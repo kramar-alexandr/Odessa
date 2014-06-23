@@ -6,6 +6,7 @@ begin
  
   Maintenance("ќкспорт склада CSV",ExportStockCSVClass,ExportStockCSVMn,modSY);
   Setting("Ќастройки экспорта склада CSV",ExportStockCSVTClass,modSY);
-    
+  Report("Ђнализ поставщика",VEAnaRClass,VEAnaRn,0,modPO);
+
 	return;
 end;
