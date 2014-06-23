@@ -1,0 +1,11 @@
+
+event startup
+begin
+
+	SetLangMode(LangRussian,"RUS",0);
+ 
+  Maintenance("ќкспорт склада CSV",ExportStockCSVClass,ExportStockCSVMn,modSY);
+  Setting("Ќастройки экспорта склада CSV",ExportStockCSVTClass,modSY);
+    
+	return;
+end;

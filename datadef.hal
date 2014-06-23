@@ -1,0 +1,25 @@
+SourceFile("halcust\\halpatch",0);
+SourceFile("halcust\\Import",0);
+SourceFile("halcust\\Report",0);
+SourceFile("halcust\\RemoteWA",0);
+SourceFile("halcust\\Windows",3);
+SourceFile("halcust\\WAction",3);
+SourceFile("halcust\\Web",3);
+
+begin
+BlockBegin(ExportStockCSVBlock,-,"" )
+  //BlockInServer;
+  //BlockForAllCompanies;
+  RecordField(FileName,M4Str,100,0);
+  RecordField(PLCode,M4Str,60,0);
+  RecordField(Location,M4Str,60,0);
+  RecordField(Qty,M4Val,0,0);
+  RecordField(HostIP,M4Str,60,0);
+  RecordField(Port,M4Int,0,0);
+  RecordField(Login,M4Str,60,0);
+  RecordField(Password,M4Str,60,0);
+
+EndBlock;
+	  	
+return;
+end;

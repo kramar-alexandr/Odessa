@@ -1,0 +1,85 @@
+
+global procedure ExportStockCSVMn()
+begin
+	record ItemStatusVc ISr;
+	record INVc INr;
+	record PLVc PLr;
+	record ExportStockCSVBlock ExportStockCSVb;
+	area importar, ftpRoutine;
+	string 20 location;
+	boolean testf;
+	integer inStock;
+	val qty;
+	
+	testf = true;
+	BlockLoad(ExportStockCSVb);
+	addtexttoarea("websites;type;sku;price;qty;in_stock",importar);
+	addtexttoarea(chr(13) & chr(10),importar);
+	
+	INr.Code = "";
+	location = ExportStockCSVb.Location;
+	while(loopmain(INr,1,true))begin
+		ISr.Code = INr.Code;
+		ISr.Location = location;
+		
+		if(readfirstmain(ISr,2,true))then begin
+			if (ISr.Instock > 0) then begin			
+				if (ExportStockCSVb.Qty > 0) then begin
+					qty = ExportStockCSVb.Qty;
+				end else begin
+					qty = ISr.Instock;
+				end;	
+				inStock = 1;
+			end else begin	
+				qty = 0;
+				inStock = 2;
+			end;			
+			PLr.ArtCode = INr.Code;
+			PLr.PLCode = ExportStockCSVb.PLCode;
+			if(!readfirstmain(PLr,2,true))then begin
+				testf = false;
+			end;
+					
+			if (testf == true) then begin
+				addtexttoarea("base;simple;" & ISr.Code & ";" & PLr.ExVatPrice & ";" & qty & ";" & inStock,importar);
+				addtexttoarea(chr(13) & chr(10),importar);
+			end;
+		end;
+		testf = true;
+	end;	
+
+	WriteAreaToFile(importar,ExportStockCSVb.FileName,0);
+	
+	addtexttoarea("open " & ExportStockCSVb.HostIP & " " & ExportStockCSVb.Port, ftpRoutine);
+	addtexttoarea(chr(13) & chr(10),ftpRoutine);
+	
+	if (NonBlank(ExportStockCSVb.Login)) then begin
+		addtexttoarea(ExportStockCSVb.Login, ftpRoutine);
+		addtexttoarea(chr(13) & chr(10),ftpRoutine);
+	end else begin
+		addtexttoarea("anonymous", ftpRoutine);
+		addtexttoarea(chr(13) & chr(10),ftpRoutine);
+	end;
+	
+	if (NonBlank(ExportStockCSVb.Password)) then begin
+		addtexttoarea(ExportStockCSVb.Password, ftpRoutine);
+		addtexttoarea(chr(13) & chr(10),ftpRoutine);
+	end else begin
+		addtexttoarea("password", ftpRoutine);
+		addtexttoarea(chr(13) & chr(10),ftpRoutine);
+	end;
+	
+	addtexttoarea("cd /FTPTest", ftpRoutine);//выбор папки куда копировать файл на фтп
+	addtexttoarea(chr(13) & chr(10),ftpRoutine);
+	
+	addtexttoarea("put " & ExportStockCSVb.FileName, ftpRoutine);
+	addtexttoarea(chr(13) & chr(10),ftpRoutine);
+	
+	addtexttoarea("bye", ftpRoutine);
+	addtexttoarea(chr(13) & chr(10),ftpRoutine);
+	
+	WriteAreaToFile(ftpRoutine,"ftptransferroutine.ftp",0);
+	RunProgram("ftptransfer.bat",1);
+
+return;
+end;

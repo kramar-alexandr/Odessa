@@ -1,0 +1,37 @@
+procedure dummy() //##ii
+begin //##ii
+  SetLangMode(LangRussian,"RUS",0); //##ii
+  return; //##ii
+end; //##ii
+
+window ExportStockCSVClass:1
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  real h,h2,h3,v,vs;
+  WindowBegin("Экспорт склада",ExportStockCSVClass,CGMnt,RcType);
+  SetWRect(64,80,700,570);
+  v = 6; vs = 20; h = 150; h2 = 250; h3 = 390;
+
+  EndWindow;
+end;
+
+window ExportStockCSVTClass:1
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  real h,v,vs;
+  WindowBegin("Настройки экспорта склада CSV",ExportStockCSVTClass,CGSbl,-);
+  SetBlid(ExportStockCSVBlock);
+  SetWRect(10,80,470,270);
+  v = 6; vs = 20; h = 180;
+  EditField(h=250,v,-40,"Название исходящего файла для сохранения",Normal,FileName,false,0);
+  EditField(h,v+=vs,100,"Склад",Normal,Location,false,LocationSClass);
+  EditField(h,v+=vs,100,"Прейскурант",Normal,PLCode,false,PLDefSClass);
+  EditField(h,v+=vs,50,"Указывать количество",Normal,Qty,true,0);
+  StaticText(h,v+=vs*3,"Насройки FTP-сервера:",true);
+  EditField(h,v+=10,100,"IP адрес FTP-сервера",Normal,HostIP,false,0);
+  EditField(h,v+=vs,50,"Порт FTP-сервера",Normal,Port,false,0);
+  EditField(h,v+=vs,100,"Логин",Normal,Login,false,0);
+  EditField(h,v+=vs,100,"Пароль",Normal,Password,false,0);
+  
+  EndWindow;
+end;
