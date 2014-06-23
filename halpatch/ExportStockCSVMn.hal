@@ -5,7 +5,9 @@ begin
 	record INVc INr;
 	record PLVc PLr;
 	record ExportStockCSVBlock ExportStockCSVb;
-	area importar, ftpRoutine;
+	area importar;
+//	area ftpRoutine;
+  string 200 tstr;
 	string 20 location;
 	boolean testf;
 	integer inStock;
@@ -50,7 +52,7 @@ begin
 
 	WriteAreaToFile(importar,ExportStockCSVb.FileName,0);
 	
-	addtexttoarea("open " & ExportStockCSVb.HostIP & " " & ExportStockCSVb.Port, ftpRoutine);
+	/*addtexttoarea("open " & ExportStockCSVb.HostIP & " " & ExportStockCSVb.Port, ftpRoutine);
 	addtexttoarea(chr(13) & chr(10),ftpRoutine);
 	
 	if (NonBlank(ExportStockCSVb.Login)) then begin
@@ -78,8 +80,24 @@ begin
 	addtexttoarea("bye", ftpRoutine);
 	addtexttoarea(chr(13) & chr(10),ftpRoutine);
 	
-	WriteAreaToFile(ftpRoutine,"ftptransferroutine.ftp",0);
-	RunProgram("ftptransfer.bat",1);
+	WriteAreaToFile(ftpRoutine,"ftptransferroutine.ftp",0);*/
+	
+	//RunProgram("ftptransfer.bat",1);
+	
+	tstr = ExportStockCSVb.HostIP & " " & ExportStockCSVb.Port & " ";
+	if (NonBlank(ExportStockCSVb.Login)) then begin
+	  tstr = tstr & ExportStockCSVb.Login & " ";
+	end else begin
+	  tstr = tstr & "anonymous ";
+	end;
 
+	if (NonBlank(ExportStockCSVb.Password)) then begin
+	  tstr = tstr & ExportStockCSVb.Password & " ";
+	end else begin
+	  tstr = tstr & "password ";
+	end;
+	tstr = tstr & ExportStockCSVb.DirName & " " & ExportStockCSVb.FileName;
+	RunProgram("ftptransfer.sh", tstr);
+	
 return;
 end;

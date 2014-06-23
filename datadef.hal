@@ -11,6 +11,7 @@ BlockBegin(ExportStockCSVBlock,-,"" )
   //BlockInServer;
   //BlockForAllCompanies;
   RecordField(FileName,M4Str,100,0);
+  RecordField(DirName,M4Str,100,0);
   RecordField(PLCode,M4Str,60,0);
   RecordField(Location,M4Str,60,0);
   RecordField(Qty,M4Val,0,0);

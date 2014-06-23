@@ -21,9 +21,17 @@ begin
   real h,v,vs;
   WindowBegin("Настройки экспорта склада CSV",ExportStockCSVTClass,CGSbl,-);
   SetBlid(ExportStockCSVBlock);
-  SetWRect(10,80,470,270);
-  v = 6; vs = 20; h = 180;
-  EditField(h=250,v,-40,"Название исходящего файла для сохранения",Normal,FileName,false,0);
+  //SetWRect(10,80,470,270);
+  //v = 6; vs = 20; h = 180;
+  //EditField(h=250,v,-40,"Название исходящего файла для сохранения",Normal,FileName,false,0);
+
+  SetWRect(10,80,370,270);
+  v = 6; vs = 20; h = 150;
+  StaticText(h-5,v+7,"Название исходящего",true);
+  StaticText(h-5,v+18,"файла для сохранения",true);
+  EditField(h,v,-40,"",Normal,FileName,false,0);
+
+  EditField(h,v+=vs,-40,"Путь для соранения",Normal,DirName,false,0);
   EditField(h,v+=vs,100,"Склад",Normal,Location,false,LocationSClass);
   EditField(h,v+=vs,100,"Прейскурант",Normal,PLCode,false,PLDefSClass);
   EditField(h,v+=vs,50,"Указывать количество",Normal,Qty,true,0);
