@@ -7,6 +7,10 @@ begin
   Maintenance("Экспорт склада CSV",ExportStockCSVClass,ExportStockCSVMn,modSY);
   Setting("Настройки экспорта склада CSV",ExportStockCSVTClass,modSY);
   Report("Анализ поставщика",VEAnaRClass,VEAnaRn,0,modPO);
+  
+   SString(31000,"На текущем складе:");
+   SString(31001,"В открытых счетах клиена:");
+   SString(31002,"Доступно:");
 
 	return;
 end;
