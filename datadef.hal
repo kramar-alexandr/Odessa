@@ -190,7 +190,6 @@ begin
   return;
 end;
 
-
 begin
 BlockBegin(ExportStockCSVBlock,-,"" )
   //BlockInServer;
@@ -206,9 +205,6 @@ BlockBegin(ExportStockCSVBlock,-,"" )
   RecordField(Password,M4Str,60,0);
 
 EndBlock;
-	  	
-return;
-end;
 
 RecordBegin(INVc,-,"artikel5");
   ImpExpLevel(1);
