@@ -1257,24 +1257,13 @@ function Boolean PODClassArtCodeEFAfter(Integer wn,Integer rownr,Boolean changed
 BEGIN
   record POVc POr;
   row POVc POrw;
-  record INVc INr; //Edit***************************Sasha2,17:37 23.06.2014
 
   GetWindowRecord(wn,POr);   
   MatRowGet(POr,rownr,POrw);
   if ((changedf) or (blank(POrw.Spec) and (nonblank(POrw.ArtCode)))) then begin
     if (POVc_PasteArtCode(POr,rownr,false)) then begin
-      INr.Code = POrw.ArtCode; //Edit***************************Sasha2,10:00 24.06.2014 {
-      if (ReadFirstMain(INr,1,true)) then begin
-      	//MatRowGet(POr,rownr,POrw);
-      	POrw.AddUnittext2 = INr.AddUnittext2;
-      	POrw.AddUnittext3 = INr.AddUnittext3;
-      	POrw.AddUnittext4 = INr.AddUnittext4;
-      	POrw.AddUnittext5 = INr.AddUnittext5;
-      	MatRowPut(POr,rownr,POrw);
-      end;//Edit***************************Sasha2,10:00 24.06.2014 }
       PutWindowRecord(wn,POr);
       if (PODClassSwitchRow(wn,rownr)) then begin end;
-      //MessageBox(0,POrw.AddUnittext2 & Chr(13) & POrw.AddUnittext3 & Chr(13) & POrw.AddUnittext4 & Chr(13) & POrw.AddUnittext4 & Chr(13));
     end else begin
       Beep;
     end;
