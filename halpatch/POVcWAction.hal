@@ -1432,12 +1432,44 @@ begin
     GetWindowRecord(wn,POr);
     MatRowGet(POr,rownr,POrw);
     INr.Code = POrw.ArtCode;
-	  if (ReadFirstMain(INr,1,true)) then begin
+	  if (ReadFirstMain(INr,1,true) and NonBlank(POrw.UnitCode)) then begin
 	  	switch (num) begin
-	  		case "2": POrw.Quant = POrw.AddUnitQty2 * INr.AddUnitCoef2; POrw.AddUnitQty3 = BlankVal;POrw.AddUnitQty4 = BlankVal;POrw.AddUnitQty5 = BlankVal;
-	  		case "3": POrw.Quant = POrw.AddUnitQty3 * INr.AddUnitCoef3; POrw.AddUnitQty2 = BlankVal;POrw.AddUnitQty4 = BlankVal;POrw.AddUnitQty5 = BlankVal;
-	  		case "4": POrw.Quant = POrw.AddUnitQty4 * INr.AddUnitCoef4; POrw.AddUnitQty2 = BlankVal;POrw.AddUnitQty3 = BlankVal;POrw.AddUnitQty5 = BlankVal;
-	  		case "5": POrw.Quant = POrw.AddUnitQty5 * INr.AddUnitCoef5; POrw.AddUnitQty2 = BlankVal;POrw.AddUnitQty3 = BlankVal;POrw.AddUnitQty4 = BlankVal;
+	  		case "2":
+	  				if (NonBlank(POrw.AddUnittext2)) then begin
+		  				if (POrw.AddUnittext2 != POrw.UnitCode) then begin
+		  					POrw.Quant = POrw.AddUnitQty2 * INr.AddUnitCoef2;
+		  				end else begin
+		  					POrw.Quant = POrw.AddUnitQty2;
+		  				end;
+		  				POrw.AddUnitQty3 = BlankVal;POrw.AddUnitQty4 = BlankVal;POrw.AddUnitQty5 = BlankVal;
+		  			end;
+	  		case "3":
+	  				if (NonBlank(POrw.AddUnittext3)) then begin
+		  				if (POrw.AddUnittext3 != POrw.UnitCode) then begin
+		  					POrw.Quant = POrw.AddUnitQty3 * INr.AddUnitCoef3;
+		  				end else begin
+		  					POrw.Quant = POrw.AddUnitQty3;
+		  				end;
+		  				POrw.AddUnitQty2 = BlankVal;POrw.AddUnitQty4 = BlankVal;POrw.AddUnitQty5 = BlankVal;
+		  			end;
+	  		case "4":
+	  				if (NonBlank(POrw.AddUnittext4)) then begin
+		  				if (POrw.AddUnittext4 != POrw.UnitCode) then begin
+		  					POrw.Quant = POrw.AddUnitQty4 * INr.AddUnitCoef4;
+		  				end else begin
+		  					POrw.Quant = POrw.AddUnitQty4;
+		  				end;
+		  				POrw.AddUnitQty2 = BlankVal;POrw.AddUnitQty3 = BlankVal;POrw.AddUnitQty5 = BlankVal;
+		  			end;
+	  		case "5":
+	  				if (NonBlank(POrw.AddUnittext5)) then begin
+		  				if (POrw.AddUnittext5 != POrw.UnitCode) then begin
+		  					POrw.Quant = POrw.AddUnitQty5 * INr.AddUnitCoef5;
+		  				end else begin
+		  					POrw.Quant = POrw.AddUnitQty5;
+		  				end; 
+		  				POrw.AddUnitQty2 = BlankVal;POrw.AddUnitQty3 = BlankVal;POrw.AddUnitQty4 = BlankVal;
+		  			end;
 	  	end;
 	  	MatRowPut(POr,rownr,POrw);
 	  end;
