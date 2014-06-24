@@ -90,14 +90,13 @@ begin
 	end else begin
 	  tstr = tstr & "anonymous ";
 	end;
-
 	if (NonBlank(ExportStockCSVb.Password)) then begin
 	  tstr = tstr & ExportStockCSVb.Password & " ";
 	end else begin
 	  tstr = tstr & "password ";
 	end;
 	tstr = tstr & ExportStockCSVb.DirName & " " & ExportStockCSVb.FileName;
-	RunProgram("ftptransfer.sh", tstr);
-	
+	RunProgram("./ftptransfer.sh", tstr);
+
 return;
 end;
