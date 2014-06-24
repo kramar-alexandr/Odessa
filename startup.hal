@@ -11,6 +11,8 @@ begin
    SString(31000,"На текущем складе:");
    SString(31001,"В открытых счетах клиена:");
    SString(31002,"Доступно:");
+   
+  Maintenance("Пересчитать значение объема в карточке товара",RecalcINVolumeClass,RecalcINVolumeMn,modDBMain);//Edit***************************Sasha2,13:50 24.06.2014
 
 	return;
 end;
