@@ -3125,7 +3125,11 @@ begin
     EditField(h4,v+=vs ,50,"Плотность",Normal,Density,true,0); //Edit***************************Sasha2,16:58 23.06.2014
     EditField(h,v ,50,"Нетто",Normal,NetWeight,true,0); //Edit***************************Sasha2,16:59 23.06.2014
     EditField(h5,v ,50,"Объем",Normal,Volume,true,0); //Edit***************************Sasha2,16:59 23.06.2014
-    StaticText(h5 + 55,v + 15,"cm"& chr(179),false); //Edit***************************Sasha2,17:19 23.06.2014
+    if (GuiType == kGuiWPF or GuiType == kGuiWindowsDesktop) then begin
+    	StaticText(h5 + 55,v + 15,"cm"& chr(179),false); //Edit***************************Sasha2,17:19 23.06.2014
+    end else begin
+    	StaticText(h5 + 55,v + 15,"cm3",false); //Edit***************************Sasha2,17:19 23.06.2014
+    end;
     EditField(h5,v+=vs ,50,"Вес",Normal,Weight,true,0); //Edit***************************Sasha2,16:59 23.06.2014
     StaticText(h5 + 55,v + 15,"КГ",false); 
     
