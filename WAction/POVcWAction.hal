@@ -1291,6 +1291,8 @@ end;
 function Boolean PODClassQuantEFAfter(Integer wn,Integer rownr,Boolean changedf)
 BEGIN
   record POVc POr;
+  row POVc POrw; //Edit***************************Sasha2,9:46 27.06.2014
+  record INVc INr; //Edit***************************Sasha2,9:46 27.06.2014
 
   if (changedf) then begin
     GetWindowRecord(wn,POr);    
@@ -1429,8 +1431,10 @@ begin
 		  					POrw.Quant = POrw.AddUnitQty2 * INr.AddUnitCoef2;
 		  				end else begin
 		  					POrw.Quant = POrw.AddUnitQty2;
-		  				end;
-		  				POrw.AddUnitQty3 = BlankVal;POrw.AddUnitQty4 = BlankVal;POrw.AddUnitQty5 = BlankVal;
+		  				end; 
+		  				if(POrw.AddUnittext3 != POrw.UnitCode) then begin POrw.AddUnitQty3 = POrw.Quant * INr.AddUnitCoef3; end else begin POrw.AddUnitQty3 = POrw.Quant; end;
+		  				if(POrw.AddUnittext4 != POrw.UnitCode) then begin POrw.AddUnitQty4 = POrw.Quant * INr.AddUnitCoef4; end else begin POrw.AddUnitQty4 = POrw.Quant; end;
+						if(POrw.AddUnittext5 != POrw.UnitCode) then begin POrw.AddUnitQty5 = POrw.Quant * INr.AddUnitCoef5; end else begin POrw.AddUnitQty5 = POrw.Quant; end;
 		  			end;
 	  		case "3":
 	  				if (NonBlank(POrw.AddUnittext3)) then begin
@@ -1439,7 +1443,9 @@ begin
 		  				end else begin
 		  					POrw.Quant = POrw.AddUnitQty3;
 		  				end;
-		  				POrw.AddUnitQty2 = BlankVal;POrw.AddUnitQty4 = BlankVal;POrw.AddUnitQty5 = BlankVal;
+		  				if(POrw.AddUnittext2 != POrw.UnitCode) then begin POrw.AddUnitQty2 = POrw.Quant * INr.AddUnitCoef2; end else begin POrw.AddUnitQty2 = POrw.Quant; end;
+		  				if(POrw.AddUnittext4 != POrw.UnitCode) then begin POrw.AddUnitQty4 = POrw.Quant * INr.AddUnitCoef4; end else begin POrw.AddUnitQty4 = POrw.Quant; end;
+						if(POrw.AddUnittext5 != POrw.UnitCode) then begin POrw.AddUnitQty5 = POrw.Quant * INr.AddUnitCoef5; end else begin POrw.AddUnitQty5 = POrw.Quant; end;
 		  			end;
 	  		case "4":
 	  				if (NonBlank(POrw.AddUnittext4)) then begin
@@ -1448,7 +1454,9 @@ begin
 		  				end else begin
 		  					POrw.Quant = POrw.AddUnitQty4;
 		  				end;
-		  				POrw.AddUnitQty2 = BlankVal;POrw.AddUnitQty3 = BlankVal;POrw.AddUnitQty5 = BlankVal;
+		  				if(POrw.AddUnittext3 != POrw.UnitCode) then begin POrw.AddUnitQty3 = POrw.Quant * INr.AddUnitCoef3; end else begin POrw.AddUnitQty3 = POrw.Quant; end;
+		  				if(POrw.AddUnittext2 != POrw.UnitCode) then begin POrw.AddUnitQty2 = POrw.Quant * INr.AddUnitCoef2; end else begin POrw.AddUnitQty2 = POrw.Quant; end;
+						if(POrw.AddUnittext5 != POrw.UnitCode) then begin POrw.AddUnitQty5 = POrw.Quant * INr.AddUnitCoef5; end else begin POrw.AddUnitQty5 = POrw.Quant; end;
 		  			end;
 	  		case "5":
 	  				if (NonBlank(POrw.AddUnittext5)) then begin
@@ -1456,10 +1464,13 @@ begin
 		  					POrw.Quant = POrw.AddUnitQty5 * INr.AddUnitCoef5;
 		  				end else begin
 		  					POrw.Quant = POrw.AddUnitQty5;
-		  				end; 
-		  				POrw.AddUnitQty2 = BlankVal;POrw.AddUnitQty3 = BlankVal;POrw.AddUnitQty4 = BlankVal;
+		  				end;
+		  				if(POrw.AddUnittext3 != POrw.UnitCode) then begin POrw.AddUnitQty3 = POrw.Quant * INr.AddUnitCoef3; end else begin POrw.AddUnitQty3 = POrw.Quant; end;
+		  				if(POrw.AddUnittext4 != POrw.UnitCode) then begin POrw.AddUnitQty4 = POrw.Quant * INr.AddUnitCoef4; end else begin POrw.AddUnitQty4 = POrw.Quant; end;
+						if(POrw.AddUnittext2 != POrw.UnitCode) then begin POrw.AddUnitQty2 = POrw.Quant * INr.AddUnitCoef2; end else begin POrw.AddUnitQty2 = POrw.Quant; end;
 		  			end;
 	  	end;
+	  	
 	  	MatRowPut(POr,rownr,POrw);
 	  end;
     PutWindowRecord(wn,POr);
