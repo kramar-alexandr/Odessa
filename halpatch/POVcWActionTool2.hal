@@ -804,28 +804,28 @@ BEGIN
   if (ReadFirstMain(INr,1,true) and NonBlank(POrw.UnitCode)) then begin
 	  if (NonBlank(POrw.AddUnittext2)) then begin 
 			if (POrw.AddUnittext2 != POrw.UnitCode) then begin
-				POrw.AddUnitQty2 = POrw.Quant * INr.AddUnitCoef2;
+				POrw.AddUnitQty2 = POrw.Quant / INr.AddUnitCoef2;
 			end else begin
 				POrw.AddUnitQty2 = POrw.Quant;
 			end;
 		end;
 		if (NonBlank(POrw.AddUnittext3)) then begin
 			if (POrw.AddUnittext3 != POrw.UnitCode) then begin
-				POrw.AddUnitQty3 = POrw.Quant * INr.AddUnitCoef3;
+				POrw.AddUnitQty3 = POrw.Quant / INr.AddUnitCoef3;
 			end else begin
 				POrw.AddUnitQty3 = POrw.Quant;
 			end;
 		end;
 		if (NonBlank(POrw.AddUnittext4)) then begin
 			if (POrw.AddUnittext4 != POrw.UnitCode) then begin
-				POrw.AddUnitQty4 = POrw.Quant * INr.AddUnitCoef4;
+				POrw.AddUnitQty4 = POrw.Quant / INr.AddUnitCoef4;
 			end else begin
 				POrw.AddUnitQty4 = POrw.Quant;
 			end;
 		end;
 		if (NonBlank(POrw.AddUnittext5)) then begin
 			if (POrw.AddUnittext5 != POrw.UnitCode) then begin
-				POrw.AddUnitQty5 = POrw.Quant * INr.AddUnitCoef5;
+				POrw.AddUnitQty5 = POrw.Quant / INr.AddUnitCoef5;
 			end else begin
 				POrw.AddUnitQty5 = POrw.Quant;
 			end; 
