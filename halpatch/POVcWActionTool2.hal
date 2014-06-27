@@ -1245,9 +1245,13 @@ begin
     POrw.PriceFactor = INr.PriceFactor;
     POrw.UnitCode = INr.Unittext;
     POrw.AddUnittext2 = INr.AddUnittext2; //Edit***************************Sasha2,11:44 24.06.2014
+    POrw.AddUnitQty2 = INr.AddUnitCoef2;// Edit ************************** четверг, 26 июня 2014 г., 20:49:44
     POrw.AddUnittext3 = INr.AddUnittext3; //Edit***************************Sasha2,11:44 24.06.2014
+    POrw.AddUnitQty3 = INr.AddUnitCoef3;// Edit ************************** четверг, 26 июня 2014 г., 20:49:44
     POrw.AddUnittext4 = INr.AddUnittext4; //Edit***************************Sasha2,11:44 24.06.2014
+    POrw.AddUnitQty4 = INr.AddUnitCoef4;// Edit ************************** четверг, 26 июня 2014 г., 20:49:44
     POrw.AddUnittext5 = INr.AddUnittext5; //Edit***************************Sasha2,11:44 24.06.2014
+    POrw.AddUnitQty5 = INr.AddUnitCoef5;// Edit ************************** четверг, 26 июня 2014 г., 20:49:44
     if (pifound) then begin
       POrw.VEArtCode = PIr.VEItemCode;
       POrw.CustomsCost = PIr.PurchaseCost;
