@@ -1,0 +1,32 @@
+SetLangMode(LangRussian,"RUS",0);
+
+global webpublic updating Procedure WebGetOrder()
+begin
+  record ORVc ORr;
+  area aPost;
+  
+  webgetpostdata(aPost);
+  
+  writeareatofile(aPost,"post.txt",0);
+  
+  recordNew(ORr);
+  
+  ORr.SerNr = NextSerNr("ORVc",CurrentDate,-1,false,"");    
+  ORr.CustCode = "100001";
+  ORr.OrdDate = CurrentDate;
+  ORr.PayDeal = "5";
+  ORr.Objects = "DEPT1";
+  ORr.SalesMan  = "ONA";
+  ORr.CurncyCode = "êìÅ";
+  ORr.BaseRate1 = 100;
+  ORr.BaseRate2 = 100;
+  ORr.Location = "éëç";
+  recordStore(ORr,true);
+  
+  weboutstring("asjdfkgjhs  " & ORr.SerNr);
+  //logtext(0,"sdkjghdfkjlghdkl  " & ORr.SerNr);
+  logtext(0,"agdfgd");
+  
+  
+return;
+end;
