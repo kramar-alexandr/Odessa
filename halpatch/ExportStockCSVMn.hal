@@ -1,5 +1,4 @@
-
-global procedure ExportStockCSVMn()
+global procedure ExportStockCSVMn(record RcVc RepSpec)
 begin
 	record ItemStatusVc ISr;
 	record INVc INr;
@@ -100,3 +99,4 @@ begin
 
 return;
 end;
+

@@ -1,3 +1,6 @@
+external procedure ExportStockCSVMn(record RcVc);
+
+
 SetLangMode(LangRussian,"RUS",0);
 
 global webpublic updating Procedure WebGetOrder()
@@ -28,5 +31,14 @@ begin
   logtext(0,"agdfgd");
   
   
+return;
+end;
+
+global webpublic Procedure WebExportStockCSVMn()
+begin
+  record RcVc RepSpec;
+  
+  ExportStockCSVMn(RepSpec);
+
 return;
 end;
