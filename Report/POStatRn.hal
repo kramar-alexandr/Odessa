@@ -562,8 +562,9 @@ BEGIN
         OutStringAdjustBiDi(310,0,USetStr(5548),true,M4Val,350);
         OutStringAdjustBiDi(370,0,USetStr(4827),true,M4Val,410);
         //OutString(400,0,USetStr(3321),false);// Edit ************************** Monday, 23 June 2014 15:28:42
-        OutString(400,0,USetStr(5507),false);// Edit ************************** Monday, 23 June 2014 15:29:56
-        OutString(1,0,USetStr(5506),true);// Edit ************************** Monday, 23 June 2014 15:29:56
+        OutString(400,0,USetStr(5506),false);// Edit ************************** Monday, 23 June 2014 15:29:56
+        OutString(1,0,USetStr(5507),true);// Edit ************************** Monday, 23 June 2014 15:29:56
+        
         EndFormat;
       end;
       value = 0;
