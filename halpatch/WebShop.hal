@@ -26,9 +26,9 @@ begin
   ORr.Location = "éëç";
   recordStore(ORr,true);
   
-  weboutstring("asjdfkgjhs  " & ORr.SerNr);
+  weboutstring("OK Order import");
   //logtext(0,"sdkjghdfkjlghdkl  " & ORr.SerNr);
-  logtext(0,"agdfgd");
+  logtext(0,"OK Order import");
   
   
 return;
