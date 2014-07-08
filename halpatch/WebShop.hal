@@ -20,64 +20,66 @@ begin
   xmlPost = PARSEXMLAREA(aPost);
   nodeORCnt = XmlCountChildren(xmlPost,"orders");
   for (i=0;i<nodeORCnt;i=i+1) begin 
-  	  if (XmlNodeExists(xmlPost,"orders/order" & i)) then begin
-  	  	  recordNew(ORr);
-	  	  ORr.SerNr = XmlGetAttribute(xmlPost,"orders/order" & i,"orderno"); //NextSerNr("ORVc",CurrentDate,-1,false,"");
-	  	  ORr.OrdDate = CurrentDate;
-	  	  Cur.eMail = XmlGetAttribute(xmlPost,"orders/order" & i,"email");
-		  if (!ReadFirstKey("eMail",Cur,1,true)) then begin
-		  	Cur.Code = XmlGetAttribute(xmlPost,"orders/order" & i,"name");
-		  	loopName = 1;
-		  	while (ReadFirstMain(Cur,1,true)) begin
-		  		loopName = loopName + 1;
-		  		Cur.Code = XmlGetAttribute(xmlPost,"orders/order" & i,"name") & loopName;
-		  	end;
-		  	if (loopName > 1) then begin
-		  		Cur.Code = XmlGetAttribute(xmlPost,"orders/order" & i,"name") & loopName;
-		  	end else begin
-		  		Cur.Code = XmlGetAttribute(xmlPost,"orders/order" & i,"name");
-		  	end;
-		  	Cur.Name = XmlGetAttribute(xmlPost,"orders/order" & i,"name2");
-		  	Cur.eMail = XmlGetAttribute(xmlPost,"orders/order" & i,"email");
-		  	Cur.Phone = XmlGetAttribute(xmlPost,"orders/order" & i,"phone");
-		  	recordStore(Cur,true);
-		  end;
-		  ORr.CustCode = Cur.Code;
-		  ORr.Addr0 = Cur.Name;
-		  ORr.PayDeal = Cur.PayDeal;
-		  ORr.ShipAddr0 = XmlGetAttribute(xmlPost,"orders/order" & i ,"delivery");
-		  ORr.ShipAddr1 = XmlGetAttribute(xmlPost,"orders/order" & i ,"country") & ", " & XmlGetAttribute(xmlPost,"orders/order" & i ,"city");
-		  ORr.ShipAddr2 = XmlGetAttribute(xmlPost,"orders/order" & i ,"address");
-		  ORr.Objects = "DEPT1";
-		  ORr.SalesMan  = "ONA";
-		  ORr.CurncyCode = "UAH";
-		  ORr.BaseRate1 = 100;
-		  ORr.BaseRate2 = 100;
-		  ORr.Location = "éëç";
-		  
-		  nodeRowCnt = XmlCountChildren(xmlPost,"orders/order" & i );
-		  rowNr = 0;
-		  for (j=0;j<nodeRowCnt;j=j+1) begin
-			if (XmlNodeExists( xmlPost,"orders/order" & i & "/row" & j ) and NonBlank(XmlGetAttribute(xmlPost,"orders/order" & i & "/row" & j,"SKU"))) then begin
-				ORrw.ArtCode = XmlGetAttribute(xmlPost,"orders/order" & i & "/row" & j,"SKU");
-				ORrw.Spec = XmlGetAttribute(xmlPost,"orders/order" & i & "/row" & j,"Name");
-				ORrw.Quant = StringToVal(XmlGetAttribute(xmlPost,"orders/order" & i & "/row" & j,"Qty"),M4UVal);
-				ORrw.Price = StringToVal(XmlGetAttribute(xmlPost,"orders/order" & i & "/row" & j,"PriceInitial"),M423Val);
-				ORrw.Sum = StringToVal(XmlGetAttribute(xmlPost,"orders/order" & i & "/row" & j ,"PriceTotal"),M4Val);
-				MatRowPut(ORr,rowNr,ORrw);
-				rowNr = rowNr + 1;
+		if (XmlNodeExists(xmlPost,"orders/order" & i)) then begin
+			recordNew(ORr);
+			ORr.SerNr = XmlGetAttribute(xmlPost,"orders/order" & i,"orderno"); //NextSerNr("ORVc",CurrentDate,-1,false,"");
+			ORr.OrdDate = CurrentDate;
+			Cur.eMail = XmlGetAttribute(xmlPost,"orders/order" & i,"email");
+			if (!ReadFirstKey("eMail",Cur,1,true)) then begin
+				Cur.Code = XmlGetAttribute(xmlPost,"orders/order" & i,"name");
+				loopName = 1;
+				while (ReadFirstMain(Cur,1,true)) begin
+					loopName = loopName + 1;
+					Cur.Code = XmlGetAttribute(xmlPost,"orders/order" & i,"name") & loopName;
+				end;
+				if (loopName > 1) then begin
+					Cur.Code = XmlGetAttribute(xmlPost,"orders/order" & i,"name") & loopName;
+				end else begin
+					Cur.Code = XmlGetAttribute(xmlPost,"orders/order" & i,"name");
+				end;
+				Cur.Name = XmlGetAttribute(xmlPost,"orders/order" & i,"name2");
+				Cur.eMail = XmlGetAttribute(xmlPost,"orders/order" & i,"email");
+				Cur.Phone = XmlGetAttribute(xmlPost,"orders/order" & i,"phone");
+				recordStore(Cur,true);
 			end;
-		  end;
-		  
-		  if (recordStore(ORr,true)) then begin
-		  	logtext(0,"OK Order import " & ORr.SerNr);
-		  end else begin
-		  	logtext(0,"Error Order import " & ORr.SerNr);
-		  end;
-	  end;
-   end;
+			ORr.CustCode = Cur.Code;
+			ORr.Addr0 = Cur.Name;
+			ORr.PayDeal = Cur.PayDeal;
+			ORr.ShipAddr0 = XmlGetAttribute(xmlPost,"orders/order" & i ,"delivery");
+			ORr.ShipAddr1 = XmlGetAttribute(xmlPost,"orders/order" & i ,"country") & ", " & XmlGetAttribute(xmlPost,"orders/order" & i ,"city");
+			ORr.ShipAddr2 = XmlGetAttribute(xmlPost,"orders/order" & i ,"address");
+			ORr.Objects = "DEPT1";
+			ORr.SalesMan  = "ONA";
+			ORr.CurncyCode = "UAH";
+			ORr.BaseRate1 = 100;
+			ORr.BaseRate2 = 100;
+			ORr.Location = "éëç";
+		
+			nodeRowCnt = XmlCountChildren(xmlPost,"orders/order" & i );
+			rowNr = 0;
+			for (j=0;j<nodeRowCnt;j=j+1) begin
+				if (XmlNodeExists( xmlPost,"orders/order" & i & "/row" & j ) and NonBlank(XmlGetAttribute(xmlPost,"orders/order" & i & "/row" & j,"SKU"))) then begin
+					ORrw.ArtCode = XmlGetAttribute(xmlPost,"orders/order" & i & "/row" & j,"SKU");
+					ORrw.Spec = XmlGetAttribute(xmlPost,"orders/order" & i & "/row" & j,"Name");
+					ORrw.Quant = StringToVal(XmlGetAttribute(xmlPost,"orders/order" & i & "/row" & j,"Qty"),M4UVal);
+					ORrw.Price = StringToVal(XmlGetAttribute(xmlPost,"orders/order" & i & "/row" & j,"PriceInitial"),M423Val);
+					ORrw.Sum = StringToVal(XmlGetAttribute(xmlPost,"orders/order" & i & "/row" & j ,"PriceTotal"),M4Val);
+					MatRowPut(ORr,rowNr,ORrw);
+					rowNr = rowNr + 1;
+				end;
+			end;
+		
+			if (recordStore(ORr,true)) then begin
+				logtext(0,"OK Order import " & ORr.SerNr);
+				weboutstring("OK Order import"); //Edit***************************Sasha2,15:18 04.07.2014
+			end else begin
+				logtext(0,"Error 1" & ORr.SerNr);
+				weboutstring("Error 1"); //Edit***************************Sasha2,15:18 04.07.2014
+			end;
+		end;
+	end;
   
-  weboutstring("OK Order import"); //Edit***************************Sasha2,15:18 04.07.2014
+  
   //logtext(0,"sdkjghdfkjlghdkl  " & ORr.SerNr);
 
 return;
