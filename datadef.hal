@@ -410,6 +410,8 @@ RecordBegin(INVc,-,"artikel5");
   RecordField(IntrastatTransCode,M4Code,20,0);  
   RecordField(TotVolume,M45Val,0,0);// Edit ************************** Friday, July 4, 2014 at 17:13:54
   RecordField(TotWeight,M45Val,0,0);// Edit ************************** Friday, July 4, 2014 at 17:13:54
+  RecordField(ShipCostRule,M4Int,0,0);// Edit ************************** Friday, July 4, 2014 at 17:13:54
+  RecordField(CustomsCostRule,M4Int,0,0);// Edit ************************** Friday, July 4, 2014 at 17:13:54
   ArrayBegin(Math,-,1);
   ArrayField(stp,M4Int,0,0);
   ArrayField(ovst,M4Int,0,0);
@@ -471,8 +473,6 @@ RecordBegin(INVc,-,"artikel5");
   ArrayField(AddUnitQty5,M4UVal,0,0);//Edit***************************Sasha2,15:27 23.06.2014
   ArrayField(Volume,M45Val,0,0);// Edit ************************** Friday, July 4, 2014 at 17:13:54
   ArrayField(Weight,M45Val,0,0);// Edit ************************** Friday, July 4, 2014 at 17:13:54
-  ArrayField(ShipCostRule,M4Int,0,0);// Edit ************************** Friday, July 4, 2014 at 17:13:54
-  ArrayField(CustomsCostRule,M4Int,0,0);// Edit ************************** Friday, July 4, 2014 at 17:13:54
   EndArray;
   MainKeyBegin(SerNr,1);
   StoreInBaseKey;
@@ -722,6 +722,8 @@ RecordBegin(INVc,-,"artikel5");
   RecordField(CustomsNr,M4Str,30,0);
   RecordField(TotVolume,M45Val,0,0);// Edit ************************** Friday, July 4, 2014 at 17:13:54
   RecordField(TotWeight,M45Val,0,0);// Edit ************************** Friday, July 4, 2014 at 17:13:54
+  RecordField(ShipCostRule,M4Int,0,0);// Edit ************************** Friday, July 4, 2014 at 17:13:54
+  RecordField(CustomsCostRule,M4Int,0,0);// Edit ************************** Friday, July 4, 2014 at 17:13:54
   ArrayBegin(Math,-,1);
   ArrayField(ArtCode,M4Code,20,INVc);
   ArrayField(Quant,M4UVal,0,0);
@@ -809,8 +811,6 @@ RecordBegin(INVc,-,"artikel5");
   ArrayField(CustomsDate,M4Date,0,0);
   ArrayField(Volume,M45Val,0,0);// Edit ************************** Friday, July 4, 2014 at 17:13:54
   ArrayField(Weight,M45Val,0,0);// Edit ************************** Friday, July 4, 2014 at 17:13:54
-  ArrayField(ShipCostRule,M4Int,0,0);// Edit ************************** Friday, July 4, 2014 at 17:13:54
-  ArrayField(CustomsCostRule,M4Int,0,0);// Edit ************************** Friday, July 4, 2014 at 17:13:54
   EndArray;
   MainKeyBegin(SerNr,0);
   KeySegment(SerNr);

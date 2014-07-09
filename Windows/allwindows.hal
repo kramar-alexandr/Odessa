@@ -2303,7 +2303,8 @@ begin
     Flip(flipnr); flipnr = flipnr + 1;
     MatCol(1,144,"Наим.",0,Spec,false,0);
     MatCol(1,-250,"Сер. номер",0,SerialNr,false,SerialNrSClass);
-    MatCol(1,-70,"Вес",0,RowWeight,true,0);// Edit ************************** Friday, July 4, 2014 at 17:01:36
+    MatCol(1,-140,"Объем",0,Volume,true,0);// Edit ************************** Friday, July 4, 2014 at 17:01:36
+    MatCol(1,-70,"Вес",0,Weight,true,0);// Edit ************************** Friday, July 4, 2014 at 17:01:36
 /*
     MatCol(1,-135,"Ширина",0,UnitXval,true,0);
     MatCol(1,-90,"Высота",0,UnitYval,true,0);
@@ -2393,22 +2394,26 @@ begin
       v = v + vs;
     end;
   end;
-  EditField(110,-41,70,"Итого кол-во",ViewOnly,SumQuant,true,0);
+  EditField(90,-41,70,"Итого кол-во",ViewOnly,SumQuant,true,0);
 //  EditField(110,-21,70,"Price Subtotal",Normal,SubTotal,true,0); //Shows the same as SumCostPrice?
-  EditField(260,-41,70,"Фрахт",Normal,ShipCost,true,0);
+
+	EditField(210,-41,60,"Объем",ViewOnly,TotVolume,true,0);// Edit ************************** Friday, July 4, 2014 at 17:49:15
+  EditField(210,-21,60,"Вес",ViewOnly,TotWeight,true,0);// Edit ************************** Friday, July 4, 2014 at 17:49:16
+
+  EditField(330,-41,70,"Фрахт",Normal,ShipCost,true,0);
   if (IsEnterprise) then begin
-    EditField(260,-21,70,"Таможня",Normal,CustomsCost,true,0);
+    EditField(330,-21,70,"Таможня",Normal,CustomsCost,true,0);
   end;
   if (CYb.UseTaxTemplatesforTaxCalc==0) then begin
-  EditField(430,-41,70,"НДС",Normal,VATVal,true,0);// Edit ************************** Friday, July 4, 2014 at 17:53:34
+  EditField(470,-41,70,"НДС",Normal,VATVal,true,0);// Edit ************************** Friday, July 4, 2014 at 17:53:34
   if (HasExtTax) then begin
-    EditField(430,-21,70,"Вн. налог",ViewOnly,TAX1Sum,true,0);
+    EditField(470,-21,70,"Вн. налог",ViewOnly,TAX1Sum,true,0);
     end;
   end else begin
-    EditField(430,-41,70,"НДС",Normal,VATVal,true,0);  // Edit ************************** Friday, July 4, 2014 at 17:53:35
+    EditField(470,-41,70,"НДС",Normal,VATVal,true,0);  // Edit ************************** Friday, July 4, 2014 at 17:53:35
   end;
-  EditField(-169,-41,118,"Подытог",ViewOnly,SumCostPrice,true,0);
-  EditField(-169,-21,118,"ИТОГО",ViewOnly,PayVal,true,0);
+  EditField(-130,-41,90,"Подытог",ViewOnly,SumCostPrice,true,0);
+  EditField(-130,-21,90,"ИТОГО",ViewOnly,PayVal,true,0);
   if (HasMultiCurrency or HasBase2) then begin
     Tile(tilenr,70,false,tilenr,FrRate); tilenr = tilenr + 1;
     vs = 20;
@@ -2467,9 +2472,9 @@ begin
     RadioButton(h3,v+=16,1,0,"Вес",ShipCostRule);
     RadioButton(h3,v+=16,2,0,"Объем",ShipCostRule);
     ButtonFrame(h3=200,v=76,130,3,"Расчет таможни");
-    RadioButton(h3,v,0,0,"Стоимость",ShipCostRule);
-    RadioButton(h3,v+=16,1,0,"Вес",ShipCostRule);
-    RadioButton(h3,v+=16,2,0,"Объем",ShipCostRule);
+    RadioButton(h3,v,0,0,"Стоимость",CustomsCostRule);
+    RadioButton(h3,v+=16,1,0,"Вес",CustomsCostRule);
+    RadioButton(h3,v+=16,2,0,"Объем",CustomsCostRule);
     
 	// Edit End ---------------------------------------------- Edit End
 	
@@ -2926,9 +2931,9 @@ begin
     RadioButton(h3,v+=16,1,0,"Вес",ShipCostRule);
     RadioButton(h3,v+=16,2,0,"Объем",ShipCostRule);
     ButtonFrame(h3=300,v=76,130,3,"Расчет таможни");
-    RadioButton(h3,v,0,0,"Стоимость",ShipCostRule);
-    RadioButton(h3,v+=16,1,0,"Вес",ShipCostRule);
-    RadioButton(h3,v+=16,2,0,"Объем",ShipCostRule);
+    RadioButton(h3,v,0,0,"Стоимость",CustomsCostRule);
+    RadioButton(h3,v+=16,1,0,"Вес",CustomsCostRule);
+    RadioButton(h3,v+=16,2,0,"Объем",CustomsCostRule);
     
 	// Edit End ---------------------------------------------- Edit End
     

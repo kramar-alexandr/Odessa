@@ -45,6 +45,8 @@ external function Boolean PODClassShipCostEFAfter(Integer,Integer,Integer,Intege
 external function Boolean PODClassCustomsCostEFAfter(Integer,Integer,Integer,Integer);
 external function Boolean PODchrsum(record POVc,Integer);
 external function Boolean UserCanChangePendingRecord(Integer);
+remote procedure POVc_PastVolumeWeight(var record POVc,Integer);// Edit ************************** Wednesday, July 9, 2014 at 11:45:42
+
 
 global
 updating procedure DropSHFromPODsm()
@@ -843,6 +845,47 @@ begin
 end;
 
 global
+function Boolean PODClassShipCostRuleButtonAfter(Integer wn,Boolean changedf)
+begin        
+  record POVc POr;  
+  Boolean res;
+
+  GetWindowRecord(wn,POr);
+  POSetShipCost(POr,1);
+  POSetShipCost(POr,2);
+  POSetShipCost(POr,3);
+  POSetShipCost(POr,4);
+  POSetShipCost(POr,5);
+  POSetShipCost(POr,6);
+  POSetShipCost(POr,7);
+  POSumup(POr);
+  PutWindowRecord(wn,POr);
+  PODClassShipCostRuleButtonAfter = res;  
+  return;
+end;
+
+global
+function Boolean PODClassCustomsCostRuleButtonAfter(Integer wn,Boolean changedf)
+begin        
+  record POVc POr;  
+  Boolean res;
+
+  GetWindowRecord(wn,POr);
+  POSetShipCost(POr,1);
+  POSetShipCost(POr,2);
+  POSetShipCost(POr,3);
+  POSetShipCost(POr,4);
+  POSetShipCost(POr,5);
+  POSetShipCost(POr,6);
+  POSetShipCost(POr,7);
+  POSumup(POr);
+  PutWindowRecord(wn,POr);
+  PODClassCustomsCostRuleButtonAfter = res;  
+  return;
+end;
+
+
+global
 function Boolean PODClassExportFlagButtonAfter(Integer wn,Boolean changedf)
 begin        
   record POVc POr;  
@@ -1303,6 +1346,19 @@ BEGIN
   return;
 end;
 
+function Boolean PODClassVolumeWeightEFAfter(Integer wn,Integer rownr,Boolean changedf)// Edit ************************** Wednesday, July 9, 2014 at 11:43:37
+BEGIN
+  record POVc POr;
+
+  if (changedf) then begin
+    GetWindowRecord(wn,POr);    
+    POVc_PastVolumeWeight(POr,rownr);
+    PutWindowRecord(wn,POr);
+  end;
+  PODClassVolumeWeightEFAfter = true;
+  return;
+end;
+
 function Boolean PODClassVEQuantEFAfter(Integer wn,Integer rownr,Boolean changedf)
 BEGIN
   record POVc POr;
@@ -1522,6 +1578,9 @@ BEGIN
     case "AddUnitQty3": res = PODClassAddUnitQtyEFAfter(wn,rownr,changed!=0,3); //Edit***************************Sasha2,10:02 24.06.2014
     case "AddUnitQty4": res = PODClassAddUnitQtyEFAfter(wn,rownr,changed!=0,4); //Edit***************************Sasha2,10:02 24.06.2014
     case "AddUnitQty5": res = PODClassAddUnitQtyEFAfter(wn,rownr,changed!=0,5); //Edit***************************Sasha2,10:02 24.06.2014
+    case "Volume": res = PODClassVolumeWeightEFAfter(wn,rownr,changed!=0);// same// Edit ************************** Wednesday, July 9, 2014 at 11:41:44
+    case "Weight": res = PODClassVolumeWeightEFAfter(wn,rownr,changed!=0);//same// Edit ************************** Wednesday, July 9, 2014 at 11:41:44
+    
   end;
   PODClassAfterEditField = res;
   RETURN;

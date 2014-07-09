@@ -181,6 +181,8 @@ BEGIN
   POp.Cost3 = blankval;
   POp.Cost4 = blankval;
   POp.Cost5 = blankval;
+  POp.TotVolume = blankval;
+  POp.TotWeight = blankval;
   POp.CustomsCost = blankval;
   rwcnt = MatRowCnt(POp);
   if (rwcnt>0) then begin
@@ -208,6 +210,9 @@ BEGIN
     POp.Cost4 = t + POp.Cost4;
     t = q*POrw.RowCost5;
     POp.Cost5 = t + POp.Cost5;
+    
+    POp.TotVolume = POp.TotVolume + POrw.Volume;// Edit ************************** Wednesday, July 9, 2014 at 11:34:42
+    POp.TotWeight = POp.TotWeight + POrw.Weight;// Edit ************************** Wednesday, July 9, 2014 at 11:34:41
 
     uprice = MulRateToBase1(POp.CurncyCode,POrw.Price,POp.FrRate,POp.ToRateB1,POp.ToRateB2,POp.BaseRate1,POp.BaseRate2,SetROundModeD(5));
 //    PUCalcPerc(uprice,POrw.Extra,cc);//should be in base 1 shouldn't it, PUrw.UPrice
@@ -802,6 +807,8 @@ BEGIN
   POrw.PalletNr = CalcPalletsNr(POrw.Quant,POrw.ArtCode);
   INr.Code = POrw.ArtCode; //Edit***************************Sasha2,9:45 27.06.2014  {
   if (ReadFirstMain(INr,1,true) and NonBlank(POrw.UnitCode)) then begin
+  	POrw.Volume = INr.Volume * POrw.Quant;// Edit ************************** Wednesday, July 9, 2014 at 11:37:02
+  	POrw.Weight = INr.Weight * POrw.Quant;// Edit ************************** Wednesday, July 9, 2014 at 11:37:01
 	  if (NonBlank(POrw.AddUnittext2)) then begin 
 			if (POrw.AddUnittext2 != POrw.UnitCode) then begin
 				POrw.AddUnitQty2 = POrw.Quant / INr.AddUnitCoef2;
@@ -835,6 +842,24 @@ BEGIN
   if (PODchrsum(POp,rownr)) then begin
   end;
   POSumup(POp);
+  RETURN;
+END;
+
+global  
+procedure POVc_PastVolumeWeight(var record POVc POp,Integer rownr)
+BEGIN
+  Boolean res,pifound;
+  record INVc INr;
+  record PIVc PIr;  
+  row PIVc PIrw;
+  Integer i,rwcnt;
+  row POVc POrw;
+  val price,reb,t;
+  string 255 descstr,vatcode,purchacc,taxtemplatecode;
+  Boolean nomoreremotecalls;
+  
+  POSumup(POp);
+  
   RETURN;
 END;
 
@@ -1027,94 +1052,6 @@ begin
   return;
 end;
 
-/*
-old versiom
-global  
-function Boolean POVc_PasteVEArtCode(var record POVc POp,Integer rownr)
-BEGIN
-  Boolean res,itemfound,found;
-  row POVc POrw;
-  record INVc INr;
-  record PIVc PIr;
-  row PIVc PIrw;
-  val t,price;
-  string 10 vatcode;
-  Integer i,rwcnt;
-  string 255 tstr;
-  
-  MatRowGet(POp,rownr,POrw);
-  PIr.VEItemCode = POrw.VEArtCode;
-  PIr.VECode = POp.VECode;
-  PIr.ItemCode = POrw.ArtCode;
-  PIr.Location = POp.Location;
-  found = ReadFirstKey("VEItemCode",PIr,4,true);
-  if (found==false) then begin
-    if (nonblank(POp.Location)) then begin
-      PIr.VECode = POp.VECode;
-      PIr.VEItemCode = POrw.VEArtCode;
-      if (nonblank(POrw.ArtCode)) then begin
-        PIr.ItemCode = POrw.ArtCode;
-        found = ReadFirstKey("VEItemCode",PIr,3,true);
-      end else begin
-        found = ReadFirstKey("VEItemCode",PIr,2,true);
-      end;
-    end;
-  end;
-  if (found) then begin
-    if (PIr.VEItemCode!=POrw.VEArtCode) then begin found = false; end;
-  end;
-  if (found) then begin
-    itemfound = ReadFirstItem(PIr.ItemCode,INr,true,false);
-    if (itemfound) then begin
-      POrw.PriceFactor = INr.PriceFactor;
-      POrw.UnitCode = INr.Unittext;
-    end else begin
-      POrw.PriceFactor = blankval;
-    end;
-    price = PIr.PurPrice;
-    vatcode = POp.VEVATCode;
-    if (blank(vatcode)) then begin
-      GetItemVATCode(POrw.ArtCode,POp.ExportFlag,vatcode,false);
-    end;
-    POrw.ArtCode = PIr.ItemCode;
-    if (PIr.CurncyCode!=POp.CurncyCode) then begin
-      t = MulWithRateToBase1(PIr.CurncyCode,POp.TransDate,PIr.PurPrice,DefaultCurRoundOff);
-      price = DivRateToBase1(POp.CurncyCode,t,POp.FrRate,POp.ToRateB1,POp.ToRateB2,POp.BaseRate1,POp.BaseRate2,DefaultCurRoundOff);
-    end;
-    POrw.Price = price;
-    POrw.VEArtCode = PIr.VEItemCode;
-    POrw.Spec = PIr.Comment;
-    POrw.VATCode = vatcode;
-    POrw.PIFactor = PIr.PIFactor;
-    POrw.VEUnit = PIr.VEUnit;
-    DivPIFactor(POrw.Quant,POrw.PIFactor,t);
-    POrw.VEQuant = t;    
-    
-    POrw.Objects = FindINObjects(INr.Objects,INr.Group);
-    POrw.UnitCode = INr.Unittext;
-    GetINPurchaseControlAcc(INr,tstr,POp.VECode,POp.Location,POrw.StockType);
-    POrw.CostAcc = tstr;
-    MatRowPut(POp,rownr,POrw);
-    rwcnt = MatRowCnt(PIr);
-    for (i=0;i<rwcnt;i=i+1) begin
-      MatRowGet(PIr,i,PIrw);
-      ClearRow(POp,POrw,1);
-      POrw.Spec = POrw.Spec & PIrw.Text;
-      MatRowPut(POp,rownr+i+1,POrw);
-    end;
-    MatRowGet(POp,rownr,POrw);
-    res = true;
-  end else begin
-    res = false;
-  end;  
-  MatRowPut(POp,rownr,POrw);
-  if (PODchrsum(POp,rownr)) then begin
-    POSumup(POp);
-  end;
-  POVc_PasteVEArtCode = res;
-  RETURN;
-END;
-*/
 
 global  
 procedure POVc_PasteStockType(var record POVc POp,Integer rownr)
@@ -1283,6 +1220,8 @@ begin
     POrw.AddUnitQty4 = INr.AddUnitCoef4;// Edit ************************** четверг, 26 июня 2014 г., 20:49:44
     POrw.AddUnittext5 = INr.AddUnittext5; //Edit***************************Sasha2,11:44 24.06.2014
     POrw.AddUnitQty5 = INr.AddUnitCoef5;// Edit ************************** четверг, 26 июня 2014 г., 20:49:44
+		POrw.Volume = INr.Volume;// Edit ************************** Wednesday, July 9, 2014 at 11:37:02
+  	POrw.Weight = INr.Weight;// Edit ************************** Wednesday, July 9, 2014 at 11:37:01
     if (pifound) then begin
       POrw.VEArtCode = PIr.VEItemCode;
       POrw.CustomsCost = PIr.PurchaseCost;
