@@ -1,7 +1,49 @@
 external procedure ExportStockCSVMn(record RcVc);
+external function Boolean ORVc_PasteArtCode(var record ORVc,Integer,var string,var string,Boolean);
+external procedure ORVc_PasteQuant(var record ORVc,Integer,Boolean,var Boolean);
+external procedure ORVc_PastePrice(var record ORVc,Integer,var Boolean);
+external procedure ORVc_PasteSum(var record ORVc,Integer,var Boolean);
+external procedure ORDchsum(var record ORVc,Integer);
+external procedure ORSumup(var record ORVc);
+external function Boolean ORDchrsum(var record ORVc,Integer);
 
 
 SetLangMode(LangRussian,"RUS",0);
+
+updating Procedure CreateCUFromXML(var record CUVc Cur,xml xmlMessage,integer i)
+begin
+	integer loopName;
+	string 255 CCode;
+	
+	Cur.Code = XmlGetAttribute(xmlMessage,"orders/order" & i,"name");
+	CCode = Cur.Code;
+	loopName = 1;
+	while (ReadFirstMain(Cur,1,true)) begin
+		loopName = loopName + 1;
+		Cur.Code = CCode & loopName;
+	end;
+	if (loopName > 1) then begin
+		if (Len(CCode) > 20) then begin
+			Cur.Code = UpperCase(Left(CCode,20 - loopName) & loopName); 
+		end else begin
+			Cur.Code = UpperCase(CCode & loopName);
+		end;
+	end else begin
+		if (Len(CCode) > 20) then begin
+			Cur.Code = UpperCase(Left(CCode,20));
+		end else begin
+			Cur.Code = UpperCase(CCode);
+		end;
+	end;
+	Cur.Name = XmlGetAttribute(xmlMessage,"orders/order" & i,"name2");
+	Cur.eMail = XmlGetAttribute(xmlMessage,"orders/order" & i,"email");
+	Cur.Phone = XmlGetAttribute(xmlMessage,"orders/order" & i,"phone");
+	Cur.CUType = 1;
+	if (!recordStore(Cur,true)) then begin
+		logtext(0,"CUVc create error: " & Cur.Name);
+	end;
+return;
+end;
 
 global webpublic updating Procedure WebGetOrder() //Edit***************************Sasha2,15:18 04.07.2014
 //global updating Procedure WebGetOrderMn()
@@ -9,15 +51,29 @@ begin
   record ORVc ORr;
   row ORVc ORrw;
   record CUVc Cur;
+  record ModuleBlock OptFeature;
   area aPost;
   xml xmlPost;
-  integer nodeORCnt,nodeRowCnt,i,j,loopName,rowNr;
+  integer nodeORCnt,nodeRowCnt,i,j,rowNr;
+  string 255 inwarning,warning;
+  Boolean chsum, chsumConfirm;
   
   
   webgetpostdata(aPost); //Edit***************************Sasha2,15:18 04.07.2014
   //AddFileToArea("test4.xml",aPost,false);
   
   xmlPost = PARSEXMLAREA(aPost);
+  if (!XmlNodeExists(xmlPost,"messagestart")) then begin
+  	logtext(0,"<messagestart> tag is missing. Orders import failed");
+  	weboutstring("Error 1"); //Edit***************************Sasha2,15:18 04.07.2014
+  	return;
+  end;
+  if (!XmlNodeExists(xmlPost,"messageend")) then begin
+  	logtext(0,"<messageend> tag is missing. Orders import failed");
+  	weboutstring("Error 1"); //Edit***************************Sasha2,15:18 04.07.2014
+  	return;
+  end;
+  
   nodeORCnt = XmlCountChildren(xmlPost,"orders");
   for (i=0;i<nodeORCnt;i=i+1) begin 
 		if (XmlNodeExists(xmlPost,"orders/order" & i)) then begin
@@ -26,21 +82,7 @@ begin
 			ORr.OrdDate = CurrentDate;
 			Cur.eMail = XmlGetAttribute(xmlPost,"orders/order" & i,"email");
 			if (!ReadFirstKey("eMail",Cur,1,true)) then begin
-				Cur.Code = XmlGetAttribute(xmlPost,"orders/order" & i,"name");
-				loopName = 1;
-				while (ReadFirstMain(Cur,1,true)) begin
-					loopName = loopName + 1;
-					Cur.Code = XmlGetAttribute(xmlPost,"orders/order" & i,"name") & loopName;
-				end;
-				if (loopName > 1) then begin
-					Cur.Code = XmlGetAttribute(xmlPost,"orders/order" & i,"name") & loopName;
-				end else begin
-					Cur.Code = XmlGetAttribute(xmlPost,"orders/order" & i,"name");
-				end;
-				Cur.Name = XmlGetAttribute(xmlPost,"orders/order" & i,"name2");
-				Cur.eMail = XmlGetAttribute(xmlPost,"orders/order" & i,"email");
-				Cur.Phone = XmlGetAttribute(xmlPost,"orders/order" & i,"phone");
-				recordStore(Cur,true);
+				CreateCUFromXML(CUr,xmlPost,i);
 			end;
 			ORr.CustCode = Cur.Code;
 			ORr.Addr0 = Cur.Name;
@@ -59,12 +101,52 @@ begin
 			rowNr = 0;
 			for (j=0;j<nodeRowCnt;j=j+1) begin
 				if (XmlNodeExists( xmlPost,"orders/order" & i & "/row" & j ) and NonBlank(XmlGetAttribute(xmlPost,"orders/order" & i & "/row" & j,"SKU"))) then begin
+					chsumConfirm = false;
 					ORrw.ArtCode = XmlGetAttribute(xmlPost,"orders/order" & i & "/row" & j,"SKU");
-					ORrw.Spec = XmlGetAttribute(xmlPost,"orders/order" & i & "/row" & j,"Name");
+					MatRowPut(ORr,rowNr,ORrw);
+					ORVc_PasteArtCode(ORr,rowNr,inwarning,warning,false);
+					if (nonblank(inwarning)) then begin
+				      logtext(0,"Order # " & ORr.SerNr & ", Artcode # " & ORrw.ArtCode & ": " & inwarning);
+				    end;
+				    if (nonblank(warning)) then begin
+				      logtext(0,"Order # " & ORr.SerNr & ", Artcode # " & ORrw.ArtCode & ": " & warning);
+				    end;
+				    
+					MatRowGet(ORr,rowNr,ORrw);
+					if (Blank(ORrw.Spec)) then begin
+						ORrw.Spec = XmlGetAttribute(xmlPost,"orders/order" & i & "/row" & j,"Name");
+					end;
 					ORrw.Quant = StringToVal(XmlGetAttribute(xmlPost,"orders/order" & i & "/row" & j,"Qty"),M4UVal);
+					MatRowPut(ORr,rowNr,ORrw);
+					if (OptFeature.NoQtyDepPrices==0) then begin
+				      ORVc_PasteQuant(ORr,rowNr,true,chsum);
+				    end else begin
+				      chsum = ORDchrsum(ORr,rowNr);
+				    end; 
+				    if (chsum) then begin
+				    	chsumConfirm = true;
+				    end;
+				    
+				    MatRowGet(ORr,rowNr,ORrw);   
 					ORrw.Price = StringToVal(XmlGetAttribute(xmlPost,"orders/order" & i & "/row" & j,"PriceInitial"),M423Val);
+					MatRowPut(ORr,rowNr,ORrw);
+					
+					ORVc_PastePrice(ORr,rowNr,chsum);
+				    if (chsum) then begin
+						chsumConfirm = true;
+				    end;
+				    MatRowGet(ORr,rowNr,ORrw);
 					ORrw.Sum = StringToVal(XmlGetAttribute(xmlPost,"orders/order" & i & "/row" & j ,"PriceTotal"),M4Val);
 					MatRowPut(ORr,rowNr,ORrw);
+					
+					ORVc_PasteSum(ORr,rowNr,chsum);
+					if (chsum) then begin
+				    	chsumConfirm = true;
+				    end;
+				    if (chsumConfirm) then begin      
+				      ORDchsum(ORr,rowNr);
+				      ORSumup(ORr);
+				    end;
 					rowNr = rowNr + 1;
 				end;
 			end;
@@ -78,9 +160,6 @@ begin
 			end;
 		end;
 	end;
-  
-  
-  //logtext(0,"sdkjghdfkjlghdkl  " & ORr.SerNr);
 
 return;
 end;
