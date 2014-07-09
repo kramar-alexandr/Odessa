@@ -10,7 +10,19 @@ external function Boolean ORDchrsum(var record ORVc,Integer);
 
 SetLangMode(LangRussian,"RUS",0);
 
-updating Procedure CreateCUFromXML(var record CUVc Cur,xml xmlMessage,integer i)
+
+// Error codes
+// Error1: Order was not created
+// Error2: New сontact card was not created
+// Error3: <messagestart> tag is missing
+// Error4: <messageend> tag is missing
+// Error5: no orders in xml data
+// Error6: no rows in order or blank artcodes
+// Error7: artcode is not exists
+// Error8: some artcode warning 
+
+
+updating Procedure CreateCUFromXML(var record CUVc Cur,xml xmlMessage,integer i,var string errors)
 begin
 	integer loopName;
 	string 255 CCode;
@@ -40,6 +52,7 @@ begin
 	Cur.Phone = XmlGetAttribute(xmlMessage,"orders/order" & i,"phone");
 	Cur.CUType = 1;
 	if (!recordStore(Cur,true)) then begin
+		if (Blank(errors)) then begin errors = "Error2"; end else begin errors = errors & ",Error2"; end;
 		logtext(0,"CUVc create error: " & Cur.Name);
 	end;
 return;
@@ -52,12 +65,13 @@ begin
   row ORVc ORrw;
   record CUVc Cur;
   record ModuleBlock OptFeature;
+  record INVc INr;
   area aPost;
   xml xmlPost;
-  integer nodeORCnt,nodeRowCnt,i,j,rowNr;
-  string 255 inwarning,warning;
+  integer nodeORCnt,nodeRowCnt,i,j,rowNr,ORCnt;
+  val qty,price,sum;
+  string 255 artcode,artspec,inwarning,warning,errors;
   Boolean chsum, chsumConfirm;
-  
   
   webgetpostdata(aPost); //Edit***************************Sasha2,15:18 04.07.2014
   //AddFileToArea("test4.xml",aPost,false);
@@ -65,24 +79,26 @@ begin
   xmlPost = PARSEXMLAREA(aPost);
   if (!XmlNodeExists(xmlPost,"messagestart")) then begin
   	logtext(0,"<messagestart> tag is missing. Orders import failed");
-  	weboutstring("Error 1"); //Edit***************************Sasha2,15:18 04.07.2014
+  	weboutstring("Error3"); //Edit***************************Sasha2,15:18 04.07.2014
   	return;
   end;
   if (!XmlNodeExists(xmlPost,"messageend")) then begin
   	logtext(0,"<messageend> tag is missing. Orders import failed");
-  	weboutstring("Error 1"); //Edit***************************Sasha2,15:18 04.07.2014
+  	weboutstring("Error4"); //Edit***************************Sasha2,15:18 04.07.2014
   	return;
   end;
   
   nodeORCnt = XmlCountChildren(xmlPost,"orders");
+  ORCnt = 0;
   for (i=0;i<nodeORCnt;i=i+1) begin 
 		if (XmlNodeExists(xmlPost,"orders/order" & i)) then begin
+			ORCnt = ORCnt + 1;
 			recordNew(ORr);
 			ORr.SerNr = XmlGetAttribute(xmlPost,"orders/order" & i,"orderno"); //NextSerNr("ORVc",CurrentDate,-1,false,"");
 			ORr.OrdDate = CurrentDate;
 			Cur.eMail = XmlGetAttribute(xmlPost,"orders/order" & i,"email");
 			if (!ReadFirstKey("eMail",Cur,1,true)) then begin
-				CreateCUFromXML(CUr,xmlPost,i);
+				CreateCUFromXML(CUr,xmlPost,i,errors);
 			end;
 			ORr.CustCode = Cur.Code;
 			ORr.Addr0 = Cur.Name;
@@ -100,65 +116,94 @@ begin
 			nodeRowCnt = XmlCountChildren(xmlPost,"orders/order" & i );
 			rowNr = 0;
 			for (j=0;j<nodeRowCnt;j=j+1) begin
-				if (XmlNodeExists( xmlPost,"orders/order" & i & "/row" & j ) and NonBlank(XmlGetAttribute(xmlPost,"orders/order" & i & "/row" & j,"SKU"))) then begin
-					chsumConfirm = false;
-					ORrw.ArtCode = XmlGetAttribute(xmlPost,"orders/order" & i & "/row" & j,"SKU");
-					MatRowPut(ORr,rowNr,ORrw);
-					ORVc_PasteArtCode(ORr,rowNr,inwarning,warning,false);
-					if (nonblank(inwarning)) then begin
-				      logtext(0,"Order # " & ORr.SerNr & ", Artcode # " & ORrw.ArtCode & ": " & inwarning);
-				    end;
-				    if (nonblank(warning)) then begin
-				      logtext(0,"Order # " & ORr.SerNr & ", Artcode # " & ORrw.ArtCode & ": " & warning);
-				    end;
-				    
-					MatRowGet(ORr,rowNr,ORrw);
-					if (Blank(ORrw.Spec)) then begin
-						ORrw.Spec = XmlGetAttribute(xmlPost,"orders/order" & i & "/row" & j,"Name");
+				if (XmlNodeExists( xmlPost,"orders/order" & i & "/row" & j )) then begin
+					artcode = XmlGetAttribute(xmlPost,"orders/order" & i & "/row" & j,"SKU");
+					if (NonBlank(artcode)) then begin
+						chsumConfirm = false;
+						INr.Code = artcode;
+						if (ReadFirstMain(INr,1,true)) then begin
+							artspec = XmlGetAttribute(xmlPost,"orders/order" & i & "/row" & j,"Name");
+							price = StringToVal(XmlGetAttribute(xmlPost,"orders/order" & i & "/row" & j,"PriceInitial"),M423Val);
+							qty = StringToVal(XmlGetAttribute(xmlPost,"orders/order" & i & "/row" & j,"Qty"),M4UVal);
+							sum = StringToVal(XmlGetAttribute(xmlPost,"orders/order" & i & "/row" & j ,"PriceTotal"),M4Val);
+							ORrw.ArtCode = artcode;
+							MatRowPut(ORr,rowNr,ORrw);
+							ORVc_PasteArtCode(ORr,rowNr,inwarning,warning,false);
+							if (nonblank(inwarning)) then begin
+								if (Blank(errors)) then begin errors = "Error8"; end else begin errors = errors & ",Error8"; end;
+						      	logtext(0,"Order # " & ORr.SerNr & ", Artcode # " & ORrw.ArtCode & ": " & inwarning);
+						    end;
+						    if (nonblank(warning)) then begin
+						    	if (Blank(errors)) then begin errors = "Error8"; end else begin errors = errors & ",Error8"; end;
+						      	logtext(0,"Order # " & ORr.SerNr & ", Artcode # " & ORrw.ArtCode & ": " & warning);
+						    end;
+						    
+							MatRowGet(ORr,rowNr,ORrw);
+							if (Blank(ORrw.Spec)) then begin
+								ORrw.Spec = artspec;
+							end;
+							ORrw.Quant = qty;
+							MatRowPut(ORr,rowNr,ORrw);
+							if (OptFeature.NoQtyDepPrices==0) then begin
+						      ORVc_PasteQuant(ORr,rowNr,true,chsum);
+						    end else begin
+						      chsum = ORDchrsum(ORr,rowNr);
+						    end; 
+						    if (chsum) then begin
+						    	chsumConfirm = true;
+						    end;
+						    
+						    MatRowGet(ORr,rowNr,ORrw);   
+							ORrw.Price = price;
+							MatRowPut(ORr,rowNr,ORrw);
+							
+							ORVc_PastePrice(ORr,rowNr,chsum);
+						    if (chsum) then begin
+								chsumConfirm = true;
+						    end;
+						    MatRowGet(ORr,rowNr,ORrw);
+							ORrw.Sum = sum;
+							MatRowPut(ORr,rowNr,ORrw);
+							
+							ORVc_PasteSum(ORr,rowNr,chsum);
+							if (chsum) then begin
+						    	chsumConfirm = true;
+						    end;
+						    if (chsumConfirm) then begin      
+						      ORDchsum(ORr,rowNr);
+						      ORSumup(ORr);
+						    end;
+						end else begin
+							ORrw.Spec = "Товар с кодом " & artcode & " не существует";
+							if (Blank(errors)) then begin errors = "Error7"; end else begin errors = errors & ",Error7"; end;
+							logtext(0,"artcode " & artcode & " is not exists");
+							MatRowPut(ORr,rowNr,ORrw);
+						end;
+						rowNr = rowNr + 1;
 					end;
-					ORrw.Quant = StringToVal(XmlGetAttribute(xmlPost,"orders/order" & i & "/row" & j,"Qty"),M4UVal);
-					MatRowPut(ORr,rowNr,ORrw);
-					if (OptFeature.NoQtyDepPrices==0) then begin
-				      ORVc_PasteQuant(ORr,rowNr,true,chsum);
-				    end else begin
-				      chsum = ORDchrsum(ORr,rowNr);
-				    end; 
-				    if (chsum) then begin
-				    	chsumConfirm = true;
-				    end;
-				    
-				    MatRowGet(ORr,rowNr,ORrw);   
-					ORrw.Price = StringToVal(XmlGetAttribute(xmlPost,"orders/order" & i & "/row" & j,"PriceInitial"),M423Val);
-					MatRowPut(ORr,rowNr,ORrw);
-					
-					ORVc_PastePrice(ORr,rowNr,chsum);
-				    if (chsum) then begin
-						chsumConfirm = true;
-				    end;
-				    MatRowGet(ORr,rowNr,ORrw);
-					ORrw.Sum = StringToVal(XmlGetAttribute(xmlPost,"orders/order" & i & "/row" & j ,"PriceTotal"),M4Val);
-					MatRowPut(ORr,rowNr,ORrw);
-					
-					ORVc_PasteSum(ORr,rowNr,chsum);
-					if (chsum) then begin
-				    	chsumConfirm = true;
-				    end;
-				    if (chsumConfirm) then begin      
-				      ORDchsum(ORr,rowNr);
-				      ORSumup(ORr);
-				    end;
-					rowNr = rowNr + 1;
 				end;
 			end;
+			if (rowNr == 0) then begin
+				if (Blank(errors)) then begin errors = "Error6"; end else begin errors = errors & ",Error6"; end;
+				logtext(0,"no rows in order #" & ORr.SerNr);
+			end;	
 		
 			if (recordStore(ORr,true)) then begin
-				logtext(0,"OK Order import " & ORr.SerNr);
-				weboutstring("OK Order import"); //Edit***************************Sasha2,15:18 04.07.2014
+				logtext(0,"Successful order import #" & ORr.SerNr);
 			end else begin
-				logtext(0,"Error 1" & ORr.SerNr);
-				weboutstring("Error 1"); //Edit***************************Sasha2,15:18 04.07.2014
+				if (Blank(errors)) then begin errors = "Error1"; end else begin errors = errors & ",Error1"; end;
+				logtext(0,"Error1" & ORr.SerNr);
 			end;
 		end;
+	end;
+	if (ORCnt == 0) then begin
+		if (Blank(errors)) then begin errors = "Error5"; end else begin errors = errors & ",Error5"; end;
+		logtext(0,"No orders in xml data");
+	end;	
+	if (Blank(errors)) then begin
+		weboutstring("Successfull import"); //Edit***************************Sasha2,15:18 04.07.2014
+	end else begin
+		weboutstring(errors); //Edit***************************Sasha2,15:18 04.07.2014
 	end;
 
 return;
