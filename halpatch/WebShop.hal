@@ -27,7 +27,7 @@ begin
 	integer loopName;
 	string 255 CCode;
 	
-	Cur.Code = XmlGetAttribute(xmlMessage,"orders/order" & i,"name");
+	Cur.Code = XmlGetAttribute(xmlMessage,"orders/order" & i,"clientid");
 	CCode = Cur.Code;
 	loopName = 1;
 	while (ReadFirstMain(Cur,1,true)) begin
@@ -47,7 +47,7 @@ begin
 			Cur.Code = UpperCase(CCode);
 		end;
 	end;
-	Cur.Name = XmlGetAttribute(xmlMessage,"orders/order" & i,"name2");
+	Cur.Name = XmlGetAttribute(xmlMessage,"orders/order" & i,"name") & " " & XmlGetAttribute(xmlMessage,"orders/order" & i,"name2");
 	Cur.eMail = XmlGetAttribute(xmlMessage,"orders/order" & i,"email");
 	Cur.Phone = XmlGetAttribute(xmlMessage,"orders/order" & i,"phone");
 	Cur.CUType = 1;
@@ -66,6 +66,7 @@ begin
   record CUVc Cur;
   record ModuleBlock OptFeature;
   record INVc INr;
+  record WebShopSettingsBlock WSSB;
   area aPost;
   xml xmlPost;
   integer nodeORCnt,nodeRowCnt,i,j,rowNr,ORCnt;
@@ -75,6 +76,8 @@ begin
   
   webgetpostdata(aPost); //Edit***************************Sasha2,15:18 04.07.2014
   //AddFileToArea("test4.xml",aPost,false);
+  WRITEAREATOFILE(aPost,"post.txt",0);
+  //LogText(0,"Пользователь: " & CurrentUser);
   
   xmlPost = PARSEXMLAREA(aPost);
   if (!XmlNodeExists(xmlPost,"messagestart")) then begin
@@ -88,13 +91,15 @@ begin
   	return;
   end;
   
+  BlockLoad(WSSB);
   nodeORCnt = XmlCountChildren(xmlPost,"orders");
   ORCnt = 0;
   for (i=0;i<nodeORCnt;i=i+1) begin 
 		if (XmlNodeExists(xmlPost,"orders/order" & i)) then begin
 			ORCnt = ORCnt + 1;
 			recordNew(ORr);
-			ORr.SerNr = XmlGetAttribute(xmlPost,"orders/order" & i,"orderno"); //NextSerNr("ORVc",CurrentDate,-1,false,"");
+			ORr.SerNr = NextSerNr("ORVc",CurrentDate,-1,false,"");
+			ORr.CustOrdNr = XmlGetAttribute(xmlPost,"orders/order" & i,"orderno"); 
 			ORr.OrdDate = CurrentDate;
 			Cur.eMail = XmlGetAttribute(xmlPost,"orders/order" & i,"email");
 			if (!ReadFirstKey("eMail",Cur,1,true)) then begin
@@ -102,16 +107,22 @@ begin
 			end;
 			ORr.CustCode = Cur.Code;
 			ORr.Addr0 = Cur.Name;
-			ORr.PayDeal = Cur.PayDeal;
 			ORr.ShipAddr0 = XmlGetAttribute(xmlPost,"orders/order" & i ,"delivery");
 			ORr.ShipAddr1 = XmlGetAttribute(xmlPost,"orders/order" & i ,"country") & ", " & XmlGetAttribute(xmlPost,"orders/order" & i ,"city");
 			ORr.ShipAddr2 = XmlGetAttribute(xmlPost,"orders/order" & i ,"address");
-			ORr.Objects = "DEPT1";
-			ORr.SalesMan  = "ONA";
+			ORr.Comment = XmlGetAttribute(xmlPost,"orders/order" & i ,"ordercomment");
+			ORr.OrderClass = "WEB";
+			ORr.SalesGroup = "WEB";
+			ORr.SalesMan  = CurrentUser;
 			ORr.CurncyCode = "UAH";
 			ORr.BaseRate1 = 100;
 			ORr.BaseRate2 = 100;
-			ORr.Location = "ОСН";
+			ORr.Location = WSSB.Location;
+			ORr.PayDeal = WSSB.PayDeal;
+			ORr.ShipDeal = WSSB.ShipDeal;
+			ORr.CustomStatusFlag = 0;
+  			ORr.TransDate = CurrentDate;
+  			ORr.TransTime = CurrentTime;
 		
 			nodeRowCnt = XmlCountChildren(xmlPost,"orders/order" & i );
 			rowNr = 0;
@@ -131,11 +142,11 @@ begin
 							ORVc_PasteArtCode(ORr,rowNr,inwarning,warning,false);
 							if (nonblank(inwarning)) then begin
 								if (Blank(errors)) then begin errors = "Error8"; end else begin errors = errors & ",Error8"; end;
-						      	logtext(0,"Order # " & ORr.SerNr & ", Artcode # " & ORrw.ArtCode & ": " & inwarning);
+						      	logtext(0,"Order #" & ORr.SerNr & ", Artcode #" & ORrw.ArtCode & ": " & inwarning);
 						    end;
 						    if (nonblank(warning)) then begin
 						    	if (Blank(errors)) then begin errors = "Error8"; end else begin errors = errors & ",Error8"; end;
-						      	logtext(0,"Order # " & ORr.SerNr & ", Artcode # " & ORrw.ArtCode & ": " & warning);
+						      	logtext(0,"Order #" & ORr.SerNr & ", Artcode #" & ORrw.ArtCode & ": " & warning);
 						    end;
 						    
 							MatRowGet(ORr,rowNr,ORrw);

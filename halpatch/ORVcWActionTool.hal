@@ -130,7 +130,7 @@ BEGIN
     if (nonblank(INr.WarnText1)) then begin
       inwarning = INr.WarnText1;
     end;
-    if (!INVc_AllowSales(INr,ErrorCode)) then begin
+    if (NonBlank(CurrentUser) and !INVc_AllowSales(INr,ErrorCode)) then begin //Edit***************************Sasha2,16:22 14.07.2014
       warning = USetStr(ErrorCode);
     end;
     ORrw.OrderType = ORr.OrderType;
