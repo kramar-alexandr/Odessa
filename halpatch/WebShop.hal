@@ -314,7 +314,7 @@ string 255 errors;
 				end;
 			end else begin
 				if (Blank(errors)) then begin errors = "Error9"; end else begin errors = errors & ",Error9"; end;
-				logtext(0,"Error9");
+				logtext(0,"Error9 order WEB #" & XmlGetAttribute(xmlPost,"orders/order" & i,"orderno"));
 			end;
 		end;
 	end;

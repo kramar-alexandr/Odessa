@@ -1860,9 +1860,9 @@ begin
   if (Blank(ORr.SalesMan)) then begin //Edit***************************Sasha2,14:51 14.07.2014 {
   	ORr.SalesMan = CurrentUser;
   end;
-  ORr.TransDate = CurrentDate;
-  ORr.TransTime = CurrentTime; //Edit***************************Sasha2,14:51 14.07.2014 }
-  ORr.SyncFlag = 0; //Edit***************************Sasha2,10:20 15.07.2014
+  //ORr.TransDate = CurrentDate; //Edit***************************Sasha2,14:51 14.07.2014
+  //ORr.TransTime = CurrentTime; //Edit***************************Sasha2,14:51 14.07.2014 }
+  //ORr.SyncFlag = 0; //Edit***************************Sasha2,10:20 15.07.2014
   
   ORVcRecordSave = res; 
   return;
