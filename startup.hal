@@ -4,7 +4,7 @@ begin
 
 	SetLangMode(LangRussian,"RUS",0);
  
-  Maintenance("Экспорт склада CSV",ExportStockCSVClass,ExportStockCSVMn,modSY);
+  Setting("Настройки WebShop",WebShopSettingsTClass,modSO); //Edit***************************Sasha2,10:22 14.07.2014
   Setting("Настройки экспорта склада CSV",ExportStockCSVTClass,modSY);
   Report("Анализ поставщика",VEAnaRClass,VEAnaRn,0,modPO);
   
@@ -12,7 +12,8 @@ begin
    SString(31001,"В открытых счетах клиена:");
    SString(31002,"Доступно:");
    
+  Maintenance("Экспорт склада CSV",ExportStockCSVClass,ExportStockCSVMn,modSY);
   Maintenance("Пересчитать значение объема в карточке товара",RecalcINVolumeClass,RecalcINVolumeMn,modDBMain);//Edit***************************Sasha2,13:50 24.06.2014
-  Setting("Настройки WebShop",WebShopSettingsTClass,modSO); //Edit***************************Sasha2,10:22 14.07.2014
+  
 	return;
 end;

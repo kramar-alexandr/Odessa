@@ -1017,6 +1017,7 @@ RecordBegin(INVc,-,"artikel5");
   RecordField(TransDate,M4Date,0,0); //Edit***************************Sasha2,13:01 14.07.2014
   RecordField(TransTime,M4Time,0,0); //Edit***************************Sasha2,13:01 14.07.2014
   RecordField(CustomStatusFlag,M4Int,0,0); //Edit***************************Sasha2,13:21 14.07.2014
+  RecordField(SyncFlag,M4Int,0,0); //Edit***************************Sasha2,10:19 15.07.2014
   ArrayBegin(Math,-,1);
   ArrayField(stp,M4Int,0,0);
   ArrayField(ArtCode,M4Code,20,INVc);
@@ -1311,6 +1312,10 @@ RecordBegin(INVc,-,"artikel5");
   
   KeyBegin(TransDate); //Edit***************************Sasha2,13:22 14.07.2014
   KeySegment(TransDate);
+  KeySegment(SerNr);
+  
+  KeyBegin(SyncFlag); //Edit***************************Sasha2,10:24 15.07.2014
+  KeySegment(SyncFlag);
   KeySegment(SerNr);
   EndRecord;
     	  	

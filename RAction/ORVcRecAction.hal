@@ -1661,6 +1661,36 @@ begin
   return;
 end;
 
+updating procedure MoreORVcHandling(var record ORVc ORr,record ORVc OR2r) //Edit***************************Sasha2,11:57 15.07.2014 {
+begin
+row ORVc ORrw,OR2rw;
+integer rwcnt1,rwcnt2,i;
+
+  if (Blank(ORr.SalesMan)) then begin 
+  	ORr.SalesMan = CurrentUser;
+  end;
+  if (ORr.CustomStatusFlag!=OR2r.CustomStatusFlag) then begin
+  	ORr.TransDate = CurrentDate;
+  	ORr.TransTime = CurrentTime;
+  	ORr.SyncFlag = 1;
+  end; 
+  rwcnt1 = MatRowCnt(ORr);
+  rwcnt2 = MatRowCnt(OR2r);
+  if (rwcnt1!=rwcnt2) then begin
+  	ORr.SyncFlag = 1;
+  end else begin
+  	for (i=0;i<rwcnt1;i=i+1) begin
+	  	MatRowGet(ORr,i,ORrw);
+	  	MatRowGet(OR2r,i,OR2rw);
+	  	if (ORrw.ArtCode!=OR2rw.ArtCode or ORrw.Quant!=OR2rw.Quant or ORrw.Price!=OR2rw.Price or ORrw.Sum!=OR2rw.Sum) then begin
+	  		ORr.SyncFlag = 1;
+	  	end;
+  	end;
+  end;
+  
+  return;
+end; //Edit***************************Sasha2,11:57 15.07.2014 }
+
 global
 updating function LongInt ORVcRecordUpdate(var record ORVc ORr,record ORVc OR2r,LongInt stat,LongInt long4)
 begin
@@ -1674,7 +1704,11 @@ begin
   UpdatePRSO(ORr,true);
   SetORFlags(ORr);
   SetORAcceptanceFlag(ORr,OR2r,stat);
-  RecalculateWeightORVc(ORr,false); 
+  RecalculateWeightORVc(ORr,false);
+  if (ORr.OrderClass == "WEB") then begin //Edit***************************Sasha2,11:57 15.07.2014
+  	MoreORVcHandling(ORr,OR2r); 
+  end; //Edit***************************Sasha2,11:57 15.07.2014
+  
   ORVcRecordUpdate = res; 
   return;
 end;
@@ -1708,13 +1742,6 @@ begin
         CancelApprovalRequestActivities(kAcceptanceOR,"ORVc",ORr.SerNr,ORr.CustCode);
       end;
   end;
-  if (Blank(ORr.SalesMan)) then begin //Edit***************************Sasha2,14:51 14.07.2014 {
-  	ORr.SalesMan = CurrentUser;
-  end;
-  if (ORr.CustomStatusFlag!=OR2r.CustomStatusFlag) then begin
-  	ORr.TransDate = CurrentDate;
-  	ORr.TransTime = CurrentTime;
-  end; //Edit***************************Sasha2,14:51 14.07.2014 } 
   
   ORVcRecordUpdateAfter = res; 
   return;
@@ -1830,6 +1857,12 @@ begin
   if (blank(ORr.OfficialSerNr)) then begin
     FindNextORVcOfficialSerialNr(ORr);
   end;
+  if (Blank(ORr.SalesMan)) then begin //Edit***************************Sasha2,14:51 14.07.2014 {
+  	ORr.SalesMan = CurrentUser;
+  end;
+  ORr.TransDate = CurrentDate;
+  ORr.TransTime = CurrentTime; //Edit***************************Sasha2,14:51 14.07.2014 }
+  ORr.SyncFlag = 0; //Edit***************************Sasha2,10:20 15.07.2014
   
   ORVcRecordSave = res; 
   return;
@@ -1847,11 +1880,6 @@ begin
   if (nonblank(ORr.OfficialSerNr)) then begin
     UpdateOffSerNr(ORr.SerNr,"ORVc",0,ORr.OfficialSerNr,false);
   end;
-  if (Blank(ORr.SalesMan)) then begin //Edit***************************Sasha2,14:51 14.07.2014 {
-  	ORr.SalesMan = CurrentUser;
-  end;
-  ORr.TransDate = CurrentDate;
-  ORr.TransTime = CurrentTime; //Edit***************************Sasha2,14:51 14.07.2014 }
   
   ORVcRecordSaveAfter = res; 
   return;
@@ -2064,6 +2092,10 @@ begin
       end;
     end;
   end;
+  ORr.TransDate = ""; //Edit***************************Sasha2,13:50 15.07.2014
+  ORr.TransTime = ""; //Edit***************************Sasha2,13:50 15.07.2014
+  ORr.SyncFlag = 0; //Edit***************************Sasha2,13:50 15.07.2014
+  ORr.CustomStatusFlag = 0; //Edit***************************Sasha2,13:50 15.07.2014
   
   ORVcRecordDuplicate = res;  
   return;
