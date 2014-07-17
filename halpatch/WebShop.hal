@@ -235,8 +235,8 @@ begin
 record ORVc ORr;
 row ORVc ORrw;
 area aSync;
-boolean TrHs;
-integer i,j,rwcnt;
+boolean TrHs,testf;
+integer i,j,rwcnt,reccnt;
 string 10 nextline;
 
 	logtext(0,"WebLookForSync");
@@ -246,33 +246,36 @@ string 10 nextline;
 	AddTextToArea("<orders>" & nextline, aSync);
 	
 	ORr.SyncFlag = 1;
-	If (ReadFirstKey("SyncFlag",ORr,1,true)) then begin
-		TrHs = true;
-  		j = 0;
-  		While(loopkey("SyncFlag",ORr,1,TrHs)) begin 
-  		logtext(0,"Sent order #" & ORr.SerNr & " SF:" & ORr.SyncFlag); //////////////////////
-			if (ORr.SyncFlag == 1) then begin
-				AddTextToArea(chr(9) & "<order" & j & " orderno='" & ORr.CustOrdNr & "'" & " status='" & ORr.CustomStatusFlag & "'" & ">" & nextline,aSync);
-					rwcnt = MatRowCnt(ORr);
-					for (i=0;i<rwcnt;i=i+1) begin
-						MatRowGet(ORr,i,ORrw);
-						AddTextToArea(chr(9) & chr(9) & "<row" & i &  " SKU='" & ORrw.ArtCode & "'" & " Qty='" & ORrw.Quant & "'" & " PriceInitial='" & ORrw.Price & "'" & " PriceTotal='" & ORrw.Sum & "'" & "></row" & i & ">" & nextline,aSync);
-					end;
-				AddTextToArea(chr(9) & "</order" & j & ">" & nextline,aSync);
-				j = j + 1;
-			end else begin
-				TrHs = false;
+	TrHs = true;
+	j = 0;
+	While(loopkey("SyncFlag",ORr,1,TrHs)) begin 
+		testf = true;
+		if(ORr.SyncFlag!=1)then begin TrHs = false; testf = false; end;
+		
+		if (testf) then begin
+			logtext(0,"Sent order #" & ORr.SerNr & " SF:" & ORr.SyncFlag); //////////////////////
+			AddTextToArea(chr(9) & "<order" & j & " orderno='" & ORr.CustOrdNr & "'" & " status='" & ORr.CustomStatusFlag & "'" & ">" & nextline,aSync);
+			rwcnt = MatRowCnt(ORr);
+			for (i=0;i<rwcnt;i=i+1) begin
+				MatRowGet(ORr,i,ORrw);
+				AddTextToArea(chr(9) & chr(9) & "<row" & i &  " SKU='" & ORrw.ArtCode & "'" & " Qty='" & ORrw.Quant & "'" & " PriceInitial='" & ORrw.Price & "'" & " PriceTotal='" & ORrw.Sum & "'" & "></row" & i & ">" & nextline,aSync);
 			end;
-		end; RESETLOOP(ORr);
-		AddTextToArea("</orders>" & nextline,aSync);
-		AddTextToArea("<messageend>END</messageend>",aSync);
+			AddTextToArea(chr(9) & "</order" & j & ">" & nextline,aSync);
+			j = j + 1;
+		end;
+	end; 
+	
+	AddTextToArea("</orders>" & nextline,aSync);
+	AddTextToArea("<messageend>END</messageend>",aSync);
+	
+	if(j>0)then begin
 		WebOutArea(aSync);
 		logText(0,"Orders are posted");
 		WriteAreaToFile(aSync,"XML.txt",0); /////////////////
 	end else begin
 		weboutstring("Nothing to sync");
 		logtext(0,"Nothing to sync");
-  	end;
+	end;
 
 return;
 end; //Edit***************************Sasha2,17:22 15.07.2014 }

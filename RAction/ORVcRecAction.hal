@@ -1661,7 +1661,7 @@ begin
   return;
 end;
 
-updating procedure MoreORVcHandling(var record ORVc ORr,record ORVc OR2r) //Edit***************************Sasha2,11:57 15.07.2014 {
+procedure MoreORVcHandling(var record ORVc ORr,record ORVc OR2r) //Edit***************************Sasha2,11:57 15.07.2014 {
 begin
 row ORVc ORrw,OR2rw;
 integer rwcnt1,rwcnt2,i;
@@ -1857,12 +1857,6 @@ begin
   if (blank(ORr.OfficialSerNr)) then begin
     FindNextORVcOfficialSerialNr(ORr);
   end;
-  if (Blank(ORr.SalesMan)) then begin //Edit***************************Sasha2,14:51 14.07.2014 {
-  	ORr.SalesMan = CurrentUser;
-  end;
-  //ORr.TransDate = CurrentDate; //Edit***************************Sasha2,14:51 14.07.2014
-  //ORr.TransTime = CurrentTime; //Edit***************************Sasha2,14:51 14.07.2014 }
-  //ORr.SyncFlag = 0; //Edit***************************Sasha2,10:20 15.07.2014
   
   ORVcRecordSave = res; 
   return;
