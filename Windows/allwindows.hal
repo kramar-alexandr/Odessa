@@ -3175,7 +3175,7 @@ begin
     end else begin
     	StaticText(h5 + 55,v + 15,"cm3",false); //Edit***************************Sasha2,17:19 23.06.2014
     end;*/
-    StaticText(h5 + 55,v + 15,"ƒλ",false); //Edit***************************Sasha2,16:03 30.07.2014 !!!!!!!!!5 rows upper the same but with cm3
+    StaticText(h5 + 55,v + 15,"γλ",false); //Edit***************************Sasha2,16:03 30.07.2014 !!!!!!!!!5 rows upper the same but with cm3
     EditField(h5,v+=vs ,50,"‚ερ",Normal,Weight,true,0); //Edit***************************Sasha2,16:59 23.06.2014
     StaticText(h5 + 55,v + 15,"ƒ",false); 
     
