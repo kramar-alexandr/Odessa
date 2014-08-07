@@ -142,13 +142,12 @@ begin
 							ORVc_PasteArtCode(ORr,rowNr,inwarning,warning,false);
 							if (nonblank(inwarning)) then begin
 								if (Blank(errors)) then begin errors = "Error8"; end else begin errors = errors & ",Error8"; end;
-						      	logtext(0,"Order #" & ORr.SerNr & ", Artcode #" & ORrw.ArtCode & ": " & inwarning);
+						      logtext(0,"Order #" & ORr.SerNr & ", Artcode #" & ORrw.ArtCode & ": " & inwarning);
 						    end;
 						    if (nonblank(warning)) then begin
 						    	if (Blank(errors)) then begin errors = "Error8"; end else begin errors = errors & ",Error8"; end;
-						      	logtext(0,"Order #" & ORr.SerNr & ", Artcode #" & ORrw.ArtCode & ": " & warning);
+						      logtext(0,"Order #" & ORr.SerNr & ", Artcode #" & ORrw.ArtCode & ": " & warning);
 						    end;
-						    
 							MatRowGet(ORr,rowNr,ORrw);
 							if (Blank(ORrw.Spec)) then begin
 								ORrw.Spec = artspec;
