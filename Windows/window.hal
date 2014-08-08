@@ -777,7 +777,10 @@ email not working yet
   end;
   EndWindow;
   
-end;window VERepRClass:1 //Edit***************************Sasha2,14:10 31.07.2014 {
+end;
+
+
+window VERepRClass:1 //Edit***************************Sasha2,14:10 31.07.2014 {
   wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
 begin
   real vs,h,v;
@@ -785,9 +788,26 @@ begin
   SetWRect(20,80,450,320);
   vs = 20; h = 120;
   PeriodField(h,v=6,"Период");
-  EditFieldTL(h,v+=vs,150,"Товар",M4UStr,Normal,41,f1,false,iNSClass);
+  EditFieldTL(h,v+=vs,150,"Товар",M4UStr,Normal,41,f1,false,INSClass);
   EditFieldTL(h,v+=vs,70,"Склад",M4UStr,Normal,41,f2,false,LocationSClass);
   EditFieldTL(h,v+=vs ,70,"Классификация",M4UStr,Normal,30,f3,false,DISClass);
   
   EndWindow;
 end; //Edit***************************Sasha2,14:10 31.07.2014 }
+
+window ItemPUOrderReportRClass:1 
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  real vs,h,v;
+  WindowBegin("Определите отчет по заказанным товарам",ItemPUOrderReportRClass,CGRcW,RcType);
+  SetWRect(20,80,450,320);
+  vs = 20; h = 120;
+  //PeriodField(h,v=6,"Период");
+  EditFieldTL(h,v+=vs,150,"Товар",M4UStr,Normal,41,f1,false,INSClass);
+  EditFieldTL(h,v+=vs ,70,"Поставщик",M4UStr,Normal,30,f2,false,VESClass);
+  EditFieldTL(h,v+=vs ,70,"Классификация",M4UStr,Normal,30,f3,false,DISClass);
+  //CheckBox(h,v+=vs,0,"Вкл. отгруженные",flags[0]);
+
+  
+  EndWindow;
+end; 
