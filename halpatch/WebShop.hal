@@ -96,9 +96,14 @@ begin
   for (i=0;i<nodeORCnt;i=i+1) begin 
 		if (XmlNodeExists(xmlPost,"orders/order" & i)) then begin
 			ORCnt = ORCnt + 1;
-			recordNew(ORr);
-			ORr.SerNr = NextSerNr("ORVc",CurrentDate,-1,false,"");
 			ORr.CustOrdNr = XmlGetAttribute(xmlPost,"orders/order" & i,"orderno"); 
+			if(readfirstkey("CustOrdNr",ORr,1,true))then begin
+				
+			end else begin
+				recordNew(ORr);
+				ORr.SerNr = NextSerNr("ORVc",CurrentDate,-1,false,"");
+				ORr.CustOrdNr = XmlGetAttribute(xmlPost,"orders/order" & i,"orderno"); 
+			end;
 			ORr.OrdDate = CurrentDate;
 			Cur.eMail = XmlGetAttribute(xmlPost,"orders/order" & i,"email");
 			if (!ReadFirstKey("eMail",Cur,1,true)) then begin
