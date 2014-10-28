@@ -689,6 +689,13 @@ begin
       goto LORVcRecordCheck;
     end;
   end;
+  
+  if (blank(ORr.Location)) then begin //Edit***************************Sasha2,13:53 28.10.2014 {
+    RecordCheckError(1290,"",-1,"Location");      
+    res = -1;
+    goto LORVcRecordCheck;
+  end; //Edit***************************Sasha2,13:53 28.10.2014 }
+  
   if (nonblank(ORr.Location)) then begin
     Locationr.Code = ORr.Location;
     if (ReadFirstMain(Locationr,1,true)==false) then begin
@@ -1022,6 +1029,15 @@ begin
             res = -1;
             goto LORVcRecordCheck;
           end;
+          if(stat==updatemode)then begin //Edit***************************Sasha2,14:01 28.10.2014 {
+			if(ORr.Reserved!=0 and OR2r.Reserved!=0)then begin
+				if(ORr.Location!=OR2r.Location)then begin
+					RecordCheckError(22067,"",-1,"Location");      
+					res = -1;
+					goto LORVcRecordCheck;
+				end;
+			end;
+          end; //Edit***************************Sasha2,14:01 28.10.2014 }
           location = ORrw.Location;
           if (blank(location)) then begin
             location = ORr.Location;
@@ -1042,7 +1058,7 @@ begin
               goto LORVcRecordCheck;
             end;  
           end;   
-          if (ORr.Reserved!=0) then begin
+          if (ORr.Reserved!=0 or (ORr.OKFlag!=0 and ORr.Reserved==0)) then begin //Edit***************************Sasha2,14:04 28.10.2014
             if (OSb.dontAllowOverreserving!=0) then begin
               switch (INr.ItemType) begin
                 case 1:
@@ -1074,6 +1090,9 @@ begin
                       end;
                     end;
                   end;
+                  if(ISr.RsrvQty<0) then begin //Edit***************************Sasha2,14:04 28.10.2014 {
+                    ISr.RsrvQty = 0;
+                  end; //Edit***************************Sasha2,14:04 28.10.2014 }
                   if ((orsrv)>(ISr.Instock-ISr.RsrvQty+orsrved)) then begin // StockRsrvQty ?
                     RecordCheckError(20011,"",i,"Quant");      
                     res = -1;
