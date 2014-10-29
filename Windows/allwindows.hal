@@ -4275,9 +4275,9 @@ end else begin
 
     switch (LMb.POSButtonsPosition) begin
       case kPOSButtonsPositionLeft:
-        SoftEditField(110,-22,200,"Товар/Команда"  ,Normal ,"ivcashcommand",false,INSClass,M4Str,255);//Edit by Victor 29.10.14
+        SoftEditField(110,-22,200,"Товар/Команда"  ,Normal ,"ivcashcommand",false,IN1SClass,M4Str,255);//Edit by Victor 29.10.14
       case kPOSButtonsPositionRight:
-        SoftEditField(-260,-22,200,"Товар/Команда"  ,Normal ,"ivcashcommand",false,INSClass,M4Str,255);//Edit by Victor 29.10.14
+        SoftEditField(-260,-22,200,"Товар/Команда"  ,Normal ,"ivcashcommand",false,IN1SClass,M4Str,255);//Edit by Victor 29.10.14
     end;
     SoftEditField(2000,-22,200,""  ,Normal ,"ivcashcommandlastitemsernrf",false,0,M4Str,255);
     DrawPOSInterface_RUS(bc1,bc2,POSBr,acnt,"",100);
@@ -4616,6 +4616,74 @@ begin
       end;
       if (HasModIN) then begin
         CalculatedColumn(-50,-50,"На складе","INSClassInStock",true);
+      end;
+      SearchField("Найти");
+      if (HasModIN) then begin
+        if (UserCanReport("INInfoRn","",true)) then begin
+          SpecialMenu("Статус товара",'I',0,"INStatusINSsm");
+        end;
+      end;
+      if (IsEnterprise) then begin
+        SpecialMenu("Поиск",'F',1,"INSearchSsm");
+        if (StandardHansa==false) then begin
+          SpecialMenu("Товары-заменители",'l',2,"AltItemINSsm");
+          SpecialMenu("Сопутствующие товары",'r',2,"CrossItemINSsm");
+        end;
+      end;
+//  SearchField("Search");
+  end;
+  EndWindow;
+end;
+
+window IN1SClass:4
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  real v;
+  
+  WindowBegin("Выберите товар",IN1SClass,CGslist,-);
+  Sizeable(-1,-1,0,0);
+  UseView(INVc);
+  SpawnClass(INDClass);
+    if (GuiType==kGuiiPhone) then begin
+      RecordList(4,17,-21,-39);
+      RLCellKey(10,6,150,19,Name,false,12,patM4blue,ActName);
+//      RLCell(10,26,150,39,Code,false,12,patM4black);
+      if (HasItemGroups or HasLocalization("PRT")) then begin
+        RLCell(210,6,280,19,Group,false,12,patM4black);
+      end;
+      RLCell(210,26,280,39,UPrice1,false,12,patM4black);
+    end else begin
+      v = 0;
+      /*if (GuiType==kGuiCocoa) then begin	//*** Edit by Victor 29.10.14
+        SetWRect(210,80,850,498);
+        //FlowView(0,0,-1,200);
+        v = v+200;
+      end else begin
+        SetWRect(210,80,850,298);
+      end;*/
+      SetWRect(210,80,850,298);
+      RecordList(4,v+17,-21,-39);
+      RlColKey(4,4,"Код",Code,false,ActCode);
+      if (HasItemGroups or HasLocalization("PRT")) then begin
+        RlColKey(105,105,"Группа",Group,false,ActGroup);
+        RlColKey(160,160,"Наименование",Name,false,ActName);
+      end else begin
+        RlColKey(105,105,"Наименование",Name,false,ActName);
+      end;
+      if (IsEnterprise) then begin
+      	if (StandardHansa==false) then begin
+        	RlColKey(-250,-250,"Альт. код",AlternativeCode,false,ActAlternativeCode);
+      	end else begin
+        	RlCol(-250,-250,"Штрих-код",BarCode,false);
+      	end;
+      end;
+      if (HasModIN) then begin
+        RlCol(-120,-120,"Баз. цена",UPrice1,true);
+      end else begin
+        RlCol(-120,-120,"Цена",UPrice1,true);
+      end;
+      if (HasModIN) then begin
+        CalculatedColumn(-50,-50,"На складе","IN1SClassInStock",true);
       end;
       SearchField("Найти");
       if (HasModIN) then begin

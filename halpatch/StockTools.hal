@@ -11,13 +11,13 @@ begin
   return;
 end;
 
-global function string 255 INSClassInStock1(var record INVc INr)	// Edit by Victor 29.10.14
+global function string 255 IN1SClassInStock(var record INVc INr)	// Edit by Victor 29.10.14
 begin
   transaction string 255 gLocation;
   
   if (blank(gLocation)) then begin
     gLocation = ";;;";
   end;
-  INSClassInStock1 = ItemInStock(INr,gLocation) + ItemInStock(INr,"");// Put stock!
+  IN1SClassInStock = ItemInStock(INr,gLocation) + ItemInStock(INr,"ОСН2");// Put stock!
   return;
 end;
