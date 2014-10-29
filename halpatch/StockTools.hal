@@ -1,12 +1,23 @@
-remote function val ItemInStock(var record INVc,string);	// Edit by Victor 29.10.14
+remote function val ItemInStock(var record INVc,string);	
 
-global function string 255 INSClassInStock(var record INVc INr)
+global function string 255 INSClassInStock(var record INVc INr)	// Edit by Victor 29.10.14
 begin
   transaction string 255 gLocation;
   
   if (blank(gLocation)) then begin
     gLocation = ";;;";
   end;
-  INSClassInStock = ItemInStock(INr,gLocation) + ItemInStock(INr,"");// Put stock!
+  INSClassInStock = ItemInStock(INr,gLocation);
+  return;
+end;
+
+global function string 255 INSClassInStock1(var record INVc INr)	// Edit by Victor 29.10.14
+begin
+  transaction string 255 gLocation;
+  
+  if (blank(gLocation)) then begin
+    gLocation = ";;;";
+  end;
+  INSClassInStock1 = ItemInStock(INr,gLocation) + ItemInStock(INr,"");// Put stock!
   return;
 end;
