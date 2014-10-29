@@ -21,3 +21,52 @@ begin
   IN1SClassInStock = ItemInStock(INr,gLocation) + ItemInStock(INr,"4-NIZ");// Put stock!
   return;
 end;
+
+procedure AddToUsersArray(var Array string auser,var Integer acnt,string UserStr)
+begin
+  Integer i;
+  
+  for (i=0;i<acnt;i=i+1) begin
+    if (auser[i]==UserStr) then begin goto LAddToUsersArray; end;
+  end;
+  auser[acnt] = UserStr;
+  acnt = acnt + 1;
+LAddToUsersArray:;  
+  return;
+end;
+
+global
+procedure UserNPTSSClassArrayOnOpen(var Array string auser,var Integer acnt)
+begin
+  record UserVc Userr;
+  record GlobalUserVc GlobalUserr;
+  record ModuleBlock MBr;
+  Boolean found,testf;
+  
+  BlockLoad(MBr);
+  acnt = 0;
+  found = true;
+  while (LoopMain(Userr,1,found)) begin
+    if (found) then begin
+      testf = true;
+      if (Userr.SalesGroup!="SALES") then begin testf = false; end;	//Add bu Victor 29.10
+      if (Userr.TerminatedFlag!=0) then begin testf = false; end;
+      if (testf) then begin
+        AddToUsersArray(auser,acnt,Userr.Code & "     " & Userr.Name)
+      end;
+    end;
+  end;
+  if (MBr.UseGlobalUsers!=0) then begin
+    found = true;
+    while (LoopMain(GlobalUserr,1,found)) begin
+      if (found) then begin
+        testf = true;
+        if (GlobalUserr.Closed!=0) then begin testf = false; end;
+        if (testf) then begin
+          AddToUsersArray(auser,acnt,GlobalUserr.Code & "     " & GlobalUserr.Name)
+        end;
+      end;
+    end;
+  end;
+  return;
+end;
