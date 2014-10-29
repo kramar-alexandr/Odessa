@@ -18,6 +18,6 @@ begin
   if (blank(gLocation)) then begin
     gLocation = ";;;";
   end;
-  IN1SClassInStock = ItemInStock(INr,gLocation) + ItemInStock(INr,"ОСН2");// Put stock!
+  IN1SClassInStock = ItemInStock(INr,gLocation) + ItemInStock(INr,"4-NIZ");// Put stock!
   return;
 end;
