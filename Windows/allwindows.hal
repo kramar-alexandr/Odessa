@@ -4255,11 +4255,11 @@ end else begin
       nr = nr & IVr.SerNr;
     end;
 
-    if (IsSessionOpen(IVr.MachineName,IVr.DrawerCode,CurrentDate,CurrentTime)) then begin
+    /*if (IsSessionOpen(IVr.MachineName,IVr.DrawerCode,CurrentDate,CurrentTime)) then begin
       sessdesc = "Сессия терминала открыта";
     end else begin
       sessdesc = "*** Сессия терминала закрыта ***";
-    end;
+    end;*/
 
     // StopAlert("IsSessionOpen(" & IVr.MachineName & "," & IVr.DrawerCode & "," & IVr.TransDate & "," & IVr.TransTime & "); -> " & sessdesc);
 
