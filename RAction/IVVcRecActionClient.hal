@@ -179,6 +179,7 @@ begin
     level = StringToInt(GetWindowString(wn,"touchscreenwindowpage"));
     PutWindowString(wn,"touchscreenwindowpageprevious",level);
     IVDClass_RefreshStringList(wn,IVr);
+    IVr.PayDeal = "C";				//	*****	Edit by Victor 30.10.14
     ResetDisplayDsm;
 //    ReRunWindowDef(wn);  in IVDClassOnOpenWindow
     WindowFieldGotoForTouchScreen(wn,-1,"ivcashcommand",true);
