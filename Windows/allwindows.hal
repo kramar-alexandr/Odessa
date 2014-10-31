@@ -4683,7 +4683,10 @@ begin
         RlCol(-120,-120,"Цена",UPrice1,true);
       end;
       if (HasModIN) then begin
-        CalculatedColumn(-50,-50,"На складе","IN1SClassInStock",true);
+        CalculatedColumn(-100,-100,"На складе","IN1SClassInStock",true);
+      end;
+      if (HasModIN) then begin
+        CalculatedColumn(-50,-50,"4-NIZ","IN1SClassInStockNIZ",true);// Edit ************************** Friday, 31 October 2014 11:43:05
       end;
       SearchField("Найти");
       if (HasModIN) then begin

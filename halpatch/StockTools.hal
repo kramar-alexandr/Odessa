@@ -10,7 +10,9 @@ begin
   INSClassInStock = ItemInStock(INr,gLocation);
   return;
 end;
-
+// Edit Start ---------------------------------------------- Edit Start
+	//Friday, 31 October 2014 11:41:08
+	
 global function string 255 IN1SClassInStock(var record INVc INr)	// Edit by Victor 29.10.14
 begin
   transaction string 255 gLocation;
@@ -18,9 +20,21 @@ begin
   if (blank(gLocation)) then begin
     gLocation = ";;;";
   end;
-  IN1SClassInStock = ItemInStock(INr,gLocation) + ItemInStock(INr,"4-NIZ");// Put stock!
+  IN1SClassInStock = ItemInStock(INr,gLocation);// Put stock!
   return;
 end;
+
+global function string 255 IN1SClassInStockNIZ(var record INVc INr)	// Edit by Victor 29.10.14
+begin
+  transaction string 255 gLocation;
+  
+  IN1SClassInStockNIZ = ItemInStock(INr,"4-NIZ");// Put stock!
+  return;
+end;
+
+
+	// Edit End ---------------------------------------------- Edit End
+	
 
 procedure AddToUsersArray(var Array string auser,var Integer acnt,string UserStr)
 begin
