@@ -1265,19 +1265,28 @@ BEGIN
   record AccBlock ARAccRec;
   record CCatVc CCatr;
   record CUVc CUr;
-
-  if (nonblank(prevpaydeal)) then begin
+  record DefCashBlock DefCashRec;	//	Edit by Victor 31.10.14
+	
+	if (nonblank(prevpaydeal)) then begin
     prevPDr.Code = prevpaydeal;
     if (GetPD(prevPDr)) then begin
     end;
   end;
+  
+  if(blank(IVp.PayDeal)) then begin	//	Edit by Victor 31.10.14
+  	BlockLoad(DefCashRec);
+    IVp.PayDeal = DefCashRec.DefCashPayDeal;
+  end;
+  
   PDr.Code = IVp.PayDeal;
   if (GetPD(PDr)) then begin
     goto LSkipMainCL;
   end;
    IVp.PayDeal = "";
    goto LPastePDInInv;
-
+	
+	
+	
 LSkipMainCL:;
     BlockLoad(ARAccRec);
     IVp.PayDeal = PDr.Code;
@@ -1365,9 +1374,7 @@ global
 function Boolean PasteCustInInv(var record IVVc IVr)
 BEGIN
   record CUVc CUr;
-  record DefCashBlock DefCashRec;	//	Edit by Victor 30.10.14
   Boolean found;
-  
   
   CUr.Code = IVr.CustCode;
   found = ReadFirstMain(CUr,1,true);
@@ -1406,12 +1413,7 @@ BEGIN
     IVr.NoInterestFlag = 0;
     GetPriceList(IVr.CustCat,IVr.TransDate,IVr.TransTime,IVr.PriceList,IVr.InclVAT);
     IVr.ExportFlag = CUr.ExportFlag;
-    if(nonblank(CUr.PayDeal))then begin		//	Edit by Victor 30.10.14
-    	IVr.PayDeal = CUr.PayDeal;
-    end else begin
-    	BlockLoad(DefCashRec);
-    	IVr.PayDeal = DefCashRec.DefCashPayDeal;
-    end;
+    IVr.PayDeal = CUr.PayDeal;
     IVr.FiscalFlag = CUr.FiscalFlag;
     PastePDInInv(IVr,"",false);
   end;
