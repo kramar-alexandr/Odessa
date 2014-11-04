@@ -842,7 +842,9 @@ begin
     if (CUr.IntRate!=0) then begin
       IVp.IntCode = CUr.IntRate;
     end;
-    IVp.CurncyCode = CUr.CurncyCode;
+    if(nonblank(CUr.CurncyCode))then begin	//	********** Edit by Victor 04.11.14	********
+	    IVp.CurncyCode = CUr.CurncyCode;
+	  end;
 		if (TouchScreenLook) then begin		//	********** Edit by Victor 31.10.14	********
 			IVp.CurncyCode = "UAH";
 		end;
