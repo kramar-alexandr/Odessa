@@ -2683,11 +2683,12 @@ begin
 //  MatCol(1,194,"Description",0,Spec,false,0);
   flipnr = 1;
   Flip(flipnr); flipnr = flipnr + 1;
-  MatColTL(1,164,"Ед.",0,M4Code,ViewOnly,5,UnitCode,false,UnitSCLass);
-  MatCol(1,204,"Наименование",0,Spec,false,0);
+  MatColTL(1,134,"Ед.",0,M4Code,ViewOnly,5,UnitCode,false,UnitSCLass);
+  MatCol(1,174,"Наименование",0,Spec,false,0);
   if (HasJewelleryInterface) then begin
     MatCol(1,-337,"Тип склада",0,StockType,false,SetSClass);
   end;
+  MatColTL(1,-330,"Альтерн.код",0,M4Code,ViewOnly,0,AlternativeCode,true,0); //Edit***************************Sasha2,13:52 06.11.2014
   MatCol(1,-237,"Цена",0,Price,true,0);
   MatCol(1,-151,"%",0,vRebate,true,0);
   MatCol(1,-116,"Сумма",0,Sum,true,0);
