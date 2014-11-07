@@ -47,7 +47,7 @@ external procedure PastePDInInv(var record IVVc,string,Boolean);
 external function Boolean PasteCustInInv(var record IVVc);
 external function LongInt GetCurUserLastNr(string);
 external procedure GetItemSalesAccFromOR(record ORVc,var string);
-external function Boolean TouchScreenLook();
+
 
 procedure GetItemDebtorsAcc(record ORVc ORr,var string debtorsacc)
 begin
@@ -769,6 +769,7 @@ begin
   record CCatVc CCatr;
   record LoyaltyCardVc LoyaltyCardr;
   Boolean limitdaysf;
+  record ModuleBlock Modb; //Edit***************************Sasha2,10:33 07.11.2014
 
   warning = "";
   errstr = "";
@@ -797,6 +798,7 @@ begin
   end;
   BlockLoad(GenOptRec);
   BlockLoad(CreditLimitRec);
+  BlockLoad(Modb); //Edit***************************Sasha2,10:37 07.11.2014
   if ((efstr!=IVp.CustCode) and (nonblank(efstr))) then begin
     tstr = IVp.Objects;
     RemoveOldCustObjects(efstr,tstr);
@@ -842,12 +844,6 @@ begin
     if (CUr.IntRate!=0) then begin
       IVp.IntCode = CUr.IntRate;
     end;
-    if(nonblank(CUr.CurncyCode))then begin	//	********** Edit by Victor 04.11.14	********
-	    IVp.CurncyCode = CUr.CurncyCode;
-	  end;
-		if (TouchScreenLook) then begin		//	********** Edit by Victor 31.10.14	********
-			IVp.CurncyCode = "UAH";
-		end;
     IVp.Objects = AddObjectToObjectList(IVp.Objects,CUr.Objects);
     oldSalesMan = IVp.SalesMan;
     SetSalesMan(IVp.SalesMan,CUr.SalesMan);
@@ -956,6 +952,12 @@ begin
     IVp.NoTax1 = CUr.NoTax1;
     IVp.NoTax2 = CUr.NoTax2;
     curcode = IVp.CurncyCode;
+    if(nonblank(CUr.CurncyCode))then begin	//	********** Edit by Victor 04.11.14	********
+	    curcode = CUr.CurncyCode;
+	end;
+	if (Modb.TouchScreenLook!=0 and LMb.TouchScreenLook!=0) then begin		//	********** Edit by Victor 31.10.14	********
+		curcode = "UAH";
+	end;
     GetFullCurncyRate(curcode,IVp.InvDate,fr,to1,to2,br1,br2);
     IVp.CurncyCode = curcode;
     IVp.FrRate = fr;
