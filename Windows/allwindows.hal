@@ -4846,3 +4846,67 @@ begin
   end;
   EndWindow;
 end;
+
+window MyAccountTClass:1
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  real h,h2,h3,h4,h5,h6,v,vs;
+  WindowBegin("Настройки моей регистрации",MyAccountTClass,CGSbl,-);
+  SetBlid(MyAccountBlock);
+  SetWRect(20,80,660,360);
+  h = 160; v = 16; vs = 20; h2 = 350; h3 = 10; h4 = 180; h5 = 400; h6 = 500;
+  Tile(0,80,false,"",Active);
+  CheckBox(h,v,0,"My Account Activated",Active);
+  CheckBox(h,v+=16,0,"Template elements override built-in headings",OverrideHeadings);
+  TileButton(1,"Registration");
+  TileButton(2,"Orders");
+  TileButton(3,"Invoices");
+  TileButton(4,"Contact Details");
+  TileButton(5,"Delivery Address");
+  TileButton(6,"Change Password");
+  Tile(1,50,true,"1",RegUniqueName);
+  ButtonFrame(h3,v=20,150,4,"Unique Fields");
+  CheckBox(h3,v,0,"Name",RegUniqueName);
+  CheckBox(h3,v+=16,0,"E-mail",RegUniqueeMail);
+  CheckBox(h3,v+=16,0,"Phone",RegUniquePhone); //Edit***************************Sasha2,12:13 07.11.2014
+  CheckBox(h3,v+=16,0,"#Reg. No.# 1",RegUniqueRegNr1);
+  CheckBox(h3,v+=16,0,"#VAT Reg. No.#",RegUniqueVATNr);
+  ButtonFrame(h4,v=20,180,7,"Default Values");
+  EditField(h4+120,v+=5,50,"Customer Category",Normal,RegDefCustCat,false,CCatSClass);
+  CheckBox(h4+10,v+=25,0,"Allow Login",RegDefAllowLogin);
+  ButtonFrame(h4+10,v+=40,100,2,"Type");
+  RadioButton(h4+10,v,0,0,"Компания",RegDefCustType);
+  RadioButton(h4+10,v+=16,1,0,"Person",RegDefCustType);
+  EditField(h6,v=6,120,"Template Page",Normal,RegPage,false,WebNGPageSClass);
+  EditField(h6,v+=vs,120,"Template Element",Normal,RegElement,false,WebNGElementSClass);
+  CheckBox(h5,v+=30,0,"Show Login after registration",RegShowLogin);
+  Tile(2,30,true,"2",OrderPage);
+  CheckBox(h3,v=6,0,"Include Orders",OrderActive);
+  EditField(h6,v,120,"Template Page",Normal,OrderPage,false,WebNGPageSClass);
+  EditField(h6,v+=vs,120,"Template Element",Normal,OrderElement,false,WebNGElementSClass);
+  ButtonFrame(h,v+=40,300,5,"Show");
+  CheckBox(h,v,0,"All Outstanding Orders",OrderAllOutst);
+  EditField(h2,v+=30,60,"Order Class",Normal,OrderClass,false,OrderClassSClass);
+  EditField(h2,v+=vs,60,"Number of Last Completed Orders",Normal,OrderCount,false,0);
+  Tile(3,30,true,"3",InvoicePage);
+  CheckBox(h3,v=6,0,"Include Invoices",InvoiceActive);
+  EditField(h6,v,120,"Template Page",Normal,InvoicePage,false,WebNGPageSClass);
+  EditField(h6,v+=vs,120,"Template Element",Normal,InvoiceElement,false,WebNGElementSClass);
+  ButtonFrame(h,v+=40,300,5,"Show");
+  CheckBox(h,v,0,"All Outstanding Invoices",InvoiceAllOutst);
+  CheckBox(h,v+=16,0,"Allow Paying Invoices",InvoiceAllowPay);
+  EditField(h2,v+=30,60,"Number of Last Paid Invoices",Normal,InvoiceCount,false,0);
+  Tile(4,30,true,"4",DetailsPage);
+  CheckBox(h3,v=6,0,"Include Contact Details",DetailsActive);
+  EditField(h6,v,120,"Template Page",Normal,DetailsPage,false,WebNGPageSClass);
+  EditField(h6,v+=vs,120,"Template Element",Normal,DetailsElement,false,WebNGElementSClass);
+  Tile(5,30,true,"5",DelAddrPage);
+  CheckBox(h3,v=6,0,"Include Delivery Address",DelAddrActive);
+  EditField(h6,v,120,"Template Page",Normal,DelAddrPage,false,WebNGPageSClass);
+  EditField(h6,v+=vs,120,"Template Element",Normal,DelAddrElement,false,WebNGElementSClass);
+  Tile(6,30,true,"6",PasswordPage);
+  CheckBox(h3,v=6,0,"Include Change Password",PasswordActive);
+  EditField(h6,v,120,"Template Page",Normal,PasswordPage,false,WebNGPageSClass);
+  EditField(h6,v+=vs,120,"Template Element",Normal,PasswordElement,false,WebNGElementSClass);
+  EndWindow;
+end;

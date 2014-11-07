@@ -207,6 +207,45 @@ BlockBegin(ExportStockCSVBlock,-,"" )
 
 EndBlock;
 
+BlockBegin(MyAccountBlock,-,"");
+  BlockInServer;
+  BlockForAllCompanies;
+  RecordField(Active,M4Int,0,0);
+  RecordField(OverrideHeadings,M4Int,0,0);
+  RecordField(OrderActive,M4Int,0,0);
+  RecordField(OrderElement,M4Code,20,0);
+  RecordField(OrderPage,M4Code,20,0);
+  RecordField(OrderAllOutst,M4Int,0,0);
+  RecordField(OrderClass,M4Code,5,OrderClassVc);
+  RecordField(OrderCount,M4Int,0,0);
+  RecordField(InvoiceActive,M4Int,0,0);
+  RecordField(InvoiceElement,M4Code,20,0);
+  RecordField(InvoicePage,M4Code,20,0);
+  RecordField(InvoiceAllOutst,M4Int,0,0);
+  RecordField(InvoiceCount,M4Int,0,0);
+  RecordField(InvoiceAllowPay,M4Int,0,0);
+  RecordField(DetailsActive,M4Int,0,0);
+  RecordField(DetailsElement,M4Code,20,0);
+  RecordField(DetailsPage,M4Code,20,0);
+  RecordField(DelAddrActive,M4Int,0,0);
+  RecordField(DelAddrElement,M4Code,20,0);
+  RecordField(DelAddrPage,M4Code,20,0);
+  RecordField(PasswordActive,M4Int,0,0);
+  RecordField(PasswordElement,M4Code,20,0);
+  RecordField(PasswordPage,M4Code,20,0);
+  RecordField(RegElement,M4Code,20,0);
+  RecordField(RegPage,M4Code,20,0);
+  RecordField(RegUniqueName,M4Int,0,0);
+  RecordField(RegUniqueeMail,M4Int,0,0);
+  RecordField(RegUniqueRegNr1,M4Int,0,0);
+  RecordField(RegUniqueVATNr,M4Int,0,0);
+  RecordField(RegDefCustCat,M4Code,5,0);
+  RecordField(RegDefAllowLogin,M4Int,0,0);
+  RecordField(RegDefCustType,M4Int,0,0);
+  RecordField(RegShowLogin,M4Int,0,0);
+  RecordField(RegUniquePhone,M4Int,0,0); //Edit***************************Sasha2,12:01 07.11.2014
+EndBlock;
+
 RecordBegin(INVc,-,"artikel5");
   ImpExpLevel(1);
   NewAutosyncRegister(kSyncDirectionToClient,true);
