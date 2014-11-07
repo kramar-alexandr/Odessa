@@ -770,7 +770,7 @@ begin
   record LoyaltyCardVc LoyaltyCardr;
   Boolean limitdaysf;
   record ModuleBlock Modb; //Edit***************************Sasha2,10:33 07.11.2014
-
+  
   warning = "";
   errstr = "";
   prepstr = "";
@@ -851,7 +851,7 @@ begin
       tstr2 = IVp.Objects;
       RemoveOldPersObjects(oldSalesMan,tstr2);
       IVp.Objects = tstr2;
-    end;
+    end; 
     /*
     GetUserObject(IVp.SalesMan,tstr);    
     IVp.Objects = AddObjectToObjectList(IVp.Objects,tstr);
@@ -897,8 +897,11 @@ begin
     if (CUr.TaxTemplateCode!=IVp.CustTaxTemplateCode) then begin
       IVVc_FillupTaxTemplate(IVp);
       IVp.CustTaxTemplateCode = CUr.TaxTemplateCode;
-    end;    
-    IVp.Phone = CUr.Phone;
+    end;   
+    if (Modb.TouchScreenLook==0 or LMb.TouchScreenLook==0) then begin //Edit***************************Sasha2,17:31 07.11.2014 {
+    	IVp.Phone = CUr.Phone; 
+    end; //Edit***************************Sasha2,17:31 07.11.2014 }
+    //IVp.Phone = CUr.Phone; //Edit***************************Sasha2,17:47 07.11.2014
     IVp.Fax = CUr.Fax;
     InclVAT = IVp.InclVAT;
     if (HasPriceLists) then begin
@@ -914,7 +917,7 @@ begin
       if (nonblank(tstr)) then begin
         IVp.PriceList = tstr;
       end;
-    end;
+    end;   
     GetPriceList(IVp.CustCat,IVp.TransDate,IVp.TransTime,IVp.PriceList,InclVAT);
     IVp.InclVAT = InclVAT;
     if (nonblank(CUr.DelAddr0) or nonblank(CUr.DelAddr1) or nonblank(CUr.DelAddr2) or nonblank(CUr.DelAddr3) or nonblank(CUr.DelAddr4)) then begin

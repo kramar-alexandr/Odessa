@@ -4270,8 +4270,8 @@ end else begin
       SoftEditFieldTLX(360,6,h4,"",M4Str,ViewOnly,100,20,patM4black,"CustomerDisplayData_Line1",true,0);
       SoftEditFieldTLX(360,36,h4,"",M4Str,ViewOnly,100,30,patM4black,"CustomerDisplayData_Line2",true,0);
     end else begin
-      SoftEditFieldTLX(360,6,h4,"",M4Str,ViewOnly,100,30,patM4black,"CustomerDisplayData_Line1",true,0);
-      SoftEditFieldTLX(360,46,h4,"",M4Str,ViewOnly,100,50,patM4black,"CustomerDisplayData_Line2",true,0);
+      SoftEditFieldTLX(360,6,h4,"",M4Str,ViewOnly,100,15,patM4black,"CustomerDisplayData_Line1",true,0);
+      SoftEditFieldTLX(360,46,h4,"",M4Str,ViewOnly,100,25,patM4black,"CustomerDisplayData_Line2",true,0);
     end;
 
     switch (LMb.POSButtonsPosition) begin
@@ -4908,5 +4908,105 @@ begin
   CheckBox(h3,v=6,0,"Include Change Password",PasswordActive);
   EditField(h6,v,120,"Template Page",Normal,PasswordPage,false,WebNGPageSClass);
   EditField(h6,v+=vs,120,"Template Element",Normal,PasswordElement,false,WebNGElementSClass);
+  EndWindow;
+end;
+
+window AmendLineNPTSSClass:1
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer,iPad")
+begin
+  real h,h2,h3,h4,hm,l,v,v3,vm,vs,v4,v5,v6;
+  Integer wn,mwn;
+  Boolean testf;
+
+  wn = CurWindow;
+  if (wn>0) then begin
+    mwn = MotherWindow(wn);
+  end;
+  WindowBegin("Редактировать строку",AmendLineNPTSSClass,CGother,RcType);
+//  Modality(kModalityGlobal);
+  UseView(RcVc);
+  SetWRect(80,200,700,520);
+  switch (GuiType) begin
+    case kGuiiPhone: PopoverWindow; vs = 40; v4 = -480 ; v5 = -310; v6 = -120;
+    otherwise
+      vs = 20; v4 = -580 ; v5 = -410; v6 = -60;
+  end;
+  
+  if (UserCanAction("ChangingCostOnInvoiceRow",false)) then begin 
+ 	EditFieldTL(h=100,v=6,70,"Товар",M4UStr,ViewOnly,20,AccStr,false,0);
+	EditFieldTL(h,v+=vs,-20,"Наименов.",M4Str,Normal,255,f1,false,0);
+	EditFieldTL(h,v+=vs,70,"К-во",M423Val,Normal,0,vals0,true,0);
+	EditFieldTL(h,v+=vs,70,"Цена",M4Val,Normal,0,vals1,true,0);
+	EditFieldTL(h,v+=vs,70,"Скидка",M41Val,Normal,0,vals2,true,0);
+	EditFieldTL(h,v+=vs,70,"Сумма",M4Val,Normal,0,vals3,true,0);
+	EditFieldTL(h,v+=vs,70,"НДС",M4Code,Normal,10,f2,false,VATCodeSClass);
+  end else begin  //Edit***************************Sasha2,14:29 07.11.2014 {
+  	EditFieldTL(h=100,v=6,70,"Товар",M4UStr,ViewOnly,20,AccStr,false,0);
+	EditFieldTL(h,v+=vs,-20,"Наименов.",M4Str,ViewOnly,255,f1,false,0);
+	EditFieldTL(h,v+=vs,70,"К-во",M423Val,Normal,0,vals0,true,0);
+	EditFieldTL(h,v+=vs,70,"Цена",M4Val,ViewOnly,0,vals1,true,0);
+	EditFieldTL(h,v+=vs,70,"Скидка",M41Val,ViewOnly,0,vals2,true,0);
+	EditFieldTL(h,v+=vs,70,"Сумма",M4Val,ViewOnly,0,vals3,true,0);
+	EditFieldTL(h,v+=vs,70,"НДС",M4Code,ViewOnly,10,f2,false,VATCodeSClass);
+  end; //Edit***************************Sasha2,14:29 07.11.2014 }
+
+  
+  testf = false;
+  if (mwn>0) then begin
+    switch (GetWindowClass(mwn)) begin
+      case "IVDClass":
+    EditFieldTL(h,v+=vs,70,"Склад",M4Code,Normal,10,f3,false,LocationSClass);
+      case "RestAccDClass":
+        EditFieldTL(h,v+=vs,70,"Блюда",M4Str,Normal,255,f11,false,MealCourseSClass);  
+        EditFieldTL(h,v+=vs,70,"Место за столиком",M4Str,Normal,255,f12,false,0);  
+    end;
+  end;
+
+  v = -385; h2 = 55; v3 = 48; vs = 52;
+  if (GuiType==kGuiiPhone) then begin
+    ColourPushButton(v4,v6,v4+3*h2,v6+v3,"CancelAndOverrideLogout","Отмена",20);
+    ColourPushButton(v5,v6,v5+3*h2,v6+v3,"ProceedAmendLineNPTSSClass","Продолжить",20);
+  end else begin
+    ColourPushButton(v4,v6,v4+3*h2,v6+v3,"CancelAndOverrideLogout","Отмена<BR>F2",20);
+    ColourPushButton(v5,v6,v5+3*h2,v6+v3,"ProceedAmendLineNPTSSClass","Продолжить<BR>F1",20);
+  end;
+
+//  ColourPushButton(h=10,v=-50,h+100,v+40,"CancelAndOverrideLogout","Cancel<BR>F2",20);
+//  ColourPushButton(h+=120,v,h+100,v+40,"ProceedAmendLineNPTSSClass","Proceed<BR>F1",20);
+//  ColourPushButton(h+=120,v,h+100,v+40,"CashPayTouchScreenKeypad","Keypad<BR>F3",2);
+
+  if (GuiType!=kGuiiPhone) then begin
+    hm = 383;
+
+    h2 = 80; v3 = 33; vs = 37; h3 = 210; h4 = 400;
+
+    vm = -160; vs = 52; h2 = 55; v3 = 48; l = 57;
+    v = v + 117+vs;
+    h = hm-2; ColourPushButton(h,v,h+h2,v+v3,"NPTSPaymentToolKeyPad1","1_",2);
+    h = h+l; ColourPushButton(h,v,h+h2,v+v3,"NPTSPaymentToolKeyPad2","2_",2);
+    h = h+l; ColourPushButton(h,v,h+h2,v+v3,"NPTSPaymentToolKeyPad3","3_",2);
+    h = h+l+10; ColourPushButton(h,v,h+h2,v+v3,"NPTSPaymentToolKeyDel","Del",2);
+    v = v+vs;
+    h = hm-2; ColourPushButton(h,v,h+h2,v+v3,"NPTSPaymentToolKeyPad4","4_",2);
+    h = h+l; ColourPushButton(h,v,h+h2,v+v3,"NPTSPaymentToolKeyPad5","5_",2);
+    h = h+l; ColourPushButton(h,v,h+h2,v+v3,"NPTSPaymentToolKeyPad6","6_",2);
+    h = h+l+10; ColourPushButton(h,v,h+h2,v+3*v3+8,"NPTSPaymentToolKeyEnter","OK",2);
+    v = v+vs;
+    h = hm-2; ColourPushButton(h,v,h+h2,v+v3,"NPTSPaymentToolKeyPad7","7_",2);
+    h = h+l; ColourPushButton(h,v,h+h2,v+v3,"NPTSPaymentToolKeyPad8","8_",2);
+    h = h+l; ColourPushButton(h,v,h+h2,v+v3,"NPTSPaymentToolKeyPad9","9_",2);
+    v = v+vs;
+    h = hm-2; ColourPushButton(h,v,h+h2,v+v3,"NPTSPaymentToolKeyPM","+/-",2);
+    h = h+l; ColourPushButton(h,v,h+h2,v+v3,"NPTSPaymentToolKeyPad0","0_",2);
+    h = h+l; ColourPushButton(h,v,h+h2,v+v3,"IVDClassToolKeyPadPoint",".",2);
+  end;
+
+/*
+  EditFieldTL(h,v+=300,70,"Price Factor",M4Val,ViewOnly,0,vals4,true,0);
+  SoftEditField(h,v+=20,70,"Base Price",ViewOnly ,"BasePrice",false,0,M4Str,255);
+
+  EditFieldTL(h,v+=20,70,"Currncy",M4UStr,ViewOnly,5,CurncyCode,true,0);
+  EditFieldTL(h,v+=20,70,"Pay Mode",M4UStr,ViewOnly,10,FirstAcc,true,0);
+*/
   EndWindow;
 end;
