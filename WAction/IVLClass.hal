@@ -1,0 +1,18 @@
+external function Boolean IVCashDClasstouchscreenitemEFAfter(Integer,Integer,Boolean);
+external function Boolean IVDClassiPhonePasteItem(Integer,Integer,Boolean);
+remote function val ItemInStock(var record INVc,string);
+
+global
+function Boolean IVLClassOnOpenWindow(Integer wn)
+begin
+  date dt;
+  record UserVc Userr;
+  
+  Userr.Code = CurrentUser;
+  if(readFirstMain(Userr, 1, true))then begin
+   	SetWindowSubset(wn,Userr.SalesGroup);
+  end;  
+    
+  IVLClassOnOpenWindow = false;
+  return;
+end;
