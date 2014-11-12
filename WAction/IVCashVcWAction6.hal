@@ -265,6 +265,7 @@ begin
         IVrw.BaseRate1 = base1;
         IVrw.BaseRate2 = base2;  
         MatRowPut(IVr,MatRowCnt(IVr),IVrw);
+        IVSumup(IVr,true);// Edit ************************** Wednesday, 12 November 2014 15:42:45
         PutWindowRecord(mwn,IVr);
         WindowFieldGoto(wn,IVr,-1,"touchscreenitem",true);
       case "IVCashVc":
@@ -454,7 +455,6 @@ begin
 							paidSum = paidSum + IVrw.Sum;							
 						end; 
 					end;
-					
           if(paidSum >= IVr.Sum4)then begin
 	        	Logtext(0,"IVFinishAndPrint() bu button 'CC pay'");
 	        	//SelectWindow(mwn);
