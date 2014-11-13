@@ -898,10 +898,7 @@ begin
       IVVc_FillupTaxTemplate(IVp);
       IVp.CustTaxTemplateCode = CUr.TaxTemplateCode;
     end;   
-    if (Modb.TouchScreenLook==0 or LMb.TouchScreenLook==0) then begin //Edit***************************Sasha2,17:31 07.11.2014 {
-    	IVp.Phone = CUr.Phone; 
-    end; //Edit***************************Sasha2,17:31 07.11.2014 }
-    //IVp.Phone = CUr.Phone; //Edit***************************Sasha2,17:47 07.11.2014
+    IVp.Phone = CUr.Phone;
     IVp.Fax = CUr.Fax;
     InclVAT = IVp.InclVAT;
     if (HasPriceLists) then begin
@@ -1030,11 +1027,11 @@ begin
   IVp.LCMLevel = "";
   IVp.Points = 0;
 
-  LoyaltyCardr.CustCode = CUr.Code;
+  /*LoyaltyCardr.CustCode = CUr.Code;
   if (ReadFirstKey("ActCustCode",LoyaltyCardr,1,true)) then begin
    IVp.LoyaltyCardNr = LoyaltyCardr.SerNr;
    IVVc_PasteLoyaltyCardNr(IVp,LMb);
-  end;
+  end;*/
   IVVc_PasteInvCountry(IVp,"");
   IVVc_PasteDelCountry(IVp,"");
 

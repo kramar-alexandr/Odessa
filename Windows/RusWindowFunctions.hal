@@ -1104,10 +1104,10 @@ begin
   if (nonblank(sessiondesc)) then begin
     StaticText(h,v+=20,sessiondesc,false);
   end;
-  /*if (nonblank(phone)) then begin //Edit***************************Sasha2,9:43 10.11.2014 {
+  if (nonblank(phone)) then begin 
     tstr = "Телефон: " & phone;
-    StaticText(h2,v+20,tstr,false); //Edit***************************Sasha2,12:07 29.10.2014
-  end;*/ //Edit***************************Sasha2,9:43 10.11.2014 }
+    StaticText(h2,v+20,tstr,false);
+  end;
   if (HasJewelleryInterface) then begin
     if (nonblank(objects)) then begin
       tstr = "Объекты: ";

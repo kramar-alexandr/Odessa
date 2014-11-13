@@ -1,1 +1,3 @@
 RAction/IVVcRecActionClient.hal
+halcust/halpatch/IVVcWActionTool3.hal
+halcust/halpatch/IVVcWActionTool.hal
