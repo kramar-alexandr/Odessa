@@ -24,6 +24,11 @@ external procedure IVCash2IV(record IVCashVc, var record IVVc);
 external function boolean PMsg_PrintReceipt(record LSerialPortDeviceVc,var record IVVc);
 external procedure PMsg_OpenCashDrawer(record LSerialPortDeviceVc,boolean);
 external procedure SetPOSWindowDisplayModeFiscalPrinterPOSNETLCD(record LSerialPortDeviceVc , string, string); //DA
+external procedure GetUserName(String,var String); //Edit***************************Sasha2,14:22 14.11.2014
+external procedure PrintLongLine(); //Edit***************************Sasha2,14:39 14.11.2014
+external procedure M4PadString(string,Integer,string,Boolean,var string); //Edit***************************Sasha2,14:51 14.11.2014
+external procedure OpenCashDrawer_IVVc(record IVVc); //Edit***************************Sasha2,16:18 14.11.2014
+external procedure UpdInvPrt(var record IVVc); //Edit***************************Sasha2,16:18 14.11.2014
 
 global
 procedure GetPrintData(string localmachine,var record MachineCashVc MCr)
@@ -680,6 +685,145 @@ begin
 LRestAccBarOrder:;
   return;
 end;
+ 
+global //Edit***************************Sasha2,13:58 14.11.2014
+procedure IVVc_PrintBTN_2002NP_Odessa(record IVVc IVp,Boolean opendrawerf)
+begin
+  Row IVVc IVrw;
+  Integer i,j,rwcnt,rwcnt1,Error;
+  String 20 StandardMode,EmphesizeOn,EmphesizeOff,LangSetOn,BigSizeOn,BigSizeOff,UnderlineOn,UnderlineOff,CenterOn,CenterOff;
+  String 20 FormFeed,CutPaper,CashBox;
+  Val RowTot,sum,rebtot;
+  Boolean res,unitprice,posf;
+  Integer vatcnt;
+  record SMVc SMr; 
+  row SMVc SMrw; 
+  record RoundBlock RoundRec;
+  string 10 stock;
+  string 60 pername;
+  record LocationVc Locationr;
+  record LocalMachineVc LMr;
+  string 255 s,L2;
+  integer leng,pos,padspec;
+  string 255 itemspec;
+
+  sum = 0;
+  rebtot = 0;
+
+  LangSetOn = chr(27) & chr(116) & chr(2) & chr(27) & chr(82) & chr(5);
+  StandardMode = chr(27) & chr(83);
+  BigSizeOn = chr(29) & chr(33) & chr(16);
+  BigSizeOff = chr(29) & chr(33) & chr(0);
+  EmphesizeOn = chr(27) & chr(69) & chr(1);
+  EmphesizeOff = chr(27) & chr(69) & chr(0);
+  UnderlineOn = chr(27) & chr(45) & chr(1);;
+  UnderlineOff = chr(27) & chr(45) & chr(0);;
+  FormFeed =  chr(27) & chr(100) & chr(5);
+  CutPaper = chr(27) & chr(105);
+  CashBox = chr(27) & chr(112) & chr(0);
+  
+  Error = OutComPort(1,StandardMode);
+  Error = OutComPort(1,chr(27) & chr(116) & chr(17)); //code page
+ 
+  M4PadString("N " & IVp.SerNr,20," ",false,s); //Change
+  M4PadString(IVp.TransDate & "  " & IVp.TransTime,20," ",true,L2);
+  s =  EmphesizeOn & s & EmphesizeOff & L2;
+  Error = OutComPort(1,s & chr(10)); s ="";
+  LMr.Code = IVp.MachineName;
+  ReadFirstMain(LMr,1,true);
+  Error = OutComPort(1,StandardMode);
+  s = LMr.CompName;
+  Error = OutComPort(1,s & chr(10)); s ="";
+  s = LMr.Addr0 & " " & LMr.Tel;
+  Error = OutComPort(1,s & chr(10)); s ="";
+  GetUserName(IVp.SalesMan,pername);
+  Error = OutComPort(1,USetStr(11044) & " " & pername & chr(10)); s ="";
+  Error = OutComPort(1,s & chr(10)); s =""; //empty line
+  PrintLongLine;
+
+  rwcnt1 = MatRowCnt(IVp);
+  s ="";
+  for (i=0;i<rwcnt1;i=i+1) begin
+      MatRowGet(IVp,i,IVrw);
+    
+	  if(IVrw.stp!=15 or IVrw.stp!=16 or IVrw.stp!=kInvoiceRowTypeChequePayment) then begin
+	    if (nonblank(IVrw.ArtCode)) then begin
+	      if (IVrw.Price!=0) then begin
+	      	leng = len(IVrw.Spec);
+	      	pos = 0;
+	      	posf = false;
+	      	padspec = 40;
+	      	while (pos<leng) begin
+	      		if (posf) then begin
+	      			pos = pos + padspec;
+	      		end;
+	      		itemspec = mid(IVrw.Spec,pos,padspec);
+	      		M4PadString(itemspec,40," ",false,L2);
+	      		s = L2;
+		    	Error = OutComPort(1,s & chr(10)); s ="";
+		    	posf = true;
+	      	end;
+		    M4PadString(ValToString(IVrw.Quant,M4UVal,"",",",0) & " X",10," ",true,L2);
+		    s = s & L2;
+		    unitprice = true;
+		    if (unitprice) then begin
+		      M4PadString(ValToString(IVrw.Price,M4Val,"",",",0),10," ",true,L2);
+		    end else begin
+		      M4PadString(ValToString(IVrw.Price*IVrw.Quant,M4Val,"",",",0) & " =",15," ",true,L2);
+		    end;
+		    s = s & L2;
+		    M4PadString(ValToString(IVrw.Sum,M4UVal,"",",",0),15," ",true,L2);
+		    s = s & L2;
+		    Error = OutComPort(1,s & chr(10)); s ="";
+		    if (IVrw.vRebate <> 0) then begin
+			    M4PadString("  " & USetStr(12007) & " " & ValToString(IVrw.vRebate,M4Val,"",",",0) & " %",15," ",false,L2);
+			    s = s & L2;
+			    M4PadString("       " & ValToString(IVrw.Quant*IVrw.Price*(IVrw.vRebate/100),M4Val,"",",",0),15," ",false,L2);
+			    rebtot = rebtot + IVrw.Quant*IVrw.Price*(IVrw.vRebate/100);
+			    s = s & L2;
+			    Error = OutComPort(1,s & chr(10)); s ="";
+		    end;
+		  end;
+	    end;
+	  end;
+  end;
+  PrintLongLine;
+  M4PadString(USetStr(11185),30," ",false,s);  //Total
+  M4PadString(ValToString(IVp.Sum4 + rebtot,M4Val,"",",",0),10," ",true,L2);
+  s = s & EmphesizeOn & L2 & EmphesizeOff; 
+  Error = OutComPort(1,s & chr(10)); s =""; L2 ="";
+  
+  M4PadString(USetStr(31004),30," ",false,s); //Rebate total
+  M4PadString(ValToString(rebtot,M4Val,"",",",0),10," ",true,L2);
+  s = s & EmphesizeOn & L2 & EmphesizeOff; 
+  Error = OutComPort(1,s & chr(10)); s =""; L2 ="";
+  
+  M4PadString(USetStr(31005),30," ",false,s); //Pay due
+  M4PadString(ValToString(IVp.Sum4,M4Val,"",",",0),10," ",true,L2);
+  s = s & EmphesizeOn & L2 & EmphesizeOff; 
+  Error = OutComPort(1,s & chr(10)); s =""; L2 ="";
+  
+  M4PadString(USetStr(9589),30," ",false,s); //Change
+  M4PadString(ValToString(IVp.RetnValue,M4Val,"",",",0),10," ",true,L2);
+  s = s & EmphesizeOn & L2 & EmphesizeOff; 
+  Error = OutComPort(1,s & chr(10)); s =""; L2 ="";
+  PrintLongLine;
+  s = USetStr(31006);
+  Error = OutComPort(1,s & chr(10)); s ="";
+  
+  Error = OutComPort(1,s & chr(10)); s =""; //empty line
+  s = "" & chr(29) & chr(86) & chr(49);
+  Error = OutComPort(1,s & chr(10)); s ="";
+
+  Error = CloseComPort(1);
+  if (opendrawerf==true) then begin
+    OpenCashDrawer_IVVc(IVp);
+  end;
+  if (IVp.Prntdf==0) then begin
+    queued.UpdInvPrt(IVp);
+  end;
+  return;
+end; //Edit***************************Sasha2,13:58 14.11.2014 }
 
 global
 function Boolean IVPrintReceipt(Integer wn,var record IVVc IVp,var record IVVc prevIVp,Integer rownr,Boolean okf,Boolean opendrawerf,Integer IncrementalPrint,Integer wnst)
@@ -718,9 +862,9 @@ begin
   end;
   switch (LSPDr.Printer) begin
     case kSerialPortDeviceModelPrinterEPSONTMU210:
-      IVVc_PrintEpsonTMU210Receipt(IVp,okf,opendrawerf);
-    case kSerialPortDeviceModelPrinterEPSONTMT88II:
-      res = IVVc_PrintEpsonTMT88IIReceipt(wn,IVp,prevIVp,rownr,okf,opendrawerf,IncrementalPrint,wnst);
+      IVVc_PrintBTN_2002NP_Odessa(IVp,opendrawerf);
+    //case kSerialPortDeviceModelPrinterEPSONTMT88II: //Edit***************************Sasha2,13:54 14.11.2014
+      //res = IVVc_PrintEpsonTMT88IIReceipt(wn,IVp,prevIVp,rownr,okf,opendrawerf,IncrementalPrint,wnst); //Edit***************************Sasha2,13:54 14.11.2014
       otherwise
         Error = CloseComPort(1);
   end;

@@ -17,6 +17,9 @@ begin
    SString(31001,"В открытых счетах клиена:");
    SString(31002,"Доступно:");
    SString(31003,"Клиент с таким телефоном уже зарегистрирован");
+   SString(31004,"Сумма скидки");
+   SString(31005,"К оплате");
+   SString(31006,"Ни хвоста ни чешуи!");
    
   Maintenance("Экспорт склада CSV",ExportStockCSVClass,ExportStockCSVMn,modSY);
   Maintenance("Пересчитать значение объема в карточке товара",RecalcINVolumeClass,RecalcINVolumeMn,modDBMain);//Edit***************************Sasha2,13:50 24.06.2014
