@@ -693,7 +693,7 @@ begin
   Integer i,j,rwcnt,rwcnt1,Error;
   String 20 StandardMode,EmphesizeOn,EmphesizeOff,LangSetOn,BigSizeOn,BigSizeOff,UnderlineOn,UnderlineOff,CenterOn,CenterOff;
   String 20 FormFeed,CutPaper,CashBox;
-  Val RowTot,sum,rebtot;
+  Val RowTot,sum,rebtot,cash,card;
   Boolean res,unitprice,posf;
   Integer vatcnt;
   record SMVc SMr; 
@@ -709,6 +709,8 @@ begin
 
   sum = 0;
   rebtot = 0;
+  cash = 0;
+  card = 0;
 
   LangSetOn = chr(27) & chr(116) & chr(2) & chr(27) & chr(82) & chr(5);
   StandardMode = chr(27) & chr(83);
@@ -719,8 +721,8 @@ begin
   UnderlineOn = chr(27) & chr(45) & chr(1);;
   UnderlineOff = chr(27) & chr(45) & chr(0);;
   FormFeed =  chr(27) & chr(100) & chr(5);
-  CutPaper = chr(27) & chr(105);
-  CashBox = chr(27) & chr(112) & chr(0);
+  CutPaper = chr(29) & chr(86) & chr(49); //cut chr(27) & chr(105);
+  CashBox = chr(27) & chr(112) & chr(0) & chr(25) & chr(250); //ESC p   old chr(27) & chr(112) & chr(0);
   
   Error = OutComPort(1,StandardMode);
   Error = OutComPort(1,chr(27) & chr(116) & chr(17)); //code page
@@ -745,7 +747,6 @@ begin
   s ="";
   for (i=0;i<rwcnt1;i=i+1) begin
       MatRowGet(IVp,i,IVrw);
-    
 	  if(IVrw.stp!=15 or IVrw.stp!=16 or IVrw.stp!=kInvoiceRowTypeChequePayment) then begin
 	    if (nonblank(IVrw.ArtCode)) then begin
 	      if (IVrw.Price!=0) then begin
@@ -760,7 +761,9 @@ begin
 	      		itemspec = mid(IVrw.Spec,pos,padspec);
 	      		M4PadString(itemspec,40," ",false,L2);
 	      		s = L2;
-		    	Error = OutComPort(1,s & chr(10)); s ="";
+	      		if (NonBlank(s)) then begin
+	      			Error = OutComPort(1,s & chr(10)); s ="";
+	      		end;
 		    	posf = true;
 	      	end;
 		    M4PadString(ValToString(IVrw.Quant,M4UVal,"",",",0) & " X",10," ",true,L2);
@@ -772,7 +775,7 @@ begin
 		      M4PadString(ValToString(IVrw.Price*IVrw.Quant,M4Val,"",",",0) & " =",15," ",true,L2);
 		    end;
 		    s = s & L2;
-		    M4PadString(ValToString(IVrw.Sum,M4UVal,"",",",0),15," ",true,L2);
+		    M4PadString(ValToString(IVrw.Sum,M4Val,"",",",0),15," ",true,L2);
 		    s = s & L2;
 		    Error = OutComPort(1,s & chr(10)); s ="";
 		    if (IVrw.vRebate <> 0) then begin
@@ -785,6 +788,13 @@ begin
 		    end;
 		  end;
 	    end;
+	  end else begin
+	  	if (IVrw.stp==kInvoiceRowTypeCashPayment) then begin
+	  		cash = cash + IVrw.Sum;
+	  	end;
+	  	if (IVrw.stp==kInvoiceRowTypeCreditCardPayment) then begin
+	  		card = card + IVrw.Sum;
+	  	end;
 	  end;
   end;
   PrintLongLine;
@@ -803,17 +813,38 @@ begin
   s = s & EmphesizeOn & L2 & EmphesizeOff; 
   Error = OutComPort(1,s & chr(10)); s =""; L2 ="";
   
+  if (cash<>0) then begin
+  	M4PadString(USetStr(8443),30," ",false,s); //Cash
+  	M4PadString(ValToString(cash,M4Val,"",",",0),10," ",true,L2);
+  	s = s & EmphesizeOn & L2 & EmphesizeOff; 
+  	Error = OutComPort(1,s & chr(10)); s =""; L2 ="";
+  end;
+  
+  if (card<>0) then begin
+  	M4PadString(USetStr(19266),30," ",false,s); //Card
+  	M4PadString(ValToString(card,M4Val,"",",",0),10," ",true,L2);
+  	s = s & EmphesizeOn & L2 & EmphesizeOff; 
+  	Error = OutComPort(1,s & chr(10)); s =""; L2 ="";
+  end;
+
   M4PadString(USetStr(9589),30," ",false,s); //Change
   M4PadString(ValToString(IVp.RetnValue,M4Val,"",",",0),10," ",true,L2);
   s = s & EmphesizeOn & L2 & EmphesizeOff; 
   Error = OutComPort(1,s & chr(10)); s =""; L2 ="";
+  
   PrintLongLine;
   s = USetStr(31006);
   Error = OutComPort(1,s & chr(10)); s ="";
   
   Error = OutComPort(1,s & chr(10)); s =""; //empty line
-  s = "" & chr(29) & chr(86) & chr(49);
-  Error = OutComPort(1,s & chr(10)); s ="";
+  Error = OutComPort(1,s & chr(10)); s =""; //empty line
+  Error = OutComPort(1,s & chr(10)); s =""; //empty line
+  Error = OutComPort(1,s & chr(10)); s =""; //empty line
+  Error = OutComPort(1,s & chr(10)); s =""; //empty line
+  Error = OutComPort(1,s & chr(10)); s =""; //empty line
+  
+  Error = OutComPort(1,CutPaper);
+  Error = OutComPort(1,CashBox);
 
   Error = CloseComPort(1);
   if (opendrawerf==true) then begin
