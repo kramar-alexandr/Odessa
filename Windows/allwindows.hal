@@ -4569,7 +4569,7 @@ end else begin
   SpecialMenu("Отчет о выручке",' ',24,"IVDClassCashupRnsm");
   SpecialMenu("Изменение скидки менеджером",' ',25,"MgrsDiscOverrideIVDsm");
   SpecialMenu("Открыть нал. матрицу",' ',25,"TestVatMatrixIVDsm");
-*/
+*/SpecialMenu("Тест принтера",'',0,"IVPrintReceiptTest");
 end;
   EndWindow;
 end;	//Edit by Victor }
