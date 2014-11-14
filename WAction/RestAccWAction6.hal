@@ -847,9 +847,10 @@ begin
   Error = OutComPort(1,CashBox);
 
   Error = CloseComPort(1);
-  if (opendrawerf==true) then begin
+  
+  /*if (opendrawerf==true) then begin
     OpenCashDrawer_IVVc(IVp);
-  end;
+  end;*/
   if (IVp.Prntdf==0) then begin
     queued.UpdInvPrt(IVp);
   end;
