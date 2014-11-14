@@ -444,7 +444,7 @@ begin
           SetPOSWindowDisplay_PaymentRow(IVrw.Spec,IVr.RetnValue);
           OpenCashDrawer;
           
-          rwcnt2 = matrowcnt(IVr);	//Begin Edit by Victor 12.11.14
+         	rwcnt2 = matrowcnt(IVr);	//Begin Edit by Victor 12.11.14
           for (i=0;i<rwcnt2;i=i+1) begin
 						MatRowGet(IVr,i,IVrw);
 						if (IVrw.stp==kInvoiceRowTypeCashPayment)then begin
