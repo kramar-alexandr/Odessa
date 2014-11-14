@@ -1035,6 +1035,9 @@ begin
       tstr = "Накопительная карта: ";
       tstr = tstr & loyaltycardnr;
       StaticText(h,v+=20,tstr,false);
+      tstr = "Накопительные баллы: ";	//Edit by Victor 14.11.14
+      tstr = tstr & OfficialNum;
+      StaticText(h,v+=20,tstr,false);	//End edit
     end else begin
       v = v + 20;
     end;
@@ -1081,6 +1084,9 @@ begin
     tstr = "Накопительная карта: ";
     tstr = tstr & loyaltycardnr;
     StaticText(h,v+=20,tstr,false);
+    tstr = "Накопительные баллы: ";	//Edit by Victor 14.11.14
+    tstr = tstr & OfficialNum;
+    StaticText(h,v+=20,tstr,false);	//End edit
   end else begin
     if (ShowBaggerSupervisor!=0) then begin
     v = v + 20;

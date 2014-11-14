@@ -4183,7 +4183,7 @@ if (HasTouchScreenLook==false) then begin
 end else begin
 
   date td;
-  integer acnt,wn;
+  integer acnt,wn,points;
   longint bm,lt,rt,tp,page;
   real h,h2,h3,h4,v;
   record IVVc IVr;
@@ -4191,7 +4191,8 @@ end else begin
   record POSButtonsVc POSBr;
   string 255 bc1,bc2,compname,lmc,nr,sessdesc,sm;
   time tt;
-
+  record LoyaltyCardVc LCr;
+  
   BlockLoad(LMb);
 
     //StopAlert(LMb.POSButtonGroup);
@@ -4260,7 +4261,12 @@ end else begin
     nr = "Счёт: ";
     if (IVr.SerNr>0) then begin
       nr = nr & IVr.SerNr;
-    end;
+    end; 
+    
+    LCr.SerNr = IVr.LoyaltyCardNr;
+		if(ReadFirstMain(LCr,1,true))then begin 
+			points = LCr.PointsBalance;
+		end; 
 
     /*if (IsSessionOpen(IVr.MachineName,IVr.DrawerCode,CurrentDate,CurrentTime)) then begin
       sessdesc = "Сессия терминала открыта";
@@ -4270,7 +4276,7 @@ end else begin
 
     // StopAlert("IsSessionOpen(" & IVr.MachineName & "," & IVr.DrawerCode & "," & IVr.TransDate & "," & IVr.TransTime & "); -> " & sessdesc);
 
-    DisplayRecordDetails_RUS(10,26,compname,td,tt,lmc,sm,nr,IVr.CustCode,IVr.Addr0,IVr.Addr1,IVr.Addr2,IVr.Addr3,IVr.Phone,IVr.Objects,IVr.LoyaltyCardNr,LMb.ShowBaggerSupervisor,"","","",blankval,sessdesc,true,IVr.OfficialSerNr,IVr.TaxAdminServSeal);
+    DisplayRecordDetails_RUS(10,26,compname,td,tt,lmc,sm,nr,IVr.CustCode,IVr.Addr0,IVr.Addr1,IVr.Addr2,IVr.Addr3,IVr.Phone,IVr.Objects,IVr.LoyaltyCardNr,LMb.ShowBaggerSupervisor,"","","",blankval,sessdesc,true,points,IVr.TaxAdminServSeal);
 
     if (bm<650) then begin
       SoftEditFieldTLX(360,6,h4,"",M4Str,ViewOnly,100,20,patM4black,"CustomerDisplayData_Line1",true,0);
@@ -4569,7 +4575,7 @@ end else begin
   SpecialMenu("Отчет о выручке",' ',24,"IVDClassCashupRnsm");
   SpecialMenu("Изменение скидки менеджером",' ',25,"MgrsDiscOverrideIVDsm");
   SpecialMenu("Открыть нал. матрицу",' ',25,"TestVatMatrixIVDsm");
-*/SpecialMenu("Тест принтера",'',0,"IVPrintReceiptTest");
+*/
 end;
   EndWindow;
 end;	//Edit by Victor }
