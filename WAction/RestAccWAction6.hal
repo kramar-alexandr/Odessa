@@ -690,11 +690,11 @@ global //Edit***************************Sasha2,13:58 14.11.2014
 procedure IVVc_PrintBTN_2002NP_Odessa(record IVVc IVp,Boolean opendrawerf)
 begin
   Row IVVc IVrw;
-  Integer i,j,rwcnt,rwcnt1,Error;
+  Integer i,j,rwcnt,Error;
   String 20 StandardMode,EmphesizeOn,EmphesizeOff,LangSetOn,BigSizeOn,BigSizeOff,UnderlineOn,UnderlineOff,CenterOn,CenterOff;
   String 20 FormFeed,CutPaper,CashBox;
-  Val RowTot,sum,rebtot,cash,card;
-  Boolean res,unitprice,posf;
+  Val RowTot,sum,rebtot,cash,card,treb;
+  Boolean res,unitprice;
   Integer vatcnt;
   record SMVc SMr; 
   row SMVc SMrw; 
@@ -703,9 +703,8 @@ begin
   string 60 pername;
   record LocationVc Locationr;
   record LocalMachineVc LMr;
-  string 255 s,L2;
-  integer leng,pos,padspec;
-  string 255 itemspec;
+  string 255 s,L2,itemspec;
+  integer leng,pos,padspec,loop;
 
   sum = 0;
   rebtot = 0;
@@ -743,28 +742,22 @@ begin
   Error = OutComPort(1,s & chr(10)); s =""; //empty line
   PrintLongLine;
 
-  rwcnt1 = MatRowCnt(IVp);
+  rwcnt = MatRowCnt(IVp);
   s ="";
-  for (i=0;i<rwcnt1;i=i+1) begin
+  for (i=0;i<rwcnt;i=i+1) begin
       MatRowGet(IVp,i,IVrw);
 	  if(IVrw.stp!=15 or IVrw.stp!=16 or IVrw.stp!=kInvoiceRowTypeChequePayment) then begin
 	    if (nonblank(IVrw.ArtCode)) then begin
 	      if (IVrw.Price!=0) then begin
 	      	leng = len(IVrw.Spec);
 	      	pos = 0;
-	      	posf = false;
 	      	padspec = 40;
-	      	while (pos<leng) begin
-	      		if (posf) then begin
-	      			pos = pos + padspec;
-	      		end;
+	      	while (leng>0) begin
 	      		itemspec = mid(IVrw.Spec,pos,padspec);
-	      		M4PadString(itemspec,40," ",false,L2);
-	      		s = L2;
-	      		if (NonBlank(s)) then begin
-	      			Error = OutComPort(1,s & chr(10)); s ="";
-	      		end;
-		    	posf = true;
+	      		M4PadString(itemspec,40," ",false,s);
+	      		Error = OutComPort(1,s & chr(10)); s ="";
+	      		leng = leng - padspec;
+	      		pos = pos + padspec;
 	      	end;
 		    M4PadString(ValToString(IVrw.Quant,M4UVal,"",",",0) & " X",10," ",true,L2);
 		    s = s & L2;
@@ -772,7 +765,7 @@ begin
 		    if (unitprice) then begin
 		      M4PadString(ValToString(IVrw.Price,M4Val,"",",",0),10," ",true,L2);
 		    end else begin
-		      M4PadString(ValToString(IVrw.Price*IVrw.Quant,M4Val,"",",",0) & " =",15," ",true,L2);
+		      M4PadString(ValToString(IVrw.Price*IVrw.Quant,M4Val,"",",",0) & " =",10," ",true,L2);
 		    end;
 		    s = s & L2;
 		    M4PadString(ValToString(IVrw.Sum,M4Val,"",",",0),15," ",true,L2);
@@ -781,8 +774,9 @@ begin
 		    if (IVrw.vRebate <> 0) then begin
 			    M4PadString("  " & USetStr(12007) & " " & ValToString(IVrw.vRebate,M4Val,"",",",0) & " %",15," ",false,L2);
 			    s = s & L2;
-			    M4PadString("       " & ValToString(IVrw.Quant*IVrw.Price*(IVrw.vRebate/100),M4Val,"",",",0),15," ",false,L2);
-			    rebtot = rebtot + IVrw.Quant*IVrw.Price*(IVrw.vRebate/100);
+			    treb = IVrw.Quant*IVrw.Price*(IVrw.vRebate/100);
+			    M4PadString("       " & ValToString(treb,M4Val,"",",",0),15," ",false,L2);
+			    rebtot = rebtot + treb;
 			    s = s & L2;
 			    Error = OutComPort(1,s & chr(10)); s ="";
 		    end;
@@ -836,12 +830,11 @@ begin
   s = USetStr(31006);
   Error = OutComPort(1,s & chr(10)); s ="";
   
-  Error = OutComPort(1,s & chr(10)); s =""; //empty line
-  Error = OutComPort(1,s & chr(10)); s =""; //empty line
-  Error = OutComPort(1,s & chr(10)); s =""; //empty line
-  Error = OutComPort(1,s & chr(10)); s =""; //empty line
-  Error = OutComPort(1,s & chr(10)); s =""; //empty line
-  Error = OutComPort(1,s & chr(10)); s =""; //empty line
+  loop = 6;
+  while (loop>0) begin
+  	Error = OutComPort(1,s & chr(10)); s =""; //empty line
+  	loop = loop - 1;
+  end;
   
   Error = OutComPort(1,CutPaper);
   Error = OutComPort(1,CashBox);
