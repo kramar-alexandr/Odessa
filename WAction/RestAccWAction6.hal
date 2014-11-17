@@ -746,7 +746,7 @@ begin
   s ="";
   for (i=0;i<rwcnt;i=i+1) begin
       MatRowGet(IVp,i,IVrw);
-	  if(IVrw.stp!=15 or IVrw.stp!=16 or IVrw.stp!=kInvoiceRowTypeChequePayment) then begin
+	  if(IVrw.stp!=15 and IVrw.stp!=16 and IVrw.stp!=kInvoiceRowTypeChequePayment) then begin
 	    if (nonblank(IVrw.ArtCode)) then begin
 	      if (IVrw.Price!=0) then begin
 	      	leng = len(IVrw.Spec);
