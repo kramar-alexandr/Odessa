@@ -3040,9 +3040,9 @@ procedure IVDClassTouchScreenCashupReport()
 begin
   Record RcVc RepSpec; //Edit***************************Sasha2,10:03 18.11.2014 {
   
-  ReportDefaults(RepSpec,"DaySalesRClass");
+  ReportDefaults(RepSpec,"POSPaymentsRClass");
   RepSpec.Media = mtScreen; 
-  RepSpec.repname = "DaySalesRn";
+  RepSpec.repname = "POSPaymentsRn";
   RepSpec.RegDate = CurrentDate;
   RunReport(RepSpec,0); //Edit***************************Sasha2,10:03 18.11.2014 }
   //IVCashCashupRnsm;  //Edit***************************Sasha2,10:03 18.11.2014

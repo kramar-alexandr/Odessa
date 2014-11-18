@@ -820,11 +820,11 @@ WindowBegin("Maintenance",MyVClass,CGMnt,RcType);
   EndWindow;
 end;
 
-window DaySalesRClass:1 
+window POSPaymentsRClass:1 
   wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
 begin
   real vs,h,v;
-  WindowBegin("Определите отчет по оплатам кассовых сч/ф",DaySalesRClass,CGRcW,RcType);
+  WindowBegin("Определите отчет по оплатам кассовых сч/ф",POSPaymentsRClass,CGRcW,RcType);
   SetWRect(20,80,400,320);
   vs = 20; h = 120;
 
