@@ -890,8 +890,8 @@ begin
       IVVc_PrintBTN_2002NP_Odessa(IVp,opendrawerf);
     //case kSerialPortDeviceModelPrinterEPSONTMT88II: //Edit***************************Sasha2,13:54 14.11.2014
       //res = IVVc_PrintEpsonTMT88IIReceipt(wn,IVp,prevIVp,rownr,okf,opendrawerf,IncrementalPrint,wnst); //Edit***************************Sasha2,13:54 14.11.2014
-      otherwise
-        Error = CloseComPort(1);
+    otherwise
+      Error = CloseComPort(1);
   end;
 LIVPrintReceipt:;
   IVPrintReceipt = res;

@@ -441,10 +441,10 @@ begin
     goto LIVDClassTouchScreenReprint;
   end;
   GetWindowRecord(wn,IVr);
-  if (IVr.OKFlag!=0) then begin
+  //if (IVr.OKFlag!=0) then begin //Edit***************************Sasha2,13:09 19.11.2014
     GetPrevWindowRecord(wn,prevIVr);
     IVPrintReceipt(wn,IVr,prevIVr,-1,false,false,0,WindowState(wn));
-  end;
+  //end; //Edit***************************Sasha2,13:09 19.11.2014
   OverrideLogout;
 LIVDClassTouchScreenReprint:;
   return;  
