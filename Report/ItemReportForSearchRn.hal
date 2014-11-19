@@ -1,0 +1,125 @@
+
+SetLangMode(LangRussian,"RUS",0);
+
+
+function Boolean FindSubString( string Search, string Source )
+begin
+	integer i,length,lengthSource,diff;
+	string 150 temp,str,inStr;
+	boolean res;
+	
+	res=false;
+	length=len(Search);
+	lengthSource=len(Source);
+	diff=lengthSource-length;
+
+	str=UpperCase(Search);   
+	inStr=UpperCase(Source);		
+	if (diff<0) then begin
+	goto	breakFunction;
+	end;
+	
+	for(i=0;i<=diff;i=i+1) begin
+	 temp=mid(inStr,i,length);
+	 if(temp==str) then begin
+	 	res = true;
+	 	goto breakFunction;
+	 end;	
+	end;
+
+	breakFunction:; // goto
+	FindSubString=res;
+return;  
+end;
+
+
+
+
+global procedure ItemReportForSearchRn(record RcVc RepSpec)
+begin
+	record INVc INr;
+	record ItemStatusVc ItemStatusr;
+	integer rw,TotalQuantity;
+	boolean continue,check;
+	string 100 searchStr ;
+	
+	searchStr = RepSpec.f1;
+
+	StartReportJob("Поиск товаров");
+	rw=1;
+	Header(rw,"Поиск по: " & searchStr,1);	
+	EndHeader;
+
+	SetRepCol(2,60);
+	SetRepCol(3,130);
+	SetRepCol(4,260);
+	SetRepCol(5,340);
+	SetRepCol(6,420);
+	SetRepCol(7,460);
+	
+	StartFormat(15);
+	OutString(0,0,"Код",false);
+	OutString(2,0,"Классификация",false);
+	OutString(3,0,"Название",false);
+	OutString(4,0,"Штрих-код",false);
+	OutString(5,0,"Альтернативный код",false);
+	OutString(6,0,"3-Рай",false);
+	OutString(7,0,"4-Низ",false);
+	EndFormat;
+	Black_Divider(0,1);
+	continue = true;
+
+	if blank(searchStr) then begin
+		continue=false;
+	end else begin
+		if (len(searchStr)<3) then begin
+		continue = false;
+		OutString(0,0,"Cузьте критерий поиска",false);
+		end;
+	end;
+
+	While (LoopMain(INr,1,continue)) begin
+		check=true;
+		
+		if (not (FindSubString(searchStr,INr.Code)  or FindSubString(searchStr,INr.Name) or 	FindSubString(searchStr,INr.InvCode) or  FindSubString(searchStr,INr.BarCode)or  FindSubString(searchStr,INr.AlternativeCode))) then begin
+		check = false;
+		end;
+	
+		if (check) then begin
+		
+			StartFormat(15);			
+			OutStringID(0,"PCIdbl",INr.Code,false,RepSpec.flags[0]);
+			OutString(2,0,INr.InvCode,false);
+			OutString(3,0,INr.Name,false);
+			OutString(4,0,INr.BarCode,false);
+			OutString(5,0,INr.AlternativeCode,false);
+
+			ItemStatusr.Code = INr.Code;
+			ItemStatusr.Location = "3-RAY";
+			if (ReadFirstMain(ItemStatusr,2,true)) then begin			//поиск по Code, Location
+				OutString(6,0,ItemStatusr.Instock,false);
+				end;
+			ItemStatusr.Location = "4-NIZ";
+			if (ReadFirstMain(ItemStatusr,2,true)) then begin			
+				OutString(7,0,ItemStatusr.Instock,false);
+				end;
+			
+			EndFormat;	
+			TotalQuantity=TotalQuantity+1;
+		
+		end;
+	
+	end;
+	
+	Black_Divider(0,1);
+	StartFormat(25);
+	EndFormat;
+	StartFormat(15);
+	OutString(0,0,"Всего найдено: " & TotalQuantity,false);
+	EndFormat;
+		
+	EndJob;
+
+
+return;
+end;

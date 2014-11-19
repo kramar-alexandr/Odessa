@@ -832,3 +832,19 @@ begin
 
   EndWindow;
 end;
+
+
+window ReportForItemSearchRClass:1  // added ************ Dima, 18.11.2014
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  real h,v,vm,vs;
+
+  WindowBegin("Поиск среди товаров",ReportForItemSearchRClass,CGRcW,-);
+  SetWRect(20,80,400,200);
+  h = 70; vs = 20; v = 6;
+  EditFieldTL(h,v,300,"Поиск",M4UStr,Normal,41,f1,false,INSClass);
+
+  EndWindow;
+
+
+end;

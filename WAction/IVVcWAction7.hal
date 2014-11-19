@@ -61,7 +61,9 @@ external procedure SetPOSWindowDisplay(string,string);
 external procedure M4PadString(string,Integer,string,Boolean,var string);
 remote procedure IVSumup(var record IVVc,Boolean);
 external function integer GetSelectedPOSItemRowIndex(integer);
-external procedure NPTSSearchItemExecute(Integer);
+external procedure NPTSSearchItemExecute(Integer); //больше не используется
+forward procedure IV_CreateReportForSearch();
+forward procedure PCIdbl(string, string,Integer);
 remote function Boolean IVVc_PasteQuantity(var record IVVc,Integer);
 external procedure IVDClass_RefreshStringList(Integer,record IVVc);
 external procedure IVCashDClass_RefreshStringList(Integer,record IVCashVc);
@@ -69,6 +71,8 @@ remote function Boolean IVVc_PasteArtCode(var record IVVc,Integer,var string,var
 external function boolean POSButtonsForWindow(integer,var record POSButtonsVc);
 external procedure ExtractObj(string,var Integer,var string);
 external updating function Boolean DoXMLExport_IVVc(var record IVVc);
+global	//added-----------by Dima 18.11.2014
+
 
 procedure NPTSIVOpenLClassOpenExecute(Integer wn)
 begin
@@ -694,7 +698,8 @@ begin
         IVDClassTouchScreenLoyaltyCard;
         goto LIVDClassTouchScreenPasteButtonDo;
       case kPOSButtonTypeItemSearch:
-        NPTSSearchItemExecute(wn);
+        //NPTSSearchItemExecute(wn);//------
+	   IV_CreateReportForSearch;//-----------------------------edit by Dima 18.11.2014
         goto LIVDClassTouchScreenPasteButtonDo;
       case kPOSButtonTypeItemStatus:
         if (SelectedListLine(wn)<>-1) then begin
@@ -3160,3 +3165,38 @@ begin
   nwn = OpenWindow("ChangeDateNPTSSClass",0,wn,"","",RepSpec);
   return;
 end;
+
+procedure IV_CreateReportForSearch()
+begin 
+  record RcVc RepSpec;
+  integer wn;
+
+  ReportDefaults(RepSpec,"GoodsReport1RClass");
+  RepSpec.Media = mtScreen;
+  RepSpec.flags[0] = CurWindow; //Mother window
+  RepSpec.repname = "ItemReportForSearchRn";
+  OpenWindow("ReportForItemSearchRClass",1,CurWindow,"","",RepSpec);
+  return;
+end;
+
+
+//added-----------by Dima 18.11.2014
+global //обработка MouseClick в окне отчета
+procedure PCIdbl(string dblstr,string h,Integer currepwn)
+begin
+	//dblstr - вставляемое значение (code)
+	record IVVc IVr;
+	integer motherWN;
+
+	motherWN=StringToInt(h);
+
+	WindowFieldGoto(motherWN,IVr,-1,"ivcashcommand",false);
+	PasteString(motherWN,dblstr);
+	KeyPadEnter(motherWN);
+	CloseWindow(currepwn);
+
+return;
+end;
+
+
+
