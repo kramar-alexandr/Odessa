@@ -6436,3 +6436,98 @@ begin
   end;
   EndWindow;
 end;
+
+window LoyaltyCardDClass:1
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  real h,h2,h3,v,vm,vs;
+  WindowBegin("Накопительная карточка",LoyaltyCardDClass,CGview,-);
+  SetWRect(64,80,640,230);
+  UseView(LoyaltyCardVc);
+  ActiveFieldOnNew("CustCode");
+  v = 16; vs = 20; h = 120; h2 = 300; h3 = 440;
+  EditField(h,vm=v, 80,"№",St_i,SerNr,false,0);
+  EditField(h,v+=20,80, "Клиент",Normal,CustCode,false,CUSClass);
+  EnterSkip(StartDate);
+  EditField(h2,v,-40, "Наименование",Normal,CustName,false,0);
+  EditField(h,v+=20,70,"Действ-на с",Normal,StartDate,false,PasteCurDate);
+  EditField(h2,v,70,"Действ-на до",Normal,ExpiryDate,false,PasteCurDate);
+  EditField(h,v+=20,80,"Прогр. лояльности",Normal,LCMLevel,false,LCMemberLevelSClass);
+  EditField(h2,v,70,"Накопл. баллы",ViewOnly,PointsBalance,true,0);
+  EditField(h3,v,-40,"Баллов до",Normal,PointsTo,false,LoyaltyCardSClass);
+  CheckBox(h,v+=20,0,"Закрыта",Closed);
+  SpecialMenu("Новый клиент",'u',10,"CUNPTSSClassNewCustomer");
+  EndWindow;
+end;
+
+
+window CUNPTDSClass:1
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  integer i,rwcnt;
+  real h,h1,h2,h3,h4,h5,l,v,vs;
+  record NPTSNewCUFieldsBlock NPTSNCUFb;
+  row NPTSNewCUFieldsBlock NPTSNCUFbrw;
+  
+  WindowBegin("Контакт",CUNPTDSClass,CGview,-);
+  Modality(kModalityGlobal);
+  DynamicWindow;
+  SetWRect(20,80,680,441);
+  Sizeable(-1,-1,0,0);
+  UseView(CUVc);
+  v = 6; h = 130; l=223; vs = 20; h1=410; h2 = 340; h3 = 430; h4 = 580; h5 = 460;
+  ActiveFieldOnNew("Code"); //dont change, otherwise automatic address lookup helper window wont show automatically //wns
+  EditField(h,v ,   95,"Код",Normal,Code,false,TSerSClass);
+  EditField(h,v+=vs,h1-h+50,"Наименов.",Normal,Name,false,0);
+	EditField(h,v+=vs,h1-h+50,"Телефон",Normal,Phone,false,0);
+	EditField(h,v+=vs,h1-h+50,"e-Mail",Normal,eMail,false,0);
+	
+/*
+  HalPushButton(h+120,v+=20,h+120+100,v+20,"UpdCustomerAddressCUDsm","Update Address");
+  v=v+10;
+  StaticText(h,v+13,"Invoice Address",false);
+  label = UserDefined("CUVc","InvAddr0");
+  EditField(h,v+=vs,-20,label,Normal,InvAddr0,false,0);
+  label = UserDefined("CUVc","InvAddr1");
+  EditField(h,v+=vs,-20,label,Normal,InvAddr1,false,0);
+  label = UserDefined("CUVc","InvAddr2");
+  EditField(h,v+=vs,-20,label,Normal,InvAddr2,false,0);
+  label = UserDefined("CUVc","InvAddr3");
+  EditField(h,v+=vs,-20,label,Normal,InvAddr3,false,0);
+  label = UserDefined("CUVc","InvAddr4");
+  EditField(h,v+=vs,-20,label,Normal,InvAddr4,false,0);
+  EditField(h,v+=vs,50,"Country",Normal,CountryCode,false,CountrySClass);//tsp-101118
+  EditField(h1,v,-20,"Department",Normal,Department,false,0);
+  EditField(h,v+=vs,150,"Telephone",Normal,Phone,false,0);
+  EditField(h1,v,-20,"Fax",Normal,Fax,false,0);
+  EditField(h,v+=vs,150,"Alt Phone",Normal,AltPhone,false,0);
+  EditField(h1,v,-20,"Mobile",Normal,Mobile,false,0);
+  EditField(h,v+=vs,150,"Skype Name",Normal,SkypeName,false,0);
+  EditField(h1,v,-20,"SIP",Normal,SIPCode,false,0);
+  EditField(h,v+=vs,150,"E-mail",Normal,eMail,false,0);
+  EditField(h1,v,-20,"Extension",Normal,Extension,false,0);
+
+  HalPushButton(h+120,v+=vs,h+120+100,v+20,"UpdDeliveryAddressCUDsm","Update Address");
+  v=v+12;
+  StaticText(h,v+13,"Delivery Address",false);
+  label = UserDefined("CUVc","DelAddr0");
+  EditField(h,v+=vs,-20,label,Normal,DelAddr0,false,0);
+  label = UserDefined("CUVc","DelAddr1");
+  EditField(h,v+=vs,-20,label,Normal,DelAddr1,false,0);
+  label = UserDefined("CUVc","DelAddr2");
+  EditField(h,v+=vs,-20,label,Normal,DelAddr2,false,0);
+  label = UserDefined("CUVc","DelAddr3");
+  EditField(h,v+=vs,-20,label,Normal,DelAddr3,false,0);
+  label = UserDefined("CUVc","DelAddr4");
+  EditField(h,v+=vs,-20,label,Normal,DelAddr4,false,0);
+  EditField(h,v+=vs,50,"Country",Normal,DelCountry,false,CountrySClass);
+*/
+
+  /*BlockLoad(NPTSNCUFb);
+  rwcnt = MatRowCnt(NPTSNCUFb);
+  for (i=0;i<rwcnt;i=i+1) begin
+    MatRowGet(NPTSNCUFb,i,NPTSNCUFbrw);
+    EditField2(h,v+=vs,h1-h+50,NPTSNCUFbrw.FieldName,NPTSNCUFbrw.EditState,NPTSNCUFbrw.FieldName,false,0);
+  end;*/
+  EndWindow;
+end;
