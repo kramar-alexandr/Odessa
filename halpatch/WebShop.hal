@@ -78,6 +78,12 @@ begin
   webgetpostdata(aPost); //Edit***************************Sasha2,15:18 04.07.2014
   WRITEAREATOFILE(aPost,"post.txt",0);///////////////////////////////
   
+  /// Should be cleaned up
+  logtext(0,"Set to success always");
+  weboutstring("Successful import");
+  return;
+  ///
+  
   xmlPost = PARSEXMLAREA(aPost);
   if (!XmlNodeExists(xmlPost,"messagestart")) then begin
   	logtext(0,"<messagestart> tag is missing. Orders import failed");
@@ -216,8 +222,8 @@ begin
 		logtext(0,"No orders in xml data");
 	end;	
 	if (Blank(errors)) then begin
-		weboutstring("Successfull import"); //Edit***************************Sasha2,15:18 04.07.2014
-		logText(0,"Successfull import order #" & ORr.SerNr);
+		weboutstring("Successful import"); //Edit***************************Sasha2,15:18 04.07.2014
+		//logText(0,"Successful import order #" & ORr.SerNr);
 	end else begin
 		weboutstring(errors); //Edit***************************Sasha2,15:18 04.07.2014
 	end;
@@ -332,7 +338,7 @@ string 255 errors;
 	
 	if (Blank(errors)) then begin
 		weboutstring("Successful");
-		logText(0,"Successfull synchronization");
+		logText(0,"Successful synchronization");
 	end else begin
 		weboutstring(errors);
 	end;
