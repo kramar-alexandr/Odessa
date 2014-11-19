@@ -1947,7 +1947,7 @@ end; //##ii
 window IVLClass:8
   wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
 begin
-  WindowBegin("Счета-фактуры",IVLClass,CGmlist,-);
+  WindowBegin("Счета-фактуры",IVLClass,CGmlist,-); 
   SetWRect(20,80,800,298);
   Sizeable(-1,-1,0,0);
   SpawnClass(IVDClass);
@@ -1955,7 +1955,7 @@ begin
   FormName(PrintIVL);
   RecordList(4,17,-21,-39);
   RlColKey(4,4,"Но.",SerNr,false,UnOKSerNr);
-  RlColKey(79,79,"ОК",OKFlag,false,UnOKOKFlag);
+  RlColKey(79,79,"ОК ",OKFlag,false,UnOKOKFlag);
   RlColKey(111,111,"Дата сч/ф",InvDate,false,UnOKInvDate);
   if (StandardHansa==false) then begin
     RlColKey(191,191,"Офиц. №",OfficialSerNr,false,UnOKOfficialSerNr);
