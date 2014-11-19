@@ -71,9 +71,8 @@ remote function Boolean IVVc_PasteArtCode(var record IVVc,Integer,var string,var
 external function boolean POSButtonsForWindow(integer,var record POSButtonsVc);
 external procedure ExtractObj(string,var Integer,var string);
 external updating function Boolean DoXMLExport_IVVc(var record IVVc);
-global	//added-----------by Dima 18.11.2014
 
-
+global
 procedure NPTSIVOpenLClassOpenExecute(Integer wn)
 begin
   record IVVc IVr;
