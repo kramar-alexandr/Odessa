@@ -78,22 +78,17 @@ begin
   webgetpostdata(aPost); //Edit***************************Sasha2,15:18 04.07.2014
   WRITEAREATOFILE(aPost,"post.txt",0);///////////////////////////////
   
-  /// Should be cleaned up
-  logtext(0,"Set to success always");
-  weboutstring("Successful import");
-  return;
-  ///
   
   xmlPost = PARSEXMLAREA(aPost);
   if (!XmlNodeExists(xmlPost,"messagestart")) then begin
   	logtext(0,"<messagestart> tag is missing. Orders import failed");
-  	weboutstring("Error3"); //Edit***************************Sasha2,15:18 04.07.2014
-  	return;
+  	if (Blank(errors)) then begin errors = "Error3"; end else begin errors = errors & ",Error3"; end;
+  	goto LWebGetOrder;
   end;
   if (!XmlNodeExists(xmlPost,"messageend")) then begin
   	logtext(0,"<messageend> tag is missing. Orders import failed");
-  	weboutstring("Error4"); //Edit***************************Sasha2,15:18 04.07.2014
-  	return;
+  	if (Blank(errors)) then begin errors = "Error4"; end else begin errors = errors & ",Error4"; end;
+  	goto LWebGetOrder;
   end;
   
   BlockLoad(WSSB);
@@ -152,11 +147,11 @@ begin
 							MatRowPut(ORr,rowNr,ORrw);
 							ORVc_PasteArtCode(ORr,rowNr,inwarning,warning,false);
 							if (nonblank(inwarning)) then begin
-								if (Blank(errors)) then begin errors = "Error8"; end else begin errors = errors & ",Error8"; end;
+							  //if (Blank(errors)) then begin errors = "Error8"; end else begin errors = errors & ",Error8"; end;
 						      logtext(0,"Order #" & ORr.SerNr & ", Artcode #" & ORrw.ArtCode & ": " & inwarning);
 						    end;
 						    if (nonblank(warning)) then begin
-						    	if (Blank(errors)) then begin errors = "Error8"; end else begin errors = errors & ",Error8"; end;
+						      //if (Blank(errors)) then begin errors = "Error8"; end else begin errors = errors & ",Error8"; end;
 						      logtext(0,"Order #" & ORr.SerNr & ", Artcode #" & ORrw.ArtCode & ": " & warning);
 						    end;
 							MatRowGet(ORr,rowNr,ORrw);
@@ -196,7 +191,7 @@ begin
 						    end;
 						end else begin
 							ORrw.Spec = "Товар с кодом " & artcode & " не существует";
-							if (Blank(errors)) then begin errors = "Error7"; end else begin errors = errors & ",Error7"; end;
+							//if (Blank(errors)) then begin errors = "Error7"; end else begin errors = errors & ",Error7"; end;
 							logtext(0,"artcode " & artcode & " is not exists");
 							MatRowPut(ORr,rowNr,ORrw);
 						end;
@@ -205,7 +200,7 @@ begin
 				end;
 			end;
 			if (rowNr == 0) then begin
-				if (Blank(errors)) then begin errors = "Error6"; end else begin errors = errors & ",Error6"; end;
+				//if (Blank(errors)) then begin errors = "Error6"; end else begin errors = errors & ",Error6"; end;
 				logtext(0,"no rows in order #" & ORr.SerNr);
 			end;	
 		
@@ -218,12 +213,14 @@ begin
 		end;
 	end;
 	if (ORCnt == 0) then begin
-		if (Blank(errors)) then begin errors = "Error5"; end else begin errors = errors & ",Error5"; end;
+		//if (Blank(errors)) then begin errors = "Error5"; end else begin errors = errors & ",Error5"; end;
 		logtext(0,"No orders in xml data");
-	end;	
+	end;
+	
+LWebGetOrder:;	
+		
 	if (Blank(errors)) then begin
 		weboutstring("Successful import"); //Edit***************************Sasha2,15:18 04.07.2014
-		//logText(0,"Successful import order #" & ORr.SerNr);
 	end else begin
 		weboutstring(errors); //Edit***************************Sasha2,15:18 04.07.2014
 	end;
@@ -304,13 +301,13 @@ string 255 errors;
 	
 	if (!XmlNodeExists(xmlPost,"messagestart")) then begin
 		logtext(0,"<messagestart> tag is missing. Orders list import failed");
-  		weboutstring("Error3"); 
-  		return;
+		if (Blank(errors)) then begin errors = "Error3"; end else begin errors = errors & ",Error3"; end; 
+  		goto LWebSyncConfirmed;
 	end;
 	if (!XmlNodeExists(xmlPost,"messageend")) then begin
   		logtext(0,"<messageend> tag is missing. Orders list import failed");
-  		weboutstring("Error4");
-  		return;
+  		if (Blank(errors)) then begin errors = "Error4"; end else begin errors = errors & ",Error4"; end;
+  		goto LWebSyncConfirmed;
 	end;
 	
 	nodeORCnt = XmlCountChildren(xmlPost,"orders");
@@ -332,10 +329,12 @@ string 255 errors;
 		end;
 	end;
 	if (ORCnt == 0) then begin
-	if (Blank(errors)) then begin errors = "Error5"; end else begin errors = errors & ",Error5"; end;
+		if (Blank(errors)) then begin errors = "Error5"; end else begin errors = errors & ",Error5"; end;
 		logtext(0,"No orders in xml data");
 	end;
-	
+
+LWebSyncConfirmed:;
+
 	if (Blank(errors)) then begin
 		weboutstring("Successful");
 		logText(0,"Successful synchronization");
