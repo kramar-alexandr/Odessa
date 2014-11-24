@@ -8,6 +8,7 @@ BEGIN
   GetWindowRecord(wn,RepSpec);
   ReportDefaults(RepSpec,"POSPaymentsRClass");  
   RepSpec.RegDate = CurrentDate;
+  RepSpec.f1 = CurMachineName;
   PutWindowRecord(wn,RepSpec);
   SelectWindow(wn);
   RETURN;

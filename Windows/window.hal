@@ -829,6 +829,7 @@ begin
   vs = 20; h = 120;
 
   EditFieldTL(h,v+=vs,100,"Дата",M4Date,Normal,41,RegDate,false,PasteCurDate);
+  EditFieldTL(h,v+=vs,100,"Лок.машина",M4UStr,Normal,41,f1,false,LocalMachineSClass);
 
   EndWindow;
 end;
