@@ -39,32 +39,51 @@ global procedure ItemReportForSearchRn(record RcVc RepSpec)
 begin
 	record INVc INr;
 	record ItemStatusVc ItemStatusr;
+	record PLVc PLr;
 	integer rw,TotalQuantity;
 	boolean continue,check;
 	string 100 searchStr ;
+	string 20 keySort;
 	
 	searchStr = RepSpec.f1;
 
+	if (RepSpec.ArtMode == 0) then begin	//сортировка
+	keySort = "Code";
+	end;
+	if (RepSpec.ArtMode == 1) then begin
+	keySort = "Name";
+	end;
+
 	StartReportJob("Поиск товаров");
 	rw=1;
-	Header(rw,"Поиск по: " & searchStr,1);	
+	Header(rw,"Поиск по: " & searchStr,1);
+	rw=rw+1;
+	if (keysort=="Code") then begin
+	Header(rw,"Сортировка по  коду товара",1);
+	end;
+	if (keysort=="Name") then begin
+	Header(rw,"Сортировка по  названию товара",1);
+	end;	
+Header(rw+1,"Код прейскуранта:  " & RepSpec.d1Code,1);
 	EndHeader;
 
 	SetRepCol(2,60);
 	SetRepCol(3,130);
 	SetRepCol(4,260);
-	SetRepCol(5,340);
-	SetRepCol(6,420);
-	SetRepCol(7,460);
+	SetRepCol(5,300);
+	SetRepCol(6,340);
+	SetRepCol(7,420);
+	SetRepCol(8,460);
 	
 	StartFormat(15);
 	OutString(0,0,"Код",false);
 	OutString(2,0,"Классификация",false);
 	OutString(3,0,"Название",false);
-	OutString(4,0,"Штрих-код",false);
-	OutString(5,0,"Альтернативный код",false);
-	OutString(6,0,"3-Рай",false);
-	OutString(7,0,"4-Низ",false);
+	OutString(4,0,"Цена",false)
+	OutString(5,0,"Штрих-код",false);
+	OutString(6,0,"Альтернативный код",false);
+	OutString(7,0,"3-Рай",false);
+	OutString(8,0,"4-Низ",false);
 	EndFormat;
 	Black_Divider(0,1);
 	continue = true;
@@ -78,30 +97,35 @@ begin
 		end;
 	end;
 
-	While (LoopMain(INr,1,continue)) begin
+	While (LoopKey(keySort,INr,1,continue)) begin
 		check=true;
 		
-		if (not (FindSubString(searchStr,INr.Code)  or FindSubString(searchStr,INr.Name) or 	FindSubString(searchStr,INr.InvCode) or  FindSubString(searchStr,INr.BarCode)or  FindSubString(searchStr,INr.AlternativeCode))) then begin
+		if (not (FindSubString(searchStr,INr.Code)  or FindSubString(searchStr,INr.Name) or 	FindSubString(searchStr,INr.DispGroups) or  FindSubString(searchStr,INr.BarCode)or  FindSubString(searchStr,INr.AlternativeCode))) then begin
 		check = false;
 		end;
 	
 		if (check) then begin
+			PLr.PLCode =  RepSpec.d1Code;
+			PLr.ArtCode = INr.Code;
 		
 			StartFormat(15);			
 			OutStringID(0,"PCIdbl",INr.Code,false,RepSpec.flags[0]);
-			OutString(2,0,INr.InvCode,false);
+			OutString(2,0,INr.DispGroups,false);
 			OutString(3,0,INr.Name,false);
-			OutString(4,0,INr.BarCode,false);
-			OutString(5,0,INr.AlternativeCode,false);
+			if (ReadFirstMain(PLr,2,true)) then begin
+				OutString(4,0,PLr.ExVatPrice,false);
+			end;
+			OutString(5,0,INr.BarCode,false);
+			OutString(6,0,INr.AlternativeCode,false);
 
 			ItemStatusr.Code = INr.Code;
 			ItemStatusr.Location = "3-RAY";
 			if (ReadFirstMain(ItemStatusr,2,true)) then begin			//поиск по Code, Location
-				OutString(6,0,ItemStatusr.Instock,false);
+				OutString(7,0,ItemStatusr.Instock,false);
 				end;
 			ItemStatusr.Location = "4-NIZ";
 			if (ReadFirstMain(ItemStatusr,2,true)) then begin			
-				OutString(7,0,ItemStatusr.Instock,false);
+				OutString(8,0,ItemStatusr.Instock,false);
 				end;
 			
 			EndFormat;	

@@ -1,0 +1,141 @@
+SetLangMode(LangRussian,"RUS",0);
+
+global 
+updating procedure PLImportIn()//   Edit-----------------------Dima    20.11.2014  
+begin
+  record PLVc PLr;
+  record PLVc oldPLr;
+  record PLDefVc PLDefr;
+  record INVc	INr;
+  string 50 plCode, artCode, price;
+  real pr;
+/*  if (SetImportCodepage("ISO-8859-5")==false) then begin
+  LogText(0,"***  Load Codepage ISO-8859-5. FAIL****	"); 
+  end;*/
+
+while (TestEOF()==false) begin
+	plCode = ImportField;
+	artCode = ImportField;
+	price = ImportField;
+	pr=StringToVal(price,M423Val);
+	if (nonblank(plCode) and nonblank(artCode) and (pr > 0) ) then begin
+	PLr.PLCode = plCode;
+	PLr.ArtCode = artCode;	
+		if (ReadFirstMain(PLr,2,true)) then begin		
+			RecordCopy(oldPLr,PLr);
+			PLr.ExVatPrice = StringToVal(price,M423Val);
+			RecordUpdate(oldPLr,PLr,true);
+		end else begin
+			PLDefr.Code = plCode;
+			INr.Code = artCode;
+			if (ReadFirstMain(PLDefr,1,true)) then begin
+			 	if (ReadFirstMain(INr,1,true))	then begin
+					RecordNew(PLr);
+					PLr.PLCode = plCode;
+					PLr.ArtCode = artCode;
+					PLr.ExVatPrice = StringToVal(price,M423Val);
+					RecordInsert(PLr,true);
+				end;
+			end;
+		end;	
+	end;	
+		if (NextImportLine(true)) then begin end;
+	
+end;
+
+return;
+end;
+
+
+
+global
+updating procedure INReplaceGroupIn()//   Edit-----------------------Dima    21.11.2014  
+begin
+  record INVc INr;
+  record INVc oldINr;
+  string 30 code, group;
+
+
+  while (TestEOF()==false) begin
+  	code = ImportField;
+  	group = ImportField;
+  	
+  	if (nonblank(code) ) then begin
+  		INr.Code = code;	
+  		if (ReadFirstMain(INr,1,true)) then begin
+			RecordCopy(oldINr,INr);
+	  		INr.Group = group;  	//если blank(group) - группа стирается		
+  			RecordUpdate(oldINr,INr,true);  
+  		end;  	
+  	end;
+	if (NextImportLine(true)) then begin end;
+  end;
+
+
+return;
+end;
+
+
+
+global
+updating procedure INImportIn()//   Edit-----------------------Dima    20.11.2014  
+begin
+  record INVc INr;
+  string 70 code, bar, alterCode,group, manufact;
+  string 15 volume, weight,unit4, coef4, unit2, coef2, unit3, coef3, unit5, coef5;
+  string 200 name;
+  
+ if (SetImportCodepage("WINDOWS-1251")==false) then begin
+  LogText(0,"***  Load Codepage ISO-8859-5. FAIL****	");
+  End;
+
+	while (TestEOF()==false) begin
+	code = ImportField;
+	name = ImportField;
+	
+		if (nonblank(code) and nonblank(name)) then begin
+		INr.Code = code;
+		INr.Name = name;
+		
+		if (ReadFirstMain(INr,1,true)==false) then begin			
+			bar = ImportField;
+			alterCode = ImportField;
+			manufact = ImportField;
+			group = ImportField;
+			volume = ImportField;
+			weight = ImportField;
+			unit2 = ImportField;
+			coef2 = ImportField;
+			unit3 = ImportField;
+			coef3 = ImportField;
+			unit4 = ImportField;
+			coef4 = ImportField;
+			unit5 = ImportField;
+			coef5 = ImportField;
+			
+          	RecordNew(INr);
+			INr.Code = code;
+			INr.Name = name;
+			INr.BarCode = bar;
+			INr.AlternativeCode = alterCode;
+			INr.Group = group;
+			INr.EUCodex = manufact;
+			INr.Volume = StringToVal(volume,M45Val);
+			INr.Weight = StringToVal(weight,M45Val);
+			INr.AddUnittext2 = unit2;
+			INr.AddUnitCoef2 = StringToVal(coef2,M4UVal);
+			INr.AddUnittext3 = unit3;
+			INr.AddUnitCoef3 = StringToVal(coef3,M4UVal);
+			INr.AddUnittext4 = unit4;
+			INr.AddUnitCoef4 = StringToVal(coef4,M4UVal);
+			INr.AddUnittext5 = unit5;
+			INr.AddUnitCoef5 = StringToVal(coef5,M4UVal);
+			RecordInsert(INr,true);
+			end;
+		end;
+		
+	if (NextImportLine(true)) then begin end;
+	end;
+
+return;
+end;

@@ -3168,12 +3168,15 @@ end;
 procedure IV_CreateReportForSearch()
 begin 
   record RcVc RepSpec;
+  record IVVc IVr;
   integer wn;
 
   ReportDefaults(RepSpec,"GoodsReport1RClass");
   RepSpec.Media = mtScreen;
   RepSpec.flags[0] = CurWindow; //Mother window
   RepSpec.repname = "ItemReportForSearchRn";
+  GetWindowRecord(CurWindow,IVr);
+  RepSpec.d1Code = IVr.PriceList;
   OpenWindow("ReportForItemSearchRClass",1,CurWindow,"","",RepSpec);
   return;
 end;
@@ -3186,7 +3189,6 @@ begin
 	//dblstr - вставляемое значение (code)
 	record IVVc IVr;
 	integer motherWN;
-
 	motherWN=StringToInt(h);
 
 	WindowFieldGoto(motherWN,IVr,-1,"ivcashcommand",false);

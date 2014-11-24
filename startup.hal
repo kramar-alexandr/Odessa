@@ -27,6 +27,10 @@ begin
   Maintenance("Пересчитать значение объема в карточке товара",RecalcINVolumeClass,RecalcINVolumeMn,modDBMain);//Edit***************************Sasha2,13:50 24.06.2014
   Maintenance("Gigient to IN",MyVClass,FillINFromGigieneMn,modDBMain); //Edit***************************Sasha2,16:21 20.10.2014
   Maintenance("Удалить накопительные карточки",MyVClass,DelLoyaltyCardMn,modDBMain); //Edit***************************Sasha2,16:21 20.10.2014
+
+  Import("Импорт цен",PLImportIClass,PLImportIn,modDI); //Added********************Dima 20.11.2014
+  Import("Импорт товаров",INImportIClass,INImportIn,modIN);//Added********************Dima 20.11.2014
+  Import("Заменить группу товара",INReplaceGroupIClass,INReplaceGroupIn,modIN);//Added********************Dima 21.11.2014
   
 	return;
 end;

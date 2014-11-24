@@ -837,14 +837,142 @@ end;
 window ReportForItemSearchRClass:1  // added ************ Dima, 18.11.2014
   wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
 begin
-  real h,v,vm,vs;
+  real h,v,vs;
 
   WindowBegin("Поиск среди товаров",ReportForItemSearchRClass,CGRcW,-);
   SetWRect(20,80,400,200);
   h = 70; vs = 20; v = 6;
-  EditFieldTL(h,v,300,"Поиск",M4UStr,Normal,41,f1,false,INSClass);
+  EditFieldTL(h,v,290,"Поиск",M4UStr,Normal,41,f1,false,INSClass);
+  v=50;
+  ButtonFrame(h-38,v,320,2,"Сортировать отчет по");
+  RadioButton(h+200,v,0,0,"Коду товара",ArtMode);
+  RadioButton(h+200,v+20,1,0,"Названию",ArtMode);
 
   EndWindow;
 
-
 end;
+
+
+window PLImportIClass:1  // added ************ Dima, 19.11.2014
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+real h,v,vs;
+Integer i;
+  WindowBegin("Импорт цен",PLImportIClass,CGIcW,-);
+  SetWRect(20,80,470,280);
+  i=1; //номер колонки
+  h=10;  v=15; 
+  StaticText(h,v,"Формат импорта",false);
+  h=20;  v=40;
+  StaticText(h,v,"Список колонок:",false);
+  v=v+30; vs=25;
+  StaticText(h,v,i &". Код прайс-листа",false);
+	 StaticText(h+150,v,"Обязательное поле",false);
+	 i=i+1;
+  StaticText(h,v+=vs,i &". Код товара",false);
+	 StaticText(h+150,v,"Обязательное поле",false);
+	 i=i+1;
+  StaticText(h,v+=vs,i &". Цена",false);
+	 StaticText(h+150,v,"Обязательное поле",false);
+	 i=i+1;
+  h=10;
+  StaticText(h,v+=45,"Примечание:   Все столбцы разделены <Tab>",false);
+
+  EndWindow;
+end;
+
+
+window INImportIClass:1		// added ************ Dima, 19.11.2014
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+real h,v,vs;
+Integer i;
+  WindowBegin("Импорт товаров",INImportIClass,CGIcW,-);	//INImportIn()
+  SetWRect(20,80,470,600);
+  i=1; //номер колонки
+  h=10;  v=15; 
+  StaticText(h,v,"Формат импорта",false);
+  h=20;  v=40;
+  StaticText(h,v,"Список колонок:",false);
+  v=v+30; vs=25;
+  StaticText(h,v, 	i & ". Код товара",false);
+	 StaticText(h+150,v,"Обязательное поле",false);
+	 i=i+1;
+  StaticText(h,v+=vs,i & ". Название товара",false);
+	 StaticText(h+150,v,"Обязательное поле",false);
+	 i=i+1;
+  StaticText(h,v+=vs,i & ". Штрих-код",false);
+	 StaticText(h+150,v,"Необязательное поле",false);
+	 i=i+1;
+  StaticText(h,v+=vs, i & ". Альтернативный код",false);
+	 StaticText(h+150,v,"Необязательное поле",false);
+	 i=i+1;
+  StaticText(h,v+=vs,i & ". Код производителя",false);
+	 StaticText(h+150,v,"Необязательное поле",false);
+	 i=i+1;
+  StaticText(h,v+=vs,i & ". Группа",false);
+	 StaticText(h+150,v,"Необязательное поле",false);
+	 i=i+1;
+
+  StaticText(h,v+=vs,i & ". Объем",false);
+	 StaticText(h+150,v,"Необязательное поле",false);
+	 i=i+1;
+  StaticText(h,v+=vs,i & ". Вес",false);
+	 StaticText(h+150,v,"Необязательное поле",false);
+	 i=i+1;
+
+  StaticText(h,v+=vs,i & ". Единица 2",false);
+	 StaticText(h+150,v,"Необязательное поле",false);
+	 i=i+1;
+  StaticText(h,v+=vs,i & ". Коеф 2",false);
+	 StaticText(h+150,v,"Необязательное поле",false);
+	 i=i+1;
+  StaticText(h,v+=vs,i & ". Единица 3",false);
+	 StaticText(h+150,v,"Необязательное поле",false);
+	 i=i+1;
+  StaticText(h,v+=vs,i & ".  Коеф 3",false);
+	 StaticText(h+150,v,"Необязательное поле",false);
+	 i=i+1;
+  StaticText(h,v+=vs,i & ". Единица 4",false);
+	 StaticText(h+150,v,"Необязательное поле",false);
+	 i=i+1;
+  StaticText(h,v+=vs,i & ". Коеф 4",false);
+	 StaticText(h+150,v,"Необязательное поле",false);
+	 i=i+1;
+  StaticText(h,v+=vs,i & ". Единица 5",false);
+	 StaticText(h+150,v,"Необязательное поле",false);
+	 i=i+1;
+  StaticText(h,v+=vs,i & ". Коеф 5",false);
+	 StaticText(h+150,v,"Необязательное поле",false);
+	 i=i+1;
+
+  StaticText(h,v+=40,"Примечание:   Все столбцы разделены <Tab>",false);
+
+  EndWindow;
+end;
+
+
+window INReplaceGroupIClass:1  // added ************ Dima, 19.11.2014
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+real h,v,vs;
+Integer i;
+  WindowBegin("Импорт цен",INReplaceGroupIClass,CGIcW,-);
+  SetWRect(20,80,470,260);
+  i=1; //номер колонки
+  h=10;  v=15; 
+  StaticText(h,v,"Формат импорта",false);
+  h=20;  v=40;
+  StaticText(h,v,"Список колонок:",false);
+  v=v+30; vs=25;
+  StaticText(h,v,i &". Код товара",false);
+	 StaticText(h+150,v,"Обязательное поле",false);
+	 i=i+1;
+  StaticText(h,v+=vs,i &". Код группы",false);
+	 StaticText(h+150,v,"Необязательное поле",false);
+	 i=i+1;
+  StaticText(h-10,v+=45,"Примечание:   Все столбцы разделены <Tab>",false);
+
+  EndWindow;
+end;
+
