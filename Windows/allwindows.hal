@@ -6531,3 +6531,65 @@ begin
   end;*/
   EndWindow;
 end;
+
+window RebDClass:2
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  real h,h1,h2,l,v,vs;
+  WindowBegin("Таблица скидок",RebDClass,CGview,RebView);
+  UseView(RebVc);
+  SetWRect(20,80,647,333);
+  Sizeable(-1,-1,-1,0);
+  vs=20;
+  Tile(0,40,false,"",Code);
+  EditField(h=90,v=6,50,"Код",Normal ,Code,false,0);
+  EditField(230,v,-40,"Коммент.",Normal,Comment,false,0);
+  if (StandardHansa==false) then begin
+    EditField(h,v+=vs,80,"Период",Normal,FromDate,false,PasteCurDate);
+    EditField(230,v,80,"-",Normal,ToDate,false,PasteCurDate);
+    EditField(440,v,-40,"Заменить",Normal,Replaces,false,RebSClass);
+  end;
+  TileButtons(v,2);
+  Tile(1,110,false,"1",StaffCode);
+  h = 110; h1 = 200; h2 = 300; vs = 20;
+  EditField(h,v=6,50,"Скидка от кол-ва",Normal,StaffCode,false,StaffSClass);
+  EditField(h,v+=vs,50,"Колонка 0",Normal,vra0,false,0);
+  EditField(h,v+=vs,50,"Колонка 1",Normal,vra1,false,0);
+  EditField(h1,v,50,"2",Normal,vra2,false,0);
+  EditField(h2,v,50,"3",Normal,vra3,false,0);
+  EditField(h,v+=vs,50,"Колонка 4",Normal,vra4,false,0);
+  EditField(h1,v,50,"5",Normal,vra5,false,0);
+  EditField(h2,v,50,"6",Normal,vra6,false,0);
+  EditField(h,v+=vs,50,"Колонка 7",Normal,vra7,false,0);
+  EditField(h1,v,50,"8",Normal,vra8,false,0);
+  EditField(h2,v,50,"9",Normal,vra9,false,0);
+  Tile(2,120,true,"2",Math);
+  StaticText(h=46,v=27,"Товар",false);
+  StaticText(h+=64,v=27,"Товар",false);
+  StaticText(h+=69,v,"На кол.",false);
+  StaticText(248,v,"Колонка",false);
+  h = 10; v=v+20; l = 30;
+  MatrixBegin(h,v,h+240+11*l,-10,-,3000); //Edit***************************Sasha2,13:59 24.11.2014
+  MatCol(1,h=30,"Код",0,CodeType,false,SetSClass);
+  MatCol(1,h=94,"Группа",0,ITCode,false,ITSClass);
+  MatCol(1,h+=70,"Скидка",0,StaffCode,false,StaffSClass);
+  MatCol(1,h+=70,"0",0,vra0,false,0);
+  MatCol(1,h+=l,"1",0,vra1,false,0);
+  MatCol(1,h+=l,"2",0,vra2,false,0);
+  MatCol(1,h+=l,"3",0,vra3,false,0);
+  MatCol(1,h+=l,"4",0,vra4,false,0);
+  MatCol(1,h+=l,"5",0,vra5,false,0);
+  MatCol(1,h+=l,"6",0,vra6,false,0);
+  MatCol(1,h+=l,"7",0,vra7,false,0);
+  MatCol(1,h+=l,"8",0,vra8,false,0);
+  MatCol(1,h+=l,"9",0,vra9,false,0);
+  EndMatrix;
+/*  noone uses this one
+  Tile(3,70,false,"3",DiscAcc);
+  EditField(h=150,v=6,50,"Счет скидки",Normal,DiscAcc,false,AccSClass);
+  EditField(h,v+=20,50,"Процент скидки",Normal,DiscPerc,false,0);
+  EditField(h,v+=20,50,"Код НДС",Normal,VATCode,false,VATCodeSClass);
+*/
+  SpecialMenu("Очистить строки",'',0,"ClearUpRebRowsDm");
+  EndWindow;
+end;

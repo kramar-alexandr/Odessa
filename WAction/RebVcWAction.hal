@@ -1,0 +1,61 @@
+
+global //Edit***************************Sasha2,14:03 24.11.2014 {
+function ClearUpRebRowsDm()
+begin
+  record RebVc Rebr;
+  row RebVc Rebrw;
+  Integer i,rwcnt,wn;
+  
+  wn = CurWindow;
+  if (WindowState(wn)==Rs_normal) then begin
+  	GetWindowRecord(wn,Rebr);
+  	rwcnt = MatRowCnt(Rebr);
+  	for (i=0;i<rwcnt;i=i+1) begin
+  		MatRowGet(Rebr,i,Rebrw);
+  		Rebrw.ITCode = "";
+  		Rebrw.StaffCode = "";
+  		Rebrw.vra0 = BlankVal;
+  		Rebrw.vra1 = BlankVal;
+  		Rebrw.vra2 = BlankVal;
+  		Rebrw.vra3 = BlankVal;
+  		Rebrw.vra4 = BlankVal;
+  		Rebrw.vra5 = BlankVal;
+  		Rebrw.vra6 = BlankVal;
+  		Rebrw.vra7 = BlankVal;
+  		Rebrw.vra8 = BlankVal;
+  		Rebrw.vra9 = BlankVal;
+  		MatRowPut(Rebr,i,Rebrw);
+  	end;
+  	PutWindowRecord(wn,Rebr);
+  end else begin
+  	MessageBox(1356,"");
+  end; 
+  
+  return;
+end; //Edit***************************Sasha2,14:03 24.11.2014 }
+
+
+global
+function string 40 RebDClassSpecPasteName(Integer wn,string defpsname)
+begin
+  string 255 psname;
+  record RebVc Rebr;
+  row RebVc Rebrw;
+  Integer rownr;
+  
+  psname = defpsname;
+  switch (WindowActiveField(wn)) begin
+    case "ITCode":
+      GetWindowRecord(wn,Rebr);
+      rownr = WindowActiveRow(wn);
+      if (rownr>=0) then begin
+        MatRowGet(Rebr,rownr,Rebrw);
+      end;
+      switch (Rebrw.CodeType) begin
+        case 0: psname = "ITSClass";
+        case 1: psname = "INSClass";
+      end;
+  end;
+  RebDClassSpecPasteName = psname;
+  return;
+end;
