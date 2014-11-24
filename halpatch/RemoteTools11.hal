@@ -846,7 +846,7 @@ begin
     end;
     IVp.Objects = AddObjectToObjectList(IVp.Objects,CUr.Objects);
     oldSalesMan = IVp.SalesMan;
-    SetSalesMan(IVp.SalesMan,CUr.SalesMan);
+    //SetSalesMan(IVp.SalesMan,CUr.SalesMan); //Edit***************************Sasha2,13:23 24.11.2014
     if ((IVp.SalesMan!=oldSalesMan)) then begin
       tstr2 = IVp.Objects;
       RemoveOldPersObjects(oldSalesMan,tstr2);
