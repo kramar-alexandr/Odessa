@@ -2195,6 +2195,7 @@ begin
     end;
     EditField(h3,v=vm,80,"Вид заказа пост.",ViewOnly,PUClass,false,0);
   end;
+  EditField(h3,v=v+vs,80,"Группа продаж",Normal,SalesGroup,false,SalesGroupSClass);
   if (HasLanguages) then begin
     v = v + vs;
     EditField(h3,v,80,"Язык",Normal,LangCode,false,LangSClass);  
@@ -5517,6 +5518,7 @@ begin
     v = v + vs;
     EditField(h2,v,135,"Филиал",ViewOnly,BranchID,false,0);
   end;
+  EditField(h2,v=v+vs,135,"Группа продаж",Normal,SalesGroup,false,SalesGroupSClass);
   if (HasMultiLocations) then begin
     v = v + vs;
   end;
@@ -5875,6 +5877,7 @@ begin
   if (HasMultiLocations) then begin
     EditField(h,v,82,"Склад",Normal,Location,false,LocationSClass);
   end;
+  
   if (HasAdvancedAccounting) then begin
     EditField(h2,v,82,"Кратк. код",Normal,ACShort,false,ACShortSClass);
   end;
@@ -5882,8 +5885,9 @@ begin
     EditField(h3,v,100,"Проект",Normal,PRCode,false,PRSClass);
   end;
   if (HasObjects) then begin
-    EditField(h2,v+=vs,270,"Объекты",Normal,Objects,false,ObjSClass);
+    EditField(h,v+=vs,260,"Объекты",Normal,Objects,false,ObjSClass);
   end;
+  EditField(h3,v,82,"Группа продаж",Normal,SalesGroup,false,SalesGroupSClass);
   EnterSkip(Math);
 //  CheckBox(450,6,0,"OK",OKFlag);
   if (IsEnterprise) then begin
@@ -6075,10 +6079,11 @@ begin
     end;
     if (HasModWHM) then begin
       v = 6 + vs;
-      CheckBox(h,v,0,"Вручную",ManualPick);
-      CheckBox(h,v+=16,0,"Послать на очередь погрузчика",ToForkLiftQue);
+      CheckBox(h+120,v,0,"Вручную",ManualPick);
+      CheckBox(h+120,v+=16,0,"Послать на очередь погрузчика",ToForkLiftQue);
     end;
   end;
+  EditField(h,v,80,"Группа продаж",Normal,SalesGroup,false,SalesGroupSClass);
   Tile(tilenr,70,false,tilenr,Comment); tilenr = tilenr + 1;
   v = 6;
   if (HasObjects) then begin
@@ -6321,6 +6326,7 @@ begin
     EditField(h2,v+=vs,135,"№ зак. на обсл.",ViewOnly,SVONr,false,0);
     EditField(h2,v+=vs,135,"№ табл. работ",ViewOnly,WSNr,false,0);
   end;
+  EditField(h3,v,80,"Группа продаж",Normal,SalesGroup,false,SalesGroupSClass);
   EnterSkip(Math);
   ButtonFrame(h3=h3-70,v=vm+10,140,2,"Уменьшить количество");
   RadioButton(h3,v,0,0,"Только отгруженные",Type);

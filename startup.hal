@@ -32,5 +32,9 @@ begin
   Import("Импорт товаров",INImportIClass,INImportIn,modIN);//Added********************Dima 20.11.2014
   Import("Заменить группу товара",INReplaceGroupIClass,INReplaceGroupIn,modIN);//Added********************Dima 21.11.2014
   
+  StrSetBegin(3); /* Try to keep them in alphabetical order */
+  StrSetText(VievAllSalesGroupDocuments,"Разрешить просмотр всех документов");
+  EndStrSet;
+  
 	return;
 end;

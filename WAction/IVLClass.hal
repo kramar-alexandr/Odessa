@@ -16,3 +16,99 @@ begin
   IVLClassOnOpenWindow = false;
   return;
 end;
+
+global
+function Boolean PULClassOnOpenWindow(Integer wn)
+begin
+  date dt;
+  record UserVc Userr;
+  
+  if(UserCanAction("VievAllSalesGroupDocuments", true)==false) then begin
+		Userr.Code = CurrentUser;
+		if(readFirstMain(Userr, 1, true))then begin
+			if(nonblank(Userr.SalesGroup))then begin
+				SetWindowSubset(wn,Userr.SalesGroup);
+			end;
+		end;  
+	end;
+    
+  PULClassOnOpenWindow = false;
+  return;
+end;
+
+global
+function Boolean SHLClassOnOpenWindow(Integer wn)
+begin
+  date dt;
+  record UserVc Userr;
+  
+  if(UserCanAction("VievAllSalesGroupDocuments", true)==false) then begin
+		Userr.Code = CurrentUser;
+		if(readFirstMain(Userr, 1, true))then begin
+			if(nonblank(Userr.SalesGroup))then begin
+				SetWindowSubset(wn,Userr.SalesGroup);
+			end;
+		end;  
+	end;
+    
+  SHLClassOnOpenWindow = false;
+  return;
+end;
+
+global
+function Boolean StockMovLClassOnOpenWindow(Integer wn)
+begin
+  date dt;
+  record UserVc Userr;
+  
+  if(UserCanAction("VievAllSalesGroupDocuments", true)==false) then begin
+		Userr.Code = CurrentUser;
+		if(readFirstMain(Userr, 1, true))then begin
+			if(nonblank(Userr.SalesGroup))then begin
+				SetWindowSubset(wn,Userr.SalesGroup);
+			end;
+		end;  
+	end;
+    
+  StockMovLClassOnOpenWindow = false;
+  return;
+end;
+
+global
+function Boolean SDLClassOnOpenWindow(Integer wn)
+begin
+  date dt;
+  record UserVc Userr;
+  
+  if(UserCanAction("VievAllSalesGroupDocuments", true)==false) then begin
+		Userr.Code = CurrentUser;
+		if(readFirstMain(Userr, 1, true))then begin
+			if(nonblank(Userr.SalesGroup))then begin
+				SetWindowSubset(wn,Userr.SalesGroup);
+			end;
+		end;  
+	end;
+    
+  SDLClassOnOpenWindow = false;
+  return;
+end;
+
+global
+function Boolean RetLClassOnOpenWindow(Integer wn)
+begin
+  date dt;
+  record UserVc Userr;
+  
+  if(UserCanAction("VievAllSalesGroupDocuments", true)==false) then begin
+		Userr.Code = CurrentUser;
+		if(readFirstMain(Userr, 1, true))then begin
+			if(nonblank(Userr.SalesGroup))then begin
+				SetWindowSubset(wn,Userr.SalesGroup);
+			end;
+		end;  
+	end;
+    
+  RetLClassOnOpenWindow = false;
+  return;
+end;
+
