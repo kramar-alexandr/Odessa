@@ -3046,6 +3046,7 @@ begin
   
   ReportDefaults(RepSpec,"POSPaymentsRClass");
   RepSpec.Media = mtScreen; 
+  RepSpec.f1 = CurMachineName;
   RepSpec.repname = "POSPaymentsRn";
   RepSpec.RegDate = CurrentDate;
   RunReport(RepSpec,0); //Edit***************************Sasha2,10:03 18.11.2014 }
