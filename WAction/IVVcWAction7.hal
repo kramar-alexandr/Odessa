@@ -3195,7 +3195,8 @@ begin
 	WindowFieldGoto(motherWN,IVr,-1,"ivcashcommand",false);
 	PasteString(motherWN,dblstr);
 	KeyPadEnter(motherWN);
-	CloseWindow(currepwn);
+	//CloseWindow(currepwn);
+	SelectWindow(currepwn);
 
 return;
 end;

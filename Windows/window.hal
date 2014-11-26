@@ -741,7 +741,8 @@ email not working yet
   end;
   SpecialMenu("Обновить товары валютного прейскуранта",' ',7,"UpdatePricesORDsm");
   SpecialMenu("Статус товара",'I',2,"ItemStatusORDsm");
-  SpecialMenu("Поиск товара",'f',1,"ItemSearchDsm");
+  SpecialMenu("Поиск товара",'',1,"ItemSearchDsm");
+  SpecialMenu("Поиск в текущей таблице",'f',1,"TableSearchDsm"); // edit ----------Dima 25.11.2014
   SpecialMenu("Статус счета",'r',5,"ORInfoRnORDsm");
   if (StandardHansa==false) then begin
     SpecialMenu("Цены предыдущей продажи",' ',12,"ORLastSPrsm");
@@ -973,6 +974,26 @@ Integer i;
 	 StaticText(h+150,v,"Необязательное поле",false);
 	 i=i+1;
   StaticText(h-10,v+=45,"Примечание:   Все столбцы разделены <Tab>",false);
+
+  EndWindow;
+end;
+
+
+window TableSearchIClass:1  // added ************ Dima, 25.11.2014
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+real h,v,vs;
+Integer i,mwn;
+  WindowBegin("Поиск в таблице",TableSearchIClass,CGother,RcType);
+//DynamicWindow;
+  SetWRect(3,140,400,250);
+  UseView(RcVc);
+  Modality(2);
+  v=30;
+  h=20;
+  EditFieldTL(h+30,v-10 ,150,"Поиск",M4Str,Normal,20,f1,true,0); // new search field
+  ColourPushButton(h+=200,v-10,h+58,v+26,"GoPreviousItem","Пред.",20);
+  ColourPushButton(h+=75,v-10,h+58,v+26,"GoNextItem","След.",2);
 
   EndWindow;
 end;

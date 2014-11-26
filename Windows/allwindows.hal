@@ -2520,7 +2520,8 @@ begin
     end;
   end else begin
   if (IsEnterprise) then begin
-    SpecialMenu("Поиск товара",'f',1,"ItemSearchDsm");
+    SpecialMenu("Поиск товара",'',1,"ItemSearchDsm");
+    SpecialMenu("Поиск в текущей таблице",'f',1,"TableSearchDsm"); // edit ----------Dima 26.11.2014
     SpecialMenu("Статус поступления",'r',4,"PUStatusDsm");
   end;
   if (HasSerialNumbers) then begin
@@ -2982,7 +2983,8 @@ begin
   if (HasModIN) then begin
     SpecialMenu("Статус товара",'I',2,"ItemStatusPODsm");
   end;
-  SpecialMenu("Поиск товара",'f',1,"ItemSearchDsm");
+    SpecialMenu("Поиск товара",'',1,"ItemSearchDsm");
+    SpecialMenu("Поиск в текущей таблице",'f',1,"TableSearchDsm"); // edit ----------Dima 26.11.2014
   if (HaseMail) then begin
     SpecialMenu("Создать e-mail",'m',3,"CreateMailFromPODsm");
   end;

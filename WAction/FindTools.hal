@@ -1,0 +1,391 @@
+//remote function Boolean FindSubString( string , string );
+  SetLangMode(LangRussian,"RUS",0); 
+
+function Boolean FindSubString( string Search, string Source )
+begin
+	integer i,length,lengthSource,diff;
+	string 150 temp,str,inStr;
+	boolean res;
+	
+	res=false;
+	length=len(Search);
+	lengthSource=len(Source);
+	diff=lengthSource-length;
+
+	str=UpperCase(Search);   
+	inStr=UpperCase(Source);		
+	if (diff<0) then begin
+	goto	breakFunction;
+	end;
+	
+	for(i=0;i<=diff;i=i+1) begin
+	 temp=mid(inStr,i,length);
+	 if(temp==str) then begin
+	 	res = true;
+	 	goto breakFunction;
+	 end;	
+	end;
+
+	breakFunction:; // goto
+	FindSubString=res;
+return;  
+end;
+
+
+//flags[0] - MotherWindow
+//flags[1] - текущая строка в таблице
+//flags[2] - направление поиска (вперед/назад)
+//flags[3] - последняя найденная строка (курсор останавливается на последнем найденном элементе)
+
+
+global    //added -----------------------Dima 25.11.2014
+function Integer FindInMathOR(var record RcVc RepSpec,var string field)
+begin
+  record ORVc ORr;
+  row ORVc ORrw;
+  boolean continue;
+  Integer i,rwcnt,mwn,res,wn;
+  string 20 search;
+  
+  //wn = CurWindow; //ORTableSearchIClass
+  mwn = RepSpec.flags[0];
+  search = RepSpec.f1;
+  GetWindowRecord(mwn,ORr);
+  rwcnt = MatRowCnt(ORr);
+  res=RepSpec.flags[3]; //last result
+  field="";
+
+	if (RepSpec.flags[2]==1) then begin  //forward search
+		  for (i = RepSpec.flags[1];i<rwcnt;i=i+1) begin
+
+					MatRowGet(ORr,i,ORrw);
+						if(FindSubString(search,ORrw.ArtCode)) then begin
+							field = "ArtCode";
+							res=i;
+							goto LBreak;
+						end else begin
+						
+							if(FindSubString(search,ORrw.Spec)) then begin
+								field = "Spec";
+								res=i;
+								goto LBreak;
+							end else begin
+				
+								if(FindSubString(search,ORrw.Price)) then begin
+									field = "Price";
+									res=i;
+									goto LBreak;
+									end;
+								end;
+								end;
+			  
+		  end;  
+	
+	end else begin
+
+	if (RepSpec.flags[2]==2) then begin  //backward search
+		  for (i = RepSpec.flags[1];i>=0;i=i-1) begin
+
+					MatRowGet(ORr,i,ORrw);
+						if(FindSubString(search,ORrw.ArtCode)) then begin
+							field = "ArtCode";
+							res=i;
+							goto LBreak;
+						end else begin
+						
+							if(FindSubString(search,ORrw.Spec)) then begin
+								field = "Spec";
+								res=i;
+								goto LBreak;
+							end else begin
+				
+								if(FindSubString(search,ORrw.Price)) then begin
+									field = "Price";
+									res=i;
+									goto LBreak;
+									end;
+								end;
+								end;						 
+			end;	  
+		
+		  end;
+	end;
+
+  if ((field =="") ) then begin
+  MessageBox(0,"Не найдено результатов для " & search);
+  end;
+
+  LBreak:;	
+  FindInMathOR=res;
+return;
+end;
+
+
+
+
+global    //added -----------------------Dima 26.11.2014
+function Integer FindInMathPO(var record RcVc RepSpec,var string field)
+begin
+  record POVc POr;
+  row POVc POrw;
+  boolean continue;
+  Integer i,rwcnt,mwn,res,wn;
+  string 20 search;
+  
+  //wn = CurWindow; //POTableSearchIClass
+  mwn = RepSpec.flags[0];
+  search = RepSpec.f1;
+  GetWindowRecord(mwn,POr);
+  rwcnt = MatRowCnt(POr);
+  res=RepSpec.flags[3]; //last result
+  field="";
+
+	if (RepSpec.flags[2]==1) then begin  //forward search
+		  for (i = RepSpec.flags[1];i<rwcnt;i=i+1) begin
+
+					MatRowGet(POr,i,POrw);
+						if(FindSubString(search,POrw.ArtCode)) then begin
+							field = "ArtCode";
+							res=i;
+							goto LBreak;
+						end else begin
+						
+							if(FindSubString(search,POrw.Spec)) then begin
+								field = "Spec";
+								res=i;
+								goto LBreak;
+							end else begin
+				
+								if(FindSubString(search,POrw.Price)) then begin
+									field = "Price";
+									res=i;
+									goto LBreak;
+									end;
+								end;
+								end;
+			  
+		  end;  
+	
+	end else begin
+
+	if (RepSpec.flags[2]==2) then begin  //backward search
+		  for (i = RepSpec.flags[1];i>=0;i=i-1) begin
+
+					MatRowGet(POr,i,POrw);
+						if(FindSubString(search,POrw.ArtCode)) then begin
+							field = "ArtCode";
+							res=i;
+							goto LBreak;
+						end else begin
+						
+							if(FindSubString(search,POrw.Spec)) then begin
+								field = "Spec";
+								res=i;
+								goto LBreak;
+							end else begin
+				
+								if(FindSubString(search,POrw.Price)) then begin
+									field = "Price";
+									res=i;
+									goto LBreak;
+									end;
+								end;
+								end;						 
+			end;	  
+		
+		  end;
+	end;
+
+  if ((field =="") ) then begin
+  MessageBox(0,"Не найдено результатов для " & search);
+  end;
+
+  LBreak:;	
+  FindInMathPO=res;
+return;
+end;
+
+
+global    //added -----------------------Dima 26.11.2014
+function Integer FindInMathPU(var record RcVc RepSpec,var string field)
+begin
+  record PUVc PUr;
+  row PUVc PUrw;
+  boolean continue;
+  Integer i,rwcnt,mwn,res,wn;
+  string 20 search;
+  
+  //wn = CurWindow; //PUTableSearchIClass
+  mwn = RepSpec.flags[0];
+  search = RepSpec.f1;
+  GetWindowRecord(mwn,PUr);
+  rwcnt = MatRowCnt(PUr);
+  res=RepSpec.flags[3]; //last result
+  field="";
+
+	if (RepSpec.flags[2]==1) then begin  //forward search
+		  for (i = RepSpec.flags[1];i<rwcnt;i=i+1) begin
+
+					MatRowGet(PUr,i,PUrw);
+						if(FindSubString(search,PUrw.ArtCode)) then begin
+							field = "ArtCode";
+							res=i;
+							goto LBreak;
+						end else begin
+						
+							if(FindSubString(search,PUrw.Spec)) then begin
+								field = "Spec";
+								res=i;
+								goto LBreak;
+							end else begin
+				
+								if(FindSubString(search,PUrw.UPrice)) then begin
+									field = "Price";
+									res=i;
+									goto LBreak;
+									end;
+								end;
+								end;
+			  
+		  end;  
+	
+	end else begin
+
+	if (RepSpec.flags[2]==2) then begin  //backward search
+		  for (i = RepSpec.flags[1];i>=0;i=i-1) begin
+
+					MatRowGet(PUr,i,PUrw);
+						if(FindSubString(search,PUrw.ArtCode)) then begin
+							field = "ArtCode";
+							res=i;
+							goto LBreak;
+						end else begin
+						
+							if(FindSubString(search,PUrw.Spec)) then begin
+								field = "Spec";
+								res=i;
+								goto LBreak;
+							end else begin
+				
+								if(FindSubString(search,PUrw.UPrice)) then begin
+									field = "Price";
+									res=i;
+									goto LBreak;
+									end;
+								end;
+								end;						 
+			end;	  
+		
+		  end;
+	end;
+
+  if ((field =="") ) then begin
+  MessageBox(0,"Не найдено результатов для " & search);
+  end;
+
+  LBreak:;	
+  FindInMathPU=res;
+return;
+end;
+
+
+
+global 
+procedure GoToRow (boolean next)
+begin
+  record ORVc ORr;
+  record POVc POr;
+  record PUVc PUr;
+  record RcVc RepSpec;
+  Integer wn,mwn,i; // i - number of current string
+  string 20 field;
+  string 50 windowClass;
+
+  //field = "ArtCode"; //default field for ORVc
+  wn=CurWindow;
+  DeselectWindow(wn,true);
+  GetWindowRecord(wn,RepSpec);
+  mwn = RepSpec.flags[0]; //MotherWindow
+  RepSpec.flags[1]=WindowActiveRow(mwn);
+
+
+	  if (next==true) then begin    			//кнопка След. 
+	   
+	    		if (RepSpec.flags[1]<0) then begin  
+	    			RepSpec.flags[1]=0; 
+	    		end;
+	    		if (RepSpec.flags[2]<>0) then begin
+	    		RepSpec.flags[1]=RepSpec.flags[1]+1;
+	    		end;
+			RepSpec.flags[2]=1; //прямой поиск
+	  end else begin						//кнопка Пред. 
+			if (RepSpec.flags[2]<>0 ) then begin
+	     	RepSpec.flags[1]=RepSpec.flags[1]-1;
+	    end;
+			RepSpec.flags[2]=2; //обратный поиск
+	  end;
+
+  PutWindowRecord(wn,RepSpec);  
+ // i = FindInMath(RepSpec,field);
+
+
+  windowClass = GetWindowClass(mwn);
+
+  switch(windowClass) begin
+  case "ORDClass":
+		i = FindInMathOR(RepSpec,field);
+		GetWindowRecord(mwn,ORr);
+  		WindowFieldGoto(mwn,ORr,i,field,true);
+  case "PODClass":
+		i = FindInMathPO(RepSpec,field);
+		GetWindowRecord(mwn,POr);
+  		WindowFieldGoto(mwn,POr,i,field,true);
+  case "PUDClass":
+		i = FindInMathPU(RepSpec,field);
+		GetWindowRecord(mwn,PUr);
+  		WindowFieldGoto(mwn,PUr,i,field,true);
+	
+  end;
+
+  RepSpec.flags[1]=i;
+  RepSpec.flags[3]=i;
+  PutWindowRecord(wn,RepSpec);
+
+return;
+end;
+
+
+
+global 		//added -----------------------Dima 25.11.2014
+procedure GoNextItem()
+begin
+//next = true;
+GoToRow(true);
+return;
+end;
+
+
+global 		//added -----------------------Dima 25.11.2014
+procedure GoPreviousItem()
+begin
+//previous = false;
+GoToRow(false);
+return;
+end;
+
+
+
+global  //added --------------Dima 25.11.2014
+procedure TableSearchDsm()
+BEGIN
+  record RcVc RepSpec;
+  Integer wn,res;
+  wn = CurWindow;
+  RepSpec.flags[0] = wn;
+  RepSpec.flags[1] = 0;  //current row in table
+  RepSpec.flags[2] = 0;  //search direction: 1-forward, 2-backward
+  RepSpec.flags[3] = 0; 
+  res = OpenWindow("TableSearchIClass",0,wn,"","",RepSpec);
+
+  RETURN;
+END;
