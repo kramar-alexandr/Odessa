@@ -316,6 +316,45 @@ LUpdateMarkPUDsm: ;
   RETURN;
 END;
 
+
+global  // added -------------------Dima  27.11.2014
+procedure ExportToExcelPUDsm()
+begin
+  record PUVc PUr;
+  record RcVc RepSpec;
+  integer wn;
+
+  wn = CurWindow;
+  GetWindowRecord(wn,PUr);
+  RepSpec.Media = mtExcel;
+  RepSpec.repname = "ExportTableToExcelPURn";
+  RepSpec.flags[0] = wn;
+  RepSpec.long1 = PUr.SerNr;
+  RunReport(RepSpec,0);
+  
+return;
+end;
+
+
+global // added -------------------Dima  27.11.2014
+procedure ExportToExcelStockMovDsm()
+begin
+  record StockMovVc StockMovr;
+  record RcVc RepSpec;
+  integer wn;
+
+  wn = CurWindow;
+  GetWindowRecord(wn,StockMovr);
+  RepSpec.Media = mtExcel;
+  RepSpec.repname = "ExportTableToExcelStockMovRn";
+  RepSpec.flags[0] = wn;
+  RepSpec.long1 = StockMovr.SerNr;
+  RunReport(RepSpec,0);
+  
+return;
+end;
+
+
 global 
 function Boolean PUDClassInsertRowTest(Integer wn, Integer rownr)
 BEGIN

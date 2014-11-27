@@ -2564,6 +2564,7 @@ begin
 //  SpecialMenu("Scan",' ',8,"ScanBarCodePUDsm");
     SpecialMenu("Создать складское перемещение",' ',8,"INTransFromPUsm");
   end;
+   SpecialMenu("Выгрузить таблицу в Excel",'',1,"ExportToExcelPUDsm"); // edit ----------Dima 26.11.2014
   end;
   EndWindow;
 end;
@@ -2999,6 +3000,7 @@ begin
   if (HasTaxMatrix) then begin
     SpecialMenu("Открыть нал. матрицу",' ',25,"OpenVatMatrixPODsm");
   end;
+    SpecialMenu("Выгрузить таблицу в Excel",'',1,"ExportToExcelPODsm"); // edit ----------Dima 26.11.2014
   end;
   EndWindow;
 end;
@@ -6286,6 +6288,7 @@ begin
       SpecialMenu("Send to Tax Authorities",'',10,"EShipPRTDsm");  
     end;
   end;  
+   SpecialMenu("Выгрузить таблицу в Excel",'',1,"ExportToExcelStockMovDsm"); // edit ----------Dima 26.11.2014
   EndWindow;
 end;
 
