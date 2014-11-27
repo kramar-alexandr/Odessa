@@ -578,6 +578,10 @@ BEGIN
   PUp.ExtraCostsCalculation = POp.ExtraCostsCalculation;
   PUp.PUFromPORate = POSetb.PUFromPORate;
   
+  if(nonblank(POp.SalesGroup))then begin	//Edit by Victor 26.11.14
+  	PUp.SalesGroup = POp.SalesGroup;
+  end;
+  
   PUp.ShipCostRule = POp.ShipCostRule;// Edit ************************** Wednesday, July 9, 2014 at 11:28:07
   PUp.CustomsCostRule = POp.CustomsCostRule;// Edit ************************** Wednesday, July 9, 2014 at 11:28:06
   
