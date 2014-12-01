@@ -1535,6 +1535,20 @@ begin
   return;
 end; //Edit***************************Sasha2,10:04 24.06.2014 }
 
+//Edit***************************Sasha2,17:12 01.12.2014 {
+function Boolean PODClassPalletNrEFAfter(Integer wn,Integer rownr,Boolean changedf)
+BEGIN
+  record POVc POr;
+
+  if (changedf) then begin
+    GetWindowRecord(wn,POr);    
+    POSumup(POr);
+    PutWindowRecord(wn,POr);
+  end;
+  PODClassPalletNrEFAfter = true;
+  return;
+end; //Edit***************************Sasha2,17:12 01.12.2014
+
 global
 function Boolean PODClassAfterEditField(Integer wn,string fieldname,Integer fn, Integer rownr,Integer changed)
 BEGIN
@@ -1580,6 +1594,7 @@ BEGIN
     case "AddUnitQty5": res = PODClassAddUnitQtyEFAfter(wn,rownr,changed!=0,5); //Edit***************************Sasha2,10:02 24.06.2014
     case "Volume": res = PODClassVolumeWeightEFAfter(wn,rownr,changed!=0);// same// Edit ************************** Wednesday, July 9, 2014 at 11:41:44
     case "Weight": res = PODClassVolumeWeightEFAfter(wn,rownr,changed!=0);//same// Edit ************************** Wednesday, July 9, 2014 at 11:41:44
+    case "PalletNr": res = PODClassPalletNrEFAfter(wn,rownr,changed!=0); //Edit***************************Sasha2,17:11 01.12.2014
     
   end;
   PODClassAfterEditField = res;
