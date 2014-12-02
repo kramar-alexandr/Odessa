@@ -112,3 +112,22 @@ begin
   return;
 end;
 
+global
+function Boolean ORLClassOnOpenWindow(Integer wn)
+begin
+  date dt;
+  record UserVc Userr;
+  
+  if(UserCanAction("VievAllSalesGroupDocuments", true)==false) then begin
+		Userr.Code = CurrentUser;
+		if(readFirstMain(Userr, 1, true))then begin
+			if(nonblank(Userr.SalesGroup))then begin
+				SetWindowSubset(wn,Userr.SalesGroup);
+			end;
+		end;  
+	end;
+    
+  ORLClassOnOpenWindow = false;
+  return;
+end;
+
