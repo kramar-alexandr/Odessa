@@ -294,7 +294,7 @@ begin
   StaticText(h-5,v+18,"файла для сохранения",true);
   EditField(h,v,-40,"",Normal,FileName,false,0);
 
-  EditField(h,v+=vs,-40,"Путь для соранения",Normal,DirName,false,0);
+  EditField(h,v+=vs,-40,"Путь для сохранения",Normal,DirName,false,0);
   EditField(h,v+=vs,100,"Склад",Normal,Location,false,LocationSClass);
   EditField(h,v+=vs,100,"Прейскурант",Normal,PLCode,false,PLDefSClass);
   EditField(h,v+=vs,50,"Указывать количество",Normal,Qty,true,0);
