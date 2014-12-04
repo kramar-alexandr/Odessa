@@ -22,6 +22,23 @@ SetLangMode(LangRussian,"RUS",0);
 // Error8: some artcode warning 
 // Error9: order not found
 
+global procedure SentFileTimeTableMn()
+begin
+  record RcVc RepSpec;
+  time t1,t2,curt;
+    
+    curt = CurrentTime;
+    t1 = StringToTime("8:30");
+    t2 = StringToTime("15:30");
+    logtext(0,"SentFileTimeTableMn");
+    
+    if (curt==t1 or curt==t2) then begin
+    	ExportStockCSVMn(RepSpec);
+    end;  
+    
+return;
+end;
+
 global procedure ExportStockCSVMn(record RcVc RepSpec)
 begin
 	record ItemStatusVc ISr;
@@ -39,7 +56,7 @@ begin
 	testf = true;
 	BlockLoad(ExportStockCSVb);
 	
-	if (Blank(ExportStockCSVb.HostIP) or Blank(ExportStockCSVb.FileName) or Blank(ExportStockCSVb.DirName)) then begin
+	if (Blank(ExportStockCSVb.HostIP) or Blank(ExportStockCSVb.FileName)) then begin
 	 goto LExportStockCSVMn;
 	end;
 	
