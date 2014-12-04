@@ -22,17 +22,28 @@ SetLangMode(LangRussian,"RUS",0);
 // Error8: some artcode warning 
 // Error9: order not found
 
-global procedure SentFileTimeTableMn()
+global procedure CustTimeTableAction()
 begin
   record RcVc RepSpec;
-  time t1,t2,curt;
+  time t1,t2,curt,curtnew;
+  string 5 hr,mn;
+
+    t1 = StringToTime("7:30");
+    t2 = StringToTime("14:30");
     
-    curt = CurrentTime;
-    t1 = StringToTime("8:30");
-    t2 = StringToTime("15:30");
-    logtext(0,"SentFileTimeTableMn");
-    
-    if (curt==t1 or curt==t2) then begin
+    curt = CurrentTime; 
+    hr = GetHour(curt);
+    if (len(hr)==1) then begin
+    	hr = "0" & hr;
+    end;
+    mn = GetMinute(curt);
+    if (len(mn)==1) then begin
+    	mn = "0" & mn;
+    end;
+    curtnew = StringToTime(hr & ":" & mn);
+
+    if (curtnew==t1 or curtnew==t2) then begin
+    	LogText(0,"CustTimeTableAction at planned time: " & curtnew);
     	ExportStockCSVMn(RepSpec);
     end;  
     
