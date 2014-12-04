@@ -38,6 +38,11 @@ begin
 	
 	testf = true;
 	BlockLoad(ExportStockCSVb);
+	
+	if (Blank(ExportStockCSVb.HostIP) or Blank(ExportStockCSVb.FileName) or Blank(ExportStockCSVb.DirName)) then begin
+	 goto LExportStockCSVMn;
+	end;
+	
 	addtexttoarea("websites;type;sku;price;qty;in_stock",importar);
 	addtexttoarea(chr(13) & chr(10),importar);
 	
@@ -120,6 +125,8 @@ begin
 	end;
 	tstr = tstr & ExportStockCSVb.DirName & " " & ExportStockCSVb.FileName;
 	RunProgram("./ftptransfer.sh", tstr);
+
+LExportStockCSVMn:;
 
 return;
 end;
