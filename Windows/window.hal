@@ -998,3 +998,39 @@ Integer i,mwn;
   EndWindow;
 end;
 
+
+
+window SalesReportRClass:1  // added ************ Dima, 04.12.2014
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  real h,v,vs;
+
+  WindowBegin("Отчет по продажам",SalesReportRClass,CGRcW,RcType);
+  SetWRect(20,80,400,200);
+  h = 100; vs = 20; v = 6;
+
+  PeriodField(h,v+=vs,"Период");
+  EditFieldTL(h,v+=vs,150,"Товар",M4UStr,Normal,41,f1,false,INSClass);
+  EditFieldTL(h,v+=vs,150,"Группа продаж",M4UStr,Normal,41,f2,false,0);
+  EditFieldTL(h,v+=vs,150,"Склад",M4UStr,Normal,41,f3,false,LocationSClass);
+  EditFieldTL(h,v+=vs,150,"Продавец",M4UStr,Normal,41,f4,false,UserSClass);
+
+
+  EndWindow;
+
+end;
+
+window LocationsReportRClass:1  // added ************ Dima, 04.12.2014
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  real h,v;
+
+  WindowBegin("Отчет по складам",LocationsReportRClass,CGRcW,RcType);
+  SetWRect(20,80,400,200);
+  //h = 115; v = 15;
+  //EditFieldTL(h,v,150,"Классификация",M4UStr,Normal,30,f1,false,0);
+
+  EndWindow;
+
+end;
+

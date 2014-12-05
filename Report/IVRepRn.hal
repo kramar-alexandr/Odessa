@@ -1,0 +1,117 @@
+SetLangMode(LangRussian,"RUS",0);
+
+global
+procedure SalesRn(record RcVc RepSpec)
+begin
+record IVVc IVr;
+row IVVc IVrw;
+Integer rw,rwcnt,i;
+boolean TrHs,testf;
+
+
+	StartReportJob("Отчет по продажам");
+	rw=1;
+	Header(rw,"Период с " & RepSpec.sStartDate & "  по  " & RepSpec.sEndDate,1);
+	rw=rw+1;
+
+	if (NonBlank(RepSpec.f1)) then begin
+		Header(rw,"Код товара: " & RepSpec.f1,1);
+		rw=rw+1;
+	end;
+	
+	if (NonBlank(RepSpec.f3)) then begin
+		Header(rw,"Склад: " & RepSpec.f3,1);
+		rw=rw+1;
+	end;
+
+	if (NonBlank(RepSpec.f2)) then begin
+		Header(rw,"Группа продаж: " & RepSpec.f2,1);
+		rw=rw+1;
+	end;
+
+	if (NonBlank(RepSpec.f4)) then begin
+		Header(rw,"Продавец: " & RepSpec.f4,1);
+		rw=rw+1;
+	end;
+
+	EndHeader;
+
+	SetRepCol(2,45);
+	SetRepCol(3,80);
+	SetRepCol(4,140);
+	SetRepCol(5,190);
+	SetRepCol(6,340);
+	SetRepCol(7,385);
+	SetRepCol(8,440);
+	
+	StartFormat(15);
+	OutString(0,0,"Дата",false);
+	OutString(2,0," № ",false);
+	OutString(3,0,"Склад",false);
+	OutString(4,0,"Код товара",false);
+	OutString(5,0,"Наименование",false)
+	OutString(6,0,"Кол-во",false);
+	OutString(7,0,"Цена",false);
+	OutString(8,0,"Продавец",false);
+	EndFormat;
+	Black_Divider(0,1);
+
+	TrHs=true;
+	While (LoopMain(IVr,1,TrHs)) begin
+
+		testf=true;
+
+		if (IVr.InvDate < RepSpec.sStartDate) then begin
+		testf=false;
+		end;	
+
+		if  (IVr.InvDate > RepSpec.sEndDate) then begin
+		TrHs=false;
+		end;		
+
+		if (nonblank(RepSpec.f3) and (IVr.Location<>RepSpec.f3)) then begin
+		testf=false;
+		end;
+
+		if (nonblank(RepSpec.f4) and (IVr.SalesMan<>RepSpec.f4)) then begin
+		testf=false;
+		end;
+		
+		rwcnt = MatRowCnt(IVr);
+
+		for(i = 0; i<rwcnt; i=i+1) begin
+          	MatRowGet(IVr,i,IVrw);
+
+			if (nonblank(RepSpec.f1) and (IVrw.ArtCode<>RepSpec.f1)) then begin
+			testf=false;
+			end;
+
+			if (nonblank(RepSpec.f2) and (IVr.SalesGroup<>RepSpec.f2)) then begin
+			testf=false;
+			end;
+			
+			if (blank(IVrw.ArtCode)) then begin
+			testf=false;
+			end;
+
+			if(testf) then begin
+				StartFormat(15);
+				OutString(0,0,IVr.InvDate,false);
+				OutString(2,0,IVr.SerNr,false);
+				OutString(3,0,IVr.Location,false);
+				OutString(4,0,IVrw.ArtCode,false);
+				OutString(5,0,IVrw.Spec,false);
+				OutString(6,0,IVrw.Quant,false);
+				OutString(7,0,IVrw.Price,false);
+				OutString(8,0,IVr.SalesMan,false);
+				EndFormat;
+
+			end;
+		end;
+
+	end;
+	
+	EndJob;
+
+return;
+end;
