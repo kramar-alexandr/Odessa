@@ -1,20 +1,37 @@
+external procedure ExtractObj(string,var Integer,var string);
+
 SetLangMode(LangRussian,"RUS",0);
+
+
 
 global
 procedure LocationsRn(record RcVc RepSpec)
 begin
-record ItemStatusVc ISr;
-record INVc INr;
-record LocationVc Locr;
-vector Integer Locations;// positions of columns
-array string 20 LocCodes;
-string 20 curCode;
-Integer i,rw;
-real h,step;
-boolean TrHs,testf;
-real sum;
+  record ItemStatusVc ISr;
+  record INVc INr;
+  record LocationVc Locr;
+  vector Integer Locations;// positions of columns
+  array string 20 LocCodes;
+  string 20 curCode;
+  Integer i,rw;
+  real h,step;
+  boolean TrHs,testf,testf0;
+  real sum;
+  Integer startPos,pos;
+  string 15 keySort;
+  string 40 class,a,b;
+  Array string 40 groups;
 
 	TrHs=true;
+
+	if (RepSpec.ArtMode == 0) then begin	//сортировка
+	keySort = "Code";
+	end;
+	if (RepSpec.ArtMode == 1) then begin
+	keySort = "Name";
+	end;
+
+
 	i=0;
 	while (LoopMain(Locr,1,TrHs)) begin
 	LocCodes[i]=Locr.Code;
@@ -26,38 +43,58 @@ real sum;
   	Header(rw,"Все склады",1);
   	rw = rw + 1;
 
-	//if (nonblank(RepSpec.f1)) then begin
-  	//	Header(rw,"Классификация товара: " & RepSpec.f1,1);
-  	//	rw = rw + 1;	
-	//end;
+	if (nonblank(RepSpec.f1)) then begin
+  		Header(rw,"Классификация товара: " & RepSpec.f1,1);
+  		rw = rw + 1;	
+	end;
+
+	if (keysort=="Code") then begin
+	Header(rw,"Сортировка по  коду товара",1);
+	end;
+	if (keysort=="Name") then begin
+	Header(rw,"Сортировка по  названию товара",1);
+	end;	
+
 	EndHeader;
 
 	StartFormat(15);
-	OutString(0,0,"Наименование",false);
-	step=400/LocCodes.length;
+	OutString(0,0,"Код товара",false);
+	OutString(30,0,"Наименование",false);
+	step=380/LocCodes.length;
+	startPos = 90;
 
 	for(i=0; i < LocCodes.length; i=i+1) begin
 		Locr.Code = LocCodes[i];
 		if (ReadFirstMain(Locr,1,true)) then begin
-			OutString(50+step*i,0,Locr.Name,false);	
+			OutString(startPos+step*i,0,Locr.Name,false);	
 		end;	
-		Locations[LocCodes[i]]=50+step*i;
+		Locations[LocCodes[i]]=startPos+step*i;
 	end;
 
-	OutString(450,0,"Всего",false);
-	Locations[";;;"]=450;//Total sum
+	OutString(460,0,"Всего",false);
+	Locations[";;;"]=460;//Total sum
 
 	EndFormat;
 	Black_Divider(0,1);
 
 	TrHs=true;
-	
-	While(LoopMain(INr,1,TrHs)) begin
-		curCode = INr.Code;
-		ISr.Code = INr.Code;
-		OutString(0,0,INr.Name,false);
 
 	
+	While(LoopKey(keySort,INr,1,TrHs)) begin
+		testf0 = true;
+
+		if (nonblank(RepSpec.f1) and (SetInSet(RepSpec.f1,INr.DispGroups) == false)) then begin
+		testf0 = false;
+		end;
+
+		if(testf0) then begin
+
+			curCode = INr.Code;
+			ISr.Code = INr.Code;
+			OutString(0,0,INr.Code,false);
+			OutString(30,0,INr.Name,false);
+
+
 			While(LoopMain(ISr,1,TrHs)) begin					
 				if(curCode==ISr.Code) then begin 
 					testf=true; 
@@ -81,7 +118,8 @@ real sum;
 			ResetLoop(ISr);
 			TrHs=true;
 			sum=0;
-			
+
+		end;			
 	end;
 	
 	EndJob;

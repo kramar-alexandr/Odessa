@@ -1000,12 +1000,12 @@ end;
 
 
 
-window SalesReportRClass:1  // added ************ Dima, 04.12.2014
+window SalesRClass:1  // added ************ Dima, 04.12.2014
   wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
 begin
   real h,v,vs;
 
-  WindowBegin("Отчет по продажам",SalesReportRClass,CGRcW,RcType);
+  WindowBegin("Отчет по продажам",SalesRClass,CGRcW,RcType);
   SetWRect(20,80,400,200);
   h = 100; vs = 20; v = 6;
 
@@ -1020,15 +1020,19 @@ begin
 
 end;
 
-window LocationsReportRClass:1  // added ************ Dima, 04.12.2014
+window LocationsRClass:1  // added ************ Dima, 04.12.2014
   wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
 begin
   real h,v;
 
-  WindowBegin("Отчет по складам",LocationsReportRClass,CGRcW,RcType);
+  WindowBegin("Отчет по складам",LocationsRClass,CGRcW,RcType);
   SetWRect(20,80,400,200);
-  //h = 115; v = 15;
-  //EditFieldTL(h,v,150,"Классификация",M4UStr,Normal,30,f1,false,0);
+  h = 115; v = 15;
+  EditFieldTL(h,v,150,"Классификация",M4UStr,Normal,30,f1,false,DISClass);
+  v=v+40;
+  ButtonFrame(h-90,v,320,2,"Сортировать отчет по");
+  RadioButton(h+150,v,0,0,"Коду товара",ArtMode);
+  RadioButton(h+150,v+20,1,0,"Названию",ArtMode);
 
   EndWindow;
 
