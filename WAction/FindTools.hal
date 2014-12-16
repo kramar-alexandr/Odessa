@@ -240,7 +240,7 @@ begin
 							end else begin
 				
 								if(FindSubString(search,PUrw.UPrice)) then begin
-									field = "Price";
+									field = "UPrice";
 									res=i;
 									goto LBreak;
 									end;
@@ -268,7 +268,7 @@ begin
 							end else begin
 				
 								if(FindSubString(search,PUrw.UPrice)) then begin
-									field = "Price";
+									field = "UPrice";
 									res=i;
 									goto LBreak;
 									end;
