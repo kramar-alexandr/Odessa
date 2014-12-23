@@ -1007,14 +1007,9 @@ procedure DisplayRecordDetails_RUS(LongInt ah,LongInt av,string compname,date td
                                string loyaltycardnr,Integer ShowBaggerSupervisor,string bagger,string supervisor,string disccardnr,val discfwdbal,
                                string sessiondesc,Boolean showlc,string OfficialNum,string taxseal)
 begin
-  record MaxPointLoyCardBlock MPLb;
   real h,h2,h3,v;
   string 255 tstr;
-  longint maxPoints;
 
-  BlockLoad(MPLb);
-  maxPoints = MPLb.MaxPointsView;
-  
   h = ah;
   h2 = h + 150;
   h3 = h + 240;
@@ -1040,11 +1035,9 @@ begin
       tstr = "Накопительная карта: ";
       tstr = tstr & loyaltycardnr;
       StaticText(h,v+=20,tstr,false);
-	if (StringToLongInt(OfficialNum) <= maxPoints) then begin				//Edit------------Dima-----23.12.2014
-	      tstr = "Накопительные баллы: ";	//Edit by Victor 14.11.14
-	      tstr = tstr & OfficialNum;
-	      StaticText(h,v+=20,tstr,false);	//End edit
-	end;//End------Edit
+      tstr = "Накопительные баллы: ";	//Edit by Victor 14.11.14
+      tstr = tstr & OfficialNum;
+      StaticText(h,v+=20,tstr,false);	//End edit
     end else begin
       v = v + 20;
     end;
@@ -1091,11 +1084,9 @@ begin
     tstr = "Накопительная карта: ";
     tstr = tstr & loyaltycardnr;
     StaticText(h,v+=20,tstr,false);
-	if (StringToLongInt(OfficialNum) <= maxPoints) then begin				//Edit------------Dima-----23.12.2014
-	      tstr = "Накопительные баллы: ";	//Edit by Victor 14.11.14
-	      tstr = tstr & OfficialNum;
-	      StaticText(h,v+=20,tstr,false);	//End edit
-	end;//End------Edit
+    tstr = "Накопительные баллы: ";	//Edit by Victor 14.11.14
+    tstr = tstr & OfficialNum;
+    StaticText(h,v+=20,tstr,false);	//End edit
   end else begin
     if (ShowBaggerSupervisor!=0) then begin
     v = v + 20;

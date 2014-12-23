@@ -7,7 +7,6 @@ begin
   Setting("Настройки WebShop",WebShopSettingsTClass,modSO); //Edit***************************Sasha2,10:22 14.07.2014
   Setting("Настройки экспорта склада CSV",ExportStockCSVTClass,modSY);
   Setting("Настройки моей регистрации",MyAccountTClass,modSL); //Edit***************************Sasha2,11:59 07.11.2014
-  Setting("Настройки отображения баллов карты лояльности",MaxPointLoyCardTClass,modPOS);	//Edit------------Dima  23.12.2014
   Report("Анализ поставщика",VEAnaRClass,VEAnaRn,0,modPO);
   Report("Отчет по товарам по классификации (поставщику)",VERepRClass,VERepRn,0,modPO); //Edit***************************Sasha2,14:08 31.07.2014
   Report("Отчет по заказанным товарам",ItemPUOrderReportRClass,ItemPUOrderReportRn,0,modPO); //Edit***************************Sasha2,14:08 31.07.2014
@@ -25,8 +24,6 @@ begin
    SString(31005,"К оплате");
    SString(31006,"Ни хвоста ни чешуи!");
    SString(31007,"Оплачено картой");
-   SString(31008,"Остатки на складах");
-
    
   Maintenance("Экспорт склада CSV",ExportStockCSVClass,ExportStockCSVMn,modSY);
   Maintenance("Пересчитать значение объема в карточке товара",RecalcINVolumeClass,RecalcINVolumeMn,modDBMain);//Edit***************************Sasha2,13:50 24.06.2014
