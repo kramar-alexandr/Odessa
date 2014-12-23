@@ -2892,6 +2892,14 @@ RecordBegin(INVc,-,"artikel5");
   KeySegment(OfficialSerNr2);
   KeySegment(SerNr);
   EndRecord;
+
+
+
+  BlockBegin(MaxPointLoyCardBlock,-,"")	//Edit-------------------------------Dima   23.12.2014
+  RecordField(MaxPointsView,M4Long,0,0);
+  EndBlock;
+
+
     	  	
 return;
 end;

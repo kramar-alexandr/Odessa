@@ -6465,7 +6465,7 @@ begin
   EditField(h2,v,70,"Действ-на до",Normal,ExpiryDate,false,PasteCurDate);
   EditField(h,v+=20,80,"Прогр. лояльности",Normal,LCMLevel,false,LCMemberLevelSClass);
   EditField(h2,v,70,"Накопл. баллы",ViewOnly,PointsBalance,true,0);
-  EditField(h3,v,-40,"Баллов до",Normal,PointsTo,false,LoyaltyCardSClass);
+  EditField(h3,v,-40,"Баллов до",ViewOnly,PointsTo,false,LoyaltyCardSClass);
   CheckBox(h,v+=20,0,"Закрыта",Closed);
   SpecialMenu("Новый клиент",'u',10,"CUNPTSSClassNewCustomer");
   EndWindow;
