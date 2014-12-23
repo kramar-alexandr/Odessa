@@ -790,7 +790,8 @@ begin
   vs = 20; h = 120;
   PeriodField(h,v=6,"Период");
   EditFieldTL(h,v+=vs,150,"Товар",M4UStr,Normal,41,f1,false,INSClass);
-  EditFieldTL(h,v+=vs,70,"Склад",M4UStr,Normal,41,f2,false,LocationSClass);
+  EditFieldTL(h,v+=vs,150,"Склад",M4UStr,Normal,41,f2,false,LocationSClass);
+  EditFieldTL(h,v+=vs,150,"Остатки на складах",M4UStr,Normal,41,f4,false,LocationSClass);
   EditFieldTL(h,v+=vs ,70,"Классификация",M4UStr,Normal,30,f3,false,DISClass);
   
   EndWindow;
@@ -1036,5 +1037,21 @@ begin
 
   EndWindow;
 
+end;
+
+
+
+window MaxPointLoyCardTClass:1
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  real h,v,vs;
+  WindowBegin("Настройки отображения баллов карты лояльности",MaxPointLoyCardTClass,CGSbl,-);
+  SetBlid(MaxPointLoyCardBlock);
+  SetWRect(10,80,370,270);
+  v = 10;  h = 100;
+  StaticText(h+215,v,"Введите максимальное кол-во баллов карты лояльности, ",true);
+  StaticText(h+150,v+15,"которое будет отображаться в счет-фактуре.",true);
+  EditField(h,v+30,50,"Кол-во баллов",Normal,MaxPointsView,false,0);  
+  EndWindow;
 end;
 
