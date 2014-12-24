@@ -1055,3 +1055,35 @@ begin
   EndWindow;
 end;
 
+
+window CleaningVClass:1 
+ wtag("language","UKR"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+ begin
+  real h,v,vs;
+
+  WindowBegin("Удалить первичные документы",CleaningVClass,CGMnt,RcType);
+  SetWRect(20,120,360,620);
+  v = 10;  h = 25; vs = 16;
+  StaticText(h-10,v,"Будут удалены все записи из регистров:",false);
+  StaticText(h,v+=vs,"Приход",false);
+  StaticText(h,v+=vs,"Расход",false);
+  StaticText(h,v+=vs,"Платежи клиентам",false);
+  StaticText(h,v+=vs,"Платежи поставщикам",false);
+  StaticText(h,v+=vs,"Счета-фактуры",false);
+  StaticText(h,v+=vs,"Счета-фактуры поставщиков",false);
+  StaticText(h,v+=vs,"Заказы поставщикам",false);
+  StaticText(h,v+=vs,"Отгрузки",false);
+  StaticText(h,v+=vs,"Поступления",false);
+  StaticText(h,v+=vs,"Списания",false);
+  StaticText(h,v+=vs,"Перемещения товаров",false);
+  StaticText(h,v+=vs,"Возвраты товаров",false);
+  StaticText(h,v+=vs,"Возвраты поставщикам",false);
+  StaticText(h,v+=vs,"Счета клиентам",false);
+  StaticText(h,v+=vs,"Записи операций",false);
+  StaticText(h,v+=vs,"Начальное сальдо",false);
+  StaticText(h,v+=vs,"История товаров",false);
+  StaticText(h,v+=vs,"Статус товаров",false);
+
+  EndWindow;
+end;
+
