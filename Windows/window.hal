@@ -792,7 +792,7 @@ begin
   EditFieldTL(h,v+=vs,150,"Товар",M4UStr,Normal,41,f1,false,INSClass);
   EditFieldTL(h,v+=vs,150,"Склад",M4UStr,Normal,41,f2,false,LocationSClass);
   EditFieldTL(h,v+=vs,150,"Остатки на складах",M4UStr,Normal,41,f4,false,LocationSClass);
-  EditFieldTL(h,v+=vs ,70,"Классификация",M4UStr,Normal,30,f3,false,DISClass);
+  EditFieldTL(h,v+=vs,150,"Классификация",M4UStr,Normal,30,f3,false,DISClass);
   
   EndWindow;
 end; //Edit***************************Sasha2,14:10 31.07.2014 }
@@ -1041,7 +1041,7 @@ end;
 
 
 
-window MaxPointLoyCardTClass:1
+window MaxPointLoyCardTClass:1	//Edit--------------------------------Dima 23.12.2014
   wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
 begin
   real h,v,vs;
@@ -1056,8 +1056,8 @@ begin
 end;
 
 
-window CleaningVClass:1 
- wtag("language","UKR"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+window CleaningVClass:1 //Edit--------------------------------Dima 24.12.2014
+ wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
  begin
   real h,v,vs;
 
@@ -1086,4 +1086,40 @@ window CleaningVClass:1
 
   EndWindow;
 end;
+
+
+
+
+window PUImportIClass:1  // added ************ Dima, 19.11.2014
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+real h,v,vs;
+Integer i;
+  WindowBegin("Импорт поступлений на склад",PUImportIClass,CGIcW,-);
+  SetWRect(20,80,470,320);
+  i=1; //номер колонки
+  h=10;  v=15; 
+  StaticText(h,v,"Формат импорта",false);
+  h=20;  v=40;
+  StaticText(h,v,"Список колонок:",false);
+  v=v+30; vs=25;
+  StaticText(h,v,i &". Код склада",false);
+	 StaticText(h+150,v,"Обязательное поле",false);
+	 i=i+1;
+  StaticText(h,v+=vs,i &". Код товара",false);
+	 StaticText(h+150,v,"Обязательное поле",false);
+	 i=i+1;
+  StaticText(h,v+=vs,i &". Количество",false);
+	 StaticText(h+150,v,"Обязательное поле",false);
+	 i=i+1;
+  StaticText(h,v+=vs,i &". Цена",false);
+	 StaticText(h+150,v,"Необязательное поле",false);
+	 i=i+1;
+  h=10;
+  StaticText(h,v+=45,"Примечание:   Все столбцы разделены <Tab>",false);
+
+  EndWindow;
+end;
+
+
 

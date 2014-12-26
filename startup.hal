@@ -37,6 +37,8 @@ begin
   Import("Импорт цен",PLImportIClass,PLImportIn,modDI); //Added********************Dima 20.11.2014
   Import("Импорт товаров",INImportIClass,INImportIn,modIN);//Added********************Dima 20.11.2014
   Import("Заменить группу товара",INReplaceGroupIClass,INReplaceGroupIn,modIN);//Added********************Dima 21.11.2014
+  Import("Импорт поступлений на склад",PUImportIClass,PUImportIn,modIN);//Added********************Dima 24.12.2014
+
    
   StrSetBegin(3); /* Try to keep them in alphabetical order */
   StrSetText(AllowAddingINtoRet,"Добавлять товары в возвраты");
