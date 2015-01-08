@@ -188,6 +188,7 @@ begin
 	Cur.Name = XmlGetAttribute(xmlMessage,"orders/order" & i,"name") & " " & XmlGetAttribute(xmlMessage,"orders/order" & i,"name2");
 	Cur.eMail = XmlGetAttribute(xmlMessage,"orders/order" & i,"email");
 	Cur.Phone = XmlGetAttribute(xmlMessage,"orders/order" & i,"phone");
+	Cur.CustCat = "WEB";	//Edit--------------------Dima 08.01.2015
 	Cur.CUType = 1;
 	if (!recordStore(Cur,true)) then begin
 		if (Blank(errors)) then begin errors = "Error2"; end else begin errors = errors & ",Error2"; end;
