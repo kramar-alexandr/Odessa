@@ -73,6 +73,52 @@ external function Boolean HasModNL();
 external function Boolean HasIncomeAndExpenseBook();
 external updating function Boolean DoXMLExport_IVVc(var record IVVc);
 
+global
+function string 20 GetCustomOfficialSerNr()
+begin
+  string 20 ofsernr,temp;
+  date curdate;
+  time curtime;
+  	
+  	curdate = CurrentDate;
+  	curtime = CurrentTime;
+  	temp = Right(GetYear(curdate),2);
+  	ofsernr = ofsernr & temp;
+  	
+  	temp = GetMonth(curdate);
+  	if (len(temp)==1) then begin
+  		temp = "0" & temp;
+  	end;
+  	ofsernr = ofsernr & temp;
+  	
+  	temp = GetDay(curdate);
+  	if (len(temp)==1) then begin
+  		temp = "0" & temp;
+  	end;
+  	ofsernr = ofsernr & temp;
+  	
+  	temp = GetHour(curtime);
+  	if (len(temp)==1) then begin
+  		temp = "0" & temp;
+  	end;
+  	ofsernr = ofsernr & temp;
+  	
+  	temp = GetMinute(curtime);
+  	if (len(temp)==1) then begin
+  		temp = "0" & temp;
+  	end;
+  	ofsernr = ofsernr & temp;
+  	
+  	temp = GetSecond(curtime);
+  	if (len(temp)==1) then begin
+  		temp = "0" & temp;
+  	end;
+  	ofsernr = ofsernr & temp;
+  	
+  GetCustomOfficialSerNr = ofsernr;
+  return;
+end;
+
 function Boolean CheckIfNextLegalSerNr(LongInt curivnr,string OfficialSerNr,Date invdate,record CUVc CUr)
 begin
   Boolean res;
@@ -377,7 +423,7 @@ BEGIN
     res = -1; 
     goto L99;
   end;
-  
+  IVp.OfficialSerNr = GetCustomOfficialSerNr;//Edit***************************Sasha2,11:31 08.01.2015
   if (blank(IVp.OfficialSerNr)) then begin	//Edit by Victor 08.01.15
     RecordCheckError(1058,"",-1,"OfficialSerNr");      
     res = -1; 

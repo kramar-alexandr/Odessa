@@ -5028,6 +5028,98 @@ begin
   EndWindow;
 end;
 
+window ORLClass:3
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  Integer pos,rn;
+
+  WindowBegin("Счета клиентам",ORLClass,CGmlist,-);
+  SpawnClass(ORDClass);
+  SetWRect(20,80,930,298); //Edit***************************Sasha2,14:12 08.01.2015
+  Sizeable(-1,-1,0,0);
+  UseView(ORVc);
+  FormName(PrintORL);
+  RecordList(4,17,-21,-39);
+  RlColKey(4,4,"Но.",SerNr,false,SerNr);
+  RlColKey(79,79,"ОК",OKFlag,false,OKFlag);
+  pos = 111;
+  if (HasModIN) then begin
+    RlColKey(pos,pos,"отгруж",ShipMark,false,ShipFlag);
+    pos = pos + 32;
+  end;
+  if (HasModSL) then begin
+    RlColKey(pos,pos,"Отфакт",InvMark,false,InvFlag);
+    pos = pos + 32;
+  end;
+  RlCol(pos,pos,"закр",Closed,false);
+  pos = pos + 32;
+  RlColKey(pos,pos,"Дата заказа",OrdDate,false,OrdDate);
+  pos = pos + 80;
+  if (HasMultiLocations) then begin
+    RlCol   (pos,pos,"Местоположение",Location,false);
+    pos = pos + 60;
+  end;
+  RlColKey(pos,pos,"Номер заказа клиента",CustOrdNr,false,CustOrdNr);
+  pos = pos + 80;
+  RlColKey(pos,pos,"Клиент",CustCode,false,CustCode);
+  pos = pos + 60;
+  RlColKey(pos,pos,"Наим.",Addr0,false,Name);
+  pos = pos + 130; //Edit***************************Sasha2,13:45 08.01.2015
+  RlColKey(pos,pos,"Оф.сер.номер",OfficialSerNr,false,OfficialSerNr); //Edit***************************Sasha2,13:45 08.01.2015
+  if (IsEnterprise) then begin
+    RlColKey(-200,-200,"Класс",OrderClass,false,OrderClass);
+    RlColKey(-155,-155,"Итого",Sum4,true,Sum4);
+    RlCol(-75,-75,"Аванс",DownPaySent,true);
+  end else begin
+    RlColKey(-55,-55,"ИТОГО",Sum4,true,Sum4);
+  end;
+  if (HasLimitedAccess) then begin
+    BrowseSubsetButton(-40,-15);
+  end;
+  SearchField("Поиск");
+  if (GuiType==kGuiMetro) then begin
+    rn = 0;
+    RowMenuBegin("");
+    if (HasModIN) then begin
+      RowMenuItem(rn,"Создать отгрузку",'L','L',4300,"SHFromORLsm"); rn = rn + 1;  
+    end;
+    RowMenuItem(rn,"Создать счет-фактуры",'L','L',4300,"IVFromORLsm"); rn = rn + 1;  
+    if (IsEnterprise) then begin
+      RowMenuItem(rn,"Созжать счет-фактуру на аванс",'o','o',4300,"DownPayFromORLsm"); rn = rn + 1;  
+    end;
+    RowMenuItem(rn,"Статус счет",'r','r',4300,"ORStatusORLsm"); rn = rn + 1;  
+    if (HasModPO) then begin
+      RowMenuItem(rn,"Создать заказ поставщику",' ',' ',4300,"POFromORLsm"); rn = rn + 1;  
+    end;
+    if (HasModCRM) then begin
+      RowMenuItem(rn,"Создать деятельность",'c','c',4300,"ActFromORLsm"); rn = rn + 1;  
+    end;
+    if (IsEnterprise) then begin
+      RowMenuItem(rn,"Отметить счёт как сфактурированный",' ',' ',4300,"ORToInvORLsm"); rn = rn + 1;  
+    end;
+    EndRowMenu;
+  end else begin
+    if (HasModIN) then begin
+      SpecialMenu("Создать отгрузку",'L',0,"SHFromORLsm");
+    end;
+    SpecialMenu("Создать реализацию",'F',1,"IVFromORLsm");
+    if (IsEnterprise) then begin
+      SpecialMenu("Создать счет-фактуру на аванс",'o',2,"DownPayFromORLsm");
+    end;
+    SpecialMenu("Статус счета",'r',3,"ORStatusORLsm");
+    if (HasModPO) then begin
+      SpecialMenu("Создать заказ поставщику",' ',4,"POFromORLsm");
+    end;
+    if (HasModCRM) then begin
+      SpecialMenu("Создать деятельность",'c',5,"ActFromORLsm");
+    end;
+    if (IsEnterprise) then begin
+      SpecialMenu("Отметить счёт как сфактурированный",' ',6,"ORToInvORLsm");
+    end;
+  end;
+  EndWindow;
+end;
+
 window ORDClass:2
   wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
 begin
