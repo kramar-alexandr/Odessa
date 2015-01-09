@@ -726,7 +726,7 @@ begin
   Error = OutComPort(1,StandardMode);
   Error = OutComPort(1,chr(27) & chr(116) & chr(17)); //code page
  
-  M4PadString("N " & IVp.SerNr,20," ",false,s); //Change
+  M4PadString("N " & IVp.OfficialSerNr,20," ",false,s); //Change
   M4PadString(IVp.TransDate & "  " & IVp.TransTime,20," ",true,L2);
   s =  EmphesizeOn & s & EmphesizeOff & L2;
   Error = OutComPort(1,s & chr(10)); s ="";
@@ -737,8 +737,9 @@ begin
   Error = OutComPort(1,s & chr(10)); s ="";
   s = LMr.Addr0 & " " & LMr.Tel;
   Error = OutComPort(1,s & chr(10)); s ="";
-  GetUserName(IVp.SalesMan,pername);
-  Error = OutComPort(1,USetStr(11044) & " " & pername & chr(10)); s ="";
+  //GetUserName(IVp.SalesMan,pername);						//Edit------------------------Dima 09.11.2015
+  //Error = OutComPort(1,USetStr(11044) & " " & pername & chr(10));
+	s ="";
   Error = OutComPort(1,s & chr(10)); s =""; //empty line
   PrintLongLine;
 
@@ -768,14 +769,16 @@ begin
 		      M4PadString(ValToString(IVrw.Price*IVrw.Quant,M4Val,"",",",0) & " =",10," ",true,L2);
 		    end;
 		    s = s & L2;
-		    M4PadString(ValToString(IVrw.Sum,M4Val,"",",",0),15," ",true,L2);
+		    M4PadString(ValToString(IVrw.Price*IVrw.Quant,M4Val,"",",",0),15," ",true,L2);//Edit----------------Dima 09.01.2015
 		    s = s & L2;
 		    Error = OutComPort(1,s & chr(10)); s ="";
 		    if (IVrw.vRebate <> 0) then begin
-			    M4PadString("  " & USetStr(12007) & " " & ValToString(IVrw.vRebate,M4Val,"",",",0) & " %",15," ",false,L2);
+			    //M4PadString("  " & USetStr(12007) & " " & ValToString(IVrw.vRebate,M4Val,"",",",0) & " %",15," ",false,L2);
+					M4PadString("  " & USetStr(12007) & " " ,15," ",false,L2);	//Edit-----------------------Dima  09.01.2015
 			    s = s & L2;
-			    treb = IVrw.Quant*IVrw.Price*(IVrw.vRebate/100);
-			    M4PadString("       " & ValToString(treb,M4Val,"",",",0),15," ",false,L2);
+			    treb = IVrw.Quant*IVrw.Price*(IVrw.vRebate/100); 
+			    //M4PadString("       " & ValToString(-treb,M4Val,"",",",0),15," ",false,L2);
+					M4PadString(ValToString(-treb,M4Val,"",",",0),15," ",true,L2);//Edit-----------------------Dima  09.01.2015
 			    rebtot = rebtot + treb;
 			    s = s & L2;
 			    Error = OutComPort(1,s & chr(10)); s ="";
@@ -827,6 +830,8 @@ begin
   Error = OutComPort(1,s & chr(10)); s =""; L2 ="";
   
   PrintLongLine;
+  s = USetStr(31009);
+  Error = OutComPort(1,s & chr(10)); s =""; //Edit -----------------Dima  09.01.2015
   s = USetStr(31006);
   Error = OutComPort(1,s & chr(10)); s ="";
   
