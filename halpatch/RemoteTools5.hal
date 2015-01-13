@@ -912,7 +912,8 @@ L10PasteOrdInShip:;
       SHrw.FIFO = blankval;
       SHrw.FIFORowVal = blankval;
       if (nonblank(SHrw.Ordered)) then begin
-        SHrw.Ship = SHrw.Ordered;
+        SHrw.Ship = SHrw.Ordered; //Comment by Victor 12.01.15
+        //SHrw.Ship = 0;	// *** Victor 12.01.15
       end;
       SHrw.BasePrice = ORrw.Price;
       SHrw.BBCostPrice = ORrw.BasePrice;
@@ -945,7 +946,7 @@ L10PasteOrdInShip:;
         srw = srw + 1;
         if (Locr.RequirePos==0) then begin
           if (INr.SerNrf==1) and (SNrb.BulkSerialNos==0) then begin
-            if (SHrw.Ship>0) then begin
+          	if (SHrw.Ship>0) then begin
               SHrw.Ship = t1;
               SHrw.Ordered = t1;
 //              if (Locr.WHMDemandPosition!=0) then begin//why when demand position only ?
@@ -1012,6 +1013,12 @@ LSKIPROW:;
     end;
   end;
   SetBackOrderComment(SHp);
+  rwcnt = MatRowCnt(SHp);
+  for (i=0;i<rwcnt;i=i+1) begin
+    MatRowGet(SHp,i,SHrw);
+    SHrw.Ship = 0;
+    MatRowPut(SHp,i,SHrw);
+  end;
   SHSumUp(SHp);  
 LPasteOrdInShip:;
   PasteOrdInShip = res;

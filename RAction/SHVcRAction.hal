@@ -284,7 +284,7 @@ begin
     goto LSHVcRecordCheck;
   end;  
 // Only TransportNumber can be changed after OK 
-
+	
   if (stat==Rs_update) then begin
     if (SH2p.OKFlag!=0) then begin
       goto LSHVcRecordCheck;
@@ -781,6 +781,18 @@ begin
     end else begin
       loc2 = location;
     end;
+    
+    if (SHp.OKFlag==1) then begin	//Edit by Victor 12.01.15	*** {
+			if (SHrw.Ship == 0) then begin
+				error = 1008;
+				errorstr = " 0";
+				rownr = i;
+				fieldstr = "Ship";
+				res = -1;
+				goto LSHVcRecordCheck;
+			end;
+		end;	// *** }
+    
     if (nonblank(loc2)) then begin
       LocRec.Code = loc2;
       if (ReadFirstMain(LocRec,1,true)==false) then begin
