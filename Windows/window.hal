@@ -1162,11 +1162,13 @@ Integer i,mwn;
   
   v=30;
   h=40;
- 	EditFieldTL(h+30,v+70 ,150,"Отправлено",M4Str,Normal,20,f2,true,0);
+ 	EditFieldTL(h+30,v+90 ,150,"Отправлено",M4Str,Normal,20,f2,true,0);
 	EnterSkip(f2); 
-	EditFieldTL(h+30,v+110 ,150,"Получено",M4Str,Normal,20,f3,true,0);
+	EditFieldTL(h+30,v+130 ,150,"Получено",M4Str,Normal,20,f3,true,0);
 	EnterSkip(f3);  
   EditFieldTL(h+30,v-10 ,150,"Поиск",M4Str,Normal,20,f1,true,0); // new search field
+
+	StaticText(h-25,v+70,"Для добавления в таблицу введите Штрих-код или Алт.код",false);
 
   ColourPushButton(h+=200,v-10,h+58,v+26,"GoPreviousItem","Пред.",20);
   ColourPushButton(h+=75,v-10,h+58,v+26,"GoNextItem","След.",2);
