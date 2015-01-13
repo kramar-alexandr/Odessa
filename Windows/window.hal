@@ -1123,3 +1123,54 @@ end;
 
 
 
+window TableSearchAdditionIClass:1  // added ************ Dima, 12.01.2015
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+real h,v,vs;
+Integer i,mwn;
+  WindowBegin("Поиск и добавление в таблице",TableSearchIClass,CGother,RcType);
+	//DynamicWindow;
+  SetWRect(3,140,400,300);
+  UseView(RcVc);
+  Modality(2);
+  
+  v=30;
+  h=40;
+ 	EditFieldTL(h+30,v+70 ,150,"Штрих-код",M4Str,Normal,20,f2,true,0);
+	EnterSkip(f2);  
+	//ActiveFieldOnNew("f2");
+  EditFieldTL(h+30,v-10 ,150,"Поиск",M4Str,Normal,20,f1,true,0); // new search field
+
+  ColourPushButton(h+=200,v-10,h+58,v+26,"GoPreviousItem","Пред.",20);
+  ColourPushButton(h+=75,v-10,h+58,v+26,"GoNextItem","След.",2);
+
+  EndWindow;
+end;
+
+
+
+window TableSearchAddition2IClass:1  // added ************ Dima, 12.01.2015
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+real h,v,vs;
+Integer i,mwn;
+  WindowBegin("Поиск и добавление в таблице",TableSearchIClass,CGother,RcType);
+	//DynamicWindow;
+  SetWRect(3,140,400,350);
+  UseView(RcVc);
+  Modality(2);
+  
+  v=30;
+  h=40;
+ 	EditFieldTL(h+30,v+70 ,150,"Отправлено",M4Str,Normal,20,f2,true,0);
+	EnterSkip(f2); 
+	EditFieldTL(h+30,v+110 ,150,"Получено",M4Str,Normal,20,f3,true,0);
+	EnterSkip(f3);  
+  EditFieldTL(h+30,v-10 ,150,"Поиск",M4Str,Normal,20,f1,true,0); // new search field
+
+  ColourPushButton(h+=200,v-10,h+58,v+26,"GoPreviousItem","Пред.",20);
+  ColourPushButton(h+=75,v-10,h+58,v+26,"GoNextItem","След.",2);
+
+  EndWindow;
+end;
+

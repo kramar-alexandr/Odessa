@@ -290,12 +290,158 @@ end;
 
 
 
+
+
+global    //added -----------------------Dima 12.01.2015
+function Integer FindInMathSH(var record RcVc RepSpec,var string field)
+begin
+  record SHVc SHr;
+  row SHVc SHrw;
+  boolean continue;
+  Integer i,rwcnt,mwn,res,wn;
+  string 20 search;
+  
+
+  mwn = RepSpec.flags[0];
+  search = RepSpec.f1;
+  GetWindowRecord(mwn,SHr);
+  rwcnt = MatRowCnt(SHr);
+  res=RepSpec.flags[3]; //last result
+  field="";
+
+	if (RepSpec.flags[2]==1) then begin  //forward search
+		  for (i = RepSpec.flags[1];i<rwcnt;i=i+1) begin
+
+					MatRowGet(SHr,i,SHrw);
+						if(FindSubString(search,SHrw.ArtCode)) then begin
+							field = "ArtCode";
+							res=i;
+							goto LBreak;
+						end else begin
+						
+							if(FindSubString(search,SHrw.Spec)) then begin
+								field = "Spec";
+								res=i;
+								goto LBreak;
+							end;
+						end;
+			  
+		  end;  
+	
+	end else begin
+
+	if (RepSpec.flags[2]==2) then begin  //backward search
+		  for (i = RepSpec.flags[1];i>=0;i=i-1) begin
+
+					MatRowGet(SHr,i,SHrw);
+						if(FindSubString(search,SHrw.ArtCode)) then begin
+							field = "ArtCode";
+							res=i;
+							goto LBreak;
+						end else begin
+						
+							if(FindSubString(search,SHrw.Spec)) then begin
+								field = "Spec";
+								res=i;
+								goto LBreak;
+							end;
+						end;	
+					 
+			end;	  
+		
+		  end;
+	end;
+
+  if ((field =="") ) then begin
+  MessageBox(0,"Не найдено результатов для " & search);
+  end;
+
+  LBreak:;	
+  FindInMathSH=res;
+return;
+end;
+
+
+
+global    //added -----------------------Dima 12.01.2015
+function Integer FindInMathStockMov(var record RcVc RepSpec,var string field)
+begin
+  record StockMovVc SMr;
+  row StockMovVc SMrw;
+  boolean continue;
+  Integer i,rwcnt,mwn,res,wn;
+  string 20 search;
+  
+
+  mwn = RepSpec.flags[0];
+  search = RepSpec.f1;
+  GetWindowRecord(mwn,SMr);
+  rwcnt = MatRowCnt(SMr);
+  res=RepSpec.flags[3]; //last result
+  field="";
+
+	if (RepSpec.flags[2]==1) then begin  //forward search
+		  for (i = RepSpec.flags[1];i<rwcnt;i=i+1) begin
+
+					MatRowGet(SMr,i,SMrw);
+						if(FindSubString(search,SMrw.ArtCode)) then begin
+							field = "ArtCode";
+							res=i;
+							goto LBreak;
+						end else begin
+						
+							if(FindSubString(search,SMrw.Spec)) then begin
+								field = "Spec";
+								res=i;
+								goto LBreak;
+							end;
+						end;
+			  
+		  end;  
+	
+	end else begin
+
+	if (RepSpec.flags[2]==2) then begin  //backward search
+		  for (i = RepSpec.flags[1];i>=0;i=i-1) begin
+
+					MatRowGet(SMr,i,SMrw);
+						if(FindSubString(search,SMrw.ArtCode)) then begin
+							field = "ArtCode";
+							res=i;
+							goto LBreak;
+						end else begin
+						
+							if(FindSubString(search,SMrw.Spec)) then begin
+								field = "Spec";
+								res=i;
+								goto LBreak;
+							end;
+						end;	
+					 
+			end;	  
+		
+		  end;
+	end;
+
+  if ((field =="") ) then begin
+  MessageBox(0,"Не найдено результатов для " & search);
+  end;
+
+  LBreak:;	
+  FindInMathStockMov=res;
+return;
+end;
+
+
+
 global 
 procedure GoToRow (boolean next)
 begin
   record ORVc ORr;
   record POVc POr;
   record PUVc PUr;
+  record SHVc SHr;
+  record StockMovVc SMr;
   record RcVc RepSpec;
   Integer wn,mwn,i; // i - number of current string
   string 20 field;
@@ -307,7 +453,6 @@ begin
   GetWindowRecord(wn,RepSpec);
   mwn = RepSpec.flags[0]; //MotherWindow
   RepSpec.flags[1]=WindowActiveRow(mwn);
-
 
 	  if (next==true) then begin    			//кнопка След. 
 	   
@@ -344,6 +489,14 @@ begin
 		i = FindInMathPU(RepSpec,field);
 		GetWindowRecord(mwn,PUr);
   		WindowFieldGoto(mwn,PUr,i,field,true);
+  case "SHDClass":
+		i = FindInMathSH(RepSpec,field);
+		GetWindowRecord(mwn,SHr);
+  		WindowFieldGoto(mwn,SHr,i,field,true);
+  case "StockMovDClass":
+		i = FindInMathStockMov(RepSpec,field);
+		GetWindowRecord(mwn,SMr);
+  		WindowFieldGoto(mwn,SMr,i,field,true);
 	
   end;
 
@@ -389,3 +542,263 @@ BEGIN
 
   RETURN;
 END;
+
+
+//поиск и добавление для Отгрузок и Перемещений
+global  //added --------------Dima 12.01.2015
+procedure TableSearchAdditionDsm()
+BEGIN
+  record RcVc RepSpec;
+  Integer wn,res;
+  wn = CurWindow;
+  RepSpec.flags[0] = wn;
+  RepSpec.flags[1] = 0;  //current row in table
+  RepSpec.flags[2] = 0;  //search direction: 1-forward, 2-backward
+  RepSpec.flags[3] = 0; 
+  res = OpenWindow("TableSearchAdditionIClass",0,wn,"","",RepSpec);
+
+  RETURN;
+END;
+
+global  //added --------------Dima 12.01.2015
+procedure TableSearchAddition2Dsm()
+BEGIN
+  record RcVc RepSpec;
+  Integer wn,res;
+  wn = CurWindow;
+  RepSpec.flags[0] = wn;
+  RepSpec.flags[1] = 0;  //current row in table
+  RepSpec.flags[2] = 0;  //search direction: 1-forward, 2-backward
+  RepSpec.flags[3] = 0; 
+  res = OpenWindow("TableSearchAddition2IClass",0,wn,"","",RepSpec);
+
+  RETURN;
+END;
+
+
+
+
+
+function Boolean FindInMathGeneral( string RegisterName, integer mwn, string search, integer from, var integer RowNumber)
+begin					//added -----------------------Dima 12.01.2015
+  row SHVc SHrw;
+	row StockMovVc SMovrw;
+	record SHVc SHr;
+	record StockMovVc SMovr;
+  boolean res;
+  Integer i,rwcnt;
+
+  res=false;
+
+  switch (RegisterName) begin
+    case "SHVc":
+								GetWindowRecord(mwn,SHr); 
+								rwcnt = MatRowCnt(SHr);
+								for (i = from;i<rwcnt;i=i+1) begin
+										MatRowGet(SHr,i,SHrw);
+											if(search==SHrw.ArtCode) then begin
+												RowNumber = i;
+												res = true;
+												goto LFindInMathGeneral;
+											end;		  
+								 end;								
+       
+    case "StockMovVc": 
+								GetWindowRecord(mwn,SMovr);
+								rwcnt = MatRowCnt(SMovr);
+								for (i = from;i<rwcnt;i=i+1) begin
+										MatRowGet(SMovr,i,SMovrw);
+											if(search==SMovrw.ArtCode) then begin
+												RowNumber = i;
+												res = true;
+												goto LFindInMathGeneral;
+											end;		  
+								 end;								
+      
+  end;  
+
+  LFindInMathGeneral:;	
+  FindInMathGeneral = res;
+return;
+end;
+
+
+global 	//Edit-------------Dima  12.01.2015
+updating procedure SH_AddOneItemToShip()
+begin
+	record INVc INr,INr1,INr2;
+	record SHVc SHr;
+	row SHVc SHrw;
+	record RcVc RepSpec;
+	integer wn,mwn,RowNumber,curRow,rwcnt;
+	Boolean key1,key2;
+
+  wn=CurWindow;
+  //DeselectWindow(wn,true);
+  GetWindowRecord(wn,RepSpec);
+  mwn = RepSpec.flags[0];
+  GetWindowRecord(mwn,SHr);
+	rwcnt = MatRowCnt(SHr);
+
+	INr1.BarCode = RepSpec.f2;
+	INr2.AlternativeCode = RepSpec.f2;
+	key1=ReadFirstKey("BarCode",INr1,1,true);
+	key2=ReadFirstKey("AlternativeCode",INr2,1,true);
+
+	if (key1) then begin INr.Code = INr1.Code; end;
+	if (key2) then begin INr.Code = INr2.Code; end;
+
+	curRow = 0;
+	RowNumber = 0;
+
+	if(key1 or key2) then begin
+			while	(curRow < rwcnt) begin
+				if(FindInMathGeneral("SHVc",mwn,INr.Code,curRow,RowNumber)==true) then begin
+						MatRowGet(SHr,RowNumber,SHrw);
+						if (SHrw.Ship < SHrw.Ordered) then begin
+							SHrw.Ship = SHrw.Ship+1;
+							MatRowPut(SHr,RowNumber,SHrw);
+							PutWindowRecord(mwn,SHr);
+							goto LBreak;
+						end else begin
+          		curRow = curRow+1; //we try to find the same item in next rows
+						end;
+
+					end else begin
+						MessageBox(0,"Нельзя добавить товар с кодом " & RepSpec.f2);
+						goto LBreak;
+					end;
+			end;
+			MessageBox(0,"Нельзя добавить товар с кодом " & RepSpec.f2);
+	end else begin
+			MessageBox(0,"Товара с указанным кодом не существует");
+	end;	
+
+	LBreak:;
+	selectWindow(wn);
+return;  
+end;
+
+
+
+
+
+
+global 	//Edit-------------Dima  12.01.2015
+updating procedure StockMove_AddOneItemTo(string field)
+begin
+	record INVc INr,INr1,INr2;
+	record StockMovVc SMr;
+	row StockMovVc SMrw;
+	record RcVc RepSpec;
+	integer wn,mwn,RowNumber,curRow,rwcnt;
+	Boolean key1,key2,put;
+
+  wn=CurWindow;
+  //DeselectWindow(wn,true);
+  GetWindowRecord(wn,RepSpec);
+  mwn = RepSpec.flags[0];
+  GetWindowRecord(mwn,SMr);
+	rwcnt = MatRowCnt(SMr);
+
+
+	switch (field) begin
+			case "SentQuant":	//Отправлено
+						INr1.BarCode = RepSpec.f2;
+						INr2.AlternativeCode = RepSpec.f2;
+
+			case "Quant":	//Получено
+						INr1.BarCode = RepSpec.f3;
+						INr2.AlternativeCode = RepSpec.f3;
+	end;
+
+	key1=ReadFirstKey("BarCode",INr1,1,true);
+	key2=ReadFirstKey("AlternativeCode",INr2,1,true);
+
+	if (key1) then begin INr.Code = INr1.Code; end;
+	if (key2) then begin INr.Code = INr2.Code; end;
+
+
+	curRow = 0;
+	RowNumber = 0;
+	put = false;
+
+	if(key1 or key2) then begin
+			while	(curRow < rwcnt) begin	 //we try to find the same item in next rows
+				if(FindInMathGeneral("StockMovVc",mwn,INr.Code,curRow,RowNumber)==true) then begin
+						MatRowGet(SMr,RowNumber,SMrw);
+
+						 	 switch (field) begin
+    							case "SentQuant":
+														if (SMrw.SentQuant < SMrw.OrdQuant) then begin
+															SMrw.SentQuant = SMrw.SentQuant+1;
+															put = true;
+														end;
+             	 
+    							case "Quant":
+														if (SMrw.Quant < SMrw.OrdQuant) then begin
+															SMrw.Quant = SMrw.Quant+1;
+															put = true;
+														end;	
+								end;	
+								
+								if (put) then begin
+										MatRowPut(SMr,RowNumber,SMrw);
+										PutWindowRecord(mwn,SMr);
+										goto LBreak;
+								end else begin
+          					curRow = curRow+1; //we try to find the same item in next rows
+								end;
+
+					end else begin
+						MessageBox(0,"Нельзя добавить товар с кодом " & RepSpec.f2);
+						goto LBreak;
+					end;
+			end;
+			MessageBox(0,"Нельзя добавить товар с кодом " & RepSpec.f2);
+	end else begin
+			MessageBox(0,"Товара с указанным кодом не существует");
+	end;	
+
+	LBreak:;
+	selectWindow(wn);
+return;  
+end;
+
+
+
+
+
+
+global	//Edit-------------Dima  12.01.2015
+updating function Boolean TableSearchAdditionIClassOnEnterKey(Integer wn,string fieldname,Integer fn,Integer rownr)
+begin
+  Boolean res;
+  res = true;
+  switch (fieldname) begin
+    case "f1": 								//Search
+       GoToRow(true);
+    case "f2": 								//Bar-code
+       SH_AddOneItemToShip;
+  end;
+  
+  TableSearchAdditionIClassOnEnterKey = res;
+  return;
+end;
+
+
+global	//Edit-------------Dima  12.01.2015
+updating function Boolean TableSearchAddition2IClassOnEnterKey(Integer wn,string fieldname,Integer fn,Integer rownr)
+begin
+  Boolean res;
+  res = true;
+  switch (fieldname) begin
+    case "f2": //Отправлено
+       StockMove_AddOneItemTo("SentQuant");
+    case "f3": 	//Получено
+       StockMove_AddOneItemTo("Quant");
+  end;
+  
+  TableSearchAddition2IClassOnEnterKey = res;
+  return;
+end;
