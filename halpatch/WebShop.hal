@@ -60,10 +60,10 @@ begin
 	area importar;
 //	area ftpRoutine;
   string 200 tstr;
-	string 10 location,loc1,loc2,loc3,loc4,loc5;
+	string 10 location,loc1,loc2,loc3,loc4,loc5,qty,price;
 	boolean testf;
 	integer inStock,dop_ostatok,pos;
-	val qty;
+	//val qty;
 	
 	BlockLoad(ExportStockCSVb);
 	
@@ -121,7 +121,8 @@ begin
 		end;
 				
 		if (testf==true) then begin
-			addtexttoarea("base;simple;" & INr.Code & ";" & PLr.ExVatPrice & ";" & qty & ";" & inStock & ";" & dop_ostatok,importar);
+		  price = ValToString(PLr.ExVatPrice,M4Val,"",".",0);
+			addtexttoarea("base;simple;" & INr.Code & ";" & price & ";" & qty & ";" & inStock & ";" & dop_ostatok,importar);
 			addtexttoarea(chr(13) & chr(10),importar);
 		end;
 
