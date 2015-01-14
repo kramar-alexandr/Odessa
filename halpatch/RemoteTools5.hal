@@ -912,8 +912,7 @@ L10PasteOrdInShip:;
       SHrw.FIFO = blankval;
       SHrw.FIFORowVal = blankval;
       if (nonblank(SHrw.Ordered)) then begin
-        SHrw.Ship = SHrw.Ordered; //Comment by Victor 12.01.15
-        //SHrw.Ship = 0;	// *** Victor 12.01.15
+        SHrw.Ship = SHrw.Ordered; 
       end;
       SHrw.BasePrice = ORrw.Price;
       SHrw.BBCostPrice = ORrw.BasePrice;
@@ -1013,12 +1012,14 @@ LSKIPROW:;
     end;
   end;
   SetBackOrderComment(SHp);
-  rwcnt = MatRowCnt(SHp);
+  
+  rwcnt = MatRowCnt(SHp); 	//Edit by Victor 13.01.15 ***
   for (i=0;i<rwcnt;i=i+1) begin
     MatRowGet(SHp,i,SHrw);
     SHrw.Ship = 0;
     MatRowPut(SHp,i,SHrw);
-  end;
+  end;	// *** }
+  
   SHSumUp(SHp);  
 LPasteOrdInShip:;
   PasteOrdInShip = res;

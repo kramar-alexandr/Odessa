@@ -2479,6 +2479,9 @@ RecordBegin(INVc,-,"artikel5");
   ArrayField(SentOldPrice,M45Val,0,0);
   ArrayField(SentFIFORowVal,M45Val,0,0);
   ArrayField(ThrouPosCode,M4Code,20,0);
+  ArrayField(FromQuant,M4UVal,0,0);	// Edit by Victor 13.01.15
+  ArrayField(ToQuant,M4UVal,0,0);	// Edit by Victor 13.01.15
+  
   EndArray;
       
   MainKeyBegin(SerNr,1);	// Edit by Victor 25.11.14 begin

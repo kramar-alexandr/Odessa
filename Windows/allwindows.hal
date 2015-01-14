@@ -6205,26 +6205,29 @@ begin
     end else begin
       MatCol(1,200,"Треб. кол-во",0,OrdQuant,true,0);
     end;
-    MatCol(1,250,"Отправ. кол-во",0,SentQuant,true,0);
-    MatCol(1,300,"Получ. кол-во",0,Quant,true,0);
-    MatCol(1,350,"Описание",0,Spec,false,0);
+    MatCol(1,300,"Отправ. кол-во",0,SentQuant,true,0);
+    MatCol(1,350,"Получ. кол-во",0,Quant,true,0);
+    MatCol(1,400,"Описание",0,Spec,false,0);
   end else begin
     MatCol(1,32,"Товар",0,ArtCode,false,INSClass);
     Flip(flipnr);  flipnr = flipnr + 1;
     if (HasVarieties) then begin
       MatCol(1,86,"Треб.кол.",0,OrdQuant,true,MATVARINSClass);
+      MatCol(1,140,"На складе",0,FromQuant,true,0);	// Edit by Victor 13.01.15
     end else begin
       MatCol(1,86,"Треб.кол.",0,OrdQuant,true,0);
+      MatCol(1,140,"На складе",0,FromQuant,true,0);// Edit by Victor 13.01.15
     end;
-    MatCol(1,148,"Отпр.кол.",0,SentQuant,true,0);
-    MatCol(1,210,"Получ.кол.",0,Quant,true,0);
-    MatCol(1,272,"Наименование",0,Spec,false,0);
+    MatCol(1,200,"Отпр.кол.",0,SentQuant,true,0);
+    MatCol(1,260,"Получ.кол.",0,Quant,true,0);
+    MatCol(1,320,"На складе",0,ToQuant,true,0);// Edit by Victor 13.01.15
+    MatCol(1,375,"Наименование",0,Spec,false,0);
   end;
-  if (UserCanAction("ViewCostPrice",true)) then begin //Edit***************************Sasha2,10:34 10.11.2014 {
+  /*if (UserCanAction("ViewCostPrice",true)) then begin //Edit***************************Sasha2,10:34 10.11.2014 {
   	MatCol(1,-260,"Старая цена",0,OldPrice,true,0);
   	MatCol(1,-160,"Накл. расх.",0,ExtraSCost,true,0);
   	MatCol(1,-80,"Новая цена",0,NewPrice,true,0);
-  end; //Edit***************************Sasha2,10:34 10.11.2014 }
+  end;*/ //Edit***************************Sasha2,10:34 10.11.2014 }
   Flip(flipnr); flipnr = flipnr + 1;
   if (HasVarieties) then begin
     MatCol(1,86,"Треб.кол.",0,OrdQuant,true,MATVARINSClass);
