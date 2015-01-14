@@ -6,6 +6,7 @@ external procedure ORVc_PasteSum(var record ORVc,Integer,var Boolean);
 external procedure ORDchsum(var record ORVc,Integer);
 external procedure ORSumup(var record ORVc);
 external function Boolean ORDchrsum(var record ORVc,Integer);
+external procedure ExtractObjWithSeparator(string,string,Boolean,var Integer,var string); //Edit***************************Sasha2,11:03 14.01.2015
 
 
 SetLangMode(LangRussian,"RUS",0);
@@ -52,58 +53,78 @@ end;
 
 global procedure ExportStockCSVMn(record RcVc RepSpec)
 begin
-	record ItemStatusVc ISr;
+	record ItemStatusVc ISr,IS2r,IS3r;
 	record INVc INr;
 	record PLVc PLr;
 	record ExportStockCSVBlock ExportStockCSVb;
 	area importar;
 //	area ftpRoutine;
   string 200 tstr;
-	string 20 location;
+	string 10 location,loc1,loc2,loc3,loc4,loc5;
 	boolean testf;
-	integer inStock;
+	integer inStock,dop_ostatok,pos;
 	val qty;
 	
-	testf = true;
 	BlockLoad(ExportStockCSVb);
 	
 	if (Blank(ExportStockCSVb.HostIP) or Blank(ExportStockCSVb.FileName)) then begin
 	 goto LExportStockCSVMn;
 	end;
 	
-	addtexttoarea("websites;type;sku;price;qty;in_stock",importar);
+	addtexttoarea("websites;type;sku;price;qty;in_stock;dop_ostatok",importar);
 	addtexttoarea(chr(13) & chr(10),importar);
+	
+	pos = 0;
+  ExtractObjWithSeparator(",",ExportStockCSVb.Location,true,pos,location);
+  while (nonblank(location)) begin
+    switch (location) begin
+      case "RYBRAY": loc1 = location;
+      case "3-RAY": loc2 = location;
+      case "4-NIZ": loc3 = location;
+      case "1-KOC": loc4 = location;
+      case "6-KV": loc5 = location;
+    end;
+    ExtractObjWithSeparator(",",ExportStockCSVb.Location,true,pos,location);
+  end;
 	
 	INr.Code = "";
 	location = ExportStockCSVb.Location;
-	while(loopmain(INr,1,true))begin
+	while (loopmain(INr,1,true)) begin
+	  testf = true;
+	  dop_ostatok = 0;
+	  
 		ISr.Code = INr.Code;
-		ISr.Location = location;
+		ISr.Location = loc1;
+		IS2r.Code = INr.Code;
+		IS2r.Location = loc2;
+		IS3r.Code = INr.Code;
+		IS3r.Location = loc3;
+		if((readfirstmain(ISr,2,true) and ISr.Instock>0) or (readfirstmain(IS2r,2,true) and IS2r.Instock>0) or (readfirstmain(IS3r,2,true) and IS3r.Instock>0)) then begin dop_ostatok = dop_ostatok + 1; end;
 		
-		if(readfirstmain(ISr,2,true))then begin
-			if (ISr.Instock > 0) then begin			
-				if (ExportStockCSVb.Qty > 0) then begin
-					qty = ExportStockCSVb.Qty;
-				end else begin
-					qty = ISr.Instock;
-				end;	
-				inStock = 1;
-			end else begin	
-				qty = 0;
-				inStock = 2;
-			end;			
-			PLr.ArtCode = INr.Code;
-			PLr.PLCode = ExportStockCSVb.PLCode;
-			if(!readfirstmain(PLr,2,true))then begin
-				testf = false;
-			end;
-					
-			if (testf == true) then begin
-				addtexttoarea("base;simple;" & ISr.Code & ";" & PLr.ExVatPrice & ";" & qty & ";" & inStock,importar);
-				addtexttoarea(chr(13) & chr(10),importar);
-			end;
+		ISr.Code = INr.Code;
+		ISr.Location = loc4;
+		IS2r.Code = INr.Code;
+		IS2r.Location = loc5;
+		if((readfirstmain(ISr,2,true) and ISr.Instock>0) or (readfirstmain(IS2r,2,true) and IS2r.Instock>0)) then begin dop_ostatok = dop_ostatok + 2; end;
+		
+		if (dop_ostatok>0) then begin			
+			qty = 200;
+			inStock = 1;
+		end else begin	
+			qty = 0;
+			inStock = 2;
+		end;			
+		PLr.ArtCode = INr.Code;
+		PLr.PLCode = ExportStockCSVb.PLCode;
+		if(!readfirstmain(PLr,2,true))then begin
+			testf = false;
 		end;
-		testf = true;
+				
+		if (testf==true) then begin
+			addtexttoarea("base;simple;" & INr.Code & ";" & PLr.ExVatPrice & ";" & qty & ";" & inStock & ";" & dop_ostatok,importar);
+			addtexttoarea(chr(13) & chr(10),importar);
+		end;
+
 	end;	
 
 	WriteAreaToFile(importar,ExportStockCSVb.FileName,0);
@@ -264,9 +285,9 @@ begin
 			ORr.PayDeal = WSSB.PayDeal;
 			ORr.ShipDeal = WSSB.ShipDeal;
 			ORr.CustomStatusFlag = 0;
-  			ORr.TransDate = CurrentDate;
-  			ORr.TransTime = CurrentTime;
-  			ORr.SyncFlag = 0;
+  		ORr.TransDate = CurrentDate;
+  		ORr.TransTime = CurrentTime;
+  		ORr.SyncFlag = 0;
 		
 			nodeRowCnt = XmlCountChildren(xmlPost,"orders/order" & i );
 			rowNr = 0;
