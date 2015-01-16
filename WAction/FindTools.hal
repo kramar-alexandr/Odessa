@@ -631,7 +631,7 @@ begin
 	row SHVc SHrw;
 	record RcVc RepSpec;
 	integer wn,mwn,RowNumber,curRow,rwcnt;
-	Boolean key1,key2;
+	Boolean key;
 
   wn=CurWindow;
   //DeselectWindow(wn,true);
@@ -640,18 +640,30 @@ begin
   GetWindowRecord(mwn,SHr);
 	rwcnt = MatRowCnt(SHr);
 
-	INr1.BarCode = RepSpec.f2;
-	INr2.AlternativeCode = RepSpec.f2;
-	key1=ReadFirstKey("BarCode",INr1,1,true);
-	key2=ReadFirstKey("AlternativeCode",INr2,1,true);
-
-	if (key1) then begin INr.Code = INr1.Code; end;
-	if (key2) then begin INr.Code = INr2.Code; end;
+	INr1.Code = RepSpec.f2;
+	if(ReadFirstMain(INr1,1,true)) then begin
+		INr.Code = INr1.Code;
+		key = true;
+	end else begin
+		RecordClear(INr1);
+		INr1.BarCode = RepSpec.f2;
+		if(ReadFirstKey("BarCode",INr1,1,true)) then begin
+			INr.Code = INr1.Code;
+			key = true;
+		end;		
+	end else begin
+		RecordClear(INr1);
+		INr1.AlternativeCode = RepSpec.f2;
+		if(ReadFirstKey("AlternativeCode",INr1,1,true)) then begin
+			INr.Code = INr1.Code;
+			key = true;
+		end;	
+	end;
 
 	curRow = 0;
 	RowNumber = 0;
 
-	if(key1 or key2) then begin
+	if(key) then begin
 			while	(curRow < rwcnt) begin
 				if(FindInMathGeneral("SHVc",mwn,INr.Code,curRow,RowNumber)==true) then begin
 						MatRowGet(SHr,RowNumber,SHrw);
@@ -688,11 +700,12 @@ global 	//Edit-------------Dima  12.01.2015
 updating procedure StockMove_AddOneItemTo(string field)
 begin
 	record INVc INr,INr1,INr2;
+	//record INVc INr0;
 	record StockMovVc SMr;
 	row StockMovVc SMrw;
 	record RcVc RepSpec;
 	integer wn,mwn,RowNumber,curRow,rwcnt;
-	Boolean key1,key2,put;
+	Boolean key1,key2,key0,put;
 
   wn=CurWindow;
   //DeselectWindow(wn,true);
@@ -704,17 +717,22 @@ begin
 
 	switch (field) begin
 			case "SentQuant":	//Отправлено
+						
 						INr1.BarCode = RepSpec.f2;
 						INr2.AlternativeCode = RepSpec.f2;
+						//INr0.Code = RepSpec.f2;
 
-			case "Quant":	//Получено
+			case "Quant":	//Получено						
 						INr1.BarCode = RepSpec.f3;
 						INr2.AlternativeCode = RepSpec.f3;
+						//INr0.Code = RepSpec.f3;
 	end;
 
+	//key0=ReadFirstMain(INr0,1,true);
 	key1=ReadFirstKey("BarCode",INr1,1,true);
 	key2=ReadFirstKey("AlternativeCode",INr2,1,true);
 
+	//if (key0) then begin INr.Code = INr0.Code; end;
 	if (key1) then begin INr.Code = INr1.Code; end;
 	if (key2) then begin INr.Code = INr2.Code; end;
 
@@ -774,12 +792,17 @@ global	//Edit-------------Dima  12.01.2015
 updating function Boolean TableSearchAdditionIClassOnEnterKey(Integer wn,string fieldname,Integer fn,Integer rownr)
 begin
   Boolean res;
+	record RcVc RepSpec;
+
   res = true;
   switch (fieldname) begin
     case "f1": 								//Search
        GoToRow(true);
     case "f2": 								//Bar-code
        SH_AddOneItemToShip;
+			  GetWindowRecord(wn,RepSpec);
+  			RepSpec.f2 = "";
+  			PutWindowRecord(wn,RepSpec);
   end;
   
   TableSearchAdditionIClassOnEnterKey = res;
