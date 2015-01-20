@@ -18,9 +18,9 @@ begin
   Report("Отчет по складам",LocationsRClass,LocationsRn,0,modIN);
   
   Setting("Авансовые отчеты",ExpLClass,modCL);
-  Setting("Выплаты персоналу","Выплаты",PPLClass,modCL);
-  //Setting("Путевые листы","Путевые листы",WayListLClass,modCL);
-  Setting("Cуточные возмещения","Cуточные возмещения",DALClass,modCL);
+  Setting("Выплаты персоналу",PPLClass,modCL);
+  //Setting("Путевые листы",WayListLClass,modCL);
+  Setting("Cуточные возмещения",DALClass,modCL);
   
   Report("Журнал суточных возмещений",DAJRClass,DAJRn,0,modCL);
   Report("Журнал авансовых отчетов",ExpJRClass,ExpRn,0,modCL);
