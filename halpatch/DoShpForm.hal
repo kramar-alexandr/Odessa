@@ -294,7 +294,7 @@ BEGIN
   val tottax1sum;
   record MainStockBlock MSb;
   record TaxMatrixVc TMr;
-  val pricewithdeb,pricefromusd,sumfromusd,pricewithdebfromusd; //Edit by Victor 09.01.15
+  val pricewithdeb,pricefromusd,sumfromusd,pricewithdebfromusd, sumwithdeb2; //Edit by Victor 09.01.15
   val fr,to1,to2,br1,br2;
   string 10 currency;
 
@@ -421,11 +421,17 @@ BEGIN
       if (FIELDINFORM("F_MYSUMWITHDEB")) then begin	//Edit by Victor 09.01.15
       	OUTFORMFIELD("F_MYSUMWITHDEB",ORrw.Sum);
       end;
-      
+           
       if (FIELDINFORM("F_MYPRICEWITHDEB")) then begin	//Edit by Victor 09.01.15
       	pricewithdeb = ORrw.Sum / ORrw.Quant;
       	OUTFORMFIELD("F_MYPRICEWITHDEB",pricewithdeb);
       end;
+      
+      if (FIELDINFORM("F_MYSUMWITHDEB2")) then begin	//Edit by Victor 09.01.15
+      	pricewithdeb = ORrw.Sum / ORrw.Quant;
+      	sumwithdeb2 = pricewithdeb * SHrw.Ship;
+      	OUTFORMFIELD("F_MYSUMWITHDEB2",sumwithdeb2);
+      end;	// if Cena po stroke will not works
       
       if (FIELDINFORM("F_MYPRICEFROMUSD")) then begin	//Edit by Victor 09.01.15
       	if(ORr.CurncyCode == "USD")then begin
@@ -650,8 +656,8 @@ BEGIN
   row LegalInvNrBlock LINrbrw;
   record BankVc Bankr;
   record eShipTaxAuthReplyVc eSTARr;
-  val totalP, totadD; //Edit by Victor 09.01.15	***
-  integer rwcnt2, i, quant;
+  val totalP, totadD, totalP2, totalD2,sumwithdeb2,rowsum, totalWithDisc; //Edit by Victor 09.01.15	***
+  integer rwcnt2, i, quant,rwcnt3,quant2;
   row ORVc ORrw;
   val fr,to1,to2,br1,br2;
   string 10 currency;	// ***
@@ -714,14 +720,38 @@ BEGIN
 		MatRowGet(ORr,i,ORrw);
 		quant = quant + ORrw.Quant;
 		totalP = totalP + ORrw.Quant * ORrw.Price; 
+		
 	end;
 	
+	rwcnt3 = MatRowCnt(SHr);
+	for (i=0;i<rwcnt3;i=i+1) begin
+		MatRowGet(SHr,i,SHrw);
+		MatRowGet(ORr,i,ORrw);
+		//CalcSum(SHrw.Ship,ORrw.Price,ORrw.PriceFactor,ORrw.vRebate,rowsum,GenOptRec.UseDiscount);
+		quant2 = quant2 + SHrw.Ship;//working
+		totalP2 = totalP2 + SHrw.Ship * ORrw.Price;//	Sum price	
+		//totalP2 = totalP2 + rowsum;
+		totalWithDisc = totalWithDisc + (SHrw.Ship * ORrw.Price - (SHrw.Ship * ORrw.Price/100*ORrw.vRebate));	//Price - PriceWithDeb
+	end;
+		
 	if (FIELDINFORM("F_MYQUANT")) then begin	//Edit by Victor 09.01.15
 		OUTFORMFIELD("F_MYQUANT",quant);
 	end;
 	
+	if (FIELDINFORM("F_MYTOTALWITHDISC")) then begin	//Edit by Victor 09.01.15
+		OUTFORMFIELD("F_MYTOTALWITHDISC",totalWithDisc);
+	end;
+	
+	if (FIELDINFORM("F_MYQUANT2")) then begin	//Edit by Victor 19.01.15
+		OUTFORMFIELD("F_MYQUANT2",quant2);
+	end;
+	
 	if (FIELDINFORM("F_MYTOTALP")) then begin	//Edit by Victor 09.01.15
 		OUTFORMFIELD("F_MYTOTALP",totalP);
+	end;
+	
+	if (FIELDINFORM("F_MYTOTALP2")) then begin	//Edit by Victor 09.01.15
+		OUTFORMFIELD("F_MYTOTALP2",totalP2);
 	end;
 	
 	if (FIELDINFORM("F_MYTOTALPRICEUSD")) then begin	//Edit by Victor 09.01.15
@@ -730,13 +760,17 @@ BEGIN
 			GetFullCurncyRate(currency,CurrentDate,fr,to1,to2,br1,br2);
 		end;
 		OUTFORMFIELD("F_MYTOTALPRICEUSD",totalP * fr/to1);
-	end;
-	 
+	end; 
 	
 	if (FIELDINFORM("F_MYTOTDEB")) then begin	//Edit by Victor 09.01.15
 		totadD = totalP - ORr.Sum4;
 		OUTFORMFIELD("F_MYTOTDEB",totadD);
 	end; 
+	
+	if (FIELDINFORM("F_MYTOTDEB2")) then begin	//Edit by Victor 09.01.15
+		totalD2 = totalP2 - totalWithDisc;
+		OUTFORMFIELD("F_MYTOTDEB2",totalD2);
+	end;	
 	
 	if (FIELDINFORM("F_MYTOTDEBUSD")) then begin	//Edit by Victor 09.01.15
 		if(ORr.CurncyCode == "USD")then begin
@@ -746,6 +780,14 @@ BEGIN
 		totadD = (totalP - ORr.Sum4) * fr/to1;
 		OUTFORMFIELD("F_MYTOTDEBUSD",totadD);
 	end; 
+	
+	if (FIELDINFORM("F_MYINVOICEOFICIALSERIALNUM")) then begin	//Edit by Victor 15.01.15
+		OUTFORMFIELD("F_MYINVOICEOFICIALSERIALNUM",ORr.OfficialSerNr);
+	end;
+	
+	if (FIELDINFORM("F_MYINVOICECUSTORDNR")) then begin	//Edit by Victor 15.01.15
+		OUTFORMFIELD("F_MYINVOICECUSTORDNR",ORr.CustOrdNr);
+	end;
   
   if (FIELDINFORM("F_NROFITEMSINTEXT")) then begin
     IntToText(SHr.LangCode,CountNrofItemsSH(SHr),tstr);
