@@ -32,6 +32,13 @@ begin
   return;
 end;
 
+global function string 255 IN1SClassInStockKV(var record INVc INr)	//Edit by Victor 21.01.15
+begin
+  transaction string 255 gLocation;
+  
+  IN1SClassInStockKV = ItemInStock(INr,"6-KV");
+  return;
+end;
 
 	// Edit End ---------------------------------------------- Edit End
 	

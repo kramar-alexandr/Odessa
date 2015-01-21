@@ -4657,11 +4657,15 @@ window IN1SClass:4
   wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
 begin
   real v;
+  record LocalMachineBlock LMb;
   
   WindowBegin("Выберите товар",IN1SClass,CGslist,-);
   Sizeable(-1,-1,0,0);
   UseView(INVc);
   SpawnClass(INDClass);
+  
+  BlockLoad(LMb);
+  
     if (GuiType==kGuiiPhone) then begin
       RecordList(4,17,-21,-39);
       RLCellKey(10,6,150,19,Name,false,12,patM4blue,ActName);
@@ -4704,7 +4708,13 @@ begin
         CalculatedColumn(-100,-100,"На складе","IN1SClassInStock",true);
       end;
       if (HasModIN) then begin
-        CalculatedColumn(-50,-50,"4-NIZ","IN1SClassInStockNIZ",true);// Edit ************************** Friday, 31 October 2014 11:43:05
+      	if(LMb.LocalMachineCode=="RR1" or LMb.LocalMachineCode=="RR2")then begin //Edit by Victor 21.01.15
+	        CalculatedColumn(-50,-50,"4-NIZ","IN1SClassInStockNIZ",true);// Edit ************************** Friday, 31 October 2014 11:43:05
+	      end else begin
+	      	if(LMb.LocalMachineCode=="KV1" or LMb.LocalMachineCode=="KV2")then begin //Edit by Victor 21.01.15
+		      	CalculatedColumn(-50,-50,"6-KV","IN1SClassInStockKV",true);//Edit by Victor 21.01.15
+		      end;
+	      end;
       end;
       SearchField("Найти");
       if (HasModIN) then begin
