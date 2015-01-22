@@ -791,7 +791,7 @@ BEGIN
         (nonblank(ORr.ShipAddr1)) or
         (nonblank(ORr.ShipAddr2)) or
         (nonblank(ORr.ShipAddr3))) then begin
-      SHp.Addr0 = ORr.ShipAddr0;
+      //SHp.Addr0 = ORr.ShipAddr0;	//	*****	Edit by Victor 22.01.15	Addr0
       SHp.Addr1 = ORr.ShipAddr1;
       SHp.Addr2 = ORr.ShipAddr2;
       SHp.Addr3 = ORr.ShipAddr3;
