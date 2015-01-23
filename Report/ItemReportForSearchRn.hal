@@ -40,12 +40,14 @@ begin
 	record INVc INr;
 	record ItemStatusVc ItemStatusr;
 	record PLVc PLr;
-	integer rw,TotalQuantity;
+	integer rw,TotalQuantity,lmflag;
 	boolean continue,check;
 	string 100 searchStr ;
 	string 20 keySort;
+	record LocalMachineBlock LMb; //Edit***************************Sasha2,10:14 23.01.2015
 	
 	searchStr = RepSpec.f1;
+	BlockLoad(LMb); //Edit***************************Sasha2,10:14 23.01.2015
 
 	if (RepSpec.ArtMode == 0) then begin	//сортировка
 	keySort = "Code";
@@ -64,16 +66,24 @@ begin
 	if (keysort=="Name") then begin
 	Header(rw,"Сортировка по  названию товара",1);
 	end;	
-Header(rw+1,"Код прейскуранта:  " & RepSpec.d1Code,1);
+  Header(rw+1,"Код прейскуранта:  " & RepSpec.d1Code,1);
 	EndHeader;
+	
+	if(LMb.LocalMachineCode=="RR1" or LMb.LocalMachineCode=="RR2")then begin  //Edit***************************Sasha2,10:15 23.01.2015 {
+    lmflag = 1;
+  end else begin
+  	if(LMb.LocalMachineCode=="KV1" or LMb.LocalMachineCode=="KV2")then begin 
+    	lmflag = 2;
+    end;
+  end; //Edit***************************Sasha2,10:15 23.01.2015 }
 
 	SetRepCol(2,60);
 	SetRepCol(3,130);
 	SetRepCol(4,260);
 	SetRepCol(5,300);
 	SetRepCol(6,340);
-	SetRepCol(7,420);
-	SetRepCol(8,460);
+	SetRepCol(7,410);
+	SetRepCol(8,450);
 	
 	StartFormat(15);
 	OutString(0,0,"Код",false);
@@ -82,8 +92,15 @@ Header(rw+1,"Код прейскуранта:  " & RepSpec.d1Code,1);
 	OutString(4,0,"Цена",false)
 	OutString(5,0,"Штрих-код",false);
 	OutString(6,0,"Альтернативный код",false);
-	OutString(7,0,"3-Рай",false);
-	OutString(8,0,"4-Низ",false);
+  switch (lmflag) begin //Edit***************************Sasha2,10:23 23.01.2015 {
+    case 0:
+	    OutString(7,0,"СКЛАД ЛОК.МАШ.НЕ ОПРЕДЕЛЕН",false);
+    case 1:
+      OutString(7,0,"3-Рай",false);
+	    OutString(8,0,"4-Низ",false);
+	  case 2:
+	    OutString(7,0,"6-KV",false);
+  end; //Edit***************************Sasha2,10:15 23.01.2015 }
 	EndFormat;
 	Black_Divider(0,1);
 	continue = true;
@@ -117,17 +134,23 @@ Header(rw+1,"Код прейскуранта:  " & RepSpec.d1Code,1);
 			end;
 			OutString(5,0,INr.BarCode,false);
 			OutString(6,0,INr.AlternativeCode,false);
-
 			ItemStatusr.Code = INr.Code;
-			ItemStatusr.Location = "3-RAY";
-			if (ReadFirstMain(ItemStatusr,2,true)) then begin			//поиск по Code, Location
-				OutString(7,0,ItemStatusr.Instock,false);
-				end;
-			ItemStatusr.Location = "4-NIZ";
-			if (ReadFirstMain(ItemStatusr,2,true)) then begin			
-				OutString(8,0,ItemStatusr.Instock,false);
-				end;
-			
+			switch (lmflag) begin //Edit***************************Sasha2,10:22 23.01.2015 {
+			  case 1:
+			    ItemStatusr.Location = "3-RAY";
+			    if (ReadFirstMain(ItemStatusr,2,true)) then begin			//поиск по Code, Location
+    				OutString(7,0,ItemStatusr.Instock,false);
+    			end;
+    			ItemStatusr.Location = "4-NIZ";
+    			if (ReadFirstMain(ItemStatusr,2,true)) then begin			
+    				OutString(8,0,ItemStatusr.Instock,false);
+    			end;
+    		case 2:
+    		  ItemStatusr.Location = "6-KV";
+			    if (ReadFirstMain(ItemStatusr,2,true)) then begin			//поиск по Code, Location
+    				OutString(7,0,ItemStatusr.Instock,false);
+    			end;
+			end; //Edit***************************Sasha2,10:22 23.01.2015 }
 			EndFormat;	
 			TotalQuantity=TotalQuantity+1;
 		
