@@ -281,8 +281,8 @@ begin
 			ORr.SalesGroup = "WEB";
 			ORr.SalesMan  = CurrentUser;
 			ORr.CurncyCode = "UAH";
-			ORr.BaseRate1 = 100;
-			ORr.BaseRate2 = 100;
+			//ORr.BaseRate1 = 100;
+			//ORr.BaseRate2 = 100;
 			ORr.Location = WSSB.Location;
 			ORr.PayDeal = WSSB.PayDeal;
 			ORr.ShipDeal = WSSB.ShipDeal;
@@ -290,7 +290,7 @@ begin
   		ORr.TransDate = CurrentDate;
   		ORr.TransTime = CurrentTime;
   		ORr.SyncFlag = 0;
-			ORVc_PasteCurncyCode(ORr,"");		//Edit--------------------Dima 23.01.2015
+			ORVc_PasteCurncyCode(ORr,"USD");		//Edit--------------------Dima 23.01.2015
 
 			nodeRowCnt = XmlCountChildren(xmlPost,"orders/order" & i );
 			rowNr = 0;
