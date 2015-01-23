@@ -2129,7 +2129,8 @@ begin
 
   wn = CurWindow;
   GetWindowRecord(wn,POr);
-  RepSpec.Media = mtExcel;
+  //RepSpec.Media = mtExcel;
+	RepSpec.Media = mtClipBoard; //Edit -----Dima 23.01.2015
   RepSpec.repname = "ExportTableToExcelPORn";
   RepSpec.flags[0] = wn;
   RepSpec.long1 = POr.SerNr;

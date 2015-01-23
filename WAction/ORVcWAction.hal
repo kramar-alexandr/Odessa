@@ -1993,3 +1993,26 @@ BEGIN
   ORRowDClassAfterEditField = res;
   RETURN;
 END;
+
+
+
+
+
+global// added -------------------Dima  23.01.2015
+procedure ExportToExcelORDsm()
+begin
+  record ORVc ORr;
+  record RcVc RepSpec;
+  integer wn;
+LogText(0,"--ExportToExcelORDsm**********");	
+  wn = CurWindow;
+  GetWindowRecord(wn,ORr);
+	RepSpec.Media = mtClipBoard; 
+  RepSpec.repname = "ExportTableToExcelORRn";
+  RepSpec.flags[0] = wn;
+  RepSpec.long1 = ORr.SerNr;
+  RunReport(RepSpec,0);
+
+  
+return;
+end;

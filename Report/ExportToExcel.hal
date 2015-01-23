@@ -1,6 +1,6 @@
   SetLangMode(LangRussian,"RUS",0);  
 
-global procedure ExportTableToExcelPORn(record RcVc RepSpec)
+global procedure ExportTableToExcelPORn(record RcVc RepSpec)	//Edit--------Dima 
 begin
   record POVc POr;
   row	POVc POrw;
@@ -38,8 +38,6 @@ begin
 	OutString(7,0,"Цена",false);
 	OutString(8,0,"%",false);
 	OutString(9,0,"Сумма",false);
-	OutString(10,0,"Фрахт",false);
-	OutString(11,0,"Таможня",false);
 	OutString(12,0,"Объем",false);
 	OutString(13,0,"Вес",false);
 	EndFormat;
@@ -57,8 +55,6 @@ begin
 		OutString(7,0,POrw.Price,false);
 		OutString(8,0,POrw.vRebate,false);
 		OutString(9,0,POrw.Sum,false);
-		OutString(10,0,POrw.ShipCost,false);
-		OutString(11,0,POrw.CustomsCost,false);
 		OutString(12,0,POrw.Volume,false);
 		OutString(13,0,POrw.Weight,false);
 		EndFormat;	
@@ -74,7 +70,7 @@ end;
 
 
 
-global procedure ExportTableToExcelPURn(record RcVc RepSpec)
+global procedure ExportTableToExcelPURn(record RcVc RepSpec)	//Edit--------Dima 
 begin
   record PUVc PUr;
   row	PUVc PUrw;
@@ -137,8 +133,8 @@ end;
 
 
 
-global procedure ExportTableToExcelStockMovRn(record RcVc RepSpec)
-begin
+global procedure ExportTableToExcelStockMovRn(record RcVc RepSpec)	//Edit--------Dima 
+begin	
   record StockMovVc StockMovr;
   row	StockMovVc StockMovrw;
   Integer rwcnt,i,wn;
@@ -201,3 +197,58 @@ return;
 end;
 
 
+
+global procedure ExportTableToExcelORRn(record RcVc RepSpec)	//Edit--------Dima  23.01.2015
+begin
+  record ORVc ORr;
+  row	ORVc ORrw;
+  Integer rwcnt,i,wn;
+  
+  ORr.SerNr = RepSpec.long1;
+  if (ReadFirstMain(ORr,1,true)) then begin	  
+  rwcnt=MatRowCnt(ORr);
+ 
+	StartReportJob("---");
+LogText(0,"--ExportTableToExcelORRn**********");	
+	EndHeader;
+
+	SetRepCol(2,50);
+	SetRepCol(3,100);
+	SetRepCol(4,150);
+	SetRepCol(5,200);
+	SetRepCol(6,250);
+	SetRepCol(7,300);
+	SetRepCol(8,350);
+	SetRepCol(9,400);
+
+
+
+	StartFormat(15);
+	OutString(0,0,"№",true);
+	OutString(2,0,"Товар",true);
+	OutString(3,0,"Кол-во",false);
+	OutString(5,0,"Описание",false);
+	OutString(6,0,"Цена",false);
+	OutString(7,0,"Стоимость",false);
+	OutString(8,0,"Сумма",false);
+	EndFormat;
+	Black_Divider(0,1);
+
+	for(i=0;i<rwcnt;i=i+1) begin
+		MatRowGet(ORr,i,ORrw)
+		StartFormat(15);			
+		OutString(0,0,i+1,false);
+		OutString(2,0,ORrw.ArtCode,false);
+		OutString(3,0,ORrw.Quant,false);
+		OutString(5,0,ORrw.Spec,false);
+		OutString(6,0,ORrw.Price,false);
+		OutString(7,0,ORrw.BasePrice,false);
+		OutString(8,0,ORrw.Sum,false);
+		EndFormat;	
+	end;		
+	EndJob;
+
+  end;
+
+return;
+end;

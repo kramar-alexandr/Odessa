@@ -326,7 +326,7 @@ begin
 
   wn = CurWindow;
   GetWindowRecord(wn,PUr);
-  RepSpec.Media = mtExcel;
+  RepSpec.Media = mtClipBoard;
   RepSpec.repname = "ExportTableToExcelPURn";
   RepSpec.flags[0] = wn;
   RepSpec.long1 = PUr.SerNr;
@@ -345,7 +345,7 @@ begin
 
   wn = CurWindow;
   GetWindowRecord(wn,StockMovr);
-  RepSpec.Media = mtExcel;
+  RepSpec.Media = mtClipBoard;
   RepSpec.repname = "ExportTableToExcelStockMovRn";
   RepSpec.flags[0] = wn;
   RepSpec.long1 = StockMovr.SerNr;
