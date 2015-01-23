@@ -620,7 +620,7 @@ window CleaningVClass:1 //Edit--------------------------------Dima 24.12.2014
   real h,v,vs;
 
   WindowBegin("Удалить первичные документы",CleaningVClass,CGMnt,RcType);
-  SetWRect(20,120,360,620);
+  SetWRect(20,120,360,750);
   v = 10;  h = 25; vs = 16;
   StaticText(h-10,v,"Будут удалены все записи из регистров:",false);
   StaticText(h,v+=vs,"Приход",false);
@@ -641,6 +641,9 @@ window CleaningVClass:1 //Edit--------------------------------Dima 24.12.2014
   StaticText(h,v+=vs,"Начальное сальдо",false);
   StaticText(h,v+=vs,"История товаров",false);
   StaticText(h,v+=vs,"Статус товаров",false);
+  StaticText(h,v+=vs,"Выплаты персоналу",false);
+  StaticText(h,v+=vs,"*Контакты      (все кроме поставщиков)",false);
+	StaticText(h,v+=vs,"Товары",false);
 
   EndWindow;
 end;
