@@ -262,19 +262,17 @@ record INVc INr;
 		if(readfirstmain(INr,1,true)==false)then begin
 			recordNew(INr);
 			INr.Code = artcode;
-			INr.UnitCoefficient = coef;
+			INr.MinLevel = coef;
 			INr.Name = name;
-			if(nonblank(name))then begin
-				INr.Name = "blank";
-			end;
 			recordstore(INr,true);
 		end else begin
-			if(INr.UnitCoefficient<coef)then begin
-				INr.UnitCoefficient=coef;
+			if(INr.MinLevel<coef)then begin
+				INr.MinLevel=coef;
 			end;
 			if(nonblank(name))then begin
 				INr.Name = name;
 			end;
+			recordStore(INr,true);
 		end;
 		
 		if (NextImportLine(true)) then begin end;
