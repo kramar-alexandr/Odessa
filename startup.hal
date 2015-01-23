@@ -41,6 +41,7 @@ begin
    SString(31007,"Оплачено картой");
    SString(31008,"Остатки на складах");
    SString(31009,"Спасибо за покупку!!!");
+   SString(31010,"Данную запись нельзя сортировать");
    
   Maintenance("Экспорт склада CSV",ExportStockCSVClass,ExportStockCSVMn,modSY);
   Maintenance("Пересчитать значение объема в карточке товара",RecalcINVolumeClass,RecalcINVolumeMn,modDBMain);//Edit***************************Sasha2,13:50 24.06.2014

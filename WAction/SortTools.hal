@@ -1,0 +1,92 @@
+  SetLangMode(LangRussian,"RUS",0); 
+
+
+
+function Integer MinInTableOR(record ORVc ORr)
+Begin
+	row ORVc ORrw;
+	integer rwcnt,i,pos;
+	string 50 min;
+
+	pos = -1;
+	rwcnt = MatRowCnt(ORr);
+	if (rwcnt>0) then begin
+		MatRowGet(ORr,0,ORrw);
+		min = ORrw.ArtCode;
+		pos = 0;
+	end;
+
+	for(i=0;i<rwcnt;i=i+1) begin
+		MatRowGet(ORr,i,ORrw);
+		if (ORrw.ArtCode<min) then begin
+			min = ORrw.ArtCode;
+			pos = i;		
+		end;
+	end;
+MinInTableOR = pos;
+return;
+end;
+
+
+
+
+procedure TableSortAscending_OR(var record ORVc ORr)
+begin
+	record ORVc oldORr;
+	row ORVc ORrw;
+  Integer rwcnt,minPos,i;
+
+
+	RecordCopy(oldORr,ORr);
+	rwcnt = MatRowCnt(ORr);
+
+	for(i=0;i<rwcnt;i=i+1) begin
+			MatRowDelete(ORr,0);
+	end;
+
+
+	for(i=0;i<rwcnt;i=i+1) begin
+		minPos = MinInTableOR(oldORr);
+		if (minPos >= 0) then begin
+				MatRowGet(oldORr,minPos,ORrw);
+				MatRowInsert(ORr,i,ORrw);
+				MatRowDelete(oldORr,minPos);
+		end;
+	end;
+
+end;
+
+
+global  //added --------------Dima 23.01.2015
+procedure TableSortORDsm()
+BEGIN
+	record ORVc ORr;
+	row ORVc ORrw;
+  Integer wn,rwcnt,i;
+
+  wn = CurWindow;
+
+	GetWindowRecord(wn,ORr);
+
+	if (ORr.OKFlag==1 ) then begin
+			MessageBox(31010,"");
+			goto LTableSortORDsm;
+	end;
+	
+	rwcnt = MatRowCnt(ORr);
+	for(i=0;i<rwcnt;i=i+1) begin
+		MatRowGet(ORr,i,ORrw);	
+		if (nonblank(ORrw.Shipd1) or nonblank(ORrw.Shipd2) or nonblank(ORrw.Invd)) then begin
+			MessageBox(31010,"");
+			goto LTableSortORDsm;
+		end;
+	end;
+
+	TableSortAscending_OR(ORr);
+  PutWindowRecord(wn,ORr);
+
+
+	LTableSortORDsm:;
+  RETURN;
+END;
+

@@ -6077,6 +6077,7 @@ email not working yet
     SpecialMenu("Открыть матрицу налогов",' ',25,"OpenVatMatrixORDsm");
   end;
 	SpecialMenu("Выгрузить таблицу в буфер обмена",'',18,"ExportToExcelORDsm"); // edit ----------Dima 26.11.2014, 23.01.2015
+	SpecialMenu("Отсортировать таблицу",'',20,"TableSortORDsm"); // edit ----------Dima 26.11.2014, 23.01.2015
   end;
   EndWindow;
   
