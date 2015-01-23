@@ -7,6 +7,7 @@ external procedure ORDchsum(var record ORVc,Integer);
 external procedure ORSumup(var record ORVc);
 external function Boolean ORDchrsum(var record ORVc,Integer);
 external procedure ExtractObjWithSeparator(string,string,Boolean,var Integer,var string); //Edit***************************Sasha2,11:03 14.01.2015
+external procedure ORVc_PasteCurncyCode(var record ORVc,string);	//Edit--------------------Dima 23.01.2015
 
 
 SetLangMode(LangRussian,"RUS",0);
@@ -289,7 +290,8 @@ begin
   		ORr.TransDate = CurrentDate;
   		ORr.TransTime = CurrentTime;
   		ORr.SyncFlag = 0;
-		
+			ORVc_PasteCurncyCode(ORr,"");		//Edit--------------------Dima 23.01.2015
+
 			nodeRowCnt = XmlCountChildren(xmlPost,"orders/order" & i );
 			rowNr = 0;
 			for (j=0;j<nodeRowCnt;j=j+1) begin
