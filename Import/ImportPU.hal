@@ -239,3 +239,45 @@ begin
 return;
 end;
 
+global updating procedure ImportRawItems()
+begin
+string 200 artcode,name,coeftext;
+integer coef;
+record INVc INr;
+	
+	while (TestEOF()==false) begin
+		artcode = "";
+		coeftext = "";
+		name = "";
+		coef = 0;
+		
+		artcode = ImportField;
+		coeftext = ImportField;
+		name = ImportField;
+		if(nonblank(coeftext))then begin
+			coef = evaltoval(coeftext);
+		end;
+		
+		INr.Code = artcode;
+		if(readfirstmain(INr,1,true)==false)then begin
+			recordNew(INr);
+			INr.Code = artcode;
+			INr.UnitCoefficient = coef;
+			INr.Name = name;
+			if(nonblank(name))then begin
+				INr.Name = "blank";
+			end;
+			recordstore(INr,true);
+		end else begin
+			if(INr.UnitCoefficient<coef)then begin
+				INr.UnitCoefficient=coef;
+			end;
+			if(nonblank(name))then begin
+				INr.Name = name;
+			end;
+		end;
+		
+		if (NextImportLine(true)) then begin end;
+	end;
+return;
+end;
