@@ -27,11 +27,12 @@ SetLangMode(LangRussian,"RUS",0);
 global procedure CustTimeTableAction()
 begin
   record RcVc RepSpec;
-  time t1,t2,curt,curtnew;
+  time t1,t2,t3,curt,curtnew;
   string 5 hr,mn;
 
-    t1 = StringToTime("7:30");
-    t2 = StringToTime("14:30");
+    t1 = StringToTime("6:30");
+    t2 = StringToTime("12:30");
+    t3 = StringToTime("20:30");
     
     curt = CurrentTime; 
     hr = GetHour(curt);
@@ -44,7 +45,7 @@ begin
     end;
     curtnew = StringToTime(hr & ":" & mn);
 
-    if (curtnew==t1 or curtnew==t2) then begin
+    if (curtnew==t1 or curtnew==t2 or curtnew==t3) then begin
     	LogText(0,"CustTimeTableAction at planned time: " & curtnew);
     	ExportStockCSVMn(RepSpec);
     end;  
