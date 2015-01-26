@@ -673,6 +673,9 @@ RecordBegin(INVc,-,"artikel5");
   AppendListFieldToKeyName(DispGroups);
   KeySegment(Group);
   KeySegment(Code);
+  KeyBegin(Reference);// Edit ************************** Saturday, 24 January 2015 11:46:38
+  KeySegment(Reference);
+  KeySegment(Code);
   EndRecord;
   
   RecordBegin(POVc,-,"POVc2");

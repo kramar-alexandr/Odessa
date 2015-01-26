@@ -179,7 +179,9 @@ begin
   record LocationVc Locr;
   string 50 location,curLoc, artcode, quant,price;
   Integer pucnt;
-
+  record INVc INr;
+	integer coefx;
+	
 	pucnt =0;
 
 	while (TestEOF()==false) begin	
@@ -191,13 +193,30 @@ begin
 
 			quant = ImportField;
 			price = ImportField;
-			PUrw.ArtCode = artcode;
-			PUrw.UPrice = StringToVal(price,M45Val);
-			PUrw.Quant = StringToVal(quant,M4UVal);
-			MatRowPut(PUr,pucnt,PUrw);
-			PUVc_FillRow(PUr,pucnt);
-			pucnt= pucnt + 1;	
-		
+			
+			INr.Code = artcode;
+			If(readfirstmain(INr,1,true))then begin
+				coefx = INr.Conversion1;
+				if(coefx<1)then begin
+					coefx = 1;
+				end;
+				PUrw.ArtCode = artcode;
+				//PUrw.UPrice = StringToVal(price,M45Val);
+				PUrw.Quant = StringToVal(quant,M4UVal)*coefx;
+				MatRowPut(PUr,pucnt,PUrw);
+				PUVc_FillRow(PUr,pucnt);
+				pucnt= pucnt + 1;	
+			end else begin
+				INr.Reference = artcode;
+				if(readfirstkey("Reference",INr,1,true))then begin
+					PUrw.ArtCode = INr.Code;
+					//PUrw.UPrice = StringToVal(price,M45Val);
+					PUrw.Quant = StringToVal(quant,M4UVal);
+					MatRowPut(PUr,pucnt,PUrw);
+					PUVc_FillRow(PUr,pucnt);
+					pucnt= pucnt + 1;	
+				end;
+			end;
 		end else begin			//создание новой PU записи
 
 			if (NonBlank(curLoc)) then begin			
@@ -210,19 +229,38 @@ begin
 			if (nonblank(location) and ReadFirstMain(Locr,1,true) and nonblank(artcode)) then begin			
 				
 				RecordNew(PUr);				
-  				PUr.SerNr = NextSerNr("PUVc",PUr.TransDate,-1,false,"");  		
+  			PUr.SerNr = NextSerNr("PUVc",PUr.TransDate,-1,false,"");  		
 				pucnt = 0;
 						
 				quant = ImportField;
 				price = ImportField;
 				        		
 				PUr.Location = location;
-          		PUrw.ArtCode = artcode;
-				PUrw.UPrice = StringToVal(price,M45Val);
-				PUrw.Quant = StringToVal(quant,M4UVal);
-				MatRowPut(PUr,pucnt,PUrw);
-				PUVc_FillRow(PUr,pucnt);
-				pucnt= pucnt + 1;          		
+				
+				INr.Code = artcode;
+				If(readfirstmain(INr,1,true))then begin
+					coefx = INr.Conversion1;
+					if(coefx<1)then begin
+						coefx = 1;
+					end;
+					PUrw.ArtCode = artcode;
+					//PUrw.UPrice = StringToVal(price,M45Val);
+					PUrw.Quant = StringToVal(quant,M4UVal)*coefx;
+					MatRowPut(PUr,pucnt,PUrw);
+					PUVc_FillRow(PUr,pucnt);
+					pucnt= pucnt + 1;	
+				end else begin
+					INr.Reference = artcode;
+					if(readfirstkey("Reference",INr,1,true))then begin
+						PUrw.ArtCode = INr.Code;
+						//PUrw.UPrice = StringToVal(price,M45Val);
+						PUrw.Quant = StringToVal(quant,M4UVal);
+						MatRowPut(PUr,pucnt,PUrw);
+						PUVc_FillRow(PUr,pucnt);
+						pucnt= pucnt + 1;	
+					end;
+				end;
+								     		
 				curLoc = location;
 			end;			
 				
@@ -262,19 +300,147 @@ record INVc INr;
 		if(readfirstmain(INr,1,true)==false)then begin
 			recordNew(INr);
 			INr.Code = artcode;
-			INr.MinLevel = coef;
+			INr.Conversion1 = coef;
 			INr.Name = name;
+			INr.Reference = name;
 			recordstore(INr,true);
 		end else begin
-			if(INr.MinLevel<coef)then begin
-				INr.MinLevel=coef;
+			if(INr.Conversion1<coef)then begin
+				INr.Conversion1=coef;
 			end;
 			if(nonblank(name))then begin
 				INr.Name = name;
+				INr.Reference = name;
 			end;
 			recordStore(INr,true);
 		end;
 		
+		if (NextImportLine(true)) then begin end;
+	end;
+return;
+end;
+
+
+global updating procedure ImportItemPricesIn()
+begin
+	record PLVc PLr;
+	record INVc INr;
+	string 50 artcode,cost,zp,opt,rrp;
+	val vcost,vzp,vopt,vrrp,coefx;
+	
+	while (TestEOF()==false) begin
+	
+		artcode = ImportField;
+		cost = ImportField;
+		zp = ImportField;
+		opt = ImportField;
+		rrp = ImportField;
+		
+		vcost = 0;
+		vzp = 0;
+		vopt = 0;
+		vrrp = 0;
+		
+		if(nonblank(cost))then begin
+			vcost = stringtoval(cost,M45Val);
+		end;
+		if(nonblank(zp))then begin
+			vzp = stringtoval(zp,M45Val);
+		end;
+		if(nonblank(opt))then begin
+			vopt = stringtoval(opt,M45Val);
+		end;
+		if(nonblank(rrp))then begin
+			vrrp = stringtoval(rrp,M45Val);
+		end;
+		
+		if(nonblank(artcode))then begin
+			INr.Code = artcode;
+			if(readfirstmain(INr,1,true))then begin
+				coefx = INr.Conversion1;
+				if(coefx<1)then begin
+					coefx = 1;
+				end;
+				
+				if(vcost>0)then begin
+					INr.InPrice = vcost/coefx;
+					recordstore(INr,true);
+				end;
+				if(vzp>0)then begin
+					recordNew(PLr);
+					PLr.PLCode = "SALAR";
+					PLr.Comment = INr.Name;
+					PLr.ArtCode = INr.Code;
+					PLr.ExVatPrice = vzp/coefx;
+					recordStore(PLr,true);
+				end;
+				if(vopt>0)then begin
+					recordNew(PLr);
+					PLr.PLCode = "OPT";
+					PLr.Comment = INr.Name;
+					PLr.ArtCode = INr.Code;
+					PLr.ExVatPrice = vopt/coefx;
+					recordStore(PLr,true);
+				end;
+				if(vrrp>0)then begin
+					PLr.PLCode = "RRP";
+					PLr.ArtCode = INr.Code;
+					if(readfirstmain(PLr,2,true)==false)then begin
+						recordNew(PLr);
+						PLr.PLCode = "RRP";
+						PLr.Comment = INr.Name;
+						PLr.ArtCode = INr.Code;
+						PLr.ExVatPrice = vrrp/coefx;
+						recordStore(PLr,true);
+					end;
+				end;
+			end else begin
+				INr.Reference = artcode;
+				if(readfirstkey("Reference",INr,1,true))then begin
+					coefx = INr.Conversion1;
+
+					/*if(vcost>0)then begin
+						if(INr.InPrice==0)then begin
+							INr.InPrice = vcost;
+							recordstore(INr,true);
+						end;
+					end;
+					if(vzp>0)then begin
+						PLr.PLCode = "SALAR";
+						PLr.ArtCode = INr.Code;
+						if(readfirstmain(PLr,2,true)==false)then begin
+							recordNew(PLr);
+							PLr.PLCode = "SALAR";
+							PLr.Comment = INr.Name;
+							PLr.ArtCode = INr.Code;
+							PLr.ExVatPrice = vzp;
+							recordStore(PLr,true);
+						end;
+					end;
+					if(vopt>0)then begin
+						PLr.PLCode = "OPT";
+						PLr.ArtCode = INr.Code;
+						if(readfirstmain(PLr,2,true)==false)then begin
+							recordNew(PLr);
+							PLr.PLCode = "OPT";
+							PLr.Comment = INr.Name;
+							PLr.ArtCode = INr.Code;
+							PLr.ExVatPrice = vopt;
+							recordStore(PLr,true);
+						end;
+					end;*/
+					if(vrrp>0)then begin
+						recordNew(PLr);
+						PLr.PLCode = "RRP";
+						PLr.Comment = INr.Name;
+						PLr.ArtCode = INr.Code;
+						PLr.ExVatPrice = vrrp;
+						recordStore(PLr,true);
+					end;
+				end;
+			end;
+		end;
+	
 		if (NextImportLine(true)) then begin end;
 	end;
 return;

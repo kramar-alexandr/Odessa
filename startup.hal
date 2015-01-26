@@ -54,7 +54,11 @@ begin
   Import("Заменить группу товара",INReplaceGroupIClass,INReplaceGroupIn,modIN);//Added********************Dima 21.11.2014
   Import("Импорт поступлений на склад",PUImportIClass,PUImportIn,modIN);//Added********************Dima 24.12.2014
  	Import("Импорт товаров RAW",INImportIClass,ImportRawItems,modDBMain);//Added********************Dima 20.11.2014
-
+ 	Import("Импорт товаров RAW2",INImportIClass,OdessaIn,modDBMain);//Added********************Dima 20.11.2014
+ 	Import("Импорт классификаций товаров",INImportIClass,ImportVEClassIn,modDBMain);//Added********************Dima 20.11.2014
+ 	Import("Импорт цен",INImportIClass,ImportItemPricesIn,modDBMain);//Added********************Dima 20.11.2014
+	
+	Export("ExxportIN",CashInvCroEClass,ExpRegINEn,modDBMain);
    
   StrSetBegin(3); /* Try to keep them in alphabetical order */
   StrSetText(AllowAddingINtoRet,"Добавлять товары в возвраты");
