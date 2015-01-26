@@ -2004,7 +2004,6 @@ begin
   record ORVc ORr;
   record RcVc RepSpec;
   integer wn;
-LogText(0,"--ExportToExcelORDsm**********");	
   wn = CurWindow;
   GetWindowRecord(wn,ORr);
 	RepSpec.Media = mtClipBoard; 
