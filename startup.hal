@@ -42,6 +42,12 @@ begin
    SString(31008,"Остатки на складах");
    SString(31009,"Спасибо за покупку!!!");
    SString(31010,"Данную запись нельзя сортировать");
+	 SString(31011,"Начальная задолженность");
+	 SString(31012,"Прочитано ");
+	 SString(31013,"Записано ");
+	 SString(31014," строк");
+	 SString(31015,"Не загружена кодовая страница Windows-1251");
+
    
   Maintenance("Экспорт склада CSV",ExportStockCSVClass,ExportStockCSVMn,modSY);
   Maintenance("Пересчитать значение объема в карточке товара",RecalcINVolumeClass,RecalcINVolumeMn,modDBMain);//Edit***************************Sasha2,13:50 24.06.2014
@@ -57,6 +63,7 @@ begin
  	Import("Импорт товаров RAW2",INImportIClass,OdessaIn,modDBMain);//Added********************Dima 20.11.2014
  	Import("Импорт классификаций товаров",INImportIClass,ImportVEClassIn,modDBMain);//Added********************Dima 20.11.2014
  	Import("Импорт цен",INImportIClass,ImportItemPricesIn,modDBMain);//Added********************Dima 20.11.2014
+ 	Import("Импорт начальной задолженности клиентов",InitialDebtIClass,InitialClientsDebtIn,modSL);//Added********************Dima 26.01.2015
 	
 	Export("ExxportIN",CashInvCroEClass,ExpRegINEn,modDBMain);
    

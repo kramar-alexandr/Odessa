@@ -1,0 +1,47 @@
+
+//SetLangMode(LangRussian,"RUS",0);		
+
+global procedure ImportResultMessage(integer read, integer wrote,integer errcode)		//Edit-----------------Dima 26.01.2015
+begin
+
+	MessageBox(0,USetStr(31012) & read & USetStr(31014) & ". 	" & USetStr(31013) & wrote & USetStr(31014));	//Прочитано-записано строк
+
+	if (errcode>0) then begin
+		MessageBox(errcode,"");
+	end;
+return;
+end;
+
+
+/*	------------------------------
+
+
+global
+procedure TestARn()
+begin
+
+	StartReportNoHeaderJob("Header");
+
+		OutString(0,0,"Report is built",false);
+	EndJob;
+
+end;
+
+
+
+
+global procedure ImportResultReport(integer read, integer wrote,array integer wrongNum,array 100 string wrongStr)
+begin
+integer i ;
+	MessageBox(0,"ImportResultReport " );
+
+//for(i=0;i<5;i=i+1) Begin
+//MessageBox(0,wrong[i]);
+//end;
+
+	TestARn;
+
+return;
+end;
+
+---------------		*/

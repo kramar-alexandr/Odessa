@@ -1,4 +1,16 @@
+external procedure IVVc_PasteQuant(var record IVVc,Integer,Boolean,var Boolean,string);
+external function val AbsoluteVal(val);
+external procedure IVSumup(var record IVVc,Boolean);
+external procedure ImportResultMessage(integer, integer,integer);
+
 SetLangMode(LangRussian,"RUS",0);
+
+
+global procedure RunImportResult(integer read, integer wrote,integer errcode)	//Edit-----------------Dima 26.01.2015
+begin
+	clientremoteasync.ImportResultMessage(read,wrote,errcode);
+end;
+
 
 global 
 updating procedure PLImportIn()//   Edit-----------------------Dima    20.11.2014  
@@ -139,3 +151,74 @@ begin
 
 return;
 end;
+
+
+
+
+global
+updating procedure InitialClientsDebtIn()//   Edit-----------------------Dima    26.01.2015 
+begin
+  record IVVc IVr;
+  row IVVc IVrw;
+	record CUVc	CUr;
+	record BaseCurBlock BCb;
+	record LocalMachineBlock LMb;
+	string 50 client, debt;
+	val sum;
+	boolean chsum;
+	integer read,wrote,errcode;
+
+	BlockLoad(BCb);
+	BlockLoad(LMb);
+
+ if (SetImportCodepage("WINDOWS-1251")==false) then begin
+			errcode = 31015;
+  End;
+
+
+	while (TestEOF()==false) begin
+	client = ImportField;
+	debt = ImportField;
+	
+		if (nonblank(client) and nonblank(debt)) then begin
+				CUr.Code = client;
+				sum = StringToVal(debt,M4Val);
+		
+		if (ReadFirstMain(CUr,1,true)) then begin				
+      	RecordNew(IVr);
+				IVr.SerNr = NextSerNr("IVVc",IVr.TransDate,-1,false,"");
+				IVr.CustCode = CUr.Code;
+				IVr.Addr0 = CUr.Name;
+				IVr.PayDate = IVr.TransDate;
+				IVr.CurncyCode = BCb.BaseCur1;
+				if (sum>0) then begin				
+						IVr.PayDeal = "0";	
+				end else begin
+						IVr.PayDeal = "CR";
+				end;
+				IVrw.Quant = 1;
+				IVrw.Price = AbsoluteVal(sum);	
+				MatRowPut(IVr,0,IVrw);				
+				IVVc_PasteQuant(IVr,0,true,chsum,LMb.DefReturnLocation);
+				IVSumup(IVr,true);
+
+				IVr.InvComment = USetStr(31011);	//начальнаЯ задолженность
+
+				RecordInsert(IVr,true);
+				wrote=wrote+1;
+			end;
+		end;
+		
+	if (NextImportLine(true)) then begin end;
+	read=read+1;
+	end;
+	
+	if (read>wrote) then begin
+		read = wrote;		//если в тексте были пустые строки
+	end;
+	RunImportResult(read,wrote,errcode);
+
+return;
+end;
+
+
