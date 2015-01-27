@@ -788,6 +788,12 @@ BEGIN
 	if (FIELDINFORM("F_MYINVOICECUSTORDNR")) then begin	//Edit by Victor 15.01.15
 		OUTFORMFIELD("F_MYINVOICECUSTORDNR",ORr.CustOrdNr);
 	end;
+	
+	if (FIELDINFORM("F_MYPOSTADRESS")) then begin	//Edit by Victor 27.01.15
+		OUTFORMFIELD("F_MYPOSTADRESS",ORr.Addr0);
+	end;
+	
+
   
   if (FIELDINFORM("F_NROFITEMSINTEXT")) then begin
     IntToText(SHr.LangCode,CountNrofItemsSH(SHr),tstr);
