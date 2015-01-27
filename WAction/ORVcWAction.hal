@@ -60,6 +60,7 @@ external procedure SerialNrDimensions(string,string,var val,var val,var val);
 external function Integer CheckSerialStatus(string,string,var string);
 remote function val CalculateSerialNrQuantity(string,string,string,Boolean,val,val,val,val);
 remote function Boolean SerialNrForOneItem(string,var record SerBalVc);
+external procedure SetupCustPS2Rn(string,record RcVc);	//Edit----------Dima  27.01.2015
 
 procedure ORSumup_TaxTemplate(var record ORVc ORp)
 begin
@@ -2014,4 +2015,48 @@ begin
 
   
 return;
+end;
+
+
+global
+procedure ORStatusCUDsm()		//Edit-----------------------------Dima 27.01.2015
+begin
+  record CUVc CUr;
+	record ORVc ORr;
+  record RcVc RepSpec;
+  Integer wn;
+  Boolean testf;
+
+  wn = CurWindow;
+  GetWindowRecord(wn,ORr);
+
+	CUr.Code = ORr.CustCode;
+
+	testf = false;
+
+	if (ReadFirstMain(CUr,1,true)) then begin
+  	
+  	if (CUr.CUType!=0) then begin
+  	  testf = true;
+  	end;
+  	if (CUr.DealerType!=0) then begin
+  	  testf = true;
+  	end;
+  	if (CUr.GuestType!=0) then begin
+  	  testf = true;
+  	end;
+  	if (CUr.EmployeeType!=0) then begin
+  	  testf = true;
+  	end;
+  	if (CUr.CUType==0) and (CUr.VEType==0) and (CUr.GuestType==0) and (CUr.DealerType==0) and (CUr.EmployeeType==0) then begin
+  	  testf = true;
+  	end;
+
+	end;
+  
+  if (testf) then begin
+    SetupCustPS2Rn(CUr.Code,RepSpec);
+    RunReport(RepSpec,0);
+  end;
+  return;
 end;
