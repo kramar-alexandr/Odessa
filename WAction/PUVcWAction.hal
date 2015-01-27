@@ -53,7 +53,8 @@ external function Boolean PUDchrsum(record PUVc,Integer);
 remote procedure PUVc_PasteTREO(var record PUVc,Integer);
 remote function Boolean PUVc_PasteVEItemCode(var record PUVc,Integer,var string,var string);
 remote procedure PUVc_PastVolumeWeight(var record POVc,Integer);// Edit ************************** Wednesday, July 9, 2014 at 11:45:42
-
+remote procedure HandleSetEAN13PU(var record PUVc); //Edit***************************Sasha2,14:33 23.01.2015
+remote procedure HandlePrintEAN13PU(record PUVc); //Edit***************************Sasha2,16:15 26.01.2015
 
 forward function Boolean PUDClassSwitchRow(Integer,Integer);
 
@@ -1148,3 +1149,31 @@ LPUDClassOnEnterKey:;
   PUDClassOnEnterKey = res;
   return;
 end;
+
+global //Edit***************************Sasha2,12:00 22.01.2015 {
+updating procedure SetEAN13PUDsm()
+begin 
+	integer wn;
+	record PUVc PUr;
+
+	wn = CurWindow;
+	GetWindowRecord(wn,PUr);
+	HandleSetEAN13PU(PUr);
+	PutWindowrecord(wn,PUr);
+
+	return;
+end; //Edit***************************Sasha2,12:00 22.01.2015 }
+
+global //Edit***************************Sasha2,12:00 22.01.2015 {
+updating procedure PrintEAN13PUDsm()
+begin 
+	integer wn;
+	record PUVc PUr;
+
+	wn = CurWindow;
+	GetWindowRecord(wn,PUr);
+	HandlePrintEAN13PU(PUr);
+	PutWindowrecord(wn,PUr);
+
+	return;
+end; //Edit***************************Sasha2,12:00 22.01.2015 }

@@ -6,6 +6,7 @@ SourceFile("halcust\\Windows",0);
 SourceFile("halcust\\WAction",0);
 SourceFile("halcust\\RAction",0);
 SourceFile("halcust\\Web",0);
+SourceFile("halcust\\LabelPrint",0)
 
 procedure DefineIVVcRecordType_Header(Boolean fieldsisf)		// Edit by Victor 10.11.14
 begin
@@ -1184,6 +1185,7 @@ RecordBegin(INVc,-,"artikel5");
   ArrayField(CustomsDate,M4Date,0,0);
   ArrayField(Volume,M45Val,0,0);// Edit ************************** Friday, July 4, 2014 at 17:13:54
   ArrayField(Weight,M45Val,0,0);// Edit ************************** Friday, July 4, 2014 at 17:13:54
+  ArrayField(AlternativeCode,M4Str,40,0); //Edit***************************Sasha2,14:27 23.01.2015
   EndArray;
     
   MainKeyBegin(SerNr,1);	// Edit by Victor 25.11.14 begin
@@ -2904,8 +2906,7 @@ RecordBegin(INVc,-,"artikel5");
   BlockBegin(MaxPointLoyCardBlock,-,"")	//Edit-------------------------------Dima   23.12.2014
   RecordField(MaxPointsView,M4Long,0,0);
   EndBlock;
-
-
+  
     	  	
 return;
 end;

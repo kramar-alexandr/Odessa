@@ -2255,7 +2255,8 @@ begin
     MatCol(1,144,"Наим.",0,Spec,false,0);
     MatCol(1,-350,"Склад",0,Location,false,LocationSClass);
     MatCol(1,-280,"Серийный номер",0,SerialNr,false,SerialNrSClass);
-    MatCol(1,-150,"Срок годности",0,BestBefore,false,0);
+    MatCol(1,-280,"Серийный номер",0,SerialNr,false,SerialNrSClass);
+    //MatCol(1,-150,"Срок годности",0,BestBefore,false,0); //Edit***************************Sasha2,17:05 26.01.2015
     MatCol(1,-60,"Ст. партии",0,BatchStatus,false,BatchStatusSClass);
     Flip(flipnr); flipnr = flipnr + 1;
     MatCol(1,144,"Наим.",0,Spec,false,0);
@@ -2566,6 +2567,8 @@ begin
   end;
    SpecialMenu("Выгрузить таблицу в буфер обмена",'',1,"ExportToExcelPUDsm"); // edit ----------Dima 26.11.2014, 23.01.2015
   end;
+  SpecialMenu("Присвоить товарам альтернат.коды",'',14,"SetEAN13PUDsm"); //Edit***************************Sasha2,10:38 21.01.2015
+  SpecialMenu("Распечатать EAN13 этикетки 5*13",'',14,"PrintEAN13PUDsm"); //Edit***************************Sasha2,10:38 21.01.2015
   EndWindow;
 end;
 
