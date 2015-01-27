@@ -2255,8 +2255,8 @@ begin
     MatCol(1,144,"Наим.",0,Spec,false,0);
     MatCol(1,-350,"Склад",0,Location,false,LocationSClass);
     MatCol(1,-280,"Серийный номер",0,SerialNr,false,SerialNrSClass);
-    MatCol(1,-280,"Серийный номер",0,SerialNr,false,SerialNrSClass);
     //MatCol(1,-150,"Срок годности",0,BestBefore,false,0); //Edit***************************Sasha2,17:05 26.01.2015
+    MatCol(1,-160,"Альтерн.код",0,AlternativeCode,false,0); //Edit***************************Sasha2,14:30 23.01.2015
     MatCol(1,-60,"Ст. партии",0,BatchStatus,false,BatchStatusSClass);
     Flip(flipnr); flipnr = flipnr + 1;
     MatCol(1,144,"Наим.",0,Spec,false,0);
