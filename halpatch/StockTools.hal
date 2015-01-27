@@ -63,14 +63,17 @@ begin
   record GlobalUserVc GlobalUserr;
   record ModuleBlock MBr;
   Boolean found,testf;
+  record UserVc User2r; //Edit***************************Sasha2,18:23 27.01.2015
   
+  User2r.Code = CurrentUser; //Edit***************************Sasha2,18:23 27.01.2015
+  ReadFirstMain(User2r,1,true); //Edit***************************Sasha2,18:23 27.01.2015
   BlockLoad(MBr);
   acnt = 0;
   found = true;
   while (LoopMain(Userr,1,found)) begin
     if (found) then begin
       testf = true;
-      if (Userr.SalesGroup!="SALES") then begin testf = false; end;	//Add bu Victor 29.10
+      if (NonBlank(User2r.SalesGroup) and Userr.SalesGroup!=User2r.SalesGroup) then begin testf = false; end;	//Add bu Victor 29.10
       if (Userr.TerminatedFlag!=0) then begin testf = false; end;
       if (testf) then begin
         AddToUsersArray(auser,acnt,Userr.Code & "     " & Userr.Name)

@@ -2147,6 +2147,8 @@ RecordBegin(INVc,-,"artikel5");
   RecordField(OfficialSerNr2,M4Str,100,0);
   RecordField(OfficialSerNr2Serie,M4Str,30,0);
  	RecordField(SalesGroup,M4Code,5,SalesGroupVc); //Edit by Victor 25.11.14
+ 	RecordField(Manager,M4UStr,60,UserVc); //Edit***************************Sasha2,15:27 27.01.2015
+ 	RecordField(Collector,M4UStr,60,UserVc); //Edit***************************Sasha2,15:27 27.01.2015
  	
   ArrayBegin(Math,-,1);
   ArrayField(OrdRow,M4Long,0,0);

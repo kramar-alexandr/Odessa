@@ -5738,6 +5738,8 @@ begin
   end;
   if (IsEnterprise) then begin
     EditField(h3,v+=vs,80,"Вид счёта",Normal,SHClass,false,OrderClassSClass);
+    EditField(h3,v+=vs,80,"Менеджер",ViewOnly,Manager,false,0); //Edit***************************Sasha2,15:30 27.01.2015
+    EditField(h3,v+=vs,80,"Сборщик",Normal,Collector,false,UserNPTSSClass); //Edit***************************Sasha2,15:30 27.01.2015
     CheckBox(h4,v=6,0,"Сообщение",Check1);
   end;
   if (IsEnterprise==false) then begin
@@ -6040,7 +6042,8 @@ begin
       SpecialMenu("Подписать",' ',10,"SignSHDsm");  
     end;
   end;
- SpecialMenu("Поиск и добавление товара",'f',1,"TableSearchAdditionDsm"); // edit ----------Dima 12.01.2015
+  SpecialMenu("Поиск и добавление товара",'f',1,"TableSearchAdditionDsm"); // edit ----------Dima 12.01.2015
+  SpecialMenu("Перенести данные из Зак. в Своб. построчно",'',1,"OrderedToShipSHDsm"); //Edit***************************Sasha2,15:22 27.01.2015
   end;
   EndWindow;
 end;
