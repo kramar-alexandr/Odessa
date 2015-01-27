@@ -2632,7 +2632,7 @@ begin
     EditField(h2,v+=vs,135,"Объекты",Normal,Objects,false,ObjSClass);
   end;
   if (HasModIN) then begin
-    EditField(h2,v+=vs,135,"Рекомендатель",Normal,Reference,false,0);
+    EditField(h2,v+=vs,135,"Внутр. номер",Normal,Reference,false,0); //Edit ------------Dima 27.01.2015
   end;
   if (HasSalesman) then begin
     EditField(h3,v=vm,80,"Продавец",Normal,SalesMan,false,UserSClass);
@@ -6808,3 +6808,86 @@ begin
   SpecialMenu("Очистить строки",'',0,"ClearUpRebRowsDm");
   EndWindow;
 end;
+
+
+window POLClass:2
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","*")
+begin
+  Integer pos;
+
+  WindowBegin("Заказы поставщикам",POLClass,CGmlist,POView);
+  SpawnClass(PODClass);
+  SetWRect(20,80,800,298);
+  Sizeable(-1,-1,0,0);
+  UseView(POVc);
+  FormName(PrintPOL);
+  RecordList(4,17,-21,-39);
+
+    RlColKey(4,4,"Номер",SerNr,false,SerNr);
+    RlColKey(79,79,"ОК",OKFlag,false,OKFlag);
+    pos = 111;
+    if (HasModIN) then begin
+      RlColKey(pos,pos,"Пост.",PUFlag,false,PUFlag);
+      pos = 143;
+    end;
+    if (HasModPL) then begin
+      RlColKey(pos,pos,"Сч/ф",PIFlag,false,InvFlag);
+      pos = 175;
+    end;
+    RlColKeyTL(pos,pos,"Закр",M4Mark,Closed,false,Closed);
+    pos = pos + 32;
+    RlColKey(pos,pos,"Дата",TransDate,false,TransDate);
+    pos = pos + 70;
+/*    if (HasMultiLocations) then begin
+      RlColKey(pos,pos,"Местопол.",Location,false,Location);	
+      pos = pos + 80;
+    end;	*/																											//Edit--------------Dima  27.01.2015
+    if (IsEnterprise) then begin
+      RlColKey(pos,pos,"Внутренний номер",Reference,false,Reference);	//Edit--------------Dima  27.01.2015
+      pos = pos + 100;
+    end;
+    RlColKey(pos,pos,"Поставщик",VECode,false,VECode);
+    pos = pos + 120;
+    RlColKey(pos,pos,"Наименование",Addr0,false,Name);
+    if (IsEnterprise) then begin
+      RlCol(-120,-120,"Класс",POClass,false);
+      RlCol(-55,-55,"Итого",Sum4,true);
+    end else begin
+      RlCol(-80,-80,"Итого",Sum4,true);
+    end;
+  if (GUIType!=kGuiiPhone) then begin
+    SearchField("Найти");
+    if (HasLimitedAccess) then begin
+      BrowseSubsetButton(-40,-15);
+    end;
+    if (GuiType==kGuiMetro) then begin
+      RowMenuBegin("");
+      RowMenuItem(0,"OK",'G','G',4312,"OKPOLsm");  
+      RowMenuItem(1,"Закрыт",' ',' ',4300,"ClosePOLsm");  
+      if (HasModIN) then begin
+        RowMenuItem(2,"Создать поступлене",' ',' ',4300,"PUFromPOLsm");  
+      end;
+      if (HasModPO) then begin
+        if (IsEnterprise) then begin
+        RowMenuItem(3,"Создать заказы поставщикам",' ',' ',4300,"POCreatePOLsm");  
+        end;
+        RowMenuItem(4,"Статус заказа поставщику",'r','r',4300,"POStatusORLsm");  
+      end;
+      EndRowMenu;
+    end else begin
+      SpecialMenu("ОК",'G',0,"OKPOLsm");
+      SpecialMenu("Закрыть",' ',1,"ClosePOLsm");
+      if (HasModIN) then begin
+        SpecialMenu("Создать поступление",' ',2,"PUFromPOLsm");
+      end;
+      if (HasModPO) then begin
+        if (IsEnterprise) then begin
+        SpecialMenu("Создать заказы поставщикам",' ',3,"POCreatePOLsm");
+        end; 
+        SpecialMenu("Статус заказа поставщику",'r',4,"POStatusORLsm");
+      end;
+    end;
+  end;
+  EndWindow;
+end;
+

@@ -120,9 +120,6 @@ begin
 return;
 end;
 
-
-
-
 global    //added -----------------------Dima 26.11.2014
 function Integer FindInMathPO(var record RcVc RepSpec,var string field)
 begin
@@ -147,19 +144,19 @@ begin
 						if(FindSubString(search,POrw.ArtCode)) then begin
 							field = "ArtCode";
 							res=i;
-							goto LBreak;
+							goto LFindInMathPO;
 						end else begin
 						
 							if(FindSubString(search,POrw.Spec)) then begin
 								field = "Spec";
 								res=i;
-								goto LBreak;
+								goto LFindInMathPO;
 							end else begin
 				
 								if(FindSubString(search,POrw.Price)) then begin
 									field = "Price";
 									res=i;
-									goto LBreak;
+									goto LFindInMathPO;
 									end;
 								end;
 								end;
@@ -175,19 +172,19 @@ begin
 						if(FindSubString(search,POrw.ArtCode)) then begin
 							field = "ArtCode";
 							res=i;
-							goto LBreak;
+							goto LFindInMathPO;
 						end else begin
 						
 							if(FindSubString(search,POrw.Spec)) then begin
 								field = "Spec";
 								res=i;
-								goto LBreak;
+								goto LFindInMathPO;
 							end else begin
 				
 								if(FindSubString(search,POrw.Price)) then begin
 									field = "Price";
 									res=i;
-									goto LBreak;
+									goto LFindInMathPO;
 									end;
 								end;
 								end;						 
@@ -200,10 +197,11 @@ begin
   MessageBox(0,"Не найдено результатов для " & search);
   end;
 
-  LBreak:;	
+  LFindInMathPO:;	
   FindInMathPO=res;
 return;
 end;
+
 
 
 global    //added -----------------------Dima 26.11.2014
@@ -528,56 +526,6 @@ end;
 
 
 
-global  //added --------------Dima 25.11.2014
-procedure TableSearchDsm()
-BEGIN
-  record RcVc RepSpec;
-  Integer wn,res;
-  wn = CurWindow;
-  RepSpec.flags[0] = wn;
-  RepSpec.flags[1] = 0;  //current row in table
-  RepSpec.flags[2] = 0;  //search direction: 1-forward, 2-backward
-  RepSpec.flags[3] = 0; 
-  res = OpenWindow("TableSearchIClass",0,wn,"","",RepSpec);
-
-  RETURN;
-END;
-
-
-//поиск и добавление для Отгрузок и Перемещений
-global  //added --------------Dima 12.01.2015
-procedure TableSearchAdditionDsm()
-BEGIN
-  record RcVc RepSpec;
-  Integer wn,res;
-  wn = CurWindow;
-  RepSpec.flags[0] = wn;
-  RepSpec.flags[1] = 0;  //current row in table
-  RepSpec.flags[2] = 0;  //search direction: 1-forward, 2-backward
-  RepSpec.flags[3] = 0; 
-  res = OpenWindow("TableSearchAdditionIClass",0,wn,"","",RepSpec);
-
-  RETURN;
-END;
-
-global  //added --------------Dima 12.01.2015
-procedure TableSearchAddition2Dsm()
-BEGIN
-  record RcVc RepSpec;
-  Integer wn,res;
-  wn = CurWindow;
-  RepSpec.flags[0] = wn;
-  RepSpec.flags[1] = 0;  //current row in table
-  RepSpec.flags[2] = 0;  //search direction: 1-forward, 2-backward
-  RepSpec.flags[3] = 0; 
-  res = OpenWindow("TableSearchAddition2IClass",0,wn,"","",RepSpec);
-
-  RETURN;
-END;
-
-
-
-
 
 function Boolean FindInMathGeneral( string RegisterName, integer mwn, string search, integer from, var integer RowNumber)
 begin					//added -----------------------Dima 12.01.2015
@@ -840,3 +788,53 @@ begin
   TableSearchAddition2IClassOnEnterKey = res;
   return;
 end;
+
+
+
+
+global  //added --------------Dima 25.11.2014
+procedure TableSearchDsm()
+BEGIN
+  record RcVc RepSpec;
+  Integer wn,res;
+  wn = CurWindow;
+  RepSpec.flags[0] = wn;
+  RepSpec.flags[1] = 0;  //current row in table
+  RepSpec.flags[2] = 0;  //search direction: 1-forward, 2-backward
+  RepSpec.flags[3] = 0; 
+  res = OpenWindow("TableSearchIClass",0,wn,"","",RepSpec);
+
+  RETURN;
+END;
+
+
+//поиск и добавление для Отгрузок и Перемещений
+global  //added --------------Dima 12.01.2015
+procedure TableSearchAdditionDsm()
+BEGIN
+  record RcVc RepSpec;
+  Integer wn,res;
+  wn = CurWindow;
+  RepSpec.flags[0] = wn;
+  RepSpec.flags[1] = 0;  //current row in table
+  RepSpec.flags[2] = 0;  //search direction: 1-forward, 2-backward
+  RepSpec.flags[3] = 0; 
+  res = OpenWindow("TableSearchAdditionIClass",0,wn,"","",RepSpec);
+
+  RETURN;
+END;
+
+global  //added --------------Dima 12.01.2015
+procedure TableSearchAddition2Dsm()
+BEGIN
+  record RcVc RepSpec;
+  Integer wn,res;
+  wn = CurWindow;
+  RepSpec.flags[0] = wn;
+  RepSpec.flags[1] = 0;  //current row in table
+  RepSpec.flags[2] = 0;  //search direction: 1-forward, 2-backward
+  RepSpec.flags[3] = 0; 
+  res = OpenWindow("TableSearchAddition2IClass",0,wn,"","",RepSpec);
+
+  RETURN;
+END;
