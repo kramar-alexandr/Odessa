@@ -453,6 +453,8 @@ begin
 	row PUVc PUrw;
 	boolean TrHs;
 	integer i,mtrw;
+	record INVc INr;
+	val Weight,Volume;
 	
 	PUr.SerNr = 1; 
 	TrHs = true;
@@ -460,15 +462,22 @@ begin
 		if(PUr.SerNr>8)then begin TrHs = false; end;
 		
 		if(TrHs)then begin
-			
+			Weight = 0;
+			Volume = 0;
 			mtrw = matrowcnt(PUr);
 			For(i=0;i<mtrw;i=i+1) begin
 	  		matrowget(PUr,i,PUrw);
-	  			PUrw.Volume = PUrw.Volume * PUrw.Quant;
-	  			PUrw.Weight = PUrw.Weight * PUrw.Quant;
+					INr.Code = PUrw.ArtCode;
+					readfirstmain(INr,1,true);
+	  			PUrw.Volume = INr.Volume * PUrw.Quant;
+	  			PUrw.Weight = INr.Weight * PUrw.Quant;
+	  			Weight = Weight + PUrw.Volume;
+	  			Volume = Volume + PUrw.Weight;
 	  		matrowput(PUr,i,PUrw);
 			end;
-		PUSumUp(PUr); 
+		//PUSumUp(PUr); 
+			PUr.TotVolume = Volume;
+			PUr.TotWeight = Weight;
 		RecordStore(PUr,true);
 		end;
 	end;
