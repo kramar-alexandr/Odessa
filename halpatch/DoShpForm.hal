@@ -63,6 +63,27 @@ external procedure Mul2VAT(string,val,var val,var val,Integer);
 external procedure GetShipValue(record SHVc,record ORVc,var val,var val);
 external procedure GetFullCurncyRate (var string,Date,var val,var val,var val,var val,var val);
 
+
+function val GetCustBalance (record ORVc ORr)		//Edit------------------------------------Dima 28.01.2015
+begin
+	record BaseCurBlock BaseCurb;
+	record CUVc CUr;
+	val t;
+
+	BlockLoad(BaseCurb);
+	CUr.Code = ORr.CustCode;
+
+	if(ReadFirstMain(CUr,1,true)) then begin
+		t = GetBalance(CUr,"balance",ORr.OrdDate);
+		if (ORr.CurncyCode != BaseCurb.BaseCur1) then begin	
+					t = t*ORr.BaseRate1/ORr.ToRateB1;
+		end;
+	end;
+GetCustBalance = t;
+return;
+end;
+
+
 global
 procedure PrintFreightPaid(string ShipDeal)
 begin
@@ -792,6 +813,18 @@ BEGIN
 	if (FIELDINFORM("F_MYPOSTADRESS")) then begin	//Edit by Victor 27.01.15
 		OUTFORMFIELD("F_MYPOSTADRESS",ORr.Addr0);
 	end;
+
+
+	if (FIELDINFORM("F_MYBALANCE")) then begin	//Edit-------------------Dima  27.01.2015
+		t = GetCustBalance(ORr);
+		OUTFORMFIELD("F_MYBALANCE",t);
+	end;
+
+	if (FIELDINFORM("F_MYSUMWITHBALANCE")) then begin	//Edit-------------------Dima  27.01.2015
+		t = ORr.Sum4 + GetCustBalance(ORr);
+		OUTFORMFIELD("F_MYSUMWITHBALANCE",t);
+	end;
+	
 	
 
   
@@ -806,14 +839,14 @@ BEGIN
   OUTFORMFIELD("F_REGNUMBER1",CUr.RegNr1);
   OUTFORMFIELD("F_REGNUMBER2",CUr.RegNr2);
   OUTFORMFIELD("F_VATNR",CUr.VATNr);
-/*  
+  
   OUTFORMFIELD("F_FROMADRESS",CUr.Name);
   OUTFORMFIELD("F_FROMADRESS",CUr.InvAddr0);
   OUTFORMFIELD("F_FROMADRESS",CUr.InvAddr1);
   OUTFORMFIELD("F_FROMADRESS",CUr.InvAddr2);
   OUTFORMFIELD("F_FROMADRESS",CUr.InvAddr3);
   OUTFORMFIELD("F_FROMADRESS",CUr.InvAddr4);
-*/  
+  
   OutAddress("F_FROMADRESS",CUr.Name,CUr.InvAddr0,CUr.InvAddr1,CUr.InvAddr2,CUr.InvAddr3,CUr.InvAddr4);
   OUTFORMFIELD("F_KUNDMOMSNR",CUr.VATNr);
   OUTFORMFIELD("F_DEPARTMENT",CUr.Department);
