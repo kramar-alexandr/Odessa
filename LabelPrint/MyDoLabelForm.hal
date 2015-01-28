@@ -155,34 +155,9 @@ BEGIN
     OUTFORMFIELD("F_PRIS",tstr);
   end;
   
-  if (FIELDINFORM("F_PRICEBASECURNCY1")) then begin
-    tstr = priceA;
-    OUTFORMFIELD("F_PRICEBASECURNCY1",tstr);
-  end;
-  if (FIELDINFORM("F_PRICEBASECURNCY2")) then begin
-    tstr = priceB;
-    OUTFORMFIELD("F_PRICEBASECURNCY2",tstr);
-  end;
-  
-  if (FIELDINFORM("F_VATEXCLPRC")) then begin
-    tstr = novat;
-    OUTFORMFIELD("F_VATEXCLPRC",tstr);
-  end;
-  if (FIELDINFORM("F_MOMS")) then begin
-    tstr = vat;
-    OUTFORMFIELD("F_MOMS",tstr);
-  end;
-  
-  if (FIELDINFORM("F_KUNDNAMN")) then begin
-    //CUr.Code = RepSpec.f1;
-    OUTFORMFIELD("F_KUNDNAMN",RepSpec.f1);
-    /*if(readfirstmain(CUr,1,true))then begin
-      tstr = CUr.Comment0;
-      OUTFORMFIELD("F_KUNDNAMN",tstr);
-    end;*/
-  end;
+
   if (FIELDINFORM("F_BARCODE")) then begin
-		tstr = INr.AlternativeCode;
+		tstr = INr.BarCode;
 		if(nonblank(tstr))then begin
 			CreateEAN128(tstr);
 			OUTFORMFIELD("F_BARCODE",tstr);
@@ -190,8 +165,15 @@ BEGIN
   end;
   
   OUTFORMFIELD("F_ITEMCODE",INr.Code);
-  OUTFORMFIELD("F_DATUM",setdate);
-  OUTFORMFIELD("F_PRINTDATE",currentdate);
+  if (FIELDINFORM("F_ITEMNAME")) then begin
+    OUTFORMFIELD("F_ITEMNAME",INr.Name);
+  end;
+  if (FIELDINFORM("F_DATUM")) then begin
+    OUTFORMFIELD("F_DATUM",setdate);
+  end;
+  if (FIELDINFORM("F_PRINTDATE")) then begin
+    OUTFORMFIELD("F_PRINTDATE",currentdate);
+  end;
   
   rwcnt = MatRowCnt(Docr);
   for (i=0;i<rwcnt;i=i+1) begin
@@ -233,8 +215,7 @@ BEGIN
   if (pucnt==0) then begin
   	goto LHandleItemLabForm;
   end;
- 	
- 	
+
   prlist = PUr.LangCode; //price list
   intdocnr = 1;
   printf = true;
