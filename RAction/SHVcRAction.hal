@@ -1411,8 +1411,9 @@ begin
   end;
   CalcSHWeight(SHr,false);
   SHOK(SHr);
-  if (blank(SHr.OfficialSerNr)) then begin 	
-    FindNextSHVcOfficialSerialNr(SHr,-1);
+  if (blank(SHr.OfficialSerNr)) then begin
+    SHr.OfficialSerNr = GetCustomOfficialSerNr; //Edit***************************Sasha2,16:56 28.01.2015 	
+    //FindNextSHVcOfficialSerialNr(SHr,-1);
   end;
   AddPortugueseSAFTHashToSH(SHr);
   SHVcRecordSave = res; 

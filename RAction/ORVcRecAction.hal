@@ -1884,7 +1884,8 @@ begin
   RecalculateWeightORVc(ORr,false);
 //  MakeActFromSubSys_ORVc(ORr,false,false);  done below in CreateActFromOR
   if (blank(ORr.OfficialSerNr)) then begin
-    FindNextORVcOfficialSerialNr(ORr);
+    ORr.OfficialSerNr = GetCustomOfficialSerNr; //Edit***************************Sasha2,16:56 28.01.2015
+    //FindNextORVcOfficialSerialNr(ORr); //Edit***************************Sasha2,16:56 28.01.2015
   end;
   
   ORVcRecordSave = res; 

@@ -95,7 +95,7 @@ external updating procedure AddToTheCustomerAccount(string,date,string,LongInt,v
 external procedure InvVat(Integer,Integer,Integer,Integer,string,val,var val,var val,var val,var val,var val);
 external function Boolean EInvoiceWithPDFFileTest(string,string,var record EInvCUVc);
 external updating procedure RoyaltyIVRemoved(record IVVc);
-
+external function string 20 GetCustomOfficialSerNr; //Edit***************************Sasha2,16:54 28.01.2015
 
 procedure SetIVAcceptanceFlag(var record IVVc IVr,record IVVc prevIVr,LongInt stat)
 begin
@@ -368,8 +368,9 @@ BEGIN
     RecalculetWeightVolumeIVVc(IVr,false);
   end;
   if (blank(IVr.OfficialSerNr)) then begin
+    IVr.OfficialSerNr = GetCustomOfficialSerNr; //Edit***************************Sasha2,16:55 28.01.2015
     if (HasLocalization("HRV")==false or IVr.FiscalFlag!=0) then begin
-      FindNextIVVcOfficialSerialNr(IVr);
+      //FindNextIVVcOfficialSerialNr(IVr); //Edit***************************Sasha2,16:54 28.01.2015
       if (nonblank(IVr.OfficialSerNr)) then begin
         switch (GetVATLaw) begin//make it setting in 6.1
           case vatArgentinean:
