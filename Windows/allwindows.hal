@@ -5648,9 +5648,7 @@ email not working yet
   if (HasTaxMatrix) then begin
     SpecialMenu("Открыть матрицу налогов",' ',25,"OpenVatMatrixORDsm");
   end;
-  if (UserCanReport("CustPSRn","",true)) then begin
-      SpecialMenu("Справка по клиенту",'e',0,"ORStatusCUDsm");	//Edit------------------Dima 27.01.2015
-  end;
+  SpecialMenu("Справка по клиенту",'e',0,"ORStatusCUDsm");	//Edit------------------Dima 27.01.2015
 	SpecialMenu("Выгрузить таблицу в буфер обмена",'',18,"ExportToExcelORDsm"); // edit ----------Dima 26.11.2014, 23.01.2015
 	SpecialMenu("Отсортировать таблицу",'',20,"TableSortORDsm"); // edit ----------Dima 26.11.2014, 23.01.2015
   end;
