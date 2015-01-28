@@ -116,8 +116,8 @@ BEGIN
     PUrw.UnitXval = INr.Width;
     PUrw.UnitYval = INr.Height;
     PUrw.UnitZval = INr.Depth;
-	PUrw.Volume = INr.Volume;
-	PUrw.Weight = INr.Weight;
+	PUrw.Volume = INr.Volume*PUrw.Quant; //Edit---------Dima 28.01.2015
+	PUrw.Weight = INr.Weight*PUrw.Quant; //Edit---------Dima 28.01.2015
     PUrw.UnitCode = INr.Unittext;
     location = PUrw.Location;
     if (blank(location)) then begin
@@ -467,7 +467,9 @@ begin
 	  			PUrw.Volume = PUrw.Volume * PUrw.Quant;
 	  			PUrw.Weight = PUrw.Weight * PUrw.Quant;
 	  		matrowput(PUr,i,PUrw);
-			end; 
+			end;
+		PUSumUp(PUr); 
+		RecordStore(PUr,true);
 		end;
 	end;
 

@@ -54,6 +54,8 @@ begin
   Maintenance("Gigient to IN",MyVClass,FillINFromGigieneMn,modDBMain); //Edit***************************Sasha2,16:21 20.10.2014
   Maintenance("Удалить накопительные карточки",MyVClass,DelLoyaltyCardMn,modDBMain); //Edit***************************Sasha2,16:21 20.10.2014
   Maintenance("Удалить первичные документы",CleaningVClass,CleaningMn,modDBMain); //Edit***************************Dima,  24.24.2014
+  Maintenance("Пересчитать вес и объем для 1-8 поступлений",MyVClass,RecalcPUWeightMn,modIN);  //Edit**********Dima, 28.01.2014
+
 
   Import("Импорт цен",PLImportIClass,PLImportIn,modDI); //Added********************Dima 20.11.2014
   Import("Импорт товаров",INImportIClass,INImportIn,modIN);//Added********************Dima 20.11.2014
