@@ -95,7 +95,6 @@ external updating procedure AddToTheCustomerAccount(string,date,string,LongInt,v
 external procedure InvVat(Integer,Integer,Integer,Integer,string,val,var val,var val,var val,var val,var val);
 external function Boolean EInvoiceWithPDFFileTest(string,string,var record EInvCUVc);
 external updating procedure RoyaltyIVRemoved(record IVVc);
-external function string 30 GetCustomOfficialSerNr(); //Edit***************************Sasha2,13:26 08.01.2015
 
 
 procedure SetIVAcceptanceFlag(var record IVVc IVr,record IVVc prevIVr,LongInt stat)
@@ -369,46 +368,45 @@ BEGIN
     RecalculetWeightVolumeIVVc(IVr,false);
   end;
   if (blank(IVr.OfficialSerNr)) then begin
-  IVr.OfficialSerNr = GetCustomOfficialSerNr;//Edit***************************Sasha2,11:31 08.01.2015
-  if (HasLocalization("HRV")==false or IVr.FiscalFlag!=0) then begin
-    //FindNextIVVcOfficialSerialNr(IVr); //Edit***************************Sasha2,13:26 08.01.2015
-    if (nonblank(IVr.OfficialSerNr)) then begin
-      switch (GetVATLaw) begin//make it setting in 6.1
-        case vatArgentinean:
-          GetLegalInvNrRow(IVr.OfficialSerNr,LINrbrw);
-          switch (LINrbrw.OutArgEInvoices) begin
-            case kOutArgEInvoicesSendWithCAEA:
-              BlockLoad(EIb);
-              if (EIb.ArgSelfBilling!=0) then begin
-                if (nonblankdate(EIb.ScdLastFortnightCAEAStartDate)) and (nonblankdate(EIb.ScdLastFortnightCAEAExpiryDate)) then begin
-                  if (DateInRange(IVr.InvDate,EIb.ScdLastFortnightCAEAStartDate,EIb.ScdLastFortnightCAEAExpiryDate)) then begin
-                    IVr.CAEAStartDate = EIb.ScdLastFortnightCAEAStartDate;
-                    IVr.CAEAExpiryDate = EIb.ScdLastFortnightCAEAExpiryDate;
-                    IVr.CAE = EIb.ScdLastFortnightCAEA;
-                    IVr.CAEAFlag = 1;
+    if (HasLocalization("HRV")==false or IVr.FiscalFlag!=0) then begin
+      FindNextIVVcOfficialSerialNr(IVr);
+      if (nonblank(IVr.OfficialSerNr)) then begin
+        switch (GetVATLaw) begin//make it setting in 6.1
+          case vatArgentinean:
+            GetLegalInvNrRow(IVr.OfficialSerNr,LINrbrw);
+            switch (LINrbrw.OutArgEInvoices) begin
+              case kOutArgEInvoicesSendWithCAEA:
+                BlockLoad(EIb);
+                if (EIb.ArgSelfBilling!=0) then begin
+                  if (nonblankdate(EIb.ScdLastFortnightCAEAStartDate)) and (nonblankdate(EIb.ScdLastFortnightCAEAExpiryDate)) then begin
+                    if (DateInRange(IVr.InvDate,EIb.ScdLastFortnightCAEAStartDate,EIb.ScdLastFortnightCAEAExpiryDate)) then begin
+                      IVr.CAEAStartDate = EIb.ScdLastFortnightCAEAStartDate;
+                      IVr.CAEAExpiryDate = EIb.ScdLastFortnightCAEAExpiryDate;
+                      IVr.CAE = EIb.ScdLastFortnightCAEA;
+                      IVr.CAEAFlag = 1;
+                    end;
+                  end;
+                  if (nonblankdate(EIb.LastFortnightCAEAStartDate)) and (nonblankdate(EIb.LastFortnightCAEAExpiryDate)) then begin
+                    if (DateInRange(IVr.InvDate,EIb.LastFortnightCAEAStartDate,EIb.LastFortnightCAEAExpiryDate)) then begin
+                      IVr.CAEAStartDate = EIb.LastFortnightCAEAStartDate;
+                      IVr.CAEAExpiryDate = EIb.LastFortnightCAEAExpiryDate;
+                      IVr.CAE = EIb.LastFortnightCAEA;
+                      IVr.CAEAFlag = 1;
+                    end;
+                  end;
+                  if (nonblankdate(EIb.CAEAStartDate)) and (nonblankdate(EIb.CAEAExpiryDate)) then begin
+                    if (DateInRange(IVr.InvDate,EIb.CAEAStartDate,EIb.CAEAExpiryDate)) then begin
+                      IVr.CAEAStartDate = EIb.CAEAStartDate;
+                      IVr.CAEAExpiryDate = EIb.CAEAExpiryDate;
+                      IVr.CAE = EIb.CAEA;
+                      IVr.CAEAFlag = 1;
+                    end;
                   end;
                 end;
-                if (nonblankdate(EIb.LastFortnightCAEAStartDate)) and (nonblankdate(EIb.LastFortnightCAEAExpiryDate)) then begin
-                  if (DateInRange(IVr.InvDate,EIb.LastFortnightCAEAStartDate,EIb.LastFortnightCAEAExpiryDate)) then begin
-                    IVr.CAEAStartDate = EIb.LastFortnightCAEAStartDate;
-                    IVr.CAEAExpiryDate = EIb.LastFortnightCAEAExpiryDate;
-                    IVr.CAE = EIb.LastFortnightCAEA;
-                    IVr.CAEAFlag = 1;
-                  end;
-                end;
-                if (nonblankdate(EIb.CAEAStartDate)) and (nonblankdate(EIb.CAEAExpiryDate)) then begin
-                  if (DateInRange(IVr.InvDate,EIb.CAEAStartDate,EIb.CAEAExpiryDate)) then begin
-                    IVr.CAEAStartDate = EIb.CAEAStartDate;
-                    IVr.CAEAExpiryDate = EIb.CAEAExpiryDate;
-                    IVr.CAE = EIb.CAEA;
-                    IVr.CAEAFlag = 1;
-                  end;
-                end;
-              end;
-          end;
+            end;
+        end;
       end;
     end;
-  end;
   end;
 LIVVcRecordSave:;
   IVVcRecordSave = res; 

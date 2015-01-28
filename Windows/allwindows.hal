@@ -5465,6 +5465,16 @@ begin
   MatCol(t,-160,"Высота",0,UnitYval,true,0);
   MatCol(t,-120,"Глубина",0,UnitZval,true,0);
   MatCol(t,-80,"Цена ед.",0,UnitFactPrice,true,0);
+  Flip(flipnr); flipnr = flipnr + 1; //Edit***************************Sasha2,17:51 23.06.2014 {
+  MatCol(t=1,32,"Товар",0,ArtCode,false,ForSaleINSClass);
+  MatCol(t,94,"Кол-во",0,Quant,true,0);
+  MatCol(t,144,"Описание",0,Spec,false,0);
+  MatCol(t,-325,"Цена",0,Price,true,PLSClass);
+  MatCol(t,-265,"Сумма",0,Sum,true,0);
+  MatColTL(t,-200,"Ед.изм.2",0,M4Str,ViewOnly,5,AddUnittext2,true,0); 
+  MatColTL(t,-150,"Коэф.",0,M4UVal,ViewOnly,0,AddUnitQty2,false,0);
+  MatColTL(t,-100,"Ед.изм.3",0,M4Str,ViewOnly,0,AddUnittext3,true,0);
+  MatColTL(t,-50,"Коэф.",0,M4UVal,ViewOnly,0,AddUnitQty3,false,0); //Edit***************************Sasha2,12:11 28.01.2015 }
   InsertRowTest;
   DeleteRowTest;
   EndMatrix;
@@ -5479,6 +5489,7 @@ begin
   if (StandardHansa==false) then begin
     v=v+vs;  VTab(-35,v,-16,v+vs,ToolFlip,8,"H");
   end;
+  v=v+vs;  VTab(-35,v,-16,v+vs,ToolFlip,9,"I"); //Edit***************************Sasha2,12:06 28.01.2015
   Tile(3,70,false,"3",FrRate);
   vs = 20;
   EditField(h=110,v=6,50,"Валюта",Normal,CurncyCode,false,CurncyCodeSClass);
@@ -5656,7 +5667,46 @@ email not working yet
   
 end;
 
-
+window SHLClass:1
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  WindowBegin("Отгрузки",SHLClass,CGmlist,SHView);
+  SpawnClass(SHDClass);
+  SetWRect(20,80,880,298);
+  Sizeable(-1,-1,0,0);
+  UseView(SHVc);
+  FormName(PrintSHL);
+  RecordList(4,17,-21,-39);
+  RlColKey(4,4,"Но.",SerNr,false,SerNr);
+  RlColKey(79,79,"ОК",OKFlag,false,OKFlag);
+  RlColKey(111,111,"Дата",ShipDate,false,ShipDate);
+  if (HasMultiLocations) then begin
+    RlCol(191,191,"Склад",Location,false);
+    RlColKey(251,251,"Счет Но.",OrderNr,false,OrderKey);
+  end else begin
+    RlColKey(191,191,"Заказ Но.",OrderNr,false,OrderKey);
+  end;
+  RlColKey(321,321,"Офиц.No.",OfficialSerNr,false,OfficialSerNr);
+  RlColKey(411,411,"Клиент",CustCode,false,CustCode);
+  RlColKey(471,471,"Наим.",Addr0,false,CustName);
+  if (IsEnterprise) then begin
+    RlColKey(-230,-180,"Коммент.",Comment,false,Comment); //Edit***************************Sasha2,12:43 28.01.2015
+    //RlColKey(-180,-180,"Трансп. Но.",TransportNumber,false,TransportNumber); //Edit***************************Sasha2,12:43 28.01.2015
+    //RlColKey(-80,-80,"Способ отгрузки",ShipMode,false,ShipMode); //Edit***************************Sasha2,12:45 28.01.2015
+    RlColKey(-80,-80,"Маршрут",Sorting,false,Sorting); //Edit***************************Sasha2,12:45 28.01.2015
+  end else begin
+    RlColKey(-180,-180,"Коммент.",Comment,false,Comment);
+  end;
+  SearchField("Найти");
+  if (GuiType==kGuiMetro) then begin
+    RowMenuBegin("");
+    RowMenuItem(0,"OK",'G','G',4312,"SHOKLsm");  
+    EndRowMenu;
+  end else begin
+    SpecialMenu("OK",'G',0,"SHOKLsm");
+  end;
+  EndWindow;
+end;
 
 window SHDClass:1
   wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
@@ -5911,7 +5961,7 @@ begin
     end;
     Tile(tilenr,110,false,tilenr,Packages); tilenr = tilenr + 1;
     h2 = 310;
-    EditField(h1,v=6,82,"Трансп. №",Normal,TransportNumber,false,0);
+    EditField(h1,v=6,160,"Трансп. №",Normal,TransportNumber,false,0); //Edit***************************Sasha2,12:54 28.01.2015
     EditField(h1,v+=vs,82,"Упаковки",Normal,Packages,true,0);
     if (HasLanguages) then begin 
     EditField(h1,v+=vs,82,"Языка",Normal,LangCode,false,LangSClass);
@@ -5923,10 +5973,10 @@ begin
       EditField(h1,v+=vs,80,"План. время отпр.",Normal,PlanSendTime,false,PasteCurTime);
     end;
 
-    EditField(h2,v=6,135,"Из города",Normal,FromCity,false,0);
-    EditField(h2,v+=vs,135,"В город",Normal,ToCity,false,0);
-    EditField(h2,v+=vs,135,"Из дока",Normal,FromDock,false,0);
-    EditField(h2,v+=vs,135,"В док",Normal,ToDock,false,0);
+    EditField(h2+100,v=6,135,"Из города",Normal,FromCity,false,0); //Edit***************************Sasha2,12:54 28.01.2015
+    EditField(h2+100,v+=vs,135,"В город",Normal,ToCity,false,0); //Edit***************************Sasha2,12:54 28.01.2015
+    EditField(h2+100,v+=vs,135,"Из дока",Normal,FromDock,false,0); //Edit***************************Sasha2,12:54 28.01.2015
+    EditField(h2+100,v+=vs,135,"В док",Normal,ToDock,false,0); //Edit***************************Sasha2,12:54 28.01.2015
     if (StandardHansa==false) then begin
       EditField(h2,v+=2*vs,80,"План. дата приб.",Normal,PlanArrDate,false,PasteCurDate);
       EditField(h2,v+=vs,80,"План. время  приб.",Normal,PlanArrTime,false,PasteCurTime);

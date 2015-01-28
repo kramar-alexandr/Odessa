@@ -150,6 +150,10 @@ BEGIN
     ORrw.Source = INr.DefaultSource;
     ORrw.PriceFactor = INr.PriceFactor;
     ORrw.Perceptions = INr.Perceptions;
+    ORrw.AddUnittext2 = INr.AddUnittext2; //Edit***************************Sasha2,12:20 28.01.2015
+    ORrw.AddUnitQty2 = INr.AddUnitCoef2; //Edit***************************Sasha2,12:20 28.01.2015
+    ORrw.AddUnittext3 = INr.AddUnittext3; //Edit***************************Sasha2,12:20 28.01.2015
+    ORrw.AddUnitQty3 = INr.AddUnitCoef3; //Edit***************************Sasha2,12:20 28.01.2015
     ORrw.CustArtCode = CustArtCode(ORr.CustCode,ORrw.ArtCode);
     GetTaxesDiscounts(ORr.CustCode,ORr.OrdDate,ORrw.VATCode,tax2code,t,tax2reb);
     if (ORr.NoTax2==0) then begin

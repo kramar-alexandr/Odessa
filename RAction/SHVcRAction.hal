@@ -411,7 +411,9 @@ begin
       end;
     end;
   end;
-  SHp.OfficialSerNr = GetCustomOfficialSerNr;//Edit***************************Sasha2,11:31 08.01.2015
+  if (blank(SHp.OfficialSerNr)) then begin
+    SHp.OfficialSerNr = GetCustomOfficialSerNr;//Edit***************************Sasha2,11:31 08.01.2015
+  end;
   if (blank(SHp.OfficialSerNr)) then begin	
     error = 1058;
     errorstr = "";
@@ -1409,9 +1411,8 @@ begin
   end;
   CalcSHWeight(SHr,false);
   SHOK(SHr);
-  if (blank(SHr.OfficialSerNr)) then begin
-  	SHr.OfficialSerNr = GetCustomOfficialSerNr; //Edit***************************Sasha2,13:28 08.01.2015
-    //FindNextSHVcOfficialSerialNr(SHr,-1); //Edit***************************Sasha2,13:28 08.01.2015
+  if (blank(SHr.OfficialSerNr)) then begin 	
+    FindNextSHVcOfficialSerialNr(SHr,-1);
   end;
   AddPortugueseSAFTHashToSH(SHr);
   SHVcRecordSave = res; 

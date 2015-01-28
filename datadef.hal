@@ -1485,6 +1485,10 @@ RecordBegin(INVc,-,"artikel5");
   ArrayField(Salesmen,M4UStr,60,UserVc);
   ArrayField(OrderType,M4Set,433,0);
   ArrayField(UnitComment,M4Str,200,0);
+  ArrayField(AddUnittext2,M4Str,15,0);//Edit***************************Sasha2,15:27 23.06.2014
+  ArrayField(AddUnitQty2,M4UVal,0,0);//Edit***************************Sasha2,15:27 23.06.2014
+  ArrayField(AddUnittext3,M4Str,15,0);//Edit***************************Sasha2,15:27 23.06.2014
+  ArrayField(AddUnitQty3,M4UVal,0,0);//Edit***************************Sasha2,15:27 23.06.2014
   EndArray;
   MainKeyBegin(SerNr,1);
   StoreInBaseKey;

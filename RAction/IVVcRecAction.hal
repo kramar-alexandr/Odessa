@@ -423,7 +423,9 @@ BEGIN
     res = -1; 
     goto L99;
   end;
-  IVp.OfficialSerNr = GetCustomOfficialSerNr;//Edit***************************Sasha2,11:31 08.01.2015
+  if (blank(IVp.OfficialSerNr)) then begin
+    IVp.OfficialSerNr = GetCustomOfficialSerNr;//Edit***************************Sasha2,11:31 08.01.2015
+  end;
   if (blank(IVp.OfficialSerNr)) then begin	//Edit by Victor 08.01.15
     RecordCheckError(1058,"",-1,"OfficialSerNr");      
     res = -1; 
