@@ -74,19 +74,39 @@ external function Integer NumberofDocumentPages(string,Integer);
 external procedure GetLangNr(string,var record LangNrVc);
 external procedure SetRowStyle(record Docvc,string,Integer,string,val);
 external procedure PrintBranchData(string);
+external function Boolean GetForeignCurncyRate(string,var val,var val,var val,Date,var Date);
+
 
 
 function val GetCustBalance (record ORVc ORr)		//Edit------------------------------------Dima 28.01.2015
 begin
 	record BaseCurBlock BaseCurb;
 	record CUVc CUr;
-	val t;
+	record ARVc ARr;
+	record IVVc IVr;
+	val t,invSum;
+	boolean TrHs;
+
+	TrHs = true;
+	invSum = 0 ;
+	t = 0;
+	IVr.OrderNr = ORr.SerNr;
+
+	while (LoopKey("OrderNr",IVr,1,TrHs)) begin
+    if (IVr.OrderNr!=ORr.SerNr) then begin TrHs = false; end;
+    if (TrHs) then begin
+				ARr.InvoiceNr = IVr.SerNr;
+				if(ReadFirstMain(ARr,1,true)) then begin
+						invSum = invSum + ARr.BookRVal;
+				end;
+		end;
+	end;
 
 	BlockLoad(BaseCurb);
 	CUr.Code = ORr.CustCode;
 
 	if(ReadFirstMain(CUr,1,true)) then begin
-		t = GetBalance(CUr,"balance",ORr.OrdDate);
+		t = GetBalance(CUr,"balance",CurrentDate) - invSum;
 		if (ORr.CurncyCode != BaseCurb.BaseCur1) then begin	
 					t = t*ORr.BaseRate1/ORr.ToRateB1;
 		end;
@@ -835,9 +855,9 @@ BEGIN
   Integer i,rwcnt,rwcnt2;
   Integer tmp;
   string 255 tstr,t1,t2,tstr1,tstr2,tstr3,tstr4,tstr5;
-  val t,totcost;
+  val t,totcost,fr,to1,to2,br1,br2;
   val totinprice,totweight,totvolume,totcombase2sum,totqty,totqty2,totnodiscount;
-  Date td;
+  Date td,edt;
   record BankVc Bankr;
 
   rwcnt2 = CountOrderRows(ORr);
@@ -962,6 +982,12 @@ BEGIN
 	if (FIELDINFORM("F_MYSUMWITHBALANCE")) then begin	//Edit-------------------Dima  27.01.2015
 		t = ORr.Sum4 + GetCustBalance(ORr);
 		OUTFORMFIELD("F_MYSUMWITHBALANCE",t);
+	end;
+
+	if (FIELDINFORM("F_UAHRATE")) then begin	//Edit-------------------Dima  27.01.2015
+		GetForeignCurncyRate("UAH",fr,to1,to2,ORr.OrdDate,edt);
+		t = fr/to1;
+		OUTFORMFIELD("F_UAHRATE",t);
 	end;
 
 
