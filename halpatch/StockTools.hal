@@ -1,5 +1,8 @@
 remote function val ItemInStock(var record INVc,string);	
 
+SetLangMode(LangRussian,"RUS",0);
+
+
 global function string 255 INSClassInStock(var record INVc INr)	// Edit by Victor 29.10.14
 begin
   transaction string 255 gLocation;
@@ -74,6 +77,10 @@ begin
     if (found) then begin
       testf = true;
       if (NonBlank(User2r.SalesGroup) and Userr.SalesGroup!=User2r.SalesGroup) then begin testf = false; end;	//Add bu Victor 29.10
+      if(User2r.SalesGroup=="OPT" and Userr.SalesGroup=="ëäãìè")then begin testf = true; end;
+      if(User2r.SalesGroup=="OPT" and Userr.SalesGroup=="OPT")then begin testf = false; end;
+      if(User2r.SalesGroup=="WEB" and Userr.SalesGroup=="àåìè")then begin testf = true; end;
+      if(User2r.SalesGroup=="WEB" and Userr.SalesGroup=="WEB")then begin testf = false; end;
       if (Userr.TerminatedFlag!=0) then begin testf = false; end;
       if (testf) then begin
         AddToUsersArray(auser,acnt,Userr.Code & "     " & Userr.Name)

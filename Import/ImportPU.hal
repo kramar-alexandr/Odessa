@@ -445,3 +445,31 @@ begin
 	end;
 return;
 end;
+
+
+global updating procedure RecalcPUWeightMn()
+begin
+	record PUVc PUr;
+	row PUVc PUrw;
+	boolean TrHs;
+	integer i,mtrw;
+	
+	PUr.SerNr = 1; 
+	TrHs = true;
+	while(loopmain(PUr,1,TrHs))begin
+		if(PUr.SerNr>8)then begin TrHs = false; end;
+		
+		if(TrHs)then begin
+			
+			mtrw = matrowcnt(PUr);
+			For(i=0;i<mtrw;i=i+1) begin
+	  		matrowget(PUr,i,PUrw);
+	  			PUrw.Volume = PUrw.Volume * PUrw.Quant;
+	  			PUrw.Weight = PUrw.Weight * PUrw.Quant;
+	  		matrowput(PUr,i,PUrw);
+			end; 
+		end;
+	end;
+
+return;
+end;
