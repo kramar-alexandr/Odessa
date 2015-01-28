@@ -80,6 +80,15 @@ BEGIN
   Integer vt;
   record TaxMatrixVc TMr;
   record TaxMatrixVc sumTMr;
+	val sc,c1,c2,c3,c4,c5,ccst; //edit ---------------Dima 28.01.2015
+
+	sc = POp.ShipCost;	//Edit--------------------Dima 28.01.2015
+	ccst = POp.CustomsCost;
+	c1 = POp.Cost1;
+	c3 = POp.Cost3;
+	c4 = POp.Cost4;
+	c5 = POp.Cost5;
+	c2 = POp.Cost2;
 
   POp.TotPalletNr = blankval;
   POp.ShipCost = blankval;
@@ -142,13 +151,23 @@ BEGIN
     ms2 = s + ms + POp.TAX1Sum;
   end;    
   ms2 = Round(ms2,rndtotal);
-  POp.ShipCost = Round(POp.ShipCost,SetRoundModeD(3));
+/*		//Edit----------------------------------------------------Dima 28.01.2015
+  POp.ShipCost = Round(POp.ShipCost,SetRoundModeD(3));	
   POp.Cost1 = Round(POp.Cost1,SetRoundModeD(3));
   POp.Cost2 = Round(POp.Cost2,SetRoundModeD(3));
   POp.Cost3 = Round(POp.Cost3,SetRoundModeD(3));
   POp.Cost4 = Round(POp.Cost4,SetRoundModeD(3));
   POp.Cost5 = Round(POp.Cost5,SetRoundModeD(3));
   POp.CustomsCost = Round(POp.CustomsCost,SetRoundModeD(5));
+*/
+	POp.ShipCost = sc;		
+  POp.Cost1 = c1;
+  POp.Cost2 = c2;
+  POp.Cost3 = c3;
+  POp.Cost4 = c4;
+  POp.Cost5 = c5;
+  POp.CustomsCost = ccst;	
+//----End edit ------------------------------------------Dima 28.01.2015
   POp.Sum1 = s;
   POp.Sum3 = ms;
   POp.Sum4 = ms2;
@@ -168,6 +187,15 @@ BEGIN
   Integer vatcnt;  
   val t,cc,uprice;
   Integer vt;
+	val sc,c1,c2,c3,c4,c5,ccst; //edit ---------------Dima 28.01.2015
+
+	sc = POp.ShipCost;	//Edit--------------------Dima 28.01.2015
+	ccst = POp.CustomsCost;
+	c1 = POp.Cost1;
+	c3 = POp.Cost3;
+	c4 = POp.Cost4;
+	c5 = POp.Cost5;
+	c2 = POp.Cost2;
 
   if (UseTaxTemplatesforTaxCalc) then begin
     POSumup_TaxTemplate(POp);
@@ -243,13 +271,24 @@ BEGIN
     ms2 = s + ms + POp.TAX1Sum;
   end;    
   ms2 = Round(ms2,rndtotal);
-  POp.ShipCost = Round(POp.ShipCost,SetRoundModeD(3));
+//Edit----------------------------------------------------Dima 28.01.2015
+/*		
+  POp.ShipCost = Round(POp.ShipCost,SetRoundModeD(3));	
   POp.Cost1 = Round(POp.Cost1,SetRoundModeD(3));
   POp.Cost2 = Round(POp.Cost2,SetRoundModeD(3));
   POp.Cost3 = Round(POp.Cost3,SetRoundModeD(3));
   POp.Cost4 = Round(POp.Cost4,SetRoundModeD(3));
   POp.Cost5 = Round(POp.Cost5,SetRoundModeD(3));
   POp.CustomsCost = Round(POp.CustomsCost,SetRoundModeD(5));
+*/
+	POp.ShipCost = sc;		
+  POp.Cost1 = c1;
+  POp.Cost2 = c2;
+  POp.Cost3 = c3;
+  POp.Cost4 = c4;
+  POp.Cost5 = c5;
+  POp.CustomsCost = ccst;	
+//----End edit ------------------------------------------Dima 28.01.2015
   POp.Sum1 = s;
   POp.Sum3 = ms;
   POp.Sum4 = ms2;
