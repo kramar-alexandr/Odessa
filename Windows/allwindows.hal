@@ -3145,6 +3145,8 @@ begin
   EditField(h6=650,v + 60 ,80,"Основной тип заказа",Normal,DefOrderType,false,SetSClass);  //Edit***************************Sasha2,15:48 23.06.2014
   if (StandardHansa==false) then begin
     EditField(h,v+=vs ,100,"Степень риска",Normal,HazLevCode,false,HazLevSClass);
+    EditField(h,v+=vs, 100,"Единичный код",Normal,Reference,false,0);// Edit ************************** Monday, 26 January 2015 09:52:06
+    
     EditField(h5,v ,50,"% алкоголя",Normal,AlcPrc,true,0);
   end;
   //EditField(h,v+=vs ,100,"Единица 2",Normal,Unittext2,false,UnitSClass); //Edit***************************Sasha2,15:44 23.06.2014
