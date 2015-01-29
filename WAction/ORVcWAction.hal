@@ -295,11 +295,19 @@ BEGIN
   val tms,ttax1sum;
   record RPCUTaxVc RPCUTaxr;
   Boolean calcperceppercuf;
+	val fr,to;	//Edit-----------Dima  29.01.2015
 
   if (UseTaxTemplatesforTaxCalc) then begin
     ORSumup_TaxTemplate(ORp);
     goto LORSumup;
   end;
+
+	fr = ORp.FrRate;
+	to = ORp.ToRateB1;
+	if (blank(fr) or blank(to)) then begin		//Edit----------------------------------Dima  29.01.2015
+		fr = 1;
+		to = 1;
+	end;
   calcperceppercuf = FindRPCUTax(ORp.CustCode,ORp.OrdDate,RPCUTaxr);
   SetupVATBase(SMr,vatcnt);
   ORp.TotGP = 0;
@@ -330,6 +338,9 @@ BEGIN
       end;
       subtotv = blankval;
     end;
+				ORrw.SumBase = ORrw.Sum * to/fr;
+				ORrw.PriceBase = ORrw.Price * to/fr;
+        MatRowPut(ORp,i,ORrw);
   end;
   if (ORp.FrPrice!=0) then begin
     tax1reb = 0;

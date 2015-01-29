@@ -1425,6 +1425,7 @@ RecordBegin(INVc,-,"artikel5");
   RecordField(TransTime,M4Time,0,0); //Edit***************************Sasha2,13:01 14.07.2014
   RecordField(CustomStatusFlag,M4Int,0,0); //Edit***************************Sasha2,13:21 14.07.2014
   RecordField(SyncFlag,M4Int,0,0); //Edit***************************Sasha2,10:19 15.07.2014
+	RecordField(OptUAHRate,M4Rate,0,0);//Edit------------------------Dima 29.01.2015
   ArrayBegin(Math,-,1);
   ArrayField(stp,M4Int,0,0);
   ArrayField(ArtCode,M4Code,20,INVc);
@@ -1489,6 +1490,8 @@ RecordBegin(INVc,-,"artikel5");
   ArrayField(AddUnitQty2,M4UVal,0,0);//Edit***************************Sasha2,15:27 23.06.2014
   ArrayField(AddUnittext3,M4Str,15,0);//Edit***************************Sasha2,15:27 23.06.2014
   ArrayField(AddUnitQty3,M4UVal,0,0);//Edit***************************Sasha2,15:27 23.06.2014
+  ArrayField(SumBase,M423Val,0,0);	//Edit --------------------------Dima 29.01.2015
+  ArrayField(PriceBase,M423Val,0,0);	//Edit --------------------------Dima 29.01.2015
   EndArray;
   MainKeyBegin(SerNr,1);
   StoreInBaseKey;
@@ -2912,6 +2915,137 @@ RecordBegin(INVc,-,"artikel5");
   BlockBegin(MaxPointLoyCardBlock,-,"")	//Edit-------------------------------Dima   23.12.2014
   RecordField(MaxPointsView,M4Long,0,0);
   EndBlock;
+
+
+RecordBegin(IPVc,-,"");		
+  ImpExpLevel(3);
+  RecordField(SerNr,M4Long,0,0);
+  SerialNoBlock(IPSerBlock);
+  RecordField(Comment,M4Str,60,0);
+  RecordField(PayMode,M4Code,2,0);
+  RecordField(OKFlag,M4Int,0,0);
+  RecordField(CurPayVal,M4Val,0,0);
+  RecordField(RegDate,M4Date,0,0);
+  RecordField(OKMark,M4Mark,0,0);
+  RecordField(TransDate,M4Date,0,0);
+  FieldIsTransDate(TransDate);
+  RecordField(Math,M4Matrix,0,0);
+  RecordField(Sign,M4Code,10,UserVc);
+  RecordField(ARonTR,M4Int,0,0);
+  RecordField(ExportedFlag,M4Int,0,0);
+  RecordField(ReceivedFlag,M4Int,0,0);
+  RecordField(RejectedFlag,M4Int,0,0);
+  RecordField(RecNumber,M4Str,20,0);
+  RecordField(Invalid,M4Int,0,0); //## real invalid?, yes, to do :)
+  RecordField(PayCurCode,M4Code,5,CurncyCodeVc);
+  RecordField(Objects,M4UStr,60,ObjVc);
+  RecordField(Prntdf,M4Int,0,0);
+  RecordField(AuthorizationCode,M4UStr,20,0);
+  RecordField(MachineName,M4Code,20,0);
+  RecordField(DrawerCode,M4Code,5,0);
+  RecordField(RegTime,M4Time,0,0);
+  RecordField(IPBookVAT,M4Int,0,0);
+  RecordField(OfficialSerNr,M4Str,100,0);
+  RecordField(OfficialSerNr2,M4Str,100,0);  
+  RecordField(Status,M4Set,361,0);
+  RecordField(BranchID,M4Code,20,CUVc);
+  RecordField(TerminalID,M4Str,60,0);
+  RecordField(OfficialSerNrSerie,M4Str,30,0);
+  ArrayBegin(Math,-,1);
+  ArrayField(stp,M4Int,0,0);
+  ArrayField(ovst,M4Int,0,0);
+  ArrayField(InvoiceNr,M4Long,0,0);
+  ArrayField(PayDate,M4Date,0,0);
+  ArrayField(CustCode,M4Code,20,CUVc);
+  ArrayField(latedays,M4Long,0,0);
+  ArrayField(CustName,M4Str,200,0);
+  ArrayField(CUPNr,M4Long,0,0);
+  ArrayField(ChequeNr,M4Long,0,0);
+  ArrayField(VATVal,M4Val,0,0);
+  ArrayField(VATCode,M4Code,10,VATCodeBlock);
+  ArrayField(InvOutstand,M4Val,0,0);
+  ArrayField(InvCurncy,M4Code,5,CurncyCodeVc);
+  ArrayField(InvVal,M4Val,0,0);
+  ArrayField(PayMode,M4Code,2,0);
+  ArrayField(BankCurncy,M4Code,5,CurncyCodeVc);
+  ArrayField(BankVal,M4Val,0,0);
+  ArrayField(RecCurncy,M4Code,5,CurncyCodeVc);
+  ArrayField(RecVal,M4Val,0,0);
+  ArrayField(BankFeeVal,M4Val,0,0);
+  ArrayField(RoundOff,M4Val,0,0);
+  ArrayField(RoundOffAcc,M4Code,10,AccVc);
+  ArrayField(Objects,M4UStr,60,ObjVc);
+  ArrayField(Coef,M4Rate,0,0);//some kind of rate to calc rec val for Superwave
+  ArrayField(BankFeePrc,M4PrcStr,20,0);
+  ArrayField(TAX1Sum,M4Val,0,0);
+  ArrayField(OrderNr,M4Long,0,0);
+  ArrayField(Comment,M4Str,60,0);
+  ArrayField(B1BankVal,M4Val,0,0); 
+  ArrayField(B2BankVal,M4Val,0,0); 
+  ArrayField(ToRateB1BankVal,M4Rate,0,0); 
+  ArrayField(ToRateB2BankVal,M4Rate,0,0); 
+  ArrayField(rkRecNumber,M4Str,40,0);
+  ArrayField(ARAcc,M4Code,10,AccVc);
+  ArrayField(TAX2Prc,M423Val,0,0);
+  ArrayField(CredManNr,M4Long,0,0);
+  ArrayField(SuggestVal,M4Val,0,0);
+  ArrayField(InstNr,M4Long,0,0);
+  ArrayField(WriteOffAcc,M4Code,10,AccVc);
+  ArrayField(FrRateBankVal,M4Rate,0,0); 
+  ArrayField(BaseRate1BankVal,M4Rate,0,0); 
+  ArrayField(BaseRate2BankVal,M4Rate,0,0); 
+  ArrayField(TaxTemplateCode,M4UStr,60,TaxTemplateVc);
+  ArrayField(TaxMatrix,M4PackedMatrix,0,TaxMatrixVc);
+  ArrayField(InvoiceOfficialSerNr,M4Str,100,0);
+	RecordField(TakeOnRate,M4Rate,0,0);		//Edit------------------------Dima 29.01.2015
+  EndArray;
+  MainKeyBegin(SerNr,0);
+  KeySegment(SerNr);
+  KeyBegin(ExportedFlag);
+  KeySegment(ExportedFlag);
+  KeySegment(SerNr);
+  KeyBegin(OKMark);
+  KeySegment(OKMark);
+  KeySegment(SerNr);
+  KeyBegin(TransDate);
+  KeySegment(TransDate);
+  KeySegment(SerNr);
+  KeyBegin(RecNumber);
+  KeySegment(RecNumber);
+  KeySegment(SerNr);
+  KeyBegin(CurPayVal);
+  KeySegment(CurPayVal);
+  KeySegment(SerNr);
+  SubsetKeyBegin2(PayMode);
+  StoreInBaseKey;
+  AppendFieldToKeyName(PayMode);
+  AppendMatrixFieldToKeyName(PayMode,0);
+  KeySegment(TransDate);
+  KeySegment(SerNr);  
+  KeyBegin(Cashup);
+  KeySegment(MachineName);
+  KeySegment(DrawerCode);
+  KeySegment(TransDate);
+  KeySegment(RegTime);
+  KeySegment(SerNr);
+  KeyBegin(OKFlagTransDate);
+  KeySegment(OKFlag);
+  KeySegment(TransDate);
+  KeySegment(SerNr);
+  KeyBegin(OfficialSerNr);
+  KeySegment(OfficialSerNr);
+  KeySegment(SerNr);
+  KeyBegin(OfficialSerNrDate);
+  KeySegment(OfficialSerNr);
+  KeySegment(TransDate);
+  KeySegment(SerNr);    
+  KeyBegin(OpenOfficialSerNr2);
+  KeySegment(OfficialSerNr2);
+  KeySegment(SerNr);
+  KeyBegin(Prntdf);
+  KeySegment(Prntdf);
+  KeySegment(SerNr);  
+  EndRecord;
   
     	  	
 return;

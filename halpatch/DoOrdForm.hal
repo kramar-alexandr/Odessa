@@ -985,8 +985,8 @@ BEGIN
 	end;
 
 	if (FIELDINFORM("F_UAHRATE")) then begin	//Edit-------------------Dima  27.01.2015
-		GetForeignCurncyRate("UAH",fr,to1,to2,ORr.OrdDate,edt);
-		t = fr/to1;
+		//GetForeignCurncyRate("UAH",fr,to1,to2,ORr.OrdDate,edt);
+		t = ORr.OptUAHRate;
 		OUTFORMFIELD("F_UAHRATE",t);
 	end;
 

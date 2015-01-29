@@ -77,6 +77,7 @@ external function Boolean GetCustAndBal(var record CUVc,var val,var val,Integer,
 external function Boolean ORCheckForSalesmanPrice(record ORVc,Integer,string,string,var string);
 external function Boolean INVc_AllowSales(record INVc,var LongInt);
 external function string 30 GetCustomOfficialSerNr(); //Edit***************************Sasha2,11:42 08.01.2015
+external function Boolean GetForeignCurncyRate(string,var val,var val,var val,Date,var Date);//Edit---------------------Dima 29.01.2015
 
 procedure SetORAcceptanceFlag(var record ORVc ORr,record ORVc prevORr,LongInt stat)
 begin
@@ -1724,6 +1725,8 @@ global
 updating function LongInt ORVcRecordUpdate(var record ORVc ORr,record ORVc OR2r,LongInt stat,LongInt long4)
 begin
   LongInt res;
+	val fr,to1,to2;//Edit---------------------------Dima 29.01.2015
+	Date edt;	//Edit--------------------------------Dima 29.01.2015
 
   ORr.Prntdf = 0;
   AutDelNonStockItem(ORr);
@@ -1737,6 +1740,10 @@ begin
   if (ORr.OrderClass == "WEB") then begin //Edit***************************Sasha2,11:57 15.07.2014
   	MoreORVcHandling(ORr,OR2r); 
   end; //Edit***************************Sasha2,11:57 15.07.2014
+  if (blank(ORr.OptUAHRate)) then begin		//Edit--------------------------Dima  29.01.2015
+		GetForeignCurncyRate("UAH",fr,to1,to2,ORr.OrdDate,edt);
+    ORr.OptUAHRate = fr/to1;
+  end;
   
   ORVcRecordUpdate = res; 
   return;
@@ -1869,6 +1876,8 @@ global
 updating function LongInt ORVcRecordSave(var record ORVc ORr,record ORVc OR2r,LongInt stat,LongInt long4)
 begin
   LongInt res;
+	val fr,to1,to2;//Edit---------------------------Dima 29.01.2015
+	Date edt;	//Edit--------------------------------Dima 29.01.2015
 
   if (blankdate(ORr.RegDate)) then begin
     ORr.RegDate = CurrentDate;
@@ -1886,6 +1895,10 @@ begin
   if (blank(ORr.OfficialSerNr)) then begin
     ORr.OfficialSerNr = GetCustomOfficialSerNr; //Edit***************************Sasha2,16:56 28.01.2015
     //FindNextORVcOfficialSerialNr(ORr); //Edit***************************Sasha2,16:56 28.01.2015
+  end;
+  if (blank(ORr.OptUAHRate)) then begin		//Edit--------------------------Dima  29.01.2015
+		GetForeignCurncyRate("UAH",fr,to1,to2,ORr.OrdDate,edt);
+    ORr.OptUAHRate = fr/to1;
   end;
   
   ORVcRecordSave = res; 
