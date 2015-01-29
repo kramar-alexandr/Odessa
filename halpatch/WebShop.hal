@@ -214,6 +214,7 @@ begin
 	Cur.Phone = XmlGetAttribute(xmlMessage,"orders/order" & i,"phone");
 	Cur.CustCat = "WEB";	//Edit--------------------Dima 08.01.2015
 	Cur.CUType = 1;
+	Cur.CurncyCode = "UAH_R";
 	if (!recordStore(Cur,true)) then begin
 		if (Blank(errors)) then begin errors = "Error2"; end else begin errors = errors & ",Error2"; end;
 		logtext(0,"CUVc create error: " & Cur.Name);
@@ -281,7 +282,7 @@ begin
 			ORr.OrderClass = "WEB";
 			ORr.SalesGroup = "WEB";
 			ORr.SalesMan  = CurrentUser;
-			ORr.CurncyCode = "UAH";
+			ORr.CurncyCode = "UAH_R";
 			//ORr.BaseRate1 = 100;
 			//ORr.BaseRate2 = 100;
 			ORr.Location = WSSB.Location;

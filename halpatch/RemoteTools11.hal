@@ -956,7 +956,7 @@ begin
 	    curcode = CUr.CurncyCode;
 	end;
 	if (Modb.TouchScreenLook!=0 and LMb.TouchScreenLook!=0) then begin		//	********** Edit by Victor 31.10.14	********
-		curcode = "UAH";
+		curcode = "UAH_R";
 	end;
     GetFullCurncyRate(curcode,IVp.InvDate,fr,to1,to2,br1,br2);
     IVp.CurncyCode = curcode;
