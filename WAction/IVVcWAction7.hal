@@ -71,6 +71,7 @@ remote function Boolean IVVc_PasteArtCode(var record IVVc,Integer,var string,var
 external function boolean POSButtonsForWindow(integer,var record POSButtonsVc);
 external procedure ExtractObj(string,var Integer,var string);
 external updating function Boolean DoXMLExport_IVVc(var record IVVc);
+remote procedure RecalcDiscountIVD(var record IVVc);//Edit-----------------------------------Dima 29.01.2015
 
 global
 procedure NPTSIVOpenLClassOpenExecute(Integer wn)
@@ -3004,9 +3005,13 @@ begin
   if (IVr.OKFlag!=0) then begin testf = false; end;
   if (IVr.Invalid!=0) then begin testf = false; end;
   if (testf) then begin
+	/*			//Edit-----------------------------------Dima 29.01.2015
     RepSpec.FirstAcc = IVr.RebCode;
     wn = OpenWindow("ChangeDiscountMatrixNPTSIVCashSClass",0,mwn,"","",RepSpec);
     WindowFieldGoto(wn,RepSpec,-1,"FirstAcc",false);    
+	*/
+	RecalcDiscountIVD(IVr);//Edit-----------------------------------Dima 29.01.2015
+  IVDClass_RefreshStringList(mwn,IVr);
   end;
   return;
 end;
