@@ -75,6 +75,7 @@ begin
   return;
 end;
 
+//Edit by Victor 29.01.15 ***
 function Boolean LoyaltyCardDClassPointsBalanceEFActive(Integer wn,Integer fn,Integer wnst,Integer ef)
 begin
   Boolean res;
@@ -90,6 +91,7 @@ begin
   LoyaltyCardDClassPointsBalanceEFActive = res;
   return;
 end;
+//***
 
 global
 function Boolean LoyaltyCardDClassActiveEditField(Integer wn,string fieldname,Integer fn,Integer wnst,Integer rownr,Integer changed)
@@ -102,7 +104,7 @@ begin
 		switch (fieldname) begin
 			case "CustCode": res = LoyaltyCardDClassCustCodeEFActive(wn,fn,wnst,changed);
 			case "StartDate": res = LoyaltyCardDClassStartDateEFActive(wn,fn,wnst,changed);
-			case "PointsBalance": res = LoyaltyCardDClassPointsBalanceEFActive(wn,fn,wnst,changed);
+			case "PointsBalance": res = LoyaltyCardDClassPointsBalanceEFActive(wn,fn,wnst,changed);	//Edit by Victor 29.01.15
 			otherwise
 				switch (wnst) begin
 					case Rs_update:
