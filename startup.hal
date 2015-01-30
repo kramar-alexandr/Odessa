@@ -18,7 +18,7 @@ begin
   Report("Отчет по складам",LocationsRClass,LocationsRn,0,modIN);
   
   Report("Отчет по ценам",PricesRepRClass,PricesRepRn,0,modDI);
-	Report("Поиск товаров",ReportForItemSearchRClass,INItemReportForSearchRn,0,modIN);//Edit----------------------------------Dima  30.01.2015
+	Report("Поиск товаров",ReportForINItemSearchRClass,INItemReportForSearchRn,0,modIN);//Edit----------------------------------Dima 
   
   Setting("Авансовые отчеты",ExpLClass,modCL);
   Setting("Выплаты персоналу",PPLClass,modCL);
