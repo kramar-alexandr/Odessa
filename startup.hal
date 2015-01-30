@@ -56,8 +56,8 @@ begin
 	 SString(31018,"за ед.");
 	 SString(31019,"общий");
 	 SString(31020,"В счетах");
-	 SString(31021,"Дост.с учет.рез-ва");
-	 SString(31022,"Дост.с учет.счетов");
+	 SString(31021,"Остат.с учет.рез-ва");
+	 SString(31022,"Остат.с учет.счетов");
 
    
   Maintenance("Экспорт склада CSV",ExportStockCSVClass,ExportStockCSVMn,modSY);
