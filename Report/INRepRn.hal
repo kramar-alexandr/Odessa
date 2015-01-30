@@ -147,6 +147,8 @@ begin
 		OutString(200,0,"Цена Розн.",false);
 		OutString(240,0,"На скл.",false);
 		OutString(280,0,"Группа",false);
+		OutString(350,0,"В ящ.",false);	
+		OutString(390,0,"В упак.",false);
 	EndFormat;
 	
 	while(loopmain(INr,1,true))begin
@@ -175,6 +177,8 @@ begin
 			OutString(200,0,PLr.ExVatPrice,false);
 			OutString(240,0,qty,false);
 			OutString(280,0,INr.Group,false);
+			OutString(350,0,INr.AddUnitCoef2,false);	//Edit by Victor 30.01.15
+			OutString(390,0,INr.AddUnitCoef3,false);	//Edit by Victor 30.01.15
 		EndFormat;
 		
 	
