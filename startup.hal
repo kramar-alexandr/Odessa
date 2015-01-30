@@ -17,6 +17,8 @@ begin
   
   Report("Отчет по складам",LocationsRClass,LocationsRn,0,modIN);
   
+  Report("Отчет по ценам",PricesRepRClass,PricesRepRn,0,modDI);
+  
   Setting("Авансовые отчеты",ExpLClass,modCL);
   Setting("Выплаты персоналу",PPLClass,modCL);
   //Setting("Путевые листы",WayListLClass,modCL);

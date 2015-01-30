@@ -128,3 +128,57 @@ begin
 
 return;
 end;
+
+
+
+global updating procedure PricesRepRn(record RcVc RepSpec)
+begin
+	record INVc INr;
+	record ItemStatusVc ISr;
+	integer qty;
+	record PLVc PLr;
+	
+	StartReportNoHeaderJob("Отчет по ценам");
+	
+	StartFormat(15);
+		OutString(0,0,"Код товара",false);
+		OutString(70,0,"Наименование",false);
+		OutString(160,0,"Цена Опт",false);
+		OutString(200,0,"Цена Розн.",false);
+		OutString(240,0,"На скл.",false);
+		OutString(280,0,"Группа",false);
+	EndFormat;
+	
+	while(loopmain(INr,1,true))begin
+		
+		ISr.Code = INr.Code;
+		if(nonblank(RepSpec.f1))then begin
+			ISr.Location = RepSpec.f1;
+		end else begin
+			ISr.Location = ";;;";
+		end;
+		qty = 0;
+		if(readfirstmain(ISr,2,true))then begin
+			qty = ISr.Instock;
+		end;
+		
+		StartFormat(15);
+			OutString(0,0,INr.Code,false);
+			OutString(70,0,INr.Name,false);
+			PLr.ArtCode = INr.Code;
+			PLr.PLCode = "OPT";
+			readfirstmain(PLr,2,true);
+			OutString(160,0,PLr.ExVatPrice,false);
+			PLr.ArtCode = INr.Code;
+			PLr.PLCode = "RRP";
+			readfirstmain(PLr,2,true);
+			OutString(200,0,PLr.ExVatPrice,false);
+			OutString(240,0,qty,false);
+			OutString(280,0,INr.Group,false);
+		EndFormat;
+		
+	
+	end;
+	endjob;
+return;
+end;

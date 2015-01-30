@@ -598,6 +598,20 @@ begin
 end;
 
 
+window PricesRepRClass:1  // added ************ Dima, 04.12.2014
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  real h,v;
+
+  WindowBegin("Ћтчет по ценам",PricesRepRClass,CGRcW,RcType);
+  SetWRect(20,80,400,200);
+  h = 115; v = 15;
+  EditFieldTL(h,v,150,"‘клад",M4UStr,Normal,30,f1,false,LocationSClass);
+  EndWindow;
+
+end;
+
+
 
 window MaxPointLoyCardTClass:1	//Edit--------------------------------Dima 23.12.2014
   wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
