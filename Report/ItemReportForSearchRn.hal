@@ -42,12 +42,11 @@ begin
 	record PLVc PLr;
 	integer rw,TotalQuantity,lmflag;
 	boolean continue,check;
-	string 100 searchStr ;
+	string 100 searchStr,locmach;
 	string 20 keySort;
-	record LocalMachineBlock LMb; //Edit***************************Sasha2,10:14 23.01.2015
 	
 	searchStr = RepSpec.f1;
-	BlockLoad(LMb); //Edit***************************Sasha2,10:14 23.01.2015
+	locmach = RepSpec.f2;
 
 	if (RepSpec.ArtMode == 0) then begin	//сортировка
 	keySort = "Code";
@@ -69,10 +68,10 @@ begin
   Header(rw+1,"Љод прейскуранта:  " & RepSpec.d1Code,1);
 	EndHeader;
 	
-	if(LMb.LocalMachineCode=="RR1" or LMb.LocalMachineCode=="RR2")then begin  //Edit***************************Sasha2,10:15 23.01.2015 {
+	if(locmach=="RR1" or locmach=="RR2")then begin  //Edit***************************Sasha2,10:15 23.01.2015 {
     lmflag = 1;
   end else begin
-  	if(LMb.LocalMachineCode=="KV1" or LMb.LocalMachineCode=="KV2")then begin 
+  	if(locmach=="KV1" or locmach=="KV2")then begin 
     	lmflag = 2;
     end;
   end; //Edit***************************Sasha2,10:15 23.01.2015 }

@@ -3173,14 +3173,17 @@ end;
 
 procedure IV_CreateReportForSearch()	//added-----------by Dima 18.11.2014
 begin 
+  record LocalMachineBlock LMb; //Edit***************************Sasha2,14:52 30.01.2015
   record RcVc RepSpec;
   record IVVc IVr;
   integer wn;
 
+  BlockLoad(LMb); //Edit***************************Sasha2,10:14 23.01.2015
   ReportDefaults(RepSpec,"GoodsReport1RClass");
   RepSpec.Media = mtScreen;
   RepSpec.flags[0] = CurWindow; //Mother window
   RepSpec.repname = "ItemReportForSearchRn";
+  RepSpec.f2 = LMb.LocalMachineCode;
   GetWindowRecord(CurWindow,IVr);
   RepSpec.d1Code = IVr.PriceList;
   OpenWindow("ReportForItemSearchRClass",1,CurWindow,"","",RepSpec);
