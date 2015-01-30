@@ -2772,16 +2772,16 @@ begin
       MatCol(1,-60,label,0,RowCost5,true,0);
     end;
     Flip(flipnr); flipnr = flipnr + 1;
-      MatColTL(1,150,"Ед.изм.2",0,M4Str,ViewOnly,5,AddUnittext2,true,0); //Edit***************************Sasha2,17:51 23.06.2014
-      //MatColTL(1,-420,"Кол-во",0,M4UVal,Normal,0,AddUnitQty2,false,0);	//Edit by Victor 30.01.15
-      MatColTL(1,-430,"Штук в",0,M4UVal,ViewOnly,0,QtyBox,false,0);	//Edit by Victor 30.01.15
-      MatColTL(1,-370,"Ед.изм.3",0,M4Str,ViewOnly,0,AddUnittext3,true,0);
-      MatColTL(1,-310,"Штук в",0,M4UVal,ViewOnly,0,QtyPack,false,0);	//Edit by Victor 30.01.15
-      //MatColTL(1,-300,"Кол-во",0,M4UVal,Normal,0,AddUnitQty3,false,0);	//Edit by Victor 30.01.15
-      MatColTL(1,-250,"Ед.изм.4",0,M4Str,ViewOnly,0,AddUnittext4,true,0);
-      MatColTL(1,-190,"Кол-во",0,M4UVal,Normal,0,AddUnitQty4,false,0);
-      MatColTL(1,-130,"Ед.изм.5",0,M4Str,ViewOnly,0,AddUnittext5,true,0);
-      MatColTL(1,-70,"Кол-во",0,M4UVal,Normal,0,AddUnitQty5,false,0); //Edit***************************Sasha2,17:51 23.06.2014
+      //MatColTL(1,150,"Ед.изм.2",0,M4Str,ViewOnly,5,AddUnittext2,true,0); //Edit***************************Sasha2,17:51 23.06.2014
+      MatColTL(1,-400,"Ящиков",0,M4UVal,Normal,0,AddUnitQty2,true,0);	//Edit by Victor 30.01.15
+      MatColTL(1,-350,"В ящике",0,M4UVal,ViewOnly,0,QtyBox,false,0);	//Edit by Victor 30.01.15
+      //MatColTL(1,-310,"Ед.изм.3",0,M4Str,ViewOnly,0,AddUnittext3,true,0);
+			MatColTL(1,-230,"Упаковок",0,M4UVal,Normal,0,AddUnitQty3,true,0);	//Edit by Victor 30.01.15
+      MatColTL(1,-170,"В упаковке",0,M4UVal,ViewOnly,0,QtyPack,false,0);	//Edit by Victor 30.01.15      
+      //MatColTL(1,-250,"Ед.изм.4",0,M4Str,ViewOnly,0,AddUnittext4,true,0);
+      //MatColTL(1,-190,"Кол-во",0,M4UVal,Normal,0,AddUnitQty4,false,0);
+      //MatColTL(1,-130,"Ед.изм.5",0,M4Str,ViewOnly,0,AddUnittext5,true,0);
+      //MatColTL(1,-70,"Кол-во",0,M4UVal,Normal,0,AddUnitQty5,false,0); //Edit***************************Sasha2,17:51 23.06.2014
     Flip(flipnr); flipnr = flipnr + 1;
       MatCol(1,164,"Наименование",0,Spec,false,0);
       MatColTL(1,-140,"Объем",0,M45Val,Normal,0,Volume,false,0);// Edit ************************** Friday, July 4, 2014 at 17:43:03
