@@ -3477,7 +3477,9 @@ begin
   end else begin
     RlColKey(pos,pos,"Наименование",Name,false,Name);
   end;
-		RlColKey(-240,-240,"Штрих-код",BarCode,false,BarCode);
+  RlCol(-340,-340,"Объем",Volume,true);
+  RlCol(-290,-290,"Вес",Weight,true,);
+  	RlColKey(-240,-240,"Штрих-код",BarCode,false,BarCode);
   if (IsEnterprise) then begin
     RlColKey(-150,-150,"Альт. код",AlternativeCode,false,AlternativeCode);
   end;

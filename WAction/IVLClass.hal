@@ -61,14 +61,14 @@ begin
   date dt;
   record UserVc Userr;
   
-  if(UserCanAction("VievAllSalesGroupDocuments", true)==false) then begin
+  /*if(UserCanAction("VievAllSalesGroupDocuments", true)==false) then begin
 		Userr.Code = CurrentUser;
 		if(readFirstMain(Userr, 1, true))then begin
 			if(nonblank(Userr.SalesGroup))then begin
 				SetWindowSubset(wn,Userr.SalesGroup);
 			end;
 		end;  
-	end;
+	end;*/	//Edit by Victor 30.01.15
     
   StockMovLClassOnOpenWindow = false;
   return;
