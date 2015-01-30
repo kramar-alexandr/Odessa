@@ -29,6 +29,7 @@ begin
   Report("Журнал авансовых отчетов",ExpJRClass,ExpRn,0,modCL);
   Report("Журнал  расчетов с ПЛ",PersPerRClass,PersPerRn,0,modCL);
   Report("Журнал выплат",PPJRClass,PPRn,0,modCL);
+  Report("Журнал по складу (модифицированный)",NewINRClass,NewInvValRn,0,modIN);
   //Report("Статистика НДС по аванс. отчетам",ExpVATRClass,ExpVATRn,0,modCL);
   //Report("Журнал путевых листов",WLJRClass,WLJRn,0,modCL);
   
@@ -50,6 +51,13 @@ begin
 	 SString(31013,"Записано ");
 	 SString(31014," строк");
 	 SString(31015,"Не загружена кодовая страница Windows-1251");
+	 SString(31016,"Штрихкод");
+	 SString(31017,"Код поставщика");
+	 SString(31018,"за ед.");
+	 SString(31019,"общий");
+	 SString(31020,"В счетах");
+	 SString(31021,"Дост.с учет.рез-ва");
+	 SString(31022,"Дост.с учет.счетов");
 
    
   Maintenance("Экспорт склада CSV",ExportStockCSVClass,ExportStockCSVMn,modSY);
