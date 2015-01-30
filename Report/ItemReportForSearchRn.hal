@@ -2,7 +2,7 @@
 SetLangMode(LangRussian,"RUS",0);
 
 
-function Boolean FindSubString( string Search, string Source )
+function Boolean FindSubString( string Search, string Source )	//Edit--------------Dima
 begin
 	integer i,length,lengthSource,diff;
 	string 150 temp,str,inStr;
@@ -132,6 +132,137 @@ begin
 			if (ReadFirstMain(PLr,2,true)) then begin
 				OutString(4,0,PLr.ExVatPrice,false);
 			end;
+			OutString(5,0,INr.BarCode,false);
+			OutString(6,0,INr.AlternativeCode,false);
+			ItemStatusr.Code = INr.Code;
+			switch (lmflag) begin //Edit***************************Sasha2,10:22 23.01.2015 {
+			  case 1:
+			    ItemStatusr.Location = "3-RAY";
+			    if (ReadFirstMain(ItemStatusr,2,true)) then begin			//поиск по Code, Location
+    				OutString(7,0,ItemStatusr.Instock,false);
+    			end;
+    			ItemStatusr.Location = "4-NIZ";
+    			if (ReadFirstMain(ItemStatusr,2,true)) then begin			
+    				OutString(8,0,ItemStatusr.Instock,false);
+    			end;
+    		case 2:
+    		  ItemStatusr.Location = "6-KV";
+			    if (ReadFirstMain(ItemStatusr,2,true)) then begin			//поиск по Code, Location
+    				OutString(7,0,ItemStatusr.Instock,false);
+    			end;
+			end; //Edit***************************Sasha2,10:22 23.01.2015 }
+			EndFormat;	
+			TotalQuantity=TotalQuantity+1;
+		
+		end;
+	
+	end;
+	
+	Black_Divider(0,1);
+	StartFormat(25);
+	EndFormat;
+	StartFormat(15);
+	OutString(0,0,"Всего найдено: " & TotalQuantity,false);
+	EndFormat;
+		
+	EndJob;
+return;
+end;
+
+
+//отчет с поиском для складовщика
+global procedure INItemReportForSearchRn(record RcVc RepSpec)	//Edit------------Dima 30.01.2015
+begin
+	record INVc INr;
+	record ItemStatusVc ItemStatusr;
+	record PLVc PLr;
+	integer rw,TotalQuantity,lmflag;
+	boolean continue,check;
+	string 100 searchStr ;
+	string 20 keySort;
+	record LocalMachineBlock LMb; //Edit***************************Sasha2,10:14 23.01.2015
+
+	searchStr = RepSpec.f1;
+	BlockLoad(LMb); //Edit***************************Sasha2,10:14 23.01.2015
+
+	if (RepSpec.ArtMode == 0) then begin	//сортировка
+	keySort = "Code";
+	end;
+	if (RepSpec.ArtMode == 1) then begin
+	keySort = "Name";
+	end;
+
+	StartReportJob("Поиск товаров");
+	rw=1;
+	Header(rw,"Поиск по: " & searchStr,1);
+	rw=rw+1;
+	if (keysort=="Code") then begin
+	Header(rw,"Сортировка по  коду товара",1);
+	end;
+	if (keysort=="Name") then begin
+	Header(rw,"Сортировка по  названию товара",1);
+	end;	
+	EndHeader;
+	
+	if(LMb.LocalMachineCode=="RR1" or LMb.LocalMachineCode=="RR2")then begin  //Edit***************************Sasha2,10:15 23.01.2015 {
+    lmflag = 1;
+  end else begin
+  	if(LMb.LocalMachineCode=="KV1" or LMb.LocalMachineCode=="KV2")then begin 
+    	lmflag = 2;
+    end;
+  end; //Edit***************************Sasha2,10:15 23.01.2015 }
+
+	SetRepCol(2,60);
+	SetRepCol(3,130);
+	SetRepCol(4,260);
+	SetRepCol(5,280);
+	SetRepCol(6,340);
+	SetRepCol(7,410);
+	SetRepCol(8,450);
+	
+	StartFormat(15);
+	OutString(0,0,"Код",false);
+	OutString(2,0,"Классификация",false);
+	OutString(3,0,"Название",false);
+	OutString(5,0,"Штрих-код",false);
+	OutString(6,0,"Альтернативный код",false);
+  switch (lmflag) begin //Edit***************************Sasha2,10:23 23.01.2015 {
+    case 0:
+	    OutString(7,0,"СКЛАД ЛОК.МАШ.НЕ ОПРЕДЕЛЕН",false);
+    case 1:
+      OutString(7,0,"3-Рай",false);
+	    OutString(8,0,"4-Низ",false);
+	  case 2:
+	    OutString(7,0,"6-KV",false);
+  end; //Edit***************************Sasha2,10:15 23.01.2015 }
+	EndFormat;
+	Black_Divider(0,1);
+	continue = true;
+
+	if blank(searchStr) then begin
+		continue=false;
+	end else begin
+		if (len(searchStr)<3) then begin
+		continue = false;
+		OutString(0,0,"Cузьте критерий поиска",false);
+		end;
+	end;
+
+	While (LoopKey(keySort,INr,1,continue)) begin
+		check=true;
+		
+		if (not (FindSubString(searchStr,INr.Code)  or FindSubString(searchStr,INr.Name) or 	FindSubString(searchStr,INr.DispGroups) or  FindSubString(searchStr,INr.BarCode)or  FindSubString(searchStr,INr.AlternativeCode))) then begin
+		check = false;
+		end;
+	
+		if (check) then begin
+			PLr.PLCode =  RepSpec.d1Code;
+			PLr.ArtCode = INr.Code;
+		
+			StartFormat(15);			
+			OutString(0,0,INr.Code,false);
+			OutString(2,0,INr.DispGroups,false);
+			OutString(3,0,INr.Name,false);
 			OutString(5,0,INr.BarCode,false);
 			OutString(6,0,INr.AlternativeCode,false);
 			ItemStatusr.Code = INr.Code;
