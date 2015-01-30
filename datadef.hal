@@ -845,6 +845,8 @@ RecordBegin(INVc,-,"artikel5");
   ArrayField(Volume,M45Val,0,0);// Edit ************************** Friday, July 4, 2014 at 17:13:54
   ArrayField(Weight,M45Val,0,0);// Edit ************************** Friday, July 4, 2014 at 17:13:54
   ArrayField(AlternativeCode,M4Str,40,0); //Edit***************************Sasha2,12:31 06.11.2014
+  ArrayField(QtyBox,M45Val,0,0);	//Edit by Victor 30.01.15
+  ArrayField(QtyPack,M45Val,0,0);	//Edit by Victor 30.01.15
   EndArray;
   MainKeyBegin(SerNr,1);
   StoreInBaseKey;

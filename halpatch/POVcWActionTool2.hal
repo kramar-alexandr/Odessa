@@ -1259,6 +1259,8 @@ begin
     POrw.AddUnitQty4 = INr.AddUnitCoef4;// Edit ************************** четверг, 26 июня 2014 г., 20:49:44
     POrw.AddUnittext5 = INr.AddUnittext5; //Edit***************************Sasha2,11:44 24.06.2014
     POrw.AddUnitQty5 = INr.AddUnitCoef5;// Edit ************************** четверг, 26 июня 2014 г., 20:49:44
+    POrw.QtyPack = INr.AddUnitCoef3;	//Edit by Victor 30.01.15
+    POrw.QtyBox = INr.AddUnitCoef2;	//Edit by Victor 30.01.15
 	POrw.Volume = INr.Volume;// Edit ************************** Wednesday, July 9, 2014 at 11:37:02
   	POrw.Weight = INr.Weight;// Edit ************************** Wednesday, July 9, 2014 at 11:37:01
   	POrw.AlternativeCode = INr.AlternativeCode; //Edit***************************Sasha2,13:54 06.11.2014
