@@ -106,8 +106,7 @@ BEGIN
   val SumCostPrice;
   record TaxMatrixVc TMr;
   record TaxMatrixVc sumTMr;
- 	record POVc POr;
-
+  
   BlockLoad(RoundRec);
   GetCurncyRoundoff(PUr.CurncyCode,"","PUVc",rndtotal,roundlines,rndvat);
   PUr.SumQuant = blankval;
@@ -176,8 +175,6 @@ BEGIN
 LSKIPPUROWPUSumUp:;    
   end;
   PUr.SumQuant = Round(totqty,SetRoundModeD(2));
-//Edit start-----------------------Dima 30.01.2015
-/*
   PUr.ShipCost = Round(PUr.ShipCost,SetRoundModeD(3));
   PUr.Cost1 = Round(PUr.Cost1,SetRoundModeD(3));
   PUr.Cost2 = Round(PUr.Cost2,SetRoundModeD(3));
@@ -185,18 +182,6 @@ LSKIPPUROWPUSumUp:;
   PUr.Cost4 = Round(PUr.Cost4,SetRoundModeD(3));
   PUr.Cost5 = Round(PUr.Cost5,SetRoundModeD(3));
   PUr.CustomsCost = Round(PUr.CustomsCost,SetRoundModeD(5));
-*/
-	POr.SerNr = PUr.PONr;	
-	if (ReadLastMain(POr,1,true)) then begin
-  	PUr.ShipCost = POr.ShipCost;
-  	PUr.Cost1 = POr.Cost1;
-  	PUr.Cost2 = POr.Cost2;
-  	PUr.Cost3 = POr.Cost3;
-  	PUr.Cost4 = POr.Cost4;
-  	PUr.Cost5 = POr.Cost5;
-  	PUr.CustomsCost = POr.CustomsCost;
-  end;
-//Edit end-----------------------Dima 30.01.2015
   PUr.ExtraCost = Round(PUr.ExtraCost,DefaultRoundMode);
   PUr.SumCostPrice = Round(PUr.SumCostPrice,SetRoundModeD(2));//rndtotal should not be rounded, cause creating TR doesnt to it
   PUr.TotUPrice = Round(PUr.TotUPrice,SetRoundModeD(2));
@@ -237,7 +222,6 @@ BEGIN
   val shipcost,cost1,cost2,cost3,cost4,cost5,customscost;
   val SumCostPrice;
   record INVc INr;
-	record POVc POr;
   
   if (UseTaxTemplatesforTaxCalc) then begin
     PUSumup_TaxTemplate(PUr);
@@ -327,8 +311,6 @@ BEGIN
 LSKIPPUROWPUSumUp:;    
   end;
   PUr.SumQuant = Round(totqty,SetRoundModeD(2));
-//Edit start-----------------------Dima 30.01.2015
-/*
   PUr.ShipCost = Round(PUr.ShipCost,SetRoundModeD(3));
   PUr.Cost1 = Round(PUr.Cost1,SetRoundModeD(3));
   PUr.Cost2 = Round(PUr.Cost2,SetRoundModeD(3));
@@ -336,18 +318,6 @@ LSKIPPUROWPUSumUp:;
   PUr.Cost4 = Round(PUr.Cost4,SetRoundModeD(3));
   PUr.Cost5 = Round(PUr.Cost5,SetRoundModeD(3));
   PUr.CustomsCost = Round(PUr.CustomsCost,SetRoundModeD(5));
-*/
-	POr.SerNr = PUr.PONr;	
-	if (ReadLastMain(POr,1,true)) then begin
-  	PUr.ShipCost = POr.ShipCost;
-  	PUr.Cost1 = POr.Cost1;
-  	PUr.Cost2 = POr.Cost2;
-  	PUr.Cost3 = POr.Cost3;
-  	PUr.Cost4 = POr.Cost4;
-  	PUr.Cost5 = POr.Cost5;
-  	PUr.CustomsCost = POr.CustomsCost;
-  end;
-//Edit end-----------------------Dima 30.01.2015
   PUr.ExtraCost = Round(PUr.ExtraCost,DefaultRoundMode);
   PUr.SumCostPrice = Round(PUr.SumCostPrice,SetRoundModeD(2));//rndtotal should not be rounded, cause creating TR doesnt to it
   PUr.TotUPrice = Round(PUr.TotUPrice,SetRoundModeD(2));
