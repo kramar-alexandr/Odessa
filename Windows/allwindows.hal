@@ -5303,7 +5303,7 @@ begin
   EditField(-150,v2,100,"ИТОГО",ViewOnly ,Sum4,true,0);
   EditField(-150,v1,100,"ИТОГО в базовой валюте",ViewOnly ,BaseSum4,true,0);//Edit----------------------Dima 29.01.2015
   v = 24;
-  MatrixBegin(3,v,-50,-49,-,200);
+  MatrixBegin(3,v,-50,-69,-,200);	//Edit----------------------Dima 29.01.2015
   MatTypedRow(stp);
   flipnr = 0;
   Flip(flipnr); flipnr = flipnr + 1;
@@ -7330,6 +7330,70 @@ begin
         SpecialMenu("Create #VAT# Correction #S/L#",' ',17,"VATCorrectionIPDsm");
       end;
     end;
+  end;
+  EndWindow;
+end;
+
+
+
+window CULClass:10
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  WindowBegin("Контакты",CULClass,CGmlist,-);
+  SpawnClass(CUDClass);
+  if (HasJewelleryInterface) then begin
+    SetWRect(20,80,880,300);
+  end else begin
+  SetWRect(20,80,760,300);
+  end;
+  Sizeable(-1,-1,0,0);
+  UseView(CUVc);
+//  FormName(CustRn);  // Crash in multiuser
+//  h = 20; HalPushButton(h,v=3,h=h+100,v+vs,"VEList","#Suppliers#");
+//  HalPushButton(h=h+50,v=3,h=h+100,v+vs,"CUList","Customers");
+  RecordList(4,17,-21,-39);
+  RlColKey(4,4,"Код",Code,false,Code);
+  RlColKey(96,96,"Сокр.",SearchKey,false,SearchKey);
+  RlColKey(145,140,"Катег.",CustCat,false,Group);
+  RlColKey(190,190,"Наименование",Name,false,Name);
+  if (HasJewelleryInterface) then begin
+    RlColKey(-480,-480,"Телефон",Phone,false,Phone);
+    RlColKey(-380,-380,"Мобильный",Mobile,false,Mobile);   
+    RlCol(-280,-280,"E-mail",eMail,true);  
+    RlCol(-150,-150,"Адрес 1",InvAddr0,false);
+  end else begin
+  RlColKey(-420,-420,"Телефон",Phone,false,Phone);
+  RlColKey(-325,-325,"E-mail",eMail,false,eMail);	//Edit--------------Dima 30.01.2015
+  RlColKey(-215,-215,"Отдел",Department,false,Department);
+  if (CUVATNrColumn) then begin
+    RlColKey(-125,-125,"ИНН",VATNr,false,VATNr);
+  end else begin
+    RlColKey(-125,-125,"ОКПО",RegNr1,false,RegNr1);
+  end;
+    if (TestEnablerFile("EnMarketplace")) then begin  
+      RlColKey(-70,-70,"MarketUserName",MarketUserName,false,MarketUserName);  
+    end else begin
+  RlColKey(-50,-50,"Р/с",BankAccount,false,BankAccount);
+    end;
+  end;
+  SearchField("Найти");
+  if (HasMetroTestFeatures or GUIType!=kGUIMetro) then begin
+    CommunicateButton;
+  end;
+  if (HasLimitedAccess) then begin
+    BrowseSubsetButton(-40,-15);
+  end;
+  if (UserCanReport("CustPSRn","",true)) then begin
+  SpecialMenu("Справка по клиенту",'e',0,"CUStatusCULsm");
+  end;
+  if (UserCanReport("VEPSRn","VendPSRClass",true)) then begin
+  SpecialMenu("Статус поставщика",'u',2,"VEStatusLsm");
+  end;
+  SpecialMenu("Сменить пароль",' ',1,"ChangePasswdCULsm");
+  SpecialMenu("Найти",'F',3,"CUSearchLsm");
+  SpecialMenu("Создать деятельность",'c',4,"NewActCULsm");
+  if (GuiType==kGuiCocoa) then begin
+    SpecialMenu("Импортировать адресную книгу",' ',5,"ImportAddressbooksm");
   end;
   EndWindow;
 end;
