@@ -55,8 +55,8 @@ begin
 		OutString(7,0,POrw.Price,false);
 		OutString(8,0,POrw.vRebate,false);
 		OutString(9,0,POrw.Sum,false);
-		OutString(12,0,POrw.Volume,false);
-		OutString(13,0,POrw.Weight,false);
+		OutVal(12,0,POrw.Volume,M45Val,false);	//Edit by Victor 30.01.15
+		OutVal(13,0,POrw.Weight,M45Val,false);	//Edit by Victor 30.01.15
 		EndFormat;	
 	end;		
 	EndJob;
