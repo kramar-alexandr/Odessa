@@ -9,6 +9,8 @@ record IVVc IVr;
 row IVVc IVrw;
 Integer rw,rwcnt,i;
 boolean TrHs,testf;
+record PLVc PLr;
+val fr,to,total0,total1,total2,total3,total4,total5;
 
 
 	StartReportJob("Отчет по продажам");
@@ -46,12 +48,17 @@ boolean TrHs,testf;
 	OutString(90,0,"Код товара",false);
 	OutString(120,0,"Наименование",false)
 	OutString(270,0,"Кол-во",false);
-	OutString(305,0,"Цена",false);
-	OutString(335,0,"Себес-ть за ед.",false);
-	OutString(370,0,"Себестоимость",false);
-	OutString(400,0,"Маржа",false);
-	OutString(430,0,"Маржа,%",false);
-	OutString(455,0,"Продавец",false);
+	OutString(300,0,"Цена",false);
+	OutString(310,0,"Сумма",false);
+	OutString(320,0,"Себес-ть за ед.",false);
+	OutString(340,0,"Себестоимость",false);
+	OutString(360,0,"Маржа",false);
+	OutString(380,0,"Маржа,%",false);
+	OutString(400,0,"Зарп. цен",false);
+	OutString(420,0,"Зарп. сум.",false);
+	OutString(440,0,"Маржа зп.",false);
+	OutString(460,0,"Маржа,% за.",false);
+	OutString(480,0,"Продавец",false);
 	EndFormat;
 	Black_Divider(0,1);
 
@@ -61,22 +68,29 @@ boolean TrHs,testf;
 		testf=true;
 
 		if (IVr.InvDate < RepSpec.sStartDate) then begin
-		testf=false;
+			testf=false;
 		end;	
 
 		if  (IVr.InvDate > RepSpec.sEndDate) then begin
-		TrHs=false;
+			TrHs=false;
 		end;		
 
 		if (nonblank(RepSpec.f3) and (IVr.Location<>RepSpec.f3)) then begin
-		testf=false;
+			testf=false;
 		end;
 
 		if (nonblank(RepSpec.f4) and (IVr.SalesMan<>RepSpec.f4)) then begin
-		testf=false;
+			testf=false;
 		end;
 		
 		rwcnt = MatRowCnt(IVr);
+		
+		fr = IVr.FrRate;
+		to = IVr.ToRateB1;
+		if(fr==0 or to==0)then begin
+			fr = 1;
+			to = 1;
+		end;
 
 		for(i = 0; i<rwcnt; i=i+1) begin
           	MatRowGet(IVr,i,IVrw);
@@ -101,19 +115,58 @@ boolean TrHs,testf;
 				OutString(90,0,IVrw.ArtCode,false);
 				OutString(120,0,IVrw.Spec,false);
 				OutString(270,0,IVrw.Quant,false);
-				OutString(305,0,IVrw.Price,false);
+				total0 = total0 + IVrw.Quant;
+				OutString(300,0,IVrw.Price/fr*to,false);
+				OutString(300,0,IVrw.Sum/fr*to,false);
+				total1 = total1 + IVrw.Sum/fr*to;
 			 if (UserCanAction("ViewCostPrice",true)) then begin
-					OutString(335,0,IVrw.BasePrice,false);
-					OutString(370,0,IVrw.BasePrice*IVrw.Quant,false);
-					OutString(400,0,IVrw.rowGP,false);
-					OutString(430,0,IVrw.rowGP*100/(IVrw.BasePrice*IVrw.Quant),false);
+					OutString(320,0,IVrw.BasePrice,false);
+					OutString(340,0,IVrw.BasePrice*IVrw.Quant,false);
+					total2 = total2 + IVrw.BasePrice*IVrw.Quant;
+					OutString(360,0,IVrw.rowGP,false);
+					OutString(380,0,IVrw.rowGP*100/(IVrw.BasePrice*IVrw.Quant),false);
+					total3 = total3 + IVrw.rowGP;
+					PLr.ArtCode = IVrw.ArtCode;
+					PLr.PLCode = "SALAR";
+					readfirstmain(PLr,2,true);
+					OutString(400,0,PLr.ExVatPrice,false);
+					OutString(420,0,PLr.ExVatPrice*IVrw.Quant,false);
+					total4 = total4 + PLr.ExVatPrice*IVrw.Quant;
+					OutString(440,0,IVrw.Sum/fr*to - PLr.ExVatPrice*IVrw.Quant,false);
+					total5 = total5 + IVrw.Sum/fr*to - PLr.ExVatPrice*IVrw.Quant;
+					OutString(460,0,(IVrw.Sum/fr*to - PLr.ExVatPrice*IVrw.Quant)/IVrw.Sum/fr*to*100,false);
 				end;
-					OutString(455,0,IVr.SalesMan,false);		
+					OutString(480,0,IVr.SalesMan,false);		
 				EndFormat;
 			end;
 		end;
 
 	end;
+	
+	StartFormat(15);
+	OutString(0,0,"",false);
+	OutString(40,0,"",false);
+	OutString(60,0,"",false);
+	OutString(90,0,"",false);
+	OutString(120,0,"",false);
+	OutString(270,0,total0,false);
+	OutString(300,0,"",false);
+	OutString(300,0,total1,false);
+ if (UserCanAction("ViewCostPrice",true)) then begin
+		OutString(320,0,"",false);
+		OutString(340,0,total2,false);
+		OutString(360,0,total3,false);
+		OutString(380,0,"",false);
+		PLr.ArtCode = IVrw.ArtCode;
+		PLr.PLCode = "SALAR";
+		readfirstmain(PLr,2,true);
+		OutString(400,0,"",false);
+		OutString(420,0,total4,false);
+		OutString(440,0,total5,false);
+		OutString(460,0,"",false);
+	end;
+		OutString(480,0,"",false);		
+	EndFormat;
 	
 	EndJob;
 
