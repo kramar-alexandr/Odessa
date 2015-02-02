@@ -29,7 +29,7 @@ begin
   Report("Журнал авансовых отчетов",ExpJRClass,ExpRn,0,modCL);
   Report("Журнал  расчетов с ПЛ",PersPerRClass,PersPerRn,0,modCL);
   Report("Журнал выплат",PPJRClass,PPRn,0,modCL);
-  Report("Журнал по складу (модифицированный)",NewINRClass,NewInvValRn,0,modIN);
+  Report("Отчет по складу (модифицированный)",NewINRClass,NewInvValRn,0,modIN);
   //Report("Статистика НДС по аванс. отчетам",ExpVATRClass,ExpVATRn,0,modCL);
   //Report("Журнал путевых листов",WLJRClass,WLJRn,0,modCL);
   
