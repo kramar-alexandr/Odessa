@@ -680,6 +680,10 @@ calculated in  GetIPVAT
       IPSumup(IPp);
     end;
   end;
+
+	if (rownr==0) then begin
+		IPp.Comment = IVr.Addr0;			//Edit-----------------------Dima 02.02.2015
+	end;	
   PasteInvIn2IPr = res;
   RETURN;  
 END;
