@@ -5,7 +5,7 @@ SetLangMode(LangRussian,"RUS",0);
 
 
 global
-procedure LocationsRn(record RcVc RepSpec)
+procedure LocationsRn(record RcVc RepSpec)	//Edit-------------------------Dima 04.12.2014
 begin
   record ItemStatusVc ISr;
   record INVc INr;
@@ -34,9 +34,10 @@ begin
 
 	i=0;
 	while (LoopMain(Locr,1,TrHs)) begin
-	LocCodes[i]=Locr.Code;
+	LocCodes[i]=Locr.Code;		
 	i=i+1;
 	end;
+	LocCodes[i]=";;;";
 
 	rw=1;
 	StartReportJob("Ћтчет по складам");
@@ -95,27 +96,31 @@ begin
 			OutString(30,0,INr.Name,false);
 
 
-			While(LoopMain(ISr,1,TrHs)) begin					
-				if(curCode==ISr.Code) then begin 
-					testf=true; 
-				end else begin 
-					TrHs=false;
-					testf=false;
+			for(i=0; i < LocCodes.length; i=i+1) begin
+				ISr.Location = LocCodes[i];
+				ISr.Code = INr.Code;
+
+				if (ReadFirstMain(ISr,2,true)) then begin				
+
+					OutString(Locations[ISr.Location],0,ISr.Instock,false);	
+				end else begin
+					OutString(Locations[LocCodes[i]],0,"",false);
 				end;
-	     	
-				if (ISr.Location == ";;;") then begin
-				sum = ISr.Instock;
-				testf=false;
-				end;
-	     	
-				if(testf) then begin
-					OutString(Locations[ISr.Location],0,Isr.Instock,false);	
-				end;	
 			end;
+/*
+				ISr.Location = ";;;";
+				ISr.Code = INr.Code;
+
+				if (ReadFirstMain(ISr,2,true)) then begin				
+
+					OutString(Locations[ISr.Location],0,ISr.Instock,false);	
+				end else begin
+					OutString(Locations[";;;"],0,"",false);
+				end;
+*/
 					
-			OutString(Locations[";;;"],0,sum,false);	//Output sum of items
 			EndFormat;
-			ResetLoop(ISr);
+
 			TrHs=true;
 			sum=0;
 
