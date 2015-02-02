@@ -88,6 +88,7 @@ BEGIN
   Userr.Code = CurrentUser;		//Edit by Victor 26.11.14
   if (ReadFirstMain(Userr,1,true)) then begin
 	  StockMovr.SalesGroup = Userr.SalesGroup;
+		StockMovr.FrLocation = Userr.Location;		//Edit-----------------Dima 02.02.2015
 	end;
 
   StockMovVcRecordDefaults = res; 
