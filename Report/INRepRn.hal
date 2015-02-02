@@ -16,11 +16,8 @@ begin
   Integer i,rw;
   real h,step;
   boolean TrHs,testf,testf0;
-  real sum;
   Integer startPos,pos;
   string 15 keySort;
-  string 40 class,a,b;
-  Array string 40 groups;
 
 	TrHs=true;
 
@@ -100,35 +97,19 @@ begin
 				ISr.Location = LocCodes[i];
 				ISr.Code = INr.Code;
 
-				if (ReadFirstMain(ISr,2,true)) then begin				
-
+				if (ReadFirstMain(ISr,2,true)) then begin	
 					OutString(Locations[ISr.Location],0,ISr.Instock,false);	
 				end else begin
 					OutString(Locations[LocCodes[i]],0,"",false);
 				end;
 			end;
-/*
-				ISr.Location = ";;;";
-				ISr.Code = INr.Code;
-
-				if (ReadFirstMain(ISr,2,true)) then begin				
-
-					OutString(Locations[ISr.Location],0,ISr.Instock,false);	
-				end else begin
-					OutString(Locations[";;;"],0,"",false);
-				end;
-*/
 					
 			EndFormat;
-
-			TrHs=true;
-			sum=0;
 
 		end;			
 	end;
 	
 	EndJob;
-
 
 
 return;
