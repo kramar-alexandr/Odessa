@@ -7401,3 +7401,70 @@ begin
   end;
   EndWindow;
 end;
+
+window OPLClass:2
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  WindowBegin("Платежи поставщикам",OPLClass,CGmlist,-);
+  SetWRect(20,80,529,307);
+  Sizeable(-1,-1,0,0);
+  SpawnClass(OPDClass);
+  UseView(OPVc);
+  FormName(PrintOPL);
+  RecordList(4,17,-21,-39);
+  RlColKey(4,1,      "Номер",SerNr,false,SerNr);
+  RlColKey(84,79,    "Заказан",OrderedFlag,false,OrderedFlag);
+  RlColKey(121,116,  "OK",DoneFlag,false,DoneFlag);
+  if (HasModNL) then begin
+    RlColKey(151,151,  "Дата",TransDate,false,TransDate);
+  end else begin
+    RlCol(151,151,  "Дата оплаты",PayDate,false);
+  end;
+  if (IsEnterprise) then begin
+    RlColKey(231,231,"Ссылка",PayNumber,false,PayNumber);
+    RlColKey(300,300,"Комментарий",BankName,false,0); //Edit***************************Sasha2,11:24 02.02.2015
+  end else begin
+    RlCol(-230,-230,"Банк. счет",BankAcc,false);
+  end;
+  if (HasMultiCurrency) then begin
+    RlColKey(-131,-131,"Сумма",CurPayVal,true,CurPayVal);
+    RlCol(-30,-30,"Валюта",PayCurCode,true);
+  end else begin
+    RlColKey(-100,-100,"Сумма",CurPayVal,true,CurPayVal);
+  end;
+  RlCol(-1,-1,"",Invalid,true);
+  SearchField("Найти");
+  if (GuiType==kGuiMetro) then begin
+    RowMenuBegin("");
+    RowMenuItem(0,"Заказ",'B','B',4312,"OrderOPLsm");  
+    RowMenuItem(1,"OK",'G','G',4312,"OKOPLsm");  
+    if (IsEnterprise and HasLocalization("EST,LVA")) then begin  
+      RowMenuItem(2,"E-Payment Status",' ',' ',4300,"EPaymentStatusOPLsm");  
+    end;
+    EndRowMenu;
+    SpecMenuGroup("",kSpecMenuGroupTypeButtonsInBottomBarRight,0);  
+    if (IsEnterprise) then begin
+      SpecialMenuWithIcon("Рекомендации по оплате",' ',4313,1,"OPSuggOPLsm");  
+//    SpecMenuItem("Create Withholding Rows",' ',3);//no code
+//  SpecMenuItem("Payment Transfer",' ',4); no code
+    end;
+    if (HasModCheck) then begin
+      SpecialMenuWithIcon("Выписать чеки",' ',4313,2,"ChequeRunOPLsm");  
+    end;
+  end else begin
+    SpecialMenu("Заказать",'B',0,"OrderOPLsm");
+    SpecialMenu("OK",'G',1,"OKOPLsm");
+    if (IsEnterprise or Left(BuildProductCode,5)=="Books") then begin
+      SpecialMenu("Рекомендации по оплате",' ',2,"OPSuggOPLsm");
+    end;
+//    SpecMenuItem("Create Withholding Rows",' ',3);//no code
+//  SpecMenuItem("Payment Transfer",' ',4); no code
+    if (IsEnterprise and HasLocalization("EST,LVA")) then begin  
+      SpecialMenu("Статус электронных платежей",' ',5,"EPaymentStatusOPLsm");
+    end;
+    if (HasModCheck) then begin
+     SpecialMenu("Выписать чеки",' ',6,"ChequeRunOPLsm");
+    end;
+  end;
+  EndWindow;
+end;
