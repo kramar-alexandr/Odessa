@@ -6230,7 +6230,9 @@ begin
     if (StandardHansa==false) then begin
       MatCol(1,-180,"Проект",0,PRCodeRow,false,PRSClass);
     end;
+		
     MatCol(1,-120,"Баз. цена",0,BasePrice,true,0);
+
     MatCol(1,-40,"Коэф.",0,Coefficient,false,0);
     Flip(flipnr); flipnr = flipnr + 1;
     MatCol(1,-140,"Ширина",0,UnitXval,true,0);
@@ -6625,7 +6627,9 @@ begin
   Flip(1);
 //  MatCol(1,194,"Description",0,Spec,false,0);
   MatCol(1,144,"Наимен.",0,Spec,false,0);
-  MatCol(1,-228,"Цена",0,UPrice,true,0);
+	if (UserCanAction("ViewCostPrice",true)) then begin
+  	MatCol(1,-228,"Цена",0,UPrice,true,0);	//Edit----------------------Dima  03.02.2015
+	end;
   MatCol(1,-160,"Накладные расходы",0,Extra,true,0);
   if (UserCanAction("ViewCostPrice",true)) then begin
   	MatCol(1,-80,"Стоимость",0,CostPrice,true,0);//Edit***************************Sasha2,10:36 10.11.2014
