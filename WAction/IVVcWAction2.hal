@@ -620,6 +620,7 @@ begin
 	
 	res = false;
 	switch (fieldname) begin
+	  case "vals0":res = true;
 		case "vals1":if(RepSpec.vals0<0)then begin res = true; end;
 		case "vals2":if(RepSpec.vals0<0)then begin res = true; end;
 		case "vals3":if(RepSpec.vals0<0)then begin res = true; end;
