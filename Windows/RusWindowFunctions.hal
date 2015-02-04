@@ -960,16 +960,16 @@ begin
         DataListColumn(1,96,-460,AdjLeft,"spec","Наименов.",M4Str);
         DataListColumn(1,-455,-380,AdjRight,"vatcode","НДС",M4Str);
     end;
-      DataListColumn(1,-375,-300,AdjRight,"qty","К-во",M4Val);
-      DataListColumn(1,-295,-210,AdjRight,"price","Цена",M4Val);
-      DataListColumn(1,-205,-150,AdjRight,"rebate","Скидка",M4Val);
-      DataListColumn(1,-145,-36,AdjRight,"rowsum","Сумма",M4Val);
+      DataListColumn(1,-305,-275,AdjRight,"qty","К-во",M4Val);
+      DataListColumn(1,-270,-190,AdjRight,"price","Цена",M4Val);
+      DataListColumn(1,-185,-140,AdjRight,"rebate","Скидка",M4Val);
+      DataListColumn(1,-135,-30,AdjRight,"rowsum","Сумма",M4Val);
     end else begin
-      DataListColumn(1,96,-340,AdjLeft,"spec","Наименов.",M4Str);
-      DataListColumn(1,-335,-270,AdjRight,"qty","К-во",M4Val);
-      DataListColumn(1,-265,-190,AdjRight,"price","Цена",M4Val);
-      DataListColumn(1,-185,-130,AdjRight,"rebate","Скидка",M4Val);
-      DataListColumn(1,-125,-36,AdjRight,"rowsum","Сумма",M4Val);
+      DataListColumn(1,95,-255,AdjLeft,"spec","Наименов.",M4Str);
+      DataListColumn(1,-250,-220,AdjRight,"qty","К-во",M4Val);
+      DataListColumn(1,-215,-145,AdjRight,"price","Цена",M4Val);
+      DataListColumn(1,-140,-95,AdjRight,"rebate","Скидка",M4Val);
+      DataListColumn(1,-90,-10,AdjRight,"rowsum","Сумма",M4Val);
     end;
     DataListColumn(1,-20,-6,AdjRight,"","",M4Str); // Added to provide some extra space for scroll bar.
     
