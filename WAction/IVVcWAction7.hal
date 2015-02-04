@@ -3011,6 +3011,7 @@ begin
     WindowFieldGoto(wn,RepSpec,-1,"FirstAcc",false);    
 	*/
 	RecalcDiscountIVD(IVr);//Edit-----------------------------------Dima 29.01.2015
+	PutWindowRecord(mwn,IVr);
   IVDClass_RefreshStringList(mwn,IVr);
   end;
   return;
