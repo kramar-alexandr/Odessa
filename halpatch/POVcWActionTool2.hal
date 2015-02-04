@@ -168,7 +168,11 @@ BEGIN
   Integer vatcnt;  
   val t,cc,uprice;
   Integer vt;
-
+  VAL cost1,cost2,cost3,cost4,cost5,ShipCost,CustomsCost;
+	record SysFormatBlock SFb;
+	
+	BlockLoad(SFb);
+	
   if (UseTaxTemplatesforTaxCalc) then begin
     POSumup_TaxTemplate(POp);
     goto LPOSumup;
@@ -199,17 +203,24 @@ BEGIN
 //    DivPIFactor(POrw.Quant,POrw.PIFactor,q); //why extra cost should be per supplier unit not ours ? 
     q = POrw.Quant;
     t = q*POrw.ShipCost;
-    POp.ShipCost = t + POp.ShipCost;
+    ShipCost = ShipCost + t;
+    //POp.ShipCost = t + POp.ShipCost;
     t = q*POrw.RowCost1;
-    POp.Cost1 = t + POp.Cost1;
+    cost1 = cost1 + t;
+    //POp.Cost1 = t + POp.Cost1;
     t = q*POrw.RowCost2;
-    POp.Cost2 = t + POp.Cost2;
+    cost2 = cost2 + t;
+    //POp.Cost2 = t + POp.Cost2;
     t = q*POrw.RowCost3;
-    POp.Cost3 = t + POp.Cost3;
+    cost3 = cost3 + t;
+    //POp.Cost3 = t + POp.Cost3;
     t = q*POrw.RowCost4;
-    POp.Cost4 = t + POp.Cost4;
+    cost4 = cost4 + t;
+    //POp.Cost4 = t + POp.Cost4;
     t = q*POrw.RowCost5;
-    POp.Cost5 = t + POp.Cost5;
+    cost5 = cost5 + t;
+    //POp.Cost5 = t + POp.Cost5;
+		CustomsCost = CustomsCost + stringtoval(POrw.CustomsCost,M45Val) * q;
     
     POp.TotVolume = POp.TotVolume + POrw.Volume;// Edit ************************** Wednesday, July 9, 2014 at 11:34:42
     POp.TotWeight = POp.TotWeight + POrw.Weight;// Edit ************************** Wednesday, July 9, 2014 at 11:34:41
@@ -225,10 +236,19 @@ BEGIN
       uprice = uprice + POrw.ShipCost;
       uprice = Round(uprice,SetRoundModeD(0));
     end;
-    PUCalcPerc(uprice,POrw.CustomsCost,cc);
+    //PUCalcPerc(uprice,POrw.CustomsCost,cc);
     t = q*cc;
-    POp.CustomsCost = t + POp.CustomsCost;   
+    //POp.CustomsCost = t + POp.CustomsCost;   
   end;
+  
+	POp.ShipCost = ShipCost;
+	POp.Cost1 = cost1;
+	POp.Cost2 = cost2;
+	POp.Cost3 = cost3;
+	POp.Cost4 = cost4;
+	POp.Cost5 = cost5;
+	POp.CustomsCost = CustomsCost;
+  
   CalcVATBaseVAT(SMr,POp.InclVAT,POp.NoTAXonVAT,vatcnt,ms,taxsum);
   POp.TAX1Sum = taxsum;  
   if ((POp.ExportFlag==1) or (POp.ExportFlag==2) or (vt==kVATTypeReversed)) then begin

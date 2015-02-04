@@ -72,6 +72,7 @@ external function boolean POSButtonsForWindow(integer,var record POSButtonsVc);
 external procedure ExtractObj(string,var Integer,var string);
 external updating function Boolean DoXMLExport_IVVc(var record IVVc);
 remote procedure RecalcDiscountIVD(var record IVVc);//Edit-----------------------------------Dima 29.01.2015
+remote procedure IVVc_PastePriceList(var record IVVc);// Edit ************************** Wednesday, 4 February 2015 14:34:16
 
 global
 procedure NPTSIVOpenLClassOpenExecute(Integer wn)
@@ -2610,6 +2611,8 @@ begin
         IVr.Location = RepSpec.LastAcc;
         IVr.LangCode = RepSpec.Language;
         IVr.Objects = RepSpec.ObjStr;
+        IVr.PriceList = RepSpec.f5;// Edit ************************** Wednesday, 4 February 2015 14:33:08
+        IVVc_PastePriceList(IVr);// Edit ************************** Wednesday, 4 February 2015 14:33:45
         PutWindowRecord(mwn,IVr);
         IVDClass_RefreshStringList(mwn,IVr);
         ReRunWindowDef(mwn);
@@ -2637,15 +2640,16 @@ begin
   return;
 end;
 
-global
-procedure IVDClassTouchScreenChangeTerms()
+// Edit Start ---------------------------------------------- Edit Start
+	//Wednesday, 4 February 2015 18:56:30
+	
+global procedure IVDClassTouchScreenChangeTermsOpen(integer mwn)
 begin
-  Integer wn,mwn;
+	Integer wn;
   record RcVc RepSpec;
   record IVVc IVr;
   Boolean testf;
   
-  mwn = CurWindow;
   RecordClear(RepSpec);
   GetWindowRecord(mwn,IVr);
   testf = true;
@@ -2657,14 +2661,82 @@ begin
     RepSpec.f2 = IVr.OurContact;
     RepSpec.f3 = IVr.ClientContact;
     RepSpec.f4 = IVr.OfficialSerNr;
+    RepSpec.f5 = IVr.PriceList;// Edit ************************** Wednesday, 4 February 2015 14:27:20
     RepSpec.LastAcc = IVr.Location;
     RepSpec.Language = IVr.LangCode;
     RepSpec.ObjStr = IVr.Objects;
     wn = OpenWindow("ChangeTermsNPTSSClass",0,mwn,"","",RepSpec);
     WindowFieldGoto(wn,RepSpec,-1,"f1",false);    
   end;
+  
+return;
+end;
+
+
+
+global
+procedure IVDClassTouchScreenChangeTerms()
+begin
+  Integer wn,mwn;
+  record RcVc RepSpec;
+  record IVVc IVr;
+  Boolean testf;
+  
+  mwn = CurWindow;
+  if (UserCanAction("AllowChangeTerms",false)) then begin
+		IVDClassTouchScreenChangeTermsOpen(mwn);
+  end else begin
+    RepSpec.AccStr = "";
+    RepSpec.FirstAcc = "";
+    RepSpec.AccStr = CurrentUser;
+    wn = OpenWindow("OpenManagerPasswordClass",0,mwn,"","",RepSpec);
+  end;
+  
+
+  LIVDClassTouchScreenChangeTerms:;
   return;
 end;
+
+
+global
+procedure OpenManagerPasswordClassCancel()
+begin
+  Integer wn;
+  
+  wn = CurWindow;
+  CloseWindow(wn);
+  return;
+end;
+
+
+global
+updating function Boolean OpenManagerPasswordClassOnOKWindow(Integer wn)
+begin
+  record RcVc RepSpec;
+  record UserVc Userr;
+  integer mwn;
+  
+  getwindowrecord(wn,RepSpec);
+  mwn = motherwindow(wn);
+  Userr.Code = RepSpec.AccStr;
+  if (ReadFirstMain(Userr,1,true)) then begin
+		if (CalcPassword(RepSpec.FirstAcc,Userr.Code,0)==Userr.DiscPassword) then begin
+			OpenManagerPasswordClassCancel;
+			IVDClassTouchScreenChangeTermsOpen(mwn);
+		end else begin
+			OpenManagerPasswordClassCancel;
+			selectwindow(mwn);
+			IVDClassTouchScreenChangeTerms;
+		end;
+  end;
+  
+  OpenManagerPasswordClassOnOKWindow = false;
+  return;
+end;
+
+	// Edit End ---------------------------------------------- Edit End
+	
+
 
 global
 updating procedure ProceedChangeAddressNPTSSClassExecute(Integer wn)

@@ -313,6 +313,7 @@ begin
   StrSetText(WSToPO,"Заказ постащику из таблицы работ");
   StrSetText(StockMovOK,"Получение перемещения товара");
   StrSetText(AllowNPTSReprint," Перепечатать строки сч/ф (сенсорный экран)");
+  StrSetText(AllowChangeTerms,"Разрешить менять условия сч/ф (сенсорный экран)");// Edit ************************** Wednesday, 4 February 2015 14:51:00
   StrSetText(JobCheckOut,"Резервирование - Выезд");
   StrSetText(JobAddItem,"Резервирование - Добавить товар");
   StrSetText(JobChargeStay,"Резервирование - Оплатить пребывание");

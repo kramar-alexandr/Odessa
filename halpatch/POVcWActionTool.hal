@@ -2234,6 +2234,11 @@ BEGIN
   record SysFormatBlock SFb;
   array integer roworder;
   record INVc INr;
+  val costdef,costsum,costbegin;// Edit ************************** Wednesday, 4 February 2015 12:46:43
+  integer minqtyi;// Edit ************************** Wednesday, 4 February 2015 12:46:43
+  val minq,maxq;
+  
+  costdef = 0;
     
   BlockLoad(SFb);
   switch(column) begin
@@ -2246,6 +2251,8 @@ BEGIN
     case 7: calcval = POr.CustomsCost; // Calculate Customs Cost 
     otherwise goto LPOSetShipCost;
   end;
+  costbegin = calcval;// Edit ************************** Wednesday, 4 February 2015 12:35:09
+  
   rwcnt = MatRowCnt(POr);
   for (i=0;i<rwcnt;i=i+1) begin
     MatRowGet(POr,i,POrw);
@@ -2292,25 +2299,48 @@ BEGIN
       
     end;
   end;
-    
+  minqtyi = 0;// Edit ************************** Wednesday, 4 February 2015 12:50:46
+  minq = 9999999;// Edit ************************** Wednesday, 4 February 2015 12:50:47
+  costsum = 0;// Edit ************************** Wednesday, 4 February 2015 12:34:32
   for (i=0;i<rwcnt;i=i+1) begin
     MatRowGet(POr,i,POrw);
+    
+    if(minq>POrw.Quant and POrw.Quant!=0 and nonblank(POrw.ArtCode))then begin// Edit ************************** Wednesday, 4 February 2015 12:50:49
+			minq = POrw.Quant;
+			minqtyi = i;
+    end;
+    
     if ((POrw.stp==3) or (POrw.ovst!=0) or (blank(POrw.ArtCode)) or (column==7 and POrw.TREO==kTREO)) then begin
       goto LSKIPPOROW;
     end;
     POCalcOneRow(SFb,POr,i,DefaultCurRoundOff,totval,calcval,rowcalcval,rest,column);
     switch (column) begin
-      case 1: POrw.RowCost1 = rowcalcval; 
-      case 2: POrw.RowCost2 = rowcalcval; 
-      case 3: POrw.RowCost3 = rowcalcval; 
-      case 4: POrw.RowCost4 = rowcalcval; 
-      case 5: POrw.RowCost5 = rowcalcval; 
-      case 6: POrw.ShipCost = rowcalcval;
+      case 1: POrw.RowCost1 = rowcalcval; costsum = costsum + rowcalcval * POrw.Quant;
+      case 2: POrw.RowCost2 = rowcalcval; costsum = costsum + rowcalcval * POrw.Quant;
+      case 3: POrw.RowCost3 = rowcalcval; costsum = costsum + rowcalcval * POrw.Quant;
+      case 4: POrw.RowCost4 = rowcalcval; costsum = costsum + rowcalcval * POrw.Quant;
+      case 5: POrw.RowCost5 = rowcalcval; costsum = costsum + rowcalcval * POrw.Quant;
+      case 6: POrw.ShipCost = rowcalcval;costsum = costsum + rowcalcval * POrw.Quant;
       case 7: POrw.CustomsCost = ValToString(rowcalcval,M45Val,SFb.thousSep,SFb.decimalPt,0);
+      				costsum = costsum + stringtoval(POrw.CustomsCost,M45Val) * POrw.Quant;
     end;
+    //costsum = costsum + rowcalcval * POrw.Quant;// Edit ************************** Wednesday, 4 February 2015 12:34:33
     MatRowPut(POr,i,POrw);
 LSKIPPOROW:;
   end;
+    
+  matrowget(POr,minqtyi,POrw);
+  	switch (column) begin
+      case 1: POrw.RowCost1 = POrw.RowCost1 - (costsum - costbegin)/POrw.Quant;
+      case 2: POrw.RowCost2 = POrw.RowCost2 - (costsum - costbegin)/POrw.Quant; 
+      case 3: POrw.RowCost3 = POrw.RowCost3 - (costsum - costbegin)/POrw.Quant; 
+      case 4: POrw.RowCost4 = POrw.RowCost4 - (costsum - costbegin)/POrw.Quant; 
+      case 5: POrw.RowCost5 = POrw.RowCost5 - (costsum - costbegin)/POrw.Quant; 
+      case 6: POrw.ShipCost = POrw.ShipCost - (costsum - costbegin)/POrw.Quant;
+      case 7: POrw.CustomsCost = ValToString((stringtoval(POrw.CustomsCost,M45Val) - (costsum - costbegin)/POrw.Quant),M45Val,SFb.thousSep,SFb.decimalPt,0);
+    end;
+  MatRowPut(POr,minqtyi,POrw);
+  
 //!!!  PUSortByVal(POr,locPOr,column,roworder);
   rwcnt = MatRowCnt(locPOr);
   for (i=0;i<rwcnt;i=i+1) begin
