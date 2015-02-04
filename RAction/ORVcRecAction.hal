@@ -1744,6 +1744,9 @@ begin
 		GetForeignCurncyRate("UAH",fr,to1,to2,ORr.OrdDate,edt);
     ORr.OptUAHRate = fr/to1;
   end;
+  if (OR2r.Closed==0 and ORr.Closed!=0 and ORr.CustomStatusFlag!=5) then begin //Edit***************************Sasha2,16:19 04.02.2015 {
+    ORr.CustomStatusFlag = 5;
+  end; //Edit***************************Sasha2,16:19 04.02.2015 }
   
   ORVcRecordUpdate = res; 
   return;
@@ -1900,8 +1903,9 @@ begin
 		GetForeignCurncyRate("UAH",fr,to1,to2,ORr.OrdDate,edt);
     ORr.OptUAHRate = fr/to1;
   end;
-  /*if (ORr.Closed==1 and ORr.) then begin
-  end;*/
+  if (ORr.Closed!=0 and ORr.CustomStatusFlag!=5) then begin //Edit***************************Sasha2,16:19 04.02.2015 {
+    ORr.CustomStatusFlag = 5;
+  end; //Edit***************************Sasha2,16:19 04.02.2015 }
   
   ORVcRecordSave = res; 
   return;
