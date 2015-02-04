@@ -3006,6 +3006,7 @@ begin
     SpecialMenu("Открыть нал. матрицу",' ',25,"OpenVatMatrixPODsm");
   end;
     SpecialMenu("Выгрузить таблицу в буфер обмена",'',1,"ExportToExcelPODsm"); // edit ----------Dima 26.11.2014
+		SpecialMenu("Обновить вес и объем в карточках",'',1,"UpdateINVcWeightVolume_PODsm");	//Edit----------------------Dima  04.02.2015
   end;
   EndWindow;
 end;

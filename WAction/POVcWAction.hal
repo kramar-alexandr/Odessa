@@ -2140,3 +2140,39 @@ begin
 return;
 end;
 
+
+
+
+global				
+updating procedure UpdateINVcWeightVolume_PODsm()		//Edit----------------------Dima  04.02.2015
+begin
+	record POVc POr;
+	row POVc POrw;
+	record INVc	INr;
+	integer wn,i,rwcnt,cnt;
+	val weight,volume;
+
+	wn = CurWindow;
+	GetWindowRecord(wn,POr);
+	rwcnt = MatRowCnt(POr);
+	cnt = 0;
+
+	for(i=0;i<rwcnt;i=i+1) begin
+		MatRowGet(POr,i,POrw);
+		INr.Code = POrw.ArtCode;
+		if (ReadFirstMain(INr,1,true)) then begin
+				volume = POrw.Volume / POrw.Quant;
+				weight = POrw.Weight / Porw.Quant;
+				INr.Volume = volume;
+				INr.Weight = weight;
+				RecordStore(INr,true);
+				cnt = cnt+1;	
+		end;		
+	end;
+
+	if (cnt>0) then begin
+		MessageBox(0,cnt & USetStr(31023));
+	end;
+
+end;
+
