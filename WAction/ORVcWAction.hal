@@ -62,6 +62,24 @@ remote function val CalculateSerialNrQuantity(string,string,string,Boolean,val,v
 remote function Boolean SerialNrForOneItem(string,var record SerBalVc);
 external procedure SetupCustPS2Rn(string,record RcVc);	//Edit----------Dima  27.01.2015
 
+
+
+global //Edit***************************Sasha2,15:51 04.02.2015 {
+function Integer ORLClassRowColor(record ORVc ORr)
+begin
+  Integer res;
+  
+  switch (ORr.CustomStatusFlag) begin
+    case 0: res = kRowColorNone;
+    case 1: res = kRowcolorRed;
+    case 2: res = kRowcolorYellow;
+    otherwise res = kRowcolorGreen;
+  end;
+  
+  ORLClassRowColor = res;
+  return;
+end; //Edit***************************Sasha2,15:51 04.02.2015 }
+
 procedure ORSumup_TaxTemplate(var record ORVc ORp)
 begin
   Integer i,rwcnt;
