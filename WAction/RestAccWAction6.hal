@@ -93,7 +93,7 @@ begin
   wn = FindWindow("NPTSIVCashDClass");
   if (wn>0) then begin
     DeselectWindow(wn,false);
-    PutWindowString(wn,"CustomerDisplayData_Line1",Left(dispstr,40));
+    PutWindowString(wn,"CustomerDisplayData_Line1",Left(dispstr,150));//Edit----------------------Dima  04.02.2015
     PutWindowString(wn,"CustomerDisplayData_Line2",Left(disp2str,20));
 
     SetPOSWindowDisplay_SendToSerialPortDevices(dispstr,disp2str);    
@@ -122,7 +122,7 @@ begin
   if (wn>0) then begin
     DeselectWindow(wn,false);
 
-    PutWindowString(wn,"CustomerDisplayData_Line1",Left(dispstr,40));
+    PutWindowString(wn,"CustomerDisplayData_Line1",Left(dispstr,150));//Edit----------------------Dima  04.02.2015
     PutWindowString(wn,"CustomerDisplayData_Line2",Left(disp2str,20));
 
     SetPOSWindowDisplay_SendToSerialPortDevices(dispstr,disp2str);    
