@@ -572,6 +572,8 @@ BEGIN
 END;
 
 ////Edit----------------------------------------------------Dima  04.02.2015
+
+/*
 function integer SpecialRowCntIP(record IPVc IPr)
 begin
 	integer res,rwcnt,i;
@@ -608,6 +610,7 @@ begin
   IPDClassTakeOnRateEFAfter = res;
   return;
 end;
+*/
 //Edit---end-----------------------------------------------Dima  04.02.2015
 
 
@@ -646,7 +649,7 @@ BEGIN
     case "BaseRate1BankVal": res = IPDClassToRateB1BankValEFAfter(wn,rownr,changed!=0);
     case "BaseRate2BankVal": res = IPDClassToRateB1BankValEFAfter(wn,rownr,changed!=0);
     case "Status": res = IPDClassStatusEFAfter(wn,changed!=0);
-		case "TakeOnRate": res = IPDClassTakeOnRateEFAfter(wn,changed);
+		//case "TakeOnRate": res = IPDClassTakeOnRateEFAfter(wn,changed);
   end;
   IPDClassAfterEditField = res;
   RETURN;

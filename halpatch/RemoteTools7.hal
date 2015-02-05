@@ -56,366 +56,7 @@ BEGIN
   RETURN;
 END;
 
-/*
-procedure MinM4Val(val a,val b,var val c)
-BEGIN
-  if (a<b) then begin
-    c = a;
-  end else begin
-    c = b;
-  end;
-  RETURN;
-END;
 
-function Integer InvInAS(Array Integer aRowType,Array LongInt aInvNr,Array string aCustCode,Array string aARAcc,Array string aInvCurncy,
-                         Array val aval,Array val ainvoutstand,Array val afrrate,Array val atorate1,Array val atorate2,
-                         Array val abaserate1,Array val abaserate2,Integer rows,Integer rowtype,LongInt Inv)
-BEGIN
-  Integer i;
-  Integer res;
-  
-  res = -1;
-  for(i=0;i<rows;i=i+1) begin
-    if (aRowType[i]==rowtype) and (aInvNr[i]==Inv) then begin
-      res = i;
-      goto LInvInAS;
-    end;
-  end;
-LInvInAS:;
-  InvInAS = res;
-  RETURN;
-END;
-
-procedure AddToAS(Array Integer AMpRowType,Array LongInt AMpInvNr,Array string AMpCustCode,Array Integer AMpInvType,Array string AMpInvCurncy,
-                  Array val AMpRVal,Array val AMpfrrate,Array val AMptorate1,Array val AMptorate2,Array val AMpbaserate1,
-                  Array val AMpbaserate2,Array string AMpARAcc,Integer AMcount,
-                  Array Integer aRowType,Array LongInt aInvNr,Array string aCustCode,Array string aARAcc,Array string aInvCurncy,
-                  Array val aval,Array val ainvoutstand,Array val afrrate,Array val atorate1,Array val atorate2,
-                  Array val abaserate1,Array val abaserate2,Integer asrwcnt,
-                  var val PV,Boolean interest,var Integer AScount)
-BEGIN
-  val t,r;
-  Integer line;
-  Integer i,rwcnt;
-  
-  rwcnt = asrwcnt;
-  line = -1;
-  for (i=0;i<AMcount;i=i+1) begin
-    if (interest) then begin
-      if (AMpInvType[i]!=4) then begin goto L20AddToAS; end;
-    end;
-    if (PV!=0) then begin    
-      line = InvInAS(aRowType,aInvNr,aCustCode,aARAcc,aInvCurncy,aval,ainvoutstand,afrrate,atorate1,atorate2,abaserate1,abaserate2,rwcnt,AMpRowType[i],AMpInvNr[i]);
-      if (line==-1) then begin
-        line = rwcnt;
-        aRowType[line] = AMpRowType[line];
-        aInvNr[line] = AMpInvNr[i];
-        aCustCode[line] = "";
-        aARAcc[line] = "";
-        aCustCode[line] = AMpCustCode[i];
-        aInvCurncy[line] = AMpInvCurncy[i];
-        aval[line] = blankval;
-        ainvoutstand[line] = AMpRVal[i];
-        afrrate[line] = AMpfrrate[i];
-        atorate1[line] = AMptorate1[i];
-        atorate2[line] = AMptorate2[i];
-        abaserate1[line] = AMpbaserate1[i];
-        abaserate2[line] = AMpbaserate2[i];
-        aARAcc[line] = AMpARAcc[i];
-        rwcnt = rwcnt + 1;
-      end;
-      r = AMpRVal[i] - aval[line];
-      MinM4Val(PV,r,t);
-      aval[line] = aval[line] + t;    
-      t = MulRateToBase1(AMpInvCurncy[i],AMpRVal[i],AMpfrrate[i],AMptorate1[i],AMptorate2[i],AMpbaserate1[i],AMpbaserate2[i],DefaultCurRoundOff);
-      if (t>=0) then begin //already done for negative amounts in ARCheckDistPay
-        PV = PV - t;
-      end;  
-L20AddToAS:;
-    end;
-  end;
-  AScount = rwcnt;
-  RETURN;
-END;
-
-procedure AddARtoAM(record ARVc ARp,val PV,Array Integer AMpRowType,Array LongInt AMpInvNr,Array string AMpCustCode,Array Integer AMpInvType,
-                    Array string AMpInvCurncy,Array val AMpRVal,Array val AMpfrrate,Array val AMptorate1,
-                    Array val AMptorate2,Array val AMpbaserate1,Array val AMpbaserate2,Array string AMpARAcc,
-                    var Integer rwcnt,record AccBlock ARAccb,record RoundBlock Roundb)
-BEGIN
-  record IVVc IVr;
-  Boolean testf,rebf;
-  val rebval,rval,vatval;
-  LongInt rebdays;
-  
-  rval = ARp.RVal;
-  if (rval>PV) then begin
-    rval = PV;
-  end;
-  AMpRowType[rwcnt] = 1;
-  AMpARAcc[rwcnt] = "";
-  AMpCustCode[rwcnt] = "";
-  AMpInvNr[rwcnt] = ARp.InvoiceNr;
-  AMpCustCode[rwcnt] = ARp.CustCode;
-  AMpRVal[rwcnt] = rval;
-  IVr.SerNr = ARp.InvoiceNr;
-  if (ReadFirstMain(IVr,1,true)) then begin
-    testf = true;
-    if (IVr.Invalid!=0) then begin
-      testf = false;
-    end;
-  end;
-  if (testf) then begin
-    if (IVr.pdvrebt!=0) then begin
-      rebdays = DateDiff(ARp.ARRebDate,CurrentDate);
-      if (rebdays>=0) then begin
-        if (ARAccb.DiscCashVAT!=0) then begin
-          vatval = (IVr.Sum3*rval)/ARp.RVal;
-          rebval = (rval - vatval)*IVr.pdvrebt;
-          rebval = rebval/100;
-          rebval = Round(rebval,GetTotalRoundMode(Roundb));
-        end else begin
-          rebval = rval*IVr.pdvrebt;
-          rebval = rebval/100;
-          rebval = Round(rebval,GetTotalRoundMode(Roundb));
-        end;
-        rebf = true;
-      end;
-      if (rebf==false) then begin
-        rebdays = DateDiff(ARp.ARRebDate2,CurrentDate);
-        if (rebdays>=0) then begin
-          if (ARAccb.DiscCashVAT!=0) then begin
-            vatval = (IVr.Sum3*rval)/ARp.RVal;
-            rebval = (rval - vatval)*IVr.pdvrebt2;
-            rebval = rebval/100;
-            rebval = Round(rebval,GetTotalRoundMode(Roundb));
-          end else begin
-            rebval = rval*IVr.pdvrebt2;
-            rebval = rebval/100;
-            rebval = Round(rebval,GetTotalRoundMode(Roundb));
-          end;
-          rebf = true;
-        end;
-      end;
-    end;   
-    AMpInvType[rwcnt] = IVr.InvType;
-    AMpARAcc[rwcnt] = IVr.ARAcc;
-    AMpInvCurncy[rwcnt] = IVr.CurncyCode;
-    AMpfrrate[rwcnt] = IVr.FrRate;
-    AMptorate1[rwcnt] = IVr.ToRateB1;
-    AMptorate2[rwcnt] = IVr.ToRateB2;
-    AMpbaserate1[rwcnt] = IVr.BaseRate1;
-    AMpbaserate2[rwcnt] = IVr.BaseRate2;
-    if (rebf) then begin
-      AMpRVal[rwcnt] = rval - rebval;
-      rwcnt = rwcnt + 1;
-
-      AMpRowType[rwcnt] = 5;
-      AMpInvNr[rwcnt] = ARp.InvoiceNr;
-      AMpCustCode[rwcnt] = ARp.CustCode;
-      AMpRVal[rwcnt] = rebval;
-      AMpInvType[rwcnt] = IVr.InvType;
-      AMpARAcc[rwcnt] = IVr.ARAcc;
-      AMpInvCurncy[rwcnt] = IVr.CurncyCode;
-      AMpfrrate[rwcnt] = IVr.FrRate;
-      AMptorate1[rwcnt] = IVr.ToRateB1;
-      AMptorate2[rwcnt] = IVr.ToRateB2;
-      AMpbaserate1[rwcnt] = IVr.BaseRate1;
-      AMpbaserate2[rwcnt] = IVr.BaseRate2;
-    end;
-  end else begin
-    AMpInvType[rwcnt] = -1;
-    AMpARAcc[rwcnt] = "9999";
-    AMpInvCurncy[rwcnt] = "";
-    AMpfrrate[rwcnt] = blankval;
-    AMptorate1[rwcnt] = blankval;
-    AMptorate2[rwcnt] = blankval;
-    AMpbaserate1[rwcnt] = blankval;
-    AMpbaserate2[rwcnt] = blankval;
-  end;
-  rwcnt = rwcnt + 1;
-  RETURN;
-END;
-
-procedure ARCheckDistPay(string custcode,string curncy,Date dp,var val PV,
-                         Array Integer aRowType,Array LongInt aInvNr,Array string aCustCode,Array string aARAcc,Array string aInvCurncy,
-                         Array val aval,Array val ainvoutstand,Array val afrrate,Array val atorate1,Array val atorate2,
-                         Array val abaserate1,Array val abaserate2,var Integer asrwcnt)
-BEGIN
-  Boolean TrHs;
-  record ARVc ARr;
-  Array LongInt AMpInvNr;
-  Array string 20 AMpCustCode;
-  Array Integer AMpInvType;
-  Array string 5 AMpInvCurncy;
-  Array val AMpRVal;
-  Array val AMpfrrate;
-  Array val AMptorate1;
-  Array val AMptorate2;
-  Array val AMpbaserate1;
-  Array val AMpbaserate2;
-  Array string 10 AMpARAcc; 
-  Array Integer AMpRowType; 
-  Integer AMcount;
-  Integer AScount,rwcnt;
-  Integer i;
-  val fr,to1,to2,br1,br2;
-  string 255 tstr;
-  record AccBlock ARAccb;
-  record RoundBlock Roundb;
-  val oPV;
-  
-  oPV = PV;
-  BlockLoad(ARAccb);
-  BlockLoad(Roundb);
-  ARr.CustCode = custcode;
-  ARr.InvoiceNr = 0;
-  TrHs = true;
-  while (LoopKey("CustDue",ARr,2,TrHs)) begin//CustCode
-    if ((TrHs==true) and (PV!=0)) then begin
-        if (ARr.CustCode==custcode) then begin
-          AddARtoAM(ARr,PV,AMpRowType,AMpInvNr,AMpCustCode,AMpInvType,AMpInvCurncy,AMpRVal,AMpfrrate,AMptorate1,
-                    AMptorate2,AMpbaserate1,AMpbaserate2,AMpARAcc,AMcount,ARAccb,Roundb);
-        end else begin
-          goto L80ARCheckDistPay;
-        end;      
-    end;
-  end;
-L80ARCheckDistPay:;
-  // AMh now contains all open invoices for this customer 
-  // Take all negative AR records and get rid of them 
-  for (i=0;i<AMcount;i=i+1) begin
-    if (AMpRVal[i]<0) then begin // the AR record is < 0 
-      aRowType[AScount] = AMpRowType[i];
-      aInvNr[AScount] = AMpInvNr[i];
-      aval[AScount] = AMpRVal[i];
-      aCustCode[AScount] = custcode;
-      aInvCurncy[AScount] = AMpInvCurncy[i];
-      afrrate[AScount] = AMpfrrate[i];
-      atorate1[AScount] = AMptorate1[i];
-      atorate2[AScount] = AMptorate2[i];
-      abaserate1[AScount] = AMpbaserate1[i];
-      abaserate2[AScount] = AMpbaserate2[i];
-      aARAcc[AScount] = AMpARAcc[i];
-      PV = PV - AMpRVal[i];
-      MinM4Val(PV,oPV,PV);
-      AScount = AScount + 1;
-    end;
-  end;
-
-  if (PV>0) then begin
-    AddToAS(AMpRowType,AMpInvNr,AMpCustCode,AMpInvType,AMpInvCurncy,AMpRVal,AMpfrrate,AMptorate1,AMptorate2,AMpbaserate1,AMpbaserate2,AMpARAcc,AMcount,
-            aRowType,aInvNr,aCustCode,aARAcc,aInvCurncy,aval,ainvoutstand,afrrate,atorate1,atorate2,abaserate1,abaserate2,asrwcnt,
-            PV,true,AScount); // look at interest invoices 
-    AddToAS(AMpRowType,AMpInvNr,AMpCustCode,AMpInvType,AMpInvCurncy,AMpRVal,AMpfrrate,AMptorate1,AMptorate2,AMpbaserate1,AMpbaserate2,AMpARAcc,AMcount,
-            aRowType,aInvNr,aCustCode,aARAcc,aInvCurncy,aval,ainvoutstand,afrrate,atorate1,atorate2,abaserate1,abaserate2,asrwcnt,
-            PV,false,AScount); // don't look at interest invoices 
-  end;
-  if (PV!=0) then begin
-    aRowType[AScount] = 1;
-    aInvNr[AScount] = -1;
-    aval[AScount] = PV;
-    ainvoutstand[AScount] = blankval;
-    aCustCode[AScount] = custcode;
-    aInvCurncy[AScount] = curncy;
-    GetFullCurncyRate(curncy,dp,fr,to1,to2,br1,br2);
-    afrrate[AScount] = fr;
-    atorate1[AScount] = to1;
-    atorate2[AScount] = to2;
-    abaserate1[AScount] = br1;
-    abaserate2[AScount] = br2;
-    GetARAcc(custcode,tstr);
-    aARAcc[AScount] = tstr;
-    AScount = AScount + 1;
-  end;
-  asrwcnt = AScount;
-  RETURN;
-END;
-
-
-/*		//Dublicate of next function   
-//Edit----------------------Dima  05.02.2015
-global
-procedure RecordAction_raExpandPay(var record IPVc IPp,Integer rownr)
-BEGIN
-  Array LongInt aInvNr;
-  Array string 20 aCustCode;
-  Array string 10 aARAcc;
-  Array string 5 aInvCurncy;
-  Array val aval;
-  Array val ainvoutstand;  
-  Array val afrrate;
-  Array val atorate1;
-  Array val atorate2;
-  Array val abaserate1;
-  Array val abaserate2;
-  Array Integer aRowType;
-  Integer rwcnt,i,j,asrwcnt;
-  row IPVc IP0rw;
-  row IPVc IP1rw;
-  row IPVc IPrw;
-  val t,rem;
-LRecordAction_raExpandPayBEGIN:;
-  rwcnt = MatRowCnt(IPp);
-  for (i=0;i<rwcnt;i=i+1) begin
-    if (i>=rownr) then begin
-    MatRowGet(IPp,i,IP0rw);
-    if (IP0rw.stp==1) then begin
-      if (IP0rw.InvoiceNr==-1) then begin
-        t = IP0rw.RecVal;
-        rem = IP0rw.RecVal;
-        ARCheckDistPay(IP0rw.CustCode,IP0rw.RecCurncy,IP0rw.PayDate,t,
-                       aRowType,aInvNr,aCustCode,aARAcc,aInvCurncy,aval,ainvoutstand,afrrate,atorate1,atorate2,abaserate1,abaserate2,asrwcnt);
-        for (j=0;j<asrwcnt;j=j+1) begin
-          if (asrwcnt>1) then begin
-            MatRowGet(IPp,i+j,IP1rw);
-          end;
-          if (rem<=0) then begin
-            MatRowDelete(IPp,i);
-            goto LRecordAction_raExpandPaySKIP;
-          end;
-          MatRowInsert(IPp,i+j+1,IPrw);
-          ClearRow(IPp,IPrw,aRowType[i]);
-          IPrw.InvoiceNr = aInvNr[j];
-          IPrw.CustCode = aCustCode[j];
-          IPrw.InvCurncy = aInvCurncy[j];
-          IPrw.CustName = IP0rw.CustName;
-          IPrw.RecCurncy = IP0rw.RecCurncy;
-          IPrw.ovst = 0;
-          IPrw.CUPNr = -1;
-          IPrw.PayDate = IP0rw.PayDate;
-          IPrw.latedays = 0;
-          IPrw.InvVal = aval[j];
-          IPrw.InvOutstand = ainvoutstand[j];
-          ChangeSVIPRecCur(IPrw,IPrw.PayDate,rem);
-          rem = rem - IPrw.RecVal;
-          if (IPrw.InvoiceNr==-1) then begin
-            IPrw.InvoiceNr = -2;
-          end;
-          MatRowPut(IPp,i+j+1,IPrw);
-        end;
-        MatRowDelete(IPp,i);
-        goto LRecordAction_raExpandPayBEGIN;        
-LRecordAction_raExpandPaySKIP:;        
-      end;
-    end;
-    end;
-  end;
-  rwcnt = MatRowCnt(IPp);
-  for (i=0;i<rwcnt;i=i+1) begin
-    if (i>=rownr) then begin
-      MatRowGet(IPp,i,IPrw);
-      if (IPrw.stp==1) then begin
-        if (IPrw.InvoiceNr==-2) then begin
-          IPrw.InvoiceNr = -1;
-          MatRowPut(IPp,i,IPrw);
-        end;
-      end;
-    end;
-  end;
-  RETURN;
-END;
-*/
 
 procedure OpenInvoiceNumber(record IPTBlock IPTb,string custcode, var LongInt lastpos,var record ARVc resARr)
 begin
@@ -441,16 +82,7 @@ begin
     end;    
   end;
 
-/*
-  while (LoopKey("CustDue",ARr,1,found)) begin
-    if (ARr.CustCode!=custcode) then begin found = false; end;
-    if (found) then begin
-      RecordCopy(resARr,ARr);     
-      lastpos = GetLoopPosition(ARr);
-      goto LOpenInvoiceNumber;
-    end;    
-  end;
-*/  
+  
 LOpenInvoiceNumber:;
   return;
 end;
@@ -503,6 +135,7 @@ begin
 END;
 
 
+
 function longint NextCUPNumber()	//Edit----------------------Dima  05.02.2015
 begin
 	record ARPayHistVc ARPr;
@@ -520,12 +153,30 @@ return;
 end;
 
 
-procedure  RewriteIPMatrix(var record IPVc IPp, string bankCurCode)		//Edit----------------------Dima  05.02.2015
+function val SumInvoicesIP(record IPVc IPp)	//Edit----------------------Dima  05.02.2015
+begin
+	row IPVc IPrw;
+	integer rwcnt,i;
+	val sum;
+
+	sum = 0;
+	rwcnt = MatRowCnt(IPp);
+	for(i=0; i<rwcnt; i=i+1) begin
+		MatRowGet(IPp,i,IPrw);
+		if (IPrw.InvoiceNr > 0) then begin
+				sum = sum + IPrw.BankVal;
+		end;
+	end;
+	SumInvoicesIP = sum;
+return;
+end;
+
+
+procedure  RewriteIPMatrix(var record IPVc IPp, string bankCurCode,val cashvalue)		//Edit----------------------Dima  05.02.2015
 begin
 	integer rwcnt,i;
 	row IPVc IPrw;
 	val coef,v;
-
 
 	rwcnt = MatRowCnt(IPp);
 	MatRowGet(IPp,0,IPrw);
@@ -549,6 +200,7 @@ begin
 			if ((IPrw.InvoiceNr<0) and (IPrw.BankCurncy !=IPrw.RecCurncy)) then begin
 					CurValToOtherCur(CurrentDate,IPrw.BankCurncy, IPrw.BankVal,IPrw.RecCurncy,v,DefaultCurRoundOff);
 					IPrw.RecVal = v;
+					IPrw.BankVal = cashvalue - SumInvoicesIP(IPp);	//for correct rounding
 					IPrw.InvoiceNr = -1;
 					IPrw.CUPNr = NextCUPNumber;
 					MatRowPut(IPp,i-1,IPrw);		
@@ -571,9 +223,9 @@ begin
   Boolean loopf,testf,installmentf;
   LongInt lastpos;
   record BaseCurBlock BCb;
-  val v,remv,chk;  
+  val v,remv,chk,cashvalue;  
   record IPTBlock IPTb;
-	string 7 bankCurcode,recCurcode;
+	string 7 bankCurcode;
 
 
   BlockLoad(BCb);
@@ -582,7 +234,9 @@ begin
   currow = rwcnt;
   MatRowGet(IPp,rownr,IP0rw);
 
+	////Edit--------------------------------------------------------------------Dima  05.02.2015
 	bankCurcode = IP0rw.BankCurncy;
+	cashvalue = IP0rw.BankVal;
 	if (IP0rw.BankCurncy != IP0rw.RecCurncy) then begin
 			if (blank(IPp.TakeOnRate)) then begin
 					CurValToOtherCur(CurrentDate,IP0rw.BankCurncy, IP0rw.BankVal,IP0rw.RecCurncy,IP0rw.RecVal,DefaultCurRoundOff);
@@ -592,6 +246,7 @@ begin
 			IP0rw.BankCurncy = BCb.BaseCur1;
 	end;
 	MatRowPut(IPp,rownr,IP0rw);
+	//Edit----------------------------------------------------------------------Dima  05.02.2015
 
   remv = IP0rw.RecVal;	
 
@@ -650,16 +305,9 @@ begin
     newIPrw.RecVal = remv;
     MatRowPut(IPp,currow,newIPrw);
     IPVc_PasteRecVal(IPp,currow);
- 
-/*
-newIPrw.BankCurncy = "UAH";
-newIPrw.RecCurncy = "USD";
-newIPrw.BankVal = remv;
-newIPrw.RecVal = remv/IPp.TakeOnRate;
-MatRowPut(IPp,currow,newIPrw);*/
   end;
 
-RewriteIPMatrix(IPp,bankCurcode);
+	RewriteIPMatrix(IPp,bankCurcode,cashvalue);	//Edit----------------------Dima  05.02.2015
 
   IPSumup(IPp);
   return;
