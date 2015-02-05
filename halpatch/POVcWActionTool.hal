@@ -2305,7 +2305,7 @@ BEGIN
   for (i=0;i<rwcnt;i=i+1) begin
     MatRowGet(POr,i,POrw);
     
-    if(minq>POrw.Quant and POrw.Quant!=0 and nonblank(POrw.ArtCode))then begin// Edit ************************** Wednesday, 4 February 2015 12:50:49
+    if(minq>POrw.Quant and POrw.Quant>0 and nonblank(POrw.ArtCode) and rowcalcval>0.07)then begin// Edit ************************** Wednesday, 4 February 2015 12:50:49
 			minq = POrw.Quant;
 			minqtyi = i;
     end;

@@ -123,14 +123,28 @@ begin
 	record ItemStatusVc ISr;
 	integer qty;
 	record PLVc PLr;
+	record PLDefVc PLDr;
+	array string 20 PLCode;
+	integer k,i,pos;
 	
 	StartReportNoHeaderJob("Отчет по ценам");
 	
+	PLDr.Code = "";
+	k=0;
+	while(loopmain(PLDr,1,true))begin
+		PLCode[k] = PLDr.Code;
+		k=k+1;
+	end;
+	
 	StartFormat(15);
 		OutString(0,0,"Код товара",false);
-		OutString(70,0,"Наименование",false);
-		OutString(160,0,"Цена Опт",false);
-		OutString(200,0,"Цена Розн.",false);
+		OutString(50,0,"Наименование",false);
+		OutString(120,0,"Себестоимость",false);
+		pos = 160;
+		For(i=0;i<k;i=i+1) begin
+	  	OutString(pos,0,PLCode[i],false);
+	  	pos = pos + 40;
+		end; 
 		OutString(240,0,"На скл.",false);
 		OutString(280,0,"Группа",false);
 		OutString(350,0,"В ящ.",false);	
@@ -152,15 +166,16 @@ begin
 		
 		StartFormat(15);
 			OutString(0,0,INr.Code,false);
-			OutString(70,0,INr.Name,false);
-			PLr.ArtCode = INr.Code;
-			PLr.PLCode = "OPT";
-			readfirstmain(PLr,2,true);
-			OutString(160,0,PLr.ExVatPrice,false);
-			PLr.ArtCode = INr.Code;
-			PLr.PLCode = "RRP";
-			readfirstmain(PLr,2,true);
-			OutString(200,0,PLr.ExVatPrice,false);
+			OutString(50,0,INr.Name,false);
+			OutString(120,0,INr.InPrice,false);
+			pos = 160;
+			For(i=0;i<k;i=i+1) begin
+				PLr.ArtCode = INr.Code;
+				PLr.PLCode = PLCode[i];
+				readfirstmain(PLr,2,true);
+				OutString(pos,0,PLr.ExVatPrice,false);
+				pos = pos + 40;
+			end; 
 			OutString(240,0,qty,false);
 			OutString(280,0,INr.Group,false);
 			OutString(350,0,INr.AddUnitCoef2,false);	//Edit by Victor 30.01.15
