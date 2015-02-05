@@ -832,7 +832,7 @@ begin
   //EditFieldTL(h,v+=vs,150,"ѓрупа",M4UStr,Normal,11,f3,false,ITSClass);
   end;
   if (HasItemClassification) then begin
-  //EditFieldTL(h,v+=vs,150,"ЉласифґкацґЯ товару", M4UStr,Normal,100,f4,false,DISClass); 
+  EditFieldTL(h,v+=vs,150,"ЉласифґкацґЯ товару", M4UStr,Normal,100,f4,false,DISClass); 
   //EditFieldTL(h,v+=vs,150,"’ип класифґкацґ»",M4UStr,Normal,60,f5,false,CTypeSClass);
   end;
   if (HasMultiLocations) then begin
