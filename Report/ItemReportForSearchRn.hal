@@ -133,18 +133,20 @@ begin
 			end;
 			OutString(5,0,INr.BarCode,false);
 			OutString(6,0,INr.AlternativeCode,false);
-			ItemStatusr.Code = INr.Code;
 			switch (lmflag) begin //Edit***************************Sasha2,10:22 23.01.2015 {
 			  case 1:
+			    ItemStatusr.Code = INr.Code;
 			    ItemStatusr.Location = "3-RAY";
 			    if (ReadFirstMain(ItemStatusr,2,true)) then begin			//поиск по Code, Location
     				OutString(7,0,ItemStatusr.Instock,false);
     			end;
+    			ItemStatusr.Code = INr.Code;
     			ItemStatusr.Location = "4-NIZ";
     			if (ReadFirstMain(ItemStatusr,2,true)) then begin			
     				OutString(8,0,ItemStatusr.Instock,false);
     			end;
     		case 2:
+    		  ItemStatusr.Code = INr.Code;
     		  ItemStatusr.Location = "6-KV";
 			    if (ReadFirstMain(ItemStatusr,2,true)) then begin			//поиск по Code, Location
     				OutString(7,0,ItemStatusr.Instock,false);
