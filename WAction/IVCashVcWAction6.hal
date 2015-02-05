@@ -3205,6 +3205,10 @@ begin
   record GCSVc GCSr;
   record RcVc RepSpec;
   Boolean res,found;
+  Integer mwn,rwcnt,i; //Edit***************************Sasha2,15:13 05.02.2015
+  record IVVc IVr; //Edit***************************Sasha2,15:21 05.02.2015
+  row IVVc IVrw; //Edit***************************Sasha2,15:21 05.02.2015
+  val certpayed; //Edit***************************Sasha2,18:04 05.02.2015
   
   res = true;
   if (changedf) then begin
@@ -3221,7 +3225,25 @@ begin
       res = false;
       goto LGiftVoucherTouchScreenDClassf1EFAfter;
     end;
-    RepSpec.vals0 = GCSr.Balance;
+    mwn = MotherWindow(wn); //Edit***************************Sasha2,15:13 05.02.2015 {
+    if (mwn!=0 and GetWindowFileName(mwn)=="IVVc") then begin 
+      GetWindowRecord(mwn,IVr);
+      certpayed = 0;
+      rwcnt = MatRowCnt(IVr);
+      for (i=0;i<rwcnt;i=i+1) begin
+        MatRowGet(IVr,i,IVrw);
+        if (IVrw.stp==kInvoiceRowTypeGiftVoucherPayment) then begin
+          certpayed = certpayed + IVrw.Sum;
+        end;
+      end;
+      if ((IVr.Sum4-certpayed)>GCSr.Balance) then begin
+        RepSpec.vals0 = GCSr.Balance;
+      end else begin
+        RepSpec.vals0 = (IVr.Sum4-certpayed);
+      end;
+    end else begin
+      RepSpec.vals0 = GCSr.Balance;
+    end; //Edit***************************Sasha2,15:20 05.02.2015 }
     PutWindowRecord(wn,RepSpec);
   end;
 LGiftVoucherTouchScreenDClassf1EFAfter:;  
