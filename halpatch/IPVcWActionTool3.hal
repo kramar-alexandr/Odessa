@@ -767,6 +767,10 @@ begin
   
   MatRowGet(IPp,rownr,IPrw);  
   ChangeIPRecVal(rownr,IPrw,IPp.TransDate);
+	if (nonblank(IPp.TakeOnRate) and (IPrw.BankCurncy != IPrw.RecCurncy)) then begin
+			IPrw.BankVal = IPrw.RecVal/IPp.TakeOnRate;											//Edit----------------------Dima  04.02.2015
+	end;
+
   if (nonblank(IPrw.VATCode)) then begin
     if (IPrw.InvoiceNr<0) then begin
       BlockLoad(Accb);  
@@ -828,7 +832,7 @@ begin
       MatRowPut(IPp,rownr,IPrw);
    end;
   end;
-  IPVc_PasteToRateB1BankVal(IPp,rownr);  
+  IPVc_PasteToRateB1BankVal(IPp,rownr); 
   IPSumup(IPp);
   return;
 end;
