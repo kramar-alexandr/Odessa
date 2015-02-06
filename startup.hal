@@ -70,7 +70,7 @@ begin
   Maintenance("Пересчитать вес и объем для 1-8 поступлений",MyVClass,RecalcPUWeightMn,modIN);  //Edit**********Dima, 28.01.2014
   Maintenance("Контакты: поставить валюту \"UAH_R\" в контактах (RETAI,WEB)",MyVClass,ReplaceUAHtoUAHRinWEBandRetailCUMn,modDBMain);  //Edit***************************Sasha2,16:20 29.01.2015
   Maintenance("Заказы: проставить кол-во в ящ. и в уп.",MyVClass,PutQtysToPOMn,modDBMain);	////Edit by Victor 30.01.15
-  
+  Maintenance("Восстановить линки на отгрузки и сч/ф из заказов",MyVClass,RestoreLinksFromORtoSHandIVMn,modDBMain); //Edit***************************Sasha2,11:51 06.02.2015
 
   Import("Импорт цен",PLImportIClass,PLImportIn,modDI); //Added********************Dima 20.11.2014
   Import("Импорт товаров",INImportIClass,INImportIn,modIN);//Added********************Dima 20.11.2014
