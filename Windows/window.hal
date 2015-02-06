@@ -303,7 +303,7 @@ begin
   EditField(h,v+=vs,50,"Порт FTP-сервера",Normal,Port,false,0);
   EditField(h,v+=vs,100,"Логин",Normal,Login,false,0);
   EditField(h,v+=vs,100,"Пароль",Normal,Password,false,0);
-  
+
   EndWindow;
 end;
 
@@ -333,7 +333,7 @@ begin
   EditField(h,v,150,"Склад",Normal,Location,false,LocationSClass);
   EditField(h,v+=vs,60,"Условия оплаты",Normal,PayDeal,false,PDSClass);
   EditField(h,v+=vs,60,"Условия отгрузки",Normal,ShipDeal,false,ShipDealSClass);
-  
+
   EndWindow;
 end; //Edit***************************Sasha2,10:24 14.07.2014 }
 
@@ -351,11 +351,11 @@ begin
   EditFieldTL(h,v+=vs,150,"Склад",M4UStr,Normal,41,f2,false,LocationSClass);
   EditFieldTL(h,v+=vs,150,"Остатки на складах",M4UStr,Normal,41,f4,false,LocationSClass);
   EditFieldTL(h,v+=vs,150,"Классификация",M4UStr,Normal,30,f3,false,DISClass);
-  
+
   EndWindow;
 end; //Edit***************************Sasha2,14:10 31.07.2014 }
 
-window ItemPUOrderReportRClass:1 
+window ItemPUOrderReportRClass:1
   wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
 begin
   real vs,h,v;
@@ -368,9 +368,9 @@ begin
   EditFieldTL(h,v+=vs ,70,"Классификация",M4UStr,Normal,30,f3,false,DISClass);
   //CheckBox(h,v+=vs,0,"Вкл. отгруженные",flags[0]);
 
-  
+
   EndWindow;
-end; 
+end;
 
 window MyVClass:1 // Edit ************************** Friday, 17 October 2014 11:47:19
  wtag("language","UKR"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
@@ -380,7 +380,7 @@ WindowBegin("Maintenance",MyVClass,CGMnt,RcType);
   EndWindow;
 end;
 
-window POSPaymentsRClass:1 
+window POSPaymentsRClass:1
   wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
 begin
   real vs,h,v;
@@ -441,7 +441,7 @@ Integer i;
   WindowBegin("Импорт цен",PLImportIClass,CGIcW,-);
   SetWRect(20,80,470,280);
   i=1; //номер колонки
-  h=10;  v=15; 
+  h=10;  v=15;
   StaticText(h,v,"Формат импорта",false);
   h=20;  v=40;
   StaticText(h,v,"Список колонок:",false);
@@ -470,7 +470,7 @@ Integer i;
   WindowBegin("Импорт товаров",INImportIClass,CGIcW,-);	//INImportIn()
   SetWRect(20,80,470,600);
   i=1; //номер колонки
-  h=10;  v=15; 
+  h=10;  v=15;
   StaticText(h,v,"Формат импорта",false);
   h=20;  v=40;
   StaticText(h,v,"Список колонок:",false);
@@ -540,7 +540,7 @@ Integer i;
   WindowBegin("Импорт цен",INReplaceGroupIClass,CGIcW,-);
   SetWRect(20,80,470,260);
   i=1; //номер колонки
-  h=10;  v=15; 
+  h=10;  v=15;
   StaticText(h,v,"Формат импорта",false);
   h=20;  v=40;
   StaticText(h,v,"Список колонок:",false);
@@ -620,12 +620,14 @@ end;
 window PricesRepRClass:1  // added ************ Dima, 04.12.2014
   wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
 begin
-  real h,v;
+  real h,v,vs;
 
   WindowBegin("Отчет по ценам",PricesRepRClass,CGRcW,RcType);
   SetWRect(20,80,400,200);
-  h = 115; v = 15;
+  h = 110; v = 15; vs = 20;
   EditFieldTL(h,v,150,"Склад",M4UStr,Normal,30,f1,false,LocationSClass);
+	EditFieldTL(h,v+=vs,150,"Диапазон товаров",M4UStr,Normal,50,f2,false,INSClass);
+	EditFieldTL(h,v+=vs,150,"Классификация",M4UStr,Normal,30,f3,false,DISClass);
   EndWindow;
 
 end;
@@ -642,7 +644,7 @@ begin
   v = 10;  h = 100;
   StaticText(h+215,v,"Введите максимальное кол-во баллов карты лояльности, ",true);
   StaticText(h+150,v+15,"которое будет отображаться в счет-фактуре.",true);
-  EditField(h,v+30,50,"Кол-во баллов",Normal,MaxPointsView,false,0);  
+  EditField(h,v+30,50,"Кол-во баллов",Normal,MaxPointsView,false,0);
   EndWindow;
 end;
 
@@ -692,7 +694,7 @@ Integer i;
   WindowBegin("Импорт поступлений на склад",PUImportIClass,CGIcW,-);
   SetWRect(20,80,470,320);
   i=1; //номер колонки
-  h=10;  v=15; 
+  h=10;  v=15;
   StaticText(h,v,"Формат импорта",false);
   h=20;  v=40;
   StaticText(h,v,"Список колонок:",false);
@@ -727,11 +729,11 @@ Integer i,mwn;
   SetWRect(3,140,400,300);
   UseView(RcVc);
   Modality(2);
-  
+
   v=30;
   h=40;
  	EditFieldTL(h+30,v+70 ,150,"Штрих-код",M4Str,Normal,20,f2,true,0);
-	EnterSkip(f2);  
+	EnterSkip(f2);
 	//ActiveFieldOnNew("f2");
   EditFieldTL(h+30,v-10 ,150,"Поиск",M4Str,Normal,20,f1,true,0); // new search field
 
@@ -753,13 +755,13 @@ Integer i,mwn;
   SetWRect(3,140,400,350);
   UseView(RcVc);
   Modality(2);
-  
+
   v=30;
   h=40;
  	EditFieldTL(h+30,v+90 ,150,"Отправлено",M4Str,Normal,20,f2,true,0);
-	EnterSkip(f2); 
+	EnterSkip(f2);
 	EditFieldTL(h+30,v+130 ,150,"Получено",M4Str,Normal,20,f3,true,0);
-	EnterSkip(f3);  
+	EnterSkip(f3);
   EditFieldTL(h+30,v-10 ,150,"Поиск",M4Str,Normal,20,f1,true,0); // new search field
 
 	StaticText(h-25,v+70,"Для добавления в таблицу введите Штрих-код или Алт.код",false);
@@ -779,7 +781,7 @@ Integer i;
   WindowBegin("Импорт начальной задолженности клиентов",InitialDebtIClass,CGIcW,-);
   SetWRect(20,80,470,240);
   i=1; //номер колонки
-  h=10;  v=15; 
+  h=10;  v=15;
   StaticText(h,v,"Формат импорта",false);
   h=20;  v=40;
   StaticText(h,v,"Список колонок:",false);
@@ -801,7 +803,7 @@ window LabelItem9RClass:1 //Edit***************************Sasha2,16:07 24.10.20
   wtag("language","UKR"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
 begin
   real h;
-	
+
   WindowBegin("Друк цінників товарів",LabelItem9RClass,CGRcW,RcType);
     SetWRect(20,120,350,300);
     /*h=100;
@@ -832,7 +834,7 @@ begin
   //EditFieldTL(h,v+=vs,150,"Група",M4UStr,Normal,11,f3,false,ITSClass);
   end;
   if (HasItemClassification) then begin
-  EditFieldTL(h,v+=vs,150,"Классификация товара", M4UStr,Normal,100,f4,false,DISClass); 
+  EditFieldTL(h,v+=vs,150,"Классификация товара", M4UStr,Normal,100,f4,false,DISClass);
   //EditFieldTL(h,v+=vs,150,"Тип класифікації",M4UStr,Normal,60,f5,false,CTypeSClass);
   end;
   if (HasMultiLocations) then begin
@@ -850,7 +852,7 @@ begin
   end;*/
   //EditFieldTL(h,v+=vs,80,"Дата",M4Date,Normal,0,d1,false,PasteCurDate);
   //CheckBox(temp,v+=vs,0,"Показ. сер. номер",flags[10]); v = v + 16;
- 
+
   CheckBox(h,v+=1.5*vs,0,"Вкл. закритий товар",flags[18]); v = v + 16;
 
   if (HasMultiCurrency) then begin
@@ -867,7 +869,7 @@ begin
   end;
   v = vm - 30; //Edit***************************Sasha2,17:35 03.09.2014
   temp = h3; //Edit***************************Sasha2,17:47 03.09.2014
-  
+
 
   EndWindow;
 end;

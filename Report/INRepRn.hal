@@ -117,6 +117,41 @@ end;
 
 
 
+procedure PricesRepRnHeader(record RcVc RepSpec)	//Edit----------------------Dima  06.02.2015
+begin
+		string 50 tstr;
+
+  	StartFormat(15);
+		if (nonblank(RepSpec.f1)) then begin
+				tstr = RepSpec.f1;
+		end else begin
+				tstr = "ВСЕ";
+		end;
+		OutString(15,0,"Склад: " & tstr,false);
+		EndFormat;
+
+		if (nonblank(RepSpec.f2)) then begin
+				tstr = RepSpec.f2;
+		end else begin
+				tstr = "ВСЕ";
+		end;
+		OutString(15,0,"Товары: " & tstr,false);
+		EndFormat;
+
+		if (nonblank(RepSpec.f3)) then begin
+				tstr = RepSpec.f3;
+		end else begin
+				tstr = "ВСЕ";
+		end;
+		OutString(15,0,"Классификация: " & tstr,false);
+		EndFormat;
+
+		Gray_Divider(0,1);
+		EndFormat;
+end;
+
+
+
 global updating procedure PricesRepRn(record RcVc RepSpec)
 begin
 	record INVc INr;
@@ -125,10 +160,13 @@ begin
 	record PLVc PLr;
 	record PLDefVc PLDr;
 	array string 20 PLCode;
-	integer k,i,pos;
+	integer k,i,pos,step;
+	string 20 frin,toin;
+	boolean testf,TrHs;
 	
 	StartReportNoHeaderJob("Отчет по ценам");
-	
+	PricesRepRnHeader(RepSpec);  //Edit----------------------Dima  06.02.2015		
+
 	PLDr.Code = "";
 	k=0;
 	while(loopmain(PLDr,1,true))begin
@@ -136,52 +174,78 @@ begin
 		k=k+1;
 	end;
 	
+	step = (350-160)/PLCode.length;	//Edit-----------------Dima 06.02.2015
+	pos = 160;
+
+  frin = FirstInRange(RepSpec.f2,20);
+  toin = LastInRange(RepSpec.f2,20);
+
 	StartFormat(15);
 		OutString(0,0,"Код товара",false);
 		OutString(50,0,"Наименование",false);
-		OutString(120,0,"Себестоимость",false);
-		pos = 160;
+		OutString(120,0,"Себестоимость",false);		
 		For(i=0;i<k;i=i+1) begin
 	  	OutString(pos,0,PLCode[i],false);
-	  	pos = pos + 40;
+	  	pos = pos + step;
 		end; 
-		OutString(240,0,"На скл.",false);
-		OutString(280,0,"Группа",false);
-		OutString(350,0,"В ящ.",false);	
-		OutString(390,0,"В упак.",false);
+		OutString(350,0,"На скл.",false);
+		OutString(380,0,"Группа",false);
+		OutString(420,0,"В ящ.",false);	
+		OutString(450,0,"В упак.",false);
 	EndFormat;
 	
-	while(loopmain(INr,1,true))begin
+
+
+	TrHs = true;
+	if (nonblank(frin)) then begin
+			INr.Code = frin;
+	end;
+	
+	while(loopmain(INr,1,TrHs))begin
+		testf = true;
 		
-		ISr.Code = INr.Code;
-		if(nonblank(RepSpec.f1))then begin
-			ISr.Location = RepSpec.f1;
-		end else begin
-			ISr.Location = ";;;";
+		if (nonblank(toin)) then begin
+			if (INr.Code>toin) then begin
+				 TrHs = false; 						//Edit----------------------Dima  06.02.2015
+				 testf = false;
+			end;
 		end;
-		qty = 0;
-		if(readfirstmain(ISr,2,true))then begin
-			qty = ISr.Instock;
+
+		if (nonblank(RepSpec.f3) and (SetInSet(RepSpec.f3,INr.DispGroups) == false)) then begin
+				testf = false;						//Edit----------------------Dima  06.02.2015
 		end;
-		
-		StartFormat(15);
-			OutString(0,0,INr.Code,false);
-			OutString(50,0,INr.Name,false);
-			OutString(120,0,INr.InPrice,false);
-			pos = 160;
-			For(i=0;i<k;i=i+1) begin
-				PLr.ArtCode = INr.Code;
-				PLr.PLCode = PLCode[i];
-				readfirstmain(PLr,2,true);
-				OutString(pos,0,PLr.ExVatPrice,false);
-				pos = pos + 40;
-			end; 
-			OutString(240,0,qty,false);
-			OutString(280,0,INr.Group,false);
-			OutString(350,0,INr.AddUnitCoef2,false);	//Edit by Victor 30.01.15
-			OutString(390,0,INr.AddUnitCoef3,false);	//Edit by Victor 30.01.15
-		EndFormat;
-		
+			
+		if(testf)  then begin
+
+				ISr.Code = INr.Code;
+				if(nonblank(RepSpec.f1))then begin
+					ISr.Location = RepSpec.f1;
+				end else begin
+					ISr.Location = ";;;";
+				end;
+				qty = 0;
+				if(readfirstmain(ISr,2,true))then begin
+					qty = ISr.Instock;
+				end;
+				
+				StartFormat(15);
+					OutString(0,0,INr.Code,false);
+					OutString(50,0,INr.Name,false);
+					OutString(120,0,INr.InPrice,false);
+					pos = 160;
+					For(i=0;i<k;i=i+1) begin
+						PLr.ArtCode = INr.Code;
+						PLr.PLCode = PLCode[i];
+						readfirstmain(PLr,2,true);
+						OutString(pos,0,PLr.ExVatPrice,false);
+						pos = pos + step;
+					end; 
+					OutString(350,0,qty,false);
+					OutString(380,0,INr.Group,false);
+					OutString(420,0,INr.AddUnitCoef2,false);	//Edit by Victor 30.01.15
+					OutString(450,0,INr.AddUnitCoef3,false);	//Edit by Victor 30.01.15
+				EndFormat;
+		end;
 	
 	end;
 	endjob;
