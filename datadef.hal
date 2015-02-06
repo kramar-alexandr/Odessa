@@ -2158,7 +2158,7 @@ RecordBegin(INVc,-,"artikel5");
  	RecordField(SalesGroup,M4Code,5,SalesGroupVc); //Edit by Victor 25.11.14
  	RecordField(Manager,M4UStr,60,UserVc); //Edit***************************Sasha2,15:27 27.01.2015
  	RecordField(Collector,M4UStr,60,UserVc); //Edit***************************Sasha2,15:27 27.01.2015
- 	
+ 	RecordField(ShipOkDate,M4Date,0,0); //Edit***************************Sasha2,13:41 06.02.2015
   ArrayBegin(Math,-,1);
   ArrayField(OrdRow,M4Long,0,0);
   ArrayField(ArtCode,M4Code,20,INVc);
@@ -2359,6 +2359,13 @@ RecordBegin(INVc,-,"artikel5");
   AppendListFieldToKeyName(SalesGroup);
   KeySegment(OfficialSerNr2);
   KeySegment(SerNr);
+  
+  SubsetKeyBegin2(ShipOkDate); //Edit***************************Sasha2,13:43 06.02.2015 {
+  StoreInBaseKey;
+  AppendListFieldToKeyName(SalesGroup);
+  KeySegment(ShipOkDate);
+  KeySegment(SerNr); //Edit***************************Sasha2,13:43 06.02.2015 }
+  
   EndRecord;// Edit by Victor 25.11.14	end
   
   RecordBegin(StockMovVc,-,"stockmov1");

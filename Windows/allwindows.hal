@@ -5691,7 +5691,7 @@ window SHLClass:1
 begin
   WindowBegin("Отгрузки",SHLClass,CGmlist,SHView);
   SpawnClass(SHDClass);
-  SetWRect(20,80,880,298);
+  SetWRect(20,80,950,298); //Edit***************************Sasha2,13:46 06.02.2015
   Sizeable(-1,-1,0,0);
   UseView(SHVc);
   FormName(PrintSHL);
@@ -5707,7 +5707,8 @@ begin
   end;
   RlColKey(321,321,"Офиц.No.",OfficialSerNr,false,OfficialSerNr);
   RlColKey(411,411,"Клиент",CustCode,false,CustCode);
-  RlColKey(471,471,"Наим.",Addr0,false,CustName);
+  RlColKey(471,471,"Дата ОК",ShipOkDate,false,ShipOkDate); //Edit***************************Sasha2,13:48 06.02.2015
+  RlColKey(541,541,"Наим.",Addr0,false,CustName); //Edit***************************Sasha2,13:48 06.02.2015
   if (IsEnterprise) then begin
     RlColKey(-230,-180,"Коммент.",Comment,false,Comment); //Edit***************************Sasha2,12:43 28.01.2015
     //RlColKey(-180,-180,"Трансп. Но.",TransportNumber,false,TransportNumber); //Edit***************************Sasha2,12:43 28.01.2015
@@ -5784,6 +5785,8 @@ begin
     v = v + vs;
     EditField(h1,v,82,"Маршрут",Normal,Sorting,false,DelRouteSClass);
   end;
+  v = v + vs; //Edit***************************Sasha2,13:49 06.02.2015
+  EditField(h1,v,82,"Дата ОК",Normal,ShipOkDate,false,0); //Edit***************************Sasha2,13:43 06.02.2015
   if (HasObjects) then begin
     EditField(h2,v=vm,135,"Объекты",Normal,Objects,false,ObjSClass);
   end;

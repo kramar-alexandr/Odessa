@@ -1408,6 +1408,7 @@ begin
   end;
   if (SHr.OKFlag!=0) then begin
     SHr.LocOKNr = NextLocOKNr(SHr.Location);
+    SHr.ShipOkDate = CurrentDate; //Edit***************************Sasha2,13:55 06.02.2015
   end;
   CalcSHWeight(SHr,false);
   SHOK(SHr);
@@ -1558,6 +1559,7 @@ begin
     end;
     UpdateStockResFromSH(SHr);
     SHr.Prntdf = 0;
+    SHr.ShipOkDate = CurrentDate; //Edit***************************Sasha2,13:55 06.02.2015
   end;
   AddPortugueseSAFTHashToSH(SHr);
   SHVcRecordUpdate = res; 
