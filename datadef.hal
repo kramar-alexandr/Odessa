@@ -2392,8 +2392,8 @@ RecordBegin(INVc,-,"artikel5");
   RecordField(FrLocOKNr,M4Qty,0,0);
   RecordField(ToLocOKNr,M4Qty,0,0);
   RecordField(IntORNo,M4Long,0,IntORVc);
-  RecordField(TotWeight,M4Qty,0,0);
-  RecordField(TotVolume,M4Qty,0,0);
+  RecordField(TotWeight,M45Val,0,0); //was M4Qty Edit***************************Sasha2,14:30 09.02.2015 
+  RecordField(TotVolume,M45Val,0,0); //was M4Qty Edit***************************Sasha2,14:30 09.02.2015
   RecordField(Objects,M4UStr,60,ObjVc);
   RecordField(FrPos,M4Code,20,0);
   RecordField(ToPos,M4Code,20,0);
@@ -2504,6 +2504,8 @@ RecordBegin(INVc,-,"artikel5");
   ArrayField(ThrouPosCode,M4Code,20,0);
   ArrayField(FromQuant,M4UVal,0,0);	// Edit by Victor 13.01.15
   ArrayField(ToQuant,M4UVal,0,0);	// Edit by Victor 13.01.15
+  ArrayField(Volume,M45Val,0,0); // Edit ************************** Friday, July 4, 2014 at 17:13:54
+  ArrayField(Weight,M45Val,0,0);
   
   EndArray;
       

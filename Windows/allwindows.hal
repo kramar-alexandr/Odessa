@@ -6440,11 +6440,14 @@ begin
   Flip(flipnr); flipnr = flipnr + 1;
   MatCol(1,86,"Наименование",0,Spec,false,0);
   if (HasSerialNumbers) then begin
-    MatCol(1,-280,"Серийный номер",0,SerialNr,false,SerialNrSClass);
+    MatCol(1,-320,"Серийный номер",0,SerialNr,false,SerialNrSClass);
   end;
-  MatCol(1,-135,"Ширина",0,UnitXval,true,0);
+  MatCol(1,-200,"Отпр.кол.",0,Quant,true,0); //Edit***************************Sasha2,14:24 09.02.2015
+  MatCol(1,-140,"Объем",0,Volume,true,0); //Edit***************************Sasha2,13:48 09.02.2015
+  MatCol(1,-70,"Вес",0,Weight,true,0); //Edit***************************Sasha2,13:48 09.02.2015
+  /*MatCol(1,-135,"Ширина",0,UnitXval,true,0);
   MatCol(1,-90,"Высота",0,UnitYval,true,0);
-  MatCol(1,-45,"Глубина",0,UnitZval,true,0);
+  MatCol(1,-45,"Глубина",0,UnitZval,true,0);*/ //Edit***************************Sasha2,13:48 09.02.2015
   if (HasPositions) then begin
     Flip(flipnr); flipnr = flipnr + 1;
     MatCol(1,86,"Наименование",0,Spec,false,0);
@@ -6470,6 +6473,8 @@ begin
     EditField(550,-40,150,"Tax Auth. Approval",Normal,TaxAdminServSeal,false,0);  
 //    SoftEditField(550,-40,150,"Tax Auth. Approval",Normal,"TaxAdminServSeal",false,0,M4Str,200);
   end;
+  EditField(550,-60,100,"Объем",ViewOnly,TotVolume,true,0); //Edit***************************Sasha2,13:50 09.02.2015
+  EditField(550,-40,100,"Вес",ViewOnly,TotWeight,true,0); //Edit***************************Sasha2,13:50 09.02.2015
   EditField(550,-20,100,"Неучт. накладные расходы",Normal,OtherExtraCosts,false,0);
   if (HasMultiCurrency or HasBase2) then begin
     Tile(tilenr,70,false,tilenr,FrRate); tilenr = tilenr + 1;

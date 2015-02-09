@@ -59,7 +59,8 @@ begin
 	 SString(31021,"Остат.с учет.рез-ва");
 	 SString(31022,"Остат.с учет.счетов");
 	 SString(31023,"  карточек товара было обновлено.");
-
+	 SString(31024,"Подар.серт.");
+   SString(31025,"Оплата подар.серт.");
 
    
   Maintenance("Экспорт склада CSV",ExportStockCSVClass,ExportStockCSVMn,modSY);
