@@ -6442,7 +6442,7 @@ begin
   if (HasSerialNumbers) then begin
     MatCol(1,-320,"Серийный номер",0,SerialNr,false,SerialNrSClass);
   end;
-  MatCol(1,-200,"Отпр.кол.",0,Quant,true,0); //Edit***************************Sasha2,14:24 09.02.2015
+  MatCol(1,-200,"Треб.кол.",0,OrdQuant,true,0); //Edit***************************Sasha2,14:24 09.02.2015
   MatCol(1,-140,"Объем",0,Volume,true,0); //Edit***************************Sasha2,13:48 09.02.2015
   MatCol(1,-70,"Вес",0,Weight,true,0); //Edit***************************Sasha2,13:48 09.02.2015
   /*MatCol(1,-135,"Ширина",0,UnitXval,true,0);

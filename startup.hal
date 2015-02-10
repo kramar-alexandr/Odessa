@@ -60,8 +60,11 @@ begin
 	 SString(31022,"Остат.с учет.счетов");
 	 SString(31023,"  карточек товара было обновлено.");
 	 SString(31024,"Подар.серт.");
-   SString(31025,"Оплата подар.серт.");
-
+   SString(31025,"Оплата под.серт.");
+   SString(31026,"Подарочный сертификат");
+   SString(31027,"На сумму");
+   SString(31028,"грн.");
+   SString(31029,"Номер сертификата");
    
   Maintenance("Экспорт склада CSV",ExportStockCSVClass,ExportStockCSVMn,modSY);
   Maintenance("Пересчитать значение объема в карточке товара",RecalcINVolumeClass,RecalcINVolumeMn,modDBMain);//Edit***************************Sasha2,13:50 24.06.2014

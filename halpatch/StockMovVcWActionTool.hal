@@ -118,10 +118,6 @@ LStockMovVc_PasteQuantAGAIN:;
       end;
     end;
   end;
-  if (NonBlank(StockMovrw.ArtCode)) then begin //Edit***************************Sasha2,14:12 09.02.2015 {
-    StockMovrw.Volume = INr.Volume * StockMovrw.Quant; 
-    StockMovrw.Weight = INr.Weight * StockMovrw.Quant; 
-  end; //Edit***************************Sasha2,14:12 09.02.2015 }
   MatRowPut(StockMovr,lrownr,StockMovrw);      
   if (res) then begin
     if (LocToRec.RequirePos!=0) then begin
@@ -131,10 +127,6 @@ LStockMovVc_PasteQuantAGAIN:;
         toStockMovrw.FrPosCode = StockMovrw.FrPosCode;
         toStockMovrw.ArtCode = INr.DefPalletItem;
         toStockMovrw.Quant = 1;
-        if (NonBlank(StockMovrw.ArtCode)) then begin //Edit***************************Sasha2,14:12 09.02.2015 {
-          StockMovrw.Volume = INr.Volume * StockMovrw.Quant; 
-          StockMovrw.Weight = INr.Weight * StockMovrw.Quant; 
-        end; //Edit***************************Sasha2,14:12 09.02.2015 }
         MatRowInsert(StockMovr,lrownr,toStockMovrw); 
         testf = StockMovVc_PasteArtCode(StockMovr,lrownr,1,aWarning);       
       end;
