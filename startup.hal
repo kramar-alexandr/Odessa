@@ -86,6 +86,9 @@ begin
  	Import("Импорт цен",INImportIClass,ImportItemPricesIn,modDBMain);//Added********************Dima 20.11.2014
  	Import("Импорт начальной задолженности клиентов",InitialDebtIClass,InitialClientsDebtIn,modSL);//Added********************Dima 26.01.2015
 	
+	Import("Импорт Accss",INImportIClass,ImpAccss,modDBMain);
+	Import("Импорт user",INImportIClass,ImpUser,modDBMain);
+	
 	Export("ExxportIN",CashInvCroEClass,ExpRegINEn,modDBMain);
 	
 	Document("Наклейки штрихкодов из поступления 5*13" ,LabelItem9RClass,ItemLabForm9,MyLabelItemFClass,modIN); //Edit***************************Sasha2,12:08 23.10.2014
