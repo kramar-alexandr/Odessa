@@ -159,7 +159,7 @@ BEGIN
   if (FIELDINFORM("F_BARCODE")) then begin
 		tstr = INr.BarCode;
 		if(nonblank(tstr))then begin
-			CreateEAN128(tstr);
+			ItemBCEAN13(tstr,tstr);
 			OUTFORMFIELD("F_BARCODE",tstr);
 		end;
   end;
