@@ -203,16 +203,20 @@ begin
 
 			//prepayment
 			if ((IPrw.InvoiceNr<0) and (IPrw.BankCurncy !=IPrw.RecCurncy)) then begin
-LogText(0,i & " P " & IPrw.InvoiceNr &"  "  & IPrw.BankCurncy & "   " & IPrw.RecCurncy);
 					CurValToOtherCur(CurrentDate,IPrw.BankCurncy, IPrw.BankVal,IPrw.RecCurncy,v,DefaultCurRoundOff);
 					IPrw.RecVal = v;
 					IPrw.BankVal = cashvalue - SumInvoicesIP(IPp);	//for correct rounding
-					IPrw.InvoiceNr = -1;
-					IPrw.CUPNr = NextCUPNumber;
 					MatRowPut(IPp,i-1,IPrw);		
 			end;
 	end;
 
+	//prepayment number
+	MatRowGet(IPp,rwcnt-1,IPrw);
+	if (IPrw.InvoiceNr<0) then begin
+			IPrw.InvoiceNr = -1;
+			IPrw.CUPNr = NextCUPNumber;
+			MatRowPut(IPp,rwcnt-1,IPrw);
+	end;
   
 end;
 
