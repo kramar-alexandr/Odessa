@@ -650,6 +650,9 @@ updating function LongInt StockMovVcRecordUpdate(var record StockMovVc StockMovr
 BEGIN
   LongInt res;
   Boolean ihef;
+  row StockMovVc StockMovrw; //Edit***************************Sasha2,14:25 11.02.2015
+  record INVc INr; //Edit***************************Sasha2,14:25 11.02.2015
+  integer rwcnt,i; //Edit***************************Sasha2,14:25 11.02.2015
 
   ihef = ItemHistExists("StockMovVc",StockMovr.SerNr);
   if ((StockMovr.SentOKFlag==0)) then begin
@@ -690,6 +693,16 @@ BEGIN
       AddPortugueseSAFTHashToStockMov(StockMovr);
     end;
   end;
+  rwcnt = MatRowCnt(StockMovr); //Edit***************************Sasha2,14:27 11.02.2015 {
+  for (i=0;i<rwcnt;i=i+1) begin
+    MatRowGet(StockMovr,i,StockMovrw);
+    INr.Code = StockMovrw.ArtCode;
+    if (NonBlank(StockMovrw.ArtCode) and ReadFirstMain(INr,1,true)) then begin
+      StockMovrw.BarCode = INr.BarCode;
+      MatRowPut(StockMovr,i,StockMovrw);
+    end;
+  end; //Edit***************************Sasha2,14:27 11.02.2015 }
+  
   StockMovVcRecordUpdate = res;
   RETURN;
 END;
@@ -770,6 +783,9 @@ global
 updating function LongInt StockMovVcRecordSave(var record StockMovVc StockMovr,record StockMovVc StockMov2r,LongInt stat,LongInt long4)
 BEGIN
   LongInt res;
+  row StockMovVc StockMovrw; //Edit***************************Sasha2,14:25 11.02.2015
+  record INVc INr; //Edit***************************Sasha2,14:25 11.02.2015
+  integer rwcnt,i; //Edit***************************Sasha2,14:25 11.02.2015
   
   if (blankdate(StockMovr.RegDate)) then begin
     StockMovr.RegDate = CurrentDate;
@@ -798,6 +814,16 @@ BEGIN
   if (StockMovr.OKFlag!=0) or (StockMovr.SentOKFlag!=0) then begin
     AddPortugueseSAFTHashToStockMov(StockMovr);
   end;
+  rwcnt = MatRowCnt(StockMovr); //Edit***************************Sasha2,14:27 11.02.2015 {
+  for (i=0;i<rwcnt;i=i+1) begin
+    MatRowGet(StockMovr,i,StockMovrw);
+    INr.Code = StockMovrw.ArtCode;
+    if (NonBlank(StockMovrw.ArtCode) and ReadFirstMain(INr,1,true)) then begin
+      StockMovrw.BarCode = INr.BarCode;
+      MatRowPut(StockMovr,i,StockMovrw);
+    end;
+  end; //Edit***************************Sasha2,14:27 11.02.2015 }
+  
   StockMovVcRecordSave = res;
   RETURN;
 END;

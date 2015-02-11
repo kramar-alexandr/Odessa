@@ -32,6 +32,7 @@ external function LongInt AddTime(Time,LongInt,var Time);
 external function LongInt DateDiff(Date,Date);
 external procedure DisplayStrArray(array string);
 remote function string 20 FindCustRouteByLocation(string,string,string);
+remote procedure HandlePrintEAN13StockMov(record StockMovVc); //Edit***************************Sasha2,16:15 26.01.2015
 
 global
 procedure CalcNewPrice(val oldprice,string extra,var val newprice)
@@ -745,7 +746,7 @@ BEGIN
   res = true;
   GetWindowRecord(wn,StockMovr);   
   if (StockMovr.OKFlag!=0) then begin
-    res = false;
+    res = /*false*/ true; //Edit***************************Sasha2,12:15 11.02.2015
   end;
   if (UserCanAction("UnOKAll",false)) then begin
     res = true;
@@ -780,6 +781,7 @@ BEGIN
     end;
   end;
   switch (fieldname) begin
+    case "PrintQuant": res = true; //Edit***************************Sasha2,12:14 11.02.2015
     case "SerNr": 
       if (wnst==Rs_update) then begin
         if (StockMovr.SentOKFlag!=0) then begin res = false; end;
@@ -1344,3 +1346,17 @@ LStockMovDClassBarcodeDataDo:;
 LStockMovDClassBarcodeDataOut:;
   return;
 end;
+
+global //Edit***************************Sasha2,12:00 22.01.2015 {
+procedure PrintEAN13StockMovDsm()
+begin 
+	integer wn;
+	record StockMovVc StockMovr;
+
+	wn = CurWindow;
+	GetWindowRecord(wn,StockMovr);
+	HandlePrintEAN13StockMov(StockMovr);
+	//PutWindowrecord(wn,StockMovr);
+
+	return;
+end; //Edit***************************Sasha2,12:00 22.01.2015 }

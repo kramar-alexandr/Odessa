@@ -54,6 +54,7 @@ BEGIN
 			if (nonblank(StockMovp.ThrouLocation)) then begin
 					StockMovrw.SentQuant = 0;	//Edit--------------------------Dima 02.02.2015
 			end;
+			StockMovrw.BarCode = INr.BarCode; //Edit***************************Sasha2,11:32 11.02.2015
       MatRowPut(StockMovp,rownr,StockMovrw);
       AddToStrArray(INr.WarnText1,aWarning);
       if (INr.ItemType!=kItemTypeStocked) then begin

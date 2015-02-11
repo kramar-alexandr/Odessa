@@ -1188,6 +1188,8 @@ RecordBegin(INVc,-,"artikel5");
   ArrayField(Volume,M45Val,0,0);// Edit ************************** Friday, July 4, 2014 at 17:13:54
   ArrayField(Weight,M45Val,0,0);// Edit ************************** Friday, July 4, 2014 at 17:13:54
   ArrayField(AlternativeCode,M4Str,40,0); //Edit***************************Sasha2,14:27 23.01.2015
+  ArrayField(StockMovNr,M4Long,0,0); //Edit***************************Sasha2,18:52 10.02.2015
+  ArrayField(PrintQuant,M4UVal,0,0); //Edit***************************Sasha2,9:40 11.02.2015
   EndArray;
     
   MainKeyBegin(SerNr,1);	// Edit by Victor 25.11.14 begin
@@ -2506,7 +2508,8 @@ RecordBegin(INVc,-,"artikel5");
   ArrayField(ToQuant,M4UVal,0,0);	// Edit by Victor 13.01.15
   ArrayField(Volume,M45Val,0,0); // Edit ************************** Friday, July 4, 2014 at 17:13:54
   ArrayField(Weight,M45Val,0,0);
-  
+  ArrayField(BarCode,M4Str,20,0); //Edit***************************Sasha2,9:41 11.02.2015
+  ArrayField(PrintQuant,M4UVal,0,0); //Edit***************************Sasha2,9:40 11.02.2015
   EndArray;
       
   MainKeyBegin(SerNr,1);	// Edit by Victor 25.11.14 begin

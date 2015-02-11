@@ -106,6 +106,7 @@ BEGIN
   val SumCostPrice;
   record TaxMatrixVc TMr;
   record TaxMatrixVc sumTMr;
+  record INVc INr; //Edit***************************Sasha2,10:58 11.02.2015
   
   BlockLoad(RoundRec);
   GetCurncyRoundoff(PUr.CurncyCode,"","PUVc",rndtotal,roundlines,rndvat);
@@ -172,6 +173,13 @@ BEGIN
     PUCalcPerc(uprice,PUrw.CustomsCost,cc);
     t = PUrw.Quant*cc;
     PUr.CustomsCost = t + PUr.CustomsCost;
+    if (NonBlank(PUrw.ArtCode)) then begin //Edit***************************Sasha2,10:20 11.02.2015 {
+      INr.Code = PUrw.ArtCode;
+      if (ReadFirstMain(INr,1,true)) then begin
+        PUrw.BarCode = INr.BarCode;
+        MatRowPut(PUr,i,PUrw); 
+      end; 
+    end; //Edit***************************Sasha2,10:20 11.02.2015 }
 LSKIPPUROWPUSumUp:;    
   end;
   PUr.SumQuant = Round(totqty,SetRoundModeD(2));
@@ -222,7 +230,7 @@ BEGIN
   val shipcost,cost1,cost2,cost3,cost4,cost5,customscost;
   val SumCostPrice;
   record INVc INr;
-  
+
   if (UseTaxTemplatesforTaxCalc) then begin
     PUSumup_TaxTemplate(PUr);
     goto LPUSumup;
@@ -263,7 +271,7 @@ BEGIN
   PUr.CustomsCostRound = blankval;
   PUr.TotVolume = blankval;// Edit ************************** Wednesday, July 9, 2014 at 12:05:02
 	PUr.TotWeight = blankval;// Edit ************************** Wednesday, July 9, 2014 at 12:05:03
-	
+
   rwcnt = MatRowCnt(PUr);
   for (i=0;i<rwcnt;i=i+1) begin
     MatRowGet(PUr,i,PUrw);
@@ -308,6 +316,10 @@ BEGIN
     PUCalcPerc(uprice,PUrw.CustomsCost,cc);
     t = q*cc;
     PUr.CustomsCost = t + PUr.CustomsCost;
+    if (NonBlank(PUrw.ArtCode)) then begin //Edit***************************Sasha2,10:20 11.02.2015 {
+      PUrw.BarCode = INr.BarCode; 
+      MatRowPut(PUr,i,PUrw);
+    end; //Edit***************************Sasha2,10:20 11.02.2015 }
 LSKIPPUROWPUSumUp:;    
   end;
   PUr.SumQuant = Round(totqty,SetRoundModeD(2));
@@ -352,6 +364,10 @@ LSKIPPUROWPUSumUp:;
         AddVATBase(VATr,PUrw.VATCode,PUrw.Sum,blankval,vatcnt,PUr.InclVAT,PUr.NoTAXonVAT);
 //incoret when incl vat      AddVATBase(VATr,PUrw.VATCode,Round(q*PUrw.CostPrice,SetRoundModeD(2)),blankval,vatcnt,PUr.InclVAT,PUr.NoTAXonVAT);//when changing round to 5 pls look in IN>>Register>>Good receipt - wrong round off on VAT
       end;
+      if (NonBlank(PUrw.ArtCode)) then begin //Edit***************************Sasha2,10:20 11.02.2015 {
+        PUrw.BarCode = INr.BarCode; 
+        MatRowPut(PUr,i,PUrw);
+      end; //Edit***************************Sasha2,10:20 11.02.2015 }
     end;
   end;
 

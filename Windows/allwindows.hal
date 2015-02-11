@@ -2256,8 +2256,9 @@ begin
     MatCol(1,-350,"Склад",0,Location,false,LocationSClass);
     MatCol(1,-280,"Серийный номер",0,SerialNr,false,SerialNrSClass);
     //MatCol(1,-150,"Срок годности",0,BestBefore,false,0); //Edit***************************Sasha2,17:05 26.01.2015
-    MatCol(1,-160,"Альтерн.код",0,AlternativeCode,false,0); //Edit***************************Sasha2,14:30 23.01.2015
-    MatCol(1,-60,"Ст. партии",0,BatchStatus,false,BatchStatusSClass);
+    MatCol(1,-160,"Штрихкод",0,BarCode,false,0); //Edit***************************Sasha2,14:30 23.01.2015
+    //MatCol(1,-60,"Ст. партии",0,BatchStatus,false,BatchStatusSClass); //Edit***************************Sasha2,11:15 11.02.2015
+    MatCol(1,-60,"Кол.печати",0,PrintQuant,false,0); //Edit***************************Sasha2,11:15 11.02.2015
     Flip(flipnr); flipnr = flipnr + 1;
     MatCol(1,144,"Наим.",0,Spec,false,0);
     if (UserCanAction("ViewCostPrice",true)) then begin
@@ -2567,7 +2568,7 @@ begin
   end;
    SpecialMenu("Выгрузить таблицу в буфер обмена",'',1,"ExportToExcelPUDsm"); // edit ----------Dima 26.11.2014, 23.01.2015
   end;
-  SpecialMenu("Присвоить товарам альтернат.коды",'',14,"SetEAN13PUDsm"); //Edit***************************Sasha2,10:38 21.01.2015
+  SpecialMenu("Присвоить товарам штрихкоды",'',14,"SetEAN13PUDsm"); //Edit***************************Sasha2,10:38 21.01.2015
   SpecialMenu("Распечатать EAN13 этикетки 5*13",'',14,"PrintEAN13PUDsm"); //Edit***************************Sasha2,10:38 21.01.2015
   EndWindow;
 end;
@@ -6439,9 +6440,11 @@ begin
   MatCol(1,-40,"Коэфф.",0,Coefficient,false,0);
   Flip(flipnr); flipnr = flipnr + 1;
   MatCol(1,86,"Наименование",0,Spec,false,0);
-  if (HasSerialNumbers) then begin
+  /*if (HasSerialNumbers) then begin //Edit***************************Sasha2,11:25 11.02.2015
     MatCol(1,-320,"Серийный номер",0,SerialNr,false,SerialNrSClass);
-  end;
+  end;*/
+  MatCol(1,-385,"Кол.печати",0,PrintQuant,false,0); //Edit***************************Sasha2,11:26 11.02.2015
+  MatColTL(1,-320,"Штрихкод",0,-1,ViewOnly,0,BarCode,false,0); //Edit***************************Sasha2,11:24 11.02.2015
   MatCol(1,-200,"Треб.кол.",0,OrdQuant,true,0); //Edit***************************Sasha2,14:24 09.02.2015
   MatCol(1,-140,"Объем",0,Volume,true,0); //Edit***************************Sasha2,13:48 09.02.2015
   MatCol(1,-70,"Вес",0,Weight,true,0); //Edit***************************Sasha2,13:48 09.02.2015
@@ -6575,7 +6578,8 @@ begin
     end;
   end;  
    SpecialMenu("Выгрузить таблицу в буфер обмена",'',1,"ExportToExcelStockMovDsm"); // edit ----------Dima 26.11.2014
-  EndWindow;
+  SpecialMenu("Распечатать EAN13 этикетки 5*13",'',1,"PrintEAN13StockMovDsm"); //Edit***************************Sasha2,12:04 11.02.2015
+  EndWindow; 
 end;
 
 window RetDClass:1

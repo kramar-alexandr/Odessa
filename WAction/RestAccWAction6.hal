@@ -691,7 +691,7 @@ procedure IVVc_PrintBTN_2002NP_Odessa(record IVVc IVp,Boolean opendrawerf)
 begin
   Row IVVc IVrw;
   Integer i,j,rwcnt,Error;
-  String 20 StandardMode,EmphesizeOn,EmphesizeOff,LangSetOn,BigSizeOn,BigSizeOff,UnderlineOn,UnderlineOff,CenterOn,CenterOff;
+  String 20 StandardMode,EmphesizeOn,EmphesizeOff,LangSetOn,BigSizeOn,BigSizeOff,UnderlineOn,UnderlineOff,CenterOn,CenterOff,AlignLeft,AlignCenter;
   String 20 FormFeed,CutPaper,CashBox;
   Val RowTot,sum,rebtot,cash,card,treb;
   Boolean res,unitprice;
@@ -705,11 +705,24 @@ begin
   record LocalMachineVc LMr;
   string 255 s,L2,itemspec;
   integer leng,pos,padspec,loop;
+  array longint certss,certsp; //Edit***************************Sasha2,13:33 09.02.2015
+  array val certval; //Edit***************************Sasha2,11:31 10.02.2015
+  integer certsscnt,certspcnt; //Edit***************************Sasha2,11:56 10.02.2015
+  record GCSVc GCSr; //Edit***************************Sasha2,11:56 10.02.2015
+  record UserVc Userr; //Edit***************************Sasha2,12:21 10.02.2015
+  roundmode rnd; //Edit***************************Sasha2,17:40 10.02.2015
+  val rowprice,rowsum,totsum; //Edit***************************Sasha2,17:42 10.02.2015
 
   sum = 0;
   rebtot = 0;
   cash = 0;
   card = 0;
+  certsscnt = 0; //Edit***************************Sasha2,13:33 09.02.2015
+  certspcnt = 0; //Edit***************************Sasha2,13:33 09.02.2015
+  rnd = DefaultValRoundoff; //Edit***************************Sasha2,17:40 10.02.2015
+  rnd.decimals = 2; //Edit***************************Sasha2,17:40 10.02.2015
+  rnd.step = kRoundingStepNone; //Edit***************************Sasha2,17:40 10.02.2015
+  rnd.mode = kRoundingModeHalfUp; //Edit***************************Sasha2,17:40 10.02.2015
 
   LangSetOn = chr(27) & chr(116) & chr(2) & chr(27) & chr(82) & chr(5);
   StandardMode = chr(27) & chr(83);
@@ -718,7 +731,9 @@ begin
   EmphesizeOn = chr(27) & chr(69) & chr(1);
   EmphesizeOff = chr(27) & chr(69) & chr(0);
   UnderlineOn = chr(27) & chr(45) & chr(1);;
-  UnderlineOff = chr(27) & chr(45) & chr(0);;
+  UnderlineOff = chr(27) & chr(45) & chr(0);
+  AlignLeft = chr(27) & chr(97) & chr(0);
+  AlignCenter = chr(27) & chr(97) & chr(1);
   FormFeed =  chr(27) & chr(100) & chr(5);
   CutPaper = chr(29) & chr(86) & chr(49); //cut chr(27) & chr(105);
   CashBox = chr(27) & chr(112) & chr(0) & chr(25) & chr(250); //ESC p   old chr(27) & chr(112) & chr(0);
@@ -726,30 +741,30 @@ begin
   Error = OutComPort(1,StandardMode);
   Error = OutComPort(1,chr(27) & chr(116) & chr(17)); //code page
  
-  M4PadString("N " & IVp.OfficialSerNr,20," ",false,s); //Change
+  LMr.Code = IVp.MachineName;
+  ReadFirstMain(LMr,1,true);
+  
+  M4PadString("N " & IVp.OfficialSerNr,20," ",false,s);
   M4PadString(IVp.TransDate & "  " & IVp.TransTime,20," ",true,L2);
   s =  EmphesizeOn & s & EmphesizeOff & L2;
   Error = OutComPort(1,s & chr(10)); s ="";
-  LMr.Code = IVp.MachineName;
-  ReadFirstMain(LMr,1,true);
-  Error = OutComPort(1,StandardMode);
   s = LMr.CompName;
   Error = OutComPort(1,s & chr(10)); s ="";
   s = LMr.Addr0 & " " & LMr.Tel;
   Error = OutComPort(1,s & chr(10)); s ="";
   //GetUserName(IVp.SalesMan,pername);						//Edit------------------------Dima 09.11.2015
-  //Error = OutComPort(1,USetStr(11044) & " " & pername & chr(10));
-	s ="";
+  //Error = OutComPort(1,USetStr(11044) & " " & pername & chr(10)); s = "";
   Error = OutComPort(1,s & chr(10)); s =""; //empty line
   PrintLongLine;
 
   rwcnt = MatRowCnt(IVp);
   s ="";
   for (i=0;i<rwcnt;i=i+1) begin
-      MatRowGet(IVp,i,IVrw);
-	  if(IVrw.stp!=15 and IVrw.stp!=16 and IVrw.stp!=kInvoiceRowTypeChequePayment) then begin
+    MatRowGet(IVp,i,IVrw);
+	  if(IVrw.stp!=15 and IVrw.stp!=16 and IVrw.stp!=kInvoiceRowTypeChequePayment and IVrw.stp!=kInvoiceRowTypeGiftVoucherPayment) then begin
 	    if (nonblank(IVrw.ArtCode)) then begin
 	      if (IVrw.Price!=0) then begin
+	        rowprice = Round(IVrw.Price,rnd);
 	      	leng = len(IVrw.Spec);
 	      	pos = 0;
 	      	padspec = 40;
@@ -760,43 +775,58 @@ begin
 	      		leng = leng - padspec;
 	      		pos = pos + padspec;
 	      	end;
-		    M4PadString(ValToString(IVrw.Quant,M4UVal,"",",",0) & " X",10," ",true,L2);
-		    s = s & L2;
-		    unitprice = true;
-		    if (unitprice) then begin
-		      M4PadString(ValToString(IVrw.Price,M4Val,"",",",0),10," ",true,L2);
-		    end else begin
-		      M4PadString(ValToString(IVrw.Price*IVrw.Quant,M4Val,"",",",0) & " =",10," ",true,L2);
-		    end;
-		    s = s & L2;
-		    M4PadString(ValToString(IVrw.Price*IVrw.Quant,M4Val,"",",",0),15," ",true,L2);//Edit----------------Dima 09.01.2015
-		    s = s & L2;
-		    Error = OutComPort(1,s & chr(10)); s ="";
-		    if (IVrw.vRebate <> 0) then begin
-			    //M4PadString("  " & USetStr(12007) & " " & ValToString(IVrw.vRebate,M4Val,"",",",0) & " %",15," ",false,L2);
-					M4PadString("  " & USetStr(12007) & " " ,15," ",false,L2);	//Edit-----------------------Dima  09.01.2015
-			    s = s & L2;
-			    treb = IVrw.Quant*IVrw.Price*(IVrw.vRebate/100); 
-			    //M4PadString("       " & ValToString(-treb,M4Val,"",",",0),15," ",false,L2);
-					M4PadString(ValToString(-treb,M4Val,"",",",0),15," ",true,L2);//Edit-----------------------Dima  09.01.2015
-			    rebtot = rebtot + treb;
-			    s = s & L2;
-			    Error = OutComPort(1,s & chr(10)); s ="";
-		    end;
-		  end;
+  		    M4PadString(ValToString(IVrw.Quant,M4UVal,"",",",0) & " X",10," ",true,L2);
+  		    s = s & L2;
+  		    unitprice = true;
+  		    if (unitprice) then begin
+  		      M4PadString(ValToString(rowprice,M4Val,"",",",0),10," ",true,L2);
+  		    end else begin
+  		      M4PadString(ValToString(rowprice*IVrw.Quant,M4Val,"",",",0) & " =",10," ",true,L2);
+  		    end;
+  		    s = s & L2;
+  		    M4PadString(ValToString(rowprice*IVrw.Quant,M4Val,"",",",0),15," ",true,L2);//Edit----------------Dima 09.01.2015
+  		    s = s & L2;
+  		    Error = OutComPort(1,s & chr(10)); s ="";
+  		    if (IVrw.vRebate <> 0) then begin
+  			    //M4PadString("  " & USetStr(12007) & " " & ValToString(IVrw.vRebate,M4Val,"",",",0) & " %",15," ",false,L2);
+  					M4PadString("  " & USetStr(12007) & " " ,15," ",false,L2);	//Edit-----------------------Dima  09.01.2015
+  			    s = s & L2;
+  			    treb = Round(IVrw.Quant*rowprice*(IVrw.vRebate/100),rnd); 
+  			    //M4PadString("       " & ValToString(-treb,M4Val,"",",",0),15," ",false,L2);
+  					M4PadString(ValToString(-treb,M4Val,"",",",0),15," ",true,L2);//Edit-----------------------Dima  09.01.2015
+  			    rebtot = rebtot + treb;
+  			    s = s & L2;
+  			    Error = OutComPort(1,s & chr(10)); s ="";
+  		    end;
+  		  end;
 	    end;
+	    if (IVrw.stp==kInvoiceRowTypeGiftVoucherSold) then begin
+	      rowsum = Round(IVrw.Sum,rnd);
+	  	  certss[certsscnt] = IVrw.GCNr;
+	  	  certsscnt = certsscnt + 1;
+	  	  M4PadString(USetStr(31024) & " № " & IVrw.GCNr,30," ",false,s);
+        M4PadString(ValToString(rowsum,M4Val,"",",",0),10," ",true,L2);
+        s = s  & L2; 
+        Error = OutComPort(1,s & chr(10)); s =""; L2 ="";
+	  	end;
 	  end else begin
+	    rowsum = Round(IVrw.Sum,rnd);
 	  	if (IVrw.stp==kInvoiceRowTypeCashPayment) then begin
-	  		cash = cash + IVrw.Sum;
+	  		cash = cash + rowsum;
 	  	end;
 	  	if (IVrw.stp==kInvoiceRowTypeCreditCardPayment) then begin
-	  		card = card + IVrw.Sum;
+	  		card = card + rowsum;
+	  	end;
+	  	if (IVrw.stp==kInvoiceRowTypeGiftVoucherPayment) then begin
+	  	  certsp[certspcnt] = IVrw.GCNr;
+	  	  certval[certspcnt] = rowsum;
+	  	  certspcnt = certspcnt + 1;
 	  	end;
 	  end;
   end;
   PrintLongLine;
   M4PadString(USetStr(11185),30," ",false,s);  //Total
-  M4PadString(ValToString(IVp.Sum4 + rebtot,M4Val,"",",",0),10," ",true,L2);
+  M4PadString(ValToString(Round(IVp.Sum4,rnd) + rebtot,M4Val,"",",",0),10," ",true,L2);
   s = s & EmphesizeOn & L2 & EmphesizeOff; 
   Error = OutComPort(1,s & chr(10)); s =""; L2 ="";
   
@@ -806,7 +836,7 @@ begin
   Error = OutComPort(1,s & chr(10)); s =""; L2 ="";
   
   M4PadString(USetStr(31005),30," ",false,s); //Pay due
-  M4PadString(ValToString(IVp.Sum4,M4Val,"",",",0),10," ",true,L2);
+  M4PadString(ValToString(Round(IVp.Sum4,rnd),M4Val,"",",",0),10," ",true,L2);
   s = s & EmphesizeOn & L2 & EmphesizeOff; 
   Error = OutComPort(1,s & chr(10)); s =""; L2 ="";
   
@@ -824,8 +854,24 @@ begin
   	Error = OutComPort(1,s & chr(10)); s =""; L2 ="";
   end;
 
+  if (certspcnt>0) then begin 
+  	For (i=0;i<certspcnt;i=i+1) begin
+  	  M4PadString(USetStr(31025) & "№ " & certsp[i],30," ",false,s); //Certificate payed
+    	M4PadString(ValToString(certval[i],M4Val,"",",",0),10," ",true,L2);
+    	s = s & EmphesizeOn & L2 & EmphesizeOff; 
+    	Error = OutComPort(1,s & chr(10)); s =""; L2 ="";
+      GCSr.SerNr = certsp[i];
+      if (ReadFirstMain(GCSr,1,true)) then begin 
+        M4PadString(USetStr(9962),30," ",false,s);
+        M4PadString(ValToString(Round(GCSr.Balance,rnd),M4Val,"",",",0),10," ",true,L2);
+        s = s & L2; 
+        Error = OutComPort(1,s & chr(10)); s =""; L2 ="";
+      end;
+    end;
+  end;
+  
   M4PadString(USetStr(9589),30," ",false,s); //Change
-  M4PadString(ValToString(IVp.RetnValue,M4Val,"",",",0),10," ",true,L2);
+  M4PadString(ValToString(Round(IVp.RetnValue,rnd),M4Val,"",",",0),10," ",true,L2);
   s = s & EmphesizeOn & L2 & EmphesizeOff; 
   Error = OutComPort(1,s & chr(10)); s =""; L2 ="";
   
@@ -843,6 +889,57 @@ begin
   
   Error = OutComPort(1,CutPaper);
   Error = OutComPort(1,CashBox);
+  
+  if (certsscnt>0) then begin //Вывод чека с проданными подарочными сертификатами
+    for (i=0;i<certsscnt;i=i+1) begin
+      GCSr.SerNr = certss[i];
+      if (ReadFirstMain(GCSr,1,true)) then begin
+        Error = OutComPort(1,AlignCenter);
+        s = EmphesizeOn & LMr.CompName;
+        Error = OutComPort(1,s & chr(10) & chr(10)); s ="";
+        s = USetStr(31026);
+        Error = OutComPort(1,s & chr(10) & chr(10)); s ="";
+        s = USetStr(31027) & " " & Round(GCSr.Amount,rnd) & " " & USetStr(31028) & EmphesizeOff;
+        Error = OutComPort(1,s & chr(10) & chr(10)); s ="";
+        s = USetStr(31029);
+        Error = OutComPort(1,s & chr(10)); s ="";
+        s = GCSr.SerNr;
+        Error = OutComPort(1,s & chr(10) & chr(10)); s ="";
+        s = USetStr(19356) & " " & dateToString(GCSr.ExpiryDate,"DD/MM/YYYY");
+        Error = OutComPort(1,s & chr(10) & chr(10)); s ="";
+        Error = OutComPort(1,AlignLeft);
+        PrintLongLine;
+        
+        s = USetStr(2353) & " " & CurrentDate;
+        Error = OutComPort(1,s & chr(10)); s ="";
+        s = USetStr(5100) & " " & CurrentTime;
+        Error = OutComPort(1,s & chr(10)); s ="";
+        s = LMr.Addr1;
+        Error = OutComPort(1,s & chr(10)); s ="";
+        Userr.Code = IVp.SalesMan;
+        ReadFirstMain(Userr,1,true);
+        s = USetStr(7690) & " " & Userr.Comment; //кассир
+        Error = OutComPort(1,s & chr(10)); s ="";
+      end;
+    end;
+  end;
+  
+  /*if (certspcnt>0) then begin  //Вывод чека с платежными подарочными сертификатами
+    for (i=0;i<certspcnt;i=i+1) begin
+      GCSr.SerNr = certsp[i];
+      if (ReadFirstMain(GCSr,1,true)) then begin
+      end;
+    end;
+  end;*/
+  
+  if (certsscnt>0 or certspcnt>0) then begin
+    loop = 6;
+    while (loop>0) begin
+    	Error = OutComPort(1,s & chr(10)); s =""; //empty line
+    	loop = loop - 1;
+    end;
+    Error = OutComPort(1,CutPaper);
+  end;
 
   Error = CloseComPort(1);
   

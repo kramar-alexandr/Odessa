@@ -11,7 +11,7 @@ external function val DivRateToBase1(string,val,val,val,val,val,val,roundmode);
 remote function Boolean PUVc_PasteArtCode(var record PUVc,Integer,var string,var string);
 remote procedure PURecalcCost(var record PUVc);
 remote procedure PUSetShipCost(var record PUVc,Integer);
-external procedure PUSumUp(var record PUVc);
+remote procedure PUSumUp(var record PUVc); //Edit***************************Sasha2,11:02 11.02.2015
 external procedure PUCalcCostPrice(string,val,Integer,Integer,string,string,
                                    val,val,val,val,val,
                                    val,val,val,val,val,val,

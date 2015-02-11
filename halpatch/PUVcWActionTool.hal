@@ -1118,7 +1118,7 @@ BEGIN
     PUrw.Gender = INr.Gender;
     PUrw.Other = INr.Other;
     PUrw.Other2 = INr.Other2;
-    PUrw.AlternativeCode = INr.AlternativeCode; //Edit***************************Sasha2,14:00 26.01.2015
+    PUrw.BarCode = INr.BarCode; //Edit***************************Sasha2,14:00 26.01.2015
 
     PackRowFieldMatrix(PUrw,"TaxMatrix",TMr);
     MatRowPut(PUr,rownr,PUrw);

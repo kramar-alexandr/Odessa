@@ -39,7 +39,7 @@ external function Boolean PUDClassRowCost5EFAfter(Integer,Integer,Integer,Intege
 external function Boolean PUDClassExtraEFAfter(Integer,Integer,Integer,Integer);
 external function Boolean PUDClassCustomsCostEFAfter(Integer,Integer,Integer,Integer);
 external function Boolean PUDClassVATCodeEFAfter(Integer,Integer,Integer,Integer);
-external procedure PUSumUp(var record PUVc);
+remote procedure PUSumUp(var record PUVc); //Edit***************************Sasha2,11:02 11.02.2015
 external procedure MulVATIV(string,val,var val,var val,Integer,Integer);
 remote procedure PUSetShipCost(var record PUVc,Integer);
 remote procedure PURecalcCost(var record PUVc);
@@ -1165,7 +1165,7 @@ begin
 end; //Edit***************************Sasha2,12:00 22.01.2015 }
 
 global //Edit***************************Sasha2,12:00 22.01.2015 {
-updating procedure PrintEAN13PUDsm()
+procedure PrintEAN13PUDsm()
 begin 
 	integer wn;
 	record PUVc PUr;
@@ -1173,7 +1173,7 @@ begin
 	wn = CurWindow;
 	GetWindowRecord(wn,PUr);
 	HandlePrintEAN13PU(PUr);
-	PutWindowrecord(wn,PUr);
+	//PutWindowrecord(wn,PUr);
 
 	return;
 end; //Edit***************************Sasha2,12:00 22.01.2015 }
