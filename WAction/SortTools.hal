@@ -1,8 +1,8 @@
   SetLangMode(LangRussian,"RUS",0); 
 
+//----------------------------------------------OR  Sorting----------------------------------------------------//
 
-
-function Integer MinInTableOR(record ORVc ORr)
+function Integer MinInTableOR(record ORVc ORr)	//Edit----------------------Dima 23.01.2015
 Begin
 	row ORVc ORrw;
 	integer rwcnt,i,pos;
@@ -30,7 +30,7 @@ end;
 
 
 
-procedure TableSortAscending_OR(var record ORVc ORr)
+procedure TableSortAscending_OR(var record ORVc ORr) //Edit----------------------Dima 23.01.2015
 begin
 	record ORVc oldORr;
 	row ORVc ORrw;
@@ -90,3 +90,121 @@ BEGIN
   RETURN;
 END;
 
+//----------------------------------------------StockMov  Sorting----------------------------------------------------//
+
+
+
+
+function Integer MinInTableStockMov(record StockMovVc SMr, string key)	//Edit----------------------Dima  11.02.2015
+Begin
+	row StockMovVc SMrw;
+	integer rwcnt,i,pos;
+	string 150 min;
+
+	pos = -1;
+	rwcnt = MatRowCnt(SMr);
+	if (rwcnt>0) then begin
+		MatRowGet(SMr,0,SMrw);
+		switch (key) begin
+			case "ArtCode":
+				min = SMrw.ArtCode;
+			case "Spec":
+				min = SMrw.Spec;		
+		end;
+		pos = 0;
+	end;
+
+	for(i=0;i<rwcnt;i=i+1) begin
+		MatRowGet(SMr,i,SMrw);
+
+		switch (key) begin
+			case "ArtCode":		
+					if (SMrw.ArtCode<min) then begin
+						min = SMrw.ArtCode;
+						pos = i;		
+					end;
+
+			case "Spec":		
+					if (SMrw.Spec<min) then begin
+						min = SMrw.Spec;
+						pos = i;		
+					end;
+		end;
+
+	end;
+MinInTableStockMov = pos;
+return;
+end;
+
+
+procedure TableSortAscending_StockMov(var record StockMovVc SMr, string key) //Edit----------------------Dima  11.02.2015
+begin
+	record StockMovVc oldSMr;
+	row StockMovVc SMrw;
+	Integer rwcnt,minPos,i;
+
+
+	RecordCopy(oldSMr,SMr);
+	rwcnt = MatRowCnt(SMr);
+
+	for(i=0;i<rwcnt;i=i+1) begin
+			MatRowDelete(SMr,0);
+	end;
+
+
+	for(i=0;i<rwcnt;i=i+1) begin
+		minPos = MinInTableStockMov(oldSMr,key);
+		if (minPos >= 0) then begin
+				MatRowGet(oldSMr,minPos,SMrw);
+				MatRowInsert(SMr,i,SMrw);
+				MatRowDelete(oldSMr,minPos);
+		end;
+	end;
+
+end;
+
+
+
+global  //Edit----------------------Dima  11.02.2015
+procedure TableSortStockMov_ByCodeDsm()
+BEGIN
+	record StockMovVc SMr;
+	integer wn;
+
+  wn = CurWindow;
+	GetWindowRecord(wn,SMr);
+
+	if ((SMr.OKFlag==1) or (SMr.OrdFlag==1) or (SMr.SentOKFlag==1)) then begin
+			MessageBox(31010,"");
+			goto LTableSortStockMov_ByCodeDsm;
+	end;
+	
+	TableSortAscending_StockMov(SMr,"ArtCode");
+  PutWindowRecord(wn,SMr);
+
+	LTableSortStockMov_ByCodeDsm:;
+  RETURN;
+END;
+
+
+
+global  //Edit----------------------Dima  11.02.2015
+procedure TableSortStockMov_ByNameDsm()
+BEGIN
+	record StockMovVc SMr;
+	integer wn;
+
+  wn = CurWindow;
+	GetWindowRecord(wn,SMr);
+
+	if ((SMr.OKFlag==1) or (SMr.OrdFlag==1) or (SMr.SentOKFlag==1)) then begin
+			MessageBox(31010,"");
+			goto LTableSortStockMov_ByNameDsm;
+	end;
+	
+	TableSortAscending_StockMov(SMr,"Spec");
+  PutWindowRecord(wn,SMr);
+
+	LTableSortStockMov_ByNameDsm:;
+  RETURN;
+END;
