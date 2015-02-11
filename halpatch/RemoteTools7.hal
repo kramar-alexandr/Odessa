@@ -191,13 +191,19 @@ begin
 			//invoices
 			for(i=0;i<rwcnt;i=i+1) begin
 					MatRowGet(IPp,i,IPrw);
-					IPrw.BankVal = coef*IPrw.BankVal;
-					IPrw.BankCurncy = bankCurCode;	
+					if (bankCurCode == IPrw.RecCurncy) then begin		//for correct rounding + prepayment calculations
+						IPrw.BankVal = IPrw.RecVal;
+						IPrw.BankCurncy = bankCurCode;
+					end else begin
+						IPrw.BankVal = coef*IPrw.BankVal;
+						IPrw.BankCurncy = bankCurCode;	
+					end;
 					MatRowPut(IPp,i,IPrw);
 			end;
 
 			//prepayment
 			if ((IPrw.InvoiceNr<0) and (IPrw.BankCurncy !=IPrw.RecCurncy)) then begin
+LogText(0,i & " P " & IPrw.InvoiceNr &"  "  & IPrw.BankCurncy & "   " & IPrw.RecCurncy);
 					CurValToOtherCur(CurrentDate,IPrw.BankCurncy, IPrw.BankVal,IPrw.RecCurncy,v,DefaultCurRoundOff);
 					IPrw.RecVal = v;
 					IPrw.BankVal = cashvalue - SumInvoicesIP(IPp);	//for correct rounding
@@ -241,7 +247,12 @@ begin
 			if (blank(IPp.TakeOnRate)) then begin
 					CurValToOtherCur(CurrentDate,IP0rw.BankCurncy, IP0rw.BankVal,IP0rw.RecCurncy,IP0rw.RecVal,DefaultCurRoundOff);
 			end else begin
-					IP0rw.RecVal = IP0rw.BankVal/IPp.TakeOnRate;
+					if (IP0rw.BankCurncy == BCb.BaseCur1) then begin
+						IP0rw.RecVal = IP0rw.BankVal*IPp.TakeOnRate;
+					end;
+					if (IP0rw.RecCurncy == BCb.BaseCur1) then begin
+						IP0rw.RecVal = IP0rw.BankVal/IPp.TakeOnRate;
+					end;
 			end;
 			IP0rw.BankCurncy = BCb.BaseCur1;
 	end;
