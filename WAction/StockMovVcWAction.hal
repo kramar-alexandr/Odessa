@@ -32,7 +32,7 @@ external function LongInt AddTime(Time,LongInt,var Time);
 external function LongInt DateDiff(Date,Date);
 external procedure DisplayStrArray(array string);
 remote function string 20 FindCustRouteByLocation(string,string,string);
-remote procedure HandlePrintEAN13StockMov(record StockMovVc); //Edit***************************Sasha2,16:15 26.01.2015
+remote procedure HandlePrintEAN13StockMov(record StockMovVc,var array record PUVc,var array integer); //Edit***************************Sasha2,16:15 26.01.2015
 
 global
 procedure CalcNewPrice(val oldprice,string extra,var val newprice)
@@ -1352,10 +1352,17 @@ procedure PrintEAN13StockMovDsm()
 begin 
 	integer wn;
 	record StockMovVc StockMovr;
+	array record PUVc PU2r;
+	array integer rownr;
+  boolean previewf;
 
 	wn = CurWindow;
 	GetWindowRecord(wn,StockMovr);
-	HandlePrintEAN13StockMov(StockMovr);
+	HandlePrintEAN13StockMov(StockMovr,PU2r,rownr);
+	previewf = false;
+	if (rownr[0]>0) then begin
+		PrintDocument(PU2r[0],"ItemLabForm9",previewf);
+	end;
 	//PutWindowrecord(wn,StockMovr);
 
 	return;

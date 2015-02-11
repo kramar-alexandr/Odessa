@@ -54,7 +54,7 @@ remote procedure PUVc_PasteTREO(var record PUVc,Integer);
 remote function Boolean PUVc_PasteVEItemCode(var record PUVc,Integer,var string,var string);
 remote procedure PUVc_PastVolumeWeight(var record POVc,Integer);// Edit ************************** Wednesday, July 9, 2014 at 11:45:42
 remote procedure HandleSetEAN13PU(var record PUVc); //Edit***************************Sasha2,14:33 23.01.2015
-remote procedure HandlePrintEAN13PU(record PUVc); //Edit***************************Sasha2,16:15 26.01.2015
+remote procedure HandlePrintEAN13PU(record PUVc,var array record PUVc,var array integer); //Edit***************************Sasha2,16:15 26.01.2015
 
 forward function Boolean PUDClassSwitchRow(Integer,Integer);
 
@@ -1169,10 +1169,17 @@ procedure PrintEAN13PUDsm()
 begin 
 	integer wn;
 	record PUVc PUr;
+	array record PUVc PU2r;
+	array integer rownr;
+  boolean previewf;
 
 	wn = CurWindow;
 	GetWindowRecord(wn,PUr);
-	HandlePrintEAN13PU(PUr);
+	HandlePrintEAN13PU(PUr,PU2r,rownr);
+	previewf = false;
+	if (rownr[0]>0) then begin
+		PrintDocument(PU2r[0],"ItemLabForm9",previewf);
+	end;
 	//PutWindowrecord(wn,PUr);
 
 	return;
