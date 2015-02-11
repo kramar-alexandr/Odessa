@@ -173,13 +173,13 @@ BEGIN
     PUCalcPerc(uprice,PUrw.CustomsCost,cc);
     t = PUrw.Quant*cc;
     PUr.CustomsCost = t + PUr.CustomsCost;
-    if (NonBlank(PUrw.ArtCode)) then begin //Edit***************************Sasha2,10:20 11.02.2015 {
+    /*if (NonBlank(PUrw.ArtCode)) then begin //Edit***************************Sasha2,10:20 11.02.2015 {
       INr.Code = PUrw.ArtCode;
       if (ReadFirstMain(INr,1,true)) then begin
         PUrw.BarCode = INr.BarCode;
         MatRowPut(PUr,i,PUrw); 
       end; 
-    end; //Edit***************************Sasha2,10:20 11.02.2015 }
+    end;*/ //Edit***************************Sasha2,10:20 11.02.2015 }
 LSKIPPUROWPUSumUp:;    
   end;
   PUr.SumQuant = Round(totqty,SetRoundModeD(2));
@@ -316,10 +316,10 @@ BEGIN
     PUCalcPerc(uprice,PUrw.CustomsCost,cc);
     t = q*cc;
     PUr.CustomsCost = t + PUr.CustomsCost;
-    if (NonBlank(PUrw.ArtCode)) then begin //Edit***************************Sasha2,10:20 11.02.2015 {
+    /*if (NonBlank(PUrw.ArtCode)) then begin //Edit***************************Sasha2,10:20 11.02.2015 {
       PUrw.BarCode = INr.BarCode; 
       MatRowPut(PUr,i,PUrw);
-    end; //Edit***************************Sasha2,10:20 11.02.2015 }
+    end; *///Edit***************************Sasha2,10:20 11.02.2015 }
 LSKIPPUROWPUSumUp:;    
   end;
   PUr.SumQuant = Round(totqty,SetRoundModeD(2));
@@ -364,10 +364,10 @@ LSKIPPUROWPUSumUp:;
         AddVATBase(VATr,PUrw.VATCode,PUrw.Sum,blankval,vatcnt,PUr.InclVAT,PUr.NoTAXonVAT);
 //incoret when incl vat      AddVATBase(VATr,PUrw.VATCode,Round(q*PUrw.CostPrice,SetRoundModeD(2)),blankval,vatcnt,PUr.InclVAT,PUr.NoTAXonVAT);//when changing round to 5 pls look in IN>>Register>>Good receipt - wrong round off on VAT
       end;
-      if (NonBlank(PUrw.ArtCode)) then begin //Edit***************************Sasha2,10:20 11.02.2015 {
+      /*if (NonBlank(PUrw.ArtCode)) then begin //Edit***************************Sasha2,10:20 11.02.2015 {
         PUrw.BarCode = INr.BarCode; 
         MatRowPut(PUr,i,PUrw);
-      end; //Edit***************************Sasha2,10:20 11.02.2015 }
+      end; *///Edit***************************Sasha2,10:20 11.02.2015 }
     end;
   end;
 
