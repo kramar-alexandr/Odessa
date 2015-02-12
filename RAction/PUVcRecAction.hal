@@ -410,8 +410,13 @@ begin
     MatRowGet(PUr,i,PUrw);
     INr.Code = PUrw.ArtCode;
     if (NonBlank(PUrw.ArtCode) and ReadFirstMain(INr,1,true)) then begin
-      PUrw.BarCode = INr.BarCode;
-      MatRowPut(PUr,i,PUrw);
+      if (NonBlank(PUrw.BarCode) and blank(INr.BarCode)) then begin
+        INr.BarCode = PUrw.BarCode;
+        RECORDSTORE(INr,true);
+      end else begin
+        PUrw.BarCode = INr.BarCode;
+        MatRowPut(PUr,i,PUrw);
+      end;
     end;
   end; //Edit***************************Sasha2,14:27 11.02.2015 }
   
@@ -554,8 +559,13 @@ begin
     MatRowGet(PUr,i,PUrw);
     INr.Code = PUrw.ArtCode;
     if (NonBlank(PUrw.ArtCode) and ReadFirstMain(INr,1,true)) then begin
-      PUrw.BarCode = INr.BarCode;
-      MatRowPut(PUr,i,PUrw);
+      if (NonBlank(PUrw.BarCode) and blank(INr.BarCode)) then begin
+        INr.BarCode = PUrw.BarCode;
+        RECORDSTORE(INr,true);
+      end else begin
+        PUrw.BarCode = INr.BarCode;
+        MatRowPut(PUr,i,PUrw);
+      end;
     end;
   end; //Edit***************************Sasha2,14:27 11.02.2015 }
 LPUVcRecordUpdate:;  
