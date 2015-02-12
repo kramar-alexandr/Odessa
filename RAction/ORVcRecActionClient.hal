@@ -2,6 +2,7 @@ remote function string 255 AddBranchObjectToObjectList(string,string);
 remote updating procedure SMSWhenOR(record ORVc,Integer);
 external updating procedure RecordActionOR_Print(var record ORVc,string,Boolean);
 external procedure RecordActionOR_Print2(record ORVc);
+remote function Boolean ifCustomerWithCurrentPhoneExist(string,var string );
 
 global
 function LongInt ORVcRecordDefaultsClient(LongInt wn,var record ORVc ORr,record ORVc OR2r,LongInt long3,LongInt long4)
@@ -61,7 +62,7 @@ BEGIN
   LongInt res;
   record AutoActionBlock AutoActionRec;
 	record CUVc CUr;
-	string 20 phone,code;
+	string 20 code;
 	boolean TrHs;
 
   BlockLoad(AutoActionRec);
@@ -73,21 +74,10 @@ BEGIN
   end;
   res = 1;
 
-	CUr.Code = ORp.CustCode;
-	if (ReadFirstMain(CUr,1,true)) then begin			//Edit----------------------Dima  11.02.2015
-		phone = CUr.Phone;
-		code = CUr.Code;
-		TrHs = true;
-		while (LoopKey("Phone",CUr,1,TrHs)) begin
-			if ((phone == CUr.Phone)  and (code != CUr.Code)) then begin
-					MessageBox(31030,CUr.Code);
-					TrHs = false;
-					goto LORVcRecordUpdateClient;
-			end;
-		end;
+	if (ifCustomerWithCurrentPhoneExist(ORp.CustCode,code)) then begin		//Edit----------------------Dima  12.02.2015
+			MessageBox(31030,code);
 	end;
 
-	LORVcRecordUpdateClient:;
   ORVcRecordUpdateClient = res;
   RETURN;
 END;

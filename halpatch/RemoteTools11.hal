@@ -1567,3 +1567,41 @@ LRecordAction_rlBud2LOK:;
   RecordAction_rlBud2LOK = res;
   return;
 end;
+
+
+global 			//Edit----------------------Dima  12.02.2015
+function Boolean ifCustomerWithCurrentPhoneExist(string code,var string existCode)
+begin
+  record CUVc CUr;
+  Boolean TrHs,res;
+	string 20 phone;
+
+		res = false;
+	
+		CUr.Code = code;
+		if (ReadFirstMain(CUr,1,true)) then begin			
+			phone = CUr.Phone;
+			RecordClear(CUr);
+			TrHs = true;
+
+			CUr.Phone = phone;
+    	while (LoopKey("Phone",CUr,1,TrHs)) begin
+    	
+    	  if (CUr.Phone!=phone) then begin 
+						TrHs = false;
+				end;
+    	
+    	  if (TrHs) then begin
+    	    if ((phone == CUr.Phone)  and (code != CUr.Code)) then begin
+    	      res = true;
+						existCode =  CUr.Code;
+    	      goto LifCustomerWithCurrentPhoneExist;
+    	    end;
+    	  end;
+    	end;
+		end;
+
+LifCustomerWithCurrentPhoneExist:;
+  ifCustomerWithCurrentPhoneExist = res;
+  return;
+end;
