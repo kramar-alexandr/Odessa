@@ -423,7 +423,7 @@ begin
   SetWRect(20,80,400,200);
   h = 120; vs = 20; v = 6;
   EditFieldTL(h,v,200,"Поиск",M4UStr,Normal,41,f1,false,INSClass);
-	EditFieldTL(h,v+20,125,"Остатки на складе",M4UStr,Normal,41,f2,false,LocationSClass);
+	EditFieldTL(h,v+20,200,"Остатки на складах",M4UStr,Normal,41,f2,false,LocationSClass);
   v=80;h=70;
   ButtonFrame(h-38,v,320,2,"Сортировать отчет по");
   RadioButton(h+200,v,0,0,"Коду товара",ArtMode);
