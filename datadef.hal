@@ -3060,7 +3060,47 @@ RecordBegin(IPVc,-,"");
   KeySegment(Prntdf);
   KeySegment(SerNr);  
   EndRecord;
-  
+	
+	RecordBegin(UserDefRepLinesVc,-,"");
+  RecordField(shortname,M4Str,20,0);
+  RecordField(IdKey,M4Long,0,0);
+  RecordField(Desc,M4UStr,100,0);
+  RecordField(Comment,M4Str,60,0);
+  RecordField(RsType,M4Int,0,0);
+  RecordField(AccType,M4Int,0,0);
+  RecordField(Sign,M4Code,10,UserVc);
+  RecordField(DCSide,M4Int,0,0);
+  RecordField(DCSaldo,M4Int,0,0);
+  RecordField(Desc2,M4UStr,100,0);
+  RecordField(Desc3,M4UStr,100,0);
+  RecordField(SpecCode,M4Str,60,0);
+  RecordField(Math,M4Matrix,0,0);
+  RecordField(CorspAcc,M4Code,10,AccVc);
+  RecordField(CurncyCode,M4Code,5,CurncyCodeVc);
+  ArrayBegin(Math,-,1);
+  ArrayField(LangCode,M4Code,5,0);
+  ArrayField(Text,M4Str,100,0);
+  EndArray;
+  MainKeyBegin(shortname,0);
+  KeySegment(shortname);
+  KeySegment(IdKey);
+  SubsetKeyBegin2(ShortIDKey);
+  AppendFieldToKeyName(shortname);
+  KeySegment(IdKey);
+  KeySegment(shortname);
+  SubsetKeyBegin2(ShortDesc);
+  AppendFieldToKeyName(shortname);
+  KeySegment(Desc);
+  KeySegment(IdKey);
+  KeySegment(shortname);
+  SubsetKeyBegin2(ShortComment);
+  AppendFieldToKeyName(shortname);
+  KeySegment(Comment);
+  KeySegment(IdKey);
+  KeySegment(shortname);
+  EndRecord;  
     	  	
 return;
 end;
+
+
