@@ -182,13 +182,13 @@ begin
 	string 100 searchStr ;
 	string 20 keySort;
 	record LocalMachineBlock LMb; //Edit***************************Sasha2,10:14 23.01.2015
-
   string 20 loc;
   Array string 20 locations;
   Array Integer LocPos;
   vector val LocBalValues;
   val step;
 	integer i,pos,startPos;
+	record LocationVc Locr;
 
 	searchStr = RepSpec.f1;
 	BlockLoad(LMb); //Edit***************************Sasha2,10:14 23.01.2015
@@ -236,13 +236,15 @@ begin
 	OutString(3,0,"Название",false);
 	OutString(5,0,"Штрих-код",false);
 	OutString(6,0,"Альтернативный код",false);
-	//OutString(7,0,"Остатки на складе",false);
-
+	OutString(7,0,"Остатки на складах",false);
+	EndFormat;
    step=(480-400)/locations.length;
    startPos = 400;
    for(i=0; i < locations.length; i=i+1) begin
 		LocPos[i] = startPos+step*i;
-   	OutString(LocPos[i],0,"Ост. " & locations[i],false);	
+		Locr.Code = locations[i];
+		ReadFirstMain(Locr,1,true);
+   	OutString(LocPos[i],0,Locr.Name,false);	
    end;	
 
 	EndFormat;
@@ -281,13 +283,6 @@ begin
 			OutString(3,0,INr.Name,false);
 			OutString(5,0,INr.BarCode,false);
 			OutString(6,0,INr.AlternativeCode,false);
-/*
-			ItemStatusr.Code = INr.Code;
-			ItemStatusr.Location = RepSpec.f2;
-			if (ReadFirstMain(ItemStatusr,2,true)) then begin			//поиск по Code, Location
-    		OutString(7,0,ItemStatusr.Instock,false);
-    	end;
-*/
 
 			for(i = 0; i < locations.length; i = i+1) begin
 				OutString(LocPos[i],0,LocBalValues[locations[i]],false);		//Edit----------------------Dima  12.02.2015
