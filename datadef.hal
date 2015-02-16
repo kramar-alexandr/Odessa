@@ -2510,6 +2510,7 @@ RecordBegin(INVc,-,"artikel5");
   ArrayField(Weight,M45Val,0,0);
   ArrayField(BarCode,M4Str,20,0); //Edit***************************Sasha2,9:41 11.02.2015
   ArrayField(PrintQuant,M4UVal,0,0); //Edit***************************Sasha2,9:40 11.02.2015
+	ArrayField(ovst,M4Int,0,0);//Edit----------------------Dima  16.02.2015
   EndArray;
       
   MainKeyBegin(SerNr,1);	// Edit by Victor 25.11.14 begin

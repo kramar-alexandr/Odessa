@@ -38,6 +38,8 @@ end;
 //flags[3] - последняя найденная строка (курсор останавливается на последнем найденном элементе)
 
 
+
+
 global    //added -----------------------Dima 25.11.2014
 function Integer FindInMathOR(var record RcVc RepSpec,var string field)
 begin
@@ -119,6 +121,8 @@ begin
   FindInMathOR=res;
 return;
 end;
+
+
 
 global    //added -----------------------Dima 26.11.2014
 function Integer FindInMathPO(var record RcVc RepSpec,var string field)
@@ -445,6 +449,7 @@ begin
   string 20 field;
   string 50 windowClass;
 
+
   //field = "ArtCode"; //default field for ORVc
   wn=CurWindow;
   DeselectWindow(wn,true);
@@ -656,9 +661,9 @@ begin
 	string 30 searchstr;
 
   wn=CurWindow;
-  //DeselectWindow(wn,true);
   GetWindowRecord(wn,RepSpec);
   mwn = RepSpec.flags[0];
+  DeselectWindow(mwn,false);
   GetWindowRecord(mwn,SMr);
 	rwcnt = MatRowCnt(SMr);
 
@@ -706,18 +711,23 @@ begin
 														if (SMrw.SentQuant < SMrw.OrdQuant) then begin
 															SMrw.SentQuant = SMrw.SentQuant+1;
 															put = true;
+															SMrw.ovst = 1;
 														end;
              	 
     							case "Quant":
 														if (SMrw.Quant < SMrw.OrdQuant) then begin
 															SMrw.Quant = SMrw.Quant+1;
 															put = true;
+															SMrw.ovst = 1;
 														end;	
 								end;	
 								
 								if (put) then begin
 										MatRowPut(SMr,RowNumber,SMrw);
 										PutWindowRecord(mwn,SMr);
+			  						WindowFieldGoto(mwn,SMr,RowNumber,field,true);
+										DeselectWindow(mwn,false);									
+										WindowFieldGoto(wn,RepSpec,-1,"f1",false);
 										goto LBreak;
 								end else begin
           					curRow = curRow+1; //we try to find the same item in next rows
@@ -733,14 +743,39 @@ begin
 			MessageBox(0,"Товара с указанным кодом не существует");
 	end;	
 
+
 	LBreak:;
-	selectWindow(wn);
+
 return;  
 end;
 
 
 
+procedure UnOverStrike(integer wn)//Edit----------------------Dima  16.02.2015
+Begin
+	record StockMovVc SMr;
+	row StockMovVc SMrw;
+	record RcVc RepSpec;
+	integer mwn,i,rwcnt;
 
+
+  GetWindowRecord(wn,RepSpec);
+  mwn = RepSpec.flags[0];
+  GetWindowRecord(mwn,SMr);
+	rwcnt = MatRowCnt(SMr);
+
+	for(i=0;i<rwcnt;i=i+1) begin
+			MatRowGet(SMr,i,SMrw);
+			if(SMrw.ovst==1) then begin
+					SMrw.ovst=0;
+					MatRowPut(SMr,i,SMrw);
+					PutWindowRecord(mwn,SMr);
+					goto LUnOverStrike;
+			end;		
+	end;
+LUnOverStrike:;
+return;
+end;
 
 
 global	//Edit-------------Dima  12.01.2015
@@ -765,30 +800,61 @@ begin
 end;
 
 
+
+
 global	//Edit-------------Dima  12.01.2015
 updating function Boolean TableSearchAddition2IClassOnEnterKey(Integer wn,string fieldname,Integer fn,Integer rownr)
 begin
   Boolean res;
-	record RcVc RepSpec;
+	record RcVc RepSpec;	
 
   res = true;
+	//DeselectWindow(wn,false);
   switch (fieldname) begin
     case "f2": //Отправлено
        StockMove_AddOneItemTo("SentQuant");
 			  GetWindowRecord(wn,RepSpec);
   			RepSpec.f2 = "";
-  			PutWindowRecord(wn,RepSpec);
     case "f3": 	//Получено
        StockMove_AddOneItemTo("Quant");
 			  GetWindowRecord(wn,RepSpec);
   			RepSpec.f3 = "";
-  			PutWindowRecord(wn,RepSpec);
   end;
-  
+  	PutWindowRecord(wn,RepSpec);
+
   TableSearchAddition2IClassOnEnterKey = res;
   return;
 end;
 
+/*
+global 
+function boolean TableSearchAddition2IClassBeforeEditField(integer wn,string fieldname,integer fn,integer rownr)
+begin
+	record RcVc RepSpec;
+	integer mwn;
+
+	  GetWindowRecord(wn,RepSpec);
+	  mwn = RepSpec.flags[0];
+		DeselectWindow(mwn,true);
+
+  RETURN;
+END;
+*/
+
+global		//Edit----------------------Dima  16.02.2015
+function Boolean TableSearchAddition2IClassAfterEditField(Integer wn,string fieldname,Integer fn,Integer rownr,Integer changed)
+BEGIN
+	record RcVc RepSpec;
+	boolean res;
+
+	GetWindowRecord(wn,RepSpec);
+	if (nonblank(RepSpec.f2) or nonblank(RepSpec.f3)) then begin
+		UnOverStrike(wn);
+	end;
+
+  TableSearchAddition2IClassAfterEditField = res;
+  RETURN;
+END;
 
 
 

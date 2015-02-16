@@ -6379,6 +6379,7 @@ begin
   Tile(tilenr,79,true,tilenr,Math); tilenr = tilenr + 1;
   v = 24;
   MatrixBegin(4,v,-50,-50,-,199);
+	MatOverStrike(ovst);//Edit----------------------Dima  16.02.2015
   Flip(0);
   flipnr = 1;
   if (HasJewelleryInterface) then begin
