@@ -15,6 +15,7 @@ row SHVc SHrw; //Edit***************************Sasha2,9:31 17.02.2015
 integer mtcnt,j; //Edit***************************Sasha2,9:31 17.02.2015
 Boolean printf; //Edit***************************Sasha2,9:37 17.02.2015
 val sum,rwGP,ivrowqtycost; //Edit***************************Sasha2,9:39 17.02.2015
+record INVc INr; //Edit***************************Sasha2,10:42 17.02.2015
 
 	StartReportJob("עקוע ןמ ןנמהאזאל");
 	rw=1;
@@ -134,8 +135,8 @@ val sum,rwGP,ivrowqtycost; //Edit***************************Sasha2,9:39 17.02.20
                 if (SHrw.ArtCode==IVrw.ArtCode and blank(IVrw.SerialNr)) then begin printf = true; j = mtcnt; end;
                 if (SHrw.ArtCode==IVrw.ArtCode and nonblank(IVrw.SerialNr) and IVrw.SerialNr==SHrw.SerialNr) then begin printf = true; j = mtcnt; end;
               end;
+              sum = MulRateToBase1(IVr.CurncyCode,IVrw.Sum,IVr.FrRate,IVr.ToRateB1,IVr.ToRateB2,IVr.BaseRate1,IVr.BaseRate2,DefaultCurRoundOff);
               if (printf) then begin
-                sum = MulRateToBase1(IVr.CurncyCode,IVrw.Sum,IVr.FrRate,IVr.ToRateB1,IVr.ToRateB2,IVr.BaseRate1,IVr.BaseRate2,DefaultCurRoundOff);
                 ivrowqtycost = (SHrw.FIFORowVal/SHrw.Ship)*IVrw.Quant;
                 OutVal(320,0,SHrw.FIFORowVal/SHrw.Ship,M45Val,false);
 					      OutVal(340,0,ivrowqtycost,M45Val,false);
@@ -145,10 +146,16 @@ val sum,rwGP,ivrowqtycost; //Edit***************************Sasha2,9:39 17.02.20
 					      OutVal(380,0,rwGP*100/ivrowqtycost,M45Val,false);
   					    total3 = total3 + rwGP;
   					  end else begin
-  					    OutVal(320,0,0,M45Val,false);
-					      OutVal(340,0,0,M45Val,false);
-					      OutVal(360,0,0,M45Val,false);
-					      OutVal(380,0,0,M45Val,false);
+  					    INr.Code = IVrw.ArtCode;
+  					    ReadFirstMain(INr,1,true);
+  					    ivrowqtycost = INr.InPrice*IVrw.Quant;
+                OutVal(320,0,INr.InPrice,M45Val,false);
+					      OutVal(340,0,ivrowqtycost,M45Val,false);
+					      total2 = total2 + ivrowqtycost;
+					      rwGP = sum - ivrowqtycost;
+					      OutVal(360,0,rwGP,M45Val,false);
+					      OutVal(380,0,rwGP*100/ivrowqtycost,M45Val,false);
+  					    total3 = total3 + rwGP;
               end;
             end;
 				  end else begin //Edit***************************Sasha2,17:57 16.02.2015 }
