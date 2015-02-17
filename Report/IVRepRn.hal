@@ -144,6 +144,11 @@ val sum,rwGP,ivrowqtycost; //Edit***************************Sasha2,9:39 17.02.20
 					      OutVal(360,0,rwGP,M45Val,false);
 					      OutVal(380,0,rwGP*100/ivrowqtycost,M45Val,false);
   					    total3 = total3 + rwGP;
+  					  end else begin
+  					    OutVal(320,0,0,M45Val,false);
+					      OutVal(340,0,0,M45Val,false);
+					      OutVal(360,0,0,M45Val,false);
+					      OutVal(380,0,0,M45Val,false);
               end;
             end;
 				  end else begin //Edit***************************Sasha2,17:57 16.02.2015 }
