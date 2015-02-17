@@ -1,6 +1,5 @@
+external function val MulRateToBase1(var string,val,val,val,val,val,val,roundmode); //Edit***************************Sasha2,9:40 17.02.2015
 SetLangMode(LangRussian,"RUS",0);
-
-
 
 global
 procedure SalesRn(record RcVc RepSpec)
@@ -11,7 +10,11 @@ Integer rw,rwcnt,i;
 boolean TrHs,testf;
 record PLVc PLr;
 val fr,to,total0,total1,total2,total3,total4,total5;
-
+record SHVc SHp; //Edit***************************Sasha2,17:42 16.02.2015
+row SHVc SHrw; //Edit***************************Sasha2,9:31 17.02.2015 
+integer mtcnt,j; //Edit***************************Sasha2,9:31 17.02.2015
+Boolean printf; //Edit***************************Sasha2,9:37 17.02.2015
+val sum,rwGP,ivrowqtycost; //Edit***************************Sasha2,9:39 17.02.2015
 
 	StartReportJob("עקוע ןמ ןנמהאזאל");
 	rw=1;
@@ -94,7 +97,7 @@ val fr,to,total0,total1,total2,total3,total4,total5;
 		end;
 
 		for(i = 0; i<rwcnt; i=i+1) begin
-          	MatRowGet(IVr,i,IVrw);
+      MatRowGet(IVr,i,IVrw);
 
 			if (nonblank(RepSpec.f1) and (IVrw.ArtCode<>RepSpec.f1)) then begin
 			testf=false;
@@ -120,13 +123,37 @@ val fr,to,total0,total1,total2,total3,total4,total5;
 				OutVal(300,0,IVrw.Price/fr*to,M45Val,false);
 				OutVal(300,0,IVrw.Sum/fr*to,M45Val,false);
 				total1 = total1 + IVrw.Sum/fr*to;
-			 if (UserCanAction("ViewCostPrice",true)) then begin
-					OutVal(320,0,IVrw.BasePrice,M45Val,false);
-					OutVal(340,0,IVrw.BasePrice*IVrw.Quant,M45Val,false);
-					total2 = total2 + IVrw.BasePrice*IVrw.Quant;
-					OutVal(360,0,IVrw.rowGP,M45Val,false);
-					OutVal(380,0,IVrw.rowGP*100/(IVrw.BasePrice*IVrw.Quant),M45Val,false);
-					total3 = total3 + IVrw.rowGP;
+			  if (UserCanAction("ViewCostPrice",true)) then begin
+				  if (IVr.UpdStockFlag!=0) then begin //Edit***************************Sasha2,17:57 16.02.2015 {
+				    SHp.OrderNr = IVr.OrderNr;
+            if (ReadFirstKey("OrderKey",SHp,1,true)) then begin
+              mtcnt = MatRowCnt(SHp);
+              printf = false;
+              for (j=0;j<mtcnt;j=j+1) begin
+                MatRowGet(SHp,j,SHrw);
+                if (SHrw.ArtCode==IVrw.ArtCode and blank(IVrw.SerialNr)) then begin printf = true; j = mtcnt; end;
+                if (SHrw.ArtCode==IVrw.ArtCode and nonblank(IVrw.SerialNr) and IVrw.SerialNr==SHrw.SerialNr) then begin printf = true; j = mtcnt; end;
+              end;
+              if (printf) then begin
+                sum = MulRateToBase1(IVr.CurncyCode,IVrw.Sum,IVr.FrRate,IVr.ToRateB1,IVr.ToRateB2,IVr.BaseRate1,IVr.BaseRate2,DefaultCurRoundOff);
+                ivrowqtycost = (SHrw.FIFORowVal/SHrw.Ship)*IVrw.Quant;
+                OutVal(320,0,SHrw.FIFORowVal/SHrw.Ship,M45Val,false);
+					      OutVal(340,0,ivrowqtycost,M45Val,false);
+					      total2 = total2 + ivrowqtycost;
+					      rwGP = sum - ivrowqtycost;
+					      OutVal(360,0,rwGP,M45Val,false);
+					      OutVal(380,0,rwGP*100/ivrowqtycost,M45Val,false);
+  					    total3 = total3 + rwGP;
+              end;
+            end;
+				  end else begin //Edit***************************Sasha2,17:57 16.02.2015 }
+					  OutVal(320,0,IVrw.BasePrice,M45Val,false);
+					  OutVal(340,0,IVrw.BasePrice*IVrw.Quant,M45Val,false);
+					  total2 = total2 + IVrw.BasePrice*IVrw.Quant;
+					  OutVal(360,0,IVrw.rowGP,M45Val,false);
+					  OutVal(380,0,IVrw.rowGP*100/(IVrw.BasePrice*IVrw.Quant),M45Val,false);
+  					total3 = total3 + IVrw.rowGP;
+					end;
 					PLr.ArtCode = IVrw.ArtCode;
 					PLr.PLCode = "SALAR";
 					readfirstmain(PLr,2,true);
@@ -137,7 +164,7 @@ val fr,to,total0,total1,total2,total3,total4,total5;
 					total5 = total5 + IVrw.Sum/fr*to - PLr.ExVatPrice*IVrw.Quant;
 					OutVal(460,0,(IVrw.Sum/fr*to - PLr.ExVatPrice*IVrw.Quant)/PLr.ExVatPrice*IVrw.Quant*100,M45Val,false);
 				end;
-					OutString(480,0,IVr.SalesMan,false);		
+				OutString(480,0,IVr.SalesMan,false);		
 				EndFormat;
 			end;
 		end;
