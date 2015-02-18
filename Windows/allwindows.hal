@@ -8864,3 +8864,24 @@ begin
   end;
   EndWindow;
 end;
+
+window DefCashTClass:1
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  real h,h2,v,vm,vs;
+  WindowBegin("Способы оплаты по умолчанию",DefCashTClass,CGSbl,-);
+  SetBlid(DefCashBlock);
+  SetWRect(64,80,450,200);
+  v = 6; vs = 20; h=180; h2 = 300;
+  EditField(h,v,50,"Для наличных",Normal,DefCashPayMode,false,PMSClass);
+  if (IsEnterprise) then begin
+    EditField(h,v+=vs,50,"Условия опл. нал.",Normal,DefCashPayDeal,false,PDSClass);
+    EditField(h,v+=vs,50,"Для кредитных карт",Normal,DefCCPayMode,false,PMSClass);
+    EditField(h,v+=vs,50,"Возвратные платежи",Normal,DefCredCashPayDeal,false,PMSClass); //Edit***************************Sasha2,17:47 18.02.2015
+    EditField(h,vm=(v+=vs),50,"Для проданных подар.сертиф.",Normal,DefGCSPayMode,false,PMSClass);
+    EditField(h,v+=vs,50,"Для получ. подар.сертиф.",Normal,DefGCRPayMode,false,PMSClass);
+    EditField(h2,v=vm,50,"Код НДС",Normal,DefGCSVATCode,false,VATCodeSClass);
+    EditField(h2,v+=vs,50,"Код НДС",Normal,DefGCRVATCode,false,VATCodeSClass);
+  end;
+  EndWindow;
+end;

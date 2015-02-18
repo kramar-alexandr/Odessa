@@ -3100,6 +3100,18 @@ RecordBegin(IPVc,-,"");
   KeySegment(IdKey);
   KeySegment(shortname);
   EndRecord;  
+  
+  BlockBegin(DefCashBlock,-,"DefCashBlock2");
+  NewAutosyncBlock(kSyncDirectionToClient);
+  RecordField(DefCashPayMode,M4Code,2,0);
+  RecordField(DefCCPayMode,M4Code,2,0);
+  RecordField(DefGCSPayMode,M4Code,2,0);
+  RecordField(DefGCRPayMode,M4Code,2,0);
+  RecordField(DefGCSVATCode,M4Code,10,VATCodeBlock);
+  RecordField(DefGCRVATCode,M4Code,10,VATCodeBlock);
+  RecordField(DefCashPayDeal,M4Code,2,0);
+  RecordField(DefCredCashPayDeal,M4Code,2,0); //Edit***************************Sasha2,17:48 18.02.2015
+  EndBlock;
     	  	
 return;
 end;
