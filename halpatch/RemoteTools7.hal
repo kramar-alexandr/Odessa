@@ -135,7 +135,7 @@ begin
 END;
 
 
-
+global
 function longint NextCUPNumber()	//Edit----------------------Dima  05.02.2015
 begin
 	record ARPayHistVc ARPr;

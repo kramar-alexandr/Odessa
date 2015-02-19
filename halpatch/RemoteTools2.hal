@@ -33,6 +33,10 @@ external procedure IPVc_PasteRecVal(var record IPVc,Integer); //Edit************
 external procedure IPSumup(var record IPVc); //Edit***************************Sasha2,15:00 18.02.2015
 external function LongInt IPVcRecordCheck(var record IPVc,record IPVc,LongInt,LongInt); //Edit***************************Sasha2,15:56 18.02.2015
 external procedure IPPastePayMode(var record IPVc); //Edit***************************Sasha2,16:12 18.02.2015
+external function longint NextCUPNumber(); //Edit***************************Sasha2,9:45 19.02.2015
+external procedure IPVc_PasteBankCurncy(var record IPVc,Integer); //Edit***************************Sasha2,10:19 19.02.2015
+
+SetLangMode(LangRussian,"RUS",0); //Edit***************************Sasha2,9:27 19.02.2015
 
 procedure FindCreditNotePayTerm(var string paydeal)
 BEGIN
@@ -796,7 +800,7 @@ begin
               goto LCreateCreditPayment;
             end;
             ClearRow(IPr,IPrw,kReceiptRowTypeNormal);
-            IPrw.InvoiceNr = credIVr.SerNr;
+            IPrw.InvoiceNr = credIVrw.OrdRow;
             MatRowPut(IPr,cnt,IPrw);
             PasteInvIn2IPr(IPr,cnt,IPr.TransDate,chk,false,installmentf);
             if (IPrw.CustCode!=credIVr.CustCode) then begin
@@ -809,6 +813,12 @@ begin
             IPrw.RecCurncy = curr;
             MatRowPut(IPr,cnt,IPrw);
             IPVc_PasteRecCurncy(IPr,cnt);
+            if (IPrw.BankCurncy!=IPrw.RecCurncy) then begin
+              MatRowGet(IPr,cnt,IPrw);
+              IPrw.BankCurncy = IPrw.RecCurncy;
+              MatRowPut(IPr,cnt,IPrw);
+              IPVc_PasteBankCurncy(IPr,cnt);
+            end;
             MatRowGet(IPr,cnt,IPrw);
             IPrw.RecVal = sum;
             MatRowPut(IPr,cnt,IPrw);
@@ -826,9 +836,13 @@ begin
             IPrw.RecVal = -sum;
             MatRowPut(IPr,cnt,IPrw);
             IPVc_PasteRecVal(IPr,cnt);
+            MatRowGet(IPr,cnt,IPrw);
+            IPrw.CUPNr = NextCUPNumber;
+            MatRowPut(IPr,cnt,IPrw); 
             
             IPr.PayMode = DCBlb.DefCredCashPayDeal;
             IPPastePayMode(IPr);
+            IPr.Comment = IPr.Comment & " (Возврат по акту " & credIVr.SerNr & ")";
             IPr.OKFlag = 1;
             IPSumup(IPr);
             IPVcRecordCheck(IPr,IP2r,1,0); //for MakeTransFromIP
