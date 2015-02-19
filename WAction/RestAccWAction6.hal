@@ -2,8 +2,9 @@ remote updating procedure UpdateAffectedRowsToKitchenOrderFromRestAcc(longint,in
 external procedure RestAccDClass_RefreshStringList(Integer,record RestAccVc);
 external updating procedure RestAccDClassTouchScreenFromFinishAndPrintButton();
 external function Boolean srlRestAccLPrint(var record RestAccVc,string,string);
+//external procedure SetPOSWindowDisplay_Posiflex(record LSerialPortDeviceVc,string,string);
 external procedure SetPOSWindowDisplay_Posiflex(record LSerialPortDeviceVc,string,string);
-external procedure SetPOSWindowDisplay_Posiflex(record LSerialPortDeviceVc,string,string);
+external procedure SetPOSWindowDisplay_PosiflexTotalSum(record LSerialPortDeviceVc,string);//Edit----------------------Dima  19.02.2015
 external procedure SetPOSWindowDisplay_Generic(record LSerialPortDeviceVc,string,string);
 external procedure SetPOSWindowDisplay_ST05(record LSerialPortDeviceVc,string,string);
 external function Boolean IVCashVc_PrintEpsonAxiohmA777Receipt(Integer,var record IVCashVc,record IVCashVc,Integer,Boolean,Boolean,Integer,Integer);
@@ -84,6 +85,28 @@ begin
 LSetPOSWindowDisplay_SendToSerialPortDevices:;  
   return;
 end;
+
+global
+procedure SetPOSWindowDisplay_SendToSerialPortDevicesTotalSum(string dispstr)		//Edit----------------------Dima  19.02.2015
+begin
+  record LocalMachineBlock LMb;
+  record LSerialPortDeviceVc LSPDr;
+    
+  BlockLoad(LMb);
+  if (LMb.UseDisplay==0)  then begin
+    goto LSetPOSWindowDisplay_SendToSerialPortDevicesTotalSum;
+  end;
+  if (FindLocalSerialPortDevice(kSerialPortDeviceClassDisplay,-1,LMb.LocalMachineCode,LSPDr)==false) then begin
+    goto LSetPOSWindowDisplay_SendToSerialPortDevicesTotalSum;
+  end;  
+  switch (LSPDr.Printer) begin
+    case kSerialPortDeviceModelDisplayPosiFlex:
+      SetPOSWindowDisplay_PosiflexTotalSum(LSPDr,dispstr);
+
+  end;
+LSetPOSWindowDisplay_SendToSerialPortDevicesTotalSum:;  
+  return;
+end;
  
 global
 procedure SetPOSWindowDisplay(string dispstr,string disp2str)
@@ -123,13 +146,16 @@ begin
     DeselectWindow(wn,false);
 
     PutWindowString(wn,"CustomerDisplayData_Line1",Left(dispstr,150));//Edit----------------------Dima  04.02.2015
-    PutWindowString(wn,"CustomerDisplayData_Line2",Left(disp2str,20));
+    PutWindowString(wn,"CustomerDisplayData_Line2",Left(disp2str,28));//Edit----------------------Dima  19.02.2015
 
     SetPOSWindowDisplay_SendToSerialPortDevices(dispstr,disp2str);    
   end;  
   
   return;
 end;
+
+
+
 
 global
 procedure SetPOSWindowDisplayAmount(string s,val total)
@@ -171,7 +197,8 @@ begin
     if (nonblank(MCr.DisplayText)) then begin
       dispstr = MCr.DisplayText;
     end else begin
-      dispstr = USetStr(1802);
+    //  dispstr = USetStr(1802);
+      dispstr = USetStr(31031);	 //Edit----------------------Dima  19.02.2015
     end;       
 LResetDisplayDsm:;
     SetPOSWindowDisplay(dispstr,"");
@@ -243,7 +270,8 @@ begin
   
   BlockLoad(LMb);
   if (LMb.UseDisplay!=0) then begin
-    M4PadString("THANK YOU",20," ",false,tstr);
+   // M4PadString("THANK YOU",20," ",false,tstr);
+    M4PadString(USetStr(31009),20," ",false,tstr);//Edit----------------------Dima  19.02.2015
     SetPOSWindowDisplay_SendToSerialPortDevices("                    ",tstr);
   end;
 LDisplayIVThankYouAction:;  
@@ -362,7 +390,7 @@ procedure DisplayIVItem2(record IVVc IVr,Integer i,var Boolean serportf,var reco
 begin
   row IVVc IVrw;
   Integer res;
-  string 200 tstr,t2;
+  string 200 tstr,t2,totalString;
   record LocalMachineBlock LMb;
   record SerPrintBlock SPb;
   string 255 port,device;
@@ -420,11 +448,17 @@ begin
         end;
     end;
   end;
-  tstr = ValToString(IVrw.Quant,M4UVal,ThousandSeparator,DecimalSeparator,0) & "*" & ValToString(IVrw.Price,M4Val,ThousandSeparator,DecimalSeparator,0);
-  M4PadString(ValToString(IVrw.Sum,M4Val,ThousandSeparator,DecimalSeparator,0),20-len(tstr)," ",true,t2);
-  tstr = tstr & t2;
-  
-  SetPOSWindowDisplay(IVrw.ArtCode & " " & IVrw.Spec,tstr);
+
+  tstr = ValToString(IVrw.Quant,M4UVal,"",".",0) & "*" & ValToString(IVrw.Price,M4Val,"",".",0);        
+  if (nonblank(IVrw.vRebate)) then begin
+			tstr = tstr & "  " & ValToString(IVrw.vRebate,M4UVal,"",".",0) & "%";		//Edit----------------------Dima  19.02.2015
+	end;        
+  M4PadString(ValToString(IVrw.Sum,M4Val,"",".",0),26-len(tstr)," ",true,t2);	//Edit----------------------Dima  19.02.2015 
+  tstr = tstr & t2; 
+  totalString = ValToString(IVr.Sum4,M4Val,ThousandSeparator,DecimalSeparator,0);
+  //SetPOSWindowDisplay(IVrw.ArtCode & " " & IVrw.Spec,tstr);
+  SetPOSWindowDisplay(IVrw.Spec,tstr);															//Edit----------------------Dima  19.02.2015
+	SetPOSWindowDisplay_SendToSerialPortDevicesTotalSum(totalString);//Edit----------------------Dima  19.02.2015
   return;
 end;
 

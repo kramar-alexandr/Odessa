@@ -58,6 +58,7 @@ external procedure OpenGiftVoucherSalesTouchScreenDClass(Integer,string,string);
 external procedure OpenNPTSCashPaymentTClass(Integer,LongInt,val,val,string,string,string);
 external procedure OpenGiftVoucherTouchScreenDClass(Integer,Integer,LongInt,val,val,string,string,string);
 external procedure SetPOSWindowDisplay(string,string);
+external procedure SetPOSWindowDisplay_SendToSerialPortDevicesTotalSum(string);
 external procedure M4PadString(string,Integer,string,Boolean,var string);
 remote procedure IVSumup(var record IVVc,Boolean);
 external function integer GetSelectedPOSItemRowIndex(integer);
@@ -1519,7 +1520,7 @@ global
 function Boolean IVDClassListClick(Integer wn,Integer rownr)
 begin
   integer sline,matrowix,res;
-  string 255 tstr,t2,tag;
+  string 255 tstr,t2,tag,totalString;
   record IVVc IVr;
   row IVVc IVrw;
   val t;
@@ -1538,7 +1539,7 @@ begin
   end;
   IVCashDClassListClick = true;
   */
-  
+
   //IVCashDClassSpecificLevel(10); //This is test code to simulate a 'Utilities' page when an item is selected in the list.
   
   sline = SelectedListLine(wn);
@@ -1561,9 +1562,18 @@ begin
       case kInvoiceRowTypeNormal:
 LkInvoiceRowTypeNormal1:;
         tstr = ValToString(IVrw.Quant,M4UVal,"",".",0) & "*" & ValToString(IVrw.Price,M4Val,"",".",0);
-        M4PadString(ValToString(IVrw.Sum,M4Val,"",".",0),20-len(tstr)," ",true,t2);
-        tstr = tstr & t2;  
-        SetPOSWindowDisplay(IVrw.ArtCode & " " & IVrw.Spec,tstr);
+        
+        if (nonblank(IVrw.vRebate)) then begin
+					tstr = tstr & "  " & ValToString(IVrw.vRebate,M4UVal,"",".",0) & "%";
+				end;
+        
+        M4PadString(ValToString(IVrw.Sum,M4Val,"",".",0),26-len(tstr)," ",true,t2);	//Edit----------------------Dima  19.02.2015
+        tstr = tstr & t2; 
+        totalString = ValToString(IVr.Sum4,M4Val,ThousandSeparator,DecimalSeparator,0); 
+//        SetPOSWindowDisplay(IVrw.ArtCode & " " & IVrw.Spec,tstr);
+        SetPOSWindowDisplay(IVrw.Spec,tstr);															//Edit----------------------Dima  19.02.2015
+        SetPOSWindowDisplay_SendToSerialPortDevicesTotalSum(totalString);	//Edit----------------------Dima  19.02.2015
+        
       case kInvoiceRowTypeCashPayment:
         tstr = IVrw.Spec & "  " & ValToString(IVrw.Sum,M4Val,ThousandSeparator,DecimalSeparator,0);
         SetPOSWindowDisplay(tstr,"");
