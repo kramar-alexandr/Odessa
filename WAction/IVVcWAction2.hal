@@ -625,7 +625,13 @@ begin
 		case "vals2":if(RepSpec.vals0<0)then begin res = true; end;
 		case "vals3":if(RepSpec.vals0<0)then begin res = true; end;
 	end;
-
+	if (UserCanAction("ChangingCostOnInvoiceRow",false)) then begin
+		switch (fieldname) begin
+			case "vals1": res = true;
+			case "vals2": res = true;
+			case "vals3": res = true;
+		end;
+	end;
 	
 	AmendLineNPTSSClassActiveEditField = res;
 

@@ -5055,8 +5055,8 @@ begin
 	EditFieldTL(h,v+=vs,70,"НДС",M4Code,Normal,10,f2,false,VATCodeSClass);
   end else begin  //Edit***************************Sasha2,14:29 07.11.2014 {
   	EditFieldTL(h=100,v=6,70,"Товар",M4UStr,ViewOnly,20,AccStr,false,0);
-	EditFieldTL(h,v+=vs,-20,"Наименов.",M4Str,ViewOnly,255,f1,false,0);
-	EditFieldTL(h,v+=vs,70,"К-во",M423Val,Normal,0,vals0,true,0);
+		EditFieldTL(h,v+=vs,-20,"Наименов.",M4Str,ViewOnly,255,f1,false,0);
+		EditFieldTL(h,v+=vs,70,"К-во",M423Val,Normal,0,vals0,true,0);
 		EditFieldTL(h,v+=vs,70,"Цена",M4Val,Normal,0,vals1,true,0);
 		EditFieldTL(h,v+=vs,70,"Скидка",M41Val,Normal,0,vals2,true,0);
 		EditFieldTL(h,v+=vs,70,"Сумма",M4Val,Normal,0,vals3,true,0);
