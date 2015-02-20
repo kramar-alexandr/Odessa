@@ -797,7 +797,7 @@ begin
     MatRowGet(IVp,i,IVrw);
 	  if(IVrw.stp!=15 and IVrw.stp!=16 and IVrw.stp!=kInvoiceRowTypeChequePayment and IVrw.stp!=kInvoiceRowTypeGiftVoucherPayment) then begin
 	    if (nonblank(IVrw.ArtCode)) then begin
-	      if (IVrw.Price!=0) then begin
+	      //if (IVrw.Price!=0) then begin
 	        rowprice = Round(IVrw.Price,rnd);
 	      	leng = len(IVrw.Spec);
 	      	pos = 0;
@@ -832,7 +832,7 @@ begin
   			    s = s & L2;
   			    Error = OutComPort(1,s & chr(10)); s ="";
   		    end;
-  		  end;
+  		  //end;
 	    end;
 	    if (IVrw.stp==kInvoiceRowTypeGiftVoucherSold) then begin
 	      rowsum = Round(IVrw.Sum,rnd);
