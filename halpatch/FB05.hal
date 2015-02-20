@@ -1671,7 +1671,7 @@ end;
 
 
 
-function Integer FindFirstPosSubString( string Search, string Source )
+function Integer FindFirstPosSubString( string Search, string Source )//Edit----------------------Dima  20.02.2015
 begin
 	integer i,length,lengthSource,diff;
 	string 150 temp,str,inStr;
@@ -1709,25 +1709,27 @@ begin
   INteger res,noErr;
   string 255 CtrlSeq,tstr;
   Area CtrlSeqArea;
-	integer spacePos,displayLineLength; ////Edit----------------------Dima  18.02.2015
+	integer spacePos,displayLineLength,comportDSPL; ////Edit----------------------Dima  18.02.2015
   
 	displayLineLength = 30;
-
-  if (OpenComPort(0,LSPDr.Port,LSPDr.BaudRate,LSPDr.Parity,LSPDr.ByteSize,LSPDr.StopBits,LSPDr.FlowControl)) then begin
+	comportDSPL = 10;
+  //if (OpenComPort(0,LSPDr.Port,LSPDr.BaudRate,LSPDr.Parity,LSPDr.ByteSize,LSPDr.StopBits,LSPDr.FlowControl)) then begin		//Edit----------------------Dima  20.02.2015
+  
+  if (LSPDr.isOpened) then begin
     SetComPortCodepage(StringSetFromString(89,LSPDr.Codepage));//set Codepage 866
     if (StringSetFromString(89,LSPDr.Codepage)=="CP866") then begin
       CtrlSeq = chr(27) & chr(116) & chr(6); //set Codepage 866
     end;
-    res = OutComPort(0,CtrlSeq);
+    res = OutComPort(comportDSPL,CtrlSeq);
     CtrlSeq = chr(12); //0x0C
-    res = OutComPort(0,CtrlSeq);
+    res = OutComPort(comportDSPL,CtrlSeq);
     CtrlSeq = chr(11); //0x0B
-    res = OutComPort(0,CtrlSeq);
+    res = OutComPort(comportDSPL,CtrlSeq);
     
         
     if (blank(dispstr)) and (blank(disp2str)) then begin
       SetComPortCodepage("UTF-8");
-	    res = CloseComPort(0);
+	   // res = CloseComPort(0);
       goto LSetPOSWindowDisplay_Posiflex;
     end;
     CtrlSeq = "";
@@ -1749,15 +1751,14 @@ begin
       CtrlSeq = CtrlSeq & tstr;
     end;
 
-    res = OutComPort(0,CtrlSeq);
+    res = OutComPort(comportDSPL,CtrlSeq);
 
 		M4PadString("",displayLineLength," ",true,tstr);
 	 	CtrlSeq = tstr & tstr;		//add empty rows		//Edit----------------------Dima  19.02.2015
-		res = OutComPort(0,CtrlSeq);
+		res = OutComPort(comportDSPL,CtrlSeq);
 
-    
-    res = CloseComPort(0);
-    SetComPortCodepage("UTF-8");
+    //res = CloseComPort(0);			//Edit----------------------Dima  20.02.2015
+    //SetComPortCodepage("UTF-8");
   end;
 LSetPOSWindowDisplay_Posiflex:;  
   return;
@@ -1767,24 +1768,25 @@ end;
 
 
 global
-procedure SetPOSWindowDisplay_PosiflexTotalSum(record LSerialPortDeviceVc LSPDr,string dispstr)
+procedure SetPOSWindowDisplay_PosiflexTotalSum(record LSerialPortDeviceVc LSPDr,string dispstr)		//Edit----------------------Dima  20.02.2015
 begin
   INteger res;
   string 255 CtrlSeq,tstr,outStr;
-	integer displayLineLength; ////Edit----------------------Dima  18.02.2015
+	integer displayLineLength,cnt,comportDSPL; //Edit----------------------Dima  18.02.2015
   
 	displayLineLength = 30;
+	comportDSPL = 10;
 
-  if (OpenComPort(0,LSPDr.Port,LSPDr.BaudRate,LSPDr.Parity,LSPDr.ByteSize,LSPDr.StopBits,LSPDr.FlowControl)) then begin
+  if (LSPDr.isOpened) then begin
 		SetComPortCodepage(StringSetFromString(89,LSPDr.Codepage));//set Codepage 866
     if (StringSetFromString(89,LSPDr.Codepage)=="CP866") then begin
      // CtrlSeq = chr(27) & chr(116) & chr(6); //set Codepage 866
-      res = OutComPort(0,CtrlSeq);
+      res = OutComPort(comportDSPL,CtrlSeq);
     end;
     
     if (blank(dispstr)) then begin
       SetComPortCodepage("UTF-8");
-	    res = CloseComPort(0);
+	    //res = CloseComPort(0);
       goto LSetPOSWindowDisplay_PosiflexTotalSum;
     end;
     CtrlSeq = "";
@@ -1794,9 +1796,8 @@ begin
       CtrlSeq = CtrlSeq & tstr;
     end;
 
-    res = OutComPort(0,CtrlSeq);
-    
-    res = CloseComPort(0);
+    res = OutComPort(comportDSPL,CtrlSeq);    
+    //res = CloseComPort(0);
  
   end;
 LSetPOSWindowDisplay_PosiflexTotalSum:;  

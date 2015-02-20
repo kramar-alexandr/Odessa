@@ -436,11 +436,11 @@ begin
           end;
         end;
       otherwise
-        if(IVrw.stp==kInvoiceRowTypeNormal) or (IVrw.stp==kInvoiceRowTypeStructuredItemComponent) then begin
+       /* if(IVrw.stp==kInvoiceRowTypeNormal) or (IVrw.stp==kInvoiceRowTypeStructuredItemComponent) then begin
           tstr = "TOTAL ";
           M4PadString(ValToString(IVrw.Sum,M4Val,ThousandSeparator,DecimalSeparator,0) & ":-",14," ",true,t2);
           SetPOSWindowDisplay_SendToSerialPortDevices("                    ",tstr & t2);   
-        end;
+        end;  */ 	//Edit----------------------Dima  20.02.2015
         if ((IVrw.stp==kInvoiceRowTypeCashPayment) or (IVrw.stp==kInvoiceRowTypeCreditCardPayment) or (IVrw.stp==kInvoiceRowTypeChequePayment) or (IVrw.stp==kInvoiceRowTypeLoyaltyPointsPayment)) then begin
           tstr = "CASH BACK";
           M4PadString(ValToString(IVr.RetnValue,M4Val,ThousandSeparator,DecimalSeparator,0) & ":-",11," ",true,t2);

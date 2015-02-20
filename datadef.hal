@@ -519,6 +519,28 @@ begin
   return;
 end;
 
+procedure SerialPortDeviceDefinition()
+begin
+  RecordField(Code,M4Code,10,0);
+  RecordField(DeviceType,M4Set,413,0);
+  RecordField(LocalMachineCode,M4Code,20,0);
+  RecordField(Printer,M4Set,415,0);
+  RecordField(Port,M4Str,100,0);
+  RecordField(BaudRate,M4Long,0,0);
+  RecordField(ByteSize,M4Int,0,0);
+  RecordField(Parity,M4Int,0,0);
+  RecordField(StopBits,M4Int,0,0);
+  RecordField(Codepage,M4StrSet,-1,0);
+  RecordField(FlowControl,M4Set,414,0);
+  RecordField(EscSeqBefore,M4Str,100,0);
+  RecordField(EscSeqAfter,M4Str,100,0);
+  RecordField(FailureCode,M4Code,10,SerialPortDeviceVc);
+  RecordField(UseHttps,M4Int,0,0);
+  RecordField(Password,M4Star,20,0);
+  RecordField(isOpened,M4Int,0,0);//Edit----------------------Dima  20.02.2015  
+  return;
+end;
+
 begin
 BlockBegin(ExportStockCSVBlock,-,"" )
   //BlockInServer;
@@ -3112,7 +3134,48 @@ RecordBegin(IPVc,-,"");
   RecordField(DefCashPayDeal,M4Code,2,0);
   RecordField(DefCredCashPayDeal,M4Code,2,0); //Edit***************************Sasha2,17:48 18.02.2015
   EndBlock;
-    	  	
+  
+  RecordBegin(SerialPortDeviceVc,-,"SerialPortDeviceVc2");
+  NewAutosyncRegister(kSyncDirectionToClient,true);
+  SerialPortDeviceDefinition;
+  MainKeyBegin(Code,0);
+  KeySegment(Code);
+  KeyBegin(DeviceType);
+  KeySegment(DeviceType);
+  KeySegment(LocalMachineCode);
+  KeySegment(Code);
+  KeyBegin(LocalMachineCode);
+  KeySegment(LocalMachineCode);
+  KeySegment(Code);
+  KeyBegin(Printer);
+  KeySegment(DeviceType);
+  KeySegment(LocalMachineCode);
+  KeySegment(Printer);
+  KeySegment(Code);
+  EndRecord;
+
+  RecordBegin(LSerialPortDeviceVc,-,"");
+  ImpExpLevel(0); // really?
+  RegisterForAllCompanies(true);  //onclient
+  RecordField(seqnr,M4Long,0,0);
+  SerialPortDeviceDefinition;
+  MainKeyBegin(Code,0);
+  KeySegment(Code);
+  KeyBegin(DeviceType);
+  KeySegment(DeviceType);
+  KeySegment(LocalMachineCode);
+  KeySegment(Code);
+  KeyBegin(LocalMachineCode);
+  KeySegment(LocalMachineCode);
+  KeySegment(Code);
+  KeyBegin(Printer);
+  KeySegment(DeviceType);
+  KeySegment(LocalMachineCode);
+  KeySegment(Printer);
+  KeySegment(Code);
+  EndRecord;
+  
+      	  	
 return;
 end;
 
