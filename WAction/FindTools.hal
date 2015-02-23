@@ -659,6 +659,10 @@ begin
 	integer wn,mwn,RowNumber,curRow,rwcnt;
 	Boolean key,put;
 	string 30 searchstr;
+	integer sQuant,sSentQuant;
+
+	sSentQuant = 3;	
+  sQuant = 2;
 
   wn=CurWindow;
   GetWindowRecord(wn,RepSpec);
@@ -711,14 +715,14 @@ begin
 														if (SMrw.SentQuant < SMrw.OrdQuant) then begin
 															SMrw.SentQuant = SMrw.SentQuant+1;
 															put = true;
-															SMrw.ovst = 1;
+															SMrw.stp = sSentQuant;
 														end;
              	 
     							case "Quant":
 														if (SMrw.Quant < SMrw.OrdQuant) then begin
 															SMrw.Quant = SMrw.Quant+1;
 															put = true;
-															SMrw.ovst = 1;
+															SMrw.stp = sQuant;
 														end;	
 								end;	
 								
@@ -766,8 +770,8 @@ Begin
 
 	for(i=0;i<rwcnt;i=i+1) begin
 			MatRowGet(SMr,i,SMrw);
-			if(SMrw.ovst==1) then begin
-					SMrw.ovst=0;
+			if(SMrw.stp!=1 and SMrw.stp!=0) then begin
+					SMrw.stp=1;
 					MatRowPut(SMr,i,SMrw);
 					PutWindowRecord(mwn,SMr);
 					goto LUnOverStrike;

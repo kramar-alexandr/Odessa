@@ -6299,7 +6299,11 @@ window StockMovDClass:1
   wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
 begin
   real h,h1,h2,h3,h4,v,vm,vs;
-  Integer tilenr,f,flipnr;
+  Integer tilenr,f,flipnr,t;
+  integer sQuant,sSentQuant;
+  
+  sSentQuant = 3;	//Edit----------------------Dima  23.02.2015
+  sQuant = 2;//Выделение для поиска и вставки
 
   WindowBegin("Перемещение складированных товаров",StockMovDClass,CGview,-);
   if (HasJewelleryInterface) then begin
@@ -6379,10 +6383,12 @@ begin
   Tile(tilenr,79,true,tilenr,Math); tilenr = tilenr + 1;
   v = 24;
   MatrixBegin(4,v,-50,-50,-,199);
-	//MatOverStrike(ovst);//Edit----------------------Dima  16.02.2015
+	MatTypedRow(stp);
   Flip(0);
   flipnr = 1;
-  if (HasJewelleryInterface) then begin
+	t=0;
+	
+/*  if (HasJewelleryInterface) then begin			//Edit----------------------Dima  23.02.2015
     MatCol(1,32,"Серийный номер",0,SerialNr,false,SerialNrSClass);
     EnterSkip(Quant);
     MatCol(1,130,"Товар",0,ArtCode,false,INSClass);
@@ -6396,70 +6402,171 @@ begin
     MatCol(1,350,"Получ. кол-во",0,Quant,true,0);
     MatCol(1,400,"Описание",0,Spec,false,0);
   end else begin
-    MatCol(1,32,"Товар",0,ArtCode,false,INSClass);
+*/
+	
+  //MatCol(t=0,32,"Товар",0,ArtCode,false,INSClass);	//Edit----------------------Dima  23.02.2015
+  //Кривой код, но по-другому не получилось. Убрал Flip(0), Везде дублируются t=0,1. Без этого плохо отображается //Edit----------------------Dima  23.02.2015
+
     Flip(flipnr);  flipnr = flipnr + 1;
-    if (HasVarieties) then begin
-      MatCol(1,86,"Треб.кол.",0,OrdQuant,true,MATVARINSClass);
-      MatCol(1,140,"На складе",0,FromQuant,true,0);	// Edit by Victor 13.01.15
+t=0;
+		MatCol(t,32,"Товар",0,ArtCode,false,INSClass);	
+    if (HasVarieties) then begin   
+      MatCol(t,86,"Треб.кол.",0,OrdQuant,true,MATVARINSClass);
+      MatCol(t,140,"На складе",0,FromQuant,true,0);	// Edit by Victor 13.01.15
     end else begin
-      MatCol(1,86,"Треб.кол.",0,OrdQuant,true,0);
-      MatCol(1,140,"На складе",0,FromQuant,true,0);// Edit by Victor 13.01.15
+      MatCol(t,86,"Треб.кол.",0,OrdQuant,true,0);
+      MatCol(t,140,"На складе",0,FromQuant,true,0);// Edit by Victor 13.01.15
     end;
-    MatCol(1,200,"Отпр.кол.",0,SentQuant,true,0);
-    MatCol(1,260,"Получ.кол.",0,Quant,true,0);
-    MatCol(1,320,"На складе",0,ToQuant,true,0);// Edit by Victor 13.01.15
-    MatCol(1,375,"Наименование",0,Spec,false,0);
-  end;
+    MatCol(t,200,"Отпр.кол.",0,SentQuant,true,0);
+    MatCol(t,260,"Получ.кол.",0,Quant,true,0);
+    MatCol(t,320,"На складе",0,ToQuant,true,0);// Edit by Victor 13.01.15
+    MatCol(t,375,"Наименование",0,Spec,false,0);
+t=1;
+		MatCol(t,32,"Товар",0,ArtCode,false,INSClass);	
+    if (HasVarieties) then begin   
+      MatCol(t,86,"Треб.кол.",0,OrdQuant,true,MATVARINSClass);
+      MatCol(t,140,"На складе",0,FromQuant,true,0);	// Edit by Victor 13.01.15
+    end else begin
+      MatCol(t,86,"Треб.кол.",0,OrdQuant,true,0);
+      MatCol(t,140,"На складе",0,FromQuant,true,0);// Edit by Victor 13.01.15
+    end;
+    MatCol(t,200,"Отпр.кол.",0,SentQuant,true,0);
+    MatCol(t,260,"Получ.кол.",0,Quant,true,0);
+    MatCol(t,320,"На складе",0,ToQuant,true,0);// Edit by Victor 13.01.15
+    MatCol(t,375,"Наименование",0,Spec,false,0);           
+t=sQuant;//Edit----------------------Dima  23.02.2015
+		MatCol(t,32,"Товар",0,ArtCode,false,INSClass);
+
+    if (HasVarieties) then begin
+      MatCol(t,86,"Треб.кол.",0,OrdQuant,true,MATVARINSClass);
+      MatCol(t,140,"На складе",0,FromQuant,true,0);	// Edit by Victor 13.01.15
+    end else begin
+      MatCol(t,86,"Треб.кол.",0,OrdQuant,true,0);
+      MatCol(t,140,"На складе",0,FromQuant,true,0);// Edit by Victor 13.01.15
+    end;
+    MatCol(t,200,"Отпр.кол.",0,SentQuant,true,0);
+    MatCol(t,245,"Получ.кол.",0,Quant,true,0);
+    MatCol(t,320,"На складе",0,ToQuant,true,0);// Edit by Victor 13.01.15
+    MatCol(t,375,"Наименование",0,Spec,false,0);     
+t=sSentQuant;//Edit----------------------Dima  23.02.2015
+		MatCol(t,32,"Товар",0,ArtCode,false,INSClass);
+
+    if (HasVarieties) then begin
+      MatCol(t,86,"Треб.кол.",0,OrdQuant,true,MATVARINSClass);
+      MatCol(t,140,"На складе",0,FromQuant,true,0);	// Edit by Victor 13.01.15
+    end else begin
+      MatCol(t,86,"Треб.кол.",0,OrdQuant,true,0);
+      MatCol(t,140,"На складе",0,FromQuant,true,0);// Edit by Victor 13.01.15
+    end;
+    MatCol(t,185,"Отпр.кол.",0,SentQuant,true,0);
+    MatCol(t,260,"Получ.кол.",0,Quant,true,0);
+    MatCol(t,320,"На складе",0,ToQuant,true,0);// Edit by Victor 13.01.15
+    MatCol(t,375,"Наименование",0,Spec,false,0);     
+
   /*if (UserCanAction("ViewCostPrice",true)) then begin //Edit***************************Sasha2,10:34 10.11.2014 {
   	MatCol(1,-260,"Старая цена",0,OldPrice,true,0);
   	MatCol(1,-160,"Накл. расх.",0,ExtraSCost,true,0);
   	MatCol(1,-80,"Новая цена",0,NewPrice,true,0);
   end;*/ //Edit***************************Sasha2,10:34 10.11.2014 }
+
   Flip(flipnr); flipnr = flipnr + 1;
+t=0;
+	MatCol(t,32,"Товар",0,ArtCode,false,INSClass);
   if (HasVarieties) then begin
-    MatCol(1,86,"Треб.кол.",0,OrdQuant,true,MATVARINSClass);
+    MatCol(t,86,"Треб.кол.",0,OrdQuant,true,MATVARINSClass);
   end else begin
-    MatCol(1,86,"Треб.кол.",0,OrdQuant,true,0);
+    MatCol(t,86,"Треб.кол.",0,OrdQuant,true,0);
   end;
-  MatCol(1,148,"Отпр.кол.",0,SentQuant,true,0);
-  MatCol(1,210,"Получ.кол.",0,Quant,true,0);
-  MatCol(1,272,"Наименование",0,Spec,false,0);
+  MatCol(t,148,"Отпр.кол.",0,SentQuant,true,0);
+  MatCol(t,210,"Получ.кол.",0,Quant,true,0);
+  MatCol(t,272,"Наименование",0,Spec,false,0);
   if (UserCanAction("ViewCostPrice",true)) then begin //Edit***************************Sasha2,10:34 10.11.2014
-  	MatCol(1,-260,"Старая цена",0,SentOldPrice,true,0);
-  	MatCol(1,-160,"Накл. расх.",0,SentExtraSCost,true,0);
-  	MatCol(1,-80,"Новая цена",0,SentNewPrice,true,0);
-  end; //Edit***************************Sasha2,10:35 10.11.2014
+  	MatCol(t,-260,"Старая цена",0,SentOldPrice,true,0);
+  	MatCol(t,-160,"Накл. расх.",0,SentExtraSCost,true,0);
+  	MatCol(t,-80,"Новая цена",0,SentNewPrice,true,0);
+  end; //Edit***************************Sasha2,10:35 10.11.2014  
+t=1;
+	MatCol(t,32,"Товар",0,ArtCode,false,INSClass);
+  if (HasVarieties) then begin
+    MatCol(t,86,"Треб.кол.",0,OrdQuant,true,MATVARINSClass);
+  end else begin
+    MatCol(t,86,"Треб.кол.",0,OrdQuant,true,0);
+  end;
+  MatCol(t,148,"Отпр.кол.",0,SentQuant,true,0);
+  MatCol(t,210,"Получ.кол.",0,Quant,true,0);
+  MatCol(t,272,"Наименование",0,Spec,false,0);
+  if (UserCanAction("ViewCostPrice",true)) then begin //Edit***************************Sasha2,10:34 10.11.2014
+  	MatCol(t,-260,"Старая цена",0,SentOldPrice,true,0);
+  	MatCol(t,-160,"Накл. расх.",0,SentExtraSCost,true,0);
+  	MatCol(t,-80,"Новая цена",0,SentNewPrice,true,0);
+  end; //Edit***************************Sasha2,10:35 10.11.2014  
+  
+t=0;
   Flip(flipnr); flipnr = flipnr + 1;
-  MatCol(1,86,"Наименование",0,Spec,false,0);
+  MatCol(t,32,"Товар",0,ArtCode,false,INSClass);
+  MatCol(t,86,"Наименование",0,Spec,false,0);
   if (HasObjects) then begin
-    MatCol(1,-380,"Объекты",0,Objects,false,ObjSClass);
+    MatCol(t,-380,"Объекты",0,Objects,false,ObjSClass);
   end;
   if (HasSerialNumbers) then begin
-    MatCol(1,-280,"Серийный номер",0,SerialNr,false,SerialNrSClass);
+    MatCol(t,-280,"Серийный номер",0,SerialNr,false,SerialNrSClass);
   end;
-  MatCol(1,-140,"Отпускн. цена",0,BasePrice,true,0);
-  MatCol(1,-40,"Коэфф.",0,Coefficient,false,0);
+  MatCol(t,-140,"Отпускн. цена",0,BasePrice,true,0);
+  MatCol(t,-40,"Коэфф.",0,Coefficient,false,0);  
+t=1;
+	MatCol(t,32,"Товар",0,ArtCode,false,INSClass);
+  MatCol(t,86,"Наименование",0,Spec,false,0);
+  if (HasObjects) then begin
+    MatCol(t,-380,"Объекты",0,Objects,false,ObjSClass);
+  end;
+  if (HasSerialNumbers) then begin
+    MatCol(t,-280,"Серийный номер",0,SerialNr,false,SerialNrSClass);
+  end;
+  MatCol(t,-140,"Отпускн. цена",0,BasePrice,true,0);
+  MatCol(t,-40,"Коэфф.",0,Coefficient,false,0);
+  
+t=0;
   Flip(flipnr); flipnr = flipnr + 1;
-  MatCol(1,86,"Наименование",0,Spec,false,0);
+  MatCol(t,32,"Товар",0,ArtCode,false,INSClass);
+  MatCol(t,86,"Наименование",0,Spec,false,0);
   /*if (HasSerialNumbers) then begin //Edit***************************Sasha2,11:25 11.02.2015
-    MatCol(1,-320,"Серийный номер",0,SerialNr,false,SerialNrSClass);
+    MatCol(t,-320,"Серийный номер",0,SerialNr,false,SerialNrSClass);
   end;*/
-  MatCol(1,-385,"Кол.печати",0,PrintQuant,false,0); //Edit***************************Sasha2,11:26 11.02.2015
-  MatColTL(1,-320,"Штрихкод",0,-1,ViewOnly,0,BarCode,false,0); //Edit***************************Sasha2,11:24 11.02.2015
-  MatCol(1,-200,"Треб.кол.",0,OrdQuant,true,0); //Edit***************************Sasha2,14:24 09.02.2015
-  MatCol(1,-140,"Объем",0,Volume,true,0); //Edit***************************Sasha2,13:48 09.02.2015
-  MatCol(1,-70,"Вес",0,Weight,true,0); //Edit***************************Sasha2,13:48 09.02.2015
-  /*MatCol(1,-135,"Ширина",0,UnitXval,true,0);
-  MatCol(1,-90,"Высота",0,UnitYval,true,0);
-  MatCol(1,-45,"Глубина",0,UnitZval,true,0);*/ //Edit***************************Sasha2,13:48 09.02.2015
+  MatCol(t,-385,"Кол.печати",0,PrintQuant,false,0); //Edit***************************Sasha2,11:26 11.02.2015
+  MatColTL(t,-320,"Штрихкод",0,-1,ViewOnly,0,BarCode,false,0); //Edit***************************Sasha2,11:24 11.02.2015
+  MatCol(t,-200,"Треб.кол.",0,OrdQuant,true,0); //Edit***************************Sasha2,14:24 09.02.2015
+  MatCol(t,-140,"Объем",0,Volume,true,0); //Edit***************************Sasha2,13:48 09.02.2015
+  MatCol(t,-70,"Вес",0,Weight,true,0); //Edit***************************Sasha2,13:48 09.02.2015
+  /*MatCol(t,-135,"Ширина",0,UnitXval,true,0);
+  MatCol(t,-90,"Высота",0,UnitYval,true,0);
+  MatCol(t,-45,"Глубина",0,UnitZval,true,0);*/ //Edit***************************Sasha2,13:48 09.02.2015
+t=1;  
+  MatCol(t,32,"Товар",0,ArtCode,false,INSClass);
+  MatCol(t,86,"Наименование",0,Spec,false,0);
+  MatCol(t,-385,"Кол.печати",0,PrintQuant,false,0); //Edit***************************Sasha2,11:26 11.02.2015
+  MatColTL(t,-320,"Штрихкод",0,-1,ViewOnly,0,BarCode,false,0); //Edit***************************Sasha2,11:24 11.02.2015
+  MatCol(t,-200,"Треб.кол.",0,OrdQuant,true,0); //Edit***************************Sasha2,14:24 09.02.2015
+  MatCol(t,-140,"Объем",0,Volume,true,0); //Edit***************************Sasha2,13:48 09.02.2015
+  MatCol(t,-70,"Вес",0,Weight,true,0); //Edit***************************Sasha2,13:48 09.02.2015
+
+
   if (HasPositions) then begin
     Flip(flipnr); flipnr = flipnr + 1;
-    MatCol(1,86,"Наименование",0,Spec,false,0);
-    MatCol(1,-180,"С места",0,FrPosCode,false,UsedPosSClass);
-    MatCol(1,-90,"На место",0,ToPosCode,false,FreePosSClass);
-  end;
+t=0;    
+    MatCol(t,32,"Товар",0,ArtCode,false,INSClass);
+    MatCol(t,86,"Наименование",0,Spec,false,0);
+    MatCol(t,-180,"С места",0,FrPosCode,false,UsedPosSClass);
+    MatCol(t,-90,"На место",0,ToPosCode,false,FreePosSClass);
+t=1;    
+    MatCol(t,32,"Товар",0,ArtCode,false,INSClass);
+    MatCol(t,86,"Наименование",0,Spec,false,0);
+    MatCol(t,-180,"С места",0,FrPosCode,false,UsedPosSClass);
+    MatCol(t,-90,"На место",0,ToPosCode,false,FreePosSClass);
+  end; 
+
   DeleteRowTest;
   EndMatrix;
+  
   vs = 20;
   v = 18;
   if (flipnr>2) then begin
