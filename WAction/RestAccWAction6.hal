@@ -779,7 +779,7 @@ begin
   ReadFirstMain(LMr,1,true);
   
   M4PadString("N " & IVp.OfficialSerNr,20," ",false,s);
-  M4PadString(IVp.TransDate & "  " & IVp.TransTime,20," ",true,L2);
+  M4PadString(IVp.TransDate & "  " & CurrentTime /*IVp.TransTime*/,20," ",true,L2);
   s =  EmphesizeOn & s & EmphesizeOff & L2;
   Error = OutComPort(1,s & chr(10)); s ="";
   s = LMr.CompName;
