@@ -1459,3 +1459,46 @@ LRefillPURows:;
   RETURN;
 END;
 
+
+global
+procedure PastePUInStockMov(record PUVc PUr,var record StockMovVc SMr)		//Edit----------------------Dima  25.02.2015
+BEGIN
+	integer i,rwcnt;
+	row PUVc PUrw;
+	row StockMovVc SMrw;
+	
+	
+	RecordNew(SMr);
+	SMr.FrLocation = PUr.Location;
+	rwcnt = MatRowCnt(PUr);
+	for(i=0;i<rwcnt;i=i+1) begin
+		MatRowGet(PUr,i,PUrw);
+		SMrw.ArtCode = PUrw.ArtCode;
+		SMrw.Quant = PUrw.Quant;
+		SMrw.OrdQuant = PUrw.Quant;
+		SMrw.Spec = PUrw.Spec;
+		SMrw.SerialNr = PUrw.SerialNr;
+		SMrw.BarCode = PUrw.BarCode;
+		MatRowPut(SMr,i,SMrw);	
+	end;
+
+RETURN;
+END;
+
+
+
+global 
+procedure CreateStockMovFromPUsm()		//Edit----------------------Dima  25.02.2015
+BEGIN
+  record PUVc PUr;
+  record StockMovVc SMr;
+  Integer wn,nwn;
+
+  wn = CurWindow;
+  GetWindowRecord(wn,PUr);
+	PastePUInStockMov(PUr,SMr);
+  nwn = OpenWindow("StockMovDClass",1,0,"","",SMr);
+ 
+  RETURN;
+END;
+

@@ -2564,12 +2564,13 @@ begin
   if (HasModRent) then begin
 //  SpecialMenu("Create #Stock# Movement",' ',5,"StockMovFromPUSpec");
 //  SpecialMenu("Scan",' ',8,"ScanBarCodePUDsm");
-    SpecialMenu("Создать складское перемещение",' ',8,"INTransFromPUsm");
+//  SpecialMenu("Создать складское перемещение",' ',8,"INTransFromPUsm");	//Edit----------------------Dima  25.02.2015
   end;
    SpecialMenu("Выгрузить таблицу в буфер обмена",'',1,"ExportToExcelPUDsm"); // edit ----------Dima 26.11.2014, 23.01.2015
   end;
   SpecialMenu("Присвоить товарам штрихкоды",'',14,"SetEAN13PUDsm"); //Edit***************************Sasha2,10:38 21.01.2015
   SpecialMenu("Распечатать EAN13 этикетки 5*13",'',14,"PrintEAN13PUDsm"); //Edit***************************Sasha2,10:38 21.01.2015
+  SpecialMenu("Создать перемещение",' ',8,"CreateStockMovFromPUsm");
   EndWindow;
 end;
 
@@ -6557,7 +6558,7 @@ t=0;
     MatCol(t,86,"Наименование",0,Spec,false,0);
     MatCol(t,-180,"С места",0,FrPosCode,false,UsedPosSClass);
     MatCol(t,-90,"На место",0,ToPosCode,false,FreePosSClass);
-t=1;    
+t=1;    //Edit----------------------Dima  25.02.2015
     MatCol(t,32,"Товар",0,ArtCode,false,INSClass);
     MatCol(t,86,"Наименование",0,Spec,false,0);
     MatCol(t,-180,"С места",0,FrPosCode,false,UsedPosSClass);
