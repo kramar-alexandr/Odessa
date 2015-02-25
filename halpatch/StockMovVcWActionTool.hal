@@ -141,7 +141,7 @@ LStockMovVc_PasteQuantAGAIN:;
     end;
   end;  
 LStockMovVc_PasteQuant:;  
-  StockMovSumUp(StockMovr);    
+  //StockMovSumUp(StockMovr);    //Edit***************************Sasha2,10:14 25.02.2015
   StockMovVc_PasteQuant = res;
   RETURN;
 END;
@@ -402,7 +402,7 @@ begin
   end;
   MatRowPut(StockMovr,rownr,StMrw);
   if (chsum) then begin
-    StockMovSumUp(StockMovr);
+    //StockMovSumUp(StockMovr); //Edit***************************Sasha2,10:15 25.02.2015
   end;
   return;
 end;
@@ -423,7 +423,7 @@ begin
       MatRowGet(StockMovr,rownr,StockMovrw);
     end;
   end;
-  StockMovSumUp(StockMovr);
+  //StockMovSumUp(StockMovr); //Edit***************************Sasha2,10:15 25.02.2015
   return;
 end;
 

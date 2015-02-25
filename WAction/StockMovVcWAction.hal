@@ -302,7 +302,7 @@ BEGIN
     MatRowGet(StockMovr,rownr,StockMovrw);
     StockMovrw.Quant = CalculateSerialNrQuantity(StockMovrw.ArtCode,"","",false,StockMovrw.UnitXval,StockMovrw.UnitYval,StockMovrw.UnitZval,StockMovrw.Quant);
     MatRowPut(StockMovr,rownr,StockMovrw);
-    StockMovSumUp(StockMovr);    
+    //StockMovSumUp(StockMovr);    //Edit***************************Sasha2,10:13 25.02.2015
     PutWindowRecord(wn,StockMovr);    
   end;
   StockMovDClassUnitXvalEFAfter = res;
@@ -321,7 +321,7 @@ BEGIN
     MatRowGet(StockMovr,rownr,StockMovrw);
     StockMovrw.Quant = CalculateSerialNrQuantity(StockMovrw.ArtCode,"","",false,StockMovrw.UnitXval,StockMovrw.UnitYval,StockMovrw.UnitZval,StockMovrw.Quant);
     MatRowPut(StockMovr,rownr,StockMovrw);
-    StockMovSumUp(StockMovr);    
+    //StockMovSumUp(StockMovr);    //Edit***************************Sasha2,10:13 25.02.2015
     PutWindowRecord(wn,StockMovr);    
   end;
   StockMovDClassUnitYvalEFAfter = res;
@@ -340,7 +340,7 @@ BEGIN
     MatRowGet(StockMovr,rownr,StockMovrw);
     StockMovrw.Quant = CalculateSerialNrQuantity(StockMovrw.ArtCode,"","",false,StockMovrw.UnitXval,StockMovrw.UnitYval,StockMovrw.UnitZval,StockMovrw.Quant);    
     MatRowPut(StockMovr,rownr,StockMovrw);
-    StockMovSumUp(StockMovr);    
+    //StockMovSumUp(StockMovr);    //Edit***************************Sasha2,10:14 25.02.2015
     PutWindowRecord(wn,StockMovr);    
   end;
   StockMovDClassUnitZvalEFAfter = res;
@@ -707,7 +707,7 @@ BEGIN
 
   if (rownr>=0) then begin
     GetWindowRecord(wn,StockMovr);    
-    StockMovSumUp(StockMovr);
+    //StockMovSumUp(StockMovr); //Edit***************************Sasha2,10:14 25.02.2015
     PutWindowRecord(wn,StockMovr);    
   end;
   res = true;

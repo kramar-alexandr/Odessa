@@ -1836,6 +1836,7 @@ BEGIN
   Boolean UnOKedCheckSerialf;
 
   res = 0;
+  StockMovSumUp(SMp); //Edit***************************Sasha2,10:12 25.02.2015
   oldnr = SMp.SerNr;
   oldOfficialSerNr = SMp.OfficialSerNr;
   UnOKedCheckSerialf = false;
