@@ -145,7 +145,7 @@ begin
     if (GetNextLoyaltyCardNr(LoyaltyCardr.SerNr)) then begin end;
     lLoyaltyCardr.SerNr = LoyaltyCardr.SerNr;
     if (ReadFirstMain(lLoyaltyCardr,1,true)) then begin
-      RecordCheckError(1547,LoyaltyCardr.SerNr,-1,"Code");      
+      RecordCheckError(1547,LoyaltyCardr.SerNr,-1,"SerNr");    //Edit***************************Sasha2,17:03 26.02.2015 
       res = -1; 
       goto LLoyaltyCardVcRecordCheck;
     end;
