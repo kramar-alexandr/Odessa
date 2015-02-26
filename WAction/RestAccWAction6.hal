@@ -989,14 +989,16 @@ begin
   return;
 end; //Edit***************************Sasha2,13:58 14.11.2014 }
 
-global
+global updating
 function Boolean IVPrintReceipt(Integer wn,var record IVVc IVp,var record IVVc prevIVp,Integer rownr,Boolean okf,Boolean opendrawerf,Integer IncrementalPrint,Integer wnst)
 begin
-  record LSerialPortDeviceVc LSPDr;
+  record LSerialPortDeviceVc LSPDr,LSPDr2;
   record LocalMachineBlock LMb;
   Integer Error;
   Boolean res;
-  Boolean custopendrawerf; //Edit***************************Sasha2,12:37 14.11.2014
+  Boolean custopendrawerf,reOpenPortDspl; //Edit***************************Sasha2,12:37 14.11.2014
+  integer comportDSPL;	//Edit----------------------Dima  26.02.2015
+  
   
   res = true;
   custopendrawerf = true;
@@ -1008,16 +1010,30 @@ begin
   end;
   if (FindLocalSerialPortDevice(kSerialPortDeviceClassReceiptPrinter,-1,LMb.LocalMachineCode,LSPDr)==false) then begin  
     goto LIVPrintReceipt;
-  end;
+  end;  
+  
+  comportDSPL = 10;//Pole display COM-port
+  reOpenPortDspl = false;		
+  if (FindLocalSerialPortDevice(kSerialPortDeviceClassDisplay,-1,LMb.LocalMachineCode,LSPDr2) and (LMb.UseDisplay!=0)) then begin	//Edit----------------------Dima  26.02.2015
+    		if (LSPDr2.isOpened==1) then begin
+					OutComPort(comportDSPL,chr(12));
+					CloseComPort(comportDSPL);
+					LSPDr2.isOpened = 0;
+					reOpenPortDspl = true;
+					RecordStore(LSPDr2,true);
+				end;
+	end;  
+  
+  
   //if (SetComPortCodepage(StringSetFromString(89,LSPDr.Codepage))) then begin end; //Edit***************************Sasha2,12:34 14.11.2014
-  Error = OpenComPort(0,LSPDr.Port,LSPDr.BaudRate,LSPDr.Parity,LSPDr.ByteSize,LSPDr.StopBits,LSPDr.FlowControl); 
+  Error = OpenComPort(1,LSPDr.Port,LSPDr.BaudRate,LSPDr.Parity,LSPDr.ByteSize,LSPDr.StopBits,LSPDr.FlowControl); 
   if (SetComPortCodepage(StringSetFromString(89,LSPDr.Codepage))) then begin end; //Edit***************************Sasha2,12:33 14.11.2014  
   if (Error==0) then begin
     if (nonblank(LSPDr.FailureCode)) then begin
       LSPDr.Code = LSPDr.FailureCode;
       if (ReadFirstMain(LSPDr,1,true)) then begin
         if (SetComPortCodepage(StringSetFromString(89,LSPDr.Codepage))) then begin end;
-        Error = OpenComPort(0,LSPDr.Port,LSPDr.BaudRate,LSPDr.Parity,LSPDr.ByteSize,LSPDr.StopBits,LSPDr.FlowControl);   
+        Error = OpenComPort(1,LSPDr.Port,LSPDr.BaudRate,LSPDr.Parity,LSPDr.ByteSize,LSPDr.StopBits,LSPDr.FlowControl);   
       end;
     end;
   end;
@@ -1032,6 +1048,15 @@ begin
     otherwise
       Error = CloseComPort(1);
   end;
+  
+  
+  if (reOpenPortDspl) then begin  //Edit----------------------Dima  26.02.2015 
+    		if (OpenComPort(comportDSPL,LSPDr2.Port,LSPDr2.BaudRate,LSPDr2.Parity,LSPDr2.ByteSize,LSPDr2.StopBits,LSPDr2.FlowControl)) then begin
+    				LSPDr2.isOpened = 1;
+						RecordStore(LSPDr2,true);
+    		end;	       		
+   end;	   
+  
 LIVPrintReceipt:;
   IVPrintReceipt = res;
   return;
