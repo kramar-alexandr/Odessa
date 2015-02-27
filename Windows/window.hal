@@ -873,3 +873,16 @@ begin
 
   EndWindow;
 end;
+
+
+window ExpSalesStatClass:1
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+	real h,h2,h3,h4,v,v1,vm,vs,v2,temp;
+  WindowBegin("Ћпределите экспорт статистики продаж магазина",ExpSalesStatClass,CGEcW,RcType);
+		SetWRect(20,80,400,470);
+		h = 100;
+		EditField(h,v,80,"‘клад магазина",Normal,f1,false,LocationSClass);
+
+  EndWindow;
+end;

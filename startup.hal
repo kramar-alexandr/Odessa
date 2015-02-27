@@ -33,6 +33,9 @@ begin
   //Report("Статистика НДС по аванс. отчетам",ExpVATRClass,ExpVATRn,0,modCL);
   //Report("Журнал путевых листов",WLJRClass,WLJRn,0,modCL);
   
+  Export("Экспорт статистики продаж",ExpSalesStatClass,ExpSalesStatEn,modSL);// Edit ************************** Thursday, 26 February 2015 18:04:57
+  Setting("Поля, задаваемые пользователем - Товары",INUserLabelTClass,modSL);// Edit ************************** Thursday, 26 February 2015 18:04:55
+  
    SString(24193,"К оплате");
    
    SString(31000,"На текущем складе:");
