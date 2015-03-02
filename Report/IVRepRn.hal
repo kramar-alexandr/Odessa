@@ -116,13 +116,15 @@ boolean TrHs1; //Edit***************************Sasha2,10:12 02.03.2015
 							SHp.OrderNr = IVr.OrderNr;
 							TrHs1 = true;
 							while (LoopKey("OrderKey",SHp,1,TrHs1)) begin
-								mtcnt = MatRowCnt(SHp);
-								printf = false;
-								for (j=0;j<mtcnt;j=j+1) begin
-									MatRowGet(SHp,j,SHrw);
-									if (SHrw.ArtCode==IVrw.ArtCode and blank(IVrw.SerialNr)) then begin printf = true; j = mtcnt;TrHs1 = false; end;
-									if (SHrw.ArtCode==IVrw.ArtCode and nonblank(IVrw.SerialNr) and IVrw.SerialNr==SHrw.SerialNr) then begin printf = true; j = mtcnt; TrHs1 = false; end;
-								end;
+								if (SHp.OKFlag==1) then begin
+  								mtcnt = MatRowCnt(SHp);
+  								printf = false;
+  								for (j=0;j<mtcnt;j=j+1) begin
+  									MatRowGet(SHp,j,SHrw);
+  									if (SHrw.ArtCode==IVrw.ArtCode and blank(IVrw.SerialNr)) then begin printf = true; j = mtcnt;TrHs1 = false; end;
+  									if (SHrw.ArtCode==IVrw.ArtCode and nonblank(IVrw.SerialNr) and IVrw.SerialNr==SHrw.SerialNr) then begin printf = true; j = mtcnt; TrHs1 = false; end;
+  								end;
+  							end;
 							end; RESETLOOP(SHp);
 							sum = MulRateToBase1(IVr.CurncyCode,IVrw.Sum,IVr.FrRate,IVr.ToRateB1,IVr.ToRateB2,IVr.BaseRate1,IVr.BaseRate2,DefaultCurRoundOff);
 							if (printf) then begin
