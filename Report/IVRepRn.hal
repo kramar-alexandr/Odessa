@@ -16,6 +16,7 @@ integer mtcnt,j; //Edit***************************Sasha2,9:31 17.02.2015
 Boolean printf; //Edit***************************Sasha2,9:37 17.02.2015
 val sum,rwGP,ivrowqtycost; //Edit***************************Sasha2,9:39 17.02.2015
 record INVc INr; //Edit***************************Sasha2,10:42 17.02.2015
+val cred;
 
 	StartReportJob("עקוע ןמ ןנמהאזאל");
 	rw=1;
@@ -69,6 +70,10 @@ record INVc INr; //Edit***************************Sasha2,10:42 17.02.2015
 	TrHs=true;
 	While (LoopMain(IVr,1,TrHs)) begin
 		testf=true;
+		cred = 1;
+		if(IVr.InvType==kInvoiceTypeCredit)then begin
+			cred = -1;
+		end;
 		if (IVr.InvDate < RepSpec.sStartDate) then begin testf=false;	end;	
 		if (IVr.InvDate > RepSpec.sEndDate) then begin	TrHs=false;	testf=false;	end;		
 		if (nonblank(RepSpec.f3) and (IVr.Location!=RepSpec.f3)) then begin	testf=false;	end;
@@ -91,6 +96,9 @@ record INVc INr; //Edit***************************Sasha2,10:42 17.02.2015
 				if (blank(IVrw.ArtCode)) then begin	testf1=false;	end;
 
 				if(testf1) then begin
+					IVrw.Quant = IVrw.Quant*cred;
+					IVrw.FIFOVal = IVrw.FIFOVal*cred;
+					IVrw.Sum = IVrw.Sum*cred;
 					StartFormat(15);
 					OutString(0,0,IVr.InvDate,false);
 					OutString(40,0,IVr.SerNr,false);
@@ -116,12 +124,12 @@ record INVc INr; //Edit***************************Sasha2,10:42 17.02.2015
 								sum = MulRateToBase1(IVr.CurncyCode,IVrw.Sum,IVr.FrRate,IVr.ToRateB1,IVr.ToRateB2,IVr.BaseRate1,IVr.BaseRate2,DefaultCurRoundOff);
 								if (printf) then begin
 									ivrowqtycost = (SHrw.FIFORowVal/SHrw.Ship)*IVrw.Quant;
-									OutVal(320,0,SHrw.FIFORowVal/SHrw.Ship,M45Val,false);
+									OutVal(320,0,SHrw.FIFORowVal/SHrw.Ship*cred,M45Val,false);
 									OutVal(340,0,ivrowqtycost,M45Val,false);
 									total2 = total2 + ivrowqtycost;
 									rwGP = sum - ivrowqtycost;
 									OutVal(360,0,rwGP,M45Val,false);
-									OutVal(380,0,rwGP*100/ivrowqtycost,M45Val,false);
+									OutVal(380,0,rwGP*100/ivrowqtycost*cred,M45Val,false);
 									total3 = total3 + rwGP;
 								end else begin
 									INr.Code = IVrw.ArtCode;
@@ -137,17 +145,17 @@ record INVc INr; //Edit***************************Sasha2,10:42 17.02.2015
 								end;
 							end;
 						end else begin //Edit***************************Sasha2,17:57 16.02.2015 }
-							OutVal(320,0,IVrw.FIFORowVal/IVrw.Quant,M45Val,false);
+							OutVal(320,0,IVrw.FIFORowVal/IVrw.Quant*cred,M45Val,false);
 							OutVal(340,0,IVrw.FIFORowVal,M45Val,false);
 							total2 = total2 + IVrw.FIFORowVal;
-							OutVal(360,0,IVrw.rowGP,M45Val,false);
-							OutVal(380,0,IVrw.rowGP*100/(IVrw.FIFORowVal),M45Val,false);
+							OutVal(360,0,IVrw.rowGP*cred,M45Val,false);
+							OutVal(380,0,IVrw.rowGP*100/(IVrw.FIFORowVal)*cred,M45Val,false);
 							total3 = total3 + IVrw.rowGP;
 						end;
 						PLr.ArtCode = IVrw.ArtCode;
 						PLr.PLCode = "SALAR";
 						readfirstmain(PLr,2,true);
-						OutVal(400,0,PLr.ExVatPrice,M45Val,false);
+						OutVal(400,0,PLr.ExVatPrice*cred,M45Val,false);
 						OutVal(420,0,PLr.ExVatPrice*IVrw.Quant,M45Val,false);
 						total4 = total4 + PLr.ExVatPrice*IVrw.Quant;
 						OutVal(440,0,IVrw.Sum/fr*to - PLr.ExVatPrice*IVrw.Quant,M45Val,false);
