@@ -85,7 +85,7 @@ record INVc INr; //Edit***************************Sasha2,10:42 17.02.2015
 			for(i=0;i<rwcnt;i=i+1) begin
 				testf1 = true;
 				MatRowGet(IVr,i,IVrw);
-				if (IVrw.stp==kInvoiceRowTypeNormal)then begin testf1=false; end;
+				if (IVrw.stp!=kInvoiceRowTypeNormal)then begin testf1=false; end;
 				if (nonblank(RepSpec.f1) and (IVrw.ArtCode!=RepSpec.f1)) then begin	testf1=false;	end;
 				if (nonblank(RepSpec.f2) and (IVr.SalesGroup!=RepSpec.f2)) then begin	testf1=false;	end;		
 				if (blank(IVrw.ArtCode)) then begin	testf1=false;	end;
