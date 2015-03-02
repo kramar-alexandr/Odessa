@@ -122,7 +122,7 @@ record INVc INr; //Edit***************************Sasha2,10:42 17.02.2015
 				OutString(270,0,IVrw.Quant,false);
 				total0 = total0 + IVrw.Quant;
 				OutVal(300,0,IVrw.Price/fr*to,M45Val,false);
-				OutVal(300,0,IVrw.Sum/fr*to,M45Val,false);
+				OutVal(310,0,IVrw.Sum/fr*to,M45Val,false);
 				total1 = total1 + IVrw.Sum/fr*to;
 			  if (UserCanAction("ViewCostPrice",true)) then begin
 				  if (IVr.UpdStockFlag!=0) then begin //Edit***************************Sasha2,17:57 16.02.2015 {
@@ -159,11 +159,11 @@ record INVc INr; //Edit***************************Sasha2,10:42 17.02.2015
               end;
             end;
 				  end else begin //Edit***************************Sasha2,17:57 16.02.2015 }
-					  OutVal(320,0,IVrw.BasePrice,M45Val,false);
-					  OutVal(340,0,IVrw.BasePrice*IVrw.Quant,M45Val,false);
-					  total2 = total2 + IVrw.BasePrice*IVrw.Quant;
+					  OutVal(320,0,IVrw.FIFORowVal/IVrw.Quant,M45Val,false);
+					  OutVal(340,0,IVrw.FIFORowVal,M45Val,false);
+					  total2 = total2 + IVrw.FIFORowVal;
 					  OutVal(360,0,IVrw.rowGP,M45Val,false);
-					  OutVal(380,0,IVrw.rowGP*100/(IVrw.BasePrice*IVrw.Quant),M45Val,false);
+					  OutVal(380,0,IVrw.rowGP*100/(IVrw.FIFORowVal),M45Val,false);
   					total3 = total3 + IVrw.rowGP;
 					end;
 					PLr.ArtCode = IVrw.ArtCode;
