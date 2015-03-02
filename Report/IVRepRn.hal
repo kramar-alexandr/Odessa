@@ -97,7 +97,7 @@ val cred;
 
 				if(testf1) then begin
 					IVrw.Quant = IVrw.Quant*cred;
-					IVrw.FIFOVal = IVrw.FIFORowVal*cred;
+					IVrw.FIFORowVal = IVrw.FIFORowVal*cred;
 					IVrw.Sum = IVrw.Sum*cred;
 					StartFormat(15);
 					OutString(0,0,IVr.InvDate,false);
