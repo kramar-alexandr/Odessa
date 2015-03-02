@@ -17,6 +17,7 @@ Boolean printf; //Edit***************************Sasha2,9:37 17.02.2015
 val sum,rwGP,ivrowqtycost; //Edit***************************Sasha2,9:39 17.02.2015
 record INVc INr; //Edit***************************Sasha2,10:42 17.02.2015
 val cred;
+boolean TrHs1; //Edit***************************Sasha2,10:12 02.03.2015
 
 	StartReportJob("עקוע ןמ ןנמהאזאל");
 	rw=1;
@@ -113,43 +114,44 @@ val cred;
 					if (UserCanAction("ViewCostPrice",true)) then begin
 						if (IVr.UpdStockFlag==0) then begin //Edit***************************Sasha2,17:57 16.02.2015 {
 							SHp.OrderNr = IVr.OrderNr;
-							if (ReadFirstKey("OrderKey",SHp,1,true)) then begin
+							TrHs1 = true;
+							while (LoopKey("OrderKey",SHp,1,TrHs1)) begin
 								mtcnt = MatRowCnt(SHp);
 								printf = false;
 								for (j=0;j<mtcnt;j=j+1) begin
 									MatRowGet(SHp,j,SHrw);
-									if (SHrw.ArtCode==IVrw.ArtCode and blank(IVrw.SerialNr)) then begin printf = true; j = mtcnt; end;
-									if (SHrw.ArtCode==IVrw.ArtCode and nonblank(IVrw.SerialNr) and IVrw.SerialNr==SHrw.SerialNr) then begin printf = true; j = mtcnt; end;
+									if (SHrw.ArtCode==IVrw.ArtCode and blank(IVrw.SerialNr)) then begin printf = true; j = mtcnt;TrHs1 = false; end;
+									if (SHrw.ArtCode==IVrw.ArtCode and nonblank(IVrw.SerialNr) and IVrw.SerialNr==SHrw.SerialNr) then begin printf = true; j = mtcnt; TrHs1 = false; end;
 								end;
-								sum = MulRateToBase1(IVr.CurncyCode,IVrw.Sum,IVr.FrRate,IVr.ToRateB1,IVr.ToRateB2,IVr.BaseRate1,IVr.BaseRate2,DefaultCurRoundOff);
-								if (printf) then begin
-									ivrowqtycost = (SHrw.FIFORowVal/SHrw.Ship)*IVrw.Quant;
-									OutVal(320,0,SHrw.FIFORowVal/SHrw.Ship*cred,M45Val,false);
-									OutVal(340,0,ivrowqtycost,M45Val,false);
-									total2 = total2 + ivrowqtycost;
-									rwGP = sum - ivrowqtycost;
-									OutVal(360,0,rwGP,M45Val,false);
-									OutVal(380,0,rwGP*100/ivrowqtycost*cred,M45Val,false);
-									total3 = total3 + rwGP;
-								end else begin
-									INr.Code = IVrw.ArtCode;
-									ReadFirstMain(INr,1,true);
-									ivrowqtycost = INr.InPrice*IVrw.Quant;
-									OutVal(320,0,INr.InPrice,M45Val,false);
-									OutVal(340,0,ivrowqtycost,M45Val,false);
-									total2 = total2 + ivrowqtycost;
-									rwGP = sum - ivrowqtycost;
-									OutVal(360,0,rwGP,M45Val,false);
-									OutVal(380,0,rwGP*100/ivrowqtycost,M45Val,false);
-									total3 = total3 + rwGP;
-								end;
+							end; RESETLOOP(SHp);
+							sum = MulRateToBase1(IVr.CurncyCode,IVrw.Sum,IVr.FrRate,IVr.ToRateB1,IVr.ToRateB2,IVr.BaseRate1,IVr.BaseRate2,DefaultCurRoundOff);
+							if (printf) then begin
+								ivrowqtycost = (SHrw.FIFORowVal/SHrw.Ship)*IVrw.Quant;
+								OutVal(320,0,SHrw.FIFORowVal/SHrw.Ship*cred,M45Val,false);
+								OutVal(340,0,ivrowqtycost,M45Val,false);
+								total2 = total2 + ivrowqtycost;
+								rwGP = sum - ivrowqtycost;
+								OutVal(360,0,rwGP,M45Val,false);
+								OutVal(380,0,rwGP*100/ivrowqtycost,M45Val,false);
+								total3 = total3 + rwGP;
+							end else begin
+								/*INr.Code = IVrw.ArtCode;
+								ReadFirstMain(INr,1,true);*/
+								ivrowqtycost = IVrw.BasePrice*IVrw.Quant;
+								OutVal(320,0,IVrw.BasePrice*cred,M45Val,false);
+								OutVal(340,0,ivrowqtycost,M45Val,false);
+								total2 = total2 + ivrowqtycost;
+								rwGP = sum - ivrowqtycost;
+								OutVal(360,0,rwGP,M45Val,false);
+								OutVal(380,0,rwGP*100/ivrowqtycost,M45Val,false);
+								total3 = total3 + rwGP;
 							end;
 						end else begin //Edit***************************Sasha2,17:57 16.02.2015 }
 							OutVal(320,0,IVrw.FIFORowVal/IVrw.Quant*cred,M45Val,false);
 							OutVal(340,0,IVrw.FIFORowVal,M45Val,false);
 							total2 = total2 + IVrw.FIFORowVal;
 							OutVal(360,0,IVrw.rowGP*cred,M45Val,false);
-							OutVal(380,0,IVrw.rowGP*100/(IVrw.FIFORowVal)*cred,M45Val,false);
+							OutVal(380,0,IVrw.rowGP*100/(IVrw.FIFORowVal),M45Val,false);
 							total3 = total3 + IVrw.rowGP;
 						end;
 						PLr.ArtCode = IVrw.ArtCode;
