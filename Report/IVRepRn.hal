@@ -112,7 +112,7 @@ boolean TrHs1; //Edit***************************Sasha2,10:12 02.03.2015
 					OutVal(310,0,IVrw.Sum/fr*to,M45Val,false);
 					total1 = total1 + IVrw.Sum/fr*to;
 					if (UserCanAction("ViewCostPrice",true)) then begin
-						if (IVr.UpdStockFlag==0) then begin //Edit***************************Sasha2,17:57 16.02.2015 {
+						if (IVr.UpdStockFlag==0 or (IVr.UpdStockFlag!=0 and IVr.OrderNr>-1)) then begin //Edit***************************Sasha2,17:57 16.02.2015 {
 							SHp.OrderNr = IVr.OrderNr;
 							TrHs1 = true;
 							while (LoopKey("OrderKey",SHp,1,TrHs1)) begin
