@@ -43,9 +43,9 @@ begin
     GetPrevWindowRecord(wn,LoyaltyCardr);
     PointsHistr.LMCardNr = LoyaltyCardr.SerNr;
     PointsHistr.CustCode = LoyaltyCardr.CustCode;
-    if (ReadFirstKey("CustCode",PointsHistr,2,true)) then begin 
+    /*if (ReadFirstKey("CustCode",PointsHistr,2,true)) then begin  //Edit***************************Sasha2,10:51 03.03.2015
       res = false;
-    end;
+    end;*/
     if (LoyaltyCardr.Closed!=0) then begin
       res = false;
     end;
