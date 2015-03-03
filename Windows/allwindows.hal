@@ -8312,7 +8312,7 @@ begin
 //  MatCol(1,-400,"Short.",0,ACShort,false,ACShortSClass); // what the hell is this? Karl
     if (HasExtraNLComment) then begin
       MatCol(1,-550,"Комментарий",0,Comment,false,0); // -349
-      MatCol(1,-380,"Дополнительный комментарий",0,ExtraComment,false,0); // -349
+      //MatCol(1,-380,"Дополнительный комментарий",0,ExtraComment,false,0); // -349 //Edit***************************Sasha2,11:36 03.03.2015
     end else begin
       MatCol(1,-400,"Комментарий",0,Comment,false,0); // -349
     end;
@@ -8320,7 +8320,7 @@ begin
 //  MatCol(1,-400,"Short.",0,ACShort,false,ACShortSClass); // what the hell is this? Karl
     if (HasExtraNLComment) then begin
       MatCol(1,-550,"Описание",0,Comment,false,0); // -349
-      MatCol(1,-380,"Доп. описание",0,ExtraComment,false,0); // -349
+      MatCol(1,-380,"Доп. описание",0,ExtraComment,false,0); // -349 
     end else begin
       MatCol(1,-550,"Описание",0,Comment,false,0); // -349
     end;
@@ -8330,19 +8330,22 @@ begin
       MatCol(1,-290,"Дт осн. 1",0,DebVal,true,0);
       MatCol(1,-230,"Кт осн. 2",0,CredVal,true,0);
     end else begin
-      MatCol(1,-210,"Дт осн. 1",0,DebVal,true,0);
-      MatCol(1,-120,"Кт осн. 2",0,CredVal,true,0);
+      MatCol(1,-410,"Дт осн. 1",0,DebVal,true,0); //Edit***************************Sasha2,11:38 03.03.2015
+      MatCol(1,-330,"Кт осн. 2",0,CredVal,true,0); //Edit***************************Sasha2,11:38 03.03.2015
     end;
   end else begin
     if (GuiType==kGuiiPhone) then begin
       MatCol(1,-290,"Дебет",0,DebVal,true,0);
       MatCol(1,-230,"Кредит",0,CredVal,true,0);
     end else begin
-      MatCol(1,-210,"Дебет",0,DebVal,true,0);
-      MatCol(1,-120,"Кредит",0,CredVal,true,0);
+      MatCol(1,-210,"Дебет",0,DebVal,true,0); 
+      MatCol(1,-120,"Кредит",0,CredVal,true,0); 
     end;
   end;
-  MatCol(1,-30,"НДС",0,VATCode,false,VATCodeSClass);
+  MatCol(1,-250,"Валюта",0,Curncy,false,CurncyCodeSClass); //Edit***************************Sasha2,11:47 03.03.2015
+  MatCol(1,-200,"Дт в валюте",0,CurDebVal,true,0); //Edit***************************Sasha2,11:47 03.03.2015
+  MatCol(1,-100,"Кт в валюте",0,CurCredVal,true,0); //Edit***************************Sasha2,11:47 03.03.2015
+  //MatCol(1,-30,"НДС",0,VATCode,false,VATCodeSClass); //Edit***************************Sasha2,11:36 03.03.2015
   MatText(2,32,"Подпись",true);
   MatColTL(2,108,"",0,M4Code,ViewOnly,0,Sign,false,0);
   MatText(2,160,"Дата старой записи",true);
