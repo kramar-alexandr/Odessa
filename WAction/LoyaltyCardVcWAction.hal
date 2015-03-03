@@ -41,9 +41,9 @@ begin
   
   if (wnst==2) then begin//updatemode
     GetPrevWindowRecord(wn,LoyaltyCardr);
-    PointsHistr.LMCardNr = LoyaltyCardr.SerNr;
+    /*PointsHistr.LMCardNr = LoyaltyCardr.SerNr; //Edit***************************Sasha2,10:51 03.03.2015
     PointsHistr.CustCode = LoyaltyCardr.CustCode;
-    /*if (ReadFirstKey("CustCode",PointsHistr,2,true)) then begin  //Edit***************************Sasha2,10:51 03.03.2015
+    if (ReadFirstKey("CustCode",PointsHistr,2,true)) then begin  
       res = false;
     end;*/
     if (LoyaltyCardr.Closed!=0) then begin
