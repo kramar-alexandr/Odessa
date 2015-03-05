@@ -449,7 +449,7 @@ begin
     end;
   end;
 
-  tstr = ValToString(IVrw.Quant,M4UVal,"",".",0) & "*" & ValToString(IVrw.Price,M4Val,"",".",0);        
+  tstr = ValToString(IVrw.Quant,M4UVal,"",".",0) & "*" & ValToString(IVrw.Price,M4Val,"",".",0)  & " (" & IVrw.Quant*IVrw.Price & ")";	//Edit----------------------Dima  05.03.2015        
   if (nonblank(IVrw.vRebate)) then begin
 			tstr = tstr & "  " & ValToString(IVrw.vRebate,M4UVal,"",".",0) & "%";		//Edit----------------------Dima  19.02.2015
 			tstr = tstr & "  (" & IVrw.Sum*IVrw.vRebate/100 & ") ";

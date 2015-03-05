@@ -3,6 +3,8 @@ event startup
 begin
 
 	SetLangMode(LangRussian,"RUS",0);
+	
+	//Module("Управление складом","",730,modWHM);
  
   Setting("Настройки WebShop",WebShopSettingsTClass,modSO); //Edit***************************Sasha2,10:22 14.07.2014
   Setting("Настройки экспорта склада CSV",ExportStockCSVTClass,modSY);
@@ -70,6 +72,8 @@ begin
    SString(31029,"Номер сертификата");
 	 SString(31030,"Контакт с указанным телефоном уже существует.  Код: ");
 	 SString(31031,"Рыбацкий рай");
+	 SString(31032,"СУММА СКИДКИ");
+	 SString(31033,"ВСЕГО БЕЗ СКИДКИ");
    
   Maintenance("Экспорт склада CSV",ExportStockCSVClass,ExportStockCSVMn,modSY);
   Maintenance("Пересчитать значение объема в карточке товара",RecalcINVolumeClass,RecalcINVolumeMn,modDBMain);//Edit***************************Sasha2,13:50 24.06.2014
