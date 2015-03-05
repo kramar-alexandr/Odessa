@@ -146,7 +146,7 @@ begin
     DeselectWindow(wn,false);
 
     PutWindowString(wn,"CustomerDisplayData_Line1",Left(dispstr,150));//Edit----------------------Dima  04.02.2015
-    PutWindowString(wn,"CustomerDisplayData_Line2",Left(disp2str,28));//Edit----------------------Dima  19.02.2015
+    PutWindowString(wn,"CustomerDisplayData_Line2",Left(disp2str,40));//Edit----------------------Dima  19.02.2015
 
     SetPOSWindowDisplay_SendToSerialPortDevices(dispstr,disp2str);    
   end;  
@@ -217,7 +217,7 @@ begin
   record LSerialPortDeviceVc LSPDr;
   string 255 dispstr;
   string 255 disp2str;
-  
+
   BlockLoad(LMb);
   if (i<MatRowCnt(RestAccr)) then begin
     MatRowGet(RestAccr,i,RestAccrw);
@@ -452,8 +452,9 @@ begin
   tstr = ValToString(IVrw.Quant,M4UVal,"",".",0) & "*" & ValToString(IVrw.Price,M4Val,"",".",0);        
   if (nonblank(IVrw.vRebate)) then begin
 			tstr = tstr & "  " & ValToString(IVrw.vRebate,M4UVal,"",".",0) & "%";		//Edit----------------------Dima  19.02.2015
-	end;        
-  M4PadString(ValToString(IVrw.Sum,M4Val,"",".",0),26-len(tstr)," ",true,t2);	//Edit----------------------Dima  19.02.2015 
+			tstr = tstr & "  (" & IVrw.Sum*IVrw.vRebate/100 & ") ";
+	end;       
+  M4PadString(ValToString(IVrw.Sum,M4Val,"",".",0),40-len(tstr)," ",true,t2);	//Edit----------------------Dima  19.02.2015 
   tstr = tstr & t2; 
   totalString = ValToString(IVr.Sum4,M4Val,ThousandSeparator,DecimalSeparator,0);
   //SetPOSWindowDisplay(IVrw.ArtCode & " " & IVrw.Spec,tstr);
