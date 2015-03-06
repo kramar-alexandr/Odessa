@@ -1568,7 +1568,7 @@ LkInvoiceRowTypeNormal1:;
 					tstr = tstr & "  (" & IVrw.Sum*IVrw.vRebate/100 & ") ";
 				end;
         
-        M4PadString(ValToString(IVrw.Sum,M4Val,"",".",0),40-len(tstr)," ",true,t2);	//Edit----------------------Dima  19.02.2015
+        M4PadString(ValToString(IVrw.Sum,M4Val,"",".",0),50-len(tstr)," ",true,t2);	//Edit----------------------Dima  19.02.2015
         tstr = tstr & t2; 
         totalString = ValToString(IVr.Sum4,M4Val,ThousandSeparator,DecimalSeparator,0); 
 //        SetPOSWindowDisplay(IVrw.ArtCode & " " & IVrw.Spec,tstr);
