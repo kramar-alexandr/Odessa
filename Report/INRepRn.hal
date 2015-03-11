@@ -231,13 +231,13 @@ begin
 				StartFormat(15);
 					OutString(0,0,INr.Code,false);
 					OutString(50,0,INr.Name,false);
-					OutString(120,0,INr.InPrice,false);
+					OutVal(120,0,INr.InPrice,M4Val,false);
 					pos = 160;
 					For(i=0;i<k;i=i+1) begin
 						PLr.ArtCode = INr.Code;
 						PLr.PLCode = PLCode[i];
 						readfirstmain(PLr,2,true);
-						OutString(pos,0,PLr.ExVatPrice,false);
+						OutVal(pos,0,PLr.ExVatPrice,M4Val,false);
 						pos = pos + step;
 					end; 
 					OutString(350,0,qty,false);
