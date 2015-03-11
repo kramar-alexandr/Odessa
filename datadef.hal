@@ -805,6 +805,7 @@ RecordBegin(INVc,-,"artikel5");
   RecordField(TotWeight,M45Val,0,0);// Edit ************************** Friday, July 4, 2014 at 17:13:54
   RecordField(ShipCostRule,M4Int,0,0);// Edit ************************** Friday, July 4, 2014 at 17:13:54
   RecordField(CustomsCostRule,M4Int,0,0);// Edit ************************** Friday, July 4, 2014 at 17:13:54
+  RecordField(ActOkFlag,M4Int,0,0);	//Edit----------------------Dima  11.03.2015
   ArrayBegin(Math,-,1);
   ArrayField(stp,M4Int,0,0);
   ArrayField(ovst,M4Int,0,0);
