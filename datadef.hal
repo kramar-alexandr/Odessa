@@ -1037,7 +1037,10 @@ RecordBegin(INVc,-,"artikel5");
   SubsetKeyBegin2(ActArtCodeOSFlag);
   StoreInBaseKey;
   AppendMatrixFieldToKeyName(ArtCode,0);
-  KeySegment(SerNr);  
+  KeySegment(SerNr);
+  KeyBegin(ActOkFlag);
+  KeySegment(ActOkFlag);
+	KeySegment(SerNr);  
   EndRecord;
   
   RecordBegin(PUVc,-,"purchase2");

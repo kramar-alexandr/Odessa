@@ -614,7 +614,7 @@ begin
 		POr.ActOkFlag = 0; 
 	end else begin
   
-  		if((totQuant>totShip) and (POr.OKFlag>0)) then begin
+  		if(totQuant>totShip)  then begin
 				POr.ActOkFlag = 1;
 			end else begin 
 				POr.ActOkFlag = 0;
