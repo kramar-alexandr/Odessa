@@ -832,11 +832,8 @@ begin
   Boolean initotcheckf;    
   transaction string 255 gRuniningMaint;
   record AccVc Accr;
-  integer totQuant,totShip;	//Edit----------------------Dima  12.03.2015
 
   res = 0;
-  totQuant = 0;
-  totShip = 0;
   insertmode = 1;
   updatemode = 2;
   BlockLoad(SRb);
@@ -1238,26 +1235,8 @@ begin
           end;
         end;
     end;
-    
-    //totQuant = totQuant + POrw.Quant;
-    //totShip = totShip + POrw.Shipd1; 
+
   end;
-  
-  
- /* 
-  if (POr.Closed > 0) then begin			//Edit----------------------Dima  12.03.2015
-		POr.ActOkFlag = 0; 
-	end else begin
-  
-  		if((totQuant>totShip) and (POr.OKFlag>0)) then begin
-				POr.ActOkFlag = 718;
-			end else begin 
-				POr.ActOkFlag = 0;
-			end;
-	end; 																//Edit----------------------Dima  12.03.2015
-	
-	LogText(0,"---- #  " & POr.SerNr & "   Quant: " & totQuant &"   Ship: " & totShip  &"      flg: " & POr.ActOkFlag );
-*/
 	
 LPOVcRecordCheck:;
   if (res!=0) then begin POr.SerNr = oldnr; end;  
