@@ -86,6 +86,7 @@ begin
   Maintenance("Восстановить линки на отгрузки и сч/ф из заказов",MyVClass,RestoreLinksFromORtoSHandIVMn,modDBMain); //Edit***************************Sasha2,11:51 06.02.2015
 	Maintenance("Установить флаги для Web-клиентов",MyVClass,PutFlagsForCUWeb,modDBMain);	//Edit----------------------Dima  11.02.2015
 	Maintenance("Создать карты лояльности клиентам \"WEB\"",MyVClass,CreateLoyaltyForWebClients,modDBMain);	//Edit***************************Sasha2,15:51 26.02.2015
+	Maintenance("Recalculate POVc.ActOkFlag",MyVClass,RecalculatePOVC_ActOkFlag_Mn,modDBMain);
 
   Import("Импорт цен",PLImportIClass,PLImportIn,modDI); //Added********************Dima 20.11.2014
   Import("Импорт товаров",INImportIClass,INImportIn,modIN);//Added********************Dima 20.11.2014
