@@ -3348,7 +3348,12 @@ begin
     label = UserDefined("INVc","UserStr1");
     if (nonblank(label)) then begin
       EditField(h,v=6 ,-40,label,Normal,UserStr1,false,0);
+    end else begin
+    	EditField(h,v=6 ,-40,"Доп. данные",Normal,UserStr1,false,0);
     end;
+    
+    
+    
     label = UserDefined("INVc","UserStr2");
     if (nonblank(label)) then begin
       EditField(h,v+=vs,-40,label,Normal,UserStr2,false,0);
