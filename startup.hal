@@ -36,6 +36,8 @@ begin
   //Report("Журнал путевых листов",WLJRClass,WLJRn,0,modCL);
   
   Export("Экспорт статистики продаж",ExpSalesStatClass,ExpSalesStatEn,modSL);// Edit ************************** Thursday, 26 February 2015 18:04:57
+  Export("Экспорт товаров в CSV",ExpItemsBarCodesEClass,ExpItemsBarCodesEn,modSL);// Edit ************************** Thursday, 26 February 2015 18:04:57
+
   Setting("Поля, задаваемые пользователем - Товары",INUserLabelTClass,modSL);// Edit ************************** Thursday, 26 February 2015 18:04:55
   
    SString(24193,"К оплате");

@@ -3100,7 +3100,7 @@ RecordBegin(IPVc,-,"");
   RecordField(SpecCode,M4Str,60,0);
   RecordField(Math,M4Matrix,0,0);
   RecordField(CorspAcc,M4Code,10,AccVc);
-  RecordField(CurncyCode,M4Code,5,CurncyCodeVc);
+  RecordField(CurncyCode,M4Code,5,CurncyCodeVc);// Edit ************************** Thursday, 5 March 2015 14:48:11
   ArrayBegin(Math,-,1);
   ArrayField(LangCode,M4Code,5,0);
   ArrayField(Text,M4Str,100,0);

@@ -8618,7 +8618,7 @@ begin
   EditField(h,v+=20,300,"Комментарий",Normal,Comment,false,0);
   if (HasAdvancedAccounting) then begin
     EditField(500,v,-40,"Допол. код",Normal,SpecCode,false,0);
-    EditField(500,v+20,-40,"Валюта",Normal,CurncyCode,false,CurncyCodeSClass);
+    EditField(500,v+20,-40,"Валюта",Normal,CurncyCode,false,CurncyCodeSClass);// Edit ************************** Thursday, 5 March 2015 14:49:32
   end;
   EditField(h,50,300,"Счета",Normal,Desc,false,AccSClass);
   EditField(h,70,300,"",Normal,Desc2,false,AccSClass);
