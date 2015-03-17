@@ -32,6 +32,8 @@ begin
   Report("Журнал  расчетов с ПЛ",PersPerRClass,PersPerRn,0,modCL);
   Report("Журнал выплат",PPJRClass,PPRn,0,modCL);
   Report("Отчет по складу (модифицированный)",NewINRClass,NewInvValRn,0,modIN);
+  Report("Товары на местах",INPosRClass,INPosRn,0,modIN);// Edit ************************** Tuesday, 17 March 2015 17:19:38
+
   //Report("Статистика НДС по аванс. отчетам",ExpVATRClass,ExpVATRn,0,modCL);
   //Report("Журнал путевых листов",WLJRClass,WLJRn,0,modCL);
   

@@ -6360,8 +6360,10 @@ begin
     Tile(tilenr,60,false,tilenr,FrPos); tilenr = tilenr + 1;
     v = 6;
     if (HasPositions) then begin
-      EditField(h,v,80, "С места",Normal,FrPos,false,UsedPosSClass);
-      EditField(h2,v,80,"на место",Normal,ToPos,false,FreePosSClass);
+    	//EditField(h,v,80, "С места",Normal,FrPos,false,UsedPosSClass);
+      EditField(h,v,80, "С места",Normal,FrPos,false,PosSClass);
+      //EditField(h2,v,80,"на место",Normal,ToPos,false,FreePosSClass);// Edit ************************** Tuesday, 17 March 2015 17:17:35
+      EditField(h2,v,80,"на место",Normal,ToPos,false,PosSClass);// Edit ************************** Tuesday, 17 March 2015 17:17:36
     end;
     if (HasModProd) then begin
       EditField(h3,v,80,"Для производства",Normal,ProdSerNr,false,ProdSClass); v = v + vs;
