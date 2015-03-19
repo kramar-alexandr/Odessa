@@ -603,13 +603,13 @@ begin
 		if(ReadFirstKey("BarCode",INr1,1,true)) then begin
 			INr.Code = INr1.Code;
 			key = true;
-		end;		
-	end else begin
-		RecordClear(INr1);
-		INr1.AlternativeCode = RepSpec.f2;
-		if(ReadFirstKey("AlternativeCode",INr1,1,true)) then begin
-			INr.Code = INr1.Code;
-			key = true;
+		end else begin
+			RecordClear(INr1);
+			INr1.AlternativeCode = RepSpec.f2;
+			if(ReadFirstKey("AlternativeCode",INr1,1,true)) then begin
+				INr.Code = INr1.Code;
+				key = true;
+			end;
 		end;	
 	end;
 
@@ -624,14 +624,14 @@ begin
 							SHrw.Ship = SHrw.Ship+1;
 							MatRowPut(SHr,RowNumber,SHrw);
 							PutWindowRecord(mwn,SHr);
-							goto LBreak;
+							goto LSH_AddOneItemToShip;
 						end else begin
           		curRow = curRow+1; //we try to find the same item in next rows
 						end;
 
 					end else begin
 						MessageBox(0,"Нельзя добавить товар с кодом " & RepSpec.f2);
-						goto LBreak;
+						goto LSH_AddOneItemToShip;
 					end;
 			end;
 			MessageBox(0,"Нельзя добавить товар с кодом " & RepSpec.f2);
@@ -639,7 +639,7 @@ begin
 			MessageBox(0,"Товара с указанным кодом не существует");
 	end;	
 
-	LBreak:;
+	LSH_AddOneItemToShip:;
 	selectWindow(wn);
 return;  
 end;
@@ -690,16 +690,15 @@ begin
 		if(ReadFirstKey("BarCode",INr1,1,true)) then begin
 			INr.Code = INr1.Code;
 			key = true;
-		end;		
-	end else begin
-		RecordClear(INr1);
-		INr1.AlternativeCode = searchstr;
-		if(ReadFirstKey("AlternativeCode",INr1,1,true)) then begin
-			INr.Code = INr1.Code;
-			key = true;
-		end;	
+		end else begin
+			RecordClear(INr1);
+			INr1.AlternativeCode = searchstr;
+			if(ReadFirstKey("AlternativeCode",INr1,1,true)) then begin
+				INr.Code = INr1.Code;
+				key = true;
+			end;
+		end;
 	end;
-
 
 	curRow = 0;
 	RowNumber = 0;
@@ -732,14 +731,14 @@ begin
 			  						WindowFieldGoto(mwn,SMr,RowNumber,field,true);
 										DeselectWindow(mwn,false);									
 										WindowFieldGoto(wn,RepSpec,-1,"f1",false);
-										goto LBreak;
+										goto LStockMove_AddOneItemTo;
 								end else begin
           					curRow = curRow+1; //we try to find the same item in next rows
 								end;
 
 					end else begin
 						MessageBox(0,"Нельзя добавить товар с кодом " & RepSpec.f2);
-						goto LBreak;
+						goto LStockMove_AddOneItemTo;
 					end;
 			end;
 			MessageBox(0,"Нельзя добавить товар с кодом " & RepSpec.f2);
@@ -748,7 +747,7 @@ begin
 	end;	
 
 
-	LBreak:;
+	LStockMove_AddOneItemTo:;
 
 return;  
 end;
