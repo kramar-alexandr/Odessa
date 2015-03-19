@@ -1,5 +1,5 @@
 external procedure ExtractObj(string,var Integer,var string);
-forward procedure CollectPORowsForTransit(var record POVc);
+forward procedure CollectPORowsForTransit(var record POVc,string);
 
 SetLangMode(LangRussian,"RUS",0);
 
@@ -25,7 +25,7 @@ begin
   val inTransit;
   
   RecordNew(PO2r);
-  CollectPORowsForTransit(PO2r);
+  CollectPORowsForTransit(PO2r,RepSpec.f1);
 	rwcnt = MatRowCnt(PO2r);
 	
 	TrHs=true;
@@ -285,12 +285,26 @@ end;
 
 
 global
-procedure CollectPORowsForTransit(var record POVc PO2r) //Edit----------------------Dima  19.03.2015
+procedure CollectPORowsForTransit(var record POVc PO2r,string classification) //Edit----------------------Dima  19.03.2015
 BEGIN 
-  integer i,j,rwcnt,rwcnt2,existsItem,k;
+  integer i,j,rwcnt,rwcnt2,existsItem,k,pos;
   Boolean TrHs,testf;
   record POVc POr;
   row POVc POrw,PO2rw;
+  record DIVc DIr;
+  string 100 vendors,temp;
+  
+  vendors = "";
+  pos = 0;
+  ExtractObj(classification,pos,temp);
+  while (nonblank(temp)) begin		
+  	DIr.Code = temp;
+  	ReadFirstMain(DIr,1,true);
+		if(DIr.CType=="VENDOR") then begin
+			vendors = vendors & DIr.Name & ",";
+		end;   	
+  	ExtractObj(classification,pos,temp);
+  end;
   
   k=0;
 	POr.ActOkFlag = 1;
@@ -300,8 +314,10 @@ BEGIN
 				
 		if (POr.ActOkFlag==0) then begin TrHs = false; testf = false; end;
 		if (POr.OKFlag==0) then begin testf=false; end;
+		if (nonblank(classification) and (SetInSet(POr.VECode,vendors)==false)) then begin testf = false; end;
 		
 		if (testf) then begin
+		//LogText(0,"   --  " & POr.SerNr);
 					rwcnt = MatRowCnt(POr);
 					for (i=0;i<rwcnt;i=i+1) begin
 						MatRowGet(POr,i,POrw);
