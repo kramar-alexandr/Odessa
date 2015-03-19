@@ -317,7 +317,6 @@ BEGIN
 		if (nonblank(classification) and (SetInSet(POr.VECode,vendors)==false)) then begin testf = false; end;
 		
 		if (testf) then begin
-		//LogText(0,"   --  " & POr.SerNr);
 					rwcnt = MatRowCnt(POr);
 					for (i=0;i<rwcnt;i=i+1) begin
 						MatRowGet(POr,i,POrw);

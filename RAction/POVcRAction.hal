@@ -474,6 +474,38 @@ begin
 end;
 */
 
+
+global
+procedure RecalculateActOkFlag(var record POVc POr)	//Edit----------------------Dima  12.03.2015
+begin
+	longint totQuant,totShip;
+	integer i,rwcnt;
+  row POVc POrw;
+ 
+  totQuant = 0;
+  totShip = 0;
+  rwcnt = MatRowCnt(POr);
+  for(i=0;i<rwcnt;i=i+1) begin
+  	MatRowGet(POr,i,POrw);
+    totQuant = totQuant + POrw.Quant;
+    totShip = totShip + POrw.Shipd2; 
+	end;
+	  
+  if (POr.Closed > 0) then begin			
+		POr.ActOkFlag = 0; 
+	end else begin
+  
+  		if(totQuant>totShip)  then begin
+				POr.ActOkFlag = 1;
+			end else begin 
+				POr.ActOkFlag = 0;
+			end;	
+	end; 																
+	
+return;
+end;
+
+
 global
 updating function LongInt POVcRecordSave(var record POVc POr,record POVc PO2r,LongInt stat,LongInt long4)
 BEGIN
@@ -491,7 +523,8 @@ BEGIN
       end;
       POr.OKPersons = POr.OKPersons & CurrentUser;
     end;
-  end;  
+  end;
+  RecalculateActOkFlag(POr);//Edit----------------------Dima  19.03.2015  
   POVcRecordSave = res; 
   RETURN;
 END;
@@ -516,6 +549,7 @@ BEGIN
       POr.OKPersons = POr.OKPersons & CurrentUser;
     end;
   end;  
+  RecalculateActOkFlag(POr);//Edit----------------------Dima  19.03.2015
   POVcRecordUpdate = res; 
   RETURN;
 END;
@@ -594,36 +628,6 @@ BEGIN
 END;
 
 
-global
-procedure RecalculateActOkFlag(var record POVc POr)	//Edit----------------------Dima  12.03.2015
-begin
-	longint totQuant,totShip;
-	integer i,rwcnt;
-  row POVc POrw;
- 
-  totQuant = 0;
-  totShip = 0;
-  rwcnt = MatRowCnt(POr);
-  for(i=0;i<rwcnt;i=i+1) begin
-  	MatRowGet(POr,i,POrw);
-    totQuant = totQuant + POrw.Quant;
-    totShip = totShip + POrw.Shipd2; 
-	end;
-	  
-  if (POr.Closed > 0) then begin			
-		POr.ActOkFlag = 0; 
-	end else begin
-  
-  		if(totQuant>totShip)  then begin
-				POr.ActOkFlag = 1;
-			end else begin 
-				POr.ActOkFlag = 0;
-			end;	
-	end; 																
-	
-return;
-end;
-
 
 global
 updating function LongInt POVcRecordSaveAfter(var record POVc POr,record POVc PO2r,LongInt stat,LongInt long4)
@@ -639,7 +643,7 @@ BEGIN
     AssignStockResFromPO(POr);
   end;
   
-  RecalculateActOkFlag(POr);	//Edit----------------------Dima  12.03.2015
+  //RecalculateActOkFlag(POr);	//Edit----------------------Dima  12.03.2015
   
   POVcRecordSaveAfter = res;
   RETURN;
@@ -673,7 +677,7 @@ BEGIN
       end;
   end;
   
-  RecalculateActOkFlag(POr);//Edit----------------------Dima  12.03.2015
+ // RecalculateActOkFlag(POr);//Edit----------------------Dima  12.03.2015
   
   POVcRecordUpdateAfter = res;
   RETURN;
