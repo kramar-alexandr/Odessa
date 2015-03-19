@@ -607,7 +607,7 @@ begin
   for(i=0;i<rwcnt;i=i+1) begin
   	MatRowGet(POr,i,POrw);
     totQuant = totQuant + POrw.Quant;
-    totShip = totShip + POrw.Shipd1; 
+    totShip = totShip + POrw.Shipd2; 
 	end;
 	  
   if (POr.Closed > 0) then begin			

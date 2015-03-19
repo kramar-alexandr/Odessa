@@ -1,4 +1,5 @@
 external procedure ExtractObj(string,var Integer,var string);
+forward procedure CollectPORowsForTransit(var record POVc);
 
 SetLangMode(LangRussian,"RUS",0);
 
@@ -13,13 +14,22 @@ begin
   vector Integer Locations;// positions of columns
   array string 20 LocCodes;
   string 20 curCode;
-  Integer i,rw;
+  Integer i,rw,j;
   real h,step;
-  boolean TrHs,testf,testf0;
+  boolean TrHs,testf,testf0,found;
   Integer startPos,pos;
-  string 15 keySort;
-
+  string 15 keySort;  
+  record POVc PO2r;
+  row POVc PO2rw;
+  integer rwcnt;
+  val inTransit;
+  
+  RecordNew(PO2r);
+  CollectPORowsForTransit(PO2r);
+	rwcnt = MatRowCnt(PO2r);
+	
 	TrHs=true;
+	inTransit = BlankVal;
 
 	if (RepSpec.ArtMode == 0) then begin	//сортировка
 	keySort = "Code";
@@ -35,7 +45,7 @@ begin
 	i=i+1;
 	end;
 	LocCodes[i]=";;;";
-
+	
 	rw=1;
 	StartReportJob("Отчет по складам");
   	Header(rw,"Все склады",1);
@@ -69,7 +79,7 @@ begin
 		Locations[LocCodes[i]]=startPos+step*i;
 	end;
 
-	OutString(460,0,"Всего",false);
+	OutString(480,0,"Всего на складах",true);
 	Locations[";;;"]=460;//Total sum
 
 	EndFormat;
@@ -95,12 +105,30 @@ begin
 
 			for(i=0; i < LocCodes.length; i=i+1) begin
 				ISr.Location = LocCodes[i];
-				ISr.Code = INr.Code;
-
-				if (ReadFirstMain(ISr,2,true)) then begin	
-					OutString(Locations[ISr.Location],0,ISr.Instock,false);	
+				ISr.Code = INr.Code;				
+				
+				if (LocCodes[i]=="TRANSIT") then begin
+									found = false;							 		
+  								for (j=0;j<rwcnt;j=j+1) begin
+  									MatRowGet(PO2r,j,PO2rw);
+  									if (PO2rw.ArtCode==INr.Code) then begin	
+  										inTransit = PO2rw.Shipd1;
+  										OutString(Locations["TRANSIT"],0,inTransit,false);
+  										found = true;
+  										inTransit = blankval; 								
+  									end;
+  								end;
+  								if (found==false) then begin	
+				  						OutString(Locations["TRANSIT"],0,"",false);
+  								end;						
 				end else begin
-					OutString(Locations[LocCodes[i]],0,"",false);
+  		
+								if (ReadFirstMain(ISr,2,true)) then begin	
+									OutString(Locations[ISr.Location],0,ISr.Instock,false);	
+								end else begin
+									OutString(Locations[LocCodes[i]],0,"",false);
+								end;
+				
 				end;
 			end;
 					
@@ -108,9 +136,9 @@ begin
 
 		end;			
 	end;
+
 	
 	EndJob;
-
 
 return;
 end;
@@ -247,7 +275,63 @@ begin
 				EndFormat;
 		end;
 	
-	end;
+	end;	
 	endjob;
+		
+return;
+end;
+
+
+
+
+global
+procedure CollectPORowsForTransit(var record POVc PO2r) //Edit----------------------Dima  19.03.2015
+BEGIN 
+  integer i,j,rwcnt,rwcnt2,existsItem,k;
+  Boolean TrHs,testf;
+  record POVc POr;
+  row POVc POrw,PO2rw;
+  
+  k=0;
+	POr.ActOkFlag = 1;
+	TrHs = true;
+	while (LoopKey("ActOkFlag",POr,1,TrHs)) begin	
+		testf = true;
+				
+		if (POr.ActOkFlag==0) then begin TrHs = false; testf = false; end;
+		if (POr.OKFlag==0) then begin testf=false; end;
+		
+		if (testf) then begin
+					rwcnt = MatRowCnt(POr);
+					for (i=0;i<rwcnt;i=i+1) begin
+						MatRowGet(POr,i,POrw);
+						if(nonblank(POrw.ArtCode) and POrw.stp==kInvoiceRowTypeNormal)then begin
+								rwcnt2 = MatRowCnt(PO2r);							
+								existsItem = 0;
+								if (rwcnt2>0) then begin
+									for (j=0;j<rwcnt2;j=j+1) begin
+										MatRowGet(PO2r,j,PO2rw);
+										if (PO2rw.ArtCode==POrw.ArtCode) then begin	
+												PO2rw.Quant = PO2rw.Quant + POrw.Quant;
+												PO2rw.Shipd1 = PO2rw.Shipd1 + (POrw.Quant - POrw.Shipd2);																								
+												MatRowPut(PO2r,j,PO2rw);
+												existsItem = 1;										
+										end;
+									end;
+								end;
+								if (existsItem==0) then begin
+										clearrow(PO2r,PO2rw,1);									
+										PO2rw.ArtCode = POrw.ArtCode;
+										PO2rw.Quant = POrw.Quant;
+										PO2rw.Shipd1 = POrw.Quant - POrw.Shipd2;
+										MatRowPut(PO2r,k,PO2rw);
+										k=k+1;
+								end;		
+
+						end;							
+					end; 
+		end;
+	end;
+	
 return;
 end;
