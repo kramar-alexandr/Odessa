@@ -64,19 +64,19 @@ begin
 						if(FindSubString(search,ORrw.ArtCode)) then begin
 							field = "ArtCode";
 							res=i;
-							goto LBreak;
+							goto LFindInMathOR;
 						end else begin
 						
 							if(FindSubString(search,ORrw.Spec)) then begin
 								field = "Spec";
 								res=i;
-								goto LBreak;
+								goto LFindInMathOR;
 							end else begin
 				
 								if(FindSubString(search,ORrw.Price)) then begin
 									field = "Price";
 									res=i;
-									goto LBreak;
+									goto LFindInMathOR;
 									end;
 								end;
 								end;
@@ -92,19 +92,19 @@ begin
 						if(FindSubString(search,ORrw.ArtCode)) then begin
 							field = "ArtCode";
 							res=i;
-							goto LBreak;
+							goto LFindInMathOR;
 						end else begin
 						
 							if(FindSubString(search,ORrw.Spec)) then begin
 								field = "Spec";
 								res=i;
-								goto LBreak;
+								goto LFindInMathOR;
 							end else begin
 				
 								if(FindSubString(search,ORrw.Price)) then begin
 									field = "Price";
 									res=i;
-									goto LBreak;
+									goto LFindInMathOR;
 									end;
 								end;
 								end;						 
@@ -117,7 +117,7 @@ begin
   MessageBox(0,"Не найдено результатов для " & search);
   end;
 
-  LBreak:;	
+  LFindInMathOR:;	
   FindInMathOR=res;
 return;
 end;
@@ -232,19 +232,19 @@ begin
 						if(FindSubString(search,PUrw.ArtCode)) then begin
 							field = "ArtCode";
 							res=i;
-							goto LBreak;
+							goto LFindInMathPU;
 						end else begin
 						
 							if(FindSubString(search,PUrw.Spec)) then begin
 								field = "Spec";
 								res=i;
-								goto LBreak;
+								goto LFindInMathPU;
 							end else begin
 				
 								if(FindSubString(search,PUrw.UPrice)) then begin
 									field = "UPrice";
 									res=i;
-									goto LBreak;
+									goto LFindInMathPU;
 									end;
 								end;
 								end;
@@ -260,19 +260,19 @@ begin
 						if(FindSubString(search,PUrw.ArtCode)) then begin
 							field = "ArtCode";
 							res=i;
-							goto LBreak;
+							goto LFindInMathPU;
 						end else begin
 						
 							if(FindSubString(search,PUrw.Spec)) then begin
 								field = "Spec";
 								res=i;
-								goto LBreak;
+								goto LFindInMathPU;
 							end else begin
 				
 								if(FindSubString(search,PUrw.UPrice)) then begin
 									field = "UPrice";
 									res=i;
-									goto LBreak;
+									goto LFindInMathPU;
 									end;
 								end;
 								end;						 
@@ -285,7 +285,7 @@ begin
   MessageBox(0,"Не найдено результатов для " & search);
   end;
 
-  LBreak:;	
+  LFindInMathPU:;	
   FindInMathPU=res;
 return;
 end;
@@ -318,13 +318,13 @@ begin
 						if(FindSubString(search,SHrw.ArtCode)) then begin
 							field = "ArtCode";
 							res=i;
-							goto LBreak;
+							goto LFindInMathSH;
 						end else begin
 						
 							if(FindSubString(search,SHrw.Spec)) then begin
 								field = "Spec";
 								res=i;
-								goto LBreak;
+								goto LFindInMathSH;
 							end;
 						end;
 			  
@@ -339,13 +339,13 @@ begin
 						if(FindSubString(search,SHrw.ArtCode)) then begin
 							field = "ArtCode";
 							res=i;
-							goto LBreak;
+							goto LFindInMathSH;
 						end else begin
 						
 							if(FindSubString(search,SHrw.Spec)) then begin
 								field = "Spec";
 								res=i;
-								goto LBreak;
+								goto LFindInMathSH;
 							end;
 						end;	
 					 
@@ -358,7 +358,7 @@ begin
   MessageBox(0,"Не найдено результатов для " & search);
   end;
 
-  LBreak:;	
+  LFindInMathSH:;	
   FindInMathSH=res;
 return;
 end;
@@ -389,13 +389,13 @@ begin
 						if(FindSubString(search,SMrw.ArtCode)) then begin
 							field = "ArtCode";
 							res=i;
-							goto LBreak;
+							goto LFindInMathStockMov;
 						end else begin
 						
 							if(FindSubString(search,SMrw.Spec)) then begin
 								field = "Spec";
 								res=i;
-								goto LBreak;
+								goto LFindInMathStockMov;
 							end;
 						end;
 			  
@@ -410,13 +410,13 @@ begin
 						if(FindSubString(search,SMrw.ArtCode)) then begin
 							field = "ArtCode";
 							res=i;
-							goto LBreak;
+							goto LFindInMathStockMov;
 						end else begin
 						
 							if(FindSubString(search,SMrw.Spec)) then begin
 								field = "Spec";
 								res=i;
-								goto LBreak;
+								goto LFindInMathStockMov;
 							end;
 						end;	
 					 
@@ -429,7 +429,7 @@ begin
   MessageBox(0,"Не найдено результатов для " & search);
   end;
 
-  LBreak:;	
+  LFindInMathStockMov:;	
   FindInMathStockMov=res;
 return;
 end;
