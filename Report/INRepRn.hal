@@ -314,7 +314,7 @@ BEGIN
 				
 		if (POr.ActOkFlag==0) then begin TrHs = false; testf = false; end;
 		if (POr.OKFlag==0) then begin testf=false; end;
-		if (nonblank(classification) and (SetInSet(POr.VECode,vendors)==false)) then begin testf = false; end;
+		if (nonblank(vendors) and (SetInSet(POr.VECode,vendors)==false)) then begin testf = false; end;
 		
 		if (testf) then begin
 					rwcnt = MatRowCnt(POr);
