@@ -40,9 +40,9 @@ BEGIN
 	if(column==0)then begin// Edit ************************** Wednesday, July 9, 2014 at 17:45:25
 		switch (PUr.ShipCostRule) begin 
 			case 1:
-					uprice = PUrw.Weight;
+					uprice = PUrw.Weight/q;// Edit ************************** Monday, 23 March 2015 17:11:13
 			case 2:
-					uprice = PUrw.Volume;
+					uprice = PUrw.Volume/q;// Edit ************************** Monday, 23 March 2015 17:11:14
 			otherwise
 				uprice = PUrw.UPrice;
 				if (uprice==0) then begin
@@ -54,9 +54,9 @@ BEGIN
   if(column==1)then begin// Edit ************************** Wednesday, July 9, 2014 at 17:45:25
 		switch (PUr.CustomsCostRule) begin 
 			case 1:
-					uprice = PUrw.Weight;
+					uprice = PUrw.Weight/q;
 			case 2:
-					uprice = PUrw.Volume;
+					uprice = PUrw.Volume/q;
 			otherwise
 				uprice = PUrw.UPrice;
 				if (uprice==0) then begin
@@ -281,6 +281,9 @@ BEGIN
   val calcval,rowcalcval,uprice,q;
   record SysFormatBlock SysFormatRec;
   record INVc INr;
+  val costdef,costsum,costbegin;// Edit ************************** Wednesday, 4 February 2015 12:46:43
+  integer minqtyi;// Edit ************************** Wednesday, 4 February 2015 12:46:43
+  val minq,maxq;
   
   BlockLoad(SysFormatRec);
   switch (column) begin
@@ -293,6 +296,8 @@ BEGIN
     case 6: calcval = PUp.Cost5; // Calculate Extra Costs 
     otherwise goto LPUSetShipCost;
   end;
+  costbegin = calcval;// Edit ************************** Wednesday, 4 February 2015 12:35:09
+  
   rwcnt = MatRowCnt(PUp);
   for (i=0;i<rwcnt;i=i+1) begin
     MatRowGet(PUp,i,PUrw);
@@ -361,24 +366,48 @@ BEGIN
       totval = totval + rv;
     end;
   end;
+  
+  minqtyi = 0;// Edit ************************** Wednesday, 4 February 2015 12:50:46
+  minq = 9999999;// Edit ************************** Wednesday, 4 February 2015 12:50:47
+  costsum = 0;// Edit ************************** Wednesday, 4 February 2015 12:34:32
+  
   for (i=0;i<rwcnt;i=i+1) begin
     MatRowGet(PUp,i,PUrw);
+    
+    if(minq>PUrw.Quant and PUrw.Quant>0 and nonblank(PUrw.ArtCode) and rowcalcval>0.07)then begin// Edit ************************** Wednesday, 4 February 2015 12:50:49
+			minq = PUrw.Quant;
+			minqtyi = i;
+    end;
+    
     if ((PUrw.stp==3) or (PUrw.ovst!=0) or (blank(PUrw.ArtCode)) or (column==1 and PUrw.TREO==kTREO)) then begin
       goto LSKIPPUROW;
     end;
     PUCalcOneRow(SysFormatRec,PUp,i,DefaultCurRoundOff,totval,calcval,rowcalcval,rest,column);
     switch (column) begin
-      case 0: PUrw.ShipCost = rowcalcval; 
+      case 0: PUrw.ShipCost = rowcalcval;  costsum = costsum + rowcalcval * PUrw.Quant;
       case 1: PUrw.CustomsCost = ValToString(rowcalcval,M45Val,SysFormatRec.thousSep,SysFormatRec.decimalPt,0);
-      case 2: PUrw.RowCost1 = rowcalcval; 
-      case 3: PUrw.RowCost2 = rowcalcval; 
-      case 4: PUrw.RowCost3 = rowcalcval; 
-      case 5: PUrw.RowCost4 = rowcalcval; 
-      case 6: PUrw.RowCost5 = rowcalcval; 
+      				costsum = costsum + stringtoval(PUrw.CustomsCost,M45Val) * PUrw.Quant;
+      case 2: PUrw.RowCost1 = rowcalcval;  costsum = costsum + rowcalcval * PUrw.Quant;
+      case 3: PUrw.RowCost2 = rowcalcval;  costsum = costsum + rowcalcval * PUrw.Quant;
+      case 4: PUrw.RowCost3 = rowcalcval;  costsum = costsum + rowcalcval * PUrw.Quant;
+      case 5: PUrw.RowCost4 = rowcalcval;  costsum = costsum + rowcalcval * PUrw.Quant;
+      case 6: PUrw.RowCost5 = rowcalcval;  costsum = costsum + rowcalcval * PUrw.Quant;
     end;
     MatRowPut(PUp,i,PUrw);
 LSKIPPUROW:;
   end;
+  
+  matrowget(PUp,minqtyi,PUrw);
+  	switch (column) begin
+      case 2: PUrw.RowCost1 = PUrw.RowCost1 - (costsum - costbegin)/PUrw.Quant;
+      case 3: PUrw.RowCost2 = PUrw.RowCost2 - (costsum - costbegin)/PUrw.Quant; 
+      case 4: PUrw.RowCost3 = PUrw.RowCost3 - (costsum - costbegin)/PUrw.Quant; 
+      case 5: PUrw.RowCost4 = PUrw.RowCost4 - (costsum - costbegin)/PUrw.Quant; 
+      case 6: PUrw.RowCost5 = PUrw.RowCost5 - (costsum - costbegin)/PUrw.Quant; 
+      case 1: PUrw.ShipCost = PUrw.ShipCost - (costsum - costbegin)/PUrw.Quant;
+      case 2: PUrw.CustomsCost = ValToString((stringtoval(PUrw.CustomsCost,M45Val) - (costsum - costbegin)/PUrw.Quant),M45Val,SysFormatRec.thousSep,SysFormatRec.decimalPt,0);
+    end;
+  MatRowPut(PUp,minqtyi,PUrw);
   
 //  PUSortByVal(PUp,locPUr,column);
   rwcnt = MatRowCnt(locPUr);
