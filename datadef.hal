@@ -1456,6 +1456,7 @@ RecordBegin(INVc,-,"artikel5");
   RecordField(CustomStatusFlag,M4Int,0,0); //Edit***************************Sasha2,13:21 14.07.2014
   RecordField(SyncFlag,M4Int,0,0); //Edit***************************Sasha2,10:19 15.07.2014
 	RecordField(OptUAHRate,M4Rate,0,0);//Edit------------------------Dima 29.01.2015
+	RecordField(CustomStatusFlagText,M4Str,20,0);	//Edit----------------------Dima  24.03.2015	
   ArrayBegin(Math,-,1);
   ArrayField(stp,M4Int,0,0);
   ArrayField(ArtCode,M4Code,20,INVc);
@@ -1761,6 +1762,10 @@ RecordBegin(INVc,-,"artikel5");
   KeyBegin(SyncFlag); //Edit***************************Sasha2,10:24 15.07.2014
   KeySegment(SyncFlag);
   KeySegment(SerNr);
+  
+  KeyBegin(CustomStatusFlagText); //Edit----------------------Dima  24.03.2015
+  KeySegment(CustomStatusFlagText);
+  KeySegment(SerNr);  
   EndRecord;
   
   

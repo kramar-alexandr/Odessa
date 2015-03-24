@@ -1721,6 +1721,24 @@ integer rwcnt1,rwcnt2,i;
   return;
 end; //Edit***************************Sasha2,11:57 15.07.2014 }
 
+
+
+global 
+procedure Recalculate_CustomStatusFlagText(var record ORVc ORr) 	//Edit----------------------Dima  24.03.2015
+begin
+	  switch (ORr.CustomStatusFlag) begin
+    case 0: ORr.CustomStatusFlagText = USetStr(31034);
+    case 1: ORr.CustomStatusFlagText = USetStr(31035);
+    case 2: ORr.CustomStatusFlagText = USetStr(31036);
+    case 3: ORr.CustomStatusFlagText = USetStr(31037);
+    case 4: ORr.CustomStatusFlagText = USetStr(31038);
+    case 5: ORr.CustomStatusFlagText = USetStr(31039);           
+
+  end;
+
+return;
+end;
+
 global
 updating function LongInt ORVcRecordUpdate(var record ORVc ORr,record ORVc OR2r,LongInt stat,LongInt long4)
 begin
@@ -1747,6 +1765,8 @@ begin
   if (OR2r.Closed==0 and ORr.Closed!=0 and ORr.CustomStatusFlag!=5) then begin //Edit***************************Sasha2,16:19 04.02.2015 {
     ORr.CustomStatusFlag = 5;
   end; //Edit***************************Sasha2,16:19 04.02.2015 }
+  
+  Recalculate_CustomStatusFlagText(ORr); //Edit----------------------Dima  24.03.2015
   
   ORVcRecordUpdate = res; 
   return;
@@ -1875,6 +1895,7 @@ begin
   return;
 end;
 
+
 global
 updating function LongInt ORVcRecordSave(var record ORVc ORr,record ORVc OR2r,LongInt stat,LongInt long4)
 begin
@@ -1906,7 +1927,7 @@ begin
   if (ORr.Closed!=0 and ORr.CustomStatusFlag!=5) then begin //Edit***************************Sasha2,16:19 04.02.2015 {
     ORr.CustomStatusFlag = 5;
   end; //Edit***************************Sasha2,16:19 04.02.2015 }
-  
+  Recalculate_CustomStatusFlagText(ORr);
   ORVcRecordSave = res; 
   return;
 end;

@@ -5137,7 +5137,7 @@ begin
 
   WindowBegin("Счета клиентам",ORLClass,CGmlist,-);
   SpawnClass(ORDClass);
-  SetWRect(20,80,930,298); //Edit***************************Sasha2,14:12 08.01.2015
+  SetWRect(20,80,980,298); //Edit***************************Sasha2,14:12 08.01.2015
   Sizeable(-1,-1,0,0);
   UseView(ORVc);
   FormName(PrintORL);
@@ -5169,12 +5169,13 @@ begin
   pos = pos + 130; //Edit***************************Sasha2,13:45 08.01.2015
   RlColKey(pos,pos,"Оф.сер.номер",OfficialSerNr,false,OfficialSerNr); //Edit***************************Sasha2,13:45 08.01.2015
   if (IsEnterprise) then begin
-    RlColKey(-200,-200,"Класс",OrderClass,false,OrderClass);
-    RlColKey(-155,-155,"Итого",Sum4,true,Sum4);
-    RlCol(-75,-75,"Аванс",DownPaySent,true);
+    RlColKey(-260,-260,"Класс",OrderClass,false,OrderClass);
+    RlColKey(-210,-210,"Итого",Sum4,true,Sum4);
+    RlCol(-135,-135,"Аванс",DownPaySent,true);
   end else begin
-    RlColKey(-55,-55,"ИТОГО",Sum4,true,Sum4);
+    RlColKey(-115,-115,"ИТОГО",Sum4,true,Sum4);
   end;
+  RlColKey(-60,-60,"Статус",CustomStatusFlagText,true,CustomStatusFlagText);
   if (HasLimitedAccess) then begin
     BrowseSubsetButton(-40,-15);
   end;
