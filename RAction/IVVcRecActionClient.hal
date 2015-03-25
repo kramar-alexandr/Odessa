@@ -229,12 +229,81 @@ begin
   record CashierDefBlock CDb;
   row IVVc IVrw; //Edit***************************Sasha2,16:04 29.10.2014
   integer i,rwcnt; //Edit***************************Sasha2,16:04 29.10.2014
+  val cash; //Edit***************************Sasha2,16:37 25.03.2015
+  Integer insertmode,updatemode; //Edit***************************Sasha2,16:45 25.03.2015
+  record AccBlock ARAccb; //Edit***************************Sasha2,16:51 25.03.2015
   
 //no client-server calls pls
   res = 0;
   checkf = errorcheck>0;
   BlockLoad(LMb); 
   BlockLoad(CDb); 
+  cash = 0; //Edit***************************Sasha2,16:45 25.03.2015
+  insertmode = 1;//Rs_insert //Edit***************************Sasha2,16:45 25.03.2015
+  updatemode = 2;//Rs_update //Edit***************************Sasha2,16:45 25.03.2015
+  rwcnt = MatRowCnt(IVr);
+  
+  if (TouchScreenLook) then begin //Edit***************************Sasha2,15:43 25.03.2015 {
+    testf = true;
+    if (IVr.OKFlag==1) then begin
+      if (stat==updatemode) then begin
+        if (IV2r.OKFlag!=0) then begin testf = false; end;
+      end;
+    end;
+    if (IVr.OKFlag==0) then begin
+      testf = false;
+    end;
+    if (testf) then begin
+      BlockLoad(ARAccb);
+      for (i=0; i<rwcnt;i=i+1) begin
+      MatRowGet(IVr,i,IVrw);
+      testf = true;    
+      switch (IVrw.stp) begin
+        case kInvoiceRowTypeGiftVoucherPayment:
+          cash = cash + IVrw.Sum;      
+        case kInvoiceRowTypeLoyaltyPointsPayment:
+          //cash = cash + MulRateToBase1(IVrw.CurncyCode,IVrw.Sum,IVrw.FrRate,IVrw.ToRateB1,IVrw.ToRateB2,IVrw.BaseRate1,IVrw.BaseRate2,DefaultCurRoundOff);// Edit ************************** Wednesday, 12 November 2014 16:02:24
+          cash = cash + IVrw.Sum;
+        case kInvoiceRowTypeCashPayment:
+          //cash = cash + MulRateToBase1(IVrw.CurncyCode,IVrw.Sum,IVrw.FrRate,IVrw.ToRateB1,IVrw.ToRateB2,IVrw.BaseRate1,IVrw.BaseRate2,DefaultCurRoundOff);// Edit ************************** Wednesday, 12 November 2014 16:02:42
+          cash = cash + IVrw.Sum;
+        case kInvoiceRowTypeChequePayment:
+          //cash = cash + MulRateToBase1(IVrw.CurncyCode,IVrw.Sum,IVrw.FrRate,IVrw.ToRateB1,IVrw.ToRateB2,IVrw.BaseRate1,IVrw.BaseRate2,DefaultCurRoundOff);// Edit ************************** Wednesday, 12 November 2014 16:02:48
+          cash = cash + IVrw.Sum;
+        case kInvoiceRowTypeCreditCardPayment:
+          cash = cash + IVrw.Sum;      
+        case kInvoiceRowTypePrepayment:
+          cash = cash + IVrw.Sum;
+        end;  
+      end;
+      testf = false;
+      if (IVr.Sum4>=0) then begin
+        if (cash<IVr.Sum4) then begin
+          testf = true;
+        end;
+        if (ARAccb.NoOverPayIV!=0) then begin
+          if (cash>IVr.Sum4) then begin
+            testf = true;
+          end;
+        end;
+      end else begin
+        if (cash>IVr.Sum4) then begin
+          testf = true;
+        end;
+        if (ARAccb.NoOverPayIV!=0) then begin
+          if (cash<IVr.Sum4) then begin
+            testf = true;
+          end;
+        end;
+      end;
+      if (testf) then begin
+        RecordCheckError(24177,"",MatRowCnt(IVr),"Sum");      
+        res = -1; 
+        goto LIVVcRecordCheckClient;
+      end;
+    end;
+  end; //Edit***************************Sasha2,15:43 25.03.2015 }
+  
   testf = true;
   if (IVr.InvType!=kInvoiceTypeCash and IVr.InvType!=kInvoiceTypeCashInvoiceReceiptPRT) then begin
     if (IVr.InvType==kInvoiceTypeCredit or IVr.InvType==kInvoiceTypeCreditSpecialSales) then begin
@@ -310,14 +379,13 @@ begin
       end;
     end;
   end;
-  rwcnt = MatRowCnt(IVr);
   for (i=0;i<rwcnt;i=i+1) begin
   	MatRowGet(IVr,i,IVrw);
   	if (IVrw.Quant<0 and IVr.UpdStockFlag!=0 and TouchScreenLook==true) then begin
 		if (UserCanAction("AllowAddingINtoRetPOSIV",false)==false) then begin
 			RecordCheckError(1574,"",i,"Quant");      
-	        res = -1;
-	        goto LIVVcRecordCheckClient;  
+      res = -1;
+      goto LIVVcRecordCheckClient;  
 		end;
   	end;
   end;
