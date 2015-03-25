@@ -1606,6 +1606,34 @@ LkInvoiceTypeCredit:;
   end;
 
   RecordNew(TRr);
+  
+  if (TouchScreenFinishButtonf) then begin //Edit***************************Sasha2,15:43 25.03.2015 {
+    testf = false;
+    if (IVp.Sum4>=0) then begin
+      if (cash<IVp.Sum4) then begin
+        testf = true;
+      end;
+      if (ARAccb.NoOverPayIV!=0) then begin
+        if (cash>IVp.Sum4) then begin
+          testf = true;
+        end;
+      end;
+    end else begin
+      if (cash>IVp.Sum4) then begin
+        testf = true;
+      end;
+      if (ARAccb.NoOverPayIV!=0) then begin
+        if (cash<IVp.Sum4) then begin
+          testf = true;
+        end;
+      end;
+    end;
+    if (testf) then begin
+      RecordCheckError(24177,"",MatRowCnt(IVp),"Sum");      
+      res = -1; 
+      goto L99;
+    end;
+  end; //Edit***************************Sasha2,15:43 25.03.2015 }
 
   if (transf) then begin
     if (HasLocalization("ARG,HRV,POL,PRT") and (IsStandardProduct)) then begin
