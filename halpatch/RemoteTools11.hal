@@ -1401,9 +1401,9 @@ begin
   ld = AddDay(sd,-1);
 //  v = GetBalance(VEr,colns,ld);
 
-  VSr.VECode = VEr.Code;
-  VSr.CurncyCode = curncy;    
-  v = GetBalance(VSr,colns,ld);
+  //VSr.VECode = VEr.Code;
+  //VSr.CurncyCode = curncy;    
+  v = GetBalance(VEr,colns,ld);
   return;
 end;
 

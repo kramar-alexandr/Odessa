@@ -534,8 +534,10 @@ begin
         	//messagebox(0,VEr.VECurncyCode & " _ " & RepSpec.CurncyCode);
         	RepSpec.CurncyCode = VEr.VECurncyCode;
         	
-          VEGetStartBalance(VEr,"vesalesinclvat",RepSpec.CurncyCode,RepSpec.sStartDate,StartBal);
+          VEGetStartBalance(VEr,"vebalance",RepSpec.CurncyCode,RepSpec.sStartDate,StartBal);
           VEGetStartBalance(VEr,"vepaidvalue",RepSpec.CurncyCode,RepSpec.sStartDate,v);
+          logtext(0,StartBal);
+          logtext(0,v);
           StartBal = StartBal + v;
 
 //          EndBal = GetBalance(VEr,"vesalesinclvat",RepSpec.sEndDate);
