@@ -9005,3 +9005,346 @@ begin
   end;
   EndWindow;
 end;
+
+
+
+window OPDClass:2
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  real h,h2,h3,h4,t,v,vm,vs;
+  Integer tilenr;
+  Integer f,flipnr;
+
+  WindowBegin("Платеж поставщику",OPDClass,CGview,-);
+  SetWRect(20,80,640,464);
+  Sizeable(-1,-1,0,0);
+  UseView(OPVc);
+  ActiveFieldOnNew("PayDate");
+  h = 100; h2 = 280; h3 = 490; v = 6; vs = 20;
+  if (IsEnterprise) then begin
+    Tile(0,110,false,"",SerNr);
+  end;
+  if (HasNumberSeries) then begin
+    EditField(h,v, 80,"Номер",St_i,SerNr,false,TSerSClass);
+  end else begin
+    EditField(h,v,80,"Номер",St_i,SerNr,false,0);
+  end;
+  EditField(h2,v,80,"Дата платежа",Normal,PayDate,false,PasteCurDate);
+  if (HasModNL) then begin
+    EditField(h3,v,82,"Дата операции",Normal,TransDate,false,PasteCurDate);
+  end;
+  EditField(h,v+=vs,30,"Способ оплаты",Normal,PayMode,false,PMSClass);
+  CheckBox(h4=-100,6,0,"Заказан",OrderedFlag);
+  CheckBox(h4=-100,6+vs,0,"OK",DoneFlag);
+  EnterSkip(Math);
+  EditField(h2,v,120,"Р/с плательщика",Normal,BankAcc,false,0);
+  EditField(h3,v,82,"Ключ сорт.",Normal,SortCode,false,0);
+  if (HasAdvancedAccounting) then begin
+    EditField(h,v+=vs,80,"Ссылка",Normal,PayNumber,false,0);
+    CheckBox(h2,v,0,"Инф-ция о пост. в записи оп.",APonTR);
+  end else begin
+    v = v + vs;
+  end;
+  if (HasLanguages) then begin
+    EditField(h3,v,82,"Язык",Normal,LangCode,false,LangSClass);
+  end;
+  if (IsEnterprise) then begin
+    EditField(h,v+=vs,472,"Комментарий",Normal,BankName,false,0);
+  end else begin 
+    v = v + 10;
+  end;
+  EnterSkip(Math);
+//  CheckBox(h,v=6,0,"Re_jected",RejectedFlag);//not used any more
+//  CheckBox(h2,v,0,"#Supp.# Info on Trans.",APonTR);
+  tilenr = 1;
+  if (IsEnterprise) then begin
+    TileButton(tilenr,"Платежи"); tilenr = tilenr + 1;
+    TileButton(tilenr,"Банк"); tilenr = tilenr + 1;
+    tilenr = 1;
+    Tile(tilenr,120,true,tilenr,Math); tilenr = tilenr + 1;
+  end;
+//  CheckBox(25,v=-39,0,"O_rdered",OrderedFlag);
+//  CheckBox(25,v=-20,0,"OK",DoneFlag);
+  if (HasLocalization("EST,LVA")) then begin
+    HalPushButton(150,-50,150+100,-5,"EPaymentSignOPDsm","Подпись");
+    HalPushButton(150,-25,150+100,-5,"EPaymentQueOPDsm","Отправить в банк");
+  end;
+  if (HasMultiCurrency) then begin
+    EditField(-300,-21,50,"Валюта",Normal,PayCurCode,false,CurncyCodeSClass);
+  end;
+  EditField(-125,-21,85,"ВСЕГО",Normal,CurPayVal,true,0);
+  h = 10;
+  if (tilenr>1) then begin
+    if (HasLocalization("EST,LVA")) then begin 
+      MatrixBegin(h,v=24,-50,-50,-,200);
+    end else begin
+    MatrixBegin(h,v=24,-50,-40,-,200);
+    end;
+  end else begin
+    if (HasLocalization("EST,LVA,RUS,POL") or HasMultiCurrency or HasObjects or ((BuildProductCode=="StandardAccounts" or BuildProductCode=="WeHaveInvoices" or BuildProductCode=="WeHaveStock" or BuildProductCode=="WeHaveStockAndCRM" or BuildProductCode=="StandardBusiness" or Left(BuildProductCode,5)=="Books") and HasLocalization("FIN"))) then begin 
+      MatrixBegin(h,v+=40,-50,-40,-,200);
+    end else begin
+      MatrixBegin(h,v+=30,-30,-30,-,200);
+    end;
+  end;
+  vm = v;
+  MatTypedRow(stp);
+  MatOverStrike(ovst);
+  Flip(0);
+  MatCol(t=1,24,"№ сч/ф",0,VISerNr,false,APSClass);
+  MatCol(t,105,"Поставщик",0,VECode,false,VESClass);
+  EnterSkip(RecVal);
+  MatCol(t=5,24,"",0,VISerNr,false,APSClass);
+  MatText(t,70,"Скидка",true);
+  MatCol(t,140,"Объект",0,Objects,false,ObjSClass);
+  MatCol(t,-360,"Валюта сч/ф пост.",0,PInvCurncy,true,0);
+  MatCol(t,-320,"Сумма сч/ф",0,PInvVal,true,0);
+  MatCol(t,-240,"Валюта банка",0,BankCurncy,true,CurncyCodeSClass);
+  MatCol(t,-200,"Сумма банка",0,BankVal,true,0);
+  MatCol(t,-120,"Вал.платежа",0,RecCurncy,true,CurncyCodeSClass);
+  MatCol(t,-80,"Перечислено",0,RecVal,true,0);
+  MatCol(t=7,24,"",0,VISerNr,false,APSClass);
+  MatText(t,-480,"Комис.банка",true);
+  MatCol(t,-390,"Валюта сч/ф пост.",0,PInvCurncy,true,0);
+  MatCol(t,-350,"Сумма сч/ф",0,PInvVal,true,0);
+  MatCol(t,-260,"Вал.банка",0,BankCurncy,true,CurncyCodeSClass);
+  MatCol(t,-220,"Сумма банка",0,BankVal,true,0);
+  MatCol(t,-130,"Вал.платежа",0,RecCurncy,true,CurncyCodeSClass);
+  MatCol(t,-90,"Перечислено",0,RecVal,true,0);
+  flipnr = 1;
+  if (HasMultiCurrency or HasObjects or HasRussianPrepayment or ((BuildProductCode=="StandardAccounts" or BuildProductCode=="WeHaveInvoices" or BuildProductCode=="WeHaveStock" or BuildProductCode=="WeHaveStockAndCRM" or BuildProductCode=="StandardBusiness" or Left(BuildProductCode,5)=="Books") and HasLocalization("FIN"))) then begin 
+    Flip(flipnr); flipnr = flipnr + 1;
+  end;
+  MatCol(t=1,190,"Текст",0,Comment,false,0);
+  if (HasMultiCurrency) then begin
+    MatCol(t,-260,"Валюта банка",0,BankCurncy,true,CurncyCodeSClass);
+    MatCol(t,-220,"Сумма банка",0,BankVal,true,0);
+    MatCol(t,-130,"Валюта платежа",0,RecCurncy,true,CurncyCodeSClass);
+    MatCol(t,-90,"Перечислено",0,RecVal,true,0);
+    Flip(flipnr); flipnr = flipnr + 1;
+    MatCol(t=1,190,"Комментарий",0,Comment,false,0);
+    MatCol(t,-350,"Валюта сч/ф поставщика",0,PInvCurncy,true,0);
+    MatCol(t,-310,"Не оплачено",0,PInvOutstand,false,0);
+    MatCol(t,-220,"Сумма сч/ф",0,PInvVal,true,0);
+    MatCol(t,-130,"Валюта платежа",0,RecCurncy,true,CurncyCodeSClass);
+    MatCol(t,-90,"Перечислено",0,RecVal,true,0);
+    if (HasLocalization("POL")) then begin
+      Flip(flipnr); flipnr = flipnr + 1;
+      MatCol(t=1,190,"Текст",0,Comment,false,0);
+      MatCol(t,-310,"Валюта банка",0,BankCurncy,true,CurncyCodeSClass);
+      MatCol(t,-270,"Сумма банка",0,BankVal,true,0);
+      MatCol(t,-180,"В б. вал. 1",0,ToRateB1BankVal,true,0);
+      MatCol(t,-110,"Б. вал. 1",0,B1BankVal,true,0);
+    end;
+  end else begin
+    MatCol(t,-270,"Сумма сч.",0,PInvOutstand,false,0);
+    MatCol(t,-180,"Сумма к спис.",0,PInvVal,true,0);
+    MatCol(t,-90,"Получ. сумма",0,RecVal,true,0);
+  end;
+  if (IsEnterprise==false) then begin
+    if (HasObjects) then begin
+      Flip(flipnr); flipnr = flipnr + 1;
+      MatCol(t=1,190,"Текст",0,Comment,false,0);
+      if (HasRussianPrepayment) then begin
+        if (HasModPO) then begin
+          MatCol(t,-320,"Объекты",0,Objects,false,ObjSClass);
+          MatCol(t,-200,"Счёт",0,OrderNr,false,POSClass);
+        end else begin
+          MatCol(t,-260,"Объекты",0,Objects,false,ObjSClass);
+        end;
+        MatCol(t,-100,"Предоплата",0,PrepayNr,false,OPPSClass);
+      end else begin
+        MatCol(t,-160,"Объекты",0,Objects,false,ObjSClass);
+      end;
+    end else begin
+      if (HasRussianPrepayment) then begin
+        Flip(flipnr); flipnr = flipnr + 1;
+        MatCol(t=1,190,"Комментарий",0,Comment,false,0);
+        if (HasModPO) then begin
+          MatCol(t,-200,"Счёт",0,OrderNr,false,POSClass);
+        end;
+        MatCol(t,-100,"Предоплата",0,PrepayNr,false,OPPSClass);
+      end;
+    end;
+    if ((BuildProductCode=="StandardAccounts" or BuildProductCode=="WeHaveInvoices" or BuildProductCode=="WeHaveStock" or BuildProductCode=="WeHaveStockAndCRM" or BuildProductCode=="StandardBusiness" or Left(BuildProductCode,5)=="Books") and HasLocalization("FIN")) then begin 
+      Flip(flipnr); flipnr = flipnr + 1;
+      MatCol(t,360,"Bank Reference",0,BankRefStr,false,0);
+      MatCol(t,-250,"To Bank A/C",0,BankAcc,false,VEBankAccSClass);
+      MatCol(t,-110,"#V-Cd#",0,VATCode,false,VATCodeSClass);  
+      MatCol(t,-80,"#VAT# Value",0,VATVal,false,0);  
+    end;
+  end else begin
+    if (StandardHansa==false) then begin
+      Flip(flipnr); flipnr = flipnr + 1;
+      MatCol(t=1,190,"Комментарий",0,Comment,false,0);
+      MatCol(t,-270,"Сп. оплаты",0,PayMode,false,PMSClass);
+      MatCol(t,-220,"№ чека",0,ChequeNr,false,0);
+      MatCol(t,-130,"Валюта платежа",0,RecCurncy,true,CurncyCodeSClass);
+      MatCol(t,-90,"Перечислено",0,RecVal,true,0);
+    end;
+    Flip(flipnr); flipnr = flipnr + 1;
+    MatCol(t=1,190,"Комментарий",0,Comment,false,0);
+    MatCol(t,-320,"№ сч.",0,OrderNr,false,POSClass);
+    MatCol(t,-230,"№ предопл.",0,PrepayNr,false,OPPSClass);
+    MatCol(t,-130,"Вал. платежа",0,RecCurncy,true,CurncyCodeSClass);
+    MatCol(t,-90,"Перечислено",0,RecVal,true,0);
+    Flip(flipnr); flipnr = flipnr + 1;
+    MatCol(t=1,190,"Комментарий",0,Comment,false,0);
+    MatCol(t,-310,"Код",0,VATCode,false,VATCodeSClass);
+    MatCol(t,-270,"НДС",0,VATVal,false,0);
+//  MatCol(t,-200,"Extra Tax",0,TAX1Sum,false,0);
+    MatCol(t,-130,"Валюта платежа",0,RecCurncy,true,CurncyCodeSClass);
+    MatCol(t,-90,"Перечислено",0,RecVal,true,0);
+    Flip(flipnr); flipnr = flipnr + 1;
+    MatCol(t=1,190,"Текст",0,Comment,false,0);
+    MatCol(t,-260,"Объекты",0,Objects,false,ObjSClass);
+    if (StandardHansa==false) then begin
+      MatCol(t,-130,"Валюта платежа",0,RecCurncy,true,CurncyCodeSClass);
+      MatCol(t,-90,"Перечислено",0,RecVal,true,0);
+      Flip(flipnr); flipnr = flipnr + 1;
+      MatCol(t=1,190,"Счет округления",0,RoundOffAcc,false,AccSClass);
+      MatCol(t,-360,"Округление",0,RoundOff,true,0);
+      MatCol(t,-300,"Взнос",0,InstNr,false,APInstallSClass);
+      MatCol(t,-220,"Удерж. налог",0,WHTax,false,WHTaxSClass);
+      MatCol(t,-170,"W. Tax Base",0,WHTaxBase,false,0);
+      MatCol(t,-100,"Номер ссылки",0,rkPayNumber,false,0);
+    end else begin
+      MatCol(t=1,-170,"Счет округления",0,RoundOffAcc,false,AccSClass);
+      MatCol(t,-80,"Счет округления",0,RoundOff,true,0);
+    end;
+    Flip(flipnr); flipnr = flipnr + 1;
+    MatCol(t=1,190,"Счет кредиторов",0,APAcc,false,AccSClass);
+    MatCol(t,-370,"Ссылка банка",0,BankRefStr,false,0);
+    MatCol(t,-270,"На р/с",0,BankAcc,false,VEBankAccSClass);
+    MatCol(t,-140,"Ключ сортировки",0,SortCode,false,0);
+    MatCol(t,-50,"Код платежа",5,PaymentCode,false,PaymentCodeSClass);
+    Flip(flipnr); flipnr = flipnr + 1;
+    MatCol(t=1,200,"Вал. банка",0,BankCurncy,true,CurncyCodeSClass);
+    MatCol(t,-400,"Сумма банка",0,BankVal,true,0);
+    MatCol(t,-330,"Комиссия",0,BankFeeVal,true,0);
+    MatCol(t,-270,"К осн. вал. 1",0,ToRateB1BankVal,true,0);
+    MatCol(t,-200,"Б. вал. 1",0,B1BankVal,true,0);
+    MatCol(t,-130,"Б. вал. 2",0,B2BankVal,true,0);
+//  MatCol(t,-120,"Fee %",0,BankFeePrc,true,0); /* What was this ?? */
+    if (StandardHansa==false) then begin
+    MatCol(t,-60,"Коэффициент",0,Coef,true,0);
+    end;
+    Flip(flipnr); flipnr = flipnr + 1;
+    MatCol(t=1,-470,"Валюта банка",0,BankCurncy,true,CurncyCodeSClass);
+    MatCol(t,-430,"Сумма банка",0,BankVal,true,0);
+    MatCol(t,-350,"Курс",0,FrRateBankVal,true,0);
+    MatCol(t,-310,"К осн. вал. 1",0,ToRateB1BankVal,true,0);
+    MatCol(t,-240,"К осн. вал. 2",0,ToRateB2BankVal,true,0);
+    MatCol(t,-170,"Осн. курс 1",0,BaseRate1BankVal,true,0);
+    MatCol(t,-95,"Осн. курс 2",0,BaseRate2BankVal,true,0);
+//    if (StandardHansa==false) then begin
+//      MatCol(t,-30,"Coef. Value",0,Coef,true,0);
+//    end;
+  end;
+  InsertRowTest;
+  DeleteRowTest;
+  EndMatrix;
+  vs = 20;
+  if (tilenr>1) then begin
+//    v = 18;
+    v = v + 1;
+  end;
+  if (flipnr>2) then begin
+    for (f=1;f<flipnr;f=f+1) begin
+      VTab(-35,v,-16,v+vs,ToolFlip,f,chr(asc("A") + f - 1));
+      v = v + vs;
+    end;
+  end;
+  if (IsEnterprise) then begin
+    Tile(tilenr,120,true,tilenr,BankAcc); tilenr = tilenr + 1;
+    v=6; h= 100;
+    EditField(h,v,120,"Собст.счёт банка",Normal,BankAcc,false,0);
+
+    CheckBox(h2,v,0,"Иностранный платеж",ForeignPayment);
+    ButtonFrame(h=40,vm=(v+=40),123,3,"Формат платежа");
+    RadioButton(h,v,0,0,"По строкам",PayperSupplier);
+    RadioButton(h,v+=16,1,0,"По поставщикам",PayperSupplier);
+    RadioButton(h,v+=16,2,0,"Пакетом",PayperSupplier);
+    ButtonFrame(h2=190,v=vm,123,3,"Тип платежа");
+    RadioButton(h2,v,0,0,"Обычный",PayMethod);
+    RadioButton(h2,v+=16,1,0,"Экспресс",PayMethod);
+    RadioButton(h2,v+=16,2,0,"Срочный экспресс",PayMethod);
+    ButtonFrame(h3=340,v=vm,123,3,"Комиссия банка");
+    RadioButton(h3,v,0,0,"Мы платим",Bankfees);
+    RadioButton(h3,v+=16,1,0,"Платит поставщик",Bankfees);
+    RadioButton(h3,v+=16,2,0,"Общий",Bankfees);
+    if (HasApprovals) then begin
+      ButtonFrame(h3=490,v=vm,123,6,"Статус утверждения");
+      RadioButton(h3,v,kAcceptanceStateNotRequired,0,"не обязательно",AcceptanceStatus);
+      RadioButton(h3,v+=16,kAcceptanceStateNotStarted,0,"не начато",AcceptanceStatus);
+      RadioButton(h3,v+=16,kAcceptanceStateNotRequested,0,"не запрошено",AcceptanceStatus);
+      RadioButton(h3,v+=16,kAcceptanceStatePending,0,"в ожидании",AcceptanceStatus);
+      RadioButton(h3,v+=16,kAcceptanceStateApproved,0,"утверждено",AcceptanceStatus);
+      RadioButton(h3,v+=16,kAcceptanceStateRejected,0,"отклонено",AcceptanceStatus);
+/*
+  CheckBox(25,v=-39,0,"Заказан",OrderedFlag);
+  CheckBox(25,v=-20,0,"OK",DoneFlag);
+  HalPushButton(150,-30,150+100,-5,"EPaymentQueOPDsm","В банк");
+*/
+    end;
+  end;
+  if (GuiType==kGuiMetro) then begin // Temporarily disabled on Windows 8
+    SpecialMenu("Статус платежа",'r',4,"OPStatusDsm");
+    if (HasModPL and HasModNL) then begin
+      SpecialMenu("Добавить комиссию банка",' ',3,"NewFeeOPDsm");
+    end;
+    if (IsEnterprise) then begin
+//    SpecMenuItem("Print Forms",' ',0); // any code for this one??, no code
+      SpecialMenu("(-",' ',1,"");
+      SpecialMenu("Добавить скидку",' ',2,"CashDiscountOPDsm");
+    end;
+    if (HasModNL) then begin
+      SpecialMenu("Открыть запись операций",'t',5,"OpenTRFromOP");
+    end;
+  end else begin
+//    SpecMenuItem("Print Forms",' ',0); // any code for this one??, no code
+    if (HasSettlementDiscount) then begin
+//    SpecialMenu("(-",' ',1,"");
+    SpecialMenu("Добавить скидку",' ',2,"CashDiscountOPDsm");
+  end;
+  if (HasModPL and HasModNL) then begin
+    SpecialMenu("Добавить комиссию банка",' ',3,"NewFeeOPDsm");
+  end;
+  if (HasApprovals) then begin
+    SpecialMenu("Отправить для утверждения",' ',14,"OPSendforAcceptanceOPDsm");
+    SpecialMenu("Отменить запрос на утверждение",' ',2,"CancelApprovalRequestDsm");
+  end;
+  if (HasModNL) then begin
+    SpecialMenu("Открыть запись операций",'t',5,"OpenTRFromOP");
+  end;
+  if (IsEnterprise) then begin
+//    SpecialMenu("Open Withholding Certificate",'',5,"OpenWHCertificateOPDsm");
+    if (StandardHansa==false) then begin
+      SpecialMenu("Задать номер чека",' ',6,"AssignChequeOPDsm");
+      SpecialMenu("Подготовить чек",'e',9,"PrepChequesOPDsm");
+      SpecialMenu("Распечатать чек",' ',9,"PrintChequesOPDsm");
+    end;
+    SpecialMenu("Создать расходный ордер",' ',8,"CLOutFromOPDsm");
+  end;
+  if (HaseMail) then begin
+    SpecialMenu("Создать E-Mail",'m',9,"CreateMailFromOPDsm");
+  end;
+    if (HasLocalization("HRV,POL,RUS,SLV,SRB,UKR") and (HasModNL or IsEnterprise)) then begin  
+    SpecialMenu("Создать корректирующую счет-фактуру",' ',9,"VATCorrectionOPsm");
+  end;
+  if (HasWithholdingTax) then begin
+    SpecialMenu("Рассчитать удерживаемый налог",' ',11,"WithholdTaxesOPDsm");
+  end;
+  if (IsEnterprise) then begin
+    SpecialMenu("Статус платежа",'r',4,"OPStatusDsm");
+    SpecialMenu("Выписка банка",' ',12,"BankStOPDsm");
+      if (HasLocalization("EST,LVA")) then begin  
+    SpecialMenu("Статус электронных платежей",' ',13,"EPaymentStatusOPDsm");
+      end;
+    SpecialMenu("Распечатать ПКО-РКО",' ',4,"PrintCashInOutOPDsm");
+      SpecialMenu("Banking File Export",'',4,"BankingFileExportDsm");  
+  end;
+  SpecialMenu("Распределить сумму",' ',3,"OPExpandOPDsm");
+  end;
+  EndWindow;
+end;

@@ -23,6 +23,7 @@ external function Integer GetVATLaw();
 remote procedure IPVc_PasteBankCurncy(var record IPVc,Integer);
 external updating procedure RecLAction_rlIPDPrint(record RcVc,var record IPVc,Boolean);
 remote function Boolean PasteInvIn2IPr(var record IPVc,Integer,Date,var val,Boolean,var Boolean);
+remote procedure OPExpandPay(var record OPVc,Integer);
 
 global
 procedure IPSumup(var record IPVc IPr)
@@ -962,3 +963,27 @@ begin
   IPDClassOpenRecord = res;
   return;
 end;
+
+
+
+global
+updating procedure OPExpandOPDsm()	//Edit----------------------Dima  25.03.2015
+BEGIN
+  Integer wn,insertmode,updatemode,rownr;
+  record OPVc OPr;
+  
+  wn = CurWindow;
+  insertmode = 1;
+  updatemode = 2;
+  if ((WindowState(wn)==updatemode) or (WindowState(wn)==insertmode)) then begin
+    rownr = WindowActiveRow(wn);
+    DeselectWindow(wn,true);
+    GetWindowRecord(wn,OPr);
+    if (rownr<0) then begin
+      rownr = MatRowCnt(OPr)-1;
+    end;
+    OPExpandPay(OPr,rownr);
+    PutWindowRecord(wn,OPr);
+  end;  
+  RETURN;
+END;

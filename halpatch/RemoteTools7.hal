@@ -1020,3 +1020,142 @@ begin
   RecordAction_rlPULOK = res;
   return;
 end;
+
+
+
+
+procedure OpenVEInvoiceNumber(string vecode,var longint lastpos,var record APVc resAPr)
+begin
+  record APVc APr;
+  Boolean found;
+
+  RecordNew(resAPr);  
+  APr.VECode = vecode;
+  found = true;
+  SetLoopPosition(APr,lastpos);
+
+  while (LoopKey("VECode",APr,1,found)) begin
+    if (APr.VECode!=vecode) then begin found = false; end;
+    if (found) then begin
+      lastpos = GetLoopPosition(APr);
+      RecordCopy(resAPr,APr);     
+      goto LOpenVEInvoiceNumber;
+    end;    
+  end;
+  
+LOpenVEInvoiceNumber:;
+  return;
+end;
+
+global
+procedure OPExpandPay(var record OPVc OPp,Integer rownr)
+begin
+  row OPVc OP0rw;
+  row OPVc newOPrw;
+  Integer i,rwcnt,currow;
+  record ARVc ARr;
+  record IVVc IVr;  
+  record VIVc VIr;
+  record APVc APr;
+  Boolean loopf,testf,installmentf;
+  LongInt lastpos;
+  record BaseCurBlock BCb;
+  val v,remv,chk,cashvalue;  
+	string 7 bankCurcode;
+
+
+  BlockLoad(BCb);
+  rwcnt = MatRowCnt(OPp);
+  currow = rwcnt;
+  MatRowGet(OPp,rownr,OP0rw);
+
+/*
+
+	////Edit--------------------------------------------------------------------Dima  05.02.2015
+	bankCurcode = IP0rw.BankCurncy;
+	cashvalue = IP0rw.BankVal;
+	if (IP0rw.BankCurncy != IP0rw.RecCurncy) then begin
+			if (blank(IPp.TakeOnRate)) then begin
+					CurValToOtherCur(CurrentDate,IP0rw.BankCurncy, IP0rw.BankVal,IP0rw.RecCurncy,IP0rw.RecVal,DefaultCurRoundOff);
+			end else begin
+					if (IP0rw.BankCurncy == BCb.BaseCur1) then begin
+						IP0rw.RecVal = IP0rw.BankVal*IPp.TakeOnRate;
+					end;
+					if (IP0rw.RecCurncy == BCb.BaseCur1) then begin
+						IP0rw.RecVal = IP0rw.BankVal/IPp.TakeOnRate;
+					end;
+			end;
+			IP0rw.BankCurncy = BCb.BaseCur1;
+	end;
+	MatRowPut(IPp,rownr,IP0rw);
+	//Edit----------------------------------------------------------------------Dima  05.02.2015
+
+*/
+
+  remv = OP0rw.RecVal;	
+
+  if ((OP0rw.VISerNr<0) and (OP0rw.RecVal>0)) then begin
+    loopf = true;
+  end;
+  while (loopf) begin
+    OpenVEInvoiceNumber(OP0rw.VECode,lastpos,APr);    
+    if (APr.SerNr<=0) then begin
+      loopf = false;
+    end;
+    if (remv<=0) then begin
+      loopf = false;
+    end;
+    if (loopf) then begin
+      testf = true;
+      VIr.SerNr = APr.SerNr;
+      if (ReadFirstMain(VIr,1,true)) then begin
+        testf = true;
+        if (VIr.Invalid!=0) then begin
+          testf = false;
+        end;
+      end;
+      if (testf) then begin
+      
+ /*     
+        if (IVr.CurncyCode!=IP0rw.RecCurncy) then begin
+          CurValToOtherCur(IPp.TransDate,IVr.CurncyCode,ARr.RVal,IP0rw.RecCurncy,v,DefaultCurRoundOff);
+        end else begin
+          v = ARr.RVal;
+        end;
+        if (remv<v) then begin
+          v = remv;
+        end;
+*/
+        ClearRow(OPp,newOPrw,1)
+        newOPrw.VISerNr = APr.SerNr;
+        MatRowPut(OPp,currow,newOPrw);
+     //   if (PasteInvIn2IPr(IPp,currow,IPp.TransDate,chk,false,installmentf)) then begin
+      //  end;     
+
+      //  ChangeIPRows(IPp,newIPrw.InvoiceNr,IP0rw.RecCurncy,currow,v,installmentf);
+            
+//        currow = currow + 1;
+        currow = MatRowCnt(OPp);
+        remv = remv - v;        
+      end;
+    end;    
+  end;  
+ /* 
+  MatRowDelete(IPp,rownr);
+  if (remv>0) then begin
+    currow = MatRowCnt(IPp);
+    CopyRow(IPp,IP0rw,newIPrw);
+    MatRowPut(IPp,currow,newIPrw);
+    MatRowGet(IPp,currow,newIPrw);
+  
+    newIPrw.RecVal = remv;
+    MatRowPut(IPp,currow,newIPrw);
+    IPVc_PasteRecVal(IPp,currow);
+  end;
+
+	RewriteIPMatrix(IPp,bankCurcode,cashvalue);	//Edit----------------------Dima  05.02.2015
+
+  IPSumup(IPp);
+  */
+  return;
+end;
