@@ -184,6 +184,42 @@ LValidateBulkSerialNoRow:;
   return;
 end;
 
+/*
+global
+function boolean CheckIfOKedInvoices_forSHVc(var record SHVc SHp, var string message)
+begin
+  record IVVc IVr;	//Edit----------------------Dima  27.03.2015
+  val totQty;
+  boolean TrHs,res;
+  
+  
+	totQty = 0;
+	res = true;
+	
+	if (SHp.OKFlag > 0) then begin
+		IVr.OrderNr = SHp.OrderNr;		
+		TrHs = true;
+		while (LoopBackKey("OrderNr",IVr,1,TrHs)) begin
+			if (IVr.OrderNr !=SHp.OrderNr) then begin TrHs=false; end;
+			if (TrHs) then begin
+				if (IVr.OKFlag != 0) then begin
+					totQty = totQty + IVr.TotQty;
+				end else begin
+ 					message = message & IVr.SerNr & " ";
+				end;
+			end;		
+		end;
+		
+		if (totQty<SHp.OKFlag) then begin
+			res = false;
+			RecordCheckError(31040,tstr2,-1,"OrderNr");
+		end;
+	end;
+  
+end;
+*/
+
+
 global
 updating function LongInt DoSHVcRecordCheck(var record SHVc SHp,record SHVc SH2p,LongInt stat,LongInt check,var LongInt error,
                                             var string errorstr,var integer rownr,var string fieldstr,Boolean UnOKedCheckSerialf)
@@ -242,6 +278,9 @@ begin
   record CUUserLabelBlock CUUerLb;
   record CountryVc Countryr;
   record AccVc Accr;
+  record IVVc IVr;	//Edit----------------------Dima  27.03.2015
+  val totQty;
+  boolean TrHs;
   
   res = 0;
   BlockLoad(SRRec);
@@ -1321,6 +1360,32 @@ LSHVcRecordCheck_GenTrans:;
       end;
     end;    
   end;
+  
+
+	tstr2 = "";
+	totQty = 0;
+	if (SHp.OKFlag > 0) then begin
+		IVr.OrderNr = SHp.OrderNr;		
+		TrHs = true;
+		while (LoopBackKey("OrderNr",IVr,1,TrHs)) begin
+			if (IVr.OrderNr !=SHp.OrderNr) then begin TrHs=false; end;
+			if (TrHs) then begin
+				if (IVr.OKFlag != 0) then begin
+					totQty = totQty + IVr.TotQty;
+				end else begin
+ 					tstr2 = tstr2 & IVr.SerNr & " ";
+				end;
+			end;		
+		end;
+		
+		if (totQty<SHp.OKFlag) then begin
+			//SHp.OKFlag = 0;
+			RecordCheckError(31040,tstr2,-1,"OrderNr");
+			res = -1;
+			goto LSHVcRecordCheck;
+		end;
+	end;
+  
   
 LSHVcRecordCheck:;
   if (res!=0) then begin

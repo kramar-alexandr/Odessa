@@ -84,7 +84,8 @@ begin
 	 SString(31036,"В ожидании оплаты");	
 	 SString(31037,"Завершён");
 	 SString(31038,"Отменён");	 
- 	 SString(31039,"Закрыт");	  	 
+ 	 SString(31039,"Закрыт");
+ 	 SString(31040,"Существуют неутвержденные счет-фактуры: ");	  	 
 	 
    
   Maintenance("Экспорт склада CSV",ExportStockCSVClass,ExportStockCSVMn,modSY);
