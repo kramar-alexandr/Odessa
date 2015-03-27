@@ -100,6 +100,8 @@ begin
 	Maintenance("Создать карты лояльности клиентам \"WEB\"",MyVClass,CreateLoyaltyForWebClients,modDBMain);	//Edit***************************Sasha2,15:51 26.02.2015
 	Maintenance("Recalculate POVc.ActOkFlag",MyVClass,RecalculatePOVC_ActOkFlag_Mn,modDBMain);
 	Maintenance("Recalculate ORVc.CustomStatusFlagText",MyVClass,RecalculatePOVC_CustomStatusFlagText_Mn,modDBMain);	//Edit----------------------Dima  24.03.2015
+	
+	Maintenance("Fix Prepayment",MyVClass,FixPrepaymentMn,modDBMain);	//Edit----------------------Dima  24.03.2015
 
   Import("Импорт цен",PLImportIClass,PLImportIn,modDI); //Added********************Dima 20.11.2014
   Import("Импорт товаров",INImportIClass,INImportIn,modIN);//Added********************Dima 20.11.2014
