@@ -1,3 +1,4 @@
+
 external function Boolean DateLocked(Date,string);
 external function roundmode GetTotalRoundMode(record RoundBlock);
 external procedure OffHireSumUp(var record OffHireVc);
@@ -207,8 +208,9 @@ begin
 
 			//prepayment
 			if ((IPrw.InvoiceNr<0) and (IPrw.BankCurncy !=IPrw.RecCurncy)) then begin
-					CurValToOtherCur(CurrentDate,IPrw.BankCurncy, IPrw.BankVal,IPrw.RecCurncy,v,DefaultCurRoundOff);
-					IPrw.RecVal = v;
+					//CurValToOtherCur(CurrentDate,IPrw.BankCurncy, IPrw.BankVal,IPrw.RecCurncy,v,DefaultCurRoundOff);	//Edit----------------------Dima  27.03.2015
+						IPrw.RecVal = IPrw.BankVal/coef;				
+					//IPrw.RecVal = v;
 					IPrw.BankVal = cashvalue - SumInvoicesIP(IPp);	//for correct rounding
 					MatRowPut(IPp,i-1,IPrw);		
 			end;
