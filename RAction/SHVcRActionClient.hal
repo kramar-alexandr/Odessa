@@ -2,7 +2,6 @@ remote updating procedure SHVcRecordUpdateClientRemote(record SHVc,record SHVc,s
 external updating procedure RecordActionSH_rlFLabLPrint(var record SHVc);
 external updating procedure RecordActionSH_Print(var record SHVc,string,Boolean,Integer);
 external procedure ShowUnOkWarn(string,Integer);
-//remote function boolean CheckIfOKedInvoices_forSHVc(var record SHVc, var string);
 
 procedure PrintSHPositions(record SHVc SHp)
 BEGIN
@@ -114,5 +113,3 @@ begin
   SHVcRecordDuplicateClient = res;
   RETURN;
 END;
-
-

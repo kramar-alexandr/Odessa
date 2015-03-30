@@ -184,40 +184,7 @@ LValidateBulkSerialNoRow:;
   return;
 end;
 
-/*
-global
-function boolean CheckIfOKedInvoices_forSHVc(var record SHVc SHp, var string message)
-begin
-  record IVVc IVr;	//Edit----------------------Dima  27.03.2015
-  val totQty;
-  boolean TrHs,res;
-  
-  
-	totQty = 0;
-	res = true;
-	
-	if (SHp.OKFlag > 0) then begin
-		IVr.OrderNr = SHp.OrderNr;		
-		TrHs = true;
-		while (LoopBackKey("OrderNr",IVr,1,TrHs)) begin
-			if (IVr.OrderNr !=SHp.OrderNr) then begin TrHs=false; end;
-			if (TrHs) then begin
-				if (IVr.OKFlag != 0) then begin
-					totQty = totQty + IVr.TotQty;
-				end else begin
- 					message = message & IVr.SerNr & " ";
-				end;
-			end;		
-		end;
-		
-		if (totQty<SHp.OKFlag) then begin
-			res = false;
-			RecordCheckError(31040,tstr2,-1,"OrderNr");
-		end;
-	end;
-  
-end;
-*/
+
 
 
 global
@@ -258,7 +225,7 @@ begin
   Integer errcode;
   LongInt sernr,stmovnr,dummyl;
   record PISVc PISr;
-  string 255 objstr,errstr,accnr,oldOfficialSerNr,tstr2,c;
+  string 255 objstr,errstr,accnr,oldOfficialSerNr,tstr2,tstr3,c;
   record CostAccBlock CAb;
   record AccBlock ARAccRec;
   Boolean unokf;
@@ -1361,31 +1328,42 @@ LSHVcRecordCheck_GenTrans:;
     end;    
   end;
   
-
+//Edit-------start-----------------Dima  30.03.2015
 	tstr2 = "";
+	tstr3 = "";
 	totQty = 0;
 	if (SHp.OKFlag > 0) then begin
-		IVr.OrderNr = SHp.OrderNr;		
+		IVr.OrderNr = SHp.OrderNr;
 		TrHs = true;
 		while (LoopBackKey("OrderNr",IVr,1,TrHs)) begin
 			if (IVr.OrderNr !=SHp.OrderNr) then begin TrHs=false; end;
 			if (TrHs) then begin
 				if (IVr.OKFlag != 0) then begin
 					totQty = totQty + IVr.TotQty;
+					tstr3 = tstr3 & IVr.SerNr & " ";
 				end else begin
  					tstr2 = tstr2 & IVr.SerNr & " ";
 				end;
-			end;		
+			end;
 		end;
-		
-		if (totQty<SHp.OKFlag) then begin
-			//SHp.OKFlag = 0;
-			RecordCheckError(31040,tstr2,-1,"OrderNr");
+LogText (0, tstr2 &"      ++     "& tstr3);		
+		if (nonblank(tstr2)) then begin
+			error = 31040;
+      errorstr = tstr2;
+      fieldstr = "OrderNr";
+			res = -1;
+			goto LSHVcRecordCheck;
+		end;		
+
+		if (totQty<SHp.TotQty) then begin
+			error = 31041;
+      errorstr = tstr3;
+      fieldstr = "OrderNr";
 			res = -1;
 			goto LSHVcRecordCheck;
 		end;
 	end;
-  
+//Edit-----end------------------------Dima  30.03.2015  
   
 LSHVcRecordCheck:;
   if (res!=0) then begin
@@ -1411,6 +1389,9 @@ begin
   if (res!=0) then begin
     RecordCheckError(error,errorstr,rownr,fieldstr);   
   end;
+  
+
+  
   SHVcRecordCheck = res;
   return;
 end;
