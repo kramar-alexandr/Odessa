@@ -207,7 +207,7 @@ begin
   record RcVc RepSpec;
   string 10 location,loc2,loc3,tstr;
   LongInt oldnr,newnr;
-  Integer i,rwcnt;
+  Integer i,rwcnt,rwcnt2;
   Boolean blankf,testf,test2f;
   Boolean transf;
   Boolean orfound,gentrans;
@@ -241,13 +241,14 @@ begin
   Array string 255 otcheckaccs;
   Array string 255 otcheckobjtyps;
   Integer otcheckcnt;
-  Boolean initotcheckf;   
+  Boolean initotcheckf,nonequivalent;   
   record CUUserLabelBlock CUUerLb;
   record CountryVc Countryr;
   record AccVc Accr;
   record IVVc IVr;	//Edit----------------------Dima  27.03.2015
   val totQty;
   boolean TrHs;
+  array string 20 Artcodes;
   
   res = 0;
   BlockLoad(SRRec);
@@ -1328,42 +1329,60 @@ LSHVcRecordCheck_GenTrans:;
     end;    
   end;
   
-//Edit-------start-----------------Dima  30.03.2015
+//Edit-------start--------------------------------------------Dima  30.03.2015
 	tstr2 = "";
-	tstr3 = "";
-	totQty = 0;
+  nonequivalent = false;
+
 	if (SHp.OKFlag > 0) then begin
 		IVr.OrderNr = SHp.OrderNr;
 		TrHs = true;
 		while (LoopBackKey("OrderNr",IVr,1,TrHs)) begin
 			if (IVr.OrderNr !=SHp.OrderNr) then begin TrHs=false; end;
 			if (TrHs) then begin
-				if (IVr.OKFlag != 0) then begin
-					totQty = totQty + IVr.TotQty;
-					tstr3 = tstr3 & IVr.SerNr & " ";
-				end else begin
+				if (IVr.OKFlag == 0) then begin
  					tstr2 = tstr2 & IVr.SerNr & " ";
 				end;
 			end;
 		end;
-LogText (0, tstr2 &"      ++     "& tstr3);		
+		
 		if (nonblank(tstr2)) then begin
 			error = 31040;
       errorstr = tstr2;
       fieldstr = "OrderNr";
 			res = -1;
 			goto LSHVcRecordCheck;
-		end;		
+		end;
+		
+		rwcnt = MatRowCnt(Shp);
+		for(i=0;i<rwcnt;i=i+1) begin
+			MatRowGet(Shp,i,SHrw);
+			Artcodes[i] = SHrw.ArtCode;
+		end;
+		
+		ORr.SerNr = SHp.OrderNr;
+		if (ReadFirstMain(ORr,1,true)) then begin	
+			rwcnt2 = MatRowCnt(ORr);
+			for(i=0;i<rwcnt;i=i+1) begin
+					for (j=0; j<rwcnt2; j=j+1) begin
+						MatRowGet(ORr,j,ORrw);						
+						if ((Artcodes[i]==ORrw.ArtCode) and	(ORrw.Shipd1 != ORrw.Invd)) then begin
+								nonequivalent = true;
+								goto LSHVcRecordCheck211;
+						end;								
+					end;
+			end;					
+		end;	
+	
+		LSHVcRecordCheck211:;
 
-		if (totQty<SHp.TotQty) then begin
+		if (nonequivalent) then begin
 			error = 31041;
-      errorstr = tstr3;
       fieldstr = "OrderNr";
 			res = -1;
 			goto LSHVcRecordCheck;
 		end;
 	end;
-//Edit-----end------------------------Dima  30.03.2015  
+//Edit-----end---------------------------------------Dima  30.03.2015  
   
 LSHVcRecordCheck:;
   if (res!=0) then begin
