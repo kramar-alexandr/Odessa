@@ -108,9 +108,12 @@ BEGIN
   record VITBlock VITb;
   string 255 curncy;
   record POSettingBlock POSb;
+  val sum;
+  record BaseCurBlock BCb;
 
   BlockLoad(POSb);
   BlockLoad(VITb);
+  BlockLoad(BCb);
   res = true;
   firstf = true;
   VIr.SerNr = -1;  
@@ -172,7 +175,7 @@ BEGIN
               ClearRow(VIp,VI2rw,1);
               VI2rw.stp = 1;
               CopyRow(VIp,VIrw,VI2rw);
-
+              
 
               if (POSb.CreateVIonRetPUOK!=0) then begin
                 VI2rw.qty = RetPUVc_FindQtyToBeCredited(RetPUp.PONr,RetPUrw.OrdRow);
@@ -183,9 +186,9 @@ BEGIN
                 VI2rw.qty = RetPUrw.Quant;
               end;
               if (VI2rw.qty!=0) then begin
-                switch (VITb.TransferItems) begin
+  /*              switch (VITb.TransferItems) begin					//Edit----------------------Dima  30.03.2015
                   case 2:
-                     VI2rw.Sum = VI2rw.qty*RetPUrw.PUCostPrice;
+                     //VI2rw.Sum = VI2rw.qty*RetPUrw.PUCostPrice;//Edit----------------------Dima  30.03.2015                     
                      if (VI2rw.Sum==0) then begin
                        VI2rw.Sum = RetPUrw.FIFORowVal;
                        CurValToOtherCur(CurrentDate,curncy,RetPUrw.FIFORowVal,VIp.CurncyCode,VI2rw.Sum,DefaultCurRoundOff);
@@ -193,6 +196,8 @@ BEGIN
                   otherwise 
                      VI2rw.Sum = (VIrw.Sum*VI2rw.qty)/VIrw.qty;
                 end;
+   */           VI2rw.Sum = (VIrw.Sum*VI2rw.qty)/VIrw.qty; 	//Edit----------------------Dima  30.03.2015  
+   							
                 if (GetAccName(RetPUrw.CredAcc,tstr,60)) then begin
                   VI2rw.AccNumber = RetPUrw.CredAcc;
                   VI2rw.Comment = tstr;
@@ -492,7 +497,6 @@ BEGIN
   BlockLoad(CostAccRec);
   res = true;
   BlockLoad(ARAccRec);          
-
   if (Retp.OrdNr>0) then begin
     IVr.SerNr = -1;  
     found = true;
