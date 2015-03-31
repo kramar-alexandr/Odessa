@@ -827,37 +827,39 @@ BEGIN
   POrw.VEQuant = t;    
   POrw.PalletNr = CalcPalletsNr(POrw.Quant,POrw.ArtCode);
   INr.Code = POrw.ArtCode; //Edit***************************Sasha2,9:45 27.06.2014  {
-  if (ReadFirstMain(INr,1,true) and NonBlank(POrw.UnitCode)) then begin
+  if (ReadFirstMain(INr,1,true)) then begin
   	POrw.Volume = INr.Volume * POrw.Quant;// Edit ************************** Wednesday, July 9, 2014 at 11:37:02
   	POrw.Weight = INr.Weight * POrw.Quant;// Edit ************************** Wednesday, July 9, 2014 at 11:37:01
-	  if (NonBlank(POrw.AddUnittext2)) then begin 
-			if (POrw.AddUnittext2 != POrw.UnitCode) then begin
-				POrw.AddUnitQty2 = POrw.Quant / INr.AddUnitCoef2;
-			end else begin
-				POrw.AddUnitQty2 = POrw.Quant;
+	  if(NonBlank(POrw.UnitCode))then begin// Edit ************************** Tuesday, 31 March 2015 12:47:24
+			if (NonBlank(POrw.AddUnittext2)) then begin 
+				if (POrw.AddUnittext2 != POrw.UnitCode) then begin
+					POrw.AddUnitQty2 = POrw.Quant / INr.AddUnitCoef2;
+				end else begin
+					POrw.AddUnitQty2 = POrw.Quant;
+				end;
 			end;
-		end;
-		if (NonBlank(POrw.AddUnittext3)) then begin
-			if (POrw.AddUnittext3 != POrw.UnitCode) then begin
-				POrw.AddUnitQty3 = POrw.Quant / INr.AddUnitCoef3;
-			end else begin
-				POrw.AddUnitQty3 = POrw.Quant;
+			if (NonBlank(POrw.AddUnittext3)) then begin
+				if (POrw.AddUnittext3 != POrw.UnitCode) then begin
+					POrw.AddUnitQty3 = POrw.Quant / INr.AddUnitCoef3;
+				end else begin
+					POrw.AddUnitQty3 = POrw.Quant;
+				end;
 			end;
-		end;
-		if (NonBlank(POrw.AddUnittext4)) then begin
-			if (POrw.AddUnittext4 != POrw.UnitCode) then begin
-				POrw.AddUnitQty4 = POrw.Quant / INr.AddUnitCoef4;
-			end else begin
-				POrw.AddUnitQty4 = POrw.Quant;
+			if (NonBlank(POrw.AddUnittext4)) then begin
+				if (POrw.AddUnittext4 != POrw.UnitCode) then begin
+					POrw.AddUnitQty4 = POrw.Quant / INr.AddUnitCoef4;
+				end else begin
+					POrw.AddUnitQty4 = POrw.Quant;
+				end;
 			end;
+			if (NonBlank(POrw.AddUnittext5)) then begin
+				if (POrw.AddUnittext5 != POrw.UnitCode) then begin
+					POrw.AddUnitQty5 = POrw.Quant / INr.AddUnitCoef5;
+				end else begin
+					POrw.AddUnitQty5 = POrw.Quant;
+				end; 
+			end; //Edit***************************Sasha2,9:46 27.06.2014 }
 		end;
-		if (NonBlank(POrw.AddUnittext5)) then begin
-			if (POrw.AddUnittext5 != POrw.UnitCode) then begin
-				POrw.AddUnitQty5 = POrw.Quant / INr.AddUnitCoef5;
-			end else begin
-				POrw.AddUnitQty5 = POrw.Quant;
-			end; 
-		end; //Edit***************************Sasha2,9:46 27.06.2014 }
 	end;
   MatRowPut(POp,rownr,POrw);
   if (PODchrsum(POp,rownr)) then begin
@@ -1243,7 +1245,7 @@ begin
     POrw.AddUnitQty5 = INr.AddUnitCoef5;// Edit ************************** четверг, 26 июня 2014 г., 20:49:44
     POrw.QtyPack = INr.AddUnitCoef3;	//Edit by Victor 30.01.15
     POrw.QtyBox = INr.AddUnitCoef2;	//Edit by Victor 30.01.15
-	POrw.Volume = INr.Volume;// Edit ************************** Wednesday, July 9, 2014 at 11:37:02
+		POrw.Volume = INr.Volume;// Edit ************************** Wednesday, July 9, 2014 at 11:37:02
   	POrw.Weight = INr.Weight;// Edit ************************** Wednesday, July 9, 2014 at 11:37:01
   	POrw.AlternativeCode = INr.AlternativeCode; //Edit***************************Sasha2,13:54 06.11.2014
     if (pifound) then begin
