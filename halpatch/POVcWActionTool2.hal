@@ -826,8 +826,8 @@ BEGIN
   DivPIFactor(POrw.Quant,POrw.PIFactor,t);
   POrw.VEQuant = t;    
   POrw.PalletNr = CalcPalletsNr(POrw.Quant,POrw.ArtCode);
-  INr.Code = POrw.ArtCode; //Edit***************************Sasha2,9:45 27.06.2014  {
-  if (ReadFirstMain(INr,1,true)) then begin
+  //INr.Code = POrw.ArtCode; //Edit***************************Sasha2,9:45 27.06.2014  {
+  //if (ReadFirstMain(INr,1,true)) then begin
   	POrw.Volume = INr.Volume * POrw.Quant;// Edit ************************** Wednesday, July 9, 2014 at 11:37:02
   	POrw.Weight = INr.Weight * POrw.Quant;// Edit ************************** Wednesday, July 9, 2014 at 11:37:01
 	  if(NonBlank(POrw.UnitCode))then begin// Edit ************************** Tuesday, 31 March 2015 12:47:24
@@ -860,7 +860,7 @@ BEGIN
 				end; 
 			end; //Edit***************************Sasha2,9:46 27.06.2014 }
 		end;
-	end;
+	//end;
   MatRowPut(POp,rownr,POrw);
   if (PODchrsum(POp,rownr)) then begin
   end;
