@@ -4,7 +4,7 @@ begin
 
 	SetLangMode(LangRussian,"RUS",0);
 	
-	//Module("Управление складом","",730,modWHM);
+		//Module("Управление складом","",730,modWHM);
  
   Setting("Настройки WebShop",WebShopSettingsTClass,modSO); //Edit***************************Sasha2,10:22 14.07.2014
   Setting("Настройки экспорта склада CSV",ExportStockCSVTClass,modSY);
@@ -27,6 +27,7 @@ begin
   //Setting("Путевые листы",WayListLClass,modCL);
   Setting("Cуточные возмещения",DALClass,modCL);
   Setting("Места",PosLClass,modIN);
+  Setting("Производство",ProdLClass,modIN);	//Edit----------------------Dima  31.03.2015
   
   Report("Журнал суточных возмещений",DAJRClass,DAJRn,0,modCL);
   Report("Журнал авансовых отчетов",ExpJRClass,ExpRn,0,modCL);
