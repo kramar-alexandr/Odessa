@@ -1802,7 +1802,7 @@ LIVVcRecordCheck_GenTrans:;
   	rwcnt = MatRowCnt(IVp);
   	for(i=0;i<rwcnt;i=i+1) begin
   		MatRowGet(IVp,i,IVrw);
-			if (IVrw.stp == kInvoiceRowTypeNormal and IVrw.Sum == 0) then begin
+			if (IVrw.stp == kInvoiceRowTypeNormal and IVrw.Sum == 0 and nonblank(IVrw.ArtCode)) then begin
 				RecordCheckError(31042,"",i,"Sum");
 				res = -1;
 		  	goto L99;
