@@ -1224,6 +1224,21 @@ begin
     end;
 LORVcRecordRowCheck:;
   end;
+  
+  
+  if (ORr.OKFlag!=0 and UserCanAction("AllowOKInvoicesWithZeroSum",false) == false) then begin			//Edit----------------------Dima  02.04.2015
+  	rwcnt = MatRowCnt(ORr);
+  	for(i=0;i<rwcnt;i=i+1) begin
+  		MatRowGet(ORr,i,ORrw);
+			if (ORrw.stp == kInvoiceRowTypeNormal and ORrw.Sum == 0) then begin
+				RecordCheckError(31042,"",i,"Sum");
+				res = -1;
+		  	goto LORVcRecordCheck;
+		  end;
+  	end; 
+  end; 
+  
+  
 LORVcRecordCheck:;
   if (res!=0) then begin 
     ORr.SerNr = oldnr; 

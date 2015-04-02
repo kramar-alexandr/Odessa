@@ -346,6 +346,7 @@ BEGIN
   record CYBlock CYb;
   Boolean TouchScreenFinishButtonf;
 
+
   if (long4==3) then begin TouchScreenFinishButtonf = true; end;
   res = 0;
   curcomp = CurrentCompany;    
@@ -1796,6 +1797,19 @@ LkInvoiceTypeCash:;
     end;
   end;  
 LIVVcRecordCheck_GenTrans:;
+
+  if (IVp.OKFlag!=0 and UserCanAction("AllowOKInvoicesWithZeroSum",false) == false) then begin			//Edit----------------------Dima  02.04.2015
+  	rwcnt = MatRowCnt(IVp);
+  	for(i=0;i<rwcnt;i=i+1) begin
+  		MatRowGet(IVp,i,IVrw);
+			if (IVrw.stp == kInvoiceRowTypeNormal and IVrw.Sum == 0) then begin
+				RecordCheckError(31042,"",i,"Sum");
+				res = -1;
+		  	goto L99;
+		  end;
+  	end; 
+  end; 
+
 //  if (HasModNL==false) then begin gentrans = false; end;
   if (gentrans==false) then begin transf = false; end;
   if (IsStandardProduct) then begin
@@ -1849,6 +1863,8 @@ LIVVcRecordCheck_GenTrans:;
           AddTTrans_IVVc(gTRp,IVp);
       end;
     end;
+           
+   
     if (check) then begin
       if (MatRowCnt(gSMp)>0) then begin
         gSMp.FileName = "IVVc";

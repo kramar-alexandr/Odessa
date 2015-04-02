@@ -87,7 +87,8 @@ begin
 	 SString(31038,"Отменён");	 
  	 SString(31039,"Закрыт");
  	 SString(31040,"Существуют неутвержденные счет-фактуры: ");	 
-   SString(31041,"Кол-во товара не соответствует кол-ву в счет-фактуре");	  	 
+   SString(31041,"Кол-во товара не соответствует кол-ву в счет-фактуре");	 
+   SString(31042,"Существует строка с нулевой суммой");	  	 
 	 
    
   Maintenance("Экспорт склада CSV",ExportStockCSVClass,ExportStockCSVMn,modSY);
@@ -352,6 +353,7 @@ begin
   StrSetText(StockMovOK,"Получение перемещения товара");
   StrSetText(AllowNPTSReprint," Перепечатать строки сч/ф (сенсорный экран)");
   StrSetText(AllowChangeTerms,"Разрешить менять условия сч/ф (сенсорный экран)");// Edit ************************** Wednesday, 4 February 2015 14:51:00
+  StrSetText(AllowOKInvoicesWithZeroSum,"Разрешить утверждать счет-фактуры с нулевой ценой");
   StrSetText(JobCheckOut,"Резервирование - Выезд");
   StrSetText(JobAddItem,"Резервирование - Добавить товар");
   StrSetText(JobChargeStay,"Резервирование - Оплатить пребывание");
