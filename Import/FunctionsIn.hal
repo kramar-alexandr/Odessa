@@ -54,6 +54,12 @@ while (TestEOF()==false) begin
 		PLr.ArtCode = artCode;	
 		if (ReadFirstMain(PLr,2,true)) then begin		
 			PLr.ExVatPrice = pr;
+			if (blank(PLr.Comment)) then begin
+					INr.Code = artCode;
+					if (ReadFirstMain(INr,1,true))	then begin
+					PLr.Comment = INr.Name;
+					end;
+			end;
 			recordstore(PLr,true);
 		end else begin
 			PLDefr.Code = plCode;
@@ -64,6 +70,9 @@ while (TestEOF()==false) begin
 					PLr.PLCode = plCode;
 					PLr.ArtCode = artCode;
 					PLr.ExVatPrice = pr;
+					if (blank(PLr.Comment)) then begin
+						PLr.Comment = INr.Name;
+					end;
 					recordstore(PLr,true);
 				end;
 			end;
