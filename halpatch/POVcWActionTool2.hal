@@ -170,6 +170,7 @@ BEGIN
   Integer vt;
   VAL cost1,cost2,cost3,cost4,cost5,ShipCost,CustomsCost;
 	record SysFormatBlock SFb;
+	record INVc INr;
 	
 	BlockLoad(SFb);
 	
@@ -193,6 +194,17 @@ BEGIN
     MatRowGet(POp,0,POrw);
     vt = VATType(POrw.VATCode);
   end;
+  
+  /*for (i = 0 ; i<rwcnt ;i=i+1) begin
+    MatRowGet(POp,i,POrw);
+  		INr.Code = POrw.ArtCode;
+  		if(readfirstmain(INr,1,true))then begin
+  			POrw.Volume = INr.Volume * POrw.Quant;// Edit ************************** Wednesday, July 9, 2014 at 11:37:02
+				POrw.Weight = INr.Weight * POrw.Quant;// Edit ************************** Wednesday, July 9, 2014 at 11:37:01
+  		end;
+  	MatRowPut(POp,i,POrw);
+  end;*/
+  
   for (i = 0 ; i<rwcnt ;i=i+1) begin
     MatRowGet(POp,i,POrw);
     s = s + POrw.Sum;
@@ -1245,8 +1257,13 @@ begin
     POrw.AddUnitQty5 = INr.AddUnitCoef5;// Edit ************************** четверг, 26 июня 2014 г., 20:49:44
     POrw.QtyPack = INr.AddUnitCoef3;	//Edit by Victor 30.01.15
     POrw.QtyBox = INr.AddUnitCoef2;	//Edit by Victor 30.01.15
-		POrw.Volume = INr.Volume;// Edit ************************** Wednesday, July 9, 2014 at 11:37:02
-  	POrw.Weight = INr.Weight;// Edit ************************** Wednesday, July 9, 2014 at 11:37:01
+    if(POrw.Quant<=0)then begin
+			POrw.Volume = INr.Volume;// Edit ************************** Wednesday, July 9, 2014 at 11:37:02
+			POrw.Weight = INr.Weight;// Edit ************************** Wednesday, July 9, 2014 at 11:37:01
+  	end else begin
+  		POrw.Volume = INr.Volume*POrw.Quant;// Edit ************************** Wednesday, July 9, 2014 at 11:37:02
+			POrw.Weight = INr.Weight*POrw.Quant;// Edit ************************** Wednesday, July 9, 2014 at 11:37:01
+  	end;
   	POrw.AlternativeCode = INr.AlternativeCode; //Edit***************************Sasha2,13:54 06.11.2014
     if (pifound) then begin
       POrw.VEArtCode = PIr.VEItemCode;

@@ -38,6 +38,7 @@ external procedure SetPOFlags(record POVc,Boolean);
 external procedure GetFullCurncyRate (var string,Date,var val,var val,var val,var val,var val);
 external procedure GetSalesGroup(string,var string);
 external updating procedure UpdateStockResFromPO(record POVc,boolean);
+remote procedure POSumup(var record POVc);// Edit ************************** Tuesday, 7 April 2015 11:55:46
 
 procedure SetPOAcceptanceFlag(var record POVc POr,record POVc prevPOr,LongInt stat)
 begin
@@ -858,6 +859,24 @@ begin
       goto LPOVcRecordCheck;
     end;
   end;
+  
+  // Edit Start ---------------------------------------------- Edit Start
+	//Tuesday, 7 April 2015 11:57:41
+	
+  rwcnt = matrowcnt(POr);
+  For(i=0;i<rwcnt;i=i+1) begin
+  	MatRowGet(POr,i,POrw);
+	  INr.Code = POrw.ArtCode;
+  		if(readfirstmain(INr,1,true))then begin
+  			POrw.Volume = INr.Volume * POrw.Quant;// Edit ************************** Wednesday, July 9, 2014 at 11:37:02
+				POrw.Weight = INr.Weight * POrw.Quant;// Edit ************************** Wednesday, July 9, 2014 at 11:37:01
+  		end;
+  	MatRowPut(POr,i,POrw);
+	end; 
+  POSumup(POr);
+  
+	// Edit End ---------------------------------------------- Edit End
+	
   oldnr = POr.SerNr;
   if (POr.SerNr<=0) then begin
     newnr = GetCurUserLastNr("POVc");
