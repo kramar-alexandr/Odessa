@@ -387,8 +387,9 @@ begin
   WindowBegin("Определите отчет по оплатам кассовых сч/ф",POSPaymentsRClass,CGRcW,RcType);
   SetWRect(20,80,400,320);
   vs = 20; h = 120;
-
-  EditFieldTL(h,v+=vs,100,"Дата",M4Date,Normal,41,RegDate,false,PasteCurDate);
+	
+	PeriodField(h,v=6,"Период");
+  //EditFieldTL(h,v+=vs,100,"Дата",M4Date,Normal,41,RegDate,false,PasteCurDate);
   EditFieldTL(h,v+=vs,100,"Лок.машина",M4UStr,Normal,41,f1,false,LocalMachineSClass);
 
   EndWindow;
