@@ -891,7 +891,18 @@ window ExpItemsBarCodesEClass:1
   wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
 begin
 	real h,h2,h3,h4,v,v1,vm,vs,v2,temp;
-  WindowBegin("ќкспорт товаров в CSV",ExpItemsBarCodesEClass,CGEcW,RcType);
+  WindowBegin("ќкспорт товаров в CSV розница",ExpItemsBarCodesEClass,CGEcW,RcType);
+		SetWRect(20,80,400,470);
+		h = 100;
+
+  EndWindow;
+end;
+
+window ExpItemsBarCodesOptEClass:1
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+	real h,h2,h3,h4,v,v1,vm,vs,v2,temp;
+  WindowBegin("ќкспорт товаров в CSV опт",ExpItemsBarCodesOptEClass,CGEcW,RcType);
 		SetWRect(20,80,400,470);
 		h = 100;
 
