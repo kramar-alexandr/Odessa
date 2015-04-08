@@ -567,6 +567,65 @@ BEGIN
   RETURN;
 END;
 
+// Edit Start ---------------------------------------------- Edit Start
+	//Wednesday, 8 April 2015 09:41:38
+	
+global updating procedure UpdatePIVcRecord(record POVc POr)
+begin
+	row POVc POrw;
+	record PIVc PIr;
+	integer i,mtrw;
+	
+	mtrw = matrowcnt(POr);
+	For(i=0;i<mtrw;i=i+1) begin
+		matrowget(POr,i,POrw);
+		if(nonblank(POrw.ArtCode) and POrw.Price>0)then begin
+			PIr.ItemCode = POrw.ArtCode;
+			PIr.VECode = POr.VECode;
+			PIr.Location = "";
+			If(readfirstmain(PIr,3,true))then begin
+				if(PIr.LastOrder>=POr.SerNr)then begin
+					PIr.CurncyCode = POr.CurncyCode;
+					PIr.PurPrice = POrw.Price;
+					PIr.LastChange = POr.TransDate;
+					PIr.LastOrder = POr.SerNr;
+					RecordStore(PIr,true);
+				end;
+			end else begin
+				RecordNew(PIr);
+				PIr.ItemCode = POrw.ArtCode;
+				PIr.VECode = POr.VECode;
+				PIr.Location = "";
+				
+				PIr.Comment = POrw.Spec;
+				PIr.CurncyCode = POr.CurncyCode;
+				PIr.VEName = POr.Addr0;
+				PIr.PurPrice = POrw.Price;
+				PIr.LastChange = POr.TransDate;
+				PIr.LastOrder = POr.SerNr;
+				RecordStore(PIr,true);
+			end;
+		end;
+	end; 
+
+return;
+end;
+
+global updating procedure UpdateinAllPIrMn(record RcVc RepSpec)
+begin
+	record POVc POr;
+	
+	while(loopmain(POr,1,true))begin
+		if(POr.OKFlag>0)then begin
+			UpdatePIVcRecord(POr);
+		end;
+	end;
+	
+return;
+end;
+
+	// Edit End ---------------------------------------------- Edit End
+	
 updating procedure UpdateIntOrderFromPO(record POVc POp,record POVc PO2p)
 BEGIN
   Integer i,rwcnt;
@@ -642,7 +701,9 @@ BEGIN
   UpdateVARItemsPO(POr);
   if (POr.OKFlag!=0) then begin
     AssignStockResFromPO(POr);
+    UpdatePIVcRecord(POr);// Edit ************************** Wednesday, 8 April 2015 09:20:59
   end;
+  
   
   //RecalculateActOkFlag(POr);	//Edit----------------------Dima  12.03.2015
   
@@ -664,6 +725,7 @@ BEGIN
   UpdateVARItemsPO(POr);
   if ((POr.OKFlag!=0) and (PO2r.OKFlag==0)) then begin
     AssignStockResFromPO(POr);
+    UpdatePIVcRecord(POr);// Edit ************************** Wednesday, 8 April 2015 09:20:59
   end;
   UpdateStockResFromPO(POr,POr.Closed);
   switch (POr.AcceptanceStatus) begin

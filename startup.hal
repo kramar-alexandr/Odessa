@@ -107,6 +107,9 @@ begin
 	Maintenance("Recalculate ORVc.CustomStatusFlagText",MyVClass,RecalculatePOVC_CustomStatusFlagText_Mn,modDBMain);	//Edit----------------------Dima  24.03.2015
 	
 	Maintenance("Fix Prepayment",MyVClass,FixPrepaymentMn,modDBMain);	//Edit----------------------Dima  24.03.2015
+	
+	Maintenance("Заполнить товары поставщиков",MyVClass,UpdateinAllPIrMn,modDBMain);	//Edit----------------------Dima  24.03.2015
+	
 	Maintenance("Заменить таблицу скидок для категории",ChangeCUCategoryVClass,ChangeCUCategoryMn,modSL);	//Edit----------------------Dima  27.03.2015
 	Maintenance("Заполнить отсутствующие названия в регистре \"Цены\"",MyVClass,FillCommentsInPricesMn,modDI);	//Edit----------------------Dima  06.04.2015
 

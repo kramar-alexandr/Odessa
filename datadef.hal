@@ -3183,7 +3183,94 @@ RecordBegin(IPVc,-,"");
   KeySegment(Printer);
   KeySegment(Code);
   EndRecord;
+	
+	RecordBegin(PIVc,-,"pi2");
+  RecordField(ItemCode,M4Code,20,INVc);
+  RecordField(VECode,M4Code,20,VEVc);
+  RecordField(VEItemCode,M4Str,20,0);
+/* kexx 970101, changed size from 40 to 60, need to test!! */
+  RecordField(Comment,M4Str,60,0);
+  RecordField(PurPrice,M45Val,0,0);
+  RecordField(DefaultChoice,M4Mark,0,0);
+  RecordField(VEName,M4Str,60,0);
+  RecordField(Math,M4Matrix,0,0);
+  RecordField(NormPOQty,M4Qty,0,0);
+  RecordField(MinPOQty,M4Qty,0,0);
+  RecordField(Manufacturer,M4Code,20,VEVc);
+  RecordField(OrgCountry,M4Code,5,0);
+  RecordField(VendDefChoice,M4Int,0,0);
+  RecordField(PIFactor,M45Val,0,0);
+  RecordField(PurchaseCost,M4PrcStr,20,0);
+  RecordField(CurncyCode,M4Code,5,CurncyCodeVc);
+  RecordField(ExtraCaost,M4Val,0,0); /* What??? */
+  RecordField(Unit,M4Str,10,0); /* What??? */
+  RecordField(VEUnit,M4Str,10,0);
+  RecordField(PlannedDelDays,M4UVal,0,0);
+  RecordField(SalesGroup,M4Code,5,SalesGroupVc);
+  FieldIsGroup(SalesGroup);
+  RecordField(SalesMan,M4Code,10,UserVc);
+  FieldIsUser(SalesMan);
+  RecordField(Location,M4Code,10,LocationVc);
+//  FieldIsLocation(Location);
+  RecordField(DefStockType,M4Set,359,0);
+  RecordField(LastChange,M4Date,0,0);// Edit ************************** Wednesday, 8 April 2015 09:19:05
+  RecordField(LastOrder,M4Long,0,0);// Edit ************************** Wednesday, 8 April 2015 09:19:05
+  ArrayBegin(Math,-,1);
+  ArrayField(Text,M4Str,100,0);
+  EndArray;
+  MainKeyBegin(MainKey,1);
+  StoreInBaseKey;
+  AppendFieldToKeyName(SalesGroup);
+  AppendFieldToKeyName(SalesMan);
+  KeySegment(ItemCode);
+  KeySegment(Location);
+  KeySegment(VECode);
+  KeySegment(VEItemCode);
   
+  SubsetKeyBegin2(Vendor);
+  StoreInBaseKey;
+  AppendFieldToKeyName(SalesGroup);
+  AppendFieldToKeyName(SalesMan);
+  KeySegment(VECode);
+  KeySegment(ItemCode);
+  KeySegment(Location);
+  KeySegment(VEItemCode);
+  SubsetKeyBegin2(VEItemCode);
+  StoreInBaseKey;
+  AppendFieldToKeyName(SalesGroup);
+  AppendFieldToKeyName(SalesMan);
+  KeySegment(VEItemCode);
+  KeySegment(VECode);
+  KeySegment(ItemCode);
+  KeySegment(Location);
+  SubsetKeyBegin2(DefaultChoice);
+  StoreInBaseKey;
+  AppendFieldToKeyName(SalesGroup);
+  AppendFieldToKeyName(SalesMan);
+  KeySegment(DefaultChoice);
+  KeySegment(ItemCode);
+  KeySegment(Location);
+  KeySegment(VECode);
+  KeySegment(VEItemCode);
+  SubsetKeyBegin2(Comment);
+  StoreInBaseKey;
+  AppendFieldToKeyName(SalesGroup);
+  AppendFieldToKeyName(SalesMan);
+  KeySegment(Comment);
+  KeySegment(ItemCode);
+  KeySegment(Location);
+  KeySegment(VECode);
+  KeySegment(VEItemCode);
+
+  SubsetKeyBegin2(Location);
+  StoreInBaseKey;
+  AppendFieldToKeyName(SalesGroup);
+  AppendFieldToKeyName(SalesMan);
+  KeySegment(Location);
+  KeySegment(ItemCode);
+  KeySegment(VECode);
+  KeySegment(VEItemCode);
+  EndRecord;  
       	  	
 return;
 end;
