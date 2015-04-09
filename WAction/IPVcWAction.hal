@@ -969,19 +969,21 @@ end;
 global
 updating procedure OPExpandOPDsm()	//Edit----------------------Dima  25.03.2015
 BEGIN
-  Integer wn,insertmode,updatemode,rownr;
+  Integer wn,insertmode,updatemode,normalmode,rownr;
   record OPVc OPr;
   
   wn = CurWindow;
+  normalmode = 0;//Rs_normal		//Edit----------------------Dima  09.04.2015
   insertmode = 1;
   updatemode = 2;
-  if ((WindowState(wn)==updatemode) or (WindowState(wn)==insertmode)) then begin
+  if ((WindowState(wn)==updatemode) or (WindowState(wn)==insertmode) or (WindowState(wn)==normalmode)) then begin
     rownr = WindowActiveRow(wn);
     DeselectWindow(wn,true);
     GetWindowRecord(wn,OPr);
     if (rownr<0) then begin
       rownr = MatRowCnt(OPr)-1;
     end;
+
     OPExpandPay(OPr,rownr);
     PutWindowRecord(wn,OPr);
   end;  
