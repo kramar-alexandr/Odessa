@@ -93,6 +93,9 @@ begin
 	 
    
   Maintenance("Экспорт склада CSV",ExportStockCSVClass,ExportStockCSVMn,modSY);
+  Maintenance("Экспорт CSV для мобильного",MyVClass,ExportAllItems,modSY);	//Edit----------------------Dima  24.03.2015
+
+  
   Maintenance("Пересчитать значение объема в карточке товара",RecalcINVolumeClass,RecalcINVolumeMn,modDBMain);//Edit***************************Sasha2,13:50 24.06.2014
   Maintenance("Gigient to IN",MyVClass,FillINFromGigieneMn,modDBMain); //Edit***************************Sasha2,16:21 20.10.2014
   Maintenance("Удалить накопительные карточки",MyVClass,DelLoyaltyCardMn,modDBMain); //Edit***************************Sasha2,16:21 20.10.2014
@@ -128,7 +131,6 @@ begin
 	
 	Export("ExxportIN",CashInvCroEClass,ExpRegINEn,modDBMain);
 	
-	Maintenance("ExportItems to CSV",MyVClass,ExportAllItems,modDBMain);	//Edit----------------------Dima  24.03.2015
 	
 	Document("Наклейки штрихкодов из поступления 5*13" ,LabelItem9RClass,ItemLabForm9,MyLabelItemFClass,modIN); //Edit***************************Sasha2,12:08 23.10.2014
    

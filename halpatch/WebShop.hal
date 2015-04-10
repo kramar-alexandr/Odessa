@@ -8,7 +8,7 @@ external procedure ORSumup(var record ORVc);
 external function Boolean ORDchrsum(var record ORVc,Integer);
 external procedure ExtractObjWithSeparator(string,string,Boolean,var Integer,var string); //Edit***************************Sasha2,11:03 14.01.2015
 external procedure ORVc_PasteCurncyCode(var record ORVc,string);	//Edit--------------------Dima 23.01.2015
-
+external procedure ExportAllItems(record RepSpec);// Edit ************************** Thursday, 9 April 2015 15:35:46
 
 SetLangMode(LangRussian,"RUS",0);
 
@@ -49,6 +49,7 @@ begin
     if (curtnew==t1 or curtnew==t2 or curtnew==t3 or curtnew==t4) then begin
     	LogText(0,"CustTimeTableAction at planned time: " & curtnew);
     	ExportStockCSVMn(RepSpec);
+    	ExportAllItems(RepSpec);
     end;  
     
 return;
