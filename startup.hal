@@ -128,6 +128,7 @@ begin
 	
 	Import("€мпорт Accss",INImportIClass,ImpAccss,modDBMain);
 	Import("€мпорт user",INImportIClass,ImpUser,modDBMain);
+	Import("€мпорт Item/Classification",INImportIClass,ImportNewItemsWithClassIn,modDBMain); //Edit***************************Sasha2,10:26 16.04.2015
 	
 	Export("ExxportIN",CashInvCroEClass,ExpRegINEn,modDBMain);
 	
