@@ -28,6 +28,7 @@ begin
   Setting("Cуточные возмещения",DALClass,modCL);
   Setting("Места",PosLClass,modIN);
   Setting("Производство",ProdLClass,modIN);	//Edit----------------------Dima  31.03.2015
+  Setting("Стандартные коробки",StandBoxesLClass,modIN); //Edit***************************Sasha2,14:51 16.04.2015
   
   Report("Журнал суточных возмещений",DAJRClass,DAJRn,0,modCL);
   Report("Журнал авансовых отчетов",ExpJRClass,ExpRn,0,modCL);

@@ -3271,6 +3271,17 @@ RecordBegin(IPVc,-,"");
   KeySegment(VECode);
   KeySegment(VEItemCode);
   EndRecord;  
+  
+  RecordBegin(StandBoxesVc,-,""); //Edit***************************Sasha2,14:40 16.04.2015 {
+  RecordField(Code,M4Code,20,0);
+  RecordField(Name,M4Str,100,0);
+  RecordField(Length,M4UVal,0,0);
+  RecordField(Width,M4UVal,0,0);
+  RecordField(Height,M4UVal,0,0);
+  RecordField(Weight,M45Val,0,0);
+  MainKeyBegin(Code,0);
+  KeySegment(Code);
+  EndRecord; //Edit***************************Sasha2,14:40 16.04.2015 }
       	  	
 return;
 end;

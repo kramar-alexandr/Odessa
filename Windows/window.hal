@@ -923,3 +923,44 @@ WindowBegin("Заменить таблицу скидок",ChangeCUCategoryVClass,CGMnt,RcType);
   EndWindow;
 end;
 
+window StandBoxesDClass:1 //Edit***************************Sasha2,15:01 16.04.2015 {
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  real h,h1,h2,h3,h4,h5,h6,v,vm,vs;
+  WindowBegin("Стандартная коробка",StandBoxesDClass,CGview,-);
+  SetWRect(20,80,600,400);
+  //Sizeable(-1,-1,-1,0);
+  DynamicWindow;
+  UseView(StandBoxesVc);
+  v = 6; vs = 20; h = 100; h1 = 300; h2 = 385; h3 = 395; h4 = 285; h5 = 433;
+  EditField(h,v, 150,"Код",Normal,Code,false,0);
+  EditField(h,v+=vs,-40,"Название",Normal,Name,false,0);
+  v = v + vs;
+  EditField(h,v+=vs, 150,"Длина",Normal,Length,false,0);
+  EditField(h2,v, 150,"Макс.вес",Normal,Weight,false,0);
+  EditField(h,v+=vs, 150,"Ширина",Normal,Width,false,0);
+  EditField(h,v+=vs, 150,"Высота",Normal,Height,false,0);
+  EndWindow;
+end; //Edit***************************Sasha2,15:01 16.04.2015 }
+
+window StandBoxesLClass:1	//Edit***************************Sasha2,14:44 16.04.2015 {
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  real h,h1,h2,h3,h4,h5,h6,v,vm,vs;
+  WindowBegin("Стандарные коробки",StandBoxesLClass,CGmlist,-);
+  SpawnClass(StandBoxesDClass);
+  SetWRect(64,80,740,298);
+  Sizeable(-1,-1,0,0);
+  UseView(StandBoxesVc);
+  RecordList(4,17,-21,-39);
+  RlColKey(4,4,"Код",Code,false,Code);
+  RlCol(111,111,"Название",Name,true);
+  RlCol(-340,-340,"Длина",Length,true);
+  RlCol(-260,-260,"Ширина",Width,true,);
+  RlCol(-180,-180,"Высота",Height,true);
+  RlCol(-100,-100,"Макс.вес",Weight,true);
+  SearchField("Найти");
+ 
+  EndWindow;
+end; //Edit***************************Sasha2,14:44 16.04.2015 }
+
