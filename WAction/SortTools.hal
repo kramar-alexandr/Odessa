@@ -65,7 +65,7 @@ BEGIN
   Integer wn,rwcnt,i;
 
   wn = CurWindow;
-
+	DeselectWindow(wn,false);
 	GetWindowRecord(wn,ORr);
 
 	if (ORr.OKFlag==1 ) then begin
