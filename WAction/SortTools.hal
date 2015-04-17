@@ -172,6 +172,7 @@ BEGIN
 	integer wn;
 
   wn = CurWindow;
+  DeselectWindow(wn,false);
 	GetWindowRecord(wn,SMr);
 
 	if ((SMr.OKFlag==1) or (SMr.OrdFlag==1) or (SMr.SentOKFlag==1)) then begin
@@ -195,6 +196,7 @@ BEGIN
 	integer wn;
 
   wn = CurWindow;
+  DeselectWindow(wn,false);
 	GetWindowRecord(wn,SMr);
 
 	if ((SMr.OKFlag==1) or (SMr.OrdFlag==1) or (SMr.SentOKFlag==1)) then begin
