@@ -1,0 +1,99 @@
+
+global
+updating function LongInt PackListVcRecordCheck(var record PackListVc PackListr,record PackListVc PackList2r,LongInt stat,LongInt check)
+begin
+  LongInt res,error;
+  row PackListVc PackListrw;
+  integer rwcnt,i;
+  
+  res = 0;
+  if (PackListr.SerNr==-1) then begin
+    PackListr.SerNr = NextSerNr("PackListVc",CurrentDate,-1,false,"");
+  end;
+  
+  rwcnt = MatRowCnt(PackListr);
+  for (i=0;i<rwcnt;i=i+1) begin
+    MatRowGet(PackListr,i,PackListrw);
+    if (NonBlank(PackListrw.Code)) then begin
+      if (PackListrw.Volume==0) then begin
+        res = -1;
+        RecordCheckError(1854,PackListrw.Volume,i,"Volume");
+        goto LPackListVcRecordCheck;
+      end;
+      if (PackListrw.Weight==0) then begin
+        res = -1;
+        RecordCheckError(1854,PackListrw.Weight,i,"Weight");
+        goto LPackListVcRecordCheck;
+      end;
+    end;
+  end;
+ 
+ LPackListVcRecordCheck:;
+ 
+  PackListVcRecordCheck = res;
+  return;
+end;
+
+global
+function LongInt PackListVcRecordDefaults(var record PackListVc PackListr,record PackListVc PackList2r,LongInt stat,LongInt long4)
+begin
+  LongInt res;
+      
+  PackListr.SerNr = -1;
+
+  PackListVcRecordDefaults = res; 
+  return;
+end;
+
+global
+function LongInt PackListVcRecordDuplicate(var record PackListVc PackListr,record PackListVc PackList2r,LongInt stat,LongInt long4)
+begin
+  LongInt res;
+
+  PackListr.SerNr = -1;
+  
+  PackListVcRecordDuplicate = res; 
+  return;
+end;
+
+global
+updating function LongInt  PackListVcRecordSave(var record PackListVc PackListr,record PackListVc PackList2r,LongInt stat,LongInt long4)
+begin
+  LongInt res;
+
+  PackListVcRecordSave = res; 
+  
+  return;
+end;
+
+global
+updating function LongInt PackListVcRecordSaveAfter(var record PackListVc PackListr,record PackListVc PackList2r,LongInt stat,LongInt long4)
+begin
+  LongInt res;
+
+  PackListVcRecordSaveAfter = res; 
+  
+  return;
+end;
+
+global
+updating function LongInt PackListVcRecordUpdate(var record PackListVc PackListr,record PackListVc PackList2r,LongInt stat,LongInt long4)
+begin
+  LongInt res;
+
+  PackListVcRecordUpdate = res; 
+  
+  return;
+end;
+
+global
+updating function LongInt PackListVcRecordUpdateAfter(var record PackListVc PackListr,record PackListVc PackList2r,LongInt stat,LongInt long4)
+begin
+  LongInt res;
+
+  PackListVcRecordUpdateAfter = res; 
+  
+  return;
+end;
+
+

@@ -923,6 +923,22 @@ WindowBegin("Заменить таблицу скидок",ChangeCUCategoryVClass,CGMnt,RcType);
   EndWindow;
 end;
 
+
+window StandBoxesSClass:1 //Edit***************************Sasha2,16:30 16.04.2015 {
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  WindowBegin("Станд.коробка",StandBoxesSClass,CGslist,ACShortView);
+  SetWRect(240,80,550,250);
+  Sizeable(-1,-1,0,0);
+  UseView(StandBoxesVc);
+  SpawnClass(StandBoxesDClass);
+  RecordList(4,17,-21,-39);
+  RlColKey(4,4,  "Код",Code,false,Code);
+  RlCol(80,80,"Наименов.",Name,false);
+  SearchField("Найти");
+  EndWindow;
+end; //Edit***************************Sasha2,16:30 16.04.2015 }
+
 window StandBoxesDClass:1 //Edit***************************Sasha2,15:01 16.04.2015 {
   wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
 begin
@@ -937,8 +953,9 @@ begin
   EditField(h,v+=vs,-40,"Название",Normal,Name,false,0);
   v = v + vs;
   EditField(h,v+=vs, 150,"Длина",Normal,Length,false,0);
-  EditField(h2,v, 150,"Макс.вес",Normal,Weight,false,0);
+  EditField(h2,v, 150,"Объем",Normal,Volume,false,0);
   EditField(h,v+=vs, 150,"Ширина",Normal,Width,false,0);
+  EditField(h2,v, 150,"Макс.вес",Normal,Weight,false,0);
   EditField(h,v+=vs, 150,"Высота",Normal,Height,false,0);
   EndWindow;
 end; //Edit***************************Sasha2,15:01 16.04.2015 }
@@ -946,7 +963,6 @@ end; //Edit***************************Sasha2,15:01 16.04.2015 }
 window StandBoxesLClass:1	//Edit***************************Sasha2,14:44 16.04.2015 {
   wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
 begin
-  real h,h1,h2,h3,h4,h5,h6,v,vm,vs;
   WindowBegin("Стандарные коробки",StandBoxesLClass,CGmlist,-);
   SpawnClass(StandBoxesDClass);
   SetWRect(64,80,740,298);
@@ -954,11 +970,56 @@ begin
   UseView(StandBoxesVc);
   RecordList(4,17,-21,-39);
   RlColKey(4,4,"Код",Code,false,Code);
-  RlCol(111,111,"Название",Name,true);
-  RlCol(-340,-340,"Длина",Length,true);
-  RlCol(-260,-260,"Ширина",Width,true,);
-  RlCol(-180,-180,"Высота",Height,true);
-  RlCol(-100,-100,"Макс.вес",Weight,true);
+  RlCol(111,111,"Название",Name,false);
+  RlCol(-360,-360,"Длина",Length,false);
+  RlCol(-290,-290,"Ширина",Width,false,);
+  RlCol(-220,-220,"Высота",Height,false);
+  RlCol(-150,-150,"Объем",Volume,false);
+  RlCol(-70,-70,"Макс.вес",Weight,false);
+  SearchField("Найти");
+ 
+  EndWindow;
+end; //Edit***************************Sasha2,14:44 16.04.2015 }
+
+window PackListDClass:1 //Edit***************************Sasha2,15:01 16.04.2015 {
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  real h,h1,h2,h3,h4,h5,h6,v,vm,vs,pos;
+  WindowBegin("Пак-лист",PackListDClass,CGview,-);
+  SetWRect(20,80,800,400);
+  Sizeable(-1,-1,0,0);
+  //DynamicWindow;
+  UseView(PackListVc);
+  v = 6; vs = 20; h = 100; h1 = 300; h2 = 385; h3 = 395; h4 = 285; h5 = 433;
+  EditField(h,v, 100,"Код",Normal,SerNr,false,0);
+  EditField(h,v+=vs,-40,"Комментарий",Normal,Comment,false,0);
+  EditField(-150,-55,95,"Объем",ViewOnly ,TotVolume,true,0);
+  EditField(-150,-31,95,"Вес",ViewOnly ,TotWeight,true,0);
+  pos = 0;
+  MatrixBegin(h-80,v+=3*vs,-40,-60,-,99);
+  MatCol(1,24,"Код",0,Code,false,StandBoxesSClass);
+  MatCol(1,110,"Название",0,Name,false,0);
+  MatCol(1,pos=-400,"Длина",0,Length,false,0);
+  MatCol(1,pos+=70,"Ширина",0,Width,false,0);
+  MatCol(1,pos+=70,"Высота",0,Height,false,0);
+  MatCol(1,pos+=70,"Объем",0,Volume,false,0);
+  MatCol(1,pos+=70,"Макс.вес",0,Weight,false,0);
+  EndMatrix;
+  
+  EndWindow;
+end; //Edit***************************Sasha2,15:01 16.04.2015 }
+
+window PackListLClass:1	//Edit***************************Sasha2,14:44 16.04.2015 {
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  WindowBegin("Пак-листы",PackListLClass,CGmlist,-);
+  SpawnClass(PackListDClass);
+  SetWRect(64,80,500,298);
+  Sizeable(-1,-1,0,0);
+  UseView(PackListVc);
+  RecordList(4,17,-21,-39);
+  RlColKey(4,4,"Код",SerNr,false,SerNr);
+  RlCol(111,111,"Комментарий",Comment,false);
   SearchField("Найти");
  
   EndWindow;

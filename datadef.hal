@@ -3278,9 +3278,29 @@ RecordBegin(IPVc,-,"");
   RecordField(Length,M4UVal,0,0);
   RecordField(Width,M4UVal,0,0);
   RecordField(Height,M4UVal,0,0);
+  RecordField(Volume,M45Val,0,0);
   RecordField(Weight,M45Val,0,0);
   MainKeyBegin(Code,0);
   KeySegment(Code);
+  EndRecord; //Edit***************************Sasha2,14:40 16.04.2015 }
+  
+  RecordBegin(PackListVc,-,""); //Edit***************************Sasha2,14:40 16.04.2015 {
+  RecordField(SerNr,M4Long,0,0);
+  RecordField(Comment,M4Str,200,0);
+  RecordField(TotVolume,M45Val,0,0);
+  RecordField(TotWeight,M45Val,0,0);
+  RecordField(Math,M4Matrix,0,0);
+  ArrayBegin(Math,-,1);
+  ArrayField(Code,M4Code,20,0);
+  ArrayField(Name,M4Str,100,0);
+  ArrayField(Length,M4UVal,0,0);
+  ArrayField(Width,M4UVal,0,0);
+  ArrayField(Height,M4UVal,0,0);
+  ArrayField(Volume,M45Val,0,0);
+  ArrayField(Weight,M45Val,0,0);
+  EndArray;
+  MainKeyBegin(SerNr,0);
+  KeySegment(SerNr);
   EndRecord; //Edit***************************Sasha2,14:40 16.04.2015 }
       	  	
 return;
