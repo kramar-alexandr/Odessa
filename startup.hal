@@ -44,11 +44,7 @@ begin
   Export("Экспорт статистики продаж",ExpSalesStatClass,ExpSalesStatEn,modSL);// Edit ************************** Thursday, 26 February 2015 18:04:57
   Export("Экспорт товаров в CSV розница",ExpItemsBarCodesEClass,ExpItemsBarCodesEn,modSL);// Edit ************************** Thursday, 26 February 2015 18:04:57
 	Export("Экспорт товаров в CSV опт",ExpItemsBarCodesOptEClass,ExpItemsBarCodeOptsEn,modSL);// Edit ************************** Thursday, 26 February 2015 18:04:57
-	
-	Report("Экспорт статистики продаж",ExpSalesStatClass,ExpSalesStatEn,0,modSL);// Edit ************************** Thursday, 26 February 2015 18:04:57
-  Report("Экспорт товаров в CSV розница",ExpItemsBarCodesEClass,ExpItemsBarCodesEn,0,modSL);// Edit ************************** Thursday, 26 February 2015 18:04:57
-	Report("Экспорт товаров в CSV опт",ExpItemsBarCodesOptEClass,ExpItemsBarCodeOptsEn,0,modSL);// Edit ************************** Thursday, 26 February 2015 18:04:57
-	
+
   Setting("Поля, задаваемые пользователем - Товары",INUserLabelTClass,modSL);// Edit ************************** Thursday, 26 February 2015 18:04:55
   
    SString(24193,"К оплате");
