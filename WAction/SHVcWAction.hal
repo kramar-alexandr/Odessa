@@ -1,4 +1,4 @@
-remote procedure SHVc_PasteDelCountry(var record ORVc,string);
+remote procedure SHVc_PasteDelCountry(var record SHVc,string);
 remote function Boolean ReadFirstItem(string,var record INVc,Boolean,Boolean);
 remote procedure SHVc_PasteShip(var record SHVc,var Integer);
 external procedure WarnFutureDate(Boolean,Date);
@@ -17,6 +17,135 @@ remote procedure RefillShipment(var record SHVc,record SHVc);
 remote procedure SetDelAddr(string,string,var string,var string,var string,var string,var string,var string,var string,var string,var string,var string,var Integer,var string);
 remote updating procedure OkAllStockMovementsSHr(record RcVc);
 remote function string 20 FindCustRoute(string,string,string);
+external procedure SHVc_PastePackType(var record SHVc,string);	//Edit----------------------Dima  17.04.2015
+external procedure SH_RecalculateRowVolume(var record SHVc,integer);
+external procedure NP_SumUpRowVolumes(var record SHVc);
+external procedure NP_SumUpRowWeight(var record SHVc);
+remote updating procedure SHVcToPackListVc(var record SHVc);//Edit----------------------Dima  06.05.2015
+remote procedure NP_PasteSender(var record SHVc);
+remote procedure NP_PasteSenderWarehouseDesc(var record SHVc);
+remote procedure NP_PasteRecipientWarehouseDesc(var record SHVc);//Edit----------------------Dima  06.05.2015
+remote function string 255 NPGetDocumentStatusRequest(string);//Edit----------------------Dima  06.05.2015
+remote updating procedure NPCreateRequestMn(var record SHVc,var string);
+remote function boolean NPDeleteDocumentRequest(string );//Edit----------------------Dima  06.05.2015
+remote function boolean CheckENremote(record SHVc, var longint,var string);
+
+function boolean CheckEN(record SHVc SHr)
+begin
+	boolean res;
+  string 255 msg;
+  longint errcode;
+  
+  errcode = 0;
+  msg = "";
+
+	if (CheckENremote(SHr,errcode,msg)) then begin
+		res = true;
+	end else begin	
+		res = false;
+		MessageBox(errcode,msg);
+	end;
+	
+	CheckEN = res;
+	return;
+end;
+
+
+
+
+global
+updating procedure NPPrintENDsm()	//Edit by Victor 07.05.15
+begin
+  integer wn;
+  record SHVc SHr;
+  record RcVc RepSpec;
+  record ORVc ORr;
+  string 255  www;
+  record NPSettingsBlock NPSettingsb;
+  
+  wn = CurWindow;
+  GetWindowRecord(wn,SHr);
+
+	if (CheckEN(SHr)) then begin		//Edit----------------------Dima  06.05.2015  	
+	  	if(nonblank(SHr.NPDocumentRef)) then begin
+	  		BlockLoad(NPSettingsb); 
+				www = "http://my.novaposhta.ua/orders/printDocument/orders[]/" & SHr.NPDocumentRef & "/type/html/apiKey/" & NPSettingsb.APIkey;
+				OpenWebBrowser(www);
+				SHr.NPPrinted = 1;
+	  	end else begin
+	  		Messagebox(31057, "");
+	 		end;	
+
+  end;
+  PutWindowRecord(wn,SHr);
+  
+  return;
+end;
+
+global
+updating procedure NPPrintMarkENDsm()	//Edit by Victor 07.05.15
+begin
+  integer wn;
+  record SHVc SHr;
+  record RcVc RepSpec;
+  record ORVc ORr;
+  string 255  www;
+  record NPSettingsBlock NPSettingsb;
+  
+  
+  wn = CurWindow;
+  GetWindowRecord(wn,SHr);
+	if (CheckEN(SHr)) then begin
+	  	if(nonblank(SHr.NPDocumentRef))then begin
+	  		BlockLoad(NPSettingsb); 
+	  		www = "https://my.novaposhta.ua/orders/printMarkings/orders[]/" & SHr.NPDocumentRef & "/type/html/apiKey/" & NPSettingsb.APIkey;
+				OpenWebBrowser(www);
+				SHr.NPPrinted = 1;
+	  	end else begin
+				MessageBox(31057,"");	
+			end;
+  end;
+  PutWindowRecord(wn,SHr);
+  
+  return;
+end;
+
+global
+updating procedure NPCreateENDsm()	//Edit by Victor 28.04.15
+begin
+  integer wn;
+  record SHVc SHr;
+  record RcVc RepSpec;
+	record ORVc ORr;
+  integer cashOnDelivery,prepayment;
+  string 255 errors, www;
+  record NPSettingsBlock NPSettingsb;
+  
+  cashOnDelivery = 1;
+  prepayment = 0;
+  
+  wn = CurWindow;
+  GetWindowRecord(wn,SHr);
+	
+	if (CheckEN(SHr)) then begin
+	  	NPCreateRequestMn(SHr,errors);
+//if(nonblank(SHr.NPDocumentRef))then begin
+	  	//	BlockLoad(NPSettingsb); 
+//	  		www = "https://my.novaposhta.ua/orders/printMarkings/orders[]/" & SHr.NPDocumentRef & "/type/html/apiKey/" & NPSettingsb.APIkey;
+	  		//www = "http://my.novaposhta.ua/orders/printDocument/orders[]/" & SHr.NPDocumentRef & "/type/html/apiKey/" & NPSettingsb.APIkey;
+			//	OpenWebBrowser(www);
+	  //	end;
+ 	
+	  	if (nonblank(errors)) then begin	//NewPost's response
+				MessageBox(0,errors);
+			end;
+			
+  end;
+  
+  PutWindowRecord(wn,SHr);
+  
+  return;
+end;
 
 global //Edit***************************Sasha2,12:00 22.01.2015 {
 updating procedure OrderedToShipSHDsm()
@@ -40,6 +169,69 @@ begin
 
 	return;
 end; //Edit***************************Sasha2,12:00 22.01.2015 }
+
+
+
+global updating
+procedure  ShowPackListSHDsm()	//Edit----------------------Dima  06.05.2015
+begin
+	integer wn,nwn;
+	record SHVc SHr;
+	record PackListVc PListr;
+
+	wn = CurWindow;
+	GetWindowRecord(wn,SHr);
+	DeselectWindow(wn,false);
+  SHVcToPackListVc(SHr);
+  PListr.SerNr = SHr.SerNr;
+  if (ReadFirstMain(PListr,1,true)) then begin
+  	nwn = OpenWindow("PackListDClass",0,wn,"","",PListr);
+  end;
+  
+end;
+
+
+
+global 
+procedure  NPGetDocStatusDsm()	//Edit----------------------Dima  06.05.2015
+begin
+	integer wn,nwn;
+	string 255 msg;
+	record SHVc SHr;
+	
+	integer i,rwcnt;
+	row SHVc SHrw;
+
+	wn = CurWindow;
+	GetWindowRecord(wn,SHr);
+  if (nonblank(SHr.NPIntDocNumber)) then begin
+  	msg = NPGetDocumentStatusRequest(SHr.NPIntDocNumber);
+  	MessageBox(0,msg);
+  end; 
+end;
+
+global 
+procedure  NPDeleteENDsm()	//Edit----------------------Dima  06.05.2015
+begin
+	integer wn,nwn;
+	string 255 msg;
+	record SHVc SHr;
+	
+	integer i,rwcnt;
+	row SHVc SHrw;
+
+	wn = CurWindow;
+	GetWindowRecord(wn,SHr);
+  if (nonblank(SHr.NPIntDocNumber)) then begin
+		if (NPDeleteDocumentRequest(SHr.NPDocumentRef)) then begin
+			SHr.NPIntDocNumber = "";
+			SHr.NPCostOnSite = "";
+			SHr.NPDocumentRef = "";
+			PutWindowrecord(wn,SHr);
+		end;
+  end; 
+end;
+
 
 procedure SHChangeShip(record SHVc SHr,Integer rownr)
 BEGIN
@@ -455,12 +647,112 @@ begin
 
   if (changedf) then begin  
     GetWindowRecord(wn,SHr);
-    SHVc_PasteDelCountry(SHr,WindEFstr(wn))
+    SHVc_PasteDelCountry(SHr,WindEFstr(wn));
     PutWindowRecord(wn,SHr);
   end;
   SHDClassDelCountryEFAfter = true;
   return;
 end;
+
+
+function Boolean SHDClassNPPackTypeEFAfter(Integer wn,Boolean changedf,string fieldname)	//Edit----------------------Dima  17.04.2015
+begin  
+  record SHVc SHr;
+
+  if (changedf) then begin  
+    GetWindowRecord(wn,SHr);
+    SHVc_PastePackType(SHr,fieldname);
+    PutWindowRecord(wn,SHr);
+  end;
+  SHDClassNPPackTypeEFAfter = true;
+  return;
+end;	
+
+
+
+function Boolean SHDClassNPSizesEFAfter(Integer wn,Boolean changedf,string fieldname)	//Edit----------------------Dima  17.04.2015
+begin  
+  record SHVc SHr;
+  integer number;
+  
+  number = StringToInt(Right(fieldname,1));
+
+  if (changedf) then begin  
+    GetWindowRecord(wn,SHr);
+    SH_RecalculateRowVolume(SHr,number);
+    PutWindowRecord(wn,SHr);
+  end;
+  SHDClassNPSizesEFAfter = true;
+  return;
+end;
+
+
+function Boolean SHDClassNPVolumeEFAfter(Integer wn,Boolean changedf)	//Edit----------------------Dima  17.04.2015
+begin  
+  record SHVc SHr;
+//MessageBox(0,"SHDClassNPVolumeEFAfter");
+  if (changedf) then begin  
+    GetWindowRecord(wn,SHr);
+   // MessageBox(0,"then");
+    NP_SumUpRowVolumes(SHr);
+    PutWindowRecord(wn,SHr);
+  end;
+  SHDClassNPVolumeEFAfter = true;
+  return;
+end;	
+
+function Boolean SHDClassNPWeightEFAfter(Integer wn,Boolean changedf)	//Edit----------------------Dima  17.04.2015
+begin  
+  record SHVc SHr;
+
+  if (changedf) then begin  
+    GetWindowRecord(wn,SHr);
+    NP_SumUpRowWeight(SHr);
+    PutWindowRecord(wn,SHr);
+  end;
+  SHDClassNPWeightEFAfter = true;
+  return;
+end;	
+
+function Boolean SHDClassNPSenderEFAfter(Integer wn,Boolean changedf)	//Edit----------------------Dima  24.04.2015
+begin  
+  record SHVc SHr;
+
+  if (changedf) then begin  
+    GetWindowRecord(wn,SHr);
+    NP_PasteSender(SHr);
+    PutWindowRecord(wn,SHr);
+  end;
+  SHDClassNPSenderEFAfter = true;
+  return;
+end;
+
+function Boolean SHDClassSenderWarehouseEFAfter(Integer wn,Boolean changedf)	//Edit----------------------Dima  24.04.2015
+begin  
+  record SHVc SHr;
+
+  if (changedf) then begin  
+    GetWindowRecord(wn,SHr);
+    NP_PasteSenderWarehouseDesc(SHr);
+    PutWindowRecord(wn,SHr);
+  end;
+  SHDClassSenderWarehouseEFAfter = true;
+  return;
+end;
+
+function Boolean SHDClassRecipientWarehouseEFAfter(Integer wn,Boolean changedf)	//Edit----------------------Dima  24.04.2015
+begin  
+  record SHVc SHr;
+
+  if (changedf) then begin  
+    GetWindowRecord(wn,SHr);
+    NP_PasteRecipientWarehouseDesc(SHr);
+    PutWindowRecord(wn,SHr);
+  end;
+  SHDClassRecipientWarehouseEFAfter = true;
+  return;
+end;
+
 
 global
 function Boolean SHDClassAfterEditField(Integer wn,string fieldname,Integer fn, Integer rownr,Integer changed)
@@ -482,6 +774,39 @@ BEGIN
     case "PosCode": res = SHDClassPosCodeEFAfter(wn,rownr,changed);
     case "ShipMode": res = SHDClassShipModeEFAfter(wn,changed!=0);
     case "DelCountry": res = SHDClassDelCountryEFAfter(wn,changed!=0);
+    case "NPPackType1" : res = SHDClassNPPackTypeEFAfter(wn,changed,fieldname);	//Edit----------------------Dima  17.04.2015
+    case "NPPackType2" : res = SHDClassNPPackTypeEFAfter(wn,changed,fieldname);
+    case "NPPackType3" : res = SHDClassNPPackTypeEFAfter(wn,changed,fieldname);
+    case "NPPackType4" : res = SHDClassNPPackTypeEFAfter(wn,changed,fieldname);
+    case "NPPackType5" : res = SHDClassNPPackTypeEFAfter(wn,changed,fieldname);	
+    case "NPLength1" : res = SHDClassNPSizesEFAfter(wn,changed,fieldname); 
+    case "NPLength2" : res = SHDClassNPSizesEFAfter(wn,changed,fieldname);
+    case "NPLength3" : res = SHDClassNPSizesEFAfter(wn,changed,fieldname);
+    case "NPLength4" : res = SHDClassNPSizesEFAfter(wn,changed,fieldname);
+    case "NPLength5" : res = SHDClassNPSizesEFAfter(wn,changed,fieldname); 
+    case "NPWidth1" : res = SHDClassNPSizesEFAfter(wn,changed,fieldname);
+    case "NPWidth2" : res = SHDClassNPSizesEFAfter(wn,changed,fieldname);
+    case "NPWidth3" : res = SHDClassNPSizesEFAfter(wn,changed,fieldname);
+		case "NPWidth4" : res = SHDClassNPSizesEFAfter(wn,changed,fieldname);
+		case "NPWidth5" : res = SHDClassNPSizesEFAfter(wn,changed,fieldname);
+		case "NPHeight1" : res = SHDClassNPSizesEFAfter(wn,changed,fieldname);
+		case "NPHeight2" : res = SHDClassNPSizesEFAfter(wn,changed,fieldname);
+		case "NPHeight3" : res = SHDClassNPSizesEFAfter(wn,changed,fieldname);
+		case "NPHeight4" : res = SHDClassNPSizesEFAfter(wn,changed,fieldname);
+		case "NPHeight5" : res = SHDClassNPSizesEFAfter(wn,changed,fieldname);		
+		case "NPRowVolume1" : res = SHDClassNPVolumeEFAfter(wn,changed);	
+		case "NPRowVolume2" : res = SHDClassNPVolumeEFAfter(wn,changed);
+		case "NPRowVolume3" : res = SHDClassNPVolumeEFAfter(wn,changed);
+		case "NPRowVolume4" : res = SHDClassNPVolumeEFAfter(wn,changed);
+		case "NPRowVolume5" : res = SHDClassNPVolumeEFAfter(wn,changed);	
+		case "NPRowWeight1" : res = SHDClassNPWeightEFAfter(wn,changed);
+		case "NPRowWeight2" : res = SHDClassNPWeightEFAfter(wn,changed);
+		case "NPRowWeight3" : res = SHDClassNPWeightEFAfter(wn,changed);
+		case "NPRowWeight4" : res = SHDClassNPWeightEFAfter(wn,changed);
+		case "NPRowWeight5" : res = SHDClassNPWeightEFAfter(wn,changed);
+		case "NPSender" : res = SHDClassNPSenderEFAfter(wn,changed);
+		case "NPSenderWarehouse" : res = SHDClassSenderWarehouseEFAfter(wn,changed);
+		case "NPRecipientWarehouse" : res = SHDClassRecipientWarehouseEFAfter(wn,changed);		//Edit----------------------Dima  20.04.2015
   end;
   SHDClassAfterEditField = res;
   RETURN;
@@ -688,6 +1013,46 @@ BEGIN
   RETURN;
 END;
 
+
+
+global
+function Boolean SHDClassNPPrintedButtonAction(Integer wn,Integer value)		//Edit----------------------Dima  08.05.2015
+BEGIN
+  Boolean res;
+  record SHVc SHr;
+  
+  res = false;
+  
+   switch (WindowState(wn)) begin
+  	case Rs_normal: 
+    		GetWindowRecord(wn,SHr);
+      	if (SHr.OKFlag==0 and (SHr.NPPrinted>0)) then begin				//user shoudn't click "unOked" NPPrinted button, he only can "unOk" this button
+					if (UserCanAction("AllowEditSHNewPost",false)) then begin
+    		    res = true;
+    		  end;
+				end;    		
+		case Rs_update:
+    		GetPrevWindowRecord(wn,SHr);
+      	if (SHr.OKFlag==0 and (SHr.NPPrinted>0)) then begin				//user shoudn't click "unOked" NPPrinted button, he only can "unOk" this button
+					if (UserCanAction("AllowEditSHNewPost",false)) then begin
+    		    res = true;
+    		  end;
+				end;    		
+   end;
+ /* 
+  if (WindowState(wn)==Rs_normal or WindowState(wn)==Rs_update) then begin
+  
+      if (SHr.OKFlag==0 and (SHr.NPPrinted>0)) then begin				//user shoudn't click "unOked" NPPrinted button, he only can "unOk" this button
+				if (UserCanAction("AllowEditSHNewPost",false)) then begin
+    	    res = true;
+    	  end;
+			end;
+  end;	
+ */ 	
+  SHDClassNPPrintedButtonAction = res;
+  RETURN;
+END;
+
 global
 function Boolean SHDClassActiveEditField(Integer wn,string fieldname,Integer fn,Integer wnst,Integer rownr,Integer changed)
 BEGIN
@@ -762,6 +1127,42 @@ BEGIN
       end;
     end;
   end;
+  
+  if (res) then begin			//Edit----------------------Dima  08.05.2015
+  	if (SHr.NPPrinted==0) then begin
+		  switch (fieldname) begin
+        case "NPSender":
+          if (UserCanAction("AllowEditSHNewPost",false)==false) then begin res = false; end;
+        case "NPCitySender":
+          if (UserCanAction("AllowEditSHNewPost",false)==false) then begin res = false; end;
+        case "NPSenderWarehouse":
+          if (UserCanAction("AllowEditSHNewPost",false)==false) then begin res = false; end;
+        case "NPContactSender":
+          if (UserCanAction("AllowEditSHNewPost",false)==false) then begin res = false; end;
+        case "NPSendersPhone":
+          if (UserCanAction("AllowEditSHNewPost",false)==false) then begin res = false; end;
+        case "NPPayer":
+          if (UserCanAction("AllowEditSHNewPost",false)==false) then begin res = false; end;
+        case "NPPaymentMethod":
+          if (UserCanAction("AllowEditSHNewPost",false)==false) then begin res = false; end;
+        case "NPServiceType":
+          if (UserCanAction("AllowEditSHNewPost",false)==false) then begin res = false; end;
+        case "NPBackDeliveryType":
+          if (UserCanAction("AllowEditSHNewPost",false)==false) then begin res = false; end;
+        case "NPBackDeliveryPayer":
+          if (UserCanAction("AllowEditSHNewPost",false)==false) then begin res = false; end;
+        case "NPIntDocNumber":
+          if (UserCanAction("AllowEditSHNewPost",false)==false) then begin res = false; end;
+        case "NPCostOnSite":
+          if (UserCanAction("AllowEditSHNewPost",false)==false) then begin res = false; end;    
+        otherwise   
+        	res = true;
+      end; 
+     end else begin  	      
+     		res = false;
+     end;
+	end;
+  
   switch (fieldname) begin
     case "BBCostPrice": res = false;
     case "Name": res = HasLocalization("PRT")==false;

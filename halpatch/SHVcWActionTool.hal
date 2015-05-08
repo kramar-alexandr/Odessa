@@ -27,6 +27,9 @@ external procedure SHSumUp(var record SHVc);
 external procedure CalcSHWeight(var record SHVc,Boolean);
 external function Boolean RefillShipRow(var Array record StockMovVc,var Integer,var record SHVc,record SHVc,record INVc,var Integer,Integer,Integer,var array string,var array string,var array string,var array val,var Integer);
 external procedure SerialNrDimensions(string,string,var val,var val,var val);
+external procedure SumUpPackList(var record PackListVc);//Edit----------------------Dima  29.04.2015
+external procedure NP_SumUpRowWeight(var record SHVc);
+external procedure NP_SumUpRowVolumes(var record SHVc);//Edit----------------------Dima  07.05.2015
 
 procedure SHChangeShip(record SHVc SHr,Integer rownr)
 BEGIN
@@ -1228,4 +1231,499 @@ begin
     StoreeShipTaxAuthReply("SHVc",SHr.SerNr,SHr.OfficialSerNr,TaxAdminServSeal);
   end;
   return;
+end;
+
+
+global
+procedure NP_SumUpRowVolumes(var record SHVc SHp)	//Edit----------------------Dima  20.04.2015
+begin
+	SHp.NPVolumeGeneral = SHp.NPRowVolume1 + SHp.NPRowVolume2 + SHp.NPRowVolume3 + SHp.NPRowVolume4 + SHp.NPRowVolume5;
+return;
+end;
+
+global
+procedure NP_SumUpRowWeight(var record SHVc SHp)
+begin
+	SHp.NPWeight = SHp.NPRowWeight1 + SHp.NPRowWeight2 + SHp.NPRowWeight3 + SHp.NPRowWeight4 + SHp.NPRowWeight5;
+return;
+end;
+
+
+global 
+procedure SH_RecalculateRowVolume(var record SHVc SHp,integer number)		//Edit----------------------Dima  17.04.2015
+begin
+val volume;
+	switch(number) begin
+						case 1 : 
+								volume = SHp.NPLength1 * SHp.NPWidth1 * SHp.NPHeight1 * 0.000001;
+								SHp.NPRowVolume1 = volume;
+						case 2 : 
+								volume = SHp.NPLength2 * SHp.NPWidth2 * SHp.NPHeight2 * 0.000001;
+								SHp.NPRowVolume2 = volume;		
+						case 3 : 
+								volume = SHp.NPLength3 * SHp.NPWidth3 * SHp.NPHeight3 * 0.000001;
+								SHp.NPRowVolume3 = volume;
+						case 4 : 
+								volume = SHp.NPLength4 * SHp.NPWidth4 * SHp.NPHeight4 * 0.000001;
+								SHp.NPRowVolume4 = volume;
+						case 5 : 
+								volume = SHp.NPLength5 * SHp.NPWidth5 * SHp.NPHeight5 * 0.000001;
+								SHp.NPRowVolume5 = volume;
+	
+	end;
+	NP_SumUpRowVolumes(SHp);
+end;
+
+
+global
+procedure SHVc_PastePackType(var record SHVc SHp,string fieldname)	//Edit----------------------Dima  17.04.2015
+begin 
+	record StandBoxesVc SBr;
+	switch(fieldname) begin
+		 case "NPPackType1" :
+								 SBr.Code = SHp.NPPackType1;
+								 if (ReadFirstMain(SBr,1,true)) then begin
+										SHp.NPLength1 = SBr.Length;
+										SHp.NPWidth1 = SBr.Width;
+										SHp.NPHeight1 = SBr.Height;
+										SHp.NPRowWeight1 = SBr.Weight;
+										SH_RecalculateRowVolume(SHp,1);
+								 end;	
+		 case "NPPackType2" :
+								 SBr.Code = SHp.NPPackType2;
+								 if (ReadFirstMain(SBr,1,true)) then begin
+										SHp.NPLength2 = SBr.Length;
+										SHp.NPWidth2 = SBr.Width;
+										SHp.NPHeight2 = SBr.Height;
+										SHp.NPRowWeight2 = SBr.Weight;
+										SH_RecalculateRowVolume(SHp,2);
+								 end;
+		 case "NPPackType3" :
+								 SBr.Code = SHp.NPPackType3;
+								 if (ReadFirstMain(SBr,1,true)) then begin
+										SHp.NPLength3 = SBr.Length;
+										SHp.NPWidth3 = SBr.Width;
+										SHp.NPHeight3 = SBr.Height;
+										SHp.NPRowWeight3 = SBr.Weight;
+										SH_RecalculateRowVolume(SHp,3);
+								 end;
+		 case "NPPackType4" :
+								 SBr.Code = SHp.NPPackType4;
+								 if (ReadFirstMain(SBr,1,true)) then begin
+										SHp.NPLength4 = SBr.Length;
+										SHp.NPWidth4 = SBr.Width;
+										SHp.NPHeight4 = SBr.Height;
+										SHp.NPRowWeight4 = SBr.Weight;
+										SH_RecalculateRowVolume(SHp,4);
+								 end;
+		 case "NPPackType5" :
+								 SBr.Code = SHp.NPPackType5;
+								 if (ReadFirstMain(SBr,1,true)) then begin
+										SHp.NPLength5 = SBr.Length;
+										SHp.NPWidth5 = SBr.Width;
+										SHp.NPHeight5 = SBr.Height;
+										SHp.NPRowWeight5 = SBr.Weight;
+										SH_RecalculateRowVolume(SHp,5);
+								 end;		
+		 
+
+	end;
+	NP_SumUpRowWeight(SHp);
+  return;
+end;
+
+global
+procedure NP_PasteSender(var record SHVc SHr)	//Edit----------------------Dima  24.04.2015
+begin
+	record NPCounterpartySenderVc NPCSr;
+	row NPCounterpartySenderVc NPCSrw;
+	integer rwcnt;
+	
+		NPCSr.Ref = SHr.NPSender;
+		if (ReadFirstKey("Ref",NPCSr,1,true)) then begin
+			SHr.NPCitySender = NPCSr.CityDescription;
+			rwcnt = MatRowCnt(NPCSr);
+			if (rwcnt>0) then begin
+				MatRowGet(NPCSr,0,NPCSrw);
+				SHr.NPContactSender = NPCSrw.Description;
+				SHr.NPSendersPhone = NPCSrw.Phones;
+			end;
+		end;
+		SHr.NPSender = NPCSr.Description;
+
+return;
+end;
+
+
+global
+procedure NP_PasteSenderWarehouseDesc(var record SHVc SHr)	//Edit----------------------Dima  05.05.2015
+begin
+	record NPWarehouseVc NPWr;
+	
+		NPWr.Number = SHr.NPSenderWarehouse;
+		NPWr.City = SHr.NPCitySender;
+
+	if (ReadFirstKey("City",NPWr,2,true)) then begin
+				SHr.NPSenderWarehouseDesc = NPWr.Description;
+	end else begin
+				SHr.NPSenderWarehouseDesc = "";
+	end;
+	
+	
+return;
+end;
+
+
+global
+procedure NP_PasteRecipientWarehouseDesc(var record SHVc SHr)	//Edit----------------------Dima  05.05.2015
+begin
+	record NPWarehouseVc NPWr;
+	
+
+		NPWr.Number = SHr.NPRecipientWarehouse;
+		NPWr.City = SHr.NPCityRecipient;		
+
+
+	if (ReadFirstKey("City",NPWr,2,true)) then begin
+				SHr.NPRecipientWarehouseDesc = NPWr.Description;
+	end else begin
+				SHr.NPRecipientWarehouseDesc = "";
+	end;
+	
+	
+return;
+end;
+
+
+
+
+procedure  SHClearSizesFields(var record SHVc SHr)
+begin
+
+			SHr.NPLength1 = blankval;
+			SHr.NPWidth1 = blankval;
+			SHr.NPHeight1 = blankval;
+			SHr.NPRowVolume1 = blankval;
+			SHr.NPRowWeight1 = blankval;
+			SHr.NPPackType1 = blankval;
+			SHr.NPLength2 = blankval;
+			SHr.NPWidth2 = blankval;
+			SHr.NPHeight2 = blankval;
+			SHr.NPRowVolume2 = blankval;
+			SHr.NPRowWeight2 = blankval;
+			SHr.NPPackType2 = blankval;
+			SHr.NPLength3 = blankval;
+			SHr.NPWidth3 = blankval;
+			SHr.NPHeight3 = blankval;
+			SHr.NPRowVolume3 = blankval;
+			SHr.NPRowWeight3 = blankval;
+			SHr.NPPackType3 = blankval;
+			SHr.NPLength4 = blankval;
+			SHr.NPWidth4 = blankval;
+			SHr.NPHeight4 = blankval;
+			SHr.NPRowVolume4 = blankval;
+			SHr.NPRowWeight4 = blankval;
+			SHr.NPPackType4 = blankval;
+			SHr.NPLength5 = blankval;
+			SHr.NPWidth5 = blankval;
+			SHr.NPHeight5 = blankval;
+			SHr.NPRowVolume5 = blankval;
+			SHr.NPRowWeight5 = blankval;
+			SHr.NPPackType5 = blankval;  
+end;
+
+
+
+procedure  PackListClearRows(record SHVc SHr, var record PackListVc PLr)	//Edit----------------------Dima 08.05.2015
+begin
+	integer rwcnt;
+	row  PackListVc PLrw;
+	
+	rwcnt = MatRowCnt(PLr);
+	//!!double removing if rwcnt>5
+
+	if (blank(SHr.NPRowVolume5) and blank(SHr.NPRowWeight5) and (rwcnt>=5)) then begin
+		//MatRowGet(PLr,4,PLrw);
+		//LogText(0,PLrw.Code);
+			MatRowDelete(PLr,4);
+	end;	
+	
+	if (blank(SHr.NPRowVolume4) and blank(SHr.NPRowWeight4) and (rwcnt>=4)) then begin
+		//	MatRowGet(PLr,3,PLrw);
+	//	LogText(0,PLrw.Code);
+			MatRowDelete(PLr,3);
+	end;	
+	
+	if (blank(SHr.NPRowVolume3) and blank(SHr.NPRowWeight3) and (rwcnt>=3)) then begin
+		//	MatRowGet(PLr,2,PLrw);
+		//LogText(0,PLrw.Code);	
+			MatRowDelete(PLr,2);
+	end;	
+	
+	if (blank(SHr.NPRowVolume2) and blank(SHr.NPRowWeight2) and (rwcnt>=2)) then begin
+			MatRowDelete(PLr,1);
+	end;		
+	
+	if (blank(SHr.NPRowVolume1) and blank(SHr.NPRowWeight1) and (rwcnt>=1)) then begin
+			MatRowDelete(PLr,0);
+	end;
+	
+			
+
+end;
+
+global updating
+procedure SHVcToPackListVc(var record SHVc SHr)//Edit----------------------Dima  20.04.2015
+begin
+	record PackListVc PLr;
+	row PackListVc PLrw;
+	record StandBoxesVc StandBoxesr;
+	integer i;
+	
+	i=0;
+	
+	PLr.SerNr = SHr.SerNr;
+	if (ReadFirstMain(PLr,1,true)==false) then begin
+		RecordNew(PLr);
+		PLr.SerNr = SHr.SerNr;
+	end;
+	
+	PackListClearRows(SHr,PLr);
+	
+	if ((SHr.NPRowVolume1>0) and (SHr.NPRowWeight1>0)) then begin
+			PLrw.Length = SHr.NPLength1;
+			PLrw.Width = SHr.NPWidth1;
+			PLrw.Height = SHr.NPHeight1;
+			PLrw.Volume = SHr.NPRowVolume1;
+			PLrw.Weight = SHr.NPRowWeight1;
+			PLrw.Code = SHr.NPPackType1;
+			StandBoxesr.Code = PLrw.Code;
+			if (ReadFirstMain(StandBoxesr,1,true)) then begin
+      PLrw.Name = StandBoxesr.Name;
+      end;
+      MatRowPut(PLr,i,PLrw); i=i+1;
+	end;
+
+	if ((SHr.NPRowVolume2>0) and (SHr.NPRowWeight2>0)) then begin
+			PLrw.Length = SHr.NPLength2;
+			PLrw.Width = SHr.NPWidth2;
+			PLrw.Height = SHr.NPHeight2;
+			PLrw.Volume = SHr.NPRowVolume2;
+			PLrw.Weight = SHr.NPRowWeight2;
+			PLrw.Code = SHr.NPPackType2;
+			StandBoxesr.Code = PLrw.Code;
+			if (ReadFirstMain(StandBoxesr,1,true)) then begin
+      PLrw.Name = StandBoxesr.Name;
+      end;
+      MatRowPut(PLr,i,PLrw); i=i+1;
+	end;
+	
+	if ((SHr.NPRowVolume3>0) and (SHr.NPRowWeight3>0)) then begin
+			PLrw.Length = SHr.NPLength3;
+			PLrw.Width = SHr.NPWidth3;
+			PLrw.Height = SHr.NPHeight3;
+			PLrw.Volume = SHr.NPRowVolume3;
+			PLrw.Weight = SHr.NPRowWeight3;
+			PLrw.Code = SHr.NPPackType3;
+			StandBoxesr.Code = PLrw.Code;
+			if (ReadFirstMain(StandBoxesr,1,true)) then begin
+      PLrw.Name = StandBoxesr.Name;
+      end;
+      MatRowPut(PLr,i,PLrw); i=i+1;
+	end;
+	
+	if ((SHr.NPRowVolume4>0) and (SHr.NPRowWeight4>0)) then begin
+			PLrw.Length = SHr.NPLength4;
+			PLrw.Width = SHr.NPWidth4;
+			PLrw.Height = SHr.NPHeight4;
+			PLrw.Volume = SHr.NPRowVolume4;
+			PLrw.Weight = SHr.NPRowWeight4;
+			PLrw.Code = SHr.NPPackType4;
+			StandBoxesr.Code = PLrw.Code;
+			if (ReadFirstMain(StandBoxesr,1,true)) then begin
+      PLrw.Name = StandBoxesr.Name;
+      end;
+      MatRowPut(PLr,i,PLrw); i=i+1;
+	end;
+	
+	if ((SHr.NPRowVolume5>0) and (SHr.NPRowWeight5>0)) then begin
+			PLrw.Length = SHr.NPLength5;
+			PLrw.Width = SHr.NPWidth5;
+			PLrw.Height = SHr.NPHeight5;
+			PLrw.Volume = SHr.NPRowVolume5;
+			PLrw.Weight = SHr.NPRowWeight5;
+			PLrw.Code = SHr.NPPackType5;
+			StandBoxesr.Code = PLrw.Code;
+			if (ReadFirstMain(StandBoxesr,1,true)) then begin
+      PLrw.Name = StandBoxesr.Name;
+      end;
+      MatRowPut(PLr,i,PLrw); i=i+1;
+	end;
+	SumUpPackList(PLr);
+	RecordStore(PLr,true);			
+
+return;
+end;
+
+
+
+
+global updating
+procedure PackListVcToSHVc(record PackListVc PLr,var record SHVc SHr)//Edit----------------------Dima  20.04.2015
+begin
+	//record SHVc SHr;
+	row PackListVc PLrw;
+	integer i,rwcnt;
+	
+	i=0;
+	
+	
+	SHClearSizesFields(SHr);
+	
+	rwcnt = MatRowCnt(PLr);
+	
+	if (i<rwcnt) then begin
+			MatRowGet(PLr,i,PLrw);
+			SHr.NPLength1 = PLrw.Length;
+			SHr.NPWidth1 = PLrw.Width;
+			SHr.NPHeight1 = PLrw.Height;
+			SHr.NPRowVolume1 = PLrw.Volume;
+			SHr.NPRowWeight1 = PLrw.Weight;
+			SHr.NPPackType1 = PLrw.Code;
+      i=i+1;
+	end;
+
+	if (i<rwcnt) then begin
+			MatRowGet(PLr,i,PLrw);
+			SHr.NPLength2 = PLrw.Length;
+			SHr.NPWidth2 = PLrw.Width;
+			SHr.NPHeight2 = PLrw.Height;
+			SHr.NPRowVolume2 = PLrw.Volume;
+			SHr.NPRowWeight2 = PLrw.Weight;
+			SHr.NPPackType2 = PLrw.Code;
+      i=i+1;
+	end;
+	
+	if (i<rwcnt) then begin
+			MatRowGet(PLr,i,PLrw);
+			SHr.NPLength3 = PLrw.Length;
+			SHr.NPWidth3 = PLrw.Width;
+			SHr.NPHeight3 = PLrw.Height;
+			SHr.NPRowVolume3 = PLrw.Volume;
+			SHr.NPRowWeight3 = PLrw.Weight;
+			SHr.NPPackType3 = PLrw.Code;
+      i=i+1;
+	end;
+	
+	if (i<rwcnt) then begin
+			MatRowGet(PLr,i,PLrw);
+			SHr.NPLength4 = PLrw.Length;
+			SHr.NPWidth4 = PLrw.Width;
+			SHr.NPHeight4 = PLrw.Height;
+			SHr.NPRowVolume4 = PLrw.Volume;
+			SHr.NPRowWeight4 = PLrw.Weight;
+			SHr.NPPackType4 = PLrw.Code;
+      i=i+1;
+	end;
+	
+	if (i<rwcnt) then begin
+			MatRowGet(PLr,i,PLrw);
+			SHr.NPLength5 = PLrw.Length;
+			SHr.NPWidth5 = PLrw.Width;
+			SHr.NPHeight5 = PLrw.Height;
+			SHr.NPRowVolume5 = PLrw.Volume;
+			SHr.NPRowWeight5 = PLrw.Weight;
+			SHr.NPPackType5 = PLrw.Code;
+      i=i+1;
+	end;
+	
+	NP_SumUpRowVolumes(SHr);
+	NP_SumUpRowWeight(SHr);		
+
+return;
+end;
+
+
+
+global
+function boolean CheckENremote(record SHVc SHr, var longint errCode,var string msg)		//Edit----------------------Dima 08.05.2015
+begin
+	boolean res;
+	record ORVc ORr;
+  integer cashOnDelivery,prepayment;
+  record NPDescripVc NPDescripr;
+  record NPCounterpartySenderVc NPCounterSr;
+ 	record NPCargoTypeVc	NPCargoTyper;
+ 	record NPPaymentFormsVc NPPayFormr;
+ 
+  
+  cashOnDelivery = 1;
+  prepayment = 0;
+  res = false;
+ 
+	ORr.SerNr = SHr.OrderNr;
+	if (ReadFirstMain(ORr,1,true)) then begin
+	
+		if (ORr.NPPaymentType == cashOnDelivery or (ORr.NPPaymentType == prepayment and ORr.PrepaymentReceived)) then begin	
+			res = true;
+		end else begin
+			res = false;
+			errCode = 31048;
+			msg = USetStr(31051) & ORr.SerNr;
+			goto LCheckENremote;
+		end;
+	
+		if (not(ORr.DeliveryNewPost)) then begin
+			res = false;
+			errCode = 31050;
+			msg = USetStr(31051) & ORr.SerNr;
+			goto LCheckENremote;
+		end;
+	end;		
+
+		if (blank(SHr.NPCargoDescription)) then begin
+			res = false;
+			errCode = 31052;
+			goto LCheckENremote;
+		end;
+		
+	  if (blank(SHr.NPVolumeGeneral) or blank(SHr.NPWeight)) then begin
+			res = false;
+			errCode = 31058;
+			goto LCheckENremote;
+		end;
+		
+		NPDescripr.Description = SHr.NPCargoDescription;
+		if (ReadFirstMain(NPDescripr,1,true)==false) then begin
+			res = false;
+			errCode = 31053;
+			goto LCheckENremote;
+		end;
+		
+		NPPayFormr.Description = SHr.NPPaymentMethod;
+		if (ReadFirstMain(NPPayFormr,1,true)==false) then begin
+			res = false;
+			errCode = 31054;
+			goto LCheckENremote;
+		end;
+		
+		NPCargoTyper.Description = SHr.NPCargoType;
+		if (ReadFirstMain(NPCargoTyper,1,true)==false) then begin
+			res = false;
+			errCode = 31056;
+			goto LCheckENremote;
+		end;		
+		
+		NPCounterSr.Description = SHr.NPSender;
+		NPCounterSr.CityDescription = SHr.NPCitySender;
+		if (ReadFirstKey("Description",NPCounterSr,2,true)==false) then begin	
+			res = false;
+			errCode = 31055;
+			goto LCheckENremote;			
+		end;	
+		
+	
+	LCheckENremote:;
+	CheckENremote = res;
+	return;
 end;

@@ -66,6 +66,7 @@ external function Boolean Date2Test(string,Date,string,Integer);
 external function Boolean SerNrTestSHVc(LongInt,Date,var Boolean);
 external function val FindPUBaseRate2forSerialNr(string,string);
 external function string 30 GetCustomOfficialSerNr(); //Edit***************************Sasha2,11:42 08.01.2015
+external updating procedure SHVcToPackListVc(var record SHVc);//Edit----------------------Dima  07.05.2015
 
 function Boolean StockMovOKedForSH(LongInt shnr,var LongInt stmovnr)
 begin
@@ -1418,7 +1419,7 @@ end;
 global
 function LongInt SHVcRecordDefaults(var record SHVc SHr,record SHVc SH2r,LongInt stat,LongInt long4)
 begin
-  LongInt res;
+  LongInt res;  
       
   SHr.SerNr = -1;
   SHr.OrderNr = -1;
@@ -1432,7 +1433,7 @@ begin
   SHr.LocalMachineCode = CurMachineName;
   SHr.OfficialSerNr = "";
   SHr.OfficialSerNrSerie = "";
-
+  
   SHVcRecordDefaults = res; 
   return;
 end;
@@ -1460,6 +1461,8 @@ begin
   return;
 end;
 
+
+
 global
 updating function LongInt SHVcRecordSave(var record SHVc SHr,record SHVc SH2r,LongInt stat,LongInt long4)
 begin
@@ -1482,6 +1485,8 @@ begin
     //FindNextSHVcOfficialSerialNr(SHr,-1);
   end;
   AddPortugueseSAFTHashToSH(SHr);
+  SHVcToPackListVc(SHr);		//Edit----------------------Dima  20.04.2015
+  
   SHVcRecordSave = res; 
   return;
 end;
@@ -1627,6 +1632,13 @@ begin
     SHr.ShipOkDate = CurrentDate; //Edit***************************Sasha2,13:55 06.02.2015
   end;
   AddPortugueseSAFTHashToSH(SHr);
+  SHVcToPackListVc(SHr);	//Edit----------------------Dima  21.04.2015
+  
+  if (SHr.NPPrinted==0 and SH2r.NPPrinted>0) then begin
+  	SHr.NPIntDocNumber = blankval;
+  	SHr.NPDocumentRef = blankval;
+  	SHr.NPCostOnSite = blankval;
+	end;  
   SHVcRecordUpdate = res; 
   return;
 end;
