@@ -3,6 +3,7 @@ remote updating procedure SMSWhenOR(record ORVc,Integer);
 external updating procedure RecordActionOR_Print(var record ORVc,string,Boolean);
 external procedure RecordActionOR_Print2(record ORVc);
 remote function Boolean ifCustomerWithCurrentPhoneExist(string,var string );
+remote updating function boolean CheckCounterparty(var record ORVc);
 
 global
 function LongInt ORVcRecordDefaultsClient(LongInt wn,var record ORVc ORr,record ORVc OR2r,LongInt long3,LongInt long4)
@@ -52,6 +53,13 @@ BEGIN
   end;
   SMSWhenOR(ORp,2);  
   res = 1;
+  
+  if (ORp.DeliveryNewPost!=0) then begin	//Edit----------------------Dima  27.04.2015
+		if (CheckCounterparty(ORp)==false) then begin						
+			MessageBox(31047,"");
+		end;
+	end;
+  
   ORVcRecordSaveClient = res;
   RETURN;
 END;
@@ -76,6 +84,12 @@ BEGIN
 
 	if (ifCustomerWithCurrentPhoneExist(ORp.CustCode,code)) then begin		//Edit----------------------Dima  12.02.2015
 			MessageBox(31030,code);
+	end;
+	
+	if ((ORp.DeliveryNewPost!=0) and (OR2p.DeliveryNewPost==0)) then begin	//Edit----------------------Dima  27.04.2015
+		if (CheckCounterparty(ORp)==false) then begin						
+			MessageBox(31047,"");
+		end;
 	end;
 
   ORVcRecordUpdateClient = res;

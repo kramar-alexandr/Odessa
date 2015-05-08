@@ -78,6 +78,8 @@ external function Boolean ORCheckForSalesmanPrice(record ORVc,Integer,string,str
 external function Boolean INVc_AllowSales(record INVc,var LongInt);
 external function string 30 GetCustomOfficialSerNr(); //Edit***************************Sasha2,11:42 08.01.2015
 external function Boolean GetForeignCurncyRate(string,var val,var val,var val,Date,var Date);//Edit---------------------Dima 29.01.2015
+//external updating function boolean NPCreateCounterparty(record NPCounterpartyVc);	//Edit----------------------Dima  15.04.2015
+//external updating procedure GetRecipientContactPerson(string ,string );
 
 procedure SetORAcceptanceFlag(var record ORVc ORr,record ORVc prevORr,LongInt stat)
 begin
@@ -387,6 +389,8 @@ begin
   Boolean initotcheckf;  
   record CUUserLabelBlock CUUerLb;
   record CountryVc Countryr;
+  record NPCityVc NPCityr;
+  record NPWarehouseVc NPWarehouser;
 
   res = 0;
   insertmode = 1;//Rs_insert
@@ -1239,6 +1243,42 @@ LORVcRecordRowCheck:;
   end; 
   
   
+  if (ORr.DeliveryNewPost) then begin					//Edit-------------------------------------Dima  15.04.2015
+  	if (blank(ORr.NPFirstName) or blank(ORr.NPLastName)) then begin
+         RecordCheckError(31043,"",-1,"NPLastName"); 
+         res = -1; 
+         goto LORVcRecordCheck;
+    end;
+   	if (blank(ORr.NPPhone)) then begin
+         RecordCheckError(31044,"",-1,"NPPhone"); 
+         res = -1; 
+         goto LORVcRecordCheck;
+    end; 
+   	if (blank(ORr.NPCityRecipient)) then begin
+         RecordCheckError(31045,"",-1,"NPCityRecipient"); 
+         res = -1; 
+         goto LORVcRecordCheck;
+    end;   
+    
+    NPCityr.City = ORr.NPCityRecipient;
+    if (ReadFirstMain(NPCityr,1,true)==false) then begin
+         RecordCheckError(31045,"",-1,"NPCityRecipient"); 
+         res = -1; 
+         goto LORVcRecordCheck;
+		end;
+		
+		NPWarehouser.City = ORr.NPCityRecipient;
+		NPWarehouser.Number = ORr.NPWarehouse;
+		if (ReadFirstKey("City",NPWarehouser,2,true)==false) then begin
+         RecordCheckError(31049,"",-1,"NPWarehouse"); 
+         res = -1; 
+         goto LORVcRecordCheck;
+		end;	
+  
+  end;	//Edit----end----------------------------------Dima  15.04.2015
+  
+  
+  
 LORVcRecordCheck:;
   if (res!=0) then begin 
     ORr.SerNr = oldnr; 
@@ -1754,6 +1794,12 @@ begin
 return;
 end;
 
+
+
+
+
+
+
 global
 updating function LongInt ORVcRecordUpdate(var record ORVc ORr,record ORVc OR2r,LongInt stat,LongInt long4)
 begin
@@ -1782,6 +1828,10 @@ begin
   end; //Edit***************************Sasha2,16:19 04.02.2015 }
   
   Recalculate_CustomStatusFlagText(ORr); //Edit----------------------Dima  24.03.2015
+  
+  //if ((ORr.DeliveryNewPost!=0) and (OR2r.DeliveryNewPost==0)) then begin
+	//	CheckCounterparty(ORr);							//Edit----------------------Dima  16.04.2015
+	//end;
   
   ORVcRecordUpdate = res; 
   return;
@@ -1911,6 +1961,8 @@ begin
 end;
 
 
+
+
 global
 updating function LongInt ORVcRecordSave(var record ORVc ORr,record ORVc OR2r,LongInt stat,LongInt long4)
 begin
@@ -1943,6 +1995,11 @@ begin
     ORr.CustomStatusFlag = 5;
   end; //Edit***************************Sasha2,16:19 04.02.2015 }
   Recalculate_CustomStatusFlagText(ORr);
+  
+  //if (ORr.DeliveryNewPost) then begin
+	//	CheckCounterparty(ORr);
+	//end;
+  
   ORVcRecordSave = res; 
   return;
 end;

@@ -61,7 +61,8 @@ external function Integer CheckSerialStatus(string,string,var string);
 remote function val CalculateSerialNrQuantity(string,string,string,Boolean,val,val,val,val);
 remote function Boolean SerialNrForOneItem(string,var record SerBalVc);
 external procedure SetupCustPS2Rn(string,record RcVc);	//Edit----------Dima  27.01.2015
-
+remote procedure ORVc_PasteNPPhone(var record ORVc);	//Edit----------------------Dima  15.04.2015
+remote procedure NP_PasteRecipientWarehouseDescOR(var record ORVc);
 
 
 global //Edit***************************Sasha2,15:51 04.02.2015 {
@@ -1354,6 +1355,36 @@ begin
   return;
 end;
 
+
+function Boolean ORDClassNPPhoneEFAfter(Integer wn,Integer changed)	//Edit----------------------Dima  15.04.2015
+begin  
+  record ORVc ORr;
+
+
+  if (changed!=0) then begin  
+    GetWindowRecord(wn,ORr);
+    ORVc_PasteNPPhone(ORr);
+    PutWindowRecord(wn,ORr);
+  end;  
+  ORDClassNPPhoneEFAfter = true;
+  return;
+end;
+
+function Boolean ORDClassNPWarehouseEFAfter(Integer wn,Integer changed)	//Edit----------------------Dima  07.05.2015
+begin  
+  record ORVc ORr;
+
+
+  if (changed!=0) then begin  
+    GetWindowRecord(wn,ORr);
+    NP_PasteRecipientWarehouseDescOR(ORr);
+    PutWindowRecord(wn,ORr);
+  end;  
+  ORDClassNPWarehouseEFAfter = true;
+  return;
+end;
+
+
 global
 function Boolean ORDClassAfterEditField(Integer wn,string fieldname,Integer fn, Integer rownr,Integer changed)
 BEGIN
@@ -1400,6 +1431,8 @@ BEGIN
     case "InvCountry": res = ORDClassInvCountryEFAfter(wn,changed!=0);
     case "DelCountry": res = ORDClassDelCountryEFAfter(wn,changed!=0);
     case "OrderType": res = ORDClassOrderTypeEFAfter(wn,rownr,changed!=0);
+    case "NPPhone": res = ORDClassNPPhoneEFAfter(wn,changed);
+    case "NPWarehouse": res = ORDClassNPWarehouseEFAfter(wn,changed);	//Edit----------------------Dima  15.04.2015
   end;
   ORDClassAfterEditField = res;
   RETURN;

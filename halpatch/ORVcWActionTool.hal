@@ -58,6 +58,8 @@ external function string 20 FindCustRoute(string,string,string);
 external function Boolean FindItemVAR(string,var string,var string,var string,var string);
 
 forward procedure ORVc_PasteQuant(var record ORVc,Integer,Boolean,var Boolean);
+external updating function boolean NPCreateCounterparty(record NPCounterpartyVc);	//Edit----------------------Dima  15.04.2015
+external updating procedure GetRecipientContactPerson(string ,string );	//Edit----------------------Dima  05.05.2015
 
 global
 procedure ORVc_PasteInvCountry(var record ORVc ORp,string oldCountryCode)
@@ -1203,3 +1205,94 @@ begin
   end;
   return;
 end;
+
+
+
+
+
+global
+procedure ORVc_PasteNPPhone(var record ORVc ORp)		//Edit----------------------Dima  15.04.2015
+begin
+	record NPCounterpartyVc NPCr;
+	record NPServiceTypesVc NPSerTyper;
+	
+	NPCr.Phone = ORp.NPPhone;
+	if (ReadFirstKey("Phone",NPCr,1,true)) then begin
+		ORp.NPFirstName = NPCr.FirstName;
+		ORp.NPMiddleName = NPCr.MiddleName;
+		ORp.NPLastName = NPCr.LastName;
+		ORp.NPEmail = NPCr.Email;
+		ORp.NPCityRecipient = NPCr.CityDescription;	
+		NPSerTyper.Ref = "WarehouseWarehouse";	//!!!
+		if (ReadFirstKey("Ref",NPSerTyper,1,true)) then begin
+			ORp.NPServiceType = NPSerTyper.Description;
+		end;
+	end;	
+  
+
+  return;
+end;
+
+
+
+global updating
+function boolean CheckCounterparty(var record ORVc ORr) 	//Edit----------------------Dima  16.04.2015
+begin
+	record NPCounterpartyVc NPCr;
+	record NPCityVc NPCityr;
+	boolean res;
+  record NPSettingsBlock NPSettingsb;
+  
+  BlockLoad(NPSettingsb);
+	
+	res = true;
+	NPCityr.City = ORr.NPCityRecipient;
+	if (ReadFirstMain(NPCityr,1,true)) then begin
+		NPCr.CityRef = NPCityr.Ref;
+	end;
+	NPCr.FirstName = ORr.NPFirstName;
+	NPCr.LastName = ORr.NPLastName;
+	NPCr.Phone = ORr.NPPhone;
+	
+	if (ReadFirstMain(NPCr,4,true) == false) then begin
+		NPCr.FirstName = ORr.NPFirstName;
+		NPCr.LastName = ORr.NPLastName;
+		NPCr.Phone = ORr.NPPhone;
+		NPCr.MiddleName = ORr.NPMiddleName;
+		NPCr.CityRef = NPCityr.Ref;
+		NPCr.Email = ORr.NPEmail;
+		NPCr.CounterpartyType = "PrivatePerson";
+		NPCr.CounterpartyProperty = "Recipient";
+		res = NPCreateCounterparty(NPCr);
+	end else begin
+		if (MatRowCnt(NPCr)==0) then begin					//if connection crashed during updating and Counterparty doesn't have Contact person
+  		GetRecipientContactPerson(NPCr.Ref, NPSettingsb.APIkey);
+  	end;
+	end;	
+	CheckCounterparty = res;
+return;
+end;
+
+
+
+global
+procedure NP_PasteRecipientWarehouseDescOR(var record ORVc ORr)	//Edit----------------------Dima  05.05.2015
+begin
+	record NPWarehouseVc NPWr;
+	
+
+		NPWr.Number = ORr.NPWarehouse;
+		NPWr.City = ORr.NPCityRecipient;		
+
+
+	if (ReadFirstKey("City",NPWr,2,true)) then begin
+				ORr.NPWarehouseDesc = NPWr.Description;
+	end else begin
+				ORr.NPWarehouseDesc = "";
+	end;
+	
+	
+return;
+end;
+
+
