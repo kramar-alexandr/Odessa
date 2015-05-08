@@ -31,6 +31,27 @@ begin
   Setting("Стандартные коробки",StandBoxesLClass,modIN); //Edit***************************Sasha2,14:51 16.04.2015
   Setting("Пак-листы",PackListLClass,modIN); //Edit***************************Sasha2,14:51 16.04.2015
   
+  Setting("Новая почта - Города",NPCityLClass,modIN);	//Edit by Victor 02.04.15
+  Setting("Новая почта - Товар",NPDescripLClass,modIN);	//Edit by Victor 02.04.15
+  Setting("Новая почта - Тип товара",NPCargoTypeLClass,modIN);	//Edit by Victor 02.04.15
+  Setting("Новая почта - Тип обратной доставки",NPBackDelivCargoTypeLClass,modIN);	//Edit by Victor 08.04.15
+  Setting("Новая почта - Статусы документов",NPDocStateLClass,modIN);	//Edit by Victor 08.04.15
+  Setting("Новая почта - Формы собственности",NPOwnershipFormLClass,modIN);	//Edit by Victor 08.04.15
+  Setting("Новая почта - Отделения",NPWarehouseLClass,modIN);	//Edit by Victor 08.04.15
+
+	Setting("Новая почта - Виды плательщиков",NPTypesOfPayersLClass,modIN);
+	Setting("Новая почта - Типы Контрагентов",NPCounterpartyTypesLClass,modIN);
+	Setting("Новая почта - Формы оплаты",NPPaymentFormsLClass,modIN);
+	Setting("Новая почта - Поддоны",NPTraysListLClass,modIN);		
+	Setting("Новая почта - Временные интервалы",NPTimeIntervalsLClass,modIN);
+	Setting("Новая почта - Технологии доставки",NPServiceTypesLClass,modIN);
+	Setting("Новая почта - Плательщики обратной доставки",NPTypesOfPayersRedeliveryLClass,modIN);	
+
+	Setting("Новая почта - Контрагенты",NPCounterpartyLClass,modIN);
+	Setting("Новая почта - Контрагенты-отправители",NPCounterpartySenderLClass,modIN);
+	Setting("Новая почта - Адреса контрагентов",NPAddressesLClass,modIN);		
+  Setting("Новая почта - Настройки",NPSettingsTClass,modIN);  
+  
   Report("Журнал суточных возмещений",DAJRClass,DAJRn,0,modCL);
   Report("Журнал авансовых отчетов",ExpJRClass,ExpRn,0,modCL);
   Report("Журнал  расчетов с ПЛ",PersPerRClass,PersPerRn,0,modCL);
@@ -91,7 +112,23 @@ begin
  	 SString(31039,"Закрыт");
  	 SString(31040,"Существуют неутвержденные счет-фактуры: ");	 
    SString(31041,"Кол-во товара не соответствует кол-ву в счет-фактуре");	 
-   SString(31042,"Существует строка с нулевой суммой");	  	 
+   SString(31042,"Существует строка с нулевой суммой");	
+   SString(31043,"Отсутствует имя контрагента");
+   SString(31044,"Отсутствует телефон контрагента");	
+   SString(31045,"Указанный город отсутствует в базе Новой почты");  	 
+	 SString(31046,"Не выбран тип доставки");
+	 SString(31047,"Контрагент получателя не был создан. Проверьте корректность данных");
+   SString(31048,"Не подтверждено получение предоплаты. ");
+   SString(31049,"Указаннoе отделение отсутствует в базе Новой почты");
+   SString(31050,"Не указана доставка Новой почтой.");
+   SString(31051," Проверьте документ Счет клиенту №");
+   SString(31052,"Не указано описание груза");
+   SString(31053,"Указанное описание груза отсутствует в базе Новой почты");
+   SString(31054,"Указанный способ оплаты отсутствует в базе Новой почты");
+   SString(31055,"указанный отправитель отсутствует");
+   SString(31056,"Указанный тип груза отсутствует в базе Новой почты");
+   SString(31057,"Экспресс накладная не существует или не создана");
+   SString(31058,"Укажите вес и объем");     	 
 	 
    
   Maintenance("Экспорт склада CSV",ExportStockCSVClass,ExportStockCSVMn,modSY);
@@ -117,6 +154,28 @@ begin
 	
 	Maintenance("Заменить таблицу скидок для категории",ChangeCUCategoryVClass,ChangeCUCategoryMn,modSL);	//Edit----------------------Dima  27.03.2015
 	Maintenance("Заполнить отсутствующие названия в регистре \"Цены\"",MyVClass,FillCommentsInPricesMn,modDI);	//Edit----------------------Dima  06.04.2015
+
+
+	Maintenance("Send NP request",RequestNPVClass,NPmainRequestMn,modIN);//Edit by Victor 20.03.15
+	Maintenance("Refresh Cyties Record - request",RequestNPVClass,NPGetCytiesRequestMn,modIN);//Edit by Victor 20.03.15
+	Maintenance("Refresh Items (Descriptions) - request",RequestNPVClass,NPGetDescriptionRequestMn,modIN);//Edit by Victor 06.04.15
+	Maintenance("Refresh Cargo types - request",RequestNPVClass,NPGetCargoTypeRequestMn,modIN);//Edit by Victor 06.04.15
+	Maintenance("Refresh Back Delivery Cargo Types - request",RequestNPVClass,NPGetBackCargoTypeRequestMn,modIN);//Edit by Victor 06.04.15
+	Maintenance("Refresh Doc States - request",RequestNPVClass,NPgetDocumentStatusesMn,modIN);//Edit by Victor 08.04.15
+	Maintenance("Refresh Ownership Forms - request",RequestNPVClass,NPGetOwnershipFormRequestMn,modIN);//Edit by Victor 08.04.15
+	Maintenance("Refresh Warehouses - request",RequestNPVClass,NPGetWarehouseMn,modIN);//Edit by Victor 08.04.15
+	
+	Maintenance("Refresh Counterparty types - request",RequestNPVClass,NPGetCounterpartyTypesRequestMn,modIN);
+	Maintenance("Refresh Types of Payers - request",RequestNPVClass,NPGetTypesOfPayerRequestMn,modIN);
+	Maintenance("Refresh Types of Payers for redelivery - request",RequestNPVClass,NPGetTypesOfPayersForRedeliveryMn,modIN);
+	Maintenance("Refresh Trays list - request",RequestNPVClass,NPGetTraysListMn,modIN);
+	Maintenance("Refresh Time intervals - request",RequestNPVClass,NPGetTimeIntervalsRequestMn,modIN);
+	Maintenance("Refresh Types of service - request",RequestNPVClass,NPGetServiceTypesRequestMn,modIN);
+	Maintenance("Refresh Forms of Payment - request",RequestNPVClass,NPGetPaymentFormsMn,modIN);
+	Maintenance("Refresh addresses of counterparties",RequestNPVClass,NPRefreshAddressesOfCounterpartiesMn,modIN);
+	Maintenance("Refresh counterparties",RequestNPVClass,NPRefreshCounterparties,modIN);
+	//Maintenance("Create sender-counterparty",RequestNPVClass,NPCreateCounterpartySender,modIN);
+	Maintenance("Add address for counterparty",RequestNPVClass,NPAddAddressForCounterpartyMn,modIN);
 
   Import("Импорт цен",PLImportIClass,PLImportIn,modDI); //Added********************Dima 20.11.2014
   Import("Импорт товаров",INImportIClass,INImportIn,modIN);//Added********************Dima 20.11.2014
@@ -374,6 +433,7 @@ begin
   StrSetText(JobShowAccount,"Резервирование - Показать состояние счета");
   StrSetText(JobShowGuestAccount,"Резервирование - Показать счёт гостя");
   StrSetText(JobGenPrepayment,"Резервирование - Сгенерировать предоплату");
+  StrSetText(AllowEditSHNewPost,"Разрешать редактировать посылку Новой почты");  
   StrSetText(AddItemsRsrtEvent,"Resort Event Add Item");
   StrSetText(RestaurantCustomerOnly,"Только клиент ресторана");
   StrSetText(PUToRetPU,"Возврат товаров из поступлений");
