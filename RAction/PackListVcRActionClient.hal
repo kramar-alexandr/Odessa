@@ -1,0 +1,35 @@
+external updating procedure UpdateSHVcFromPackList(record PackListVc,Integer);
+
+
+global
+updating function LongInt PackListVcRecordUpdateClient(var record PackListVc PackListr,record PackListVc PackList2r,LongInt stat,LongInt long4)
+begin
+  LongInt res;
+	integer wn,mwn;
+	
+	wn = CurWindow;
+	mwn = MotherWindow(wn);
+	UpdateSHVcFromPackList(PackListr,mwn);
+  PackListVcRecordUpdateClient = res; 
+  
+  return;
+end;
+
+
+
+global
+updating function LongInt PackListVcRecordSaveClient(var record PackListVc PackListr,record PackListVc PackList2r,LongInt stat,LongInt long4)
+begin
+  LongInt res;
+	integer wn,mwn;
+	
+	wn = CurWindow;
+	mwn = MotherWindow(wn);
+	UpdateSHVcFromPackList(PackListr,mwn);
+  PackListVcRecordSaveClient = res; 
+  
+  return;
+end;
+
+
+
