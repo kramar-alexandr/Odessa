@@ -670,11 +670,19 @@ begin
   string 255 xpath, descr, descrRU;
   longint i;
   record NPDescripVc NPDr;
+  record NPSettingsBlock NPSettingsb;
+  
+	BlockLoad(NPSettingsb); 
   
   host = "api.novaposhta.ua";
   page = "/v2.0/xml/";
    
-	CreateCommonRequest(host, page, "c29d9f70e96d27782866c5013b617699", "Common","getCargoDescriptionList", "", mainRequest); //get status
+  if (blank(NPSettingsb.APIkey)) then begin
+  	goto LNPGetDescriptionRequestMn;
+  end;
+  
+	CreateCommonRequest(host, page, NPSettingsb.APIkey, "Common","getCargoDescriptionList", "", mainRequest); //get status
+	
 
   if(MySendRawWebRequest(host,"443",true,"POST",page & getParam,"text/xml","",false,mainRequest,replyarea,600))then begin  //WORK! 
     messagebox(0,"Connection on!");
@@ -695,7 +703,6 @@ begin
     
   while(XmlNodeExists(xdata,"root/data/item[" & i & "]/Description"))begin
 		descr = XmlGet(xdata,"root/data/item[" & i & "]/Description");
-//		NPDr.Description = descr;
 		if(ReadFirstMain(NPDr, 1, true))then begin 
 			NPDr.synchFlag = 1;
 			NPDr.Description = descr;
@@ -703,13 +710,7 @@ begin
 			NPDr.Ref = XmlGet(xdata,"root/data/item[" & i & "]/Ref");
 					
 			if (RecordStore(NPDr,true)) then begin		end;
-		end;// else
-		/*begin
-			RecordNew(NPDr);
-			NPDr.Description = descr;
-			NPDr.DescriptionRU = XmlGet(xdata,"root/data/item[" & i & "]/DescriptionRu");
-			NPDr.Ref = XmlGet(xdata,"root/data/item[" & i & "]/Ref");			
-		end;*/		
+		end;// else		
     i = i + 1;
   end;
   
@@ -730,6 +731,7 @@ begin
  		logtext(0,"Hansa World: No Connection to api.novaposhta.ua");
   end;
  
+ 	LNPGetDescriptionRequestMn:;
   return;
 end;
 
@@ -746,7 +748,11 @@ begin
   record NPCargoTypeVc NPCTr;
   record NPSettingsBlock NPSettingsb;
   
-	BlockLoad(NPSettingsb);  
+	BlockLoad(NPSettingsb);
+	
+	if (blank(NPSettingsb.APIkey)) then begin
+  	goto LNPGetCargoTypeRequestMn;
+  end;  
   
   host = "api.novaposhta.ua";
   page = "/v2.0/xml/";
@@ -788,6 +794,7 @@ begin
  		logtext(0,"Hansa World: No Connection to api.novaposhta.ua");
   end;
  
+ 	LNPGetCargoTypeRequestMn:;
   return;
 end;
 
@@ -809,7 +816,7 @@ begin
   AddTextToArea("   <modelName>" & ConvertXml(aModel) & "</modelName>" & chr(13),aRequest);
   AddTextToArea("   <calledMethod>" & ConvertXml(aMethod) & "</calledMethod>" & chr(13),aRequest);
   AddTextToArea("			<methodProperties>"& chr(13),aRequest);
-  AddTextToArea("   		<CounterpartyRef>" & ConvertXml(aParam) & "</CounterpartyRef>" & chr(13),aRequest);
+ // AddTextToArea("   		<CounterpartyRef>" & ConvertXml(aParam) & "</CounterpartyRef>" & chr(13),aRequest);
 	 AddTextToArea("		</methodProperties>" & chr(13),aRequest)
   AddTextToArea("</file>" & chr(13),aRequest);
   
@@ -837,13 +844,17 @@ begin
   record NPBackDelivCargoTypeVc NPBr;
   record NPSettingsBlock NPSettingsb;
   
-	BlockLoad(NPSettingsb);  
+	BlockLoad(NPSettingsb);
+	
+	if (blank(NPSettingsb.APIkey)) then begin
+  	goto LNPGetBackCargoTypeRequestMn;
+  end; 	  
   
   host = "api.novaposhta.ua";
   page = "/v2.0/xml/";
   
-  delivRef = "93159f41-d1f6-11e4-a77a-005056887b8d"; 	//will take from Recipient Register(CounterpartyRef)
-	CreateBackwardDeliveryCargoTypesRequest(host, page, NPSettingsb.APIkey, "Common","getBackwardDeliveryCargoTypes", delivRef, mainRequest); //get status
+ // delivRef = "93159f41-d1f6-11e4-a77a-005056887b8d"; 	//will take from Recipient Register(CounterpartyRef)
+	CreateBackwardDeliveryCargoTypesRequest(host, page, NPSettingsb.APIkey, "Common","getBackwardDeliveryCargoTypes", " ", mainRequest); //get status
 
   if(MySendRawWebRequest(host,"443",true,"POST",page & getParam,"text/xml","",false,mainRequest,replyarea,600))then begin  //WORK! 
     messagebox(0,"Connection on!");
@@ -879,6 +890,7 @@ begin
  		logtext(0,"Hansa World: No Connection to api.novaposhta.ua");
   end;
  
+ 	LNPGetBackCargoTypeRequestMn:;
   return;
 end;
 
@@ -895,7 +907,11 @@ begin
   record NPDocStateVc NPDSr;
   record NPSettingsBlock NPSettingsb;
   
-	BlockLoad(NPSettingsb);  
+	BlockLoad(NPSettingsb);
+	
+	if (blank(NPSettingsb.APIkey)) then begin
+  	goto LNPgetDocumentStatusesMn;
+  end; 	 	  
   
   host = "api.novaposhta.ua";
   page = "/v2.0/xml/";
@@ -929,6 +945,7 @@ begin
  		logtext(0,"Hansa World: No Connection to api.novaposhta.ua");
   end;
  
+  LNPgetDocumentStatusesMn:;
   return;
 end;
 
@@ -969,7 +986,10 @@ begin
   record NPOwnershipFormVc NPOFr;
   record NPSettingsBlock NPSettingsb;
   
-	BlockLoad(NPSettingsb);  
+	BlockLoad(NPSettingsb);
+	if (blank(NPSettingsb.APIkey)) then begin
+  	goto LNPGetOwnershipFormRequestMn;
+  end;	  
   
   host = "api.novaposhta.ua";
   page = "/v2.0/xml/";
@@ -1004,6 +1024,7 @@ begin
  		logtext(0,"Hansa World: No Connection to api.novaposhta.ua");
   end;
  
+ 	LNPGetOwnershipFormRequestMn:;
   return;
 end;
 
@@ -1051,6 +1072,12 @@ begin
   integer repeat;
   record NPWarehouseVc NPWr;
   record NPCityVc NPCr;
+  record NPSettingsBlock NPSettingsb;
+  
+	BlockLoad(NPSettingsb);  
+  if (blank(NPSettingsb.APIkey)) then begin
+  	goto LNPGetWarehouseMn;
+  end;
   
   repeat = 0;
   host = "api.novaposhta.ua";
@@ -1062,7 +1089,7 @@ begin
 			cityRef = NPCr.Ref;
 			cityName = NPCr.City;
 			SetAreaZeroSize(mainRequest);
-			CreateWarehouseRequest(host, page, "c29d9f70e96d27782866c5013b617699", "Address","getWarehouses", cityRef, mainRequest); 
+			CreateWarehouseRequest(host, page, NPSettingsb.APIkey, "Address","getWarehouses", cityRef, mainRequest); 
 			
 			LsendRequestAgainGet1: ;
 			if(MySendRawWebRequest(host,"443",true,"POST",page & getParam,"text/xml","",false,mainRequest,replyarea,600))then begin 
@@ -1108,7 +1135,7 @@ begin
 			end;
 		end;
 		
- 
+ 	LNPGetWarehouseMn:;
   return;
 end;
 
@@ -1157,7 +1184,11 @@ begin
   xml xdata;
   record NPSettingsBlock NPSettingsb;
   
-	BlockLoad(NPSettingsb);   
+	BlockLoad(NPSettingsb);
+	response = "";
+  if (blank(NPSettingsb.APIkey)) then begin
+  	goto LNPGetDocumentStatusRequest;
+  end;	   
   
   host = "api.novaposhta.ua";
   page = "/v2.0/xml/";
@@ -1178,6 +1209,7 @@ begin
  		logtext(0,"Hansa World: No Connection to api.novaposhta.ua");
   end;
  
+	LNPGetDocumentStatusRequest:; 
  	NPGetDocumentStatusRequest = response;
   return;
 end;
@@ -1194,7 +1226,10 @@ begin
   record NPSettingsBlock NPSettingsb;
   boolean res;
   
-	BlockLoad(NPSettingsb);   
+	BlockLoad(NPSettingsb);
+  if (blank(NPSettingsb.APIkey)) then begin
+  	goto LNPDeleteDocumentRequest;
+  end;	 	   
   
   host = "api.novaposhta.ua";
   page = "/v2.0/xml/";
@@ -1216,7 +1251,7 @@ begin
 				   
   end;
     
- 
+ 	LNPDeleteDocumentRequest:;
  	NPDeleteDocumentRequest = res;
   return;
 end;
@@ -1236,7 +1271,10 @@ begin
   record NPCounterpartyTypesVc NPCTr;
   record NPSettingsBlock NPSettingsb;
   
-	BlockLoad(NPSettingsb);  
+	BlockLoad(NPSettingsb);
+  if (blank(NPSettingsb.APIkey)) then begin
+  	goto LNPGetCounterpartyTypesRequestMn;
+  end;	  
   
   host = "api.novaposhta.ua";
   page = "/v2.0/xml/";
@@ -1270,6 +1308,7 @@ begin
  		logtext(0,"Hansa World: No Connection to api.novaposhta.ua");
   end;
  
+ 	LNPGetCounterpartyTypesRequestMn:;
   return;
 end;
 
@@ -1288,7 +1327,10 @@ begin
   record NPTypesOfPayersVc NPTPr;
   record NPSettingsBlock NPSettingsb;
   
-	BlockLoad(NPSettingsb);  
+	BlockLoad(NPSettingsb);
+  if (blank(NPSettingsb.APIkey)) then begin
+  	goto LNPGetTypesOfPayerRequestMn;
+  end;	  
   
   host = "api.novaposhta.ua";
   page = "/v2.0/xml/";
@@ -1322,6 +1364,7 @@ begin
  		logtext(0,"Hansa World: No Connection to api.novaposhta.ua");
   end;
  
+ 	LNPGetTypesOfPayerRequestMn:;
   return;
 end;
 
@@ -1341,6 +1384,9 @@ begin
   record NPSettingsBlock NPSettingsb;
   
 	BlockLoad(NPSettingsb);
+  if (blank(NPSettingsb.APIkey)) then begin
+  	goto LNPGetPaymentFormsMn;
+  end;	
 	  
   host = "api.novaposhta.ua";
   page = "/v2.0/xml/";
@@ -1374,6 +1420,7 @@ begin
  		logtext(0,"Hansa World: No Connection to api.novaposhta.ua");
   end;
  
+	LNPGetPaymentFormsMn:;
   return;
 end;
 
@@ -1392,7 +1439,10 @@ begin
   record NPServiceTypesVc NPSTr;
   record NPSettingsBlock NPSettingsb;
   
-	BlockLoad(NPSettingsb);  
+	BlockLoad(NPSettingsb);
+  if (blank(NPSettingsb.APIkey)) then begin
+  	goto LNPGetServiceTypesRequestMn;
+  end;	  
   
   host = "api.novaposhta.ua";
   page = "/v2.0/xml/";
@@ -1425,7 +1475,7 @@ begin
     end else begin
  		logtext(0,"Hansa World: No Connection to api.novaposhta.ua");
   end;
- 
+ 	LNPGetServiceTypesRequestMn:;
   return;
 end;
 
@@ -1446,7 +1496,10 @@ begin
   record NPTimeIntervalsVc NPTIr;
   record NPSettingsBlock NPSettingsb;
   
-	BlockLoad(NPSettingsb);  
+	BlockLoad(NPSettingsb);
+  if (blank(NPSettingsb.APIkey)) then begin
+  	goto LNPGetTimeIntervalsRequestMn;
+  end;	  
   host = "api.novaposhta.ua";
   page = "/v2.0/xml/";
   
@@ -1482,7 +1535,7 @@ begin
     end else begin
  		logtext(0,"Hansa World: No Connection to api.novaposhta.ua");
   end;
- 
+ 	LNPGetTimeIntervalsRequestMn:;
   return;
 end;
 
@@ -1502,7 +1555,10 @@ begin
   record NPTraysListVc NPTLr;
   record NPSettingsBlock NPSettingsb;
   
-	BlockLoad(NPSettingsb);  
+	BlockLoad(NPSettingsb); 
+  if (blank(NPSettingsb.APIkey)) then begin
+  	goto LNPGetTraysListMn;
+  end;	 
   host = "api.novaposhta.ua";
   page = "/v2.0/xml/";
    
@@ -1536,7 +1592,7 @@ begin
     end else begin
  		logtext(0,"Hansa World: No Connection to api.novaposhta.ua");
   end;
- 
+  LNPGetTraysListMn:;
   return;
 end;
 
@@ -1555,7 +1611,10 @@ begin
   record NPTypesOfPayersRedeliveryVc NPTPRr;
   record NPSettingsBlock NPSettingsb;
   
-	BlockLoad(NPSettingsb);  
+	BlockLoad(NPSettingsb);
+  if (blank(NPSettingsb.APIkey)) then begin
+  	goto LNPGetTypesOfPayersForRedeliveryMn;
+  end;	  
   host = "api.novaposhta.ua";
   page = "/v2.0/xml/";
    
@@ -1588,6 +1647,7 @@ begin
  		logtext(0,"Hansa World: No Connection to api.novaposhta.ua");
   end;
  
+  LNPGetTypesOfPayersForRedeliveryMn:;
   return;
 end;
 
@@ -1675,6 +1735,9 @@ begin
   record NPSettingsBlock NPSettingsb;
   
 	BlockLoad(NPSettingsb);
+  if (blank(NPSettingsb.APIkey)) then begin
+  	goto LNPCreateCounterparty;
+  end;		
   
   host = "api.novaposhta.ua";
   page = "/v2.0/xml/";
@@ -1817,6 +1880,9 @@ begin
   record NPSettingsBlock NPSettingsb;
   
 	BlockLoad(NPSettingsb);
+  if (blank(NPSettingsb.APIkey)) then begin
+  	goto LNPAddAddressForCounterpartyMn;
+  end;	
 
   //record RcVc RepSpec;
   
@@ -1861,7 +1927,7 @@ begin
     end else begin
  		logtext(0,"Hansa World: No Connection to api.novaposhta.ua");
   end;
- 
+  LNPAddAddressForCounterpartyMn:;
   return;
 end;	
 
@@ -1900,7 +1966,10 @@ begin
   record NPSettingsBlock NPSettingsb;
   integer repeat;
   
-	BlockLoad(NPSettingsb);  
+	BlockLoad(NPSettingsb);
+  if (blank(NPSettingsb.APIkey)) then begin
+  	goto LNPRefreshAddresses81u1;
+  end;	  
 
   
   host = "api.novaposhta.ua";
@@ -1960,6 +2029,7 @@ end;
 
 //********************
 
+
 global updating
 procedure NPAddWarehouseMn(record RcVc RepSpec)
 begin
@@ -1976,7 +2046,10 @@ begin
   record NPCityVc NPCr;
   record NPSettingsBlock NPSettingsb;
   
-	BlockLoad(NPSettingsb);  
+	BlockLoad(NPSettingsb);
+  if (blank(NPSettingsb.APIkey)) then begin
+  	goto LNPAddWarehouseMn;
+  end;		  
   
   repeat = 0;
   host = "api.novaposhta.ua";
@@ -2034,7 +2107,7 @@ begin
 			end;
 		end;
 		
- 
+ LNPAddWarehouseMn:;
   return;
 end;
 
@@ -2070,6 +2143,7 @@ begin
 		  
 return;
 end;
+
 
 global updating
 procedure  GetRecipientContactPerson(string counterpartyRef,string apiKey)
@@ -2198,7 +2272,7 @@ procedure  RefreshCounterpartyContactPerson(array string senders, array string r
 begin
 	record NPSettingsBlock NPSettingsb;
   longint j;
-	BlockLoad(NPSettingsb);
+	BlockLoad(NPSettingsb);		
 
 
 	for(j=0;j<recipients.length;j=j+1) begin
@@ -2208,7 +2282,6 @@ begin
 	for(j=0;j<senders.length;j=j+1) begin
 			GetSenderContactPerson(senders[j],NPSettingsb.APIkey)
   end;
-  
   
 end;
 
@@ -2232,6 +2305,9 @@ begin
   boolean exist;
 
 	BlockLoad(NPSettingsb);
+  if (blank(NPSettingsb.APIkey)) then begin
+  	goto LNPRefreshCounterparties;
+  end;		
   
   host = "api.novaposhta.ua";
   page = "/v2.0/xml/";
@@ -2348,6 +2424,7 @@ begin
   end;
   
   RefreshCounterpartyContactPerson(senders,recipients);
-  
+  LNPRefreshCounterparties:;
   return;
 end;
+
