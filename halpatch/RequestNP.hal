@@ -873,7 +873,7 @@ begin
 
   if(MySendRawWebRequest(host,"443",true,"POST",page & getParam,"text/xml","",false,mainRequest,replyarea,600))then begin  //WORK! 
     //messagebox(0,"Connection on!");
-    logtext(0,"Hansa World: GetCargoType");
+    logtext(0,"Hansa World: GetOwnershipForm");
     //writeareatofile(replyarea,"1OwnershipFormReply.txt",0);
     
     GetXMLArea(replyarea);
@@ -2303,8 +2303,7 @@ begin
 	NPGetCargoTypeRequestMn(RepSpec);
 	NPGetBackCargoTypeRequestMn(RepSpec);
 	NPgetDocumentStatusesMn(RepSpec);
-	NPGetOwnershipFormRequestMn(RepSpec);
-	NPGetWarehouseMn(RepSpec);
+	NPGetOwnershipFormRequestMn(RepSpec);	
 	NPGetCounterpartyTypesRequestMn(RepSpec);
 	NPGetTypesOfPayerRequestMn(RepSpec);
 	NPGetPaymentFormsMn(RepSpec);
@@ -2312,6 +2311,6 @@ begin
 	NPGetTimeIntervalsRequestMn(RepSpec);
 	NPGetTraysListMn(RepSpec);
 	NPGetTypesOfPayersForRedeliveryMn(RepSpec);
-
+	NPGetWarehouseMn(RepSpec);
 end;
 
