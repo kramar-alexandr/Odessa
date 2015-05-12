@@ -30,10 +30,10 @@ begin
   time t1,t2,t3,t4,curt,curtnew;
   string 5 hr,mn;
 
-    t1 = StringToTime("6:30");
-    t2 = StringToTime("12:30");
-    t3 = StringToTime("20:30");
-    t4 = StringToTime("22:07");
+    t1 = StringToTime("7:30");
+    t2 = StringToTime("13:30");
+    t3 = StringToTime("21:30");
+    t4 = StringToTime("23:07");
     
     curt = CurrentTime; 
     hr = GetHour(curt);
