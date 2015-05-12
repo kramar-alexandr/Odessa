@@ -2292,3 +2292,26 @@ begin
   return;
 end;
 
+
+global updating
+procedure RefreshAllInnerRegistersNP()
+begin
+	record RcVc RepSpec;
+	RecordNew(RepSpec)
+	NPGetCytiesRequestMn(RepSpec);
+	NPGetDescriptionRequestMn(RepSpec);
+	NPGetCargoTypeRequestMn(RepSpec);
+	NPGetBackCargoTypeRequestMn(RepSpec);
+	NPgetDocumentStatusesMn(RepSpec);
+	NPGetOwnershipFormRequestMn(RepSpec);
+	NPGetWarehouseMn(RepSpec);
+	NPGetCounterpartyTypesRequestMn(RepSpec);
+	NPGetTypesOfPayerRequestMn(RepSpec);
+	NPGetPaymentFormsMn(RepSpec);
+	NPGetServiceTypesRequestMn(RepSpec);
+	NPGetTimeIntervalsRequestMn(RepSpec);
+	NPGetTraysListMn(RepSpec);
+	NPGetTypesOfPayersForRedeliveryMn(RepSpec);
+
+end;
+

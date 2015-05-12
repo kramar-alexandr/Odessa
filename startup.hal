@@ -36,8 +36,8 @@ begin
   Setting("Пак-листы",PackListLClass,modNPost); //Edit***************************Sasha2,14:51 16.04.2015
   
   //Setting("Города",NPCityLClass,modIN);	//Edit by Victor 02.04.15
-  Setting("Товар",NPDescripLClass,modNPost);	//Edit by Victor 02.04.15
-  Setting("Тип товара",NPCargoTypeLClass,modNPost);	//Edit by Victor 02.04.15
+  Setting("Описания грузов",NPDescripLClass,modNPost);	//Edit by Victor 02.04.15
+  Setting("Тип груза",NPCargoTypeLClass,modNPost);	//Edit by Victor 02.04.15
   Setting("Тип обратной доставки",NPBackDelivCargoTypeLClass,modNPost);	//Edit by Victor 08.04.15
   Setting("Статусы документов",NPDocStateLClass,modNPost);	//Edit by Victor 08.04.15
   Setting("Формы собственности",NPOwnershipFormLClass,modNPost);	//Edit by Victor 08.04.15
@@ -161,7 +161,7 @@ begin
 
 
 	Maintenance("Обновить список городов",RequestNPVClass,NPGetCytiesRequestMn,modNPost);//Edit by Victor 20.03.15
-	Maintenance("Обновить описания товаров",RequestNPVClass,NPGetDescriptionRequestMn,modNPost);//Edit by Victor 06.04.15
+	Maintenance("Обновить описания грузов",RequestNPVClass,NPGetDescriptionRequestMn,modNPost);//Edit by Victor 06.04.15
 	Maintenance("Обновить типы груза",RequestNPVClass,NPGetCargoTypeRequestMn,modNPost);//Edit by Victor 06.04.15
 	Maintenance("Обновить типы груза обратной доставки",RequestNPVClass,NPGetBackCargoTypeRequestMn,modNPost);//Edit by Victor 06.04.15
 	Maintenance("Обновить список статусов документов",RequestNPVClass,NPgetDocumentStatusesMn,modNPost);//Edit by Victor 08.04.15
@@ -179,6 +179,7 @@ begin
 	Maintenance("Обновить контрагентов",RequestNPVClass,NPRefreshCounterparties,modNPost);
 	//Maintenance("Create sender-counterparty",RequestNPVClass,NPCreateCounterpartySender,modNPost);
 	//Maintenance("Add address for counterparty",RequestNPVClass,NPAddAddressForCounterpartyMn,modNPost);
+	Maintenance("Обновить регистры Новой почты",RequestNPVClass,RefreshAllInnerRegistersNP,modNPost);
 
   Import("Импорт цен",PLImportIClass,PLImportIn,modDI); //Added********************Dima 20.11.2014
   Import("Импорт товаров",INImportIClass,INImportIn,modIN);//Added********************Dima 20.11.2014
