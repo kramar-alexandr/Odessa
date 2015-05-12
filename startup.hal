@@ -5,6 +5,10 @@ begin
 	SetLangMode(LangRussian,"RUS",0);
 	
 		//Module("Управление складом","",730,modWHM);
+	Module("Новая почта","",730,modNPost);
+	Register("Города","Города",NPCityVc,modNPost);
+	Register("Отделения","Отделения",NPWarehouseVc,modNPost);
+	Register("Стандартные коробки","Стандартные коробки",StandBoxesVc,modNPost);	
  
   Setting("Настройки WebShop",WebShopSettingsTClass,modSO); //Edit***************************Sasha2,10:22 14.07.2014
   Setting("Настройки экспорта склада CSV",ExportStockCSVTClass,modSY);
@@ -28,29 +32,29 @@ begin
   Setting("Cуточные возмещения",DALClass,modCL);
   Setting("Места",PosLClass,modIN);
   Setting("Производство",ProdLClass,modIN);	//Edit----------------------Dima  31.03.2015
-  Setting("Стандартные коробки",StandBoxesLClass,modIN); //Edit***************************Sasha2,14:51 16.04.2015
-  Setting("Пак-листы",PackListLClass,modIN); //Edit***************************Sasha2,14:51 16.04.2015
+  //Setting("Стандартные коробки",StandBoxesLClass,modIN); //Edit***************************Sasha2,14:51 16.04.2015
+  Setting("Пак-листы",PackListLClass,modNPost); //Edit***************************Sasha2,14:51 16.04.2015
   
-  Setting("Новая почта - Города",NPCityLClass,modIN);	//Edit by Victor 02.04.15
-  Setting("Новая почта - Товар",NPDescripLClass,modIN);	//Edit by Victor 02.04.15
-  Setting("Новая почта - Тип товара",NPCargoTypeLClass,modIN);	//Edit by Victor 02.04.15
-  Setting("Новая почта - Тип обратной доставки",NPBackDelivCargoTypeLClass,modIN);	//Edit by Victor 08.04.15
-  Setting("Новая почта - Статусы документов",NPDocStateLClass,modIN);	//Edit by Victor 08.04.15
-  Setting("Новая почта - Формы собственности",NPOwnershipFormLClass,modIN);	//Edit by Victor 08.04.15
-  Setting("Новая почта - Отделения",NPWarehouseLClass,modIN);	//Edit by Victor 08.04.15
+  //Setting("Города",NPCityLClass,modIN);	//Edit by Victor 02.04.15
+  Setting("Товар",NPDescripLClass,modNPost);	//Edit by Victor 02.04.15
+  Setting("Тип товара",NPCargoTypeLClass,modNPost);	//Edit by Victor 02.04.15
+  Setting("Тип обратной доставки",NPBackDelivCargoTypeLClass,modNPost);	//Edit by Victor 08.04.15
+  Setting("Статусы документов",NPDocStateLClass,modNPost);	//Edit by Victor 08.04.15
+  Setting("Формы собственности",NPOwnershipFormLClass,modNPost);	//Edit by Victor 08.04.15
+  //Setting("Отделения",NPWarehouseLClass,modIN);	//Edit by Victor 08.04.15
 
-	Setting("Новая почта - Виды плательщиков",NPTypesOfPayersLClass,modIN);
-	Setting("Новая почта - Типы Контрагентов",NPCounterpartyTypesLClass,modIN);
-	Setting("Новая почта - Формы оплаты",NPPaymentFormsLClass,modIN);
-	Setting("Новая почта - Поддоны",NPTraysListLClass,modIN);		
-	Setting("Новая почта - Временные интервалы",NPTimeIntervalsLClass,modIN);
-	Setting("Новая почта - Технологии доставки",NPServiceTypesLClass,modIN);
-	Setting("Новая почта - Плательщики обратной доставки",NPTypesOfPayersRedeliveryLClass,modIN);	
+	Setting("Виды плательщиков",NPTypesOfPayersLClass,modNPost);
+	Setting("Типы Контрагентов",NPCounterpartyTypesLClass,modNPost);
+	Setting("Формы оплаты",NPPaymentFormsLClass,modNPost);
+	Setting("Поддоны",NPTraysListLClass,modNPost);		
+	Setting("Временные интервалы",NPTimeIntervalsLClass,modNPost);
+	Setting("Технологии доставки",NPServiceTypesLClass,modNPost);
+	Setting("Плательщики обратной доставки",NPTypesOfPayersRedeliveryLClass,modNPost);	
 
-	Setting("Новая почта - Контрагенты",NPCounterpartyLClass,modIN);
-	Setting("Новая почта - Контрагенты-отправители",NPCounterpartySenderLClass,modIN);
-	Setting("Новая почта - Адреса контрагентов",NPAddressesLClass,modIN);		
-  Setting("Новая почта - Настройки",NPSettingsTClass,modIN);  
+	Setting("Контрагенты",NPCounterpartyLClass,modNPost);
+	Setting("Контрагенты-отправители",NPCounterpartySenderLClass,modNPost);
+	Setting("Адреса контрагентов",NPAddressesLClass,modNPost);		
+  Setting("Настройки Новой почты",NPSettingsTClass,modNPost);  
   
   Report("Журнал суточных возмещений",DAJRClass,DAJRn,0,modCL);
   Report("Журнал авансовых отчетов",ExpJRClass,ExpRn,0,modCL);
@@ -156,26 +160,25 @@ begin
 	Maintenance("Заполнить отсутствующие названия в регистре \"Цены\"",MyVClass,FillCommentsInPricesMn,modDI);	//Edit----------------------Dima  06.04.2015
 
 
-	Maintenance("Send NP request",RequestNPVClass,NPmainRequestMn,modIN);//Edit by Victor 20.03.15
-	Maintenance("Refresh Cyties Record - request",RequestNPVClass,NPGetCytiesRequestMn,modIN);//Edit by Victor 20.03.15
-	Maintenance("Refresh Items (Descriptions) - request",RequestNPVClass,NPGetDescriptionRequestMn,modIN);//Edit by Victor 06.04.15
-	Maintenance("Refresh Cargo types - request",RequestNPVClass,NPGetCargoTypeRequestMn,modIN);//Edit by Victor 06.04.15
-	Maintenance("Refresh Back Delivery Cargo Types - request",RequestNPVClass,NPGetBackCargoTypeRequestMn,modIN);//Edit by Victor 06.04.15
-	Maintenance("Refresh Doc States - request",RequestNPVClass,NPgetDocumentStatusesMn,modIN);//Edit by Victor 08.04.15
-	Maintenance("Refresh Ownership Forms - request",RequestNPVClass,NPGetOwnershipFormRequestMn,modIN);//Edit by Victor 08.04.15
-	Maintenance("Refresh Warehouses - request",RequestNPVClass,NPGetWarehouseMn,modIN);//Edit by Victor 08.04.15
+	Maintenance("Обновить список городов",RequestNPVClass,NPGetCytiesRequestMn,modNPost);//Edit by Victor 20.03.15
+	Maintenance("Обновить описания товаров",RequestNPVClass,NPGetDescriptionRequestMn,modNPost);//Edit by Victor 06.04.15
+	Maintenance("Обновить типы груза",RequestNPVClass,NPGetCargoTypeRequestMn,modNPost);//Edit by Victor 06.04.15
+	Maintenance("Обновить типы груза обратной доставки",RequestNPVClass,NPGetBackCargoTypeRequestMn,modNPost);//Edit by Victor 06.04.15
+	Maintenance("Обновить список статусов документов",RequestNPVClass,NPgetDocumentStatusesMn,modNPost);//Edit by Victor 08.04.15
+	Maintenance("Обновить список форм собственности",RequestNPVClass,NPGetOwnershipFormRequestMn,modNPost);//Edit by Victor 08.04.15
+	Maintenance("Обновить отделения",RequestNPVClass,NPGetWarehouseMn,modNPost);//Edit by Victor 08.04.15
 	
-	Maintenance("Refresh Counterparty types - request",RequestNPVClass,NPGetCounterpartyTypesRequestMn,modIN);
-	Maintenance("Refresh Types of Payers - request",RequestNPVClass,NPGetTypesOfPayerRequestMn,modIN);
-	Maintenance("Refresh Types of Payers for redelivery - request",RequestNPVClass,NPGetTypesOfPayersForRedeliveryMn,modIN);
-	Maintenance("Refresh Trays list - request",RequestNPVClass,NPGetTraysListMn,modIN);
-	Maintenance("Refresh Time intervals - request",RequestNPVClass,NPGetTimeIntervalsRequestMn,modIN);
-	Maintenance("Refresh Types of service - request",RequestNPVClass,NPGetServiceTypesRequestMn,modIN);
-	Maintenance("Refresh Forms of Payment - request",RequestNPVClass,NPGetPaymentFormsMn,modIN);
-	Maintenance("Refresh addresses of counterparties",RequestNPVClass,NPRefreshAddressesOfCounterpartiesMn,modIN);
-	Maintenance("Refresh counterparties",RequestNPVClass,NPRefreshCounterparties,modIN);
-	//Maintenance("Create sender-counterparty",RequestNPVClass,NPCreateCounterpartySender,modIN);
-	Maintenance("Add address for counterparty",RequestNPVClass,NPAddAddressForCounterpartyMn,modIN);
+	Maintenance("Обновить типы контрагентов",RequestNPVClass,NPGetCounterpartyTypesRequestMn,modNPost);
+	Maintenance("Обновить список видов плательщиков",RequestNPVClass,NPGetTypesOfPayerRequestMn,modNPost);
+	Maintenance("Обновить типы плательщиков обратной доставки",RequestNPVClass,NPGetTypesOfPayersForRedeliveryMn,modNPost);
+//	Maintenance("Обновить список поддонов",RequestNPVClass,NPGetTraysListMn,modNPost);
+	Maintenance("Обновить временные интервалы",RequestNPVClass,NPGetTimeIntervalsRequestMn,modNPost);
+	Maintenance("Обновить типы доставки",RequestNPVClass,NPGetServiceTypesRequestMn,modNPost);
+	Maintenance("Обновить формы оплаты",RequestNPVClass,NPGetPaymentFormsMn,modNPost);
+	Maintenance("Обновить адреса конрагентов",RequestNPVClass,NPRefreshAddressesOfCounterpartiesMn,modNPost);
+	Maintenance("Обновить контрагентов",RequestNPVClass,NPRefreshCounterparties,modNPost);
+	//Maintenance("Create sender-counterparty",RequestNPVClass,NPCreateCounterpartySender,modNPost);
+	//Maintenance("Add address for counterparty",RequestNPVClass,NPAddAddressForCounterpartyMn,modNPost);
 
   Import("Импорт цен",PLImportIClass,PLImportIn,modDI); //Added********************Dima 20.11.2014
   Import("Импорт товаров",INImportIClass,INImportIn,modIN);//Added********************Dima 20.11.2014
