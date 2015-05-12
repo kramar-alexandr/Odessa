@@ -172,7 +172,7 @@ begin
 	Maintenance("Обновить список видов плательщиков",RequestNPVClass,NPGetTypesOfPayerRequestMn,modNPost);
 	Maintenance("Обновить типы плательщиков обратной доставки",RequestNPVClass,NPGetTypesOfPayersForRedeliveryMn,modNPost);
 //	Maintenance("Обновить список поддонов",RequestNPVClass,NPGetTraysListMn,modNPost);
-	Maintenance("Обновить временные интервалы",RequestNPVClass,NPGetTimeIntervalsRequestMn,modNPost);
+	//Maintenance("Обновить временные интервалы",RequestNPVClass,NPGetTimeIntervalsRequestMn,modNPost);
 	Maintenance("Обновить типы доставки",RequestNPVClass,NPGetServiceTypesRequestMn,modNPost);
 	Maintenance("Обновить формы оплаты",RequestNPVClass,NPGetPaymentFormsMn,modNPost);
 	Maintenance("Обновить адреса конрагентов",RequestNPVClass,NPRefreshAddressesOfCounterpartiesMn,modNPost);

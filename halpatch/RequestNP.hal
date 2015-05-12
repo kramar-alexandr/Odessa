@@ -238,8 +238,6 @@ begin
 		BackDeliveryPayer = BackTypeOfPayer.Ref;
 	end;		
 
-	
-	  
   addtexttoarea("POST " & aPage & " HTTP/1.1" & chr(13) & chr(10),aRequest);
  	addtexttoarea("host: " & aHost & chr(13) & chr(10),aRequest);
  	AddTextToArea("" & chr(13) & chr(10),aRequest);
@@ -316,7 +314,7 @@ begin
   AddTextToArea("" & chr(13) & chr(10),aRequest);
 	AddTextToArea("" & chr(13) & chr(10),aRequest);		//Working get doc status
 	
-	writeareatofile(aRequest,"1autorization.txt",0);
+	//writeareatofile(aRequest,"1autorization.txt",0);
   
 return;
 end;
@@ -357,7 +355,7 @@ begin
     writeareatofile(replyarea,"1reply.txt",0);
     
     GetXMLArea(replyarea);
-    writeareatofile(replyarea,"1CreateENReply.txt",0);
+    //writeareatofile(replyarea,"1CreateENReply.txt",0);
     xdata = ParseXMLArea(replyarea);
 		i = 0;
 		
@@ -373,144 +371,6 @@ begin
 		end;
 		
     
-    end else begin
- 		logtext(0,"Hansa World: No Connection to api.novaposhta.ua");
-  end;
- 
-  return;
-end;
-
-
-
-procedure Autoriazation(string aWeb, string aPage, string aKey,string aModel,string aMethod,string aParam, var area aRequest)
-begin
-  area request,replyarea,test;
-  string 100 tstr;
-  string 200 getParam, host, page, webAddr;
-  string 20 timed;
-  area basestring;   
-
-	addtexttoarea("POST " & aPage & " HTTP/1.1" & chr(13) & chr(10),aRequest);
- 	addtexttoarea("host: " & aWeb & chr(13) & chr(10),aRequest);
- 	AddTextToArea("" & chr(13) & chr(10),aRequest);
- 	//messagebox(0, urlencode("https://" & aWeb));
- 	AddTextToArea("<?xml version=""1.0"" encoding=""UTF-8""?>" & chr(13),aRequest);
-  AddTextToArea("<file>"& chr(13),aRequest);
-  AddTextToArea("   <apiKey>" & ConvertXml(aKey) & "</apiKey>" & chr(13),aRequest);
-  AddTextToArea("   <modelName>" & ConvertXml(aModel) & "</modelName>" & chr(13),aRequest);
-  AddTextToArea("   <calledMethod>" & ConvertXml(aMethod) & "</calledMethod>" & chr(13),aRequest);
-  AddTextToArea("		<methodProperties>"& chr(13),aRequest);
-  AddTextToArea("			<Documents>"& chr(13),aRequest);
-  AddTextToArea("				<item>" & ConvertXml("20400000613364") & "</item>" & chr(13),aRequest);
-  AddTextToArea(" 		</Documents>" & chr(13),aRequest);
-  AddTextToArea("		</methodProperties>" & chr(13),aRequest);
-  AddTextToArea("</file>" & chr(13),aRequest);
-	
-	
-	/*AddTextToArea("<?xml version=""1.0"" encoding=""UTF-8""?>" & chr(13),aRequest);
-  AddTextToArea("<file>"& chr(13),aRequest);
-  AddTextToArea("   <apiKey>" & ConvertXml(aKey) & "</apiKey>" & chr(13),aRequest);
-  AddTextToArea("   <modelName>" & ConvertXml(aModel) & "</modelName>" & chr(13),aRequest);
-  AddTextToArea("   <calledMethod>" & ConvertXml(aMethod) & "</calledMethod>" & chr(13),aRequest);
-  AddTextToArea("		<methodProperties>"& chr(13),aRequest);
-  //AddTextToArea("			<Documents>"& chr(13),aRequest);
-  AddTextToArea("				<PayerType>" & ConvertXml("Sender") & "</PayerType>" & chr(13),aRequest);
-  AddTextToArea("				<PaymentMethod>" & ConvertXml("Cash") & "</PaymentMethod>" & chr(13),aRequest);
-  AddTextToArea("				<DateTime>" & ConvertXml("01.04.2015") & "</DateTime>" & chr(13),aRequest);
-  AddTextToArea("				<CargoType>" & ConvertXml("Cargo") & "</CargoType>" & chr(13),aRequest);
-  AddTextToArea("				<VolumeGeneral>" & ConvertXml("10") & "</VolumeGeneral>" & chr(13),aRequest);
-  AddTextToArea("				<Weight>" & ConvertXml("1") & "</Weight>" & chr(13),aRequest);
-  AddTextToArea("				<ServiceType>" & ConvertXml("WarehouseDoors") & "</ServiceType>" & chr(13),aRequest);
-  AddTextToArea("				<SeatsAmount>" & ConvertXml("1") & "</SeatsAmount>" & chr(13),aRequest);
-  AddTextToArea("				<Description>" & ConvertXml("8f46973e-33e4-11e3-b441-0050568002cf") & "</Description>" & chr(13),aRequest);
-  AddTextToArea("				<Cost>" & ConvertXml("500") & "</Cost>" & chr(13),aRequest);
-  AddTextToArea("				<CitySender>" & ConvertXml("8d5a980d-391c-11dd-90d9-001a92567626") & "</CitySender>" & chr(13),aRequest);	//!
-  AddTextToArea("				<Sender>" & ConvertXml("93159ec4-d1f6-11e4-a77a-005056887b8d") & "</Sender>" & chr(13),aRequest);
-  AddTextToArea("				<SenderAddress>" & ConvertXml("eae7d9e7-9320-11e4-acce-0050568002cf") & "</SenderAddress>" & chr(13),aRequest);
-  AddTextToArea("				<ContactSender>" & ConvertXml("5824c318-d1fb-11e4-a77a-005056887b8d") & "</ContactSender>" & chr(13),aRequest);
-  AddTextToArea("				<SendersPhone>" & ConvertXml("0982025316") & "</SendersPhone>" & chr(13),aRequest);
-  AddTextToArea("				<CityRecipient>" & ConvertXml("8d5a980d-391c-11dd-90d9-001a92567626") & "</CityRecipient>" & chr(13),aRequest);
-  AddTextToArea("				<Recipient>" & ConvertXml("93159f41-d1f6-11e4-a77a-005056887b8d") & "</Recipient>" & chr(13),aRequest);
-  AddTextToArea("				<RecipientAddress>" & ConvertXml("9d05f6d7-d865-11e4-8a92-005056887b8d") & "</RecipientAddress>" & chr(13),aRequest);
-  AddTextToArea("				<ContactRecipient>" & ConvertXml("5824c3e7-d1fb-11e4-a77a-005056887b8d") & "</ContactRecipient>" & chr(13),aRequest);
-  AddTextToArea("				<RecipientsPhone>" & ConvertXml("0987654321") & "</RecipientsPhone>" & chr(13),aRequest);
-  //AddTextToArea("				<>" & ConvertXml("") & "</>" & chr(13),aRequest);
-  AddTextToArea("		</methodProperties>" & chr(13),aRequest);
-  AddTextToArea("</file>" & chr(13),aRequest);*/
-  AddTextToArea("" & chr(13) & chr(10),aRequest);
-	AddTextToArea("" & chr(13) & chr(10),aRequest);		//Working get doc status
-  
-	AddTextToArea("" & chr(13) & chr(10),aRequest);
-	AddTextToArea("" & chr(13) & chr(10),aRequest);
-	
-	
-	/*if(nonblank(aParam))then begin	
-		addtexttoarea(urlencode(aParam & "&"),basestring);		//********* if for "&"
-	end;*/
-				
-//	AddTextToArea("Authorization: OAuth oauth_signature_method=" & chr(34) & oauth_signature_method & chr(34) & " oauth_version=" & chr(34) & "1.0" & chr(34) &  " oauth_nonce=" & chr(34) & oauth_nonce & chr(34) & " oauth_timestamp=" & chr(34) & oauth_timestamp &chr(34) &  " oauth_consumer_key=" & chr(34) & oauth_consumer_key & chr(34) & " oauth_signature=" & chr(34) & oauth_signature & chr(34),aRequest);
-	
-	writeareatofile(aRequest,"1autorization.txt",0);
-  
-return;
-end;
-
-global updating
-procedure NPmainRequestMn(record RcVc RepSpec)
-begin
-  area request,replyarea,mainRequest,extracted;
-  string 255 username,filename;
-  string 200 getParam,host,page,webaddr,path;
-  area basestring;
-  
-  host = "api.novaposhta.ua";
-  //host = "4hi8ygyxo9r0.runscope.net";
-  //page = "/";
-  page = "/v2.0/xml/";
-  //webaddr = "api.novaposhta.ua/v2.0/xml/";
-  webaddr = "4hi8ygyxo9r0.runscope.net";
-   
-	Autoriazation(host, page, "c29d9f70e96d27782866c5013b617699", "InternetDocument","documentsTracking", "", mainRequest); //get status
-//	Autoriazation("c29d9f70e96d27782866c5013b617699", "InternetDocument","save", "", mainRequest);
-//Autoriazation(host, page, "c29d9f70e96d27782866c5013b617699", "InternetDocument","save", "", mainRequest); //get status
-	
-	AddTextToArea("" & chr(13) & chr(10),mainRequest);
-	AddTextToArea("" & chr(13) & chr(10),mainRequest);
-
-	writeareatofile(mainRequest,"1Request.txt",0);
-	messagebox(0,"In");
-
-  //if(SendRawWebRequest(host,"443",true,"GET",page & getParam,"text/xml","",false,mainRequest,replyarea,200))then begin  //WORK! 
-  if(MySendRawWebRequest(host,"443",true,"POST",page & getParam,"text/xml","",false,mainRequest,replyarea,600))then begin  //WORK! 
-    messagebox(0,"Connection on!");
-    logtext(0,"Hansa World: Connection on");
-    writeareatofile(replyarea,"1reply.txt",0);
-    end else begin
- 		logtext(0,"Hansa World: No Connection to api.novaposhta.ua");
-  end;
- 
-  return;
-end;
-
-global updating
-procedure NPGetStatusRequestMn(record RcVc RepSpec)
-begin
-  area request,replyarea,mainRequest,extracted;
-  string 255 username,filename;
-  string 200 getParam,host,page,webaddr,path;
-  area basestring;
-  
-  host = "api.novaposhta.ua";
-  page = "/v2.0/xml/";
-   
-	Autoriazation(host, page, "c29d9f70e96d27782866c5013b617699", "InternetDocument","documentsTracking", "", mainRequest); //get status
-
-	messagebox(0,"In");
-
-  if(MySendRawWebRequest(host,"443",true,"POST",page & getParam,"text/xml","",false,mainRequest,replyarea,600))then begin  //WORK! 
-    messagebox(0,"Connection on!");
-    logtext(0,"Hansa World: Connection on");
-    writeareatofile(replyarea,"1getStatusReply.txt",0);
     end else begin
  		logtext(0,"Hansa World: No Connection to api.novaposhta.ua");
   end;
@@ -545,12 +405,10 @@ begin
 	AddTextToArea("" & chr(13) & chr(10),aRequest);
 	AddTextToArea("" & chr(13) & chr(10),aRequest);
 	
-	writeareatofile(aRequest,"1addresRequest.txt",0);
+	//writeareatofile(aRequest,"1addresRequest.txt",0);
   
 return;
 end;
-
-
 
 
 global updating
@@ -564,33 +422,43 @@ begin
   string 255 xpath, city, cityRU;
   longint i;
   record NPCityVc NPCityr;
+  record NPSettingsBlock NPSettingsb;
+  
+	BlockLoad(NPSettingsb); 
+  
+  if (blank(NPSettingsb.APIkey)) then begin
+  	goto LNPGetCytiesRequestMn;
+  end;
    
   host = "api.novaposhta.ua";
   page = "/v2.0/xml/";
    
-	CreateAddressRequest(host, page, "c29d9f70e96d27782866c5013b617699", "Address","getCities", "", mainRequest); //get status
+	CreateAddressRequest(host, page, NPSettingsb.APIkey, "Address","getCities", "", mainRequest); //get status
 
-	messagebox(0,"In");
+	//messagebox(0,"In");
 
   if(MySendRawWebRequest(host,"443",true,"POST",page & getParam,"text/xml","",false,mainRequest,replyarea,600))then begin  //WORK! 
-    messagebox(0,"Connection on!");
+    //messagebox(0,"Connection on!");
     logtext(0,"Hansa World: Connection on");
-    writeareatofile(replyarea,"1getStatusReply.txt",0);
+    //writeareatofile(replyarea,"1getStatusReply.txt",0);
     
     GetXMLArea(replyarea);
     
 		xdata = ParseXMLArea(replyarea);
-		//make it queued. 
+
 		i = 0;  
-		NPCityr.City = "";
-		while (LoopMain(NPCityr,1,true)) begin
-			NPCityr.synchFlag = 0;
-			if (RecordStore(NPCityr,true)) then begin		end;
+		
+		if(CountRecords("NPCityVc") > 0) then begin
+			NPCityr.City = "";
+			while (LoopMain(NPCityr,1,true)) begin
+				NPCityr.synchFlag = 0;
+				if (RecordStore(NPCityr,true)) then begin		end;
+			end;
 		end;
 		
 		while(XmlNodeExists(xdata,"root/data/item[" & i & "]/Description"))begin
 			city = XmlGet(xdata,"root/data/item[" & i & "]/Description");
-			if(ReadFirstMain(NPCityr, 1, true))then begin 
+			if(ReadFirstMain(NPCityr, 1, true))then begin //existing city
 				NPCityr.synchFlag = 1;
 				NPCityr.City = city;
 				NPCityr.CityRU = XmlGet(xdata,"root/data/item[" & i & "]/DescriptionRu");
@@ -605,8 +473,23 @@ begin
 				NPCityr.NPArea  = XmlGet(xdata,"root/data/item[" & i & "]/Area");
 			
 				if (RecordStore(NPCityr,true)) then begin		end;
+			end else begin	//new city
+				RecordNew(NPCityr);
+					NPCityr.synchFlag = 1;
+					NPCityr.City = city;
+					NPCityr.CityRU = XmlGet(xdata,"root/data/item[" & i & "]/DescriptionRu");
+					NPCityr.Ref = XmlGet(xdata,"root/data/item[" & i & "]/Ref");
+					NPCityr.Delivery1 = StringToInt(XmlGet(xdata,"root/data/item[" & i & "]/Delivery1"));
+					NPCityr.Delivery2 = StringToInt(XmlGet(xdata,"root/data/item[" & i & "]/Delivery2"));
+					NPCityr.Delivery3 = StringToInt(XmlGet(xdata,"root/data/item[" & i & "]/Delivery3"));
+					NPCityr.Delivery4 = StringToInt(XmlGet(xdata,"root/data/item[" & i & "]/Delivery4"));
+					NPCityr.Delivery5 = StringToInt(XmlGet(xdata,"root/data/item[" & i & "]/Delivery5"));
+					NPCityr.Delivery6 = StringToInt(XmlGet(xdata,"root/data/item[" & i & "]/Delivery6"));
+					NPCityr.Delivery7 = StringToInt(XmlGet(xdata,"root/data/item[" & i & "]/Delivery7"));
+					NPCityr.NPArea  = XmlGet(xdata,"root/data/item[" & i & "]/Area");
+				if (RecordStore(NPCityr,true)) then begin		end;
 			end;		
-			//logtext(0,"cityRU: " & i & " " & city);
+			logtext(0,"cityRU: " & i & " " & city);
 			i = i + 1;
 		end;
 	
@@ -627,6 +510,7 @@ begin
  		logtext(0,"Hansa World: No Connection to api.novaposhta.ua");
   end;
  
+	LNPGetCytiesRequestMn:;
   return;
 end;
 
@@ -654,7 +538,7 @@ begin
 	AddTextToArea("" & chr(13) & chr(10),aRequest);
 	AddTextToArea("" & chr(13) & chr(10),aRequest);
 	
-	writeareatofile(aRequest,"1descriptionRequest.txt",0);
+	//writeareatofile(aRequest,"1descriptionRequest.txt",0);
   
 return;
 end;
@@ -685,9 +569,9 @@ begin
 	
 
   if(MySendRawWebRequest(host,"443",true,"POST",page & getParam,"text/xml","",false,mainRequest,replyarea,600))then begin  //WORK! 
-    messagebox(0,"Connection on!");
+    //messagebox(0,"Connection on!");
     logtext(0,"Hansa World: GetDescription");
-    writeareatofile(replyarea,"1getStatusReply.txt",0);
+    //writeareatofile(replyarea,"1getStatusReply.txt",0);
     
     GetXMLArea(replyarea);
     
@@ -695,10 +579,12 @@ begin
   xdata = ParseXMLArea(replyarea);
     
   i = 0;  
-  NPDr.Description = "";
-  while (LoopMain(NPDr,1,true)) begin
-  	NPDr.synchFlag = 0;
-  	if (RecordStore(NPDr,true)) then begin		end;
+  if(CountRecords("NPDescripVc") > 0) then begin
+		NPDr.Description = "";
+		while (LoopMain(NPDr,1,true)) begin
+			NPDr.synchFlag = 0;
+			if (RecordStore(NPDr,true)) then begin		end;
+		end;
   end;
     
   while(XmlNodeExists(xdata,"root/data/item[" & i & "]/Description"))begin
@@ -710,7 +596,14 @@ begin
 			NPDr.Ref = XmlGet(xdata,"root/data/item[" & i & "]/Ref");
 					
 			if (RecordStore(NPDr,true)) then begin		end;
-		end;// else		
+		end else begin
+			RecordNew(NPDr);
+			NPDr.synchFlag = 1;
+			NPDr.Description = descr;
+			NPDr.DescriptionRU = XmlGet(xdata,"root/data/item[" & i & "]/DescriptionRu");
+			NPDr.Ref = XmlGet(xdata,"root/data/item[" & i & "]/Ref");			
+			if (RecordStore(NPDr,true)) then begin		end;
+		end;	
     i = i + 1;
   end;
   
@@ -760,9 +653,9 @@ begin
 	CreateCommonRequest(host, page, NPSettingsb.APIkey, "Common","getCargoTypes", "", mainRequest); //get status
 
   if(MySendRawWebRequest(host,"443",true,"POST",page & getParam,"text/xml","",false,mainRequest,replyarea,600))then begin  //WORK! 
-    messagebox(0,"Connection on!");
+    //messagebox(0,"Connection on!");
     logtext(0,"Hansa World: GetCargoType");
-    writeareatofile(replyarea,"1CargoTypeReply.txt",0);
+    //writeareatofile(replyarea,"1CargoTypeReply.txt",0);
     
     GetXMLArea(replyarea);
     //writeareatofile(replyarea,"1CargoTypeReply2.txt",0);
@@ -774,19 +667,11 @@ begin
 		while(XmlNodeExists(xdata,"root/data/item[" & i & "]/Description"))begin
 			RecordNew(NPCTr);
 			descr = XmlGet(xdata,"root/data/item[" & i & "]/Description");
-	//		NPCTr.Description = descr;
-			//if(ReadFirstMain(NPCTr, 1, true))then begin 
 				NPCTr.Description = descr;
 				NPCTr.Ref = XmlGet(xdata,"root/data/item[" & i & "]/Ref"); 
 					
 				if (RecordStore(NPCTr,true)) then begin		end;
-			//end;// else
-			/*begin
-				RecordNew(NPCTr);
-				NPCTr.Description = descr;
-				NPCTr.DescriptionRU = XmlGet(xdata,"root/data/item[" & i & "]/DescriptionRu");
-				NPCTr.Ref = XmlGet(xdata,"root/data/item[" & i & "]/Ref");			
-			end;*/		
+
 			i = i + 1;
 		end;
 		
@@ -825,7 +710,7 @@ begin
 	AddTextToArea("" & chr(13) & chr(10),aRequest);
 	AddTextToArea("" & chr(13) & chr(10),aRequest);
 	
-	writeareatofile(aRequest,"1descriptionRequest.txt",0);
+	//writeareatofile(aRequest,"1descriptionRequest.txt",0);
   
 return;
 end;
@@ -851,15 +736,14 @@ begin
   end; 	  
   
   host = "api.novaposhta.ua";
-  page = "/v2.0/xml/";
-  
- // delivRef = "93159f41-d1f6-11e4-a77a-005056887b8d"; 	//will take from Recipient Register(CounterpartyRef)
+  page = "/v2.0/xml/"; 
+ 
 	CreateBackwardDeliveryCargoTypesRequest(host, page, NPSettingsb.APIkey, "Common","getBackwardDeliveryCargoTypes", " ", mainRequest); //get status
 
   if(MySendRawWebRequest(host,"443",true,"POST",page & getParam,"text/xml","",false,mainRequest,replyarea,600))then begin  //WORK! 
-    messagebox(0,"Connection on!");
+    //messagebox(0,"Connection on!");
     logtext(0,"Hansa World: GetBackCargoType");
-    writeareatofile(replyarea,"1GetBackCargoType.txt",0);
+    //writeareatofile(replyarea,"1GetBackCargoType.txt",0);
     
     GetXMLArea(replyarea);
     
@@ -870,19 +754,10 @@ begin
 		while(XmlNodeExists(xdata,"root/data/item[" & i & "]/Description"))begin
 			RecordNew(NPBr);
 			descr = XmlGet(xdata,"root/data/item[" & i & "]/Description");
-	//		NPBr.Description = descr;
-			//if(ReadFirstMain(NPBr, 1, true))then begin 
 				NPBr.Description = descr;
 				NPBr.Ref = XmlGet(xdata,"root/data/item[" & i & "]/Ref"); 
 					
-				if (RecordStore(NPBr,true)) then begin		end;
-			//end;// else
-			/*begin
-				RecordNew(NPBr);
-				NPBr.Description = descr;
-				NPBr.DescriptionRU = XmlGet(xdata,"root/data/item[" & i & "]/DescriptionRu");
-				NPBr.Ref = XmlGet(xdata,"root/data/item[" & i & "]/Ref");			
-			end;*/		
+				if (RecordStore(NPBr,true)) then begin		end;		
 			i = i + 1;
 		end;
 		
@@ -919,9 +794,9 @@ begin
 	CreateCommonRequest(host, page, NPSettingsb.APIkey, "Common","getDocumentStatuses", "", mainRequest); //get status
 
   if(MySendRawWebRequest(host,"443",true,"POST",page & getParam,"text/xml","",false,mainRequest,replyarea,600))then begin  //WORK! 
-    messagebox(0,"Connection on!");
+    //messagebox(0,"Connection on!");
     logtext(0,"Hansa World: getDocumentStatuses");
-    writeareatofile(replyarea,"1CargoTypeReply.txt",0);
+    //writeareatofile(replyarea,"1CargoTypeReply.txt",0);
     
     GetXMLArea(replyarea);
     
@@ -997,12 +872,11 @@ begin
 	CreateOwnershipFormRequest(host, page, NPSettingsb.APIkey, "Common","getOwnershipFormsList", lang, mainRequest); //get status
 
   if(MySendRawWebRequest(host,"443",true,"POST",page & getParam,"text/xml","",false,mainRequest,replyarea,600))then begin  //WORK! 
-    messagebox(0,"Connection on!");
+    //messagebox(0,"Connection on!");
     logtext(0,"Hansa World: GetCargoType");
-    writeareatofile(replyarea,"1OwnershipFormReply.txt",0);
+    //writeareatofile(replyarea,"1OwnershipFormReply.txt",0);
     
     GetXMLArea(replyarea);
-    //writeareatofile(replyarea,"1CargoTypeReply2.txt",0);
     
 		xdata = ParseXMLArea(replyarea);
 		i = 0;
@@ -1131,7 +1005,7 @@ begin
 				end;
 				repeat = 0;
 				
-				logtext(0,"Hansa World: No Connection to api.novaposhta.ua "  & cityName);
+				logtext(0,"Hansa World: No Connection to api.novaposhta.ua. There is no "  & cityName);
 			end;
 		end;
 		
@@ -1154,7 +1028,7 @@ begin
 	addtexttoarea("POST " & aPage & " HTTP/1.1" & chr(13) & chr(10),aRequest);
  	addtexttoarea("host: " & aWeb & chr(13) & chr(10),aRequest);
  	AddTextToArea("" & chr(13) & chr(10),aRequest);
- 	//messagebox(0, urlencode("https://" & aWeb));
+
  	AddTextToArea("<?xml version=""1.0"" encoding=""UTF-8""?>" & chr(13),aRequest);
   AddTextToArea("<file>"& chr(13),aRequest);
   AddTextToArea("   <apiKey>" & ConvertXml(aKey) & "</apiKey>" & chr(13),aRequest);
@@ -1170,7 +1044,7 @@ begin
 	AddTextToArea("" & chr(13) & chr(10),aRequest);
 	AddTextToArea("" & chr(13) & chr(10),aRequest);
 	
-	writeareatofile(aRequest,"1descriptionRequest.txt",0);
+	//writeareatofile(aRequest,"1descriptionRequest.txt",0);
   
 return;
 end;
@@ -1199,7 +1073,7 @@ begin
    
 
   if(MySendRawWebRequest(host,"443",true,"POST",page & getParam,"text/xml","",false,mainRequest,replyarea,600))then begin 
-    writeareatofile(replyarea,"1getDocStatusReply.txt",0);
+    //writeareatofile(replyarea,"1getDocStatusReply.txt",0);
     GetXMLArea(replyarea);
 		xdata = ParseXMLArea(replyarea);
 
@@ -1282,9 +1156,9 @@ begin
 	CreateCommonRequest(host, page, NPSettingsb.APIkey, "Common","getTypesOfCounterparties", "", mainRequest); //get status
 
   if(MySendRawWebRequest(host,"443",true,"POST",page & getParam,"text/xml","",false,mainRequest,replyarea,600))then begin  //WORK! 
-    messagebox(0,"Connection on!");
+    //messagebox(0,"Connection on!");
     logtext(0,"Hansa World: GetCounterpartyType");
-    writeareatofile(replyarea,"1CounterpartyTypeReply.txt",0);
+    //writeareatofile(replyarea,"1CounterpartyTypeReply.txt",0);
     
     GetXMLArea(replyarea);
     
@@ -1338,9 +1212,9 @@ begin
 	CreateCommonRequest(host, page, NPSettingsb.APIkey, "Common","getTypesOfPayers", "", mainRequest); //get status
 
   if(MySendRawWebRequest(host,"443",true,"POST",page & getParam,"text/xml","",false,mainRequest,replyarea,600))then begin  //WORK! 
-    messagebox(0,"Connection on!");
+    //messagebox(0,"Connection on!");
     logtext(0,"Hansa World: GetTypesOfPayers");
-    writeareatofile(replyarea,"1TypesOfPayersReply.txt",0);
+    //writeareatofile(replyarea,"1TypesOfPayersReply.txt",0);
     
     GetXMLArea(replyarea);
     
@@ -1394,9 +1268,9 @@ begin
 	CreateCommonRequest(host, page, NPSettingsb.APIkey, "Common","getPaymentForms", "", mainRequest); //get status
 
   if(MySendRawWebRequest(host,"443",true,"POST",page & getParam,"text/xml","",false,mainRequest,replyarea,600))then begin  
-    messagebox(0,"Connection on!");
+    //messagebox(0,"Connection on!");
     logtext(0,"Hansa World: GetPaymentForms");
-    writeareatofile(replyarea,"1PaymentFormsReply.txt",0);
+    //writeareatofile(replyarea,"1PaymentFormsReply.txt",0);
     
     GetXMLArea(replyarea);
     
@@ -1450,9 +1324,9 @@ begin
 	CreateCommonRequest(host, page, NPSettingsb.APIkey, "Common","getServiceTypes", "", mainRequest); //get status
 
   if(MySendRawWebRequest(host,"443",true,"POST",page & getParam,"text/xml","",false,mainRequest,replyarea,600))then begin  
-    messagebox(0,"Connection on!");
+    //messagebox(0,"Connection on!");
     logtext(0,"Hansa World: GetServiceTypes");
-    writeareatofile(replyarea,"1ServiceTypesReply.txt",0);
+    //writeareatofile(replyarea,"1ServiceTypesReply.txt",0);
     
     GetXMLArea(replyarea);
     
@@ -1509,9 +1383,9 @@ begin
 	CreateDescriptRequestWithMethod(host, page, NPSettingsb.APIkey, "Common","getTimeIntervals", properties, mainRequest); //get status
 
   if(MySendRawWebRequest(host,"443",true,"POST",page & getParam,"text/xml","",false,mainRequest,replyarea,600))then begin  
-    messagebox(0,"Connection on!");
+    //messagebox(0,"Connection on!");
     logtext(0,"Hansa World: GetTimeIntervals");
-    writeareatofile(replyarea,"1TimeIntervalsReply.txt",0);
+    //writeareatofile(replyarea,"1TimeIntervalsReply.txt",0);
     
     GetXMLArea(replyarea);
     
@@ -1565,9 +1439,9 @@ begin
 	CreateCommonRequest(host, page, NPSettingsb.APIkey, "Common","getTraysList", "", mainRequest); //get status
 
   if(MySendRawWebRequest(host,"443",true,"POST",page & getParam,"text/xml","",false,mainRequest,replyarea,600))then begin  
-    messagebox(0,"Connection on!");
+    //messagebox(0,"Connection on!");
     logtext(0,"Hansa World: GetTraysList");
-    writeareatofile(replyarea,"1TraysListReply.txt",0);
+    //writeareatofile(replyarea,"1TraysListReply.txt",0);
     
     GetXMLArea(replyarea);
     
@@ -1622,8 +1496,8 @@ begin
 
   if(MySendRawWebRequest(host,"443",true,"POST",page & getParam,"text/xml","",false,mainRequest,replyarea,600)) then begin  
     //messagebox(0,"Connection on!");
-    //logtext(0,"Hansa World: GetTypesOfPayersForRedelivery");
-    writeareatofile(replyarea,"1TypesOfPayersForRedeliveryReply.txt",0);
+    logtext(0,"Hansa World: GetTypesOfPayersForRedelivery");
+    //writeareatofile(replyarea,"1TypesOfPayersForRedeliveryReply.txt",0);
     
     GetXMLArea(replyarea);
     
@@ -1675,7 +1549,6 @@ begin
   ownershipForm = NPCr.OwnershipForm;
   
      
-
 	addtexttoarea("POST " & aPage & " HTTP/1.1" & chr(13) & chr(10),aRequest);
  	addtexttoarea("host: " & aWeb & chr(13) & chr(10),aRequest);
  	AddTextToArea("" & chr(13) & chr(10),aRequest);
@@ -1710,11 +1583,10 @@ begin
 	AddTextToArea("" & chr(13) & chr(10),aRequest);
 	AddTextToArea("" & chr(13) & chr(10),aRequest);
 	
-	writeareatofile(aRequest,"1CounterpartyCreationRequest.txt",0);	
+	//writeareatofile(aRequest,"1CounterpartyCreationRequest.txt",0);	
 		  
 return;
 end;
-
 
 
 
@@ -1743,13 +1615,11 @@ begin
   page = "/v2.0/xml/";
   res = true;
   
-
-   
 	CreateCounterpartyRequest(host, page, NPSettingsb.APIkey, "Counterparty","save", "",NPCounterpartyr, mainRequest);
 
   if(MySendRawWebRequest(host,"443",true,"POST",page & getParam,"text/xml","",false,mainRequest,replyarea,600)) then begin  
     //messagebox(0,"Connection on!");
-    writeareatofile(replyarea,"1CounterpatyCreationReply.txt",0);
+    //writeareatofile(replyarea,"1CounterpatyCreationReply.txt",0);
      
     GetXMLArea(replyarea);
     
@@ -1860,7 +1730,7 @@ begin
 	AddTextToArea("" & chr(13) & chr(10),aRequest);
 	AddTextToArea("" & chr(13) & chr(10),aRequest);
 	
-	writeareatofile(aRequest,"1addressCreationRequest.txt",0);	
+	//writeareatofile(aRequest,"1addressCreationRequest.txt",0);	
 		  
 return;
 end;
@@ -1900,7 +1770,7 @@ begin
 
   if(MySendRawWebRequest(host,"443",true,"POST",page & getParam,"text/xml","",false,mainRequest,replyarea,600))then begin  
     //messagebox(0,"Connection on!");
-    writeareatofile(replyarea,"1addAddressReply.txt",0);
+    //writeareatofile(replyarea,"1addAddressReply.txt",0);
     
     GetXMLArea(replyarea);
     
@@ -2073,7 +1943,6 @@ begin
 				xdata = ParseXMLArea(replyarea);
 				i = 0;
 
-//				NPWr.Description = "";
 				while(XmlNodeExists(xdata,"root/data/item[" & i & "]/Description"))begin
 					RecordNew(NPWr);
 					descr = XmlGet(xdata,"root/data/item[" & i & "]/Description");
@@ -2112,10 +1981,6 @@ begin
 end;
 
 
-
-
-
-
 procedure GetCounterpartiesRequest(string aWeb, string aPage, string aKey,string aModel,string aMethod,string counterpartyProperty, var area aRequest)
 begin
   string 200 getParam, host, page, webAddr;
@@ -2139,7 +2004,7 @@ begin
 	AddTextToArea("" & chr(13) & chr(10),aRequest);
 	AddTextToArea("" & chr(13) & chr(10),aRequest);
 	
-	writeareatofile(aRequest,"1CounterpartyCreationRequest.txt",0);	
+	//writeareatofile(aRequest,"1CounterpartyCreationRequest.txt",0);	
 		  
 return;
 end;
@@ -2168,8 +2033,7 @@ begin
 				LogText(0,counterpartyRef);
   			properties = "<Ref>" & counterpartyRef & "</Ref>"; 
 				CreateDescriptRequestWithMethod(host, page, apiKey, "Counterparty","getCounterpartyContactPersons", properties, mainRequest);
-  			
-  			
+  						
   			While(repeat<3)  begin  
   			  
   			  if (MySendRawWebRequest(host,"443",true,"POST",page & getParam,"text/xml","",false,mainRequest,replyarea,600)) then begin
@@ -2198,11 +2062,8 @@ begin
   								repeat = repeat + 1;
 									millisleep(300);
 					end;		
-
-  			end;
-  			
-  	end;  
-  
+  			end; 			
+  	end;    
 end;
 
 
@@ -2258,6 +2119,9 @@ begin
   			  end else begin
   								repeat = repeat + 1;
 									millisleep(300);
+									if(repeat == 3)then begin
+										logtext(0,"There is no connection!");
+									end;
 					end;		
 
   			end;
@@ -2375,7 +2239,7 @@ begin
 
   if(MySendRawWebRequest(host,"443",true,"POST",page & getParam,"text/xml","",false,mainRequest,replyarea,600)) then begin  
     //messagebox(0,"Connection on!");
-    writeareatofile(replyarea,"1SendersReply.txt",0);
+    //writeareatofile(replyarea,"1SendersReply.txt",0);
      
     GetXMLArea(replyarea);
     
