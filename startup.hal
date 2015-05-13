@@ -177,6 +177,7 @@ begin
 	Maintenance("Обновить формы оплаты",RequestNPVClass,NPGetPaymentFormsMn,modNPost);
 	Maintenance("Обновить адреса конрагентов",RequestNPVClass,NPRefreshAddressesOfCounterpartiesMn,modNPost);
 	Maintenance("Обновить контрагентов",RequestNPVClass,NPRefreshCounterparties,modNPost);
+	Maintenance("Обновить контрагентов отправителя",RequestNPVClass,NPRefreshSenderCounterparties,modNPost);
 	//Maintenance("Create sender-counterparty",RequestNPVClass,NPCreateCounterpartySender,modNPost);
 	//Maintenance("Add address for counterparty",RequestNPVClass,NPAddAddressForCounterpartyMn,modNPost);
 	Maintenance("Обновить регистры Новой почты",RequestNPVClass,RefreshAllInnerRegistersNP,modNPost);

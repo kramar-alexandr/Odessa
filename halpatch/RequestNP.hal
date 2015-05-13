@@ -2191,11 +2191,8 @@ begin
 		while(XmlNodeExists(xdata,"root/data/item[" & i & "]/Description")) begin
 				exist = false;
 
-				NPCr.FirstName = XmlGet(xdata,"root/data/item[" & i & "]/FirstName");
-				NPCr.LastName = XmlGet(xdata,"root/data/item[" & i & "]/LastName");
-				NPCr.MiddleName = XmlGet(xdata,"root/data/item[" & i & "]/MiddleName");
-				NPCr.CityRef = XmlGet(xdata,"root/data/item[" & i & "]/City");				
-				if (ReadFirstKey("FirstName",NPCr,4,true)) then begin
+				NPCr.Ref = XmlGet(xdata,"root/data/item[" & i & "]/Ref");				
+				if (ReadFirstKey("Ref",NPCr,1,true)) then begin
 					RecordCopy(oldNPCr,NPCr);
 					exist = true;
 				end else begin
@@ -2239,7 +2236,7 @@ begin
 
   if(MySendRawWebRequest(host,"443",true,"POST",page & getParam,"text/xml","",false,mainRequest,replyarea,600)) then begin  
     //messagebox(0,"Connection on!");
-    //writeareatofile(replyarea,"1SendersReply.txt",0);
+    writeareatofile(replyarea,"1SendersReply.txt",0);
      
     GetXMLArea(replyarea);
     
@@ -2248,12 +2245,8 @@ begin
 
 		while(XmlNodeExists(xdata,"root/data/item[" & i & "]/Description")) begin
 				exist = false;
-
-				NPCSr.FirstName = XmlGet(xdata,"root/data/item[" & i & "]/FirstName");
-				NPCSr.LastName = XmlGet(xdata,"root/data/item[" & i & "]/LastName");
-				NPCSr.MiddleName = XmlGet(xdata,"root/data/item[" & i & "]/MiddleName");
-				NPCSr.CityRef = XmlGet(xdata,"root/data/item[" & i & "]/City");				
-				if (ReadFirstKey("FirstName",NPCSr,4,true)) then begin
+				NPCSr.Ref = XmlGet(xdata,"root/data/item[" & i & "]/Ref");				
+				if (ReadFirstKey("Ref",NPCSr,1,true)) then begin
 					RecordCopy(oldNPCSr,NPCSr);
 					exist = true;
 				end else begin
@@ -2263,7 +2256,10 @@ begin
 				NPCSr.CityRef = XmlGet(xdata,"root/data/item[" & i & "]/City");
 				NPCSr.FirstName = XmlGet(xdata,"root/data/item[" & i & "]/FirstName");
 				NPCSr.LastName = XmlGet(xdata,"root/data/item[" & i & "]/LastName");
-				NPCSr.MiddleName = XmlGet(xdata,"root/data/item[" & i & "]/MiddleName");		
+				NPCSr.MiddleName = XmlGet(xdata,"root/data/item[" & i & "]/MiddleName");	
+				if (blank(NPCSr.FirstName) and blank(NPCSr.LastName)) then begin	
+					NPCSr.FirstName = NPCSr.Description;											//main key should be nonblank//Edit----------------------Dima  13.05.2015
+				end;
 				NPCSr.Ref = XmlGet(xdata,"root/data/item[" & i & "]/Ref");
 				NPCSr.CounterpartyType = XmlGet(xdata,"root/data/item[" & i & "]/CounterpartyType");
 				NPCSr.CounterpartyProperty = "Sender";	 				
@@ -2314,3 +2310,83 @@ begin
 	NPGetWarehouseMn(RepSpec);
 end;
 
+
+global updating
+procedure NPRefreshSenderCounterparties(record NPCounterpartyVc NPCounterpartyr)
+begin
+  area replyarea,mainRequest;
+  boolean TrHs;
+  string 200 getParam,host,page,webaddr,path;
+  area basestring;
+  xml xdata;
+  string 255 xpath, descr;
+  longint i,j;
+  record NPCounterpartySenderVc NPCSr, oldNPCSr;
+  record NPCityVc NPCityr;
+  record NPSettingsBlock NPSettingsb;
+  array string 50 senders,recipients;
+  boolean exist;
+
+	BlockLoad(NPSettingsb);
+  if (blank(NPSettingsb.APIkey)) then begin
+  	goto LNPRefreshSenderCounterparties;
+  end;		
+  
+  host = "api.novaposhta.ua";
+  page = "/v2.0/xml/";
+
+	GetCounterpartiesRequest(host, page, NPSettingsb.APIkey, "Counterparty","getCounterparties", "Sender", mainRequest);
+
+  if(MySendRawWebRequest(host,"443",true,"POST",page & getParam,"text/xml","",false,mainRequest,replyarea,600)) then begin  
+    //messagebox(0,"Connection on!");
+    writeareatofile(replyarea,"1SendersReply.txt",0);
+     
+    GetXMLArea(replyarea);
+    
+		xdata = ParseXMLArea(replyarea);
+		i = 0;
+
+		while(XmlNodeExists(xdata,"root/data/item[" & i & "]/Description")) begin
+				exist = false;
+				NPCSr.Ref = XmlGet(xdata,"root/data/item[" & i & "]/Ref");				
+				if (ReadFirstKey("Ref",NPCSr,1,true)) then begin
+					RecordCopy(oldNPCSr,NPCSr);
+					exist = true;
+				end else begin
+					RecordNew(NPCSr);
+				end;	
+				NPCSr.Description = XmlGet(xdata,"root/data/item[" & i & "]/Description");
+				NPCSr.CityRef = XmlGet(xdata,"root/data/item[" & i & "]/City");
+				NPCSr.FirstName = XmlGet(xdata,"root/data/item[" & i & "]/FirstName");
+				NPCSr.LastName = XmlGet(xdata,"root/data/item[" & i & "]/LastName");
+				NPCSr.MiddleName = XmlGet(xdata,"root/data/item[" & i & "]/MiddleName");	
+				if (blank(NPCSr.FirstName) and blank(NPCSr.LastName)) then begin	
+					NPCSr.FirstName = NPCSr.Description;											//main key should be nonblank//Edit----------------------Dima  13.05.2015
+				end;
+				NPCSr.Ref = XmlGet(xdata,"root/data/item[" & i & "]/Ref");
+				NPCSr.CounterpartyType = XmlGet(xdata,"root/data/item[" & i & "]/CounterpartyType");
+				NPCSr.CounterpartyProperty = "Sender";	 				
+				NPCSr.EDRPOU = XmlGet(xdata,"root/data/item[" & i & "]/EDRPOU");
+				NPCSr.OwnershipForm = XmlGet(xdata,"root/data/item[" & i & "]/OwnershipForm");
+				NPCSr.OwnershipFormDescription = XmlGet(xdata,"root/data/item[" & i & "]/OwnershipFormDescription");
+				NPCSr.Counterparty = XmlGet(xdata,"root/data/item[" & i & "]/Counterparty");
+				NPCityr.Ref = NPCSr.CityRef;
+				if 	(ReadFirstKey("Ref",NPCityr,1,true)) then begin
+					NPCSr.CityDescription = NPCityr.City;
+				end;
+				if (exist) then begin
+					RecordUpdate(oldNPCSr,NPCSr,true);
+				end else begin	
+					RecordStore(NPCSr,true);
+				end;
+				senders[i] = NPCSr.Ref;
+			i = i + 1;
+		end;
+    end else begin
+ 		logtext(0,"Hansa World: No Connection to api.novaposhta.ua");
+  end;
+  
+  RefreshCounterpartyContactPerson(senders,recipients);
+  LNPRefreshSenderCounterparties:;
+  return;
+end;

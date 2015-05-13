@@ -1216,13 +1216,11 @@ begin
   UseView(NPCounterpartySenderVc);
   ActiveFieldOnNew("Имя");
   SetWRect(20,100,530,600);
-  h=75; h2 = 230;
+  h=85; h2 = 240;
   EditField(h,v=6,250,"CityRef",Normal,CityRef,false,0);
   EditField(400,v,250,"Город",Normal,CityDescription,false,0);
   EditField(h,v+=20,250,"Reference",Normal,Ref,false,0);
-  EditField(h,v+=20,110,"Фамилия",Normal,LastName,false,0);
-  EditField(h2,v,110,"Имя",Normal,FirstName,false,0);
-  EditField(400,v,110,"Отчество",Normal,MiddleName,false,0);
+  EditField(h,v+=20,200,"Наименование",Normal,Description,false,0);
   EditField(h,v+=20,110,"Телефон",Normal,Phone,false,0);
   EditField(h2,v,110,"E-mail",Normal,Email,false,0);
   EditField(h,v+=20,110,"Тип",Normal,CounterpartyType,false,NPCounterpartyTypesSClass);
@@ -1258,8 +1256,7 @@ begin
   Sizeable(-1,-1,0,0);
   UseView(NPCounterpartySenderVc);
   RecordList(4,17,-21,-39);
-  RlColKey(4,4,"Имя(Название)",FirstName,false,FirstName);
-  RlColKey(80,80,"Фамилия",LastName,false,LastName); 
+  RlColKey(4,4,"Наименование",Description,false,Description);
   RlColKey(180,180,"Категория",CounterpartyProperty,false,CounterpartyProperty);
   RlColKey(280,280,"Тип",CounterpartyType,false,CounterpartyType);
   RlCol(350,350,"Reference",Ref,false);
@@ -1896,7 +1893,7 @@ begin
   EditField(h,v+=vs,200,"Отправитель",Normal,DefSenderDescription,false,0);
   EditField(h2,v+=vs,200,"Город(ссылка)",Normal,DefSenderCityRef,false,0);
   EditField(h,v+=vs,200,"Город",Normal,DefSenderCityDescription,false,0);  
-  EditField(h2,v+=vs,200,"Отделение НП(по-умолчанию)",Normal,DefSenderWarehouse,false,NPWarehouseSClass);
+  EditField(h2,v+=vs,200,"Отделение НП",Normal,DefSenderWarehouse,false,NPWarehouseSClass);
   StaticText(h-50,v+=40,"Параметры доставки:",false);
   EditField(h2,v+=vs,200,"Тип доставки",Normal,DefServiceType,false,NPServiceTypesSClass);
   EditField(h2,v+=vs,200,"Тип груза",Normal,DefCargoType,false,NPCargoTypeSClass);
