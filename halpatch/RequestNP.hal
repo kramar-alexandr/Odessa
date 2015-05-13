@@ -159,7 +159,7 @@ begin
 	  end else begin
 	  	Weight = PackListr.TotWeight;
 	  end;
-		logtext(0, PackListr.TotVolume);
+		//logtext(0, PackListr.TotVolume);
 	  Volume = PackListr.TotVolume;
 	  SeatsAmount = MatRowCnt(PackListr);
   end;
@@ -355,7 +355,7 @@ begin
     writeareatofile(replyarea,"1reply.txt",0);
     
     GetXMLArea(replyarea);
-    //writeareatofile(replyarea,"1CreateENReply.txt",0);
+    writeareatofile(replyarea,"1CreateENReply.txt",0);
     xdata = ParseXMLArea(replyarea);
 		i = 0;
 		

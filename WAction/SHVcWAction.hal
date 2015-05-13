@@ -30,7 +30,7 @@ remote updating procedure NPCreateRequestMn(var record SHVc,var string);
 remote function boolean NPDeleteDocumentRequest(string );//Edit----------------------Dima  06.05.2015
 remote function boolean CheckENremote(record SHVc, var longint,var string);
 
-function boolean CheckEN(record SHVc SHr)
+function boolean CheckEN(record SHVc SHr,integer wn)
 begin
 	boolean res;
   string 255 msg;
@@ -46,6 +46,9 @@ begin
 		MessageBox(errcode,msg);
 	end;
 	
+	if (WindowState(wn)==Rs_update) then begin
+		MessageBox(31059,"");
+	end;	
 	CheckEN = res;
 	return;
 end;
@@ -60,15 +63,21 @@ begin
   record SHVc SHr;
   record RcVc RepSpec;
   record ORVc ORr;
-  string 255  www;
+  string 255  www,errors;
   record NPSettingsBlock NPSettingsb;
   
   wn = CurWindow;
   GetWindowRecord(wn,SHr);
 
-	if (CheckEN(SHr)) then begin		//Edit----------------------Dima  06.05.2015  	
+	if (CheckEN(SHr,wn)) then begin		//Edit----------------------Dima  06.05.2015  	
 	  	if(nonblank(SHr.NPDocumentRef)) then begin
-	  		BlockLoad(NPSettingsb); 
+	  		BlockLoad(NPSettingsb);
+				if(nonblank(SHr.NPIntDocNumber) and (SHr.NPPrinted==0)) then begin
+					NPCreateRequestMn(SHr, errors);															//update before printing if necessary
+					PutWindowRecord(wn,SHr);
+					GetWindowRecord(wn,SHr);
+				end;	  		
+	  		 
 				www = "http://my.novaposhta.ua/orders/printDocument/orders[]/" & SHr.NPDocumentRef & "/type/html/apiKey/" & NPSettingsb.APIkey;
 				OpenWebBrowser(www);
 				SHr.NPPrinted = 1;
@@ -89,15 +98,20 @@ begin
   record SHVc SHr;
   record RcVc RepSpec;
   record ORVc ORr;
-  string 255  www;
+  string 255  www,errors;
   record NPSettingsBlock NPSettingsb;
   
   
   wn = CurWindow;
   GetWindowRecord(wn,SHr);
-	if (CheckEN(SHr)) then begin
+	if (CheckEN(SHr,wn)) then begin
 	  	if(nonblank(SHr.NPDocumentRef))then begin
-	  		BlockLoad(NPSettingsb); 
+	  		BlockLoad(NPSettingsb);
+				if(nonblank(SHr.NPIntDocNumber) and nonblank(SHr.NPDocumentRef) and blank(SHr.NPPrinted))then begin
+					NPCreateRequestMn(SHr, errors);															//update before printing if necessary
+					PutWindowRecord(wn,SHr);
+					GetWindowRecord(wn,SHr); 
+				end;	  		 
 	  		www = "https://my.novaposhta.ua/orders/printMarkings/orders[]/" & SHr.NPDocumentRef & "/type/html/apiKey/" & NPSettingsb.APIkey;
 				OpenWebBrowser(www);
 				SHr.NPPrinted = 1;
@@ -127,14 +141,8 @@ begin
   wn = CurWindow;
   GetWindowRecord(wn,SHr);
 	
-	if (CheckEN(SHr)) then begin
+	if (CheckEN(SHr,wn)) then begin
 	  	NPCreateRequestMn(SHr,errors);
-//if(nonblank(SHr.NPDocumentRef))then begin
-	  	//	BlockLoad(NPSettingsb); 
-//	  		www = "https://my.novaposhta.ua/orders/printMarkings/orders[]/" & SHr.NPDocumentRef & "/type/html/apiKey/" & NPSettingsb.APIkey;
-	  		//www = "http://my.novaposhta.ua/orders/printDocument/orders[]/" & SHr.NPDocumentRef & "/type/html/apiKey/" & NPSettingsb.APIkey;
-			//	OpenWebBrowser(www);
-	  //	end;
  	
 	  	if (nonblank(errors)) then begin	//NewPost's response
 				MessageBox(0,errors);
