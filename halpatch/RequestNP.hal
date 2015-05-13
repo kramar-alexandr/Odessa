@@ -198,11 +198,11 @@ begin
   
   CounterpartySenderr.Description = SHr.NPSender;
   CounterpartySenderr.CityDescription = SHr.NPCitySender;
-  CounterpartySenderr.Phone = SHr.NPSendersPhone;
-  if(ReadFirstKey("Description",CounterpartySenderr, 3, true))then begin
+ // CounterpartySenderr.Phone = SHr.NPSendersPhone;
+  if(ReadFirstKey("Description",CounterpartySenderr, 2, true))then begin
   	Sender = CounterpartySenderr.Ref;
   	matrowget(CounterpartySenderr, 0, Senderrw);
-  		ContactSender = Senderrw.Ref;  
+  		ContactSender = Senderrw.Ref; 
   end;
   
   Counterpartyr.LastName = SHr.NPRecipientLastName;
@@ -700,9 +700,9 @@ begin
   AddTextToArea("   <apiKey>" & ConvertXml(aKey) & "</apiKey>" & chr(13),aRequest);
   AddTextToArea("   <modelName>" & ConvertXml(aModel) & "</modelName>" & chr(13),aRequest);
   AddTextToArea("   <calledMethod>" & ConvertXml(aMethod) & "</calledMethod>" & chr(13),aRequest);
-  AddTextToArea("			<methodProperties>"& chr(13),aRequest);
+  AddTextToArea("			<methodProperties />"& chr(13),aRequest);
  // AddTextToArea("   		<CounterpartyRef>" & ConvertXml(aParam) & "</CounterpartyRef>" & chr(13),aRequest);
-	 AddTextToArea("		</methodProperties>" & chr(13),aRequest)
+	 //AddTextToArea("		</methodProperties>" & chr(13),aRequest)
   AddTextToArea("</file>" & chr(13),aRequest);
   
 	AddTextToArea("" & chr(13) & chr(10),aRequest);
@@ -710,7 +710,7 @@ begin
 	AddTextToArea("" & chr(13) & chr(10),aRequest);
 	AddTextToArea("" & chr(13) & chr(10),aRequest);
 	
-	//writeareatofile(aRequest,"1descriptionRequest.txt",0);
+	writeareatofile(aRequest,"1descriptionRequest.txt",0);
   
 return;
 end;
