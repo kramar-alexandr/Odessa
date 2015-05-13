@@ -1687,7 +1687,7 @@ begin
 			goto LCheckENremote;
 		end;
 		
-	  if (blank(SHr.NPVolumeGeneral) or blank(SHr.NPWeight)) then begin
+	  if (blank(SHr.NPVolumeGeneral) or blank(SHr.NPWeight) or blank(SHr.NPRowVolume1) or blank(SHr.NPRowWeight1)) then begin
 			res = false;
 			errCode = 31058;
 			goto LCheckENremote;
