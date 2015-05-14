@@ -5176,7 +5176,8 @@ begin
   end else begin
     RlColKey(-115,-115,"ИТОГО",Sum4,true,Sum4);
   end;
-  RlColKey(-60,-60,"Статус",CustomStatusFlagText,true,CustomStatusFlagText);
+  //RlColKey(-60,-60,"Статус",CustomStatusFlagText,true,CustomStatusFlagText);//   ????
+  RlCol(-60,-60,"Статус",CustomStatusFlagText,true);
   if (HasLimitedAccess) then begin
     BrowseSubsetButton(-40,-15);
   end;
