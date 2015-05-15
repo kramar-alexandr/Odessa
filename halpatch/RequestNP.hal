@@ -132,10 +132,11 @@ begin
 	  SeatsAmount = MatRowCnt(PackListr);
   end;
   
-  Descripr.Description = SHr.NPCargoDescription;
-  if(ReadFirstMain(Descripr, 1, true)) then begin
-	  Descrip = Descripr.Ref;
-  end;
+  Descrip = SHr.NPCargoDescription;
+  //Descripr.Description = SHr.NPCargoDescription;
+  //if(ReadFirstMain(Descripr, 1, true)) then begin
+ //  Descrip = Descripr.Ref;
+  //end;
   
   ORr.SerNr = SHr.OrderNr;
   if(ReadFirstMain(ORr, 1, true)) then begin

@@ -1230,8 +1230,8 @@ begin
   EditField(400,v,50,"Квартира",Normal,Flat,false,0);
   MatrixBegin(25,v+=40,-100,-7,-,99);
   Flip(0);
-  MatCol(1,30,"Фамилия",0,FirstName,false,0);
-  MatCol(1,120,"Имя",0,LastName,false,0);
+  MatCol(1,30,"Фамилия",0,LastName,false,0);
+  MatCol(1,120,"Имя",0,FirstName,false,0);
   Flip(1);
   MatCol(1,210,"Отчество",0,MiddleName,false,0);
   MatCol(1,300,"Телефон",0,Phones,false,0);
