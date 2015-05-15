@@ -1778,7 +1778,10 @@ RecordBegin(INVc,-,"artikel5");
   KeySegment(SyncFlag);
   KeySegment(SerNr);
   
-  KeyBegin(CustomStatusFlagText); //Edit----------------------Dima  24.03.2015
+  SubsetKeyBegin2(CustomStatusFlagText);// Edit ************************** Thursday, 14 May 2015 23:00:39
+  StoreInBaseKey;
+  AppendListFieldToKeyName(SalesMan);
+  AppendListFieldToKeyName(SalesGroup);
   KeySegment(CustomStatusFlagText);
   KeySegment(SerNr);  
   EndRecord;

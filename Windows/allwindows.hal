@@ -5168,7 +5168,8 @@ begin
   pos = pos + 60;
   RlColKey(pos,pos,"Наим.",Addr0,false,Name);
   pos = pos + 130; //Edit***************************Sasha2,13:45 08.01.2015
-  RlColKey(pos,pos,"Оф.сер.номер",OfficialSerNr,false,OfficialSerNr); //Edit***************************Sasha2,13:45 08.01.2015
+  //RlColKey(pos,pos,"Оф.сер.номер",OfficialSerNr,false,OfficialSerNr); //Edit***************************Sasha2,13:45 08.01.2015
+  RlCol(pos,pos,"Оф.сер.номер",OfficialSerNr,false);// Edit ************************** Thursday, 14 May 2015 23:15:45
   if (IsEnterprise) then begin
     RlColKey(-260,-260,"Класс",OrderClass,false,OrderClass);
     RlColKey(-210,-210,"Итого",Sum4,true,Sum4);
@@ -5176,8 +5177,8 @@ begin
   end else begin
     RlColKey(-115,-115,"ИТОГО",Sum4,true,Sum4);
   end;
-  //RlColKey(-60,-60,"Статус",CustomStatusFlagText,true,CustomStatusFlagText);//   ????
-  RlCol(-60,-60,"Статус",CustomStatusFlagText,true);
+  RlColKey(-60,-60,"Статус",CustomStatusFlagText,true,CustomStatusFlagText);//   ????
+  //RlCol(-60,-60,"Статус",CustomStatusFlagText,true);
   if (HasLimitedAccess) then begin
     BrowseSubsetButton(-40,-15);
   end;
