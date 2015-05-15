@@ -30,6 +30,7 @@ external procedure SerialNrDimensions(string,string,var val,var val,var val);
 external procedure SumUpPackList(var record PackListVc);//Edit----------------------Dima  29.04.2015
 external procedure NP_SumUpRowWeight(var record SHVc);
 external procedure NP_SumUpRowVolumes(var record SHVc);//Edit----------------------Dima  07.05.2015
+external procedure CurValToOtherCur(Date,string,val,string,var val,roundmode);	//Edit----------------------Dima  15.05.2015
 
 procedure SHChangeShip(record SHVc SHr,Integer rownr)
 BEGIN
@@ -1397,7 +1398,7 @@ end;
 
 
 
-procedure  SHClearSizesFields(var record SHVc SHr)
+procedure  SHClearSizesFields(var record SHVc SHr)	//Edit----------------------Dima  05.05.2015
 begin
 
 			SHr.NPLength1 = blankval;
@@ -1722,8 +1723,46 @@ begin
 			goto LCheckENremote;			
 		end;	
 		
+		if (SHr.NPCostCODEdit>SHr.NPCostEdit) then begin	
+			res = false;
+			errCode = 31060;
+			goto LCheckENremote;			
+		end;		
+		
 	
 	LCheckENremote:;
 	CheckENremote = res;
 	return;
+end;
+
+
+global
+function val CalculateCostFromORVc(record SHVc SHr)		//Edit----------------------Dima  15.05.2015
+begin
+ val cost,cost2;
+ record ORVc ORr;
+ row ORVc ORrw;
+ row SHVc SHrw;
+ integer i,rwcnt,qty;
+ 
+ cost = 0;
+ rwcnt = MatRowCnt(SHr);
+ ORr.SerNr = SHr.OrderNr;
+ if (ReadFirstMain(ORr,1,true)) then begin
+  	for (i=0; i<rwcnt;i=i+1) begin
+			MatRowGet(SHr,i,SHrw);
+			MatRowGet(ORr,SHrw.OrdRow,ORrw);
+			cost = cost + ORrw.Sum*SHrw.Ordered/ORrw.Quant;  	
+  	end; 
+ end;
+  
+/*  
+ if(ORr.CurncyCode != "UAH") then begin //?? UAH or UAH_R
+ 		CurValToOtherCur(CurrentDate,ORr.CurncyCode, cost,"UAH",cost2,DefaultCurRoundOff);
+ 		cost = cost2;
+ end;
+*/ 
+
+ CalculateCostFromORVc = cost;
+return;  
 end;

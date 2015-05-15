@@ -2266,7 +2266,12 @@ RecordBegin(INVc,-,"artikel5");
 	RecordField(NPRecipientWarehouseDesc,M4Str,200,0);
 	RecordField(NPBackDeliveryType,M4Str,80,0);
 	RecordField(NPBackDeliveryPayer,M4Str,80,0);
-	RecordField(NPPrinted,M4Mark,0,0); 		//Edit----end------------------Dima  08.05.2015
+	RecordField(NPPrinted,M4Mark,0,0);
+	RecordField(NPCost,M4Val,0,0);
+	RecordField(NPCostEdit,M4Val,0,0);
+	RecordField(NPCostCOD,M4Val,0,0);
+	RecordField(NPCostCODEdit,M4Val,0,0);
+	RecordField(NPComment,M4Str,200,0); 		//Edit----end------------------Dima  08.05.2015
   ArrayBegin(Math,-,1);
   ArrayField(OrdRow,M4Long,0,0);
   ArrayField(ArtCode,M4Code,20,INVc);

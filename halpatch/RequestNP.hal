@@ -14,7 +14,6 @@ external function Boolean FindStringInString(string, string);
 external function boolean MySendRawWebRequest(string, string, boolean, string, string, string, string, boolean, area, var area, integer);
 external function string 255 ConvertXml(string);
 external function string 255 ConvertXmlString(string,Boolean);
-external procedure GetFullCurncyRate (var string,Date,var val,var val,var val,var val,var val);
 
 
 SetLangMode(LangRussian,"RUS",0); 
@@ -56,37 +55,6 @@ begin
 end;
 
 
-function val CalculateCostFromORVc(record SHVc SHr)
-begin
- val cost;
- record ORVc ORr;
- row ORVc ORrw;
- row SHVc SHrw;
- integer i,rwcnt,qty;
- val t,fr,to1,to2,br1,br2;
- string 5 curncy;
- 
- cost = 0;
- rwcnt = MatRowCnt(SHr);
- ORr.SerNr = SHr.OrderNr;
- if (ReadFirstMain(ORr,1,true)) then begin
-  	for (i=0; i<rwcnt;i=i+1) begin
-			MatRowGet(SHr,i,SHrw);
-			MatRowGet(ORr,SHrw.OrdRow,ORrw);
-			cost = cost + ORrw.Sum*SHrw.Ordered/ORrw.Quant;  	
-  	end; 
- end; 
-  
- if(ORr.CurncyCode == "USD") then begin
-		curncy = "UAH";
- 		GetFullCurncyRate(curncy,CurrentDate,fr,to1,to2,br1,br2);
- 		cost = cost * fr/to1;
- end;
- 
- CalculateCostFromORVc = cost;
-return;  
-end;
-
 
 procedure NPParseErrors(xml xdata,var string errors)
 begin
@@ -113,7 +81,7 @@ begin
 	string 255 CitySender,BackDeliveryType,BackDeliveryPayer;
 	val Volume, Weight;
 	integer SeatsAmount,i;
-	val Cost;
+	val Cost,CostCOD;
 	record NPTypesOfPayersVc TypeOfPayerr;
 	record NPPaymentFormsVc PaymentFormr;
 	record NPCargoTypeVc CargoTyper;
@@ -171,10 +139,20 @@ begin
   
   ORr.SerNr = SHr.OrderNr;
   if(ReadFirstMain(ORr, 1, true)) then begin
-  	Cost = CalculateCostFromORVc(SHr);
   	RecipientsPhone = ORr.NPPhone;
   end;
   
+  if (nonblank(SHr.NPCostEdit)) then begin
+		Cost = SHr.NPCostEdit;
+	end else begin
+		Cost = SHr.NPCost;
+	end;
+  if (nonblank(SHr.NPCostCODEdit)) then begin
+		CostCOD = SHr.NPCostCODEdit;
+	end else begin
+		CostCOD = SHr.NPCostCOD;
+	end;	
+		  
   Cityr.City = SHr.NPCitySender;
   if(ReadFirstMain(Cityr, 1, true)) then begin
 	  CitySender = Cityr.Ref;
@@ -304,7 +282,7 @@ begin
 				AddTextToArea("		<item>"& chr(13),aRequest);
  				AddTextToArea("				<PayerType>" & ConvertXml(BackDeliveryPayer) & "</PayerType>" & chr(13),aRequest);	
  				AddTextToArea("				<CargoType>" & ConvertXml(BackDeliveryType) & "</CargoType>" & chr(13),aRequest);
- 				AddTextToArea("				<RedeliveryString>" & ConvertXml(Cost) & "</RedeliveryString>" & chr(13),aRequest);	
+ 				AddTextToArea("				<RedeliveryString>" & ConvertXml(CostCOD) & "</RedeliveryString>" & chr(13),aRequest);	
  				AddTextToArea("		</item>" & chr(13),aRequest);
 				AddTextToArea("		</BackwardDeliveryData>"& chr(13),aRequest);	
 	end;	

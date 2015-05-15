@@ -12,6 +12,7 @@ external procedure SetupVATBase(var record SMVc,var Integer);
 external procedure AddVATBase(var record SMVc,string,val,val,Integer,Integer,Integer);
 external procedure MulM4ProcVal(val,val,var val);
 external procedure PUCalcPerc(val,string,var val);
+external function val CalculateCostFromORVc(record SHVc);
 
 
 global
@@ -81,6 +82,7 @@ begin
   val totqty,taxsum,sum,t,t1;
   val totv,totw;
   record INVc INr;
+  val cost;	//Edit----------------------Dima  15.05.2015
   
   ORr.SerNr = SHr.OrderNr;
   if (ReadFirstMain(ORr,1,true)) then begin
@@ -103,6 +105,14 @@ begin
       totw = totw + SHrw.Ship*INr.Weight;
       totv = totv + SHrw.Ship*INr.Volume;      
     end;
+  end;
+  
+  if (ORr.DeliveryNewPost>0) then begin		//Edit----------------------Dima  15.05.2015
+  	cost = CalculateCostFromORVc(SHr);
+  	SHr.NPCost = cost;
+  	if (ORr.NPPaymentType==1) then begin		//cash on delivery
+  		SHr.NPCostCOD = cost;
+  	end;
   end;
   SHr.TotQty = Round(totqty,SetRoundModeD(2));
   SHr.TAX1Sum = Round(taxsum,DefaultRoundMode);

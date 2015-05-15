@@ -30,7 +30,7 @@ remote updating procedure NPCreateRequestMn(var record SHVc,var string);
 remote function boolean NPDeleteDocumentRequest(string );//Edit----------------------Dima  06.05.2015
 remote function boolean CheckENremote(record SHVc, var longint,var string);
 
-function boolean CheckEN(record SHVc SHr,integer wn)
+function boolean CheckEN(record SHVc SHr,integer wn)	//Edit----------------------Dima  07.05.2015
 begin
 	boolean res;
   string 255 msg;
@@ -47,6 +47,7 @@ begin
 	end;
 	
 	if (WindowState(wn)==Rs_update) then begin
+		res = false;
 		MessageBox(31059,"");
 	end;	
 	CheckEN = res;
@@ -131,12 +132,9 @@ begin
   record SHVc SHr;
   record RcVc RepSpec;
 	record ORVc ORr;
-  integer cashOnDelivery,prepayment;
   string 255 errors, www;
   record NPSettingsBlock NPSettingsb;
   
-  cashOnDelivery = 1;
-  prepayment = 0;
   
   wn = CurWindow;
   GetWindowRecord(wn,SHr);
@@ -1046,17 +1044,7 @@ BEGIN
     		    res = true;
     		  end;
 				end;    		
-   end;
- /* 
-  if (WindowState(wn)==Rs_normal or WindowState(wn)==Rs_update) then begin
-  
-      if (SHr.OKFlag==0 and (SHr.NPPrinted>0)) then begin				//user shoudn't click "unOked" NPPrinted button, he only can "unOk" this button
-				if (UserCanAction("AllowEditSHNewPost",false)) then begin
-    	    res = true;
-    	  end;
-			end;
-  end;	
- */ 	
+   end;	
   SHDClassNPPrintedButtonAction = res;
   RETURN;
 END;
@@ -1272,22 +1260,3 @@ BEGIN
   RETURN;
 END;
 
-/*
-global
-function Boolean SHDClassOnOpenWindow(Integer wn)
-begin
-  record SHVc SHr;
-  record eShipTaxAuthReplyVc eSTARr;
-  
-TaxAdminServSeal is in SHVc record  
-  GetWindowRecord(wn,SHr);
-  if (HasLocalization("PRT")) then begin
-    eSTARr.FileName = "SHVc";
-    eSTARr.TransNr = SHr.SerNr;
-    ReadLastKey("FNTransNr",eSTARr,2,true);
-    PutWindowString(wn,"TaxAdminServSeal",eSTARr.TaxAdminServSeal);
-  end;  
-  SHDClassOnOpenWindow = false;
-  return;
-end;
-*/
