@@ -1124,46 +1124,55 @@ BEGIN
     end;
   end;
   
-  if (res) then begin			//Edit----------------------Dima  08.05.2015
-  	if (SHr.NPPrinted==0) then begin
-		  switch (fieldname) begin
-        case "NPSender":
-          if (UserCanAction("AllowEditSHNewPost",false)==false) then begin res = false; end;
-        case "NPCitySender":
-          if (UserCanAction("AllowEditSHNewPost",false)==false) then begin res = false; end;
-        case "NPSenderWarehouse":
-          if (UserCanAction("AllowEditSHNewPost",false)==false) then begin res = false; end;
-        case "NPContactSender":
-          if (UserCanAction("AllowEditSHNewPost",false)==false) then begin res = false; end;
-        case "NPSendersPhone":
-          if (UserCanAction("AllowEditSHNewPost",false)==false) then begin res = false; end;
-        case "NPPayer":
-          if (UserCanAction("AllowEditSHNewPost",false)==false) then begin res = false; end;
-        case "NPPaymentMethod":
-          if (UserCanAction("AllowEditSHNewPost",false)==false) then begin res = false; end;
-        case "NPServiceType":
-          if (UserCanAction("AllowEditSHNewPost",false)==false) then begin res = false; end;
-        case "NPBackDeliveryType":
-          if (UserCanAction("AllowEditSHNewPost",false)==false) then begin res = false; end;
-        case "NPBackDeliveryPayer":
-          if (UserCanAction("AllowEditSHNewPost",false)==false) then begin res = false; end;
-        case "NPIntDocNumber":
-          if (UserCanAction("AllowEditSHNewPost",false)==false) then begin res = false; end;
-        case "NPCostOnSite":
-          if (UserCanAction("AllowEditSHNewPost",false)==false) then begin res = false; end;    
-        otherwise   
-        	res = true;
-      end; 
-     end else begin  	      
-     		res = false;
-     end;
-	end;
   
   switch (fieldname) begin
     case "BBCostPrice": res = false;
     case "Name": res = HasLocalization("PRT")==false;
     case "TaxAuthID": res = true;
   end;
+  
+  if (SHr.NPPrinted==0) then begin		//Edit----------------------Dima  18.05.2015
+	  switch (fieldname) begin
+      case "NPSender":
+      	res = true;
+        if (UserCanAction("AllowEditSHNewPost",false)==false) then begin res = false; end;
+      case "NPCitySender":
+				res = true;      
+        if (UserCanAction("AllowEditSHNewPost",false)==false) then begin res = false; end;
+      case "NPSenderWarehouse":
+      	res = true;
+        if (UserCanAction("AllowEditSHNewPost",false)==false) then begin res = false; end;
+      case "NPContactSender":
+      	res = true;
+        if (UserCanAction("AllowEditSHNewPost",false)==false) then begin res = false; end;
+      case "NPSendersPhone":
+        if (UserCanAction("AllowEditSHNewPost",false)==false) then begin res = false; end;
+      case "NPPayer":
+      	res = true;
+        if (UserCanAction("AllowEditSHNewPost",false)==false) then begin res = false; end;
+      case "NPPaymentMethod":
+      	res = true;
+        if (UserCanAction("AllowEditSHNewPost",false)==false) then begin res = false; end;
+      case "NPServiceType":
+      	res = true;
+        if (UserCanAction("AllowEditSHNewPost",false)==false) then begin res = false; end;
+      case "NPBackDeliveryType":
+      	res = true;
+        if (UserCanAction("AllowEditSHNewPost",false)==false) then begin res = false; end;
+      case "NPBackDeliveryPayer":
+      	res = true;
+        if (UserCanAction("AllowEditSHNewPost",false)==false) then begin res = false; end;
+      case "NPIntDocNumber":
+      	res = true;
+        if (UserCanAction("AllowEditSHNewPost",false)==false) then begin res = false; end;
+    
+      otherwise   
+      	res = true;
+    end; 
+   end else begin	      
+   		res = false;
+   end;
+     
   SHDClassActiveEditField = res;
   RETURN;
 END;
