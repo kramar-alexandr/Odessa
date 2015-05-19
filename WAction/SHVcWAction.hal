@@ -75,8 +75,8 @@ begin
 	  		BlockLoad(NPSettingsb);
 				if(nonblank(SHr.NPIntDocNumber) and (SHr.NPPrinted==0)) then begin
 					NPCreateRequestMn(SHr, errors);															//update before printing if necessary
-					PutWindowRecord(wn,SHr);
-					GetWindowRecord(wn,SHr);
+					//PutWindowRecord(wn,SHr);
+					//GetWindowRecord(wn,SHr);
 				end;	  		
 	  		 
 				www = "http://my.novaposhta.ua/orders/printDocument/orders[]/" & SHr.NPDocumentRef & "/type/html/apiKey/" & NPSettingsb.APIkey;
@@ -88,7 +88,7 @@ begin
 
   end;
   PutWindowRecord(wn,SHr);
-  
+  WindowDoOK(wn,0);
   return;
 end;
 
@@ -110,8 +110,8 @@ begin
 	  		BlockLoad(NPSettingsb);
 				if(nonblank(SHr.NPIntDocNumber) and nonblank(SHr.NPDocumentRef) and blank(SHr.NPPrinted))then begin
 					NPCreateRequestMn(SHr, errors);															//update before printing if necessary
-					PutWindowRecord(wn,SHr);
-					GetWindowRecord(wn,SHr); 
+					//PutWindowRecord(wn,SHr);
+					//GetWindowRecord(wn,SHr); 
 				end;	  		 
 	  		www = "https://my.novaposhta.ua/orders/printMarkings/orders[]/" & SHr.NPDocumentRef & "/type/html/apiKey/" & NPSettingsb.APIkey;
 				OpenWebBrowser(www);
@@ -121,7 +121,7 @@ begin
 			end;
   end;
   PutWindowRecord(wn,SHr);
-  
+  WindowDoOK(wn,0);
   return;
 end;
 
@@ -149,7 +149,7 @@ begin
   end;
   
   PutWindowRecord(wn,SHr);
-  
+  WindowDoOK(wn,0);
   return;
 end;
 

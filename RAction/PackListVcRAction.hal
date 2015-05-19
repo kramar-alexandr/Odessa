@@ -10,7 +10,8 @@ begin
   
   res = 0;
   if (PackListr.SerNr==-1) then begin
-    PackListr.SerNr = NextSerNr("PackListVc",CurrentDate,-1,false,"");
+    //PackListr.SerNr = NextSerNr("PackListVc",CurrentDate,-1,false,"");
+    goto LPackListVcRecordCheck;
   end;
   
   rwcnt = MatRowCnt(PackListr);
@@ -29,7 +30,8 @@ begin
       end;
     end;
   end;
- 
+
+	 
  LPackListVcRecordCheck:;
  
   PackListVcRecordCheck = res;

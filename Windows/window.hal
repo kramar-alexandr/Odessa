@@ -1858,6 +1858,8 @@ begin
   MatCol(1,pos+=70,"Высота",0,Height,false,0);
   MatCol(1,pos+=70,"Объем",0,Volume,false,0);
   MatCol(1,pos+=70,"Макс.вес",0,Weight,false,0);
+  InsertRowTest;
+  DeleteRowTest;
   EndMatrix;
   
   EndWindow;

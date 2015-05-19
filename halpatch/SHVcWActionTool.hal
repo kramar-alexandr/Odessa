@@ -1439,25 +1439,18 @@ procedure  PackListClearRows(record SHVc SHr, var record PackListVc PLr)	//Edit-
 begin
 	integer rwcnt;
 	row  PackListVc PLrw;
-	
 	rwcnt = MatRowCnt(PLr);
-	//!!double removing if rwcnt>5
+	
 
 	if (blank(SHr.NPRowVolume5) and blank(SHr.NPRowWeight5) and (rwcnt>=5)) then begin
-		//MatRowGet(PLr,4,PLrw);
-		//LogText(0,PLrw.Code);
 			MatRowDelete(PLr,4);
 	end;	
 	
 	if (blank(SHr.NPRowVolume4) and blank(SHr.NPRowWeight4) and (rwcnt>=4)) then begin
-		//	MatRowGet(PLr,3,PLrw);
-	//	LogText(0,PLrw.Code);
-			MatRowDelete(PLr,3);
+			MatRowDelete(PLr,3);	
 	end;	
 	
 	if (blank(SHr.NPRowVolume3) and blank(SHr.NPRowWeight3) and (rwcnt>=3)) then begin
-		//	MatRowGet(PLr,2,PLrw);
-		//LogText(0,PLrw.Code);	
 			MatRowDelete(PLr,2);
 	end;	
 	
@@ -1572,7 +1565,6 @@ end;
 global updating
 procedure PackListVcToSHVc(record PackListVc PLr,var record SHVc SHr)//Edit----------------------Dima  20.04.2015
 begin
-	//record SHVc SHr;
 	row PackListVc PLrw;
 	integer i,rwcnt;
 	
@@ -1582,6 +1574,7 @@ begin
 	SHClearSizesFields(SHr);
 	
 	rwcnt = MatRowCnt(PLr);
+	
 	
 	if (i<rwcnt) then begin
 			MatRowGet(PLr,i,PLrw);
