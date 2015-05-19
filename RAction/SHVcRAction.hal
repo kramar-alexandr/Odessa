@@ -1469,6 +1469,7 @@ updating function LongInt SHVcRecordSave(var record SHVc SHr,record SHVc SH2r,Lo
 begin
   LongInt res;
   record PackListVc PackListr;
+  record ORVc ORr;
 
   if (blankdate(SHr.RegDate)) then begin
     SHr.RegDate = CurrentDate;
@@ -1487,11 +1488,17 @@ begin
     //FindNextSHVcOfficialSerialNr(SHr,-1);
   end;
   AddPortugueseSAFTHashToSH(SHr);
-  SHVcToPackListVc(SHr);		//Edit----------------------Dima  20.04.2015
-  PackListr.SerNr = SHr.SerNr;
-  if (ReadFirstMain(PackListr,1,true)) then begin
-  	PackListVcToSHVc(PackListr,SHr);  //Edit----------------------Dima  19.05.2015
-  end;  
+  
+  ORr.SerNr=SHr.OrderNr;						//Edit----------------------Dima  20.04.2015
+  if (ReadFirstMain(ORr,1,true)) then begin
+  	if (ORr.DeliveryNewPost>0) then begin
+  		SHVcToPackListVc(SHr);		
+  		PackListr.SerNr = SHr.SerNr;
+  		if (ReadFirstMain(PackListr,1,true)) then begin
+  			PackListVcToSHVc(PackListr,SHr);  //Edit----------------------Dima  19.05.2015
+  		end;
+  	end;  
+  end;
   SHVcRecordSave = res; 
   return;
 end;
@@ -1622,6 +1629,7 @@ updating function LongInt SHVcRecordUpdate(var record SHVc SHr,record SHVc SH2r,
 begin
   LongInt res;
   record PackListVc PackListr;
+  record ORVc ORr;
 
   if ((SHr.OrderNr!=-1) and (SH2r.OKFlag==0)) then begin
     if (UpdateOrderFromShip(SHr,true,SH2r,true,false)) then begin end;
@@ -1638,10 +1646,16 @@ begin
     SHr.ShipOkDate = CurrentDate; //Edit***************************Sasha2,13:55 06.02.2015
   end;
   AddPortugueseSAFTHashToSH(SHr);
-  SHVcToPackListVc(SHr);	//Edit----------------------Dima  21.04.2015
-  PackListr.SerNr = SHr.SerNr;
-  if (ReadFirstMain(PackListr,1,true)) then begin
-  	PackListVcToSHVc(PackListr,SHr);  //Edit----------------------Dima  19.05.2015
+
+  ORr.SerNr=SHr.OrderNr;				//Edit----------------------Dima  19.05.2015
+  if (ReadFirstMain(ORr,1,true)) then begin
+  	if (ORr.DeliveryNewPost>0) then begin
+  		SHVcToPackListVc(SHr);		
+  		PackListr.SerNr = SHr.SerNr;
+  		if (ReadFirstMain(PackListr,1,true)) then begin
+  			PackListVcToSHVc(PackListr,SHr);  //Edit----------------------Dima  19.05.2015
+  		end;
+  	end;  
   end;
   
   if (SHr.NPPrinted==0 and SH2r.NPPrinted>0) then begin
