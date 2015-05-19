@@ -4273,6 +4273,7 @@ if (HasTouchScreenLook==false) then begin
 
     //  SpecialMenu("GSXAutoEnrollmentIVDsm",'w',26,"GSXAutoEnrollmentIVDsm");
       SpecialMenu("Apple гар. статус проверка",'w',26,"WarrantyStatusIVDsm");
+      SpecialMenu("Џроверка векторов",'w',26,"CheckVectorTransfering");
 
     //  SpecialMenu("TESTSendArgEInvoiceFECAESolicitar",' ',25,"TESTSendArgEInvoiceFECAESolicitar");
     //  SpecialMenu("Test Mex E-Invoices",'1',0,"TestMexEInvoices");

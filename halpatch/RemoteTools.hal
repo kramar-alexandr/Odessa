@@ -1918,3 +1918,19 @@ LRecordAction_raPasteOrdInInv:;
   RecordAction_raPasteOrdInInv = res;
   RETURN;
 END;
+
+global procedure GetSquaredVector(vector integer data,var vector integer data2)
+begin
+	data2["one"] = data["one"]*data["one"];
+	data2["two"] = data["two"]*data["two"];
+	data2["three"] = data["three"]*data["three"];
+	data2["four"] = data["four"]*data["four"];
+	
+	LogText(0,"Vector data(received): " & data["one"]);
+	LogText(0,"Vector data(received): " & data["two"]);
+	LogText(0,"Vector data(received): " & data["three"]);
+	LogText(0,"Vector data(received): " & data["four"]);
+
+return;
+end;
+
