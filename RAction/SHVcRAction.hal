@@ -66,8 +66,7 @@ external function Boolean Date2Test(string,Date,string,Integer);
 external function Boolean SerNrTestSHVc(LongInt,Date,var Boolean);
 external function val FindPUBaseRate2forSerialNr(string,string);
 external function string 30 GetCustomOfficialSerNr(); //Edit***************************Sasha2,11:42 08.01.2015
-external updating procedure SHVcToPackListVc(var record SHVc);									//Edit----------------------Dima  07.05.2015
-external updating procedure PackListVcToSHVc(record PackListVc,var record SHVc);	//Edit----------------------Dima  19.05.2015
+external updating procedure SHVcToPackListVc(var record SHVc);//Edit----------------------Dima  07.05.2015
 
 function Boolean StockMovOKedForSH(LongInt shnr,var LongInt stmovnr)
 begin
@@ -1468,7 +1467,6 @@ global
 updating function LongInt SHVcRecordSave(var record SHVc SHr,record SHVc SH2r,LongInt stat,LongInt long4)
 begin
   LongInt res;
-  record PackListVc PackListr;
 
   if (blankdate(SHr.RegDate)) then begin
     SHr.RegDate = CurrentDate;
@@ -1488,10 +1486,7 @@ begin
   end;
   AddPortugueseSAFTHashToSH(SHr);
   SHVcToPackListVc(SHr);		//Edit----------------------Dima  20.04.2015
-  PackListr.SerNr = SHr.SerNr;
-  if (ReadFirstMain(PackListr,1,true)) then begin
-  	PackListVcToSHVc(PackListr,SHr);  //Edit----------------------Dima  19.05.2015
-  end;  
+  
   SHVcRecordSave = res; 
   return;
 end;
@@ -1621,7 +1616,6 @@ global
 updating function LongInt SHVcRecordUpdate(var record SHVc SHr,record SHVc SH2r,LongInt stat,LongInt long4)
 begin
   LongInt res;
-  record PackListVc PackListr;
 
   if ((SHr.OrderNr!=-1) and (SH2r.OKFlag==0)) then begin
     if (UpdateOrderFromShip(SHr,true,SH2r,true,false)) then begin end;
@@ -1639,10 +1633,6 @@ begin
   end;
   AddPortugueseSAFTHashToSH(SHr);
   SHVcToPackListVc(SHr);	//Edit----------------------Dima  21.04.2015
-  PackListr.SerNr = SHr.SerNr;
-  if (ReadFirstMain(PackListr,1,true)) then begin
-  	PackListVcToSHVc(PackListr,SHr);  //Edit----------------------Dima  19.05.2015
-  end;
   
   if (SHr.NPPrinted==0 and SH2r.NPPrinted>0) then begin
   	SHr.NPIntDocNumber = blankval;
