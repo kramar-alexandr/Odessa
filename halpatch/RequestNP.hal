@@ -2110,7 +2110,7 @@ begin
 end;
 
 
-global updating
+updating
 procedure  RefreshCounterpartyContactPerson(array string senders, array string recipients)
 begin
 	record NPSettingsBlock NPSettingsb;
@@ -2365,7 +2365,7 @@ begin
  		logtext(0,"Hansa World: No Connection to api.novaposhta.ua");
   end;
   
-  queued.RefreshCounterpartyContactPerson(senders,recipients);
+  RefreshCounterpartyContactPerson(senders,recipients);
   LNPRefreshSenderCounterparties:;
   return;
 end;
