@@ -293,7 +293,7 @@ begin
   AddTextToArea("" & chr(13) & chr(10),aRequest);
 	AddTextToArea("" & chr(13) & chr(10),aRequest);		//Working get doc status
 	
-	//writeareatofile(aRequest,"1autorization.txt",0);
+	writeareatofile(aRequest,"1autorization.txt",0);
   
 return;
 end;
