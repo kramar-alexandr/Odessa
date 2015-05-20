@@ -187,6 +187,7 @@ begin
   Counterpartyr.LastName = SHr.NPRecipientLastName;
   Counterpartyr.FirstName = SHr.NPRecipientFirstName;
   Counterpartyr.Phone = RecipientsPhone;
+  logtext(0,RecipientsPhone);
   Counterpartyr.CityRef = CityRecipient;
   if(ReadFirstMain(Counterpartyr, 4, true))then begin
   	Recipient = Counterpartyr.Ref;
@@ -194,7 +195,10 @@ begin
   		ContactRecipient = Counterpartyrw.Ref;
   
   end;
-  
+  logtext(0, Counterpartyr.LastName);
+  logtext(0, Counterpartyr.FirstName);
+  logtext(0, Counterpartyr.Phone);
+  logtext(0, Counterpartyr.CityRef);
   
   Warehouser.Number = SHr.NPRecipientWarehouse;
   Warehouser.City = SHr.NPCityRecipient;
