@@ -6119,12 +6119,21 @@ begin
     EditField(h3,v,120,"",ViewOnly,NPSenderWarehouseDesc,false,0);
     //EditField(h2,v,150,"Адрес",Normal,NPSenderAddress,false,0);
     StaticText(90,v+=40,"Получатель:",true);
-    EditField(h1,v+=5,100,"Фамилия",ViewOnly,NPRecipientLastName,false,0);
-    EditField(h2-90,v,100,"Имя",ViewOnly,NPRecipientFirstName,false,0);
-    EditField(h3-90,v,100,"Отчество",ViewOnly,NPRecipientMiddleName,false,0);
-    EditField(h1,v+=vs,100,"Город",ViewOnly,NPCityRecipient,false,0);
-    EditField(h2,v,100,"Отделение НП",ViewOnly,NPRecipientWarehouse,false,NPWarehouseSClass);
-    EditField(h3-90,v,200,"",ViewOnly,NPRecipientWarehouseDesc,false,0);
+    if (CurrentUser=="SA") then begin
+    	EditField(h1,v+=5,100,"Фамилия",Normal,NPRecipientLastName,false,0);
+    	EditField(h2-90,v,100,"Имя",Normal,NPRecipientFirstName,false,0);
+    	EditField(h3-90,v,100,"Отчество",Normal,NPRecipientMiddleName,false,0);
+    	EditField(h1,v+=vs,100,"Город",Normal,NPCityRecipient,false,0);
+    	EditField(h2,v,100,"Отделение НП",Normal,NPRecipientWarehouse,false,NPWarehouseSClass);
+    	EditField(h3-90,v,200,"",Normal,NPRecipientWarehouseDesc,false,0);
+    end else begin
+    	EditField(h1,v+=5,100,"Фамилия",ViewOnly,NPRecipientLastName,false,0);
+    	EditField(h2-90,v,100,"Имя",ViewOnly,NPRecipientFirstName,false,0);
+    	EditField(h3-90,v,100,"Отчество",ViewOnly,NPRecipientMiddleName,false,0);
+    	EditField(h1,v+=vs,100,"Город",ViewOnly,NPCityRecipient,false,0);
+    	EditField(h2,v,100,"Отделение НП",ViewOnly,NPRecipientWarehouse,false,NPWarehouseSClass);
+    	EditField(h3-90,v,200,"",ViewOnly,NPRecipientWarehouseDesc,false,0);
+		end;
   // EditField(h3,v,150,"Адрес",Normal,NPRecipientAddress,false,0);
 		h3 = 570;
   	EditField(h1,v+=30,120,"Тип груза",Normal,NPCargoType,false,NPCargoTypeSClass);

@@ -1906,3 +1906,17 @@ begin
   EditField(h2,v+=vs,200,"Плательщик",Normal,DefRedeliveryPayer,false,NPTypesOfPayersRedeliverySClass);  
   EndWindow;
 end;
+
+
+
+
+window ExportRegistersVClass:1 //Edit***************************Sasha2,13:51 24.06.2014 {
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  WindowBegin("Экспортировать регистр",ExportRegistersVClass,CGMnt,RcType);
+  SetWRect(64,80,500,300);
+  StaticText(200,20,"Формат ввода: XXVc",false);
+  EditField(200,40, 100,"Название регистра",Normal,f1,false,0);
+
+  EndWindow;
+end;
