@@ -80,6 +80,7 @@ external function string 30 GetCustomOfficialSerNr(); //Edit********************
 external function Boolean GetForeignCurncyRate(string,var val,var val,var val,Date,var Date);//Edit---------------------Dima 29.01.2015
 //external updating function boolean NPCreateCounterparty(record NPCounterpartyVc);	//Edit----------------------Dima  15.04.2015
 //external updating procedure GetRecipientContactPerson(string ,string );
+external function Boolean IsLetter(string);
 
 procedure SetORAcceptanceFlag(var record ORVc ORr,record ORVc prevORr,LongInt stat)
 begin
@@ -391,6 +392,10 @@ begin
   record CountryVc Countryr;
   record NPCityVc NPCityr;
   record NPWarehouseVc NPWarehouser;
+  string 80 tmpStr, resStr;
+  string 20 char, nextChar;
+  integer nameLen;
+  boolean ifBegin;
 
   res = 0;
   insertmode = 1;//Rs_insert
@@ -1277,7 +1282,63 @@ LORVcRecordRowCheck:;
   
   end;	//Edit----end----------------------------------Dima  15.04.2015
   
+  if (ORr.DeliveryNewPost) then begin					//Edit by Victor 20.05.2015
+  	if (nonblank(ORr.NPFirstName)) then begin
+  		tmpStr = ORr.NPFirstName;
+  		
+  		i = 0;
+  		char = Mid(tmpStr,i,1);
+			while(char==chr(32)) begin
+				i = i + 1;
+				char = Mid(tmpStr,i,1);
+			end;
+			
+			tmpStr = Right(tmpStr, len(tmpStr) - i);
+			nameLen = len(tmpStr);
+			
+  		for (i=0;i<nameLen;i=i+1) begin
+        char = Mid(tmpStr,i,1);
+        nextChar = Mid(tmpStr,i+1,1);
+        if(char == chr(32) and nextChar == chr(32))then begin
+         goto nextI;
+        end;			
+        if (char!=chr(32) or (char==chr(32) and nonblank(nextChar))) then begin
+	        resStr = resStr & char;
+				end;     
+				nextI:;
+      end;
+      ORr.NPFirstName = resStr;
+    end;
+  end;
   
+  if (ORr.DeliveryNewPost) then begin					
+  	if (nonblank(ORr.NPLastName)) then begin
+  		tmpStr = ORr.NPLastName;
+  		
+  		i = 0;
+  		char = Mid(tmpStr,i,1);
+			while(char==chr(32)) begin
+				i = i + 1;
+				char = Mid(tmpStr,i,1);
+			end;
+			
+			tmpStr = Right(tmpStr, len(tmpStr) - i);  		
+  		nameLen = len(tmpStr);
+  		resStr = "";
+  		for (i=0;i<nameLen;i=i+1) begin
+        char = Mid(tmpStr,i,1);
+        nextChar = Mid(tmpStr,i+1,1);	
+        if(char == chr(32) and nextChar == chr(32))then begin
+         goto nextI2;
+        end;					
+        if (char!=chr(32) or (char==chr(32) and nonblank(nextChar))) then begin
+	        resStr = resStr & char;
+				end;  
+				nextI2:;    
+      end;  
+      ORr.NPLastName = resStr;		  		
+    end;
+  end;
   
 LORVcRecordCheck:;
   if (res!=0) then begin 
