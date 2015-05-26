@@ -543,6 +543,13 @@ begin
         ORr.RegTime = CurrentTime;
       end;
   end;
+  
+  CUr.Code = ORr.CustCode;
+  if (ReadFirstMain(CUr,1,true)) then begin
+  	if(blank(CUr.InvAddr0)) then begin
+  		messagebox(31062, "");
+  	end;
+  end;
 
   BlockLoad(LINrb);  		
   /*if (nonblank(ORr.OfficialSerNr)) then begin		// Comment by Victor 08.01.15 *****
