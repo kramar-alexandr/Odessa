@@ -189,12 +189,20 @@ begin
   Counterpartyr.Phone = RecipientsPhone;
   logtext(0,RecipientsPhone);
   Counterpartyr.CityRef = CityRecipient;
-  if(ReadFirstMain(Counterpartyr, 4, true))then begin
+  logtext(0, Counterpartyr.LastName);
+  logtext(0, Counterpartyr.FirstName);
+  logtext(0, Counterpartyr.Phone);
+  logtext(0, Counterpartyr.CityRef);
+  if(ReadFirstMain(Counterpartyr,4,true))then begin
   	Recipient = Counterpartyr.Ref;
   	matrowget(Counterpartyr, 0, Counterpartyrw);
   		ContactRecipient = Counterpartyrw.Ref;
   
+  end else begin
+  	//Messagebox(0,"Recipient Not Found");
+  	//Goto LNPCreateENRequest;
   end;
+  
   logtext(0, Counterpartyr.LastName);
   logtext(0, Counterpartyr.FirstName);
   logtext(0, Counterpartyr.Phone);
@@ -256,6 +264,7 @@ begin
   AddTextToArea("				<RecipientAddress>" & ConvertXml(RecipientAddress) & "</RecipientAddress>" & chr(13),aRequest);
   AddTextToArea("				<ContactRecipient>" & ConvertXml(ContactRecipient) & "</ContactRecipient>" & chr(13),aRequest);
   AddTextToArea("				<RecipientsPhone>" & ConvertXml(RecipientsPhone) & "</RecipientsPhone>" & chr(13),aRequest);
+  logtext(0,"ResipPhone--- " & ConvertXml(RecipientsPhone));
   
 	if (SeatsAmount>1) then begin
 		AddTextToArea("		<OptionsSeat>"& chr(13),aRequest);
@@ -298,7 +307,7 @@ begin
 	AddTextToArea("" & chr(13) & chr(10),aRequest);		//Working get doc status
 	
 	writeareatofile(aRequest,"1autorization.txt",0);
-  
+  LNPCreateENRequest:;
 return;
 end;
 
