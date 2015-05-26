@@ -56,6 +56,8 @@ begin
 	Setting("Адреса контрагентов",NPAddressesLClass,modNPost);		
   Setting("Настройки Новой почты",NPSettingsTClass,modNPost);  
   
+  Setting("Поля, задаваемые пользователем - Контакты",CUUserLabelTClass,modSO); //Edit by Victor 26.05.15
+  
   Report("Журнал суточных возмещений",DAJRClass,DAJRn,0,modCL);
   Report("Журнал авансовых отчетов",ExpJRClass,ExpRn,0,modCL);
   Report("Журнал  расчетов с ПЛ",PersPerRClass,PersPerRn,0,modCL);
