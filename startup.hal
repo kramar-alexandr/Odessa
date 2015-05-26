@@ -162,6 +162,7 @@ begin
 	Maintenance("Заменить таблицу скидок для категории",ChangeCUCategoryVClass,ChangeCUCategoryMn,modSL);	//Edit----------------------Dima  27.03.2015
 	Maintenance("Заполнить отсутствующие названия в регистре \"Цены\"",MyVClass,FillCommentsInPricesMn,modDI);	//Edit----------------------Dima  06.04.2015
 	Maintenance("Экспортировать регистр",ExportRegistersVClass,ExportRegsMn,modDBMain);
+	Maintenance("Обновить города клиентов",MyVClass,CutDigitCUMn,modSO);	//Edit by Victor 25.05.15
 
 
 	Maintenance("Обновить список городов",RequestNPVClass,NPGetCytiesRequestMn,modNPost);//Edit by Victor 20.03.15
