@@ -544,11 +544,8 @@ begin
       end;
   end;
   
-  CUr.Code = ORr.CustCode;
-  if (ReadFirstMain(CUr,1,true)) then begin
-  	if(blank(CUr.InvAddr0)) then begin
-  		messagebox(31062, "");
-  	end;
+  if(blank(CUr.InvAddr0)) then begin
+  	messagebox(31062, "");
   end;
 
   BlockLoad(LINrb);  		
