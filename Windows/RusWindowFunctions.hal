@@ -1086,7 +1086,15 @@ begin
   tstr = tstr & custcode;
   StaticText(h,v+=20,tstr,false);
   StaticText(h2,v,Left(custname,35),false);
-
+  // Edit Start ---------------------------------------------- Edit Start
+	//Wednesday, 27 May 2015 09:37:26
+	
+  tstr = "Скидка: ";
+  tstr = tstr & addr1;
+  StaticText(h,v+=20,tstr,false);
+	
+	// Edit End ---------------------------------------------- Edit End
+	
   if (showlc) and (nonblank(loyaltycardnr)) then begin
     tstr = "Накопительная карта: ";
     tstr = tstr & loyaltycardnr;
@@ -1123,7 +1131,7 @@ begin
     tstr = "Телефон: " & phone;
     StaticText(h2,v+20,tstr,false);
   end;
-  if (HasJewelleryInterface) then begin
+  /*if (HasJewelleryInterface) then begin// Edit ************************** Wednesday, 27 May 2015 09:37:06
     if (nonblank(objects)) then begin
       tstr = "Объекты: ";
       tstr = tstr & objects;
@@ -1142,7 +1150,7 @@ begin
       tstr = addr3;
       StaticText(h,v+=20,tstr,false);
     end;
-  end;
+  end;*/
 LDisplayRecordDetails_RUS01:;  
   return;
 end;
