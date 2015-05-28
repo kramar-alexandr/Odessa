@@ -1041,6 +1041,47 @@ begin
 return;
 end;
 
+
+procedure CreateDescriptRequestDocumentTrackig(string aWeb, string aPage, string aKey,array string documents, var area aRequest)
+begin
+  area request,replyarea,test;
+  string 100 tstr;
+  string 200 getParam, host, page, webAddr;
+  string 20 timed;
+  area basestring;
+  integer i;   
+
+	addtexttoarea("POST " & aPage & " HTTP/1.1" & chr(13) & chr(10),aRequest);
+ 	addtexttoarea("host: " & aWeb & chr(13) & chr(10),aRequest);
+ 	AddTextToArea("" & chr(13) & chr(10),aRequest);
+
+ 	AddTextToArea("<?xml version=""1.0"" encoding=""UTF-8""?>" & chr(13),aRequest);
+  AddTextToArea("<file>"& chr(13),aRequest);
+  AddTextToArea("   <apiKey>" & ConvertXml(aKey) & "</apiKey>" & chr(13),aRequest);
+  AddTextToArea("   <modelName>" & ConvertXml("InternetDocument") & "</modelName>" & chr(13),aRequest);
+  AddTextToArea("   <calledMethod>" & ConvertXml("documentsTracking") & "</calledMethod>" & chr(13),aRequest);
+  AddTextToArea("		<methodProperties>"& chr(13),aRequest);
+  AddTextToArea("		  <Documents>"& chr(13),aRequest);
+  
+  for(i=0;i<documents.length;i=i+1) begin
+		AddTextToArea("		  <item>" & documents[i] & "</item>"& chr(13),aRequest);
+	end;
+  
+  AddTextToArea("		  </Documents>"& chr(13),aRequest); 
+  AddTextToArea("		</methodProperties>" & chr(13),aRequest);
+  AddTextToArea("</file>" & chr(13),aRequest);
+  
+	AddTextToArea("" & chr(13) & chr(10),aRequest);
+	AddTextToArea("" & chr(13) & chr(10),aRequest);
+	AddTextToArea("" & chr(13) & chr(10),aRequest);
+	AddTextToArea("" & chr(13) & chr(10),aRequest);
+	
+	writeareatofile(aRequest,"1STATUSESRequest.txt",0);
+  
+return;
+end;
+
+
 global 
 function string 255 NPGetDocumentStatusRequest(string documentID)
 begin
@@ -1079,6 +1120,7 @@ begin
  	NPGetDocumentStatusRequest = response;
   return;
 end;
+
 
 
 
@@ -2380,5 +2422,80 @@ begin
   
   RefreshCounterpartyContactPerson(senders,recipients);
   LNPRefreshSenderCounterparties:;
+  return;
+end;
+
+
+
+
+global updating
+procedure NPUpdateENstatusMn(record RcVc RepSpec)
+begin
+  area request,replyarea,mainRequest;
+  boolean TrHs;
+  string 200 getParam,host,page;
+  xml xdata;
+  longint i;
+  record NPSettingsBlock NPSettingsb;
+  record SHVc SHr,oldSHr;
+  array string 50 documents;
+  array longint deliveries;
+  vector string 50 statuses;
+  string 200 docNumber,status;
+
+  
+	BlockLoad(NPSettingsb); 
+  if (blank(NPSettingsb.APIkey)) then begin
+  	goto LNPUpdateENstatusMn;
+  end;	 
+  host = "api.novaposhta.ua";
+  page = "/v2.0/xml/";
+  i = 0;
+  TrHs = true;
+  
+  SHr.NPIntDocNumber= "000";
+  While(LoopKey("NPIntDocNumber",SHr,1,TrHs)) begin
+  	if (blank(SHr.NPIntDocNumber)) then begin TrHs = false; end;
+		if (TrHs and (SHr.NPStatusCode==0)) then begin
+				documents[i] = SHr.NPIntDocNumber;
+				i=i+1;
+				//LogText(0,SHr.SerNr & "  : " & SHr.NPIntDocNumber);
+			end;  
+  end;
+   
+
+	CreateDescriptRequestDocumentTrackig(host, page, NPSettingsb.APIkey, documents, mainRequest); 
+
+  if(MySendRawWebRequest(host,"443",true,"POST",page & getParam,"text/xml","",false,mainRequest,replyarea,600)) then begin  
+    writeareatofile(replyarea,"1statusesReply.txt",0);
+    
+    GetXMLArea(replyarea);
+    
+		xdata = ParseXMLArea(replyarea);
+		i = 0;
+
+		while(XmlNodeExists(xdata,"root/data/item[" & i & "]/Barcode")) begin
+			
+			docNumber = XmlGet(xdata,"root/data/item[" & i & "]/Barcode");
+			status = XmlGet(xdata,"root/data/item[" & i & "]/StateName");
+			
+			SHr.NPIntDocNumber = docNumber;
+			if (ReadFirstKey("NPIntDocNumber",SHr,1,true)) then begin
+					if (SHr.NPStatus != status) then begin
+						RecordCopy(oldSHr,SHr);
+						SHr.NPStatus = status;
+						if (status == USetStr(31063)) then begin
+							SHr.NPStatusCode = 1;
+						end;
+						RecordUpdate(oldSHr,SHr,false);
+					end;
+			end;			
+			i = i + 1;
+		end;
+		
+    end else begin
+ 		logtext(0,"Hansa World: No Connection to api.novaposhta.ua");
+  end;
+  LNPUpdateENstatusMn:;
   return;
 end;

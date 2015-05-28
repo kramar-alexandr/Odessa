@@ -2274,7 +2274,9 @@ RecordBegin(INVc,-,"artikel5");
 	RecordField(NPCostEdit,M4Val,0,0);
 	RecordField(NPCostCOD,M4Val,0,0);
 	RecordField(NPCostCODEdit,M4Val,0,0);
-	RecordField(NPComment,M4Str,200,0); 		//Edit----end------------------Dima  08.05.2015
+	RecordField(NPComment,M4Str,200,0); 		
+	RecordField(NPStatusCode,M4Int,0,0);
+	RecordField(NPStatus,M4Str,200,0);	//Edit----end------------------Dima  08.05.2015
   ArrayBegin(Math,-,1);
   ArrayField(OrdRow,M4Long,0,0);
   ArrayField(ArtCode,M4Code,20,INVc);
@@ -2481,6 +2483,24 @@ RecordBegin(INVc,-,"artikel5");
   AppendListFieldToKeyName(SalesGroup);
   KeySegment(ShipOkDate);
   KeySegment(SerNr); //Edit***************************Sasha2,13:43 06.02.2015 }
+  
+  SubsetKeyBegin2(NPStatusCode);//Edit----------------------Dima  28.05.2015
+  StoreInBaseKey;
+  AppendListFieldToKeyName(SalesGroup);
+  KeySegment(NPStatusCode);
+  KeySegment(SerNr);
+  
+  SubsetKeyBegin2(NPStatus);//Edit----------------------Dima  28.05.2015
+  StoreInBaseKey;
+  AppendListFieldToKeyName(SalesGroup);
+  KeySegment(NPStatus);
+  KeySegment(SerNr); 
+  
+  SubsetKeyBegin2(NPIntDocNumber);//Edit----------------------Dima  28.05.2015
+  StoreInBaseKey;
+  AppendListFieldToKeyName(SalesGroup);
+  KeySegment(NPIntDocNumber);
+  KeySegment(SerNr);     
   
   EndRecord;// Edit by Victor 25.11.14	end
   
