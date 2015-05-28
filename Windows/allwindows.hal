@@ -7660,7 +7660,8 @@ begin
     if (TestEnablerFile("EnMarketplace")) then begin
       RlColKey(-70,-70,"MarketUserName",MarketUserName,false,MarketUserName);
     end else begin
-  RlColKey(-50,-50,"Р/с",BankAccount,false,BankAccount);
+  //RlColKey(-50,-50,"Р/с",BankAccount,false,BankAccount); //Edit***************************Sasha2,9:23 28.05.2015
+  RlCol(-50,-50,"Табл.скидок",RebCode,false);
     end;
   end;
   SearchField("Найти");
