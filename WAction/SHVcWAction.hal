@@ -29,6 +29,8 @@ remote function string 255 NPGetDocumentStatusRequest(string);//Edit------------
 remote updating procedure NPCreateRequestMn(var record SHVc,var string);
 remote function boolean NPDeleteDocumentRequest(string );//Edit----------------------Dima  06.05.2015
 remote function boolean CheckENremote(record SHVc, var longint,var string);
+remote updating function boolean CheckCounterpartySH(var record SHVc);
+
 
 function boolean CheckEN(record SHVc SHr,integer wn)	//Edit----------------------Dima  07.05.2015
 begin
@@ -105,6 +107,7 @@ begin
   
   wn = CurWindow;
   GetWindowRecord(wn,SHr);
+  	
 	if (CheckEN(SHr,wn)) then begin
 	  	if(nonblank(SHr.NPDocumentRef))then begin
 	  		BlockLoad(NPSettingsb);
@@ -138,18 +141,23 @@ begin
   
   wn = CurWindow;
   GetWindowRecord(wn,SHr);
+	if (blank(SHr.NPIntDocNumber)) then begin
+			if(CheckCounterpartySH(SHr)==false) then begin
+				MessageBox(31047,0);
+				goto LBreakNPCreateENDsm;
+			end;
+	end;
 	
 	if (CheckEN(SHr,wn)) then begin
 	  	NPCreateRequestMn(SHr,errors);
- 	
 	  	if (nonblank(errors)) then begin	//NewPost's response
 				MessageBox(0,errors);
 			end;
-			
   end;
   
   PutWindowRecord(wn,SHr);
   WindowDoOK(wn,0);
+  LBreakNPCreateENDsm:;
   return;
 end;
 
@@ -198,7 +206,7 @@ end;
 
 
 
-global 
+global updating
 procedure  NPGetDocStatusDsm()	//Edit----------------------Dima  06.05.2015
 begin
 	integer wn,nwn;
@@ -210,8 +218,15 @@ begin
 
 	wn = CurWindow;
 	GetWindowRecord(wn,SHr);
+	DeselectWindow(wn,false);
   if (nonblank(SHr.NPIntDocNumber)) then begin
   	msg = NPGetDocumentStatusRequest(SHr.NPIntDocNumber);
+  	
+  	if (SHr.NPStatus!=msg) then begin
+  		SHr.NPStatus = msg;
+  	  PutWindowRecord(wn,SHr);
+  		WindowDoOK(wn,0);
+  	end;	
   	MessageBox(0,msg);
   end; 
 end;
