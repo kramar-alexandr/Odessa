@@ -1907,6 +1907,22 @@ updating function LongInt ORVcRecordUpdateAfter(var record ORVc ORr,record ORVc 
 begin
   LongInt res;
   val bc1v;
+  record SHVc SHr;
+  
+  if(ORr.DeliveryNewPost == 1)then begin		//Edit by Victor 02.06.15
+		SHr.OrderNr = ORr.SerNr;
+		if(ReadFirstKey("OrderKey",SHr, 1, true))then begin
+			if(ORr.NPPaymentType == 1 or (ORr.NPPaymentType == 0 and ORr.PrepaymentReceived == 1))then begin
+				SHr.Assembly = 1;
+				RecordStore(SHr, true);
+			end;
+			
+			if(ORr.NPPaymentType == 0 and ORr.PrepaymentReceived == 0)then begin
+				SHr.Assembly = 0;
+				RecordStore(SHr, true);
+			end;
+		end;
+	end;	// end edit
 
 //  ORObjectStats(ORr,OR2r); it is stored only and not used ever
   UpdateVARItemsOR(ORr);

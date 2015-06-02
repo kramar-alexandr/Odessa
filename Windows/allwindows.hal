@@ -4374,7 +4374,7 @@ end else begin
 
     // StopAlert("IsSessionOpen(" & IVr.MachineName & "," & IVr.DrawerCode & "," & IVr.TransDate & "," & IVr.TransTime & "); -> " & sessdesc);
 
-    DisplayRecordDetails_RUS(10,26,compname,td,tt,lmc,sm,nr,IVr.CustCode,IVr.Addr0,IVr.Addr1,IVr.Addr2,IVr.Addr3,IVr.Phone,IVr.Objects,IVr.LoyaltyCardNr,LMb.ShowBaggerSupervisor,"","","",blankval,sessdesc,true,points,IVr.TaxAdminServSeal);
+    DisplayRecordDetails_RUS(10,26,compname,td,tt,lmc,sm,nr,IVr.CustCode,IVr.Addr0,/*IVr.Addr1*/IVr.RebCode,IVr.Addr2,IVr.Addr3,IVr.Phone,IVr.Objects,IVr.LoyaltyCardNr,LMb.ShowBaggerSupervisor,"","","",blankval,sessdesc,true,points,IVr.TaxAdminServSeal);
 
     if (bm<650) then begin
       SoftEditFieldTLX(360,6,h4,"",M4Str,ViewOnly,100,20,patM4black,"CustomerDisplayData_Line1",true,0);
@@ -5752,13 +5752,14 @@ begin
   RlColKey(471,471,"Дата ОК",ShipOkDate,false,ShipOkDate); //Edit***************************Sasha2,13:48 06.02.2015
   RlColKey(541,541,"Наим.",Addr0,false,CustName); //Edit***************************Sasha2,13:48 06.02.2015
   if (IsEnterprise) then begin
-    RlColKey(-230,-180,"Коммент.",Comment,false,Comment); //Edit***************************Sasha2,12:43 28.01.2015
+    RlColKey(-250,-200,"Коммент.",Comment,false,Comment); //Edit***************************Sasha2,12:43 28.01.2015
     //RlColKey(-180,-180,"Трансп. Но.",TransportNumber,false,TransportNumber); //Edit***************************Sasha2,12:43 28.01.2015
     //RlColKey(-80,-80,"Способ отгрузки",ShipMode,false,ShipMode); //Edit***************************Sasha2,12:45 28.01.2015
-    RlColKey(-80,-80,"Маршрут",Sorting,false,Sorting); //Edit***************************Sasha2,12:45 28.01.2015
+    RlColKey(-120,-120,"Маршрут",Sorting,false,Sorting); //Edit***************************Sasha2,12:45 28.01.2015
   end else begin
-    RlColKey(-180,-180,"Коммент.",Comment,false,Comment);
+    RlColKey(-220,-220,"Коммент.",Comment,false,Comment);
   end;
+  RlColKey(-40,-40,"Зборка",Assembly,false,0);
   SearchField("Найти");
   if (GuiType==kGuiMetro) then begin
     RowMenuBegin("");
@@ -5857,6 +5858,7 @@ begin
     EditField(h3,v+=vs,80,"Менеджер",ViewOnly,Manager,false,0); //Edit***************************Sasha2,15:30 27.01.2015
     EditField(h3,v+=vs,80,"Сборщик",Normal,Collector,false,UserNPTSSClass); //Edit***************************Sasha2,15:30 27.01.2015
     CheckBox(h4,v=6,0,"Сообщение",Check1);
+    CheckBox(h4,v+15,0,"Готов к сборке",Assembly);
   end;
   if (IsEnterprise==false) then begin
     if (HasMultiLocations) then begin
@@ -6209,7 +6211,7 @@ begin
   	EditField(h1,v+=30,100,"Номер ЭН",Normal,NPIntDocNumber,false,0);
   	EditField(h4,v,80,"Цена доставки",Normal,NPCostOnSite,false,0);
  		CheckBox(h6,v,0,"ЭН Напечатана",NPPrinted);
-
+		EditField(h1,v+=vs,200,"Статус",Normal,NPStatus,false,0);
 
 
   if (GuiType==kGuiMetro) then begin // Temporarily disabled on Windows 8
@@ -7660,7 +7662,8 @@ begin
     if (TestEnablerFile("EnMarketplace")) then begin
       RlColKey(-70,-70,"MarketUserName",MarketUserName,false,MarketUserName);
     end else begin
-  RlColKey(-50,-50,"Р/с",BankAccount,false,BankAccount);
+  //RlColKey(-50,-50,"Р/с",BankAccount,false,BankAccount); //Edit***************************Sasha2,9:23 28.05.2015
+  RlCol(-50,-50,"Табл.скидок",RebCode,false);
     end;
   end;
   SearchField("Найти");
