@@ -169,6 +169,7 @@ begin
 	Maintenance("Экспортировать регистр",ExportRegistersVClass,ExportRegsMn,modDBMain);
 	Maintenance("Обновить города клиентов",MyVClass,CutDigitCUMn,modSO);	//Edit by Victor 25.05.15
 	Maintenance("Пересчитать FIFO для с/фактур(возвраты)",MyVClass,RecalculateFIFOforInvoiceMn,modDBMain);//Edit----------------------Dima  03.06.2015
+	Maintenance("FIX StockMovVc",MyVClass,FixStockMovMn,modDBMain);				//Edit----------------------Dima  03.06.2015
 
 	Maintenance("Обновить список городов",RequestNPVClass,NPGetCytiesRequestMn,modNPost);//Edit by Victor 20.03.15
 	Maintenance("Обновить описания грузов",RequestNPVClass,NPGetDescriptionRequestMn,modNPost);//Edit by Victor 06.04.15
