@@ -1,0 +1,18 @@
+global
+function Boolean GCSDClassActiveEditField(Integer wn,string fieldname,Integer fn,Integer wnst,Integer rownr,Integer changed)
+begin
+  Boolean res;
+  record GCSVc GCSr;
+  
+  res = false;
+  
+  switch(fieldname) begin							//Edit----------------------Dima  09.06.2015
+		case "ExpiryDate":
+      	if (UserCanAction("ViewCostPrice",false)) then begin
+      	  res = true;
+      	end;
+	end; 
+  
+  GCSDClassActiveEditField = res;
+  return;
+end;
