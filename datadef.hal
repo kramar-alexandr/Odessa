@@ -3827,7 +3827,7 @@ RecordBegin(IPVc,-,"");
   
   
   
-	BlockBegin(NPSettingsBlock,-,"");
+	BlockBegin(NPSettingsBlock,-,"");		//Edit----------------------Dima  10.06.2015
 	RecordField(DefSenderDescription,M4Str,200,0);
 	RecordField(DefSenderRef,M4Str,100,0);
 	RecordField(DefSenderCityDescription,M4Str,150,0);
@@ -3842,6 +3842,12 @@ RecordBegin(IPVc,-,"");
 	RecordField(DefPaymentForm,M4Str,100,0);
 	RecordField(DefCargoDescription,M4Str,200,0);
 	EndBlock; 
+	
+	
+	BlockBegin(FiscalSettingsBlock,-,"");		//Edit----------------------Dima  10.06.2015
+	RecordField(StoragePath,M4Str,255,0);
+	RecordField(FileName,M4Str,255,0);
+	EndBlock; 	
     
       	  	
 return;

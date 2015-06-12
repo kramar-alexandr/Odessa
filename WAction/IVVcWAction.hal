@@ -68,6 +68,8 @@ external function Boolean SetUnitFactor(string,var val,val,val,val,var val,var v
 external function val CalculateSerialNrQuantity(string,string,string,Boolean,val,val,val,val);
 external procedure DisplayIVItem(record IVVc,Integer);
 remote procedure PastePDInInv(var record IVVc,string,Boolean);
+external procedure MakeFiscalReceipt(record IVVc);
+
 
 procedure ChangeIVSerialNr(Integer wnst,var record IVVc IVp)
 BEGIN
@@ -2153,4 +2155,24 @@ begin
   res = IVDClassAfterEditField(wn,fieldname,fn,rownr,changed);
   IVMobilePOSDClassAfterEditField = res;
   return;
+end;
+
+
+
+
+
+global procedure PrintFiscalReceipt()		//Edit----------------------Dima  10.06.2015
+begin
+	record IVVc IVr;
+	row IVVc IVrw;
+	area filedata;
+	string 255 filepath;
+	record FiscalSettingsBlock Fiskalblock;
+	integer wn;
+
+  wn = CurWindow;
+  GetWindowRecord(wn,IVr);
+  
+  MakeFiscalReceipt(IVr);
+
 end;

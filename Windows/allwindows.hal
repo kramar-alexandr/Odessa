@@ -4273,6 +4273,7 @@ if (HasTouchScreenLook==false) then begin
 
     //  SpecialMenu("GSXAutoEnrollmentIVDsm",'w',26,"GSXAutoEnrollmentIVDsm");
       SpecialMenu("Apple гар. статус проверка",'w',26,"WarrantyStatusIVDsm");
+      SpecialMenu("Печать фискальный чек",'p',26,"PrintFiscalReceipt");	//Edit----------------------Dima  10.06.2015
 
     //  SpecialMenu("TESTSendArgEInvoiceFECAESolicitar",' ',25,"TESTSendArgEInvoiceFECAESolicitar");
     //  SpecialMenu("Test Mex E-Invoices",'1',0,"TestMexEInvoices");

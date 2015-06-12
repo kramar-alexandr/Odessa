@@ -1936,3 +1936,40 @@ begin
 
   EndWindow;
 end;
+
+
+window FiscalSettingsTClass:1				//Edit----------------------Dima  27.04.2015
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  real h,v,vs;
+  WindowBegin("Настройки фискального принтера",FiscalSettingsTClass,CGSbl,-);
+  SetBlid(FiscalSettingsBlock);
+  SetWRect(64,80,550,300);
+  v=6;vs = 20; h = 100; 
+  StaticText(50,15,"Путь к папке для хранения фискальных чеков:",false);
+  EditField(h,v+=vs,400,"Папка",Normal,StoragePath,false,0);
+  EditField(h,v+=vs,200,"Название файла",Normal,FileName,false,0);
+  
+  EndWindow;
+end;
+
+
+
+window FiscalPrintingTClass:1				
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  real h,v,vs,h1,v1;
+  WindowBegin("Печать на фискальном принтере",FiscalPrintingTClass,CGother,RcType);
+  SetWRect(64,80,550,300);
+  v1=30;vs = 20; h1 = 50; 
+  
+	ColourPushButton(h1,v1,h1+100,v1+40,"MakeXReport","Печатать Х отчет",1);	//green
+	v1=v1+60;
+	ColourPushButton(h1,v1,h1+100,v1+40,"MakeZReport","Печатать Z отчет",3); //red
+	v1=v1+60;
+	ColourPushButton(h1,v1,h1+100,v1+40,"MakePeriodicReport","Отчет за период",4);
+	v1=v1+60;
+	ColourPushButton(h1,v1,h1+100,v1+40,"MakePeriodicShortReport","Короткий отчет за период",5);
+	  
+  EndWindow;
+end;

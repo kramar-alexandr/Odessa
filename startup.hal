@@ -14,6 +14,9 @@ begin
   Setting("Настройки экспорта склада CSV",ExportStockCSVTClass,modSY);
   Setting("Настройки моей регистрации",MyAccountTClass,modSL); //Edit***************************Sasha2,11:59 07.11.2014
   Setting("Настройки отображения баллов карты лояльности",MaxPointLoyCardTClass,modPOS);	//Edit------------Dima  23.12.2014
+  Setting("Настройки фискального принтера",FiscalSettingsTClass,modPOS);//Edit----------------------Dima  10.06.2015
+  Setting("Печать на фискальном принтере",FiscalPrintingTClass,modPOS);
+  
   Report("Анализ поставщика",VEAnaRClass,VEAnaRn,0,modPO);
   Report("Отчет по товарам по классификации (поставщику)",VERepRClass,VERepRn,0,modPO); //Edit***************************Sasha2,14:08 31.07.2014
   Report("Отчет по заказанным товарам",ItemPUOrderReportRClass,ItemPUOrderReportRn,0,modPO); //Edit***************************Sasha2,14:08 31.07.2014
@@ -140,7 +143,9 @@ begin
    SString(31060,"Страховочная стоимость не может быть меньше наложенного платежа"); 
    SString(31061,"ЭН напечатана. Нельзя вносить изменения");
    SString(31062,"У клиента отсутствует город!");
-   SString(31063,"Одержаний");     	 
+   SString(31063,"Одержаний"); 
+   SString(31064,"Подарочный сертификат");
+   SString(31065,"Указанная, в настройках фискального принтера, папка недоступна");     	 
 	 
    
   Maintenance("Экспорт склада CSV",ExportStockCSVClass,ExportStockCSVMn,modSY);

@@ -1,0 +1,135 @@
+
+procedure CreateFiscalFile(area filedata)
+begin
+	record FiscalSettingsBlock Fiskalblock;
+	longint tick;
+	
+	BlockLoad(Fiskalblock);
+	
+	tick = GetCurTick;
+	if (DirExists(Fiskalblock.StoragePath))	then begin
+		WriteAreaToFile(filedata,Fiskalblock.StoragePath & "\\" & Fiskalblock.FileName & tick & ".txt",0);
+	end else begin
+		MessageBox(31065,"");
+	end;
+
+end;
+
+
+global
+procedure MakeFiscalReceipt(record IVVc IVr)
+begin
+	row IVVc IVrw;
+	area filedata;
+	integer i,rwcnt;
+	string 5 d,nalogGroup;
+	string 255 rowStr,name;
+	string 10 articul,saleCommand,payCommand;
+	integer printStatus,paymentStatus,quant;
+	longint rowSum;
+	
+  d = "!===!"; 	//divider
+  //saleCommand = "FPSale";
+  //payCommand = "FPPayment";
+  saleCommand = "SaleEx";
+  payCommand = "Payment";  
+  printStatus = 0;
+  nalogGroup = "1";
+	rwcnt = MatRowCnt(IVr);
+	
+	
+	for(i=0;i<rwcnt;i=i+1) begin
+		MatRowGet(IVr,i,IVrw);
+		if (IVrw.stp == kInvoiceRowTypeNormal) then begin
+			rowSum = IVrw.Sum * 100;
+			quant = IVrw.Quant;
+			articul = IVr.SerNr & i;
+			//rowStr = saleCommand & d & quant & d & printStatus & d &  rowSum & d & nalogGroup & d & IVrw.Spec & d & articul & d; 
+			rowStr = saleCommand & d & quant & d & printStatus  & d &  "false" & d &  rowSum & d & nalogGroup & d &  "false" & d & IVrw.Spec & d & articul & d; 
+			AddTextToArea(rowStr,filedata);
+		end;
+		if (IVrw.stp == kInvoiceRowTypeGiftVoucherSold) then begin
+			rowSum = IVrw.Sum * 100;
+			quant = 1;
+			name = IVrw.Spec;
+			articul = IVr.SerNr & i;
+			if (blank(name)) then begin name = USetStr(31064); end;
+			rowStr = saleCommand & d & quant & d & printStatus & d &  rowSum & d & nalogGroup & d & name & d & articul & d; 
+			AddTextToArea(rowStr,filedata);
+		end;		
+		if (IVrw.stp==kInvoiceRowTypeCashPayment) then begin
+			paymentStatus = 3;
+			rowSum = IVrw.Sum * 100;
+//			rowStr = payCommand & d & paymentStatus & d & rowSum & d &  "false" & d & "true" & d & "" & d ;
+				rowStr = payCommand & d & paymentStatus & d & rowSum & d &  "false" & d & "true" & d ; 
+			AddTextToArea(rowStr,filedata);
+		end;
+		if (IVrw.stp==kInvoiceRowTypeCreditCardPayment) then begin
+			paymentStatus = 0;
+			rowSum = IVrw.Sum * 100;
+//				rowStr = payCommand & d & paymentStatus & d & rowSum & d &  "false" & d & "true" & d & "" & d ;
+			rowStr = payCommand & d & paymentStatus & d & rowSum & d &  "false" & d & "true" & d ; 
+			AddTextToArea(rowStr,filedata);
+		end;		
+		
+	end;	
+	//AddTextToArea("<END>" & chr(13),filedata);
+	CreateFiscalFile(filedata);
+	
+return;	
+end;
+
+
+
+global procedure MakeXReport()
+begin
+	string 255 command,password,d;
+	area filedata;
+	
+	d = "!===!"; 	//divider	
+//	command = "FPDayReport";
+	command = "DayReport";
+	password = "";
+	
+	AddTextToArea(command & d & password & d,filedata);
+	//AddTextToArea("<END>" & chr(13),filedata);
+	CreateFiscalFile(filedata);
+return;
+end;
+
+
+
+global procedure MakeZReport()
+begin
+	string 255 command,password,d;
+	area filedata;
+	
+	d = "!===!"; 	//divider	
+	command = "FPDayClrReport";
+	password = "";
+	
+	AddTextToArea(command & d & password & d,filedata);
+	AddTextToArea("<END>" & chr(13),filedata);
+	CreateFiscalFile(filedata);
+return;
+end;
+
+
+global procedure MakePeriodicReport()
+begin
+	string 255 command,password,d;
+	area filedata;
+	
+
+return;
+end;
+
+global procedure MakePeriodicShortReport()
+begin
+	string 255 command,password,d;
+	area filedata;
+	
+
+return;
+end;
+
