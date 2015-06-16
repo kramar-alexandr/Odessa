@@ -150,6 +150,7 @@ begin
    SString(31067,"ЗНИЖКА");
    SString(31068,"ПС Номер ");
    SString(31069,"Залишок ");
+   SString(31070,"На складе недостаточное кол-во свободного, незарезервированного товара ");
 	 
    
   Maintenance("Экспорт склада CSV",ExportStockCSVClass,ExportStockCSVMn,modSY);

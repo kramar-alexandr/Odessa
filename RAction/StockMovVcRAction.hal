@@ -1660,7 +1660,28 @@ already checked few lines above
         goto LCheckStockMovRecord;
       end;
     end;
-  end;
+    
+    
+  	if (SMp.OKFlag > 0  or SMp.SentOKFlag > 0  or SMp.OrdFlag > 0)   then begin			//Edit----------------------Dima  16.06.2015
+  	  FindStockValue(StockMovrw.ArtCode,SMp.FrLocation,ISr);
+  	  if ((StockMovrw.SentQuant > ISr.Instock) or (StockMovrw.Quant > ISr.Instock)) then begin
+  	    error = 1247;
+  	    errorstr = "";
+  	    rownr = i;
+  	    fieldstr = "Quant";          
+  	    res = -1;
+  	    goto LCheckStockMovRecord;   
+  	  end;  	  
+  	  if ((StockMovrw.SentQuant > ISr.Instock - ISr.RsrvQty) or (StockMovrw.Quant > ISr.Instock - ISr.RsrvQty)) then begin
+  	    error = 31070;
+  	    errorstr = StockMovrw.ArtCode;
+  	    rownr = i;
+  	    fieldstr = "Quant";          
+  	    res = -1;
+  	    goto LCheckStockMovRecord;   
+  	  end;
+  	 end; 
+  end;	//Edit--end--------------------Dima  16.06.2015
   
   if (check!=0) then begin
     UpdateStockMovFIFO(SMp,SM2p,stat);
