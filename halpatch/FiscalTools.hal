@@ -1,6 +1,6 @@
 external function val AbsoluteVal(val);
 
-procedure CreateFiscalFile(area filedata)
+procedure CreateFiscalFile(area filedata)				//Edit----------------------Dima  11.06.2015
 begin
 	record FiscalSettingsBlock Fiskalblock;
 	longint tick;
@@ -8,12 +8,29 @@ begin
 	BlockLoad(Fiskalblock);
 	
 	tick = GetCurTick;
-	if (DirExists(Fiskalblock.StoragePath))	then begin
-		WriteAreaToFile(filedata,Fiskalblock.StoragePath & "\\" & Fiskalblock.FileName & tick & ".txt",0);
-	end else begin
-		MessageBox(31065,"");
+	if (nonblank(Fiskalblock.StoragePath)) then begin
+		if (DirExists(Fiskalblock.StoragePath))	then begin
+			WriteAreaToFile(filedata,Fiskalblock.StoragePath & "\\" & Fiskalblock.FileName & tick & ".txt",0);
+		end else begin
+			MessageBox(31065,"");
+		end;
 	end;
 
+end;
+
+
+function val GetRemainingVoucherSum(longint sernr)
+Begin
+val balance;
+record GCSVc GCSr;
+
+	balance = 0;
+	GCSr.SerNr = sernr;
+	ReadFirstMain(GCSr,1,true);
+	balance = GCSr.Balance;
+	
+GetRemainingVoucherSum = balance;
+return;
 end;
 
 
@@ -45,24 +62,30 @@ end;
 
 
 global
-procedure MakeFiscalReceipt(record IVVc IVr)
+procedure MakeFiscalReceipt(record IVVc IVr)	//Edit----------------------Dima  11.06.2015
 begin
 	row IVVc IVrw;
 	area filedata;
 	integer i,rwcnt;
 	string 5 d,nalogGroup;
 	string 255 rowStr,name;
-	string 10 articul,saleCommand,payCommand,refundCommand,command;
-	integer printStatus,paymentStatus,quant;
-	longint rowSum;
+	string 10 articul,saleCommand,payCommand,refundCommand,command,rebateCommand,commentCommand;
+	integer printStatus,paymentStatus,quant,discountType;
+	longint rowSum,totalRebate,cashSum,cardSum,giftSum, giftBalance;
+	array longint VoucherNumbers;
+	array longint VoucherSum;
 	
   d = "!===!"; 	//divider
 
   saleCommand = "SaleEx";
   payCommand = "Payment";
-  refundCommand  = "PayMoney";  
+  rebateCommand = "Discount";
+  refundCommand  = "PayMoney";
+  commentCommand = "Comment";  
   printStatus = 0;
   nalogGroup = "1";
+  discountType = 0; //absolute value of discount
+  totalRebate= 0 ;
 	rwcnt = MatRowCnt(IVr);
 	
 	
@@ -74,38 +97,79 @@ begin
 			end else begin	
 				command = refundCommand;		
 			end;
-				rowSum = AbsoluteVal(IVrw.Sum) * 100;
+				rowSum = IVrw.Price * 100;
 				quant = AbsoluteVal(IVrw.Quant);
 				articul = IVr.SerNr & i;
-				//rowStr = saleCommand & d & quant & d & printStatus & d &  rowSum & d & nalogGroup & d & IVrw.Spec & d & articul & d; 
 				rowStr = command & d & quant & d & printStatus  & d &  "false" & d &  rowSum & d & nalogGroup & d &  "false" & d & IVrw.Spec & d & articul & d; 
-				AddTextToArea(rowStr,filedata);			
+				AddTextToArea(rowStr,filedata);	
+				
+			if (nonblank(IVrw.vRebate)) then begin
+				rowSum = (AbsoluteVal(IVrw.Quant)*IVrw.Price - (AbsoluteVal(IVrw.Sum)))*100;
+				rowStr = rebateCommand & d & discountType & d & rowSum  & d &  USetStr(31067)  & d;
+				AddTextToArea(rowStr,filedata);
+			end;
+						
 		end;
+		
 		if (IVrw.stp == kInvoiceRowTypeGiftVoucherSold) then begin
 			rowSum = IVrw.Sum * 100;
 			quant = 1;
-			name = IVrw.Spec;
+			name = USetStr(31068) & IVrw.GCNr & "  " & IVrw.Spec;
 			articul = IVr.SerNr & i;
-			if (blank(name)) then begin name = USetStr(31064); end;
-			rowStr = saleCommand & d & quant & d & printStatus  & d &  "false" & d &  rowSum & d & nalogGroup & d &  "false" & d & IVrw.Spec & d & articul & d; 
-			AddTextToArea(rowStr,filedata);
-		end;		
-		if (IVrw.stp==kInvoiceRowTypeCashPayment) then begin
-			paymentStatus = 3;
-			rowSum = AbsoluteVal(IVrw.Sum) * 100;
-//			rowStr = payCommand & d & paymentStatus & d & rowSum & d &  "false" & d & "true" & d & "" & d ;
-				rowStr = payCommand & d & paymentStatus & d & rowSum & d &  "false" & d & "true" & d ; 
-			AddTextToArea(rowStr,filedata);
-		end;
-		if (IVrw.stp==kInvoiceRowTypeCreditCardPayment) then begin
-			paymentStatus = 0;
-			rowSum = AbsoluteVal(IVrw.Sum) * 100;
-//				rowStr = payCommand & d & paymentStatus & d & rowSum & d &  "false" & d & "true" & d & "" & d ;
-			rowStr = payCommand & d & paymentStatus & d & rowSum & d &  "true" & d & "true" & d ; 
+			//if (blank(name)) then begin name = USetStr(31064); end;
+			rowStr = saleCommand & d & quant & d & printStatus  & d &  "false" & d &  rowSum & d & nalogGroup & d &  "false" & d & name & d & articul & d; 
 			AddTextToArea(rowStr,filedata);
 		end;		
 		
-	end;	
+		if (IVrw.stp==kInvoiceRowTypeCashPayment) then begin
+			paymentStatus = 3;
+			cashSum = AbsoluteVal(IVrw.Sum) * 100;
+		end;
+		if (IVrw.stp==kInvoiceRowTypeCreditCardPayment) then begin
+			paymentStatus = 0;
+			cardSum = AbsoluteVal(IVrw.Sum) * 100;
+		end;
+		
+		if (IVrw.stp==kInvoiceRowTypeGiftVoucherPayment) then begin
+			giftSum = AbsoluteVal(IVrw.Sum) * 100;
+			VoucherNumbers[VoucherNumbers.length] = IVrw.GCNr;
+			VoucherSum[VoucherSum.length] =  AbsoluteVal(IVrw.Sum) * 100;
+		end;				
+		
+	end;
+
+	if (VoucherSum.length>0) then begin
+				discountType = 4; //discount on the total sum
+				for(i=0;i<VoucherSum.length;i=i+1) begin							
+					rowStr = rebateCommand & d & discountType & d & VoucherSum[i]  & d &  USetStr(31066) & VoucherNumbers[i] &" "& USetStr(31067) & d;
+					AddTextToArea(rowStr,filedata);
+					giftBalance = GetRemainingVoucherSum(VoucherNumbers[i]);
+					if (giftBalance>0) then begin
+							rowStr = commentCommand & d & USetStr(31069)  & giftBalance & d & "false" &  d ;
+							AddTextToArea(rowStr,filedata);
+					end;
+				end;
+	end;
+
+	
+	if (cardSum>0 and cashSum>0) then begin	
+		paymentStatus = 3;
+		rowStr = payCommand & d & paymentStatus & d & cashSum & "???" & cardSum & d &  "false" & d & "true" & d ;
+		AddTextToArea(rowStr,filedata); 
+	end else begin	
+		if (cashSum>0) then begin
+				paymentStatus = 3;
+				rowStr = payCommand & d & paymentStatus & d & cashSum & d &  "false" & d & "true" & d ;
+		end;	
+		if (cardSum>0) then begin
+				paymentStatus = 0;
+				rowStr = payCommand & d & paymentStatus & d & cardSum & d &  "true" & d & "true" & d ;
+		end;
+		AddTextToArea(rowStr,filedata);		
+	end;
+	
+	
+
 	AddTextToArea(chr(13) & "<END>",filedata);
 	CreateFiscalFile(filedata);
 	
@@ -120,7 +184,6 @@ begin
 	area filedata;
 	
 	d = "!===!"; 	//divider	
-//	command = "FPDayReport";
 	command = "DayReport";
 	
 	AddTextToArea(command & d,filedata);
@@ -133,14 +196,26 @@ end;
 
 global procedure MakeZReport()
 begin
-	string 255 command,password,d;
+	string 255 command,password,d,cashOutFlag;
 	area filedata;
+	integer wn;
+	record RcVc RepSpec;
 	
+	wn = CurWindow;
+	DeselectWindow(wn,false);	
+	GetWindowRecord(wn,RepSpec);	
+	
+	if (RepSpec.flags[1]>0) then begin
+		cashOutFlag = "true";
+	end else begin
+		cashOutFlag = "false";
+	end;
+		
 	d = "!===!"; 	//divider	
 	command = "DayClrReport";
 	password = "";
 	
-	AddTextToArea(command & d,filedata);
+	AddTextToArea(command & d & cashOutFlag & d,filedata);
 	AddTextToArea(chr(13) & "<END>",filedata);
 	CreateFiscalFile(filedata);
 return;
@@ -178,7 +253,7 @@ end;
 
 global procedure MakePeriodicShortReport()
 begin
-	string 255 command,password,d;
+	string 255 command,d;
 	area filedata;
 	string 10 sdate,edate,temp;
 	integer wn;
@@ -204,7 +279,7 @@ end;
 
 global procedure MakeResetOrder()
 begin
-	string 255 command,password,d;
+	string 255 command,d;
 	area filedata;
 	
 	d = "!===!"; 	//divider	
@@ -219,7 +294,7 @@ end;
 
 global procedure MakeNullCheck()
 begin
-	string 255 command,password,d;
+	string 255 command,d;
 	area filedata;
 	
 	d = "!===!"; 	//divider	
@@ -233,8 +308,12 @@ end;
 
 global procedure MakeLastCheck()
 begin
-	string 255 command,password,d;
-	area filedata;
+	string 255 command,d;
+	area filedata;	
+	record IVVc IVr;
+	row IVVc IVrw;
+	integer rwcnt,i;
+	boolean f,pp,pay;
 	
 	d = "!===!"; 	//divider	
 	command = "CopyLastCheck";
@@ -242,14 +321,107 @@ begin
 	AddTextToArea(command & d,filedata);
 	AddTextToArea(chr(13) & "<END>",filedata);
 	CreateFiscalFile(filedata);
+	
+/*	
+	//--temporary --//
+	While(LoopMain(IVr,1,true)) begin
+		rwcnt = MatRowCnt(IVr);
+		pay=false;
+		pp=false;
+		for(i=0;i<rwcnt;i=i+1) begin
+			MatRowGet(IVr,i,IVrw);
+			if(IVrw.stp==6) then begin pp=true; end;
+			if(IVrw.stp==14 or IVrw.stp==15 or IVrw.stp==16) then begin pay=true; end;
+		
+		
+		end;
+		
+		if (pp and pay) then begin 
+			LogText(0,IVr.SerNr);
+		end;	
+	end;	
+	
+*/	
+	
 return;
 end;
 
 
 
+global procedure MakeCashIn()
+begin
+	string 255 command,avans,d;
+	area filedata;
+	integer wn;
+	record RcVc RepSpec;
+	
+	wn = CurWindow;
+	DeselectWindow(wn,false);	
+	GetWindowRecord(wn,RepSpec);	
+	
+	d = "!===!"; 	//divider	
+	command = "InToCash";
+	avans = RepSpec.long1;
+	
+	AddTextToArea(command & d & avans & d,filedata);
+	AddTextToArea(chr(13) & "<END>",filedata);
+	CreateFiscalFile(filedata);
+return;
+end;
+
+
+global procedure MakeCashOut()
+begin
+	string 255 command,money,d;
+	area filedata;
+	integer wn;
+	record RcVc RepSpec;
+	
+	wn = CurWindow;
+	DeselectWindow(wn,false);	
+	GetWindowRecord(wn,RepSpec);	
+	
+	d = "!===!"; 	//divider	
+	command = "OutOfCash";
+	money = RepSpec.long1;
+	
+	AddTextToArea(command & d & money & d,filedata);
+	AddTextToArea(chr(13) & "<END>",filedata);
+	CreateFiscalFile(filedata);
+return;
+end;
+
+
+global procedure MakeDateSetting()
+begin
+	string 255 command,d;
+	string 10 newdate,newtime;
+	area filedata;
+	integer wn;
+	record RcVc RepSpec;
+	
+	wn = CurWindow;
+	DeselectWindow(wn,false);	
+	GetWindowRecord(wn,RepSpec);	
+	
+	d = "!===!"; 	//divider	
+	command = "setdatetime";
+	newdate = RepSpec.f1;
+	newtime = RepSpec.f2;
+	
+	if (blank(newdate)) then begin newdate="0"; end;
+	if (blank(newtime)) then begin newtime="0"; end;
+	
+	AddTextToArea(command & d & newdate & d & newtime & d,filedata);
+	AddTextToArea(chr(13) & "<END>",filedata);
+	CreateFiscalFile(filedata);
+return;
+end;
+
+
 
 global
-function Boolean FiscalPrintingTClassOnOpenWindow(Integer wn)
+function Boolean FiscalPrintingTClassOnOpenWindow(Integer wn)//Edit----------------------Dima  15.06.2015
 begin
   record RcVc RepSpec;
   date d;
@@ -259,6 +431,10 @@ begin
   GetWindowRecord(wn,RepSpec);
 	RepSpec.sStartDate = sd;
 	RepSpec.sEndDate = sd;
+	RepSpec.flags[1] = 1;
+	sd = DateToString(CurrentDate,"DD.MM.YYYY");
+	RepSpec.f1 = sd;
+	RepSpec.f2 = CurrentTime;
   PutWindowRecord(wn,RepSpec); 
   
   FiscalPrintingTClassOnOpenWindow = false;

@@ -12,6 +12,7 @@ external updating procedure IVVc_SendToSerialPortDevices(Integer,LongInt,record 
 remote updating procedure RraPasteInvInEDIInv(var record EDIIVVc,var LongInt);
 external procedure RecordActionIV_Print(var record IVVc,string,string,Integer,Boolean);
 external procedure ShowUnOkWarn(string,Integer);
+external procedure MakeFiscalReceipt(record IVVc); //Edit----------------------Dima  16.06.2015
 
 updating procedure acCreateEDIInv(record IVVc IVp)
 BEGIN
@@ -93,6 +94,10 @@ LkInvoiceTypeCredit:;
 //    ResetDisplayDsm;
     ReRunWindowDef(wn);
     WindowFieldGotoForTouchScreen(wn,-1,"ivcashcommand",true);
+	  if (IVr.OKFlag > 0) then begin	
+	  MessageBox(0,"Now");	
+				MakeFiscalReceipt(IVr);		//Edit----------------------Dima  16.06.2015
+		end;
   end;
 LIVVcRecordSaveClient:;
   IVVcRecordSaveClient = res; 
@@ -161,6 +166,10 @@ BEGIN
   if (TouchScreenLook) then begin
     ResetDisplayDsm;  
     ReRunWindowDef(wn);
+	  if ((IV2r.OKFlag == 0) and (IVr.OKFlag > 0)) then begin	
+	  MessageBox(0,"Now");	
+				MakeFiscalReceipt(IVr);		//Edit----------------------Dima  16.06.2015
+		end;    
   end;
 LIVVcRecordUpdateClient:;
   IVVcRecordUpdateClient = res; 

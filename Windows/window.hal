@@ -1957,7 +1957,7 @@ end;
 
 
 
-window FiscalPrintingTClass:1
+window FiscalPrintingTClass:1																//Edit----------------------Dima  15.06.2015
   wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
 begin
   real h,v,vs,h1,h2,v1;
@@ -1969,11 +1969,13 @@ begin
   TileButton(1,"Отчеты");
   TileButton(2,"Операции с чеком");
   TileButton(3,"Внесение/изъятие");
+  TileButton(4,"Дата/Время");
   v1=30;vs = 20; h1 = 50; h2 = 200 ;
 
   Tile(1,100,false,"","sStartDate");
-	ColourPushButton(h1,v1,h1+100,v1+40,"MakeXReport","Печатать Х отчет",1);	//green
-	ColourPushButton(h2,v1,h2+100,v1+40,"MakeZReport","Печатать Z отчет",3); //red
+	ColourPushButton(h1,v1,h1+100,v1+40,"MakeXReport","Печатать Х отчет",1);
+	ColourPushButton(h2,v1,h2+100,v1+40,"MakeZReport","Печатать Z отчет",3);
+	CheckBox(h2,v1+50,1,"Автоматический вынос денег",flags[1]);
 	v1=v1+140;
 	ColourPushButton(h1,v1,h1+100,v1+40,"MakePeriodicReport","Отчет за период",4);
 	ColourPushButton(h2,v1,h2+100,v1+40,"MakePeriodicShortReport","Короткий отчет за период",5);
@@ -1982,12 +1984,30 @@ begin
   EditField(h1+30,v1+=vs,70,"Период",Normal,sStartDate,false,0);
   EditField(h2-10,v1,70,":   ",Normal,sEndDate,false,0);
 
-	Tile(2,200,false,"","f2");
+	Tile(2,200,false,"","f4");
 	v1=30;
 	ColourPushButton(h1,v1,h1+100,v1+40,"MakeLastCheck","Копия последнего чека",6);
 	v1=v1+60;
 	ColourPushButton(h1,v1,h1+100,v1+40,"MakeResetOrder","Аннулировать чек",7);
 	v1=v1+60;
 	ColourPushButton(h1,v1,h1+100,v1+40,"MakeNullCheck","Нулевой чек",8);
+
+
+	Tile(3,200,false,"","long1");
+	v1=30;
+	ColourPushButton(h1,v1,h1+100,v1+40,"MakeCashIn","Внесение денег",2);
+	ColourPushButton(h2,v1,h2+100,v1+40,"MakeCashOut","Изъятие денег",1);
+	v1=v1+100;
+  EditField(h1+100,v1,150,"Сумма в копейках",Normal,long1,false,0);
+
+	Tile(4,200,false,"","f1");
+	v1=30;
+	StaticText(50,v1,"Установка времени и даты фискального принтера",false);
+	StaticText(50,v1+12,"Неиспользуемое поле следует оставить пустым",false);
+	v1=v1+50;
+  EditField(h1,v1,100,"Дата",Normal,f1,false,0);
+  EditField(h1,v1+20,100,"Время",Normal,f2,false,0);
+  v1=v1+90;
+	ColourPushButton(h2,v1,h2+100,v1+40,"MakeDateSetting","Установить",2);  
   EndWindow;
 end;
