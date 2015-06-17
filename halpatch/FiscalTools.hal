@@ -9,7 +9,8 @@ begin
 	
 	tick = GetCurTick;
 	if (nonblank(Fiskalblock.StoragePath)) then begin
-		if (DirExists(Fiskalblock.StoragePath))	then begin
+		//if (DirExists(Fiskalblock.StoragePath))	then begin
+		if (FileExists(Fiskalblock.StoragePath & "\\checkconnect.txt")) then begin
 			WriteAreaToFile(filedata,Fiskalblock.StoragePath & "\\" & Fiskalblock.FileName & tick & ".txt",0);
 		end else begin
 			MessageBox(31065,"");
@@ -468,3 +469,67 @@ begin
   FiscalPrintingTClassOnOpenWindow = false;
   return;
 end;
+
+
+
+
+
+
+
+
+/*
+global
+ function LongInt FiscalSettingsBlockRecordUpdateClient(var record FiscalSettingsBlock FSb,record FiscalSettingsBlock FS2b,LongInt stat,LongInt long4)
+begin
+	area checkarea;
+	LongInt res;
+			//if (FileExists(Fiskalblock.StoragePath & "\\checkconnect.txt")) then begin
+			//AddTextToArea(chr(13) & "<END>",filedata);
+			//WriteAreaToFile(filedata,Fiskalblock.StoragePath & "\\" & Fiskalblock.FileName & tick & ".txt",0);
+  MessageBox(0,"You shall not pass!!!");
+FiscalSettingsBlockRecordUpdateClient = res;  
+  return;
+end;
+
+
+global
+ function LongInt FiscalSettingsBlockRecordSaveClient(var record FiscalSettingsBlock FSb,record FiscalSettingsBlock FS2b,LongInt stat,LongInt long4)
+begin
+  LongInt res;
+	integer wn,mwn;
+	
+	wn = CurWindow;
+	mwn = MotherWindow(wn);
+	UpdateSHVcFromPackList(PackListr,mwn);
+  PackListVcRecordSaveClient = res; 
+  
+  return;
+end;
+
+global
+function LongInt FiscalSettingsBlockRecordCheck(var record FiscalSettingsBlock FSb,record FiscalSettingsBlock FS2b,LongInt stat,LongInt long4)
+BEGIN
+longint res;
+res = 0;
+LogText(0,"FiscalSettingsBlockRecordCheck");
+
+
+	FiscalSettingsBlockRecordCheck = res;
+return;
+end;
+
+global
+function LongInt FiscalSettingsBlockRecordCheckClient(LongInt wn,record FiscalSettingsBlock FSb,record FiscalSettingsBlock FS2b,LongInt stat,LongInt long4)
+BEGIN
+longint res;
+res = 0;
+
+MessageBox(0,"FiscalSettingsBlockRecordCheckClient");
+
+
+	FiscalSettingsBlockRecordCheckClient = res;
+return;
+end;
+
+
+*/
