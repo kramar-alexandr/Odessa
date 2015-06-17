@@ -71,7 +71,7 @@ begin
 	string 255 rowStr,name;
 	string 10 articul,saleCommand,payCommand,refundCommand,command,rebateCommand,commentCommand;
 	integer printStatus,paymentStatus,quant,discountType;
-	longint rowSum,totalRebate,cashSum,cardSum,giftSum, giftBalance;
+	longint rowSum,totalRebate,cashSum,cardSum,giftSum, giftBalance,prepaymentSum,totSum;
 	array longint VoucherNumbers;
 	array longint VoucherSum;
 	
@@ -83,27 +83,31 @@ begin
   refundCommand  = "PayMoney";
   commentCommand = "Comment";  
   printStatus = 0;
-  nalogGroup = "1";
+  nalogGroup = "0";
   discountType = 0; //absolute value of discount
   totalRebate= 0 ;
+  giftSum = 0;
+  prepaymentSum = 0;
 	rwcnt = MatRowCnt(IVr);
 	
 	
 	for(i=0;i<rwcnt;i=i+1) begin
 		MatRowGet(IVr,i,IVrw);
 		if (IVrw.stp == kInvoiceRowTypeNormal and nonblank(IVrw.ArtCode)) then begin	
-			if (IVrw.Quant>0) then begin
-				command = saleCommand;
-			end else begin	
-				command = refundCommand;		
-			end;
-				rowSum = IVrw.Price * 100;
+				if (IVrw.Quant>0) then begin
+					command = saleCommand;
+					rowSum = IVrw.Price * 100;
+				end else begin	
+					command = refundCommand;	
+					rowSum = (IVrw.Sum * 100) / IVrw.Quant;	
+				end;
+				
 				quant = AbsoluteVal(IVrw.Quant);
 				articul = IVr.SerNr & i;
 				rowStr = command & d & quant & d & printStatus  & d &  "false" & d &  rowSum & d & nalogGroup & d &  "false" & d & IVrw.Spec & d & articul & d; 
 				AddTextToArea(rowStr,filedata);	
 				
-			if (nonblank(IVrw.vRebate)) then begin
+			if (nonblank(IVrw.vRebate) and IVrw.Quant>0) then begin
 				rowSum = (AbsoluteVal(IVrw.Quant)*IVrw.Price - (AbsoluteVal(IVrw.Sum)))*100;
 				rowStr = rebateCommand & d & discountType & d & rowSum  & d &  USetStr(31067)  & d;
 				AddTextToArea(rowStr,filedata);
@@ -131,18 +135,27 @@ begin
 		end;
 		
 		if (IVrw.stp==kInvoiceRowTypeGiftVoucherPayment) then begin
-			giftSum = AbsoluteVal(IVrw.Sum) * 100;
 			VoucherNumbers[VoucherNumbers.length] = IVrw.GCNr;
 			VoucherSum[VoucherSum.length] =  AbsoluteVal(IVrw.Sum) * 100;
-		end;				
+		end;
+		
+		if (IVrw.stp==kInvoiceRowTypePrepayment) then begin
+			prepaymentSum =prepaymentSum + AbsoluteVal(IVrw.Sum) * 100;
+		end;						
 		
 	end;
-
+	
+	
+	
+	//Gift voucher payment---------------------------
 	if (VoucherSum.length>0) then begin
 				discountType = 4; //discount on the total sum
 				for(i=0;i<VoucherSum.length;i=i+1) begin							
-					rowStr = rebateCommand & d & discountType & d & VoucherSum[i]  & d &  USetStr(31066) & VoucherNumbers[i] &" "& USetStr(31067) & d;
-					AddTextToArea(rowStr,filedata);
+					rowStr = rebateCommand & d & discountType & d & VoucherSum[i]  & d &  USetStr(31066) & d; 
+					giftSum = giftSum + VoucherSum[i];
+					AddTextToArea(rowStr,filedata);	//Gift voucher
+					rowStr = commentCommand & d & USetStr(31072)  & VoucherNumbers[i] & d & "false" &  d ;
+					AddTextToArea(rowStr,filedata);	//was used
 					giftBalance = GetRemainingVoucherSum(VoucherNumbers[i]);
 					if (giftBalance>0) then begin
 							rowStr = commentCommand & d & USetStr(31069)  & giftBalance & d & "false" &  d ;
@@ -150,8 +163,15 @@ begin
 					end;
 				end;
 	end;
-
 	
+	//prepayment---------------------------
+	if(prepaymentSum>0) then begin
+		discountType = 4;
+		rowStr = rebateCommand & d & discountType & d & prepaymentSum  & d &  USetStr(31071) & d;
+		AddTextToArea(rowStr,filedata);		 
+	end;
+	
+	//payment by card and cash---------------------------
 	if (cardSum>0 and cashSum>0) then begin	
 		paymentStatus = 3;
 		rowStr = payCommand & d & paymentStatus & d & cashSum & "???" & cardSum & d &  "false" & d & "true" & d ;
@@ -160,14 +180,22 @@ begin
 		if (cashSum>0) then begin
 				paymentStatus = 3;
 				rowStr = payCommand & d & paymentStatus & d & cashSum & d &  "false" & d & "true" & d ;
+				AddTextToArea(rowStr,filedata);
 		end;	
 		if (cardSum>0) then begin
 				paymentStatus = 0;
 				rowStr = payCommand & d & paymentStatus & d & cardSum & d &  "true" & d & "true" & d ;
+				AddTextToArea(rowStr,filedata);
 		end;
-		AddTextToArea(rowStr,filedata);		
+				
 	end;
 	
+	totSum = IVr.Sum4*100;
+	if (totSum>0  and  ((giftSum >= totSum) or (prepaymentSum >= totSum))) then begin	//for closing of receipt
+				paymentStatus = 3;
+				rowStr = payCommand & d & paymentStatus & d & "0" & d &  "false" & d & "true" & d ;
+				AddTextToArea(rowStr,filedata);
+	end;	
 	
 
 	AddTextToArea(chr(13) & "<END>",filedata);
@@ -310,10 +338,10 @@ global procedure MakeLastCheck()
 begin
 	string 255 command,d;
 	area filedata;	
-	record IVVc IVr;
-	row IVVc IVrw;
-	integer rwcnt,i;
-	boolean f,pp,pay;
+	//record IVVc IVr;
+	//row IVVc IVrw;
+	//integer rwcnt,i;
+	//boolean f,pp,pay;
 	
 	d = "!===!"; 	//divider	
 	command = "CopyLastCheck";

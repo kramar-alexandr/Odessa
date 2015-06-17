@@ -4675,6 +4675,7 @@ end else begin
   SpecialMenu("Изменение скидки менеджером",' ',25,"MgrsDiscOverrideIVDsm");
   SpecialMenu("Открыть нал. матрицу",' ',25,"TestVatMatrixIVDsm");
 */
+	SpecialMenu("Печать фискальный чек",'p',26,"PrintFiscalReceipt");	//Edit----------------------Dima  10.06.2015
 end;
   EndWindow;
 end;	//Edit by Victor }
