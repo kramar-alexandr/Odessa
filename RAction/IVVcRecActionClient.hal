@@ -95,7 +95,6 @@ LkInvoiceTypeCredit:;
     ReRunWindowDef(wn);
     WindowFieldGotoForTouchScreen(wn,-1,"ivcashcommand",true);
 	  if (IVr.OKFlag > 0) then begin	
-	  MessageBox(0,"Now");	
 				MakeFiscalReceipt(IVr);		//Edit----------------------Dima  16.06.2015
 		end;
   end;
@@ -167,7 +166,6 @@ BEGIN
     ResetDisplayDsm;  
     ReRunWindowDef(wn);
 	  if ((IV2r.OKFlag == 0) and (IVr.OKFlag > 0)) then begin	
-	  MessageBox(0,"Now");	
 				MakeFiscalReceipt(IVr);		//Edit----------------------Dima  16.06.2015
 		end;    
   end;
