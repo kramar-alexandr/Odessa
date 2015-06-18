@@ -490,6 +490,7 @@ begin
   record ItemStatusVc ISr;
   record TaxMatrixVc TMr;
   record CUVc CUr;	
+	boolean testf1;// Edit ************************** Thursday, 18 June 2015 11:27:00
 	
   BlockLoad(GenOptRec);
   BlockLoad(MainStockRec);
@@ -524,9 +525,9 @@ begin
       if (nonblank(RepSpec.Stext)) then begin
         if (CheckPlanShipRows(RepSpec.Stext,ORr)==false) then begin testf = false; end;
       end;  
-      if ((nonblank(RepSpec.f4)) and (RepSpec.f4<>ORr.Location)) then begin 
+      /*if ((nonblank(RepSpec.f4)) and (RepSpec.f4<>ORr.Location)) then begin // Edit ************************** Thursday, 18 June 2015 11:25:22
         testf = false; 
-      end;
+      end;*/
       if ((nonblank(RepSpec.ObjStr)) and (SetInSet(RepSpec.ObjStr,ORr.Objects)==false)) then begin testf = false; end;
       if (ORr.OKFlag==0) then begin
         if (RepSpec.flags[7]==0) then begin testf = false; end;
@@ -567,7 +568,22 @@ L30:;
         rwcnt = MatRowCnt(ORr);
         for (i=0 ;i<rwcnt ;i=i+1) begin
           testf = true;
+          testf1= true;
           MatRowGet(ORr,i,ORrw);
+          
+          
+          if (nonblank(RepSpec.f4))then begin // Edit ************************** Thursday, 18 June 2015 11:25:22
+						if(nonblank(ORrw.Location))then begin
+							if (RepSpec.f4<>ORrw.Location) then begin // Edit ************************** Thursday, 18 June 2015 11:25:22
+								testf1 = false; 
+							end;
+						end else begin
+							if (RepSpec.f4<>ORrw.Location) then begin // Edit ************************** Thursday, 18 June 2015 11:25:22
+								testf1 = false; 
+							end;
+						end;
+					end;
+
           if (ORrw.Quant < ORrw.Shipd1) then begin
             goto LNext;
           end;
@@ -598,7 +614,7 @@ L30:;
           end;
 */                    
           if (ORrw.rowGP<=0) then begin testf = false; end;//instock
-          if (testf) then begin
+          if (testf and testf1) then begin// Edit ************************** Thursday, 18 June 2015 11:26:47
             if ((ORrw.stp==1) and ((ORrw.Quant-ORrw.Shipd2)!=0)) then begin          
               if ((nonblank(RepSpec.f3)) and (RepSpec.Comparison==1)) then begin             
                 INr.Code = ORrw.ArtCode;
@@ -706,8 +722,23 @@ LNext:;
                 if (nonblank(RepSpec.Stext)) then begin
                   if (CheckPlanShipRows(RepSpec.Stext,ORr)==false) then begin testf = false; end;
                 end;  
-                if (ORrw.rowGP<=0) then begin testf = false; end;//instock
-                if (testf) then begin
+                //if (ORrw.rowGP<=0) then begin testf = false; end;//instock// Edit ************************** Thursday, 18 June 2015 13:40:20
+                
+                testf1 = true;// Edit ************************** Thursday, 18 June 2015 11:34:36;
+                
+                if (nonblank(RepSpec.f4))then begin // Edit ************************** Thursday, 18 June 2015 11:25:22
+									if(nonblank(ORrw.Location))then begin
+										if (RepSpec.f4<>ORrw.Location) then begin // Edit ************************** Thursday, 18 June 2015 11:25:22
+											testf1 = false; 
+										end;
+									end else begin
+										if (RepSpec.f4<>ORrw.Location) then begin // Edit ************************** Thursday, 18 June 2015 11:25:22
+											testf1 = false; 
+										end;
+									end;
+								end;
+								
+                if (testf and testf1) then begin// Edit ************************** Thursday, 18 June 2015 11:34:22
                   StartFormat(15);
                   OutLongInt(0,"DblORVc",ORr.SerNr,false);
                  // OutDate(50,0,ORr.OrdDate,false);
