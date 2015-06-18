@@ -578,7 +578,7 @@ L30:;
 								testf1 = false; 
 							end;
 						end else begin
-							if (RepSpec.f4<>ORrw.Location) then begin // Edit ************************** Thursday, 18 June 2015 11:25:22
+							if (RepSpec.f4<>ORr.Location) then begin // Edit ************************** Thursday, 18 June 2015 11:25:22
 								testf1 = false; 
 							end;
 						end;
@@ -732,7 +732,7 @@ LNext:;
 											testf1 = false; 
 										end;
 									end else begin
-										if (RepSpec.f4<>ORrw.Location) then begin // Edit ************************** Thursday, 18 June 2015 11:25:22
+										if (RepSpec.f4<>ORr.Location) then begin // Edit ************************** Thursday, 18 June 2015 11:25:22
 											testf1 = false; 
 										end;
 									end;
