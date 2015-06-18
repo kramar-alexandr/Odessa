@@ -1956,6 +1956,21 @@ begin
 end;
 
 
+window FiscalSetLocalTClass:1				//Edit----------------------Dima  27.04.2015
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  real h,v,vs;
+  WindowBegin("Локальные настройки фискального принтера",FiscalSetLocalTClass,CGSbl,-);
+  SetBlid(FiscalSetLocalBlock);
+  SetWRect(64,80,550,300);
+  v=6;vs = 20; h = 100;
+  StaticText(50,15,"Путь к папке для хранения фискальных чеков:",false);
+  EditField(h,v+=vs,400,"Папка",Normal,StoragePath,false,0);
+  EditField(h,v+=vs,200,"Название файла",Normal,FileName,false,0);
+
+  EndWindow;
+end;
+
 
 window FiscalPrintingTClass:1																//Edit----------------------Dima  15.06.2015
   wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
@@ -1993,12 +2008,12 @@ begin
 	ColourPushButton(h1,v1,h1+100,v1+40,"MakeNullCheck","Нулевой чек",8);
 
 
-	Tile(3,200,false,"","long1");
+	Tile(3,200,false,"","vals1");
 	v1=30;
 	ColourPushButton(h1,v1,h1+100,v1+40,"MakeCashIn","Внесение денег",2);
 	ColourPushButton(h2,v1,h2+100,v1+40,"MakeCashOut","Изъятие денег",1);
 	v1=v1+100;
-  EditField(h1+100,v1,150,"Сумма в копейках",Normal,long1,false,0);
+  EditField(h1+100,v1,150,"Сумма в гривнах",Normal,vals1,false,0);
 
 	Tile(4,200,false,"","f1");
 	v1=30;

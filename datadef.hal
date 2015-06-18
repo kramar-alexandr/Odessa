@@ -3844,8 +3844,16 @@ RecordBegin(IPVc,-,"");
 	RecordField(DefCargoDescription,M4Str,200,0);
 	EndBlock; 
 	
-	
+	//should be removed
 	BlockBegin(FiscalSettingsBlock,-,"");		//Edit----------------------Dima  10.06.2015
+	RecordField(StoragePath,M4Str,255,0);
+	RecordField(FileName,M4Str,255,0);
+	EndBlock; 	
+	//----------removed
+	
+	
+	BlockBegin(FiscalSetLocalBlock,-,"");		//Edit----------------------Dima  10.06.2015
+  BlockForAllCompanies;
 	RecordField(StoragePath,M4Str,255,0);
 	RecordField(FileName,M4Str,255,0);
 	EndBlock; 	

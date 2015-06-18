@@ -2164,10 +2164,6 @@ end;
 global procedure PrintFiscalReceipt()		//Edit----------------------Dima  10.06.2015
 begin
 	record IVVc IVr;
-	row IVVc IVrw;
-	area filedata;
-	string 255 filepath;
-	record FiscalSettingsBlock Fiskalblock;
 	integer wn;
 
   wn = CurWindow;

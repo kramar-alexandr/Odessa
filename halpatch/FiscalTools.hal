@@ -2,7 +2,7 @@ external function val AbsoluteVal(val);
 
 procedure CreateFiscalFile(area filedata)				//Edit----------------------Dima  11.06.2015
 begin
-	record FiscalSettingsBlock Fiskalblock;
+	record FiscalSetLocalBlock Fiskalblock;
 	longint tick;
 	
 	BlockLoad(Fiskalblock);
@@ -339,38 +339,13 @@ global procedure MakeLastCheck()
 begin
 	string 255 command,d;
 	area filedata;	
-	//record IVVc IVr;
-	//row IVVc IVrw;
-	//integer rwcnt,i;
-	//boolean f,pp,pay;
 	
 	d = "!===!"; 	//divider	
 	command = "CopyLastCheck";
 	
 	AddTextToArea(command & d,filedata);
 	AddTextToArea(chr(13) & "<END>",filedata);
-	CreateFiscalFile(filedata);
-	
-/*	
-	//--temporary --//
-	While(LoopMain(IVr,1,true)) begin
-		rwcnt = MatRowCnt(IVr);
-		pay=false;
-		pp=false;
-		for(i=0;i<rwcnt;i=i+1) begin
-			MatRowGet(IVr,i,IVrw);
-			if(IVrw.stp==6) then begin pp=true; end;
-			if(IVrw.stp==14 or IVrw.stp==15 or IVrw.stp==16) then begin pay=true; end;
-		
-		
-		end;
-		
-		if (pp and pay) then begin 
-			LogText(0,IVr.SerNr);
-		end;	
-	end;	
-	
-*/	
+	CreateFiscalFile(filedata);	
 	
 return;
 end;
@@ -382,6 +357,7 @@ begin
 	string 255 command,avans,d;
 	area filedata;
 	integer wn;
+	longint sum;
 	record RcVc RepSpec;
 	
 	wn = CurWindow;
@@ -390,7 +366,8 @@ begin
 	
 	d = "!===!"; 	//divider	
 	command = "InToCash";
-	avans = RepSpec.long1;
+	sum = RepSpec.vals1 * 100;
+	avans = sum;
 	
 	AddTextToArea(command & d & avans & d,filedata);
 	AddTextToArea(chr(13) & "<END>",filedata);
@@ -405,6 +382,7 @@ begin
 	area filedata;
 	integer wn;
 	record RcVc RepSpec;
+	longint sum;
 	
 	wn = CurWindow;
 	DeselectWindow(wn,false);	
@@ -412,7 +390,8 @@ begin
 	
 	d = "!===!"; 	//divider	
 	command = "OutOfCash";
-	money = RepSpec.long1;
+	sum = RepSpec.vals1 * 100;
+	money = sum;
 	
 	AddTextToArea(command & d & money & d,filedata);
 	AddTextToArea(chr(13) & "<END>",filedata);
@@ -486,7 +465,6 @@ begin
 			//if (FileExists(Fiskalblock.StoragePath & "\\checkconnect.txt")) then begin
 			//AddTextToArea(chr(13) & "<END>",filedata);
 			//WriteAreaToFile(filedata,Fiskalblock.StoragePath & "\\" & Fiskalblock.FileName & tick & ".txt",0);
-  MessageBox(0,"You shall not pass!!!");
 FiscalSettingsBlockRecordUpdateClient = res;  
   return;
 end;

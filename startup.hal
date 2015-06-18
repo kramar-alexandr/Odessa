@@ -14,7 +14,7 @@ begin
   Setting("Настройки экспорта склада CSV",ExportStockCSVTClass,modSY);
   Setting("Настройки моей регистрации",MyAccountTClass,modSL); //Edit***************************Sasha2,11:59 07.11.2014
   Setting("Настройки отображения баллов карты лояльности",MaxPointLoyCardTClass,modPOS);	//Edit------------Dima  23.12.2014
-  Setting("Настройки фискального принтера",FiscalSettingsTClass,modPOS);//Edit----------------------Dima  10.06.2015
+  Setting("Локальные настройки фискального принтера",FiscalSetLocalTClass,modPOS);//Edit----------------------Dima  10.06.2015
   Setting("Печать на фискальном принтере",FiscalPrintingTClass,modPOS);
   
   Report("Анализ поставщика",VEAnaRClass,VEAnaRn,0,modPO);
