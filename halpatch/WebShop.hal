@@ -9,6 +9,7 @@ external function Boolean ORDchrsum(var record ORVc,Integer);
 external procedure ExtractObjWithSeparator(string,string,Boolean,var Integer,var string); //Edit***************************Sasha2,11:03 14.01.2015
 external procedure ORVc_PasteCurncyCode(var record ORVc,string);	//Edit--------------------Dima 23.01.2015
 external procedure ExportAllItems(record RepSpec);// Edit ************************** Thursday, 9 April 2015 15:35:46
+external procedure RefreshAllInnerRegistersNP;
 
 SetLangMode(LangRussian,"RUS",0);
 
@@ -27,13 +28,14 @@ SetLangMode(LangRussian,"RUS",0);
 global procedure CustTimeTableAction()
 begin
   record RcVc RepSpec;
-  time t1,t2,t3,t4,curt,curtnew;
+  time t1,t2,t3,t4,t5,curt,curtnew;
   string 5 hr,mn;
 
     t1 = StringToTime("7:30");
     t2 = StringToTime("13:30");
     t3 = StringToTime("21:30");
     t4 = StringToTime("23:07");
+    t5 = StringToTime("3:01");
     
     curt = CurrentTime; 
     hr = GetHour(curt);
@@ -50,7 +52,11 @@ begin
     	LogText(0,"CustTimeTableAction at planned time: " & curtnew);
     	ExportStockCSVMn(RepSpec);
     	ExportAllItems(RepSpec);
-    end;  
+    end;
+    if (curtnew==t5) then begin
+    	LogText(0,"CustTimeTableAction at planned time: " & curtnew);
+    	RefreshAllInnerRegistersNP;
+    end;    
     
 return;
 end;
