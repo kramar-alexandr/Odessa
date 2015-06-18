@@ -304,6 +304,7 @@ BEGIN
             FindStockValueInclStockReserv(-1,StockMovrw.ArtCode,StockMovrw.SerialNr,frlocation,ISr,stockreservq);
           end;
           prev = prev + quant;
+          //stockreservq gets from StockReservVc
           if (ISr.Instock<(prev+stockreservq)) then begin
             if (sentquantf) then begin
               error = 1247;
@@ -319,6 +320,25 @@ BEGIN
             res = 1247;
             goto LCheckStockMovRow;
           end;
+          if (SMp.MoveIncludingReserve==0) then begin		//Edit----------------------Dima  18.06.2015
+          	stockreservq = stockreservq + ISr.RsrvQty;		
+          	if (ISr.Instock<(prev+stockreservq)) then begin
+          	  if (sentquantf) then begin
+          	    error = 31070;
+          	    errorstr = StockMovrw.ArtCode;
+          	    errorrownr = rownr;
+          	    fieldstr = "SentQuant";                  
+          	  end else begin
+          	    error = 31070;
+          	    errorstr = StockMovrw.ArtCode;
+          	    errorrownr = rownr;
+          	    fieldstr = "Quant";                      
+          	  end;
+          	  res = 31070;
+          	  goto LCheckStockMovRow;
+          	end; 
+          end;         		//Edit--end--------------------Dima  18.06.2015
+          
         end;
       end;
     end;
@@ -450,6 +470,108 @@ LCheckStockMovRow:;
   CheckStockMovRow = res;
   RETURN;
 END;
+
+
+
+
+function Integer CheckStockMovRowWhenOrdered(record StockMovVc SMp,row StockMovVc StockMovrw,record INVc INr,                                  
+                                  record MainStockBlock MSb,record SerNrTrackBlock SNrb,Integer rownr,
+                                  string frlocation,LongInt check,
+                                  var LongInt error,var string errorstr,var integer errorrownr,var string fieldstr,boolean UnOKedCheckSerialf)
+BEGIN		//Edit----------------------Dima  18.06.2015
+  Integer res;
+  record INVc IN2r;
+  record ItemStatusVc ISr;
+  record PISVc PISr;
+  val w,h,d,m;
+  val prev,stockreservq;
+  row StockMovVc StockMov2rw;
+  Integer errcode;
+  string 255 objstr,errstr;
+  Integer j;
+  val quant;
+  record LocationVc ToLocr;
+  val serqty;
+  string 255 serialnr,errofield;
+  
+
+  quant = StockMovrw.OrdQuant;
+
+  if (quant<0) then begin
+      error = 1574;
+      errorstr = "";
+      errorrownr = rownr;
+      fieldstr = "OrdQuant";            
+    	res = 1574; 
+    	goto LCheckStockMovRowWhenOrdered;
+  end;
+  if (blank(quant)) then begin
+      error = 1058;
+      errorstr = "";
+      errorrownr = rownr;
+      fieldstr = "OrdQuant";            
+    	res = 1058;
+    	goto LCheckStockMovRowWhenOrdered;
+  end;    
+  if (((INr.SerNrf>0) and (INr.SerNrf<3)) and (MSb.NoSerOnPU==0)) then begin
+    if (ToLocr.Type==1) then begin
+      if (CheckSerialStatus(StockMovrw.ArtCode,StockMovrw.SerialNr,errstr)==2) then begin
+        error = 2210;
+        errorstr = " " & errstr;
+        errorrownr = rownr;
+        fieldstr = "SerialNr";          
+        res = -1;
+        goto LCheckStockMovRowWhenOrdered;
+      end;
+    end;
+  end;
+
+  if (check!=0) then begin
+    if (MSb.dontAllowOvership==1) then begin
+      if (SMp.OrdFlag==1) then begin
+        if (INr.ItemType==1) then begin        
+          prev = 0;
+          for (j=0;j<rownr;j=j+1) begin           
+            MatRowGet(SMp,j,StockMov2rw);
+            if ((StockMovrw.ArtCode==StockMov2rw.ArtCode) and ((StockMovrw.SerialNr==StockMov2rw.SerialNr) and (SNrb.BulkSerialNos==0))) then begin
+            	prev = prev + StockMov2rw.OrdQuant;
+            end;
+          end;          
+          if (SNrb.BulkSerialNos!=0) then begin
+            FindStockValueInclStockReserv(-1,StockMovrw.ArtCode,"",frlocation,ISr,stockreservq);
+          end else begin
+            FindStockValueInclStockReserv(-1,StockMovrw.ArtCode,StockMovrw.SerialNr,frlocation,ISr,stockreservq);
+          end;
+          prev = prev + quant;
+          if (ISr.Instock<(prev+stockreservq)) then begin
+              error = 1247;
+              errorstr = "";
+              errorrownr = rownr;
+              fieldstr = "OrdQuant";                  
+ 		          res = 1247;
+ 		          goto LCheckStockMovRowWhenOrdered;
+          end;
+          if (SMp.MoveIncludingReserve==0) then begin
+          	stockreservq = stockreservq + ISr.RsrvQty;		
+          	if (ISr.Instock<(prev+stockreservq)) then begin
+          	    error = 31070;
+          	    errorstr = StockMovrw.ArtCode;
+          	    errorrownr = rownr;
+          	    fieldstr = "OrdQuant";                  
+          	  	res = 31070;
+          	  	goto LCheckStockMovRowWhenOrdered;
+          	end;          		
+          end;
+        end;
+      end;
+    end;
+  end;  
+  
+LCheckStockMovRowWhenOrdered:;  
+  CheckStockMovRowWhenOrdered = res;
+  RETURN;
+END;		//Edit---end-------------------Dima  18.06.2015
+
 
 
 global
@@ -1542,6 +1664,22 @@ BEGIN
         goto LCheckStockMovRecord;
       end;
     end;
+    
+    if (stat==Rs_update) then begin		//Edit----------------------Dima  18.06.2015
+				if ((SMp.OrdFlag > 0) and (SM2p.OrdFlag == 0)) then begin
+						errcode = CheckStockMovRowWhenOrdered(SMp,StockMovrw,INr,MSb,SNrb,i,SMp.FrLocation,check,error,errorstr,rownr,fieldstr,UnOKedCheckSerialf);
+				end;
+		end else begin
+				if (SMp.OrdFlag > 0) then begin
+						errcode = CheckStockMovRowWhenOrdered(SMp,StockMovrw,INr,MSb,SNrb,i,SMp.FrLocation,check,error,errorstr,rownr,fieldstr,UnOKedCheckSerialf);
+				end;
+		end;
+		if (errcode!=0) then begin 
+        res = -1;
+        goto LCheckStockMovRecord;
+    end;
+		//Edit-----END------------------------------------------Dima  18.06.2015
+    
     if (transsendf or checksendf) then begin
       errcode = CheckStockMovRow(SMp,StockMovrw,INr,MSb,SNrb,i,SMp.FrLocation,SMp.ThrouLocation,true,check,error,errorstr,rownr,fieldstr,UnOKedCheckSerialf);
       if (errcode!=0) then begin 
@@ -1660,28 +1798,8 @@ already checked few lines above
         goto LCheckStockMovRecord;
       end;
     end;
-    
-    
-  	if (SMp.OKFlag > 0  or SMp.SentOKFlag > 0  or SMp.OrdFlag > 0)   then begin			//Edit----------------------Dima  16.06.2015
-  	  FindStockValue(StockMovrw.ArtCode,SMp.FrLocation,ISr);
-  	  if ((StockMovrw.SentQuant > ISr.Instock) or (StockMovrw.Quant > ISr.Instock)) then begin
-  	    error = 1247;
-  	    errorstr = "";
-  	    rownr = i;
-  	    fieldstr = "Quant";          
-  	    res = -1;
-  	    goto LCheckStockMovRecord;   
-  	  end;  	  
-  	  if ((StockMovrw.SentQuant > ISr.Instock - ISr.RsrvQty) or (StockMovrw.Quant > ISr.Instock - ISr.RsrvQty)) then begin
-  	    error = 31070;
-  	    errorstr = StockMovrw.ArtCode;
-  	    rownr = i;
-  	    fieldstr = "Quant";          
-  	    res = -1;
-  	    goto LCheckStockMovRecord;   
-  	  end;
-  	 end; 
-  end;	//Edit--end--------------------Dima  16.06.2015
+
+  end;	
   
   if (check!=0) then begin
     UpdateStockMovFIFO(SMp,SM2p,stat);

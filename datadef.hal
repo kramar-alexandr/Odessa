@@ -2613,6 +2613,7 @@ RecordBegin(INVc,-,"artikel5");
   RecordField(OfficialSerNr2,M4Str,100,0);
   RecordField(OfficialSerNr2Serie,M4Str,30,0);
   RecordField(SalesGroup,M4Code,5,SalesGroupVc); //Edit by Victor 25.11.14
+  RecordField(MoveIncludingReserve,M4Mark,0,0);	//Edit----------------------Dima  18.06.2015
   
   ArrayBegin(Math,-,1);
   ArrayField(ArtCode,M4Code,20,INVc);
