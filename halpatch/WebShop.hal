@@ -28,14 +28,20 @@ SetLangMode(LangRussian,"RUS",0);
 global procedure CustTimeTableAction()
 begin
   record RcVc RepSpec;
-  time t1,t2,t3,t4,t5,curt,curtnew;
+  time t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,curt,curtnew;
   string 5 hr,mn;
 
-    t1 = StringToTime("7:30");
-    t2 = StringToTime("13:30");
-    t3 = StringToTime("21:30");
-    t4 = StringToTime("23:07");
-    t5 = StringToTime("3:01");
+    t1 = StringToTime("8:00");
+    t2 = StringToTime("10:00");
+    t3 = StringToTime("12:00");
+    t4 = StringToTime("14:00");
+    t5 = StringToTime("16:00");
+    t6 = StringToTime("18:00");
+    t7 = StringToTime("20:00");
+    t8 = StringToTime("22:00");
+    t9 = StringToTime("00:00");
+    
+    t10 = StringToTime("3:00");//Nowa poshta
     
     curt = CurrentTime; 
     hr = GetHour(curt);
@@ -48,12 +54,12 @@ begin
     end;
     curtnew = StringToTime(hr & ":" & mn);
 
-    if (curtnew==t1 or curtnew==t2 or curtnew==t3 or curtnew==t4) then begin
+    if (curtnew==t1 or curtnew==t2 or curtnew==t3 or curtnew==t4 or curtnew==t5 or curtnew==t6 or curtnew==t7 or curtnew==t8 or curtnew==t9) then begin
     	LogText(0,"CustTimeTableAction at planned time: " & curtnew);
     	ExportStockCSVMn(RepSpec);
     	ExportAllItems(RepSpec);
     end;
-    if (curtnew==t5) then begin
+    if (curtnew==t10) then begin
     	LogText(0,"CustTimeTableAction at planned time: " & curtnew);
     	RefreshAllInnerRegistersNP;
     end;    
@@ -109,13 +115,13 @@ begin
 		IS2r.Location = loc2;
 		IS3r.Code = INr.Code;
 		IS3r.Location = loc3;
-		if((readfirstmain(ISr,2,true) and ISr.Instock>0) or (readfirstmain(IS2r,2,true) and IS2r.Instock>0) or (readfirstmain(IS3r,2,true) and IS3r.Instock>0)) then begin dop_ostatok = dop_ostatok + 1; end;
+		if((readfirstmain(ISr,2,true) and (ISr.Instock-ISr.OrddOut)>0) or (readfirstmain(IS2r,2,true) and (IS2r.Instock-IS2r.OrddOut)>0) or (readfirstmain(IS3r,2,true) and (IS3r.Instock-IS3r.OrddOut)>0)) then begin dop_ostatok = dop_ostatok + 1; end;
 		
 		ISr.Code = INr.Code;
 		ISr.Location = loc4;
 		IS2r.Code = INr.Code;
 		IS2r.Location = loc5;
-		if((readfirstmain(ISr,2,true) and ISr.Instock>0) or (readfirstmain(IS2r,2,true) and IS2r.Instock>0)) then begin dop_ostatok = dop_ostatok + 2; end;
+		if((readfirstmain(ISr,2,true) and (ISr.Instock-ISr.OrddOut)>0) or (readfirstmain(IS2r,2,true) and (IS2r.Instock-IS2r.OrddOut)>0)) then begin dop_ostatok = dop_ostatok + 2; end;
 		
 		if (dop_ostatok>0) then begin			
 			qty = 200;
