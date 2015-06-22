@@ -35,7 +35,10 @@ begin
   	OutString(30,0,CurrentDate,false);
   	OutString(40,0,CurrentTime,false);
   	EndFormat;
-  		
+  	
+  	OutString(0,0,"Период: ",false);
+  	OutString(10,0,RepSpec.Period2Str,false);
+		EndFormat;	
   	HeaderItems(RepSpec.f1,tstr);
   	OutString(0,0,tstr,false);
   	EndFormat;
@@ -320,8 +323,7 @@ longint length,k;
   if (RepSpec.Media == mtExcel) then begin	//Edit----------------------Dima  22.06.2015
   	OutHeaderToExcel(RepSpec);
   end;	
-  
-	
+
 	StartFormat(15);
 	OutString(20,0,"Код товара",false);
 	OutString(60,0,"Наименование",false)
@@ -375,7 +377,7 @@ longint length,k;
 					
 					if (blank(items[IVrw.ArtCode])) then begin
 							items[IVrw.ArtCode] = IVrw.Spec;
-							itemCodes[length-1] = IVrw.ArtCode;
+							itemCodes[length] = IVrw.ArtCode;
 							length = length +1; 								
 							qty[IVrw.ArtCode] = 0;
 					end;
@@ -440,7 +442,7 @@ longint length,k;
 	
 	SortStringArray(itemCodes);
 	
-	for(k=0;k<length-1;k=k+1) begin
+	for(k=0;k<length;k=k+1) begin
 		OutString(20,0,itemCodes[k],false);
 		OutString(60,0,items[itemCodes[k]],false);
 		OutString(270,0,qty[itemCodes[k]],false);
