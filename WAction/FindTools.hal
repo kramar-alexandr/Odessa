@@ -630,12 +630,15 @@ begin
 						end;
 
 					end else begin
+						Beep;
 						MessageBox(0,"Нельзя добавить товар с кодом " & RepSpec.f2);
 						goto LSH_AddOneItemToShip;
 					end;
 			end;
+			Beep;
 			MessageBox(0,"Нельзя добавить товар с кодом " & RepSpec.f2);
 	end else begin
+			Beep;
 			MessageBox(0,"Товара с указанным кодом не существует");
 	end;	
 
@@ -737,15 +740,17 @@ begin
 								end;
 
 					end else begin
+						Beep;
 						MessageBox(0,"Нельзя добавить товар с кодом " & RepSpec.f2);
 						goto LStockMove_AddOneItemTo;
 					end;
 			end;
+			Beep;
 			MessageBox(0,"Нельзя добавить товар с кодом " & RepSpec.f2);
 	end else begin
+			Beep;
 			MessageBox(0,"Товара с указанным кодом не существует");
 	end;	
-
 
 	LStockMove_AddOneItemTo:;
 
@@ -829,20 +834,7 @@ begin
   return;
 end;
 
-/*
-global 
-function boolean TableSearchAddition2IClassBeforeEditField(integer wn,string fieldname,integer fn,integer rownr)
-begin
-	record RcVc RepSpec;
-	integer mwn;
 
-	  GetWindowRecord(wn,RepSpec);
-	  mwn = RepSpec.flags[0];
-		DeselectWindow(mwn,true);
-
-  RETURN;
-END;
-*/
 
 global		//Edit----------------------Dima  16.02.2015
 function Boolean TableSearchAddition2IClassAfterEditField(Integer wn,string fieldname,Integer fn,Integer rownr,Integer changed)
