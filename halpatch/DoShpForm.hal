@@ -298,6 +298,8 @@ BEGIN
   val pricewithdeb,pricefromusd,sumfromusd,pricewithdebfromusd, sumwithdeb2; //Edit by Victor 09.01.15
   val fr,to1,to2,br1,br2;
   string 10 currency;
+  record ItemStatusVc ISr; 
+  integer inLoc;
 
   SetupVATBase(VATr,vatcnt);
   BlockLoad(MSb);  
@@ -459,7 +461,17 @@ BEGIN
 				end;
       	pricewithdebfromusd = (ORrw.Sum * fr/to1) / ORrw.Quant;
       	OUTFORMFIELD("F_MYPRICEWITHDEBFROMUSD",pricewithdebfromusd);
-      end;      			
+      end;  
+          	
+      ISr.Code = SHrw.ArtCode;												//Edit by Victor 22.06.15
+      ISr.Location = SHr.Location;
+      if(ReadFirstMain(ISr,2,true))then begin
+      	if (FIELDINFORM("F_MYCOUNTONLOC")) then begin	
+      		inLoc = ISr.Instock;
+      		OUTFORMFIELD("F_MYCOUNTONLOC",inLoc);
+      	end;
+      end;
+  			
             
       AddVATBase(VATr,ORrw.VATCode,ORrw.Sum,ORrw.TAX1Reb,vatcnt,ORr.InclVAT,ORr.NoTAXonVAT);
       if (HasLocalization("PRT")==false) then begin
