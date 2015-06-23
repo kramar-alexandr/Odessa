@@ -63,6 +63,7 @@ external procedure Mul2VAT(string,val,var val,var val,Integer);
 external procedure GetShipValue(record SHVc,record ORVc,var val,var val);
 external procedure GetFullCurncyRate (var string,Date,var val,var val,var val,var val,var val);
 
+SetLangMode(LangRussian,"RUS",0);	
 
 global
 procedure PrintFreightPaid(string ShipDeal)
@@ -1333,6 +1334,7 @@ LBREAKSH1:;
         ExpandShipment(RepSpec.repname,RepSpec.flags[1],SHr,resSHr);
 //        SummarizeComponents(resSHr);,setting
         PrintShipment(RepSpec,resSHr,formcode);
+        
         NumberofDocumentPages(FDrw.FPCode,MatRowCnt(resSHr));
         CloseForm;
       end else begin
@@ -1351,7 +1353,7 @@ LDoSh1Form:;
   RETURN;
 END;
 
-global
+global updating
 procedure DoSh2Form(record RcVc RepSpec,record SHVc SHr)
 BEGIN
   record FormDefVc FDr;
@@ -1404,6 +1406,10 @@ LBREAKSH2:;
       if (OpenForm(formcode)) then begin    
           ExpandShipment(RepSpec.repname,RepSpec.flags[1],SHr,resSHr);
           PrintShipment(RepSpec,resSHr,formcode);
+           if(SHr.OKFlag == 0 and blank(SHr.Sorting))then begin 
+							SHr.Sorting = "ÇëÅéêäÖ";
+							if(recordStore(SHr, true))then begin 	end;
+						end;
           NumberofDocumentPages(FDrw.FPCode,MatRowCnt(resSHr));
           CloseForm;
       end else begin
