@@ -5761,8 +5761,8 @@ begin
   end else begin
     RlColKey(-220,-220,"Коммент.",Comment,false,Comment);
   end;
-  RlColKey(-70,-70,"Зборка",Assembly,false,0);
-  RlColKey(-30,-30,"ЭН",NPPrinted,false,0);
+  RlCol(-70,-70,"Зборка",Assembly,false);
+  RlCol(-30,-30,"ЭН",NPPrinted,false);
   SearchField("Найти");
   if (GuiType==kGuiMetro) then begin
     RowMenuBegin("");
