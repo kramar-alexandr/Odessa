@@ -40,6 +40,9 @@ BEGIN
   record IVVc creditedIVr;
   Boolean testf;
   string 255 tstr;
+	record FiscalSetLocalBlock Fiskalblock;
+
+	BlockLoad(Fiskalblock); //Edit----------------------Dima  23.06.2015  
 
 //Client-Server !!!!
   if (IVr.Invalid==0) then begin
@@ -94,8 +97,10 @@ LkInvoiceTypeCredit:;
 //    ResetDisplayDsm;
     ReRunWindowDef(wn);
     WindowFieldGotoForTouchScreen(wn,-1,"ivcashcommand",true);
-	  if (IVr.OKFlag > 0) then begin	
-				MakeFiscalReceipt(IVr);		//Edit----------------------Dima  16.06.2015
+    if (nonblank(Fiskalblock.StoragePath)) then begin
+	  	if (IVr.OKFlag > 0) then begin	
+					MakeFiscalReceipt(IVr);		//Edit----------------------Dima  16.06.2015
+			end;
 		end;
   end;
 LIVVcRecordSaveClient:;
@@ -112,6 +117,9 @@ BEGIN
   record IVVc creditedIVr;
   Boolean testf;
   record COIVVc COIVr;
+	record FiscalSetLocalBlock Fiskalblock;
+
+	BlockLoad(Fiskalblock);  //Edit----------------------Dima  23.06.2015
 
 //Client-Server !!!!
   if ((IV2r.Invalid==0) and (IVr.Invalid==0)) then begin
@@ -165,9 +173,11 @@ BEGIN
   if (TouchScreenLook) then begin
     ResetDisplayDsm;  
     ReRunWindowDef(wn);
-	  if ((IV2r.OKFlag == 0) and (IVr.OKFlag > 0)) then begin	
-				MakeFiscalReceipt(IVr);		//Edit----------------------Dima  16.06.2015
-		end;    
+    if (nonblank(Fiskalblock.StoragePath)) then begin
+	  	if ((IV2r.OKFlag == 0) and (IVr.OKFlag > 0)) then begin	
+					MakeFiscalReceipt(IVr);		//Edit----------------------Dima  16.06.2015
+			end; 
+		end;   
   end;
 LIVVcRecordUpdateClient:;
   IVVcRecordUpdateClient = res; 
