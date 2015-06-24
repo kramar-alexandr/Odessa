@@ -997,6 +997,9 @@ begin
   record SerBalVc SBr;
   record LocalMachineBlock LMb;
   
+  
+  logtext(0,"begin " & getcurtick);
+  
   suspended = StringToInt(GetWindowString(wn,"Suspended"));
   input = GetWindowString(wn,"ivcashcommand");
   PutWindowString(wn,"ivcashcommand","");
@@ -1345,6 +1348,8 @@ LIVDClassivcashcommandOnEnterKey1:;
   //WindowFieldGoto(wn,IVr,-1,"ivcashcommand",false);
   WindowFieldGotoForTouchScreen(wn,-1,"ivcashcommand",false);
 LIVDClassivcashcommandOnEnterKey:;  
+	
+	logtext(0,"end " & getcurtick);
   IVDClassivcashcommandOnEnterKey = res;
   return;
 end;

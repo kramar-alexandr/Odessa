@@ -931,33 +931,35 @@ begin
   if (certsscnt>0) then begin //Вывод чека с проданными подарочными сертификатами
     for (i=0;i<certsscnt;i=i+1) begin
       GCSr.SerNr = certss[i];
-      if (ReadFirstMain(GCSr,1,true)) then begin
-        Error = OutComPort(1,AlignCenter);
-        s = EmphesizeOn & LMr.CompName;
-        Error = OutComPort(1,s & chr(10) & chr(10)); s ="";
-        s = USetStr(31026);
-        Error = OutComPort(1,s & chr(10) & chr(10)); s ="";
-        s = USetStr(31027) & " " & Round(GCSr.Amount,rnd) & " " & USetStr(31028) & EmphesizeOff;
-        Error = OutComPort(1,s & chr(10) & chr(10)); s ="";
-        s = USetStr(31029);
-        Error = OutComPort(1,s & chr(10)); s ="";
-        s = GCSr.SerNr;
-        Error = OutComPort(1,s & chr(10) & chr(10)); s ="";
-        s = USetStr(19356) & " " & dateToString(GCSr.ExpiryDate,"DD/MM/YYYY");
-        Error = OutComPort(1,s & chr(10) & chr(10)); s ="";
-        Error = OutComPort(1,AlignLeft);
-        PrintLongLine;
-        
-        s = USetStr(2353) & " " & CurrentDate;
-        Error = OutComPort(1,s & chr(10)); s ="";
-        s = USetStr(5100) & " " & CurrentTime;
-        Error = OutComPort(1,s & chr(10)); s ="";
-        s = LMr.Addr1;
-        Error = OutComPort(1,s & chr(10)); s ="";
-        Userr.Code = IVp.SalesMan;
-        ReadFirstMain(Userr,1,true);
-        s = USetStr(7690) & " " & Userr.Comment; //кассир
-        Error = OutComPort(1,s & chr(10)); s ="";
+      if(certss[i]>0)then begin// Edit ************************** Wednesday, 24 June 2015 14:58:07
+				if (ReadFirstMain(GCSr,1,true)) then begin
+					Error = OutComPort(1,AlignCenter);
+					s = EmphesizeOn & LMr.CompName;
+					Error = OutComPort(1,s & chr(10) & chr(10)); s ="";
+					s = USetStr(31026);
+					Error = OutComPort(1,s & chr(10) & chr(10)); s ="";
+					s = USetStr(31027) & " " & Round(GCSr.Amount,rnd) & " " & USetStr(31028) & EmphesizeOff;
+					Error = OutComPort(1,s & chr(10) & chr(10)); s ="";
+					s = USetStr(31029);
+					Error = OutComPort(1,s & chr(10)); s ="";
+					s = GCSr.SerNr;
+					Error = OutComPort(1,s & chr(10) & chr(10)); s ="";
+					s = USetStr(19356) & " " & dateToString(GCSr.ExpiryDate,"DD/MM/YYYY");
+					Error = OutComPort(1,s & chr(10) & chr(10)); s ="";
+					Error = OutComPort(1,AlignLeft);
+					PrintLongLine;
+				
+					s = USetStr(2353) & " " & CurrentDate;
+					Error = OutComPort(1,s & chr(10)); s ="";
+					s = USetStr(5100) & " " & CurrentTime;
+					Error = OutComPort(1,s & chr(10)); s ="";
+					s = LMr.Addr1;
+					Error = OutComPort(1,s & chr(10)); s ="";
+					Userr.Code = IVp.SalesMan;
+					ReadFirstMain(Userr,1,true);
+					s = USetStr(7690) & " " & Userr.Comment; //кассир
+					Error = OutComPort(1,s & chr(10)); s ="";
+				end;
       end;
     end;
   end;

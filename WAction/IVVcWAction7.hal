@@ -1252,13 +1252,13 @@ begin
     end;
   end;
   if (err==0 or RECORDCHECKLASTERRORNO==31412) then begin
-    if (HasLocalization("HRV") and blank(IVr.RefStr)) then begin
+    /*if (HasLocalization("HRV") and blank(IVr.RefStr)) then begin
       if (DoXMLExport_IVVc(IVr)==false) then begin
         PutWindowRecord(wn,IVr);
         OpenWindow("EnterRefStrDClass",0,wn,"","",RepSpec);
         err = 1;
       end;
-    end;
+    end;*/
   end;
   if (err==0) then begin
     if (IVPrintReceipt(wn,IVr,prevIVr,-1,true,true,LMb.IncrementalReceiptPrinting,wnst)==false) then begin
