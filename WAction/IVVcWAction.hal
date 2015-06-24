@@ -15,7 +15,7 @@ external procedure IVDClass_RefreshStringList(Integer,record IVVc);
 external function Boolean IVDClassVoidRow(var record IVVc,Integer);
 external procedure GetFullCurncyRate (var string,Date,var val,var val,var val,var val,var val);
 external function Boolean GetFullCurncyPurchaseRate(var string,Date,var val,var val,var val,var val,var val);
-external function Integer GetPOSCommand(string,var string,var string,var Integer);
+remote function Integer GetPOSCommand(string,var string,var string,var Integer);//remote // Edit ************************** Wednesday, 24 June 2015 14:41:56
 external function boolean POSButtonsForWindow(integer,var record POSButtonsVc);
 external procedure SendArtStat(string,string,string,val,val,val,Date,Integer);
 external procedure ExtractObj(string,var Integer,var string);
