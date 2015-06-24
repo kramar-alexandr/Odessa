@@ -76,8 +76,10 @@ val sum,rwGP,ivrowqtycost; //Edit***************************Sasha2,9:39 17.02.20
 record INVc INr; //Edit***************************Sasha2,10:42 17.02.2015
 val cred;
 boolean TrHs1; //Edit***************************Sasha2,10:12 02.03.2015 
-
-
+boolean vievcost;
+	
+	vievcost = UserCanAction("ViewCostPrice",true);
+	
 	StartReportJob("עקוע ןמ ןנמהאזאל");
 	rw=1;
 	Header(rw,"ונטמה ס " & RepSpec.sStartDate & "  ןמ  " & RepSpec.sEndDate,1);
@@ -174,12 +176,14 @@ boolean TrHs1; //Edit***************************Sasha2,10:12 02.03.2015
 					OutVal(300,0,IVrw.Price/fr*to,M45Val,false);
 					OutVal(310,0,IVrw.Sum/fr*to,M45Val,false);
 					total1 = total1 + IVrw.Sum/fr*to;
-					if (UserCanAction("ViewCostPrice",true)) then begin
+					if (vievcost) then begin
 						if (IVr.UpdStockFlag==0 or (IVr.UpdStockFlag!=0 and IVr.OrderNr>-1)) then begin //Edit***************************Sasha2,17:57 16.02.2015 {
 							SHp.OrderNr = IVr.OrderNr;
 							TrHs1 = true;
 							while (LoopKey("OrderKey",SHp,1,TrHs1)) begin
-								if (SHp.OKFlag==1) then begin
+								if(SHp.OrderNr!=IVr.OrderNr)then begin TrHs1 = false; end;// Edit ************************** Wednesday, 24 June 2015 17:45:54
+								
+								if (SHp.OKFlag==1 and TrHs1) then begin
   								mtcnt = MatRowCnt(SHp);
   								printf = false;
   								for (j=0;j<mtcnt;j=j+1) begin
@@ -221,7 +225,9 @@ boolean TrHs1; //Edit***************************Sasha2,10:12 02.03.2015
 						end;
 						PLr.ArtCode = IVrw.ArtCode;
 						PLr.PLCode = "SALAR";
-						readfirstmain(PLr,2,true);
+						if(currentuser!="SA")then begin
+							readfirstmain(PLr,2,true);
+						end;
 						OutVal(400,0,PLr.ExVatPrice*cred,M45Val,false);
 						OutVal(420,0,PLr.ExVatPrice*IVrw.Quant,M45Val,false);
 						total4 = total4 + PLr.ExVatPrice*IVrw.Quant;
@@ -391,7 +397,9 @@ longint length,k;
 							SHp.OrderNr = IVr.OrderNr;
 							TrHs1 = true;
 							while (LoopKey("OrderKey",SHp,1,TrHs1)) begin
-								if (SHp.OKFlag==1) then begin
+								if(SHp.OrderNr!=IVr.OrderNr)then begin TrHs1 = false; end;
+								
+								if (SHp.OKFlag==1 and TrHs1) then begin
   								mtcnt = MatRowCnt(SHp);
   								printf = false;
   								for (j=0;j<mtcnt;j=j+1) begin

@@ -50,7 +50,7 @@ remote procedure LoyaltyPointsPayment_IVCashVc(var record IVCashVc,val,string);
 remote function Integer IVCashVc_PasteGiftCertificate(var record IVCashVc,Integer,Integer);
 remote function Integer SCDiscountCardExecuteRemote(var record IVCashVc,record RcVc);
 remote function Boolean IVCashVc_PasteQuant(var record IVCashVc,Integer);
-external procedure CntPOSCurrencies(var Array string,var Array Boolean,var Integer);
+remote procedure CntPOSCurrencies(var Array string,var Array Boolean,var Integer);// Edit ************************** Wednesday, 24 June 2015 15:33:05
 external procedure IVCashDClass_RefreshStringList(Integer,record IVCashVc);
 remote function Boolean GetFullCurncyPurchaseRate(var string,Date,var val,var val,var val,var val,var val);
 remote procedure GetFullCurncyRate (var string,Date,var val,var val,var val,var val,var val);
