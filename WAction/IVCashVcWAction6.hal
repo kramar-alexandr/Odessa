@@ -27,8 +27,8 @@ remote procedure LoyaltyPointsPayment_IVVc(var record IVVc,val,string);
 remote function Integer IVVc_PasteGiftCertificate(var record IVVc,Integer,Integer);
 external function Boolean IVVc_PasteQuantity(var record IVVc,Integer);
 external procedure IVDClass_RefreshStringList(Integer,record IVVc);
-external procedure IVSumup(var record IVVc,Boolean);
-external procedure IVVc_PasteLoyaltyCardNr(var record IVVc,record LocalMachineBlock);
+remote procedure IVSumup(var record IVVc,Boolean);	//Edit----------------------Dima  24.06.2015
+remote procedure IVVc_PasteLoyaltyCardNr(var record IVVc,record LocalMachineBlock);	//Edit----------------------Dima  24.06.2015
 external function Boolean srlRestAccLPrint(var record RestAccVc,string,string);
 external procedure RestAccDchsum(record RestAccVc,Integer);
 external function Boolean RestAccDchrsum(var record RestAccVc,Integer,Integer);
