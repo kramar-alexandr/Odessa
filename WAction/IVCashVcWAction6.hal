@@ -1443,8 +1443,8 @@ begin
         case "IVVc":
           GetWindowRecord(mwn,IVr);
           IVDClass_RefreshStringList(mwn,IVr);
-          SetPOSWindowDisplay_PaymentRow(IVrw.Spec,IVr.RetnValue);
-          OpenCashDrawer;
+          //SetPOSWindowDisplay_PaymentRow(IVrw.Spec,IVr.RetnValue);// Edit ************************** Thursday, 25 June 2015 15:06:38
+          //OpenCashDrawer;// Edit ************************** Thursday, 25 June 2015 15:06:39
           
           rwcnt = matrowcnt(IVr);	//Begin Edit by Victor 12.11.14
           for (i=0;i<rwcnt;i=i+1) begin
@@ -1462,6 +1462,7 @@ begin
 	        	Logtext(0,"IVFinishAndPrint() bu button 'Cash pay'");
 	        	//SelectWindow(mwn);
 						IVFinishAndPrint;
+						goto LProceedCashPayTouchScreenDClass1;// Edit ************************** Thursday, 25 June 2015 15:09:47
 					end;   		// End Edit by Victor 12.11.14
 	      
         case "IVCashVc":
@@ -1481,7 +1482,8 @@ begin
 LProceedCashPayTouchScreenDClass:;  
   //WindowFieldGoto(mwn,RepSpec,-1,"ivcashcommand",true);
   WindowFieldGotoForTouchScreen(mwn,-1,"ivcashcommand",true);
-	
+
+LProceedCashPayTouchScreenDClass1:;  
 	return;
 end;
 

@@ -566,7 +566,7 @@ LkIVRowTypeNormal4:;
   if (line<=0) then begin line = 1; end;
   SetSelectedListLine(wn,line-1);
   
-  if (gNPTSIVCashCUDisplayDClassf==false) then begin
+  /*if (gNPTSIVCashCUDisplayDClassf==false) then begin// Edit ************************** Thursday, 25 June 2015 14:57:21
     gNPTSIVCashCUDisplayDClassf = true;
     switch (GetWindowClass(wn)) begin
       case "IVDClass":
@@ -577,7 +577,7 @@ LkIVRowTypeNormal4:;
       case "NPTSIVCUDisplayDClass":
         IVDClass_RefreshStringList(wn,IVr);
     end;
-  end;
+  end;*/
   return;
 end;
 

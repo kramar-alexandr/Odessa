@@ -79,10 +79,10 @@ LkInvoiceTypeCredit:;
     end;
   end;
 
-  IVVc_SendToSerialPortDevices(kSerialPortDeviceClassReceiptPrinter,Rs_insert,IVr,IV2r);
-  IVVc_SendToSerialPortDevices(kSerialPortDeviceClassFiscalPrinter,Rs_insert,IVr,IV2r);
-  IVVc_SendToSerialPortDevices(kSerialPortDeviceClassFiscalControlUnit,Rs_insert,IVr,IV2r);
-  if (HasLocalization("ARG")) then begin
+  IVVc_SendToSerialPortDevices(kSerialPortDeviceClassReceiptPrinter,Rs_insert,IVr,IV2r);// Edit ************************** Thursday, 25 June 2015 16:11:42
+  //IVVc_SendToSerialPortDevices(kSerialPortDeviceClassFiscalPrinter,Rs_insert,IVr,IV2r);// Edit ************************** Thursday, 25 June 2015 16:11:37
+  //IVVc_SendToSerialPortDevices(kSerialPortDeviceClassFiscalControlUnit,Rs_insert,IVr,IV2r);// Edit ************************** Thursday, 25 June 2015 16:11:29
+  /*if (HasLocalization("ARG")) then begin
     tstr = GetWindowString(wn,"RLINK");
     if (nonblank(tstr)) then begin
       IVVc_LinkRecords(IVr,GetWindowString(wn,"RLINKFILENAME"),tstr);
@@ -90,9 +90,9 @@ LkInvoiceTypeCredit:;
   end;
   if (HasLocalization("MEX")) then begin
     IVVc_StoreEInvoice(IVr,IV2r,stat);
-  end;
-  SetPOSWindowDisplayChange(IVr.RetValue);
-  ShowUnOkWarn("IVVc",IVr.OKFlag);
+  end;*/
+  //SetPOSWindowDisplayChange(IVr.RetValue);// Edit ************************** Thursday, 25 June 2015 16:11:11
+  //ShowUnOkWarn("IVVc",IVr.OKFlag);// Edit ************************** Thursday, 25 June 2015 16:11:11
   if (TouchScreenLook) then begin
 //    ResetDisplayDsm;
     ReRunWindowDef(wn);
@@ -163,13 +163,13 @@ BEGIN
   end;
   
   IVVc_SendToSerialPortDevices(kSerialPortDeviceClassReceiptPrinter,Rs_update,IVr,IV2r);
-  IVVc_SendToSerialPortDevices(kSerialPortDeviceClassFiscalPrinter,Rs_update,IVr,IV2r);
-  IVVc_SendToSerialPortDevices(kSerialPortDeviceClassFiscalControlUnit,Rs_update,IVr,IV2r);
-  if (HasLocalization("MEX")) then begin
+  //IVVc_SendToSerialPortDevices(kSerialPortDeviceClassFiscalPrinter,Rs_update,IVr,IV2r);
+  //IVVc_SendToSerialPortDevices(kSerialPortDeviceClassFiscalControlUnit,Rs_update,IVr,IV2r);
+  /*if (HasLocalization("MEX")) then begin
     IVVc_StoreEInvoice(IVr,IV2r,stat);
-  end;
-  SetPOSWindowDisplayChange(IVr.RetValue);
-  ShowUnOkWarn("IVVc",IVr.OKFlag);
+  end;*/
+  //SetPOSWindowDisplayChange(IVr.RetValue);// Edit ************************** Thursday, 25 June 2015 16:12:55
+  //ShowUnOkWarn("IVVc",IVr.OKFlag);// Edit ************************** Thursday, 25 June 2015 16:12:54
   if (TouchScreenLook) then begin
     ResetDisplayDsm;  
     ReRunWindowDef(wn);
