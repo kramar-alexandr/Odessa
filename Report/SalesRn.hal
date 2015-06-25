@@ -1,0 +1,359 @@
+external function val MulRateToBase1(var string,val,val,val,val,val,val,roundmode); //Edit***************************Sasha2,9:40 17.02.2015
+SetLangMode(LangRussian,"RUS",0);
+
+
+procedure HeaderItems(string a,  var string res)
+begin
+  if (blank(a)) then begin
+     res = USetStr(1106);
+  end else begin
+     res = USetStr(1088);
+     res = res &": " & a;
+  end;
+return;
+end;
+
+procedure HeaderLocations(string a,  var string res)
+begin
+  if (blank(a)) then begin
+     res = USetStr(8961);
+  end else begin
+     res = USetStr(2768);
+     res = res &": " & a;
+  end;
+return;
+end;
+
+procedure OutHeaderToExcel(record RcVc RepSpec)	
+begin
+  string 255 tstr; 
+
+  	startformat(15);
+  	OutString(0,0,USetStr(1413),false);	//Enterprise by Hansa, Print Date
+  	OutString(10,0,"",false);
+  	OutString(20,0,"",false);
+  	OutString(30,0,CurrentDate,false);
+  	OutString(40,0,CurrentTime,false);
+  	EndFormat;
+  	
+  	OutString(0,0,"Период: ",false);
+  	OutString(10,0,RepSpec.Period2Str,false);
+		EndFormat;	
+  	HeaderItems(RepSpec.f1,tstr);
+  	OutString(0,0,tstr,false);
+  	EndFormat;
+  	HeaderLocations(RepSpec.f3,tstr);
+  	OutString(0,0,tstr,false);
+  	EndFormat;
+		if (NonBlank(RepSpec.f2)) then begin
+			OutString(0,0,"Группа продаж: " & RepSpec.f2,1);
+			EndFormat;
+		end;  	
+		if (NonBlank(RepSpec.f4)) then begin
+			OutString(0,0,"Продавец: " & RepSpec.f4,1);
+			EndFormat;
+		end;
+  	EndFormat;
+  	EndFormat;  
+	
+end;
+
+
+
+
+procedure PrintReportHeader(integer ReportType) //Edit----------------------Dima  25.06.2015
+begin
+
+		StartFormat(15);
+		
+	if (ReportType==0) then begin //Detailed		
+		OutString(0,0,"Дата",false);
+		OutString(40,0," № ",false);
+		OutString(60,0,"Склад",false);
+		OutString(90,0,"Код товара",false);
+		OutString(120,0,"Наименование",false);		
+	end else begin			//Consolidated
+		OutString(20,0,"Код товара",false);
+		OutString(60,0,"Наименование",false);
+	end;
+	
+		OutString(270,0,"Кол-во",false);
+		OutString(300,0,"Цена",false);
+		OutString(310,0,"Сумма",false);
+		OutString(320,0,"Себес-ть за ед.",false);
+		OutString(340,0,"Себестоимость",false);
+		OutString(360,0,"Рент.",false);
+		OutString(380,0,"Рент.,%",false);
+		OutString(400,0,"Зарп. цен",false);
+		OutString(420,0,"Зарп. сум.",false);
+		OutString(440,0,"Рент. зп.",false);
+		OutString(460,0,"Рент.,% зп.",false);
+		if (ReportType==0) then begin
+			OutString(480,0,"Продавец",false);
+		end;
+		
+		EndFormat;
+		Black_Divider(0,1);
+
+end;
+
+
+
+global
+procedure  SalesRn(record RcVc RepSpec)
+begin
+
+record IVVc IVr;
+row IVVc IVrw;
+Integer rw,rwcnt,i;
+boolean TrHs,testf,testf1;
+record PLVc PLr;
+val fr,to,total0,total1,total2,total3,total4,total5;
+record SHVc SHp; //Edit***************************Sasha2,17:42 16.02.2015
+row SHVc SHrw; //Edit***************************Sasha2,9:31 17.02.2015 
+integer mtcnt,j; //Edit***************************Sasha2,9:31 17.02.2015
+Boolean printf; //Edit***************************Sasha2,9:37 17.02.2015
+val sum,rwGP,ivrowqtycost; //Edit***************************Sasha2,9:39 17.02.2015
+record INVc INr; //Edit***************************Sasha2,10:42 17.02.2015
+val cred;
+boolean TrHs1; //Edit***************************Sasha2,10:12 02.03.2015 
+boolean viewcost;
+val rowPrice,rowSum,rowCostUnit,rwGPpercent,salaryPrice,salarySum,rentSal,rentSalPercent,rowsalary;
+vector val PLsalary;
+array string 20 itemCodes;
+vector val salesum,cost,rent,salary,rentsalary;
+vector string 70 items;
+vector longint qty;
+longint length,k;
+	
+	viewcost = UserCanAction("ViewCostPrice",true);
+	length = 0;
+	
+	if (viewcost) then begin
+		TrHs = true;
+		PLr.PLCode = "SALAR";
+		While(LoopMain(PLr,1,TrHs)) begin
+			if (PLr.PLCode != "SALAR") then begin TrHs = false; end;
+			if (TrHs) then begin
+				PLsalary[PLr.ArtCode] = PLr.ExVatPrice;
+			end;
+		end;
+	end;	
+	
+	StartReportJob("Отчет по продажам");
+	rw=1;
+	Header(rw,"Период с " & RepSpec.sStartDate & "  по  " & RepSpec.sEndDate,1);
+	rw=rw+1;
+	if (NonBlank(RepSpec.f1)) then begin
+		Header(rw,"Код товара: " & RepSpec.f1,1);
+		rw=rw+1;
+	end;
+	if (NonBlank(RepSpec.f3)) then begin
+		Header(rw,"Склад: " & RepSpec.f3,1);
+		rw=rw+1;
+	end;
+	if (NonBlank(RepSpec.f2)) then begin
+		Header(rw,"Группа продаж: " & RepSpec.f2,1);
+		rw=rw+1;
+	end;
+	if (NonBlank(RepSpec.f4)) then begin
+		Header(rw,"Продавец: " & RepSpec.f4,1);
+		rw=rw+1;
+	end;
+
+	EndHeader;
+	
+  if (RepSpec.Media == mtExcel) then begin	//Edit----------------------Dima  22.06.2015
+  	OutHeaderToExcel(RepSpec);
+  end;
+  
+
+	PrintReportHeader(RepSpec.ArtMode);
+	
+
+	TrHs=true;
+	While (LoopMain(IVr,1,TrHs)) begin
+		testf=true;
+		cred = 1;
+		if(IVr.InvType==kInvoiceTypeCredit)then begin
+			cred = -1;
+		end;
+		if (IVr.InvDate < RepSpec.sStartDate) then begin testf=false;	end;	
+		if (IVr.InvDate > RepSpec.sEndDate) then begin	TrHs=false;	testf=false;	end;		
+		if (nonblank(RepSpec.f3) and (IVr.Location!=RepSpec.f3)) then begin	testf=false;	end;
+		if (nonblank(RepSpec.f4) and (IVr.SalesMan!=RepSpec.f4)) then begin	testf=false;	end;
+		
+		fr = IVr.FrRate;
+		to = IVr.ToRateB1;
+		if(fr==0 or to==0)then begin
+			fr = 1;
+			to = 1;
+		end;
+		if(testf)then begin
+			rwcnt = MatRowCnt(IVr);
+			for(i=0;i<rwcnt;i=i+1) begin
+				testf1 = true;
+				MatRowGet(IVr,i,IVrw);
+				if (IVrw.stp!=kInvoiceRowTypeNormal)then begin testf1=false; end;
+				if (nonblank(RepSpec.f1) and (IVrw.ArtCode!=RepSpec.f1)) then begin	testf1=false;	end;
+				if (nonblank(RepSpec.f2) and (IVr.SalesGroup!=RepSpec.f2)) then begin	testf1=false;	end;		
+				if (blank(IVrw.ArtCode)) then begin	testf1=false;	end;
+
+				if(testf1) then begin
+				
+					if ((RepSpec.ArtMode == 1)) then begin	//Edit----------------------Dima  25.06.2015
+						if (blank(items[IVrw.ArtCode])) then begin
+								items[IVrw.ArtCode] = IVrw.Spec;
+								itemCodes[length] = IVrw.ArtCode;
+								length = length +1; 								
+								qty[IVrw.ArtCode] = 0;
+						end;
+					end;								
+			
+					IVrw.Quant = IVrw.Quant*cred;
+					IVrw.FIFORowVal = IVrw.FIFORowVal*cred;
+					IVrw.Sum = IVrw.Sum*cred;
+					rowPrice = IVrw.Price/fr*to;
+					rowSum = IVrw.Sum/fr*to;										
+					total0 = total0 + IVrw.Quant;
+					total1 = total1 + rowSum;
+					
+					if (viewcost) then begin
+						if (IVr.UpdStockFlag==0 or (IVr.UpdStockFlag!=0 and IVr.OrderNr>-1)) then begin //Edit***************************Sasha2,17:57 16.02.2015 {
+							SHp.OrderNr = IVr.OrderNr;
+							TrHs1 = true;
+							while (LoopKey("OrderKey",SHp,1,TrHs1)) begin
+								if(SHp.OrderNr!=IVr.OrderNr)then begin TrHs1 = false; end;// Edit ************************** Wednesday, 24 June 2015 17:45:54
+								
+								if (SHp.OKFlag==1 and TrHs1) then begin
+  								mtcnt = MatRowCnt(SHp);
+  								printf = false;
+  								for (j=0;j<mtcnt;j=j+1) begin
+  									MatRowGet(SHp,j,SHrw);
+  									if (SHrw.ArtCode==IVrw.ArtCode and blank(IVrw.SerialNr)) then begin printf = true; j = mtcnt;TrHs1 = false; end;
+  									if (SHrw.ArtCode==IVrw.ArtCode and nonblank(IVrw.SerialNr) and IVrw.SerialNr==SHrw.SerialNr) then begin printf = true; j = mtcnt; TrHs1 = false; end;
+  								end;
+  							end;
+							end; RESETLOOP(SHp);
+							sum = MulRateToBase1(IVr.CurncyCode,IVrw.Sum,IVr.FrRate,IVr.ToRateB1,IVr.ToRateB2,IVr.BaseRate1,IVr.BaseRate2,DefaultCurRoundOff);
+							if (printf) then begin
+								ivrowqtycost = (SHrw.FIFORowVal/SHrw.Ship)*IVrw.Quant;
+								rowCostUnit = SHrw.FIFORowVal/SHrw.Ship*cred;
+							end else begin
+								ivrowqtycost = IVrw.BasePrice*IVrw.Quant;
+								rowCostUnit = IVrw.BasePrice*cred;
+							end;								
+								rwGP = sum - ivrowqtycost;
+								rwGPpercent = rwGP*100/ivrowqtycost;
+								total2 = total2 + ivrowqtycost;
+								total3 = total3 + rwGP;
+															
+						end else begin //Edit***************************Sasha2,17:57 16.02.2015 }
+							rowCostUnit = IVrw.FIFORowVal/IVrw.Quant*cred;
+							ivrowqtycost = IVrw.FIFORowVal;
+							total2 = total2 + IVrw.FIFORowVal;
+							total3 = total3 + IVrw.rowGP;
+							rwGP = IVrw.rowGP*cred;
+							rwGPpercent = IVrw.rowGP*100/(IVrw.FIFORowVal);						
+						end;
+						rowsalary = PLsalary[IVrw.ArtCode];
+						salaryPrice = rowsalary*cred;
+						salarySum = rowsalary*IVrw.Quant; 				//PLr.ExVatPrice*IVrw.Quant
+						rentSal = IVrw.Sum/fr*to - salarySum;						
+						rentSalPercent = rentSal*100/salarySum;		//(IVrw.Sum/fr*to - PLr.ExVatPrice*IVrw.Quant)/(PLr.ExVatPrice*IVrw.Quant)*100
+						total4 = total4 + salarySum;
+						total5 = total5 + rentSal;
+					end;
+					
+					if (RepSpec.ArtMode == 0) then begin			//Detailed report
+							StartFormat(15);
+							OutString(0,0,IVr.InvDate,false);
+							OutString(40,0,IVr.SerNr,false);
+							OutString(60,0,IVr.Location,false);
+							OutString(90,0,IVrw.ArtCode,false);
+							OutString(120,0,IVrw.Spec,false);
+							OutString(270,0,IVrw.Quant,false);
+							OutVal(300,0,rowPrice,M45Val,false);
+							OutVal(310,0,rowSum,M45Val,false);
+							if (viewcost) then begin
+								OutVal(320,0,rowCostUnit,M45Val,false);
+								OutVal(340,0,ivrowqtycost,M45Val,false);
+								OutVal(360,0,rwGP,M45Val,false);
+								OutVal(380,0,rwGPpercent,M45Val,false);
+								OutVal(400,0,salaryPrice,M45Val,false);
+								OutVal(420,0,salarySum,M45Val,false);	
+								OutVal(440,0,rentSal,M45Val,false);
+								OutVal(460,0,rentSalPercent,M45Val,false);
+							end;
+							OutString(480,0,IVr.SalesMan,false);																											
+							EndFormat;					
+					end else begin													//Consolidated
+							qty[IVrw.ArtCode] = qty[IVrw.ArtCode] + IVrw.Quant;
+							salesum[IVrw.ArtCode] = salesum[IVrw.ArtCode] + rowSum;
+							if (viewcost) then begin																
+								cost[IVrw.ArtCode] = cost[IVrw.ArtCode] + ivrowqtycost;
+								rent[IVrw.ArtCode] = rent[IVrw.ArtCode] + rwGP;
+								salary[IVrw.ArtCode] = salary[IVrw.ArtCode] + salarySum;
+								rentsalary[IVrw.ArtCode] = rentsalary[IVrw.ArtCode] + rentSal;
+							end;					  
+					end;		
+				end;
+			end;
+		end;
+	end;
+	
+	
+	if (RepSpec.ArtMode == 1) then begin		//Consolidated
+		SortStringArray(itemCodes);
+		
+		for(k=0;k<length;k=k+1) begin
+			OutString(20,0,itemCodes[k],false);
+			OutString(60,0,items[itemCodes[k]],false);
+			OutString(270,0,qty[itemCodes[k]],false);
+			OutString(300,0,salesum[itemCodes[k]]/qty[itemCodes[k]],false);				//Price
+			OutString(310,0,salesum[itemCodes[k]],false);
+			if (viewcost) then begin
+				OutString(320,0,cost[itemCodes[k]]/qty[itemCodes[k]],false);				//Cost per one
+				OutString(340,0,cost[itemCodes[k]],false);
+				OutString(360,0,rent[itemCodes[k]],false);
+				OutString(380,0,rent[itemCodes[k]]*100/cost[itemCodes[k]],false); 	//profit %
+				OutString(400,0,PLsalary[itemCodes[k]],false);										
+				OutString(420,0,salary[itemCodes[k]],false);
+				OutString(440,0,rentsalary[itemCodes[k]],false);
+				OutString(460,0,rentsalary[itemCodes[k]]*100/PLsalary[itemCodes[k]]/qty[itemCodes[k]],false); //rent, salary %			
+			end;
+			EndFormat;
+		end;
+	
+	end;	
+	
+	
+	StartFormat(15);
+	if (RepSpec.ArtMode==0) then begin
+		OutString(0,0,"",false);
+		OutString(40,0,"",false);
+		OutString(60,0,"",false);
+	end;
+	OutString(90,0,"",false);
+	OutString(120,0,"Всего:",false);
+	OutVal(270,0,total0,M45Val,false);
+	OutString(300,0,"",false);
+	OutVal(300,0,total1,M45Val,false);
+ if (UserCanAction("ViewCostPrice",true)) then begin
+		OutString(320,0,"",false);
+		OutVal(340,0,total2,M45Val,false);
+		OutVal(360,0,total3,M45Val,false);
+		OutString(380,0,total3/total4*100,false);
+		OutString(400,0,"",false);
+		OutVal(420,0,total4,M45Val,false);
+		OutVal(440,0,total5,M45Val,false);
+		OutString(460,0,(total1 - total4)/total4*100,false);
+	end;
+		OutString(480,0,"",false);		
+	EndFormat;
+	
+	EndJob;
+	
+end;
+
+
