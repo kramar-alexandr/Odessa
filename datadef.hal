@@ -3856,8 +3856,11 @@ RecordBegin(IPVc,-,"");
   BlockForAllCompanies;
 	RecordField(StoragePath,M4Str,255,0);
 	RecordField(FileName,M4Str,255,0);
-	EndBlock; 	
-    
+	EndBlock;
+	
+	BlockBegin(SMSSettingsBlock,-,"");			//Edit----------------------Dima  25.06.2015
+	RecordField(ePochtaKey,M4Str,255,0);
+	EndBlock; 	   
       	  	
 return;
 end;

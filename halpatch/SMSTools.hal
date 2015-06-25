@@ -1,0 +1,51 @@
+
+function string 15 NormalizePhone(string phone)
+begin
+	string 15 correctPhone;
+
+	if (Len(phone)>=10) then begin
+		correctPhone = "38" & Right(phone,10);
+	end else begin
+		correctPhone = "";
+	end;
+	
+	NormalizePhone = correctPhone;
+	return;
+end;
+
+
+
+global procedure SendSMS(string phone, string message, string smsTitle)
+begin
+	area subject,body;
+	string 15 correctPhone;
+	record SMSSettingsBlock SMSblock;
+	
+	BlockLoad(SMSblock);
+
+	if (DirExists("SMS")==false) then begin
+		CreateFolder("SMS");
+	end;
+
+	correctPhone = NormalizePhone(phone);
+
+	addtexttoarea(SMSblock.ePochtaKey & " " & correctPhone,subject);
+	writeareatofile(subject,"SMS/sms_subj.txt",0);
+	
+	addtexttoarea("[SENDER]" & smsTitle & "[/SENDER]",body);
+	addtexttoarea("[SMS]" & message & "[/SMS]",body);
+	writeareatofile(body,"SMS/sms_body.txt",0);	
+	//runprogram("SMS/sendSRVSMS.sh","");
+	//logtext(0,"SEND SMS");
+end;
+
+
+
+global
+procedure  MakeSMSMn()
+begin
+  SendSMS("0637990958","Test message", "PC");
+end;
+
+
+

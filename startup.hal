@@ -60,6 +60,8 @@ begin
   Setting("Настройки Новой почты",NPSettingsTClass,modNPost);  
   
   Setting("Поля, задаваемые пользователем - Контакты",CUUserLabelTClass,modSO); //Edit by Victor 26.05.15
+  Setting("Поля, задаваемые пользователем - Товары",INUserLabelTClass,modSL);// Edit ************************** Thursday, 26 February 2015 18:04:55
+  Setting("Настройки отправки СМС",SMSSettingsTClass,modTC); //Edit by Victor 26.05.15
   
   Report("Журнал суточных возмещений",DAJRClass,DAJRn,0,modCL);
   Report("Журнал авансовых отчетов",ExpJRClass,ExpRn,0,modCL);
@@ -76,7 +78,7 @@ begin
   Export("Экспорт товаров в CSV розница",ExpItemsBarCodesEClass,ExpItemsBarCodesEn,modSL);// Edit ************************** Thursday, 26 February 2015 18:04:57
 	Export("Экспорт товаров в CSV опт",ExpItemsBarCodesOptEClass,ExpItemsBarCodeOptsEn,modSL);// Edit ************************** Thursday, 26 February 2015 18:04:57
 
-  Setting("Поля, задаваемые пользователем - Товары",INUserLabelTClass,modSL);// Edit ************************** Thursday, 26 February 2015 18:04:55
+  
   
    SString(24193,"К оплате");
    
@@ -205,6 +207,8 @@ begin
 	//Maintenance("Add address for counterparty",RequestNPVClass,NPAddAddressForCounterpartyMn,modNPost);
 	Maintenance("Обновить регистры Новой почты",RequestNPVClass,RefreshAllInnerRegistersNP,modNPost);
 	Maintenance("Обновить статусы электронных накладных",RequestNPVClass,NPUpdateENstatusMn,modNPost);
+	
+	Maintenance("Создать СМС",RequestNPVClass,MakeSMSMn,modTC);
 	
 
   Import("Импорт цен",PLImportIClass,PLImportIn,modDI); //Added********************Dima 20.11.2014

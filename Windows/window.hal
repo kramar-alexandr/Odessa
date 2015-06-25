@@ -2026,3 +2026,17 @@ begin
 	ColourPushButton(h2,v1,h2+100,v1+40,"MakeDateSetting","Установить",2);  
   EndWindow;
 end;
+
+
+
+window SMSSettingsTClass:1				//Edit----------------------Dima  27.04.2015
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  real h,v,vs;
+  WindowBegin("Настройки отправки СМС",SMSSettingsTClass,CGSbl,-);
+  SetBlid(SMSSettingsBlock);
+  SetWRect(64,80,500,300);
+  v=6;vs = 20; h = 100;
+  EditField(h,v+=vs,200,"Ключ ePochta",Normal,ePochtaKey,false,0);
+  EndWindow;
+end;
