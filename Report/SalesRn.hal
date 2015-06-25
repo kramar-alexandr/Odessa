@@ -172,13 +172,13 @@ longint length,k;
 	
 
 	TrHs=true;
-	While (LoopMain(IVr,1,TrHs)) begin
+	IVr.InvDate = RepSpec.sStartDate;
+	While (LoopKey("InvDate",IVr,1,TrHs)) begin
 		testf=true;
 		cred = 1;
 		if(IVr.InvType==kInvoiceTypeCredit)then begin
 			cred = -1;
-		end;
-		if (IVr.InvDate < RepSpec.sStartDate) then begin testf=false;	end;	
+		end;	
 		if (IVr.InvDate > RepSpec.sEndDate) then begin	TrHs=false;	testf=false;	end;		
 		if (nonblank(RepSpec.f3) and (IVr.Location!=RepSpec.f3)) then begin	testf=false;	end;
 		if (nonblank(RepSpec.f4) and (IVr.SalesMan!=RepSpec.f4)) then begin	testf=false;	end;
