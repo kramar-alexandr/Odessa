@@ -3647,7 +3647,7 @@ if (HasTouchScreenLook==false) then begin
   end;
   EditField(90,-61,-35,"Комментарий",Normal,InvComment,false,0); //Edit by Victor 11.09.14
   v = 24;
-  MatrixBegin(4,v,-50,-49,-,200);
+  MatrixBegin(4,v,-50,-49,-,999);// Edit ************************** Thursday, 25 June 2015 17:22:45
   MatTypedRow(stp);
   MatOverStrike(ovst);
   Flip(0);
@@ -5042,7 +5042,7 @@ begin
   EditField(-150,v2,100,"ИТОГО",ViewOnly ,Sum4,true,0);
   EditField(-150,v1,100,"ИТОГО в базовой валюте",ViewOnly ,BaseSum4,true,0);//Edit----------------------Dima 29.01.2015
   v = 24;
-  MatrixBegin(3,v,-50,-69,-,200);	//Edit----------------------Dima 29.01.2015
+  MatrixBegin(3,v,-50,-69,-,999);	//Edit----------------------Dima 29.01.2015// Edit ************************** Thursday, 25 June 2015 17:20:43
   MatTypedRow(stp);
   flipnr = 0;
   Flip(flipnr); flipnr = flipnr + 1;
@@ -5592,7 +5592,7 @@ begin
   end;
   Tile(tilenr,190,true,tilenr,Math); tilenr = tilenr + 1;
   v = 20;
-  MatrixBegin(4,v,-50,-35,-,200);
+  MatrixBegin(4,v,-50,-35,-,999);// Edit ************************** Thursday, 25 June 2015 17:29:44
   MatTypedRow(stp);
   Flip(0);
   MatCol(1,32,"Товар",0,ArtCode,false,ForSaleINSClass);
@@ -6628,7 +6628,7 @@ begin
   CheckBox(h4,v+=16,0,"Без кр. сч/ф",Closed);
   Tile(2,79,true,"2",Math);
   v = 24;
-  MatrixBegin(4,v,-50,-22,-,199);
+  MatrixBegin(4,v,-50,-22,-,999);// Edit ************************** Thursday, 25 June 2015 17:23:18 199
   Flip(0);
   MatCol(1,32,"Товар",0,ArtCode,false,ForSaleINSClass);
 //  MatCol(1,84,"Var",0,VARList,true,VARSClass);
