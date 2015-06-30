@@ -6002,6 +6002,7 @@ begin
   SpecialMenu("Напечатать маркировку ЭН Новой почты",'',1,"NPPrintMarkENDsm");
   SpecialMenu("Удалить текущую ЭН Новой почты",'',1,"NPDeleteENDsm");
   SpecialMenu("Новая почта: проверить статус посылки",'',1,"NPGetDocStatusDsm");
+  SpecialMenu("Повторная отправка СМС",'',1,"NPSendSMSDsm");	//Edit----------------------Dima  30.06.2015
   end;
   EndWindow;
 end;

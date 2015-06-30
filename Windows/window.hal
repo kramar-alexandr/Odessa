@@ -2044,6 +2044,7 @@ begin
   EndWindow;
 end;
 
+/*
 window SMSTextTClass:1				//Edit----------------------Dima  26.06.2015
   wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
 begin
@@ -2055,7 +2056,7 @@ begin
   EditField(h,v+=vs,150,"Заголовок",Normal,Title1,false,0);
   EditField(h,v+=vs,400,"Реквизиты",Normal,Requisites,false,0);
   EndWindow;
-end;
+end;	*/
 
 
 window SMSSendingORTClass:1																
@@ -2073,3 +2074,29 @@ begin
   ColourPushButton(h2,v,h2+100,v+30,"MakeSMSmessage","Отправить",8);
   EndWindow;
 end;  
+
+
+
+window SMSTextTClass:1				//Edit----------------------Dima  26.06.2015
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  real h,v,vs;
+  WindowBegin("Текст СМС сообщений",SMSTextTClass,CGSbl,-);
+  SetBlid(SMSTextBlock);
+  SetWRect(64,80,550,350);
+  vs = 20; h = 80;
+  
+  Tile(0,20,false,"","Title1");
+  TileButton(1,"Отправка реквизитов");
+  TileButton(2,"Отгрузка");
+  
+  Tile(1,100,false,"","Title1");
+  v=6;
+  EditField(h,v+=vs,150,"Заголовок",Normal,Title1,false,0);
+  EditField(h,v+=vs,400,"Реквизиты",Normal,Requisites,false,0);
+  
+  Tile(2,200,false,"","Title2");
+  v=6;
+  EditField(h,v+=vs,150,"Заголовок",Normal,Title2,false,0);  
+  EndWindow;
+end;

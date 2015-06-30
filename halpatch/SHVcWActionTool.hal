@@ -31,6 +31,7 @@ external procedure SumUpPackList(var record PackListVc);//Edit------------------
 external procedure NP_SumUpRowWeight(var record SHVc);
 external procedure NP_SumUpRowVolumes(var record SHVc);//Edit----------------------Dima  07.05.2015
 external procedure CurValToOtherCur(Date,string,val,string,var val,roundmode);	//Edit----------------------Dima  15.05.2015
+external function string 255 SendSMS(string, string, string);//Edit----------------------Dima  30.06.2015
 
 procedure SHChangeShip(record SHVc SHr,Integer rownr)
 BEGIN
@@ -1759,3 +1760,53 @@ begin
  CalculateCostFromORVc = cost;
 return;  
 end;
+
+
+
+function string 15 GetPlaceWord(integer placeNr)	//Edit----------------------Dima  30.06.2015
+begin
+string 15 wordRes;
+	if (placeNr==1) then begin wordRes = USetStr(31093);
+	end else begin
+		if (placeNr>1 and placeNr<5) then begin
+			wordRes = USetStr(31094);
+		end else begin
+			wordRes = USetStr(31095);
+		end;
+	end;
+
+GetPlaceWord = wordRes;
+return;
+end;
+
+global function string 200 SendSMSNewPost(record SHVc SHr, boolean makeLog)//Edit----------------------Dima  30.06.2015
+Begin
+  record PackListVc PackListr;
+  record ORVc ORr;
+  integer placeNr;
+  string 200 response,text;
+  string 15 title,placeWord;
+  record SMSTextBlock SMSb;
+  
+  BlockLoad(SMSb);  
+  
+  ORr.SerNr = SHr.OrderNr;
+  if (ReadFirstMain(ORr,1,true)) then begin
+  		PackListr.SerNr = SHr.SerNr;
+  		if (ReadFirstMain(PackListr,1,true)) then begin 
+  			placeNr = MatRowCnt(PackListr);
+  			title = left(SMSb.Title2,11);			//limitation from ePochta
+  			placeWord = GetPlaceWord(placeNr);
+  			text = USetStr(31091) & ORr.CustOrdNr & ". " & USetStr(31092) & SHr.NPIntDocNumber & "(" & placeNr & placeWord & ")";
+				response = SendSMS(ORr.NPPhone,text, title); 		 
+			end;
+	end; 
+	
+	if (makeLog) then begin 
+		LogText(0,"SMS was sent. User: " & CurrentUser);
+	end;
+
+SendSMSNewPost = response;
+return;
+end;
+

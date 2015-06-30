@@ -165,6 +165,14 @@ begin
    SString(31077,"Недостаточно средств для отправки СМС");
    SString(31078,"Неверный номер получателя");
    SString(31079,"Ошибка отправки СМС");
+   
+   SString(31090,"ОТГРУЖЕНО");
+   SString(31091,"Заказ ");
+   SString(31092,"Номер декларации ");
+   SString(31093,"место");
+   SString(31094,"места");
+   SString(31095,"мест");
+   SString(31096,"SMS было отправлено");
 	 
    
   Maintenance("Экспорт склада CSV",ExportStockCSVClass,ExportStockCSVMn,modSY);
