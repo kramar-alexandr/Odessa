@@ -1,10 +1,16 @@
+external function boolean MySendRawWebRequest(string, string, boolean, string, string, string, string, boolean, area, var area, integer);
+external function string 255 ConvertXml(string);
+external procedure GetXMLArea(var area);
+
 
 function string 15 NormalizePhone(string phone)
 begin
 	string 15 correctPhone;
 
-	if (Len(phone)>=10) then begin
-		correctPhone = "38" & Right(phone,10);
+	correctPhone = StripNonDigits(phone);
+
+	if (Len(correctPhone)>=10) then begin
+		correctPhone = "38" & Right(correctPhone,10);
 	end else begin
 		correctPhone = "";
 	end;
@@ -15,7 +21,7 @@ end;
 
 
 
-global procedure SendSMS(string phone, string message, string smsTitle)
+global procedure SendSMSEmail(string phone, string message, string smsTitle)
 begin
 	area subject,body;
 	string 15 correctPhone;
@@ -44,8 +50,105 @@ end;
 global
 procedure  MakeSMSMn()
 begin
-  SendSMS("0637990958","Test message", "PC");
+  SendSMSEmail("0637990958","Test message", "PC");
 end;
 
 
+
+procedure  CheckEPochtaResponse(var string response)
+begin
+	integer v;
+	v = StringToInt(response);
+	
+	if (v <= 0) then begin
+		switch(v) begin
+			case -1: response = USetStr(31075);
+			case -2: response = USetStr(31076);
+			case -3: response = USetStr(31077);
+			case -4: response = USetStr(31078);
+			otherwise response = USetStr(31079);
+		end;
+	end else begin
+			response = "";
+	end;	
+
+end;
+
+procedure CreateSMSRequest(string aWeb,string phone,string text,string title,var area aRequest)
+begin
+  area request,replyarea,test;
+  string 100 tstr;
+  string 20 timed;
+  area basestring;
+  record SMSSettingsBlock SMSb;
+  string 50 login,password;
+  integer i;   
+  
+  BlockLoad(SMSb);  
+
+  login = SMSb.Login;
+  password = SMSb.Password;
+
+	Addtexttoarea("POST " & aWeb  & chr(13) & chr(10),aRequest);
+ 	AddTextToArea("" & chr(13) & chr(10),aRequest);
+
+  AddTextToArea("<SMS>"& chr(13),aRequest);
+  AddTextToArea("   <operations><operation>" & "SEND" & "</operation></operations>" & chr(13),aRequest);
+  AddTextToArea("   <authentification>"  & chr(13),aRequest);
+  AddTextToArea("     <username>" & login & "</username>" & chr(13),aRequest);  
+  AddTextToArea("     <password>" & password & "</password>" & chr(13),aRequest); 
+  AddTextToArea("   </authentification>"  & chr(13),aRequest);  
+  AddTextToArea("   <message>"& chr(13),aRequest);
+  AddTextToArea("     <sender>" & title & "</sender>" & chr(13),aRequest); 
+  AddTextToArea("     <text>" & text & "</text>" & chr(13),aRequest);
+  AddTextToArea("   </message>" & chr(13),aRequest);
+  AddTextToArea("   <numbers>"& chr(13),aRequest);
+  AddTextToArea("     <number>" & ConvertXml(phone) & "</number>" & chr(13),aRequest); 
+  AddTextToArea("   </numbers>" & chr(13),aRequest);  
+  AddTextToArea("</SMS>" & chr(13),aRequest);  
+	AddTextToArea("" & chr(13) & chr(10),aRequest);
+	
+	
+	writeareatofile(aRequest,"SMSRequest.txt",0);
+  
+return;
+end;
+
+
+
+global 
+function string 255 SendSMS(string phone,string text,string title)
+begin
+  area replyarea,mainRequest;
+  string 200 host,page,response;
+  xml xdata;
+  string 15 correctPhone;
+
+	response = "";
+   
+  
+  host = "my.epochta.ru";
+  page = "/members/sms/xml.php"; 
+   
+  correctPhone = NormalizePhone(phone);
+  
+	CreateSMSRequest(host & page,correctPhone,text,title, mainRequest);   
+   
+
+  if(MySendRawWebRequest(host,"443",true,"POST",page ,"text/xml","",false,mainRequest,replyarea,600))then begin 
+    writeareatofile(replyarea,"SMSReply.txt",0);
+    GetXMLArea(replyarea);
+		xdata = ParseXMLArea(replyarea);
+
+		response = XmlGet(xdata,"RESPONSE/status");
+		CheckEPochtaResponse(response); 
+		   
+  end else begin
+ 		logtext(0,"Hansa World: No Connection to my.epochta.ru");
+  end;
+ 
+	LSendSMS:; 
+ 	SendSMS = response;
+  return;
+end;
 

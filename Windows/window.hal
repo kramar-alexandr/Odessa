@@ -2029,14 +2029,47 @@ end;
 
 
 
-window SMSSettingsTClass:1				//Edit----------------------Dima  27.04.2015
+window SMSSettingsTClass:1				//Edit----------------------Dima  25.06.2015
   wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
 begin
   real h,v,vs;
   WindowBegin("Настройки отправки СМС",SMSSettingsTClass,CGSbl,-);
   SetBlid(SMSSettingsBlock);
   SetWRect(64,80,500,300);
-  v=6;vs = 20; h = 100;
+  v=6;vs = 20; h = 150;
   EditField(h,v+=vs,200,"Ключ ePochta",Normal,ePochtaKey,false,0);
+ // EditField(h,v+=vs,200,"Адрес Web-запроса",Normal,AdressRequest,false,0);
+  EditField(h,v+=vs,200,"Логин",Normal,Login,false,0);
+  EditField(h,v+=vs,200,"Пароль",Normal,Password,false,0);
   EndWindow;
 end;
+
+window SMSTextTClass:1				//Edit----------------------Dima  26.06.2015
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  real h,v,vs;
+  WindowBegin("Текст СМС сообщений",SMSTextTClass,CGSbl,-);
+  SetBlid(SMSTextBlock);
+  SetWRect(64,80,550,350);
+  v=6;vs = 20; h = 80;
+  EditField(h,v+=vs,150,"Заголовок",Normal,Title1,false,0);
+  EditField(h,v+=vs,400,"Реквизиты",Normal,Requisites,false,0);
+  EndWindow;
+end;
+
+
+window SMSSendingORTClass:1																
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  real h,h2,v,vs;
+  WindowBegin("Редактирование СМС",SMSSendingORTClass,CGother,RcType);
+  SetWRect(64,80,600,300);
+  v=5;vs = 20; h = 80; h2 = -150;
+  UseView(RcVc);
+  EditField(h,v+=vs,150,"Телефон",Normal,f1,false,0);
+  EditField(h,v+=(vs+10),150,"Заголовок",Normal,f3,false,0);
+  EditField(h,v+=vs,450,"Текст",Normal,f2,false,0);
+  v=v+30;
+  ColourPushButton(h2,v,h2+100,v+30,"MakeSMSmessage","Отправить",8);
+  EndWindow;
+end;  

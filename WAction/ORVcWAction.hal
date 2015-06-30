@@ -63,6 +63,7 @@ remote function Boolean SerialNrForOneItem(string,var record SerBalVc);
 external procedure SetupCustPS2Rn(string,record RcVc);	//Edit----------Dima  27.01.2015
 remote procedure ORVc_PasteNPPhone(var record ORVc);	//Edit----------------------Dima  15.04.2015
 remote procedure NP_PasteRecipientWarehouseDescOR(var record ORVc);
+remote function string 255 SendSMS(string, string, string);//Edit----------------------Dima  26.06.2015
 
 
 global //Edit***************************Sasha2,15:51 04.02.2015 {
@@ -2121,4 +2122,91 @@ begin
     RunReport(RepSpec,0);
   end;
   return;
+end;
+
+
+
+
+
+global
+procedure MakeSMSORDsm()					//Edit----------------------Dima  26.06.2015
+begin
+  record ORVc ORr;
+  record CUVc CUr;
+  record RcVc RepSpec;
+  record SMSTextBlock SMSb;
+  integer wn,nwn;
+  
+  BlockLoad(SMSb);
+  
+  wn = CurWindow;
+  GetWindowRecord(wn,ORr);
+
+	if (nonblank(ORr.NPPhone)) then begin
+		RepSpec.f1 = ORr.NPPhone;
+	end else begin	
+		CUr.Code = ORr.CustCode;
+		ReadFirstMain(CUr,1,true);
+		RepSpec.f1 = CUr.Phone;
+	end;
+	
+	RepSpec.f3 = SMSb.Title1;
+  RepSpec.f2 = SMSb.Requisites;  
+  
+  nwn = OpenWindow("SMSSendingORTClass",0,wn,"","",RepSpec);
+return;
+end;
+
+
+global updating
+procedure MakeSMSmessage()	//Edit----------------------Dima  26.06.2015
+begin
+	record RcVc RepSpec;
+	record ORVc ORr;
+	record NotepadVc Noter;
+  integer wn,mwn,notenr;
+  record RLinkVc RLinkr;
+  string 200 response; 
+  
+  wn = CurWindow;
+  DeselectWindow(wn,false);
+  GetWindowRecord(wn,RepSpec); 
+  
+  //Check SMS title
+  if (Len(RepSpec.f3)>11) then begin
+			MessageBox(31074,"");
+			goto LMakeSMSmessage;
+	end; 
+	 
+  response = SendSMS(RepSpec.f1,RepSpec.f2, RepSpec.f3);		//(Phone,Text,Title)
+  
+  if (blank(response)) then begin
+    
+  	//attach note to ORr
+  	mwn = MotherWindow(wn);
+  	GetWindowRecord(mwn,ORr);
+		Noter.SerNr = NextSerNr("NotepadVc",CurrentDate,-1,false,"");
+		LineTextPut(Noter,0,RepSpec.f2 & chr(13));
+		LineTextPut(Noter,0,USetStr(31073) & CurrentDate & " " & CurrentTime);
+		
+  	if (RecordStore(Noter,false)) then begin
+  	  CreateRecordLink(ORr,CurrentCompany,Noter,CurrentCompany); 
+  	  notenr = 1;
+  	  while (ReadRecordLink(ORr,notenr,Noter,RLinkr)) begin
+  	    notenr = notenr + 1;
+  	  end;
+  	  if (ReadRecordLink(ORr,notenr-1,Noter,RLinkr)) then begin
+  	      RLinkr.Comment = "SMS " & CurrentDate;    
+  	    if (RecordStore(RLinkr,true)) then begin
+  	    end;
+  	  end;     
+  	end;
+  	CloseWindow(wn);
+  
+  end else begin
+		MessageBox(0,response);
+	end;
+
+  
+  LMakeSMSmessage:;   
 end;

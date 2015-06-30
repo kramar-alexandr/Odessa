@@ -5445,6 +5445,7 @@ email not working yet
   SpecialMenu("Справка по клиенту",'e',0,"ORStatusCUDsm");	//Edit------------------Dima 27.01.2015
 	SpecialMenu("Выгрузить таблицу в буфер обмена",'',18,"ExportToExcelORDsm"); // edit ----------Dima 26.11.2014, 23.01.2015
 	SpecialMenu("Отсортировать таблицу",'',20,"TableSortORDsm"); // edit ----------Dima 26.11.2014, 23.01.2015
+	SpecialMenu("Создать СМС с реквизитами",'',20,"MakeSMSORDsm");	//Edit----------------------Dima  26.06.2015
   end;
   EndWindow;
 
