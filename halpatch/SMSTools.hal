@@ -47,12 +47,6 @@ end;
 
 
 
-global
-procedure  MakeSMSMn()
-begin
-  SendSMSEmail("0637990958","Test message", "PC");
-end;
-
 
 
 procedure  CheckEPochtaResponse(var string response)
