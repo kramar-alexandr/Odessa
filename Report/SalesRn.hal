@@ -253,9 +253,11 @@ longint length,k;
 							rowCostUnit = IVrw.FIFORowVal/IVrw.Quant*cred;
 							ivrowqtycost = IVrw.FIFORowVal;
 							total2 = total2 + IVrw.FIFORowVal;
-							total3 = total3 + IVrw.rowGP;
-							rwGP = IVrw.rowGP*cred;
-							rwGPpercent = IVrw.rowGP*100/(IVrw.FIFORowVal);						
+							//total3 = total3 + IVrw.rowGP;// Edit ************************** Wednesday, 1 July 2015 15:36:00
+							total3 = total3 + (rowSum-ivrowqtycost)*cred;
+							//rwGP = IVrw.rowGP*cred;// Edit ************************** Wednesday, 1 July 2015 15:34:30
+							rwGP = (rowSum-ivrowqtycost)*cred;
+							rwGPpercent = (rowSum-ivrowqtycost)*100/(IVrw.FIFORowVal);						
 						end;
 						rowsalary = PLsalary[IVrw.ArtCode];
 						salaryPrice = rowsalary*cred;
