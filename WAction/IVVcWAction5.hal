@@ -538,7 +538,7 @@ begin
     IVDClassLevelTopExecute(ClientMode==false);
 //    PutWindowString(wn,"PrevSuspended",IVCashr.Suspended);
     PutWindowString(wn,"Suspended","0");
-    SetPOSWindowDisplay("","");
+    //SetPOSWindowDisplay("","");
     IVDClass_RefreshStringList(wn,IVr);
     if (WindowState(wn)!=Rs_insert) then begin
       ReRunWindowDef(wn);

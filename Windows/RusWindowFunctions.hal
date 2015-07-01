@@ -1131,26 +1131,7 @@ begin
     tstr = "Телефон: " & phone;
     StaticText(h2,v+20,tstr,false);
   end;
-  /*if (HasJewelleryInterface) then begin// Edit ************************** Wednesday, 27 May 2015 09:37:06
-    if (nonblank(objects)) then begin
-      tstr = "Объекты: ";
-      tstr = tstr & objects;
-      StaticText(h,v+=20,tstr,false);
-    end;
-    if (nonblank(addr1)) then begin
-      tstr = "Адрес: ";
-      tstr = tstr & addr1;
-      StaticText(h,v+=20,tstr,false);
-    end;
-    if (nonblank(addr2)) then begin
-      tstr = addr2;
-      StaticText(h,v+=20,tstr,false);
-    end;
-    if (nonblank(addr3)) then begin
-      tstr = addr3;
-      StaticText(h,v+=20,tstr,false);
-    end;
-  end;*/
+
 LDisplayRecordDetails_RUS01:;  
   return;
 end;
@@ -2785,4 +2766,20 @@ begin
     v = 18;
   end;
   return;
+end;
+
+
+global function integer GetLoyPoints(string sernr)
+begin
+	integer res;
+	record LoyaltyCardVc LCr;
+	
+	
+	LCr.SerNr = sernr;
+	if(ReadFirstMain(LCr,1,true))then begin
+		res = LCr.PointsBalance;
+	end;
+		
+	GetLoyPoints = res;
+return;
 end;

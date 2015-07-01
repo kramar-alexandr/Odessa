@@ -1937,6 +1937,11 @@ external	function Boolean HasModSVO();
 external	function Boolean HasModTS();
 external	function Boolean HasModWHM();
 external	function Boolean HasModDI();
+
+remote function integer GetLoyPoints(string);
+
+
+
 //##ii
 procedure dummy() //##ii
 begin //##ii
@@ -4290,7 +4295,7 @@ end else begin
   record POSButtonsVc POSBr;
   string 255 bc1,bc2,compname,lmc,nr,sessdesc,sm;
   time tt;
-  record LoyaltyCardVc LCr;
+  //record LoyaltyCardVc LCr;
 
   BlockLoad(LMb);
 
@@ -4361,11 +4366,15 @@ end else begin
     if (IVr.SerNr>0) then begin
       nr = nr & IVr.SerNr;
     end;
-
-    LCr.SerNr = IVr.LoyaltyCardNr;
+		
+		if(nonblank(IVr.LoyaltyCardNr))then begin
+			points = GetLoyPoints(IVr.LoyaltyCardNr);
+		end;
+		
+    /*LCr.SerNr = IVr.LoyaltyCardNr;
 		if(ReadFirstMain(LCr,1,true))then begin
 			points = LCr.PointsBalance;
-		end;
+		end;*/
 
     /*if (IsSessionOpen(IVr.MachineName,IVr.DrawerCode,CurrentDate,CurrentTime)) then begin
       sessdesc = "Сессия терминала открыта";

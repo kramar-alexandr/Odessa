@@ -341,7 +341,7 @@ begin
 	writeareatofile(mainRequest,"1Request.txt",0);
 	//messagebox(0,"In");
 
-  if(MySendRawWebRequest(host,"443",true,"POST",page & getParam,"text/xml","",false,mainRequest,replyarea,100))then begin  //WORK! 
+  if(MySendRawWebRequest(host,"443",true,"POST",page & getParam,"text/xml","",false,mainRequest,replyarea,10))then begin  //WORK! 
     //messagebox(0,"Connection on!");
     //logtext(0,"Hansa World: Connection on. Document has been saved.");
     writeareatofile(replyarea,"1reply.txt",0);
@@ -429,7 +429,7 @@ begin
 
 	//messagebox(0,"In");
 
-  if(MySendRawWebRequest(host,"443",true,"POST",page & getParam,"text/xml","",false,mainRequest,replyarea,600))then begin  //WORK! 
+  if(MySendRawWebRequest(host,"443",true,"POST",page & getParam,"text/xml","",false,mainRequest,replyarea,10))then begin  //WORK! 
     //messagebox(0,"Connection on!");
     logtext(0,"Hansa World: Connection on");
     //writeareatofile(replyarea,"1getStatusReply.txt",0);
@@ -560,7 +560,7 @@ begin
 	CreateCommonRequest(host, page, NPSettingsb.APIkey, "Common","getCargoDescriptionList", "", mainRequest); //get status
 	
 
-  if(MySendRawWebRequest(host,"443",true,"POST",page & getParam,"text/xml","",false,mainRequest,replyarea,600))then begin  //WORK! 
+  if(MySendRawWebRequest(host,"443",true,"POST",page & getParam,"text/xml","",false,mainRequest,replyarea,10))then begin  //WORK! 
     //messagebox(0,"Connection on!");
     logtext(0,"Hansa World: GetDescription");
     //writeareatofile(replyarea,"1getStatusReply.txt",0);
@@ -644,7 +644,7 @@ begin
    
 	CreateCommonRequest(host, page, NPSettingsb.APIkey, "Common","getCargoTypes", "", mainRequest); //get status
 
-  if(MySendRawWebRequest(host,"443",true,"POST",page & getParam,"text/xml","",false,mainRequest,replyarea,600))then begin  //WORK! 
+  if(MySendRawWebRequest(host,"443",true,"POST",page & getParam,"text/xml","",false,mainRequest,replyarea,10))then begin  //WORK! 
     //messagebox(0,"Connection on!");
     logtext(0,"Hansa World: GetCargoType");
     //writeareatofile(replyarea,"1CargoTypeReply.txt",0);
@@ -732,7 +732,7 @@ begin
  
 	CreateBackwardDeliveryCargoTypesRequest(host, page, NPSettingsb.APIkey, "Common","getBackwardDeliveryCargoTypes", " ", mainRequest); //get status
 
-  if(MySendRawWebRequest(host,"443",true,"POST",page & getParam,"text/xml","",false,mainRequest,replyarea,600))then begin  //WORK! 
+  if(MySendRawWebRequest(host,"443",true,"POST",page & getParam,"text/xml","",false,mainRequest,replyarea,10))then begin  //WORK! 
     //messagebox(0,"Connection on!");
     logtext(0,"Hansa World: GetBackCargoType");
     //writeareatofile(replyarea,"1GetBackCargoType.txt",0);
@@ -785,7 +785,7 @@ begin
    
 	CreateCommonRequest(host, page, NPSettingsb.APIkey, "Common","getDocumentStatuses", "", mainRequest); //get status
 
-  if(MySendRawWebRequest(host,"443",true,"POST",page & getParam,"text/xml","",false,mainRequest,replyarea,600))then begin  //WORK! 
+  if(MySendRawWebRequest(host,"443",true,"POST",page & getParam,"text/xml","",false,mainRequest,replyarea,10))then begin  //WORK! 
     //messagebox(0,"Connection on!");
     logtext(0,"Hansa World: getDocumentStatuses");
     //writeareatofile(replyarea,"1CargoTypeReply.txt",0);
@@ -863,7 +863,7 @@ begin
   lang = "ru"; //ua ru en 
 	CreateOwnershipFormRequest(host, page, NPSettingsb.APIkey, "Common","getOwnershipFormsList", lang, mainRequest); //get status
 
-  if(MySendRawWebRequest(host,"443",true,"POST",page & getParam,"text/xml","",false,mainRequest,replyarea,600))then begin  //WORK! 
+  if(MySendRawWebRequest(host,"443",true,"POST",page & getParam,"text/xml","",false,mainRequest,replyarea,10))then begin  //WORK! 
     //messagebox(0,"Connection on!");
     logtext(0,"Hansa World: GetOwnershipForm");
     //writeareatofile(replyarea,"1OwnershipFormReply.txt",0);
@@ -958,7 +958,7 @@ begin
 			CreateWarehouseRequest(host, page, NPSettingsb.APIkey, "Address","getWarehouses", cityRef, mainRequest); 
 			
 			LsendRequestAgainGet1: ;
-			if(MySendRawWebRequest(host,"443",true,"POST",page & getParam,"text/xml","",false,mainRequest,replyarea,600))then begin 
+			if(MySendRawWebRequest(host,"443",true,"POST",page & getParam,"text/xml","",false,mainRequest,replyarea,10))then begin 
 				logtext(0,"Hansa World: GetWarehouses - " & cityName);
 		
 				GetXMLArea(replyarea);
@@ -1105,7 +1105,7 @@ begin
 	CreateDescriptRequestWithMethod(host, page, NPSettingsb.APIkey, "InternetDocument","documentsTracking", properties, mainRequest);   
    
 
-  if(MySendRawWebRequest(host,"443",true,"POST",page & getParam,"text/xml","",false,mainRequest,replyarea,600))then begin 
+  if(MySendRawWebRequest(host,"443",true,"POST",page & getParam,"text/xml","",false,mainRequest,replyarea,10))then begin 
     //writeareatofile(replyarea,"1getDocStatusReply.txt",0);
     GetXMLArea(replyarea);
 		xdata = ParseXMLArea(replyarea);
@@ -1147,7 +1147,7 @@ begin
 	CreateDescriptRequestWithMethod(host, page, NPSettingsb.APIkey, "InternetDocument","delete", properties, mainRequest);   
    
 
-  if(MySendRawWebRequest(host,"443",true,"POST",page & getParam,"text/xml","",false,mainRequest,replyarea,600))then begin 
+  if(MySendRawWebRequest(host,"443",true,"POST",page & getParam,"text/xml","",false,mainRequest,replyarea,10))then begin 
     //writeareatofile(replyarea,"1getDocStatusReply.txt",0);
     GetXMLArea(replyarea);
 		xdata = ParseXMLArea(replyarea);
@@ -1189,7 +1189,7 @@ begin
    
 	CreateCommonRequest(host, page, NPSettingsb.APIkey, "Common","getTypesOfCounterparties", "", mainRequest); //get status
 
-  if(MySendRawWebRequest(host,"443",true,"POST",page & getParam,"text/xml","",false,mainRequest,replyarea,600))then begin  //WORK! 
+  if(MySendRawWebRequest(host,"443",true,"POST",page & getParam,"text/xml","",false,mainRequest,replyarea,10))then begin  //WORK! 
     //messagebox(0,"Connection on!");
     logtext(0,"Hansa World: GetCounterpartyType");
     //writeareatofile(replyarea,"1CounterpartyTypeReply.txt",0);
@@ -1245,7 +1245,7 @@ begin
    
 	CreateCommonRequest(host, page, NPSettingsb.APIkey, "Common","getTypesOfPayers", "", mainRequest); //get status
 
-  if(MySendRawWebRequest(host,"443",true,"POST",page & getParam,"text/xml","",false,mainRequest,replyarea,600))then begin  //WORK! 
+  if(MySendRawWebRequest(host,"443",true,"POST",page & getParam,"text/xml","",false,mainRequest,replyarea,10))then begin  //WORK! 
     //messagebox(0,"Connection on!");
     logtext(0,"Hansa World: GetTypesOfPayers");
     //writeareatofile(replyarea,"1TypesOfPayersReply.txt",0);
@@ -1301,7 +1301,7 @@ begin
    
 	CreateCommonRequest(host, page, NPSettingsb.APIkey, "Common","getPaymentForms", "", mainRequest); //get status
 
-  if(MySendRawWebRequest(host,"443",true,"POST",page & getParam,"text/xml","",false,mainRequest,replyarea,600))then begin  
+  if(MySendRawWebRequest(host,"443",true,"POST",page & getParam,"text/xml","",false,mainRequest,replyarea,10))then begin  
     //messagebox(0,"Connection on!");
     logtext(0,"Hansa World: GetPaymentForms");
     //writeareatofile(replyarea,"1PaymentFormsReply.txt",0);
@@ -1357,7 +1357,7 @@ begin
    
 	CreateCommonRequest(host, page, NPSettingsb.APIkey, "Common","getServiceTypes", "", mainRequest); //get status
 
-  if(MySendRawWebRequest(host,"443",true,"POST",page & getParam,"text/xml","",false,mainRequest,replyarea,600))then begin  
+  if(MySendRawWebRequest(host,"443",true,"POST",page & getParam,"text/xml","",false,mainRequest,replyarea,10))then begin  
     //messagebox(0,"Connection on!");
     logtext(0,"Hansa World: GetServiceTypes");
     //writeareatofile(replyarea,"1ServiceTypesReply.txt",0);
@@ -1416,7 +1416,7 @@ begin
    
 	CreateDescriptRequestWithMethod(host, page, NPSettingsb.APIkey, "Common","getTimeIntervals", properties, mainRequest); //get status
 
-  if(MySendRawWebRequest(host,"443",true,"POST",page & getParam,"text/xml","",false,mainRequest,replyarea,600))then begin  
+  if(MySendRawWebRequest(host,"443",true,"POST",page & getParam,"text/xml","",false,mainRequest,replyarea,10))then begin  
     //messagebox(0,"Connection on!");
     logtext(0,"Hansa World: GetTimeIntervals");
     //writeareatofile(replyarea,"1TimeIntervalsReply.txt",0);
@@ -1472,7 +1472,7 @@ begin
    
 	CreateCommonRequest(host, page, NPSettingsb.APIkey, "Common","getTraysList", "", mainRequest); //get status
 
-  if(MySendRawWebRequest(host,"443",true,"POST",page & getParam,"text/xml","",false,mainRequest,replyarea,600))then begin  
+  if(MySendRawWebRequest(host,"443",true,"POST",page & getParam,"text/xml","",false,mainRequest,replyarea,10))then begin  
     //messagebox(0,"Connection on!");
     logtext(0,"Hansa World: GetTraysList");
     //writeareatofile(replyarea,"1TraysListReply.txt",0);
@@ -1528,7 +1528,7 @@ begin
    
 	CreateCommonRequest(host, page, NPSettingsb.APIkey, "Common","getTypesOfPayersForRedelivery", "", mainRequest); //get status
 
-  if(MySendRawWebRequest(host,"443",true,"POST",page & getParam,"text/xml","",false,mainRequest,replyarea,600)) then begin  
+  if(MySendRawWebRequest(host,"443",true,"POST",page & getParam,"text/xml","",false,mainRequest,replyarea,10)) then begin  
     //messagebox(0,"Connection on!");
     logtext(0,"Hansa World: GetTypesOfPayersForRedelivery");
     //writeareatofile(replyarea,"1TypesOfPayersForRedeliveryReply.txt",0);
@@ -1651,7 +1651,7 @@ begin
   
 	CreateCounterpartyRequest(host, page, NPSettingsb.APIkey, "Counterparty","save", "",NPCounterpartyr, mainRequest);
 
-  if(MySendRawWebRequest(host,"443",true,"POST",page & getParam,"text/xml","",false,mainRequest,replyarea,600)) then begin  
+  if(MySendRawWebRequest(host,"443",true,"POST",page & getParam,"text/xml","",false,mainRequest,replyarea,10)) then begin  
     //messagebox(0,"Connection on!");
     //writeareatofile(replyarea,"1CounterpatyCreationReply.txt",0);
      
@@ -1802,7 +1802,7 @@ begin
    
 	SaveCounterpartyAddressRequest(host, page, NPSettingsb.APIkey, "Address","save", "",RepSpec, mainRequest); //get status
 
-  if(MySendRawWebRequest(host,"443",true,"POST",page & getParam,"text/xml","",false,mainRequest,replyarea,600))then begin  
+  if(MySendRawWebRequest(host,"443",true,"POST",page & getParam,"text/xml","",false,mainRequest,replyarea,10))then begin  
     //messagebox(0,"Connection on!");
     //writeareatofile(replyarea,"1addAddressReply.txt",0);
     
@@ -1889,7 +1889,7 @@ begin
 		CreateDescriptRequestWithMethod(host, page, NPSettingsb.APIkey, "Counterparty","getCounterpartyAddresses", properties, mainRequest);
 		
 		LsendRequestAgainAdress:;
-		if(MySendRawWebRequest(host,"443",true,"POST",page & getParam,"text/xml","",false,mainRequest,replyarea,600)) then begin  
+		if(MySendRawWebRequest(host,"443",true,"POST",page & getParam,"text/xml","",false,mainRequest,replyarea,10)) then begin  
   	  	//writeareatofile(replyarea,"1AddressesReply.txt",0);
   	  	
   	  	GetXMLArea(replyarea);
@@ -1968,7 +1968,7 @@ begin
 			CreateWarehouseRequest(host, page, NPSettingsb.APIkey, "Address","getWarehouses", cityRef, mainRequest); 
 			
 			LsendRequestAgain: ;
-			if(MySendRawWebRequest(host,"443",true,"POST",page & getParam,"text/xml","",false,mainRequest,replyarea,600))then begin 
+			if(MySendRawWebRequest(host,"443",true,"POST",page & getParam,"text/xml","",false,mainRequest,replyarea,10))then begin 
 				logtext(0,"Hansa World: GetWarehouses - " & cityName);
 		
 				GetXMLArea(replyarea);
@@ -2070,7 +2070,7 @@ begin
   						
   			While(repeat<3)  begin  
   			  
-  			  if (MySendRawWebRequest(host,"443",true,"POST",page & getParam,"text/xml","",false,mainRequest,replyarea,600)) then begin
+  			  if (MySendRawWebRequest(host,"443",true,"POST",page & getParam,"text/xml","",false,mainRequest,replyarea,10)) then begin
   			  		repeat = 3; // break loop
   			  		GetXMLArea(replyarea);
 							xdata = ParseXMLArea(replyarea);
@@ -2128,7 +2128,7 @@ begin
   			
   			While(repeat<3)  begin  
   			  
-  			  if (MySendRawWebRequest(host,"443",true,"POST",page & getParam,"text/xml","",false,mainRequest,replyarea,600)) then begin
+  			  if (MySendRawWebRequest(host,"443",true,"POST",page & getParam,"text/xml","",false,mainRequest,replyarea,10)) then begin
   			  		repeat = 3; // break loop
   			  		GetXMLArea(replyarea);
 							xdata = ParseXMLArea(replyarea);
@@ -2213,7 +2213,7 @@ begin
   //------------------------------------------------------RECIPIENTs------------------------------------------------------- 
 	GetCounterpartiesRequest(host, page, NPSettingsb.APIkey, "Counterparty","getCounterparties", "Recipient", mainRequest);
 
-  if(MySendRawWebRequest(host,"443",true,"POST",page & getParam,"text/xml","",false,mainRequest,replyarea,600)) then begin  
+  if(MySendRawWebRequest(host,"443",true,"POST",page & getParam,"text/xml","",false,mainRequest,replyarea,10)) then begin  
     //messagebox(0,"Connection on!");
     writeareatofile(replyarea,"1RecipientsReply.txt",0);
      
@@ -2268,7 +2268,7 @@ begin
 	 SetAreaZeroSize(replyarea);
 	GetCounterpartiesRequest(host, page, NPSettingsb.APIkey, "Counterparty","getCounterparties", "Sender", mainRequest);
 
-  if(MySendRawWebRequest(host,"443",true,"POST",page & getParam,"text/xml","",false,mainRequest,replyarea,600)) then begin  
+  if(MySendRawWebRequest(host,"443",true,"POST",page & getParam,"text/xml","",false,mainRequest,replyarea,10)) then begin  
     //messagebox(0,"Connection on!");
     writeareatofile(replyarea,"1SendersReply.txt",0);
      
@@ -2371,7 +2371,7 @@ begin
 
 	GetCounterpartiesRequest(host, page, NPSettingsb.APIkey, "Counterparty","getCounterparties", "Sender", mainRequest);
 
-  if(MySendRawWebRequest(host,"443",true,"POST",page & getParam,"text/xml","",false,mainRequest,replyarea,600)) then begin  
+  if(MySendRawWebRequest(host,"443",true,"POST",page & getParam,"text/xml","",false,mainRequest,replyarea,10)) then begin  
     //messagebox(0,"Connection on!");
     writeareatofile(replyarea,"1SendersReply.txt",0);
      
@@ -2466,7 +2466,7 @@ begin
 
 	CreateDescriptRequestDocumentTrackig(host, page, NPSettingsb.APIkey, documents, mainRequest); 
 
-  if(MySendRawWebRequest(host,"443",true,"POST",page & getParam,"text/xml","",false,mainRequest,replyarea,600)) then begin  
+  if(MySendRawWebRequest(host,"443",true,"POST",page & getParam,"text/xml","",false,mainRequest,replyarea,10)) then begin  
     writeareatofile(replyarea,"1statusesReply.txt",0);
     
     GetXMLArea(replyarea);
