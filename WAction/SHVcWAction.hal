@@ -263,7 +263,7 @@ begin
 
 	wn = CurWindow;
 	GetWindowRecord(wn,SHr);
-  if (nonblank(SHr.NPIntDocNumber) and SHr.Sorting == USetStr(31090) and (SHr.SHClass=="WEB")) then begin
+  if (nonblank(SHr.NPIntDocNumber) and SHr.Sorting == USetStr(31090) and (SHr.SHClass=="WEB") and (SHr.OKFlag>0)) then begin
 			msg = SendSMSNewPost(SHr,true);
 			if (nonblank(msg)) then begin
 				MessageBox(0,msg);
