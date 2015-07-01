@@ -222,6 +222,7 @@ longint length,k;
 						if (IVr.UpdStockFlag==0 or (IVr.UpdStockFlag!=0 and IVr.OrderNr>-1)) then begin //Edit***************************Sasha2,17:57 16.02.2015 {
 							SHp.OrderNr = IVr.OrderNr;
 							TrHs1 = true;
+							printf = false;// Edit ************************** Wednesday, 1 July 2015 10:24:52
 							while (LoopKey("OrderKey",SHp,1,TrHs1)) begin
 								if(SHp.OrderNr!=IVr.OrderNr)then begin TrHs1 = false; end;// Edit ************************** Wednesday, 24 June 2015 17:45:54
 								
