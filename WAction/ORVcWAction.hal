@@ -72,16 +72,10 @@ begin
   Integer res;
   
   switch (ORr.CustomStatusFlag) begin
-   /* case 0: res = kRowColorNone;
+	  case 0: res = kRowColorNone;
     case 1: res = kRowcolorRed;
     case 2: res = kRowcolorYellow;
     otherwise res = kRowcolorGreen;
-    */
-    case 0: res = 1110;
-    case 1: res = 12;
-    case 2: res = 7;
-    otherwise res = kRowcolorYellow;    
-    
   end;
   
   ORLClassRowColor = res;
@@ -2216,3 +2210,61 @@ begin
   
   LMakeSMSmessage:;   
 end;
+
+
+
+
+global
+function integer  OLClassGerFilter()
+begin
+	record GlobalVariablesBlock GlobalVars;
+	integer res;
+	
+	BlockLoad(GlobalVars);
+	res = GlobalVars.ORFilterKey;
+
+	if (blank(res)) then begin res = 0; end;
+	
+	OLClassGerFilter = res;
+return;
+end;
+
+
+global updating
+procedure FilterORWindow(integer button)	//Edit----------------------Dima  02.07.2015
+begin
+	record GlobalVariablesBlock GlobalVars;
+	record ORVc ORr;
+	integer nwn,wn;
+	
+	BlockLoad(GlobalVars);
+	GlobalVars.ORFilterKey = button; //store the type of filter (New orders, Sended orders, Canceled...) of ORLclass
+	BlockStore(GlobalVars);
+	nwn = OpenWindow("ORLClassFiltered",1,CurWindow,"","",ORr);
+	//ReRunWindowDef(nwn);
+end;
+
+
+
+global updating procedure OpenORFilteringWindow1()
+begin
+  	FilterORWindow(1);
+end;
+
+
+global updating  procedure OpenORFilteringWindow2()
+begin
+  	FilterORWindow(2);
+end;
+
+global updating  procedure OpenORFilteringWindow3()
+begin
+  	FilterORWindow(3);
+end;
+
+global updating  procedure OpenORFilteringWindow4()
+begin
+  	FilterORWindow(4);
+end;
+
+
