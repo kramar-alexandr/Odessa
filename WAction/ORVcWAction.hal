@@ -13,6 +13,7 @@ remote procedure ORVc_PasteRegion(var record ORVc,string);
 remote function string 255 FindPositionWithSerialNr(string,string,string,string);
 remote procedure ORVc_PasteSalesMan(var record ORVc,string);
 external function roundmode SetRoundModeD(Integer);
+external function roundmode SetRoundMode	(integer,integer,integer,integer);
 external function roundmode DefaultRoundMode();
 remote procedure ORVc_PasteLocation(var record ORVc,Integer);
 remote function Boolean CostPriceForGP(string,string,string,string,var val);
@@ -64,6 +65,7 @@ external procedure SetupCustPS2Rn(string,record RcVc);	//Edit----------Dima  27.
 remote procedure ORVc_PasteNPPhone(var record ORVc);	//Edit----------------------Dima  15.04.2015
 remote procedure NP_PasteRecipientWarehouseDescOR(var record ORVc);
 remote function string 255 SendSMS(string, string, string,boolean);//Edit----------------------Dima  26.06.2015
+external function string 255 ReplaceAllSubStringInString(string, string, string);//Edit----------------------Dima  02.07.2015
 
 
 global //Edit***************************Sasha2,15:51 04.02.2015 {
@@ -2158,6 +2160,44 @@ return;
 end;
 
 
+function string 255 ParseSMStext(string text, record ORVc ORr)	//Edit----------------------Dima  02.07.2015
+begin
+  record UserVc Userr;
+	string 10 replaceSum,replaceCard;
+	string 50 sum,card;
+	string 255 resString,temp;
+  record SMSTextBlock SMSb;
+  val tempVal;
+  roundmode rmde;
+  
+  BlockLoad(SMSb);	
+	
+	replaceSum = "%Sum%";
+	replaceCard = "%Card%";
+	
+	Userr.Code = ORr.SalesMan;
+	if (ReadFirstMain(Userr,1,true)) then begin
+		if (nonblank(Userr.CardNumber)) then begin
+				card = Userr.CardNumber;
+		end else begin
+				card = SMSb.DefaultCard;
+		end;	
+	end;
+	rmde = SetRoundMode(0,kRoundingDirectionToFromPosInf,kRoundingModeTruncate,kRoundingStepNone);
+	tempVal = Round(ORr.Sum4 * 1.005,rmde);
+	if (tempVal<ORr.Sum4 * 1.005) then begin
+		tempVal = tempVal +1;
+	end;
+	sum = tempVal;
+
+	temp = ReplaceAllSubStringInString(replaceCard,card,text);
+	resString = ReplaceAllSubStringInString(replaceSum,sum,temp);
+
+ParseSMStext = resString;
+return;
+end;
+
+
 global updating
 procedure MakeSMSmessage()	//Edit----------------------Dima  26.06.2015
 begin
@@ -2166,7 +2206,7 @@ begin
 	record NotepadVc Noter;
   integer wn,mwn,notenr;
   record RLinkVc RLinkr;
-  string 200 response; 
+  string 200 response,text; 
   
   wn = CurWindow;
   DeselectWindow(wn,false);
@@ -2177,16 +2217,20 @@ begin
 			MessageBox(31074,"");
 			goto LMakeSMSmessage;
 	end; 
+	
+ 	mwn = MotherWindow(wn);
+ 	GetWindowRecord(mwn,ORr);
+ 	
+ 	text = ParseSMStext(RepSpec.f2,ORr);
 	 
-  response = SendSMS(RepSpec.f1,RepSpec.f2, RepSpec.f3,true);		//(Phone,Text,Title)
+  response = SendSMS(RepSpec.f1,text, RepSpec.f3,true);		//(Phone,Text,Title,  print Log)
   
   if (blank(response)) then begin
     
   	//attach note to ORr
-  	mwn = MotherWindow(wn);
-  	GetWindowRecord(mwn,ORr);
+
 		Noter.SerNr = NextSerNr("NotepadVc",CurrentDate,-1,false,"");
-		LineTextPut(Noter,0,RepSpec.f2 & chr(13));
+		LineTextPut(Noter,0,text & chr(13));
 		LineTextPut(Noter,0,USetStr(31073) & CurrentDate & " " & CurrentTime);
 		
   	if (RecordStore(Noter,false)) then begin
