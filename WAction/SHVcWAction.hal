@@ -30,7 +30,7 @@ remote updating procedure NPCreateRequestMn(var record SHVc,var string);
 remote function boolean NPDeleteDocumentRequest(string );//Edit----------------------Dima  06.05.2015
 remote function boolean CheckENremote(record SHVc, var longint,var string);
 remote updating function boolean CheckCounterpartySH(var record SHVc);
-remote function string 200 SendSMSNewPost(record SHVc,boolean);	//Edit----------------------Dima  30.06.2015
+remote function string 200 SendSMSNewPost(record SHVc);	//Edit----------------------Dima  30.06.2015
 
 function boolean CheckEN(record SHVc SHr,integer wn)	//Edit----------------------Dima  07.05.2015
 begin
@@ -263,8 +263,8 @@ begin
 
 	wn = CurWindow;
 	GetWindowRecord(wn,SHr);
-  if (nonblank(SHr.NPIntDocNumber) and SHr.Sorting == USetStr(31090) and (SHr.SHClass=="WEB") and (SHr.OKFlag>0)) then begin
-			msg = SendSMSNewPost(SHr,true);
+  if (nonblank(SHr.NPIntDocNumber) and (SHr.SHClass=="WEB") and (SHr.OKFlag>0)) then begin
+			msg = SendSMSNewPost(SHr);
 			if (nonblank(msg)) then begin
 				MessageBox(0,msg);
 			end else begin

@@ -111,7 +111,7 @@ end;
 
 
 global 
-function string 255 SendSMS(string phone,string text,string title)
+function string 255 SendSMS(string phone,string text,string title, boolean writeLog)
 begin
   area replyarea,mainRequest;
   string 200 host,page,response;
@@ -135,7 +135,11 @@ begin
 		xdata = ParseXMLArea(replyarea);
 
 		response = XmlGet(xdata,"RESPONSE/status");
-		CheckEPochtaResponse(response); 
+		CheckEPochtaResponse(response);
+		
+		if (writeLog) then begin 
+			LogText(0,"SMS was sent.  TEXT: " & text);
+		end;		 
 		   
   end else begin
  		logtext(0,"Hansa World: No Connection to my.epochta.ru");

@@ -63,7 +63,7 @@ remote function Boolean SerialNrForOneItem(string,var record SerBalVc);
 external procedure SetupCustPS2Rn(string,record RcVc);	//Edit----------Dima  27.01.2015
 remote procedure ORVc_PasteNPPhone(var record ORVc);	//Edit----------------------Dima  15.04.2015
 remote procedure NP_PasteRecipientWarehouseDescOR(var record ORVc);
-remote function string 255 SendSMS(string, string, string);//Edit----------------------Dima  26.06.2015
+remote function string 255 SendSMS(string, string, string,boolean);//Edit----------------------Dima  26.06.2015
 
 
 global //Edit***************************Sasha2,15:51 04.02.2015 {
@@ -72,10 +72,16 @@ begin
   Integer res;
   
   switch (ORr.CustomStatusFlag) begin
-    case 0: res = kRowColorNone;
+   /* case 0: res = kRowColorNone;
     case 1: res = kRowcolorRed;
     case 2: res = kRowcolorYellow;
     otherwise res = kRowcolorGreen;
+    */
+    case 0: res = 1110;
+    case 1: res = 12;
+    case 2: res = 7;
+    otherwise res = kRowcolorYellow;    
+    
   end;
   
   ORLClassRowColor = res;
@@ -2178,7 +2184,7 @@ begin
 			goto LMakeSMSmessage;
 	end; 
 	 
-  response = SendSMS(RepSpec.f1,RepSpec.f2, RepSpec.f3);		//(Phone,Text,Title)
+  response = SendSMS(RepSpec.f1,RepSpec.f2, RepSpec.f3,true);		//(Phone,Text,Title)
   
   if (blank(response)) then begin
     
