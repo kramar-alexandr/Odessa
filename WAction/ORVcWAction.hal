@@ -2167,7 +2167,7 @@ begin
 	string 50 sum,card;
 	string 255 resString,temp;
   record SMSTextBlock SMSb;
-  val tempVal;
+  val tempVal,tempsum;
   roundmode rmde;
   
   BlockLoad(SMSb);	
@@ -2184,8 +2184,13 @@ begin
 		end;	
 	end;
 	rmde = SetRoundMode(0,kRoundingDirectionToFromPosInf,kRoundingModeTruncate,kRoundingStepNone);
-	tempVal = Round(ORr.Sum4 * 1.005,rmde);
-	if (tempVal<ORr.Sum4 * 1.005) then begin
+	tempsum = round(ORr.Sum4,rmde);// Edit ************************** Friday, 3 July 2015 10:17:36
+	if (tempsum<ORr.Sum4) then begin
+		tempsum = tempsum +1;
+	end;
+	
+	tempVal = Round(tempsum * 1.005,rmde);
+	if (tempVal<tempsum * 1.005) then begin
 		tempVal = tempVal +1;
 	end;
 	sum = tempVal;
