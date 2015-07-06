@@ -2143,13 +2143,13 @@ begin
 	replaceCard = "%Card%";
 	
 	Userr.Code = ORr.SalesMan;
-	if (ReadFirstMain(Userr,1,true)) then begin
-		if (nonblank(Userr.CardNumber)) then begin
-				card = Userr.CardNumber;
-		end else begin
+	if (ReadFirstMain(Userr,1,true) and nonblank(Userr.CardNumber)) then begin
+				card = Userr.CardNumber;		
+	end else begin
 				card = SMSb.DefaultCard;
-		end;	
-	end;
+	end;	
+	
+	
 	rmde = SetRoundMode(0,kRoundingDirectionToFromPosInf,kRoundingModeTruncate,kRoundingStepNone);
 	tempsum = round(ORr.Sum4,rmde);// Edit ************************** Friday, 3 July 2015 10:17:36
 	if (tempsum<ORr.Sum4) then begin
