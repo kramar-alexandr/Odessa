@@ -84,7 +84,7 @@ begin
   refundCommand  = "PayMoney";
   commentCommand = "Comment";  
   printStatus = 0;
-  nalogGroup = "0";
+  nalogGroup = "1";
   discountType = 0; //absolute value of discount
   totalRebate= 0 ;
   giftSum = 0;

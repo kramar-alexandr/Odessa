@@ -2037,10 +2037,14 @@ begin
   SetBlid(SMSSettingsBlock);
   SetWRect(64,80,500,300);
   v=6;vs = 20; h = 150;
-  EditField(h,v+=vs,200,"Ключ ePochta",Normal,ePochtaKey,false,0);
+  //EditField(h,v+=vs,200,"Ключ ePochta",Normal,ePochtaKey,false,0);
  // EditField(h,v+=vs,200,"Адрес Web-запроса",Normal,AdressRequest,false,0);
+ 	statictext(h,v+=vs,"Для обычных счетов",false);
   EditField(h,v+=vs,200,"Логин",Normal,Login,false,0);
   EditField(h,v+=vs,200,"Пароль",Normal,Password,false,0);
+  statictext(h,v+=vs+vs,"Для счетов с типом WEB",false);
+  EditField(h,v+=vs,200,"Логин",Normal,WEBLogin,false,0);
+  EditField(h,v+=vs,200,"Пароль",Normal,WEBPassword,false,0);
   EndWindow;
 end;
 

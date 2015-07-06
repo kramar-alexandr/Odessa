@@ -68,7 +68,7 @@ begin
 
 end;
 
-procedure CreateSMSRequest(string aWeb,string phone,string text,string title,var area aRequest)
+procedure CreateSMSRequest(string aWeb,string phone,string text,string title,var area aRequest,string ordclass)
 begin
   area request,replyarea,test;
   string 100 tstr;
@@ -82,6 +82,11 @@ begin
 
   login = SMSb.Login;
   password = SMSb.Password;
+  
+  if(ordclass=="WEB")then begin
+		login = SMSb.WEBLogin;
+		password = SMSb.WEBPassword;
+  end;
 
 	Addtexttoarea("POST " & aWeb  & chr(13) & chr(10),aRequest);
  	AddTextToArea("" & chr(13) & chr(10),aRequest);
@@ -111,7 +116,7 @@ end;
 
 
 global 
-function string 255 SendSMS(string phone,string text,string title, boolean writeLog)
+function string 255 SendSMS(string phone,string text,string title, boolean writeLog,string ordclass)
 begin
   area replyarea,mainRequest;
   string 200 host,page,response;
@@ -126,10 +131,10 @@ begin
    
   correctPhone = NormalizePhone(phone);
   
-	CreateSMSRequest(host & page,correctPhone,text,title, mainRequest);   
+	CreateSMSRequest(host & page,correctPhone,text,title, mainRequest,ordclass);   
    
 
-  if(MySendRawWebRequest(host,"443",true,"POST",page ,"text/xml","",false,mainRequest,replyarea,600))then begin 
+  if(MySendRawWebRequest(host,"443",true,"POST",page ,"text/xml","",false,mainRequest,replyarea,10))then begin 
     writeareatofile(replyarea,"SMSReply.txt",0);
     GetXMLArea(replyarea);
 		xdata = ParseXMLArea(replyarea);

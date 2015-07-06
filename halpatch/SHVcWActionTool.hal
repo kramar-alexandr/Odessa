@@ -31,7 +31,7 @@ external procedure SumUpPackList(var record PackListVc);//Edit------------------
 external procedure NP_SumUpRowWeight(var record SHVc);
 external procedure NP_SumUpRowVolumes(var record SHVc);//Edit----------------------Dima  07.05.2015
 external procedure CurValToOtherCur(Date,string,val,string,var val,roundmode);	//Edit----------------------Dima  15.05.2015
-external function string 255 SendSMS(string, string, string,boolean);//Edit----------------------Dima  30.06.2015
+external function string 255 SendSMS(string, string, string,boolean,string);//Edit----------------------Dima  30.06.2015
 
 procedure SHChangeShip(record SHVc SHr,Integer rownr)
 BEGIN
@@ -1798,7 +1798,7 @@ Begin
   			title = left(SMSb.Title2,11);			//limitation from ePochta
   			placeWord = GetPlaceWord(placeNr);
   			text = USetStr(31091) & ORr.CustOrdNr & ". " & USetStr(31092) & SHr.NPIntDocNumber & "(" & placeNr & placeWord & ")";
-				response = SendSMS(ORr.NPPhone,text, title,true); 		 
+				response = SendSMS(ORr.NPPhone,text, title,true,ORr.OrderClass); 		 
 			end;
 	end; 
 

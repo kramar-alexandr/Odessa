@@ -3996,6 +3996,8 @@ RecordBegin(IPVc,-,"");
 	RecordField(AdressRequest,M4Str,255,0);
 	RecordField(Login,M4Str,255,0);
 	RecordField(Password,M4Str,255,0);
+	RecordField(WEBLogin,M4Str,255,0);
+	RecordField(WEBPassword,M4Str,255,0);
 	EndBlock; 
 	
 	BlockBegin(SMSTextBlock,-,"");					//Edit----------------------Dima  26.06.2015
