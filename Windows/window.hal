@@ -1984,24 +1984,29 @@ begin
 
   Tile(0,20,false,"","f1");
   TileButton(1,"Отчеты");
-  TileButton(2,"Операции с чеком");
-  TileButton(3,"Внесение/изъятие");
-  TileButton(4,"Дата/Время");
+  TileButton(2,"Z-отчет");
+  TileButton(3,"Операции с чеком");
+  TileButton(4,"Внесение/изъятие");
+  TileButton(5,"Дата/Время");
+  TileButton(6,"Ящик");
   v1=30;vs = 20; h1 = 50; h2 = 200 ;
 
   Tile(1,100,false,"","sStartDate");
-	ColourPushButton(h1,v1,h1+100,v1+40,"MakeXReport","Печатать Х отчет",1);
-	ColourPushButton(h2,v1,h2+100,v1+40,"MakeZReport","Печатать Z отчет",3);
-	CheckBox(h2,v1+50,1,"Автоматический вынос денег",flags[1]);
+	ColourPushButton(h1,v1,h1+100,v1+40,"MakeXReport","Печатать Х отчет",3);
 	v1=v1+140;
-	ColourPushButton(h1,v1,h1+100,v1+40,"MakePeriodicReport","Отчет за период",4);
+	ColourPushButton(h1,v1,h1+100,v1+40,"MakePeriodicReport","Отчет за период",5);
 	ColourPushButton(h2,v1,h2+100,v1+40,"MakePeriodicShortReport","Короткий отчет за период",5);
 	v1=v1+80;
 	//PeriodField(h1,v1,"Период");
   EditField(h1+30,v1+=vs,70,"Период",Normal,sStartDate,false,0);
   EditField(h2-10,v1,70,":   ",Normal,sEndDate,false,0);
-
-	Tile(2,200,false,"","f4");
+  
+  Tile(2,100,false,"","f5");
+  v1=60;
+	ColourPushButton(h1,v1,h1+100,v1+40,"MakeZReport","Печатать Z отчет",1);
+	CheckBox(h1,v1+50,1,"Автоматический вынос денег",flags[1]);
+	
+	Tile(3,200,false,"","f4");
 	v1=30;
 	ColourPushButton(h1,v1,h1+100,v1+40,"MakeLastCheck","Копия последнего чека",6);
 	v1=v1+60;
@@ -2010,14 +2015,14 @@ begin
 	ColourPushButton(h1,v1,h1+100,v1+40,"MakeNullCheck","Нулевой чек",8);
 
 
-	Tile(3,200,false,"","vals1");
+	Tile(4,200,false,"","vals1");
 	v1=30;
 	ColourPushButton(h1,v1,h1+100,v1+40,"MakeCashIn","Внесение денег",2);
 	ColourPushButton(h2,v1,h2+100,v1+40,"MakeCashOut","Изъятие денег",1);
 	v1=v1+100;
   EditField(h1+100,v1,150,"Сумма в гривнах",Normal,vals1,false,0);
 
-	Tile(4,200,false,"","f1");
+	Tile(5,200,false,"","f1");
 	v1=30;
 	StaticText(50,v1,"Установка времени и даты фискального принтера",false);
 	StaticText(50,v1+12,"Неиспользуемое поле следует оставить пустым",false);
@@ -2025,7 +2030,12 @@ begin
   EditField(h1,v1,100,"Дата",Normal,f1,false,0);
   EditField(h1,v1+20,100,"Время",Normal,f2,false,0);
   v1=v1+90;
-	ColourPushButton(h2,v1,h2+100,v1+40,"MakeDateSetting","Установить",2);  
+	ColourPushButton(h2,v1,h2+100,v1+40,"MakeDateSetting","Установить",2); 
+	
+  Tile(6,100,false,"","f6");
+  v1=60;
+	ColourPushButton(h1,v1,h1+100,v1+40,"OpenCashBox","Открыть денежный ящик",4);
+		 
   EndWindow;
 end;
 

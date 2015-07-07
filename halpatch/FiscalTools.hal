@@ -453,7 +453,20 @@ end;
 
 
 
-
+global procedure OpenCashBox()	//Edit----------------------Dima  07.07.2015
+begin
+	string 255 command,d;
+	area filedata;	
+	
+	d = "!===!"; 	//divider	
+	command = "OpenBox";
+	
+	AddTextToArea(command & d,filedata);
+	AddTextToArea(chr(13) & "<END>",filedata);
+	CreateFiscalFile(filedata);	
+	
+return;
+end;
 
 
 
