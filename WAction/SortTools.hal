@@ -53,6 +53,10 @@ begin
 				MatRowDelete(oldORr,minPos);
 		end;
 	end;
+	
+	//strange bug. Sometimes the matrix is shifted by 1 row
+	MatRowGet(ORr,0,ORrw);
+	if (blank(ORrw.ArtCode) and blank(ORrw.Sum)) then begin MatRowDelete(ORr,0);	end;
 
 end;
 
@@ -87,6 +91,33 @@ BEGIN
 
 
 	LTableSortORDsm:;
+  RETURN;
+END;
+
+
+global  //Edit----------------------Dima  07.07.2015
+procedure TableSortOR2(var record ORVc ORr)
+BEGIN
+	row ORVc ORrw;
+  Integer wn,rwcnt,i;
+
+
+	if (ORr.OKFlag==1 ) then begin
+			goto LTableSortOR2;
+	end;
+	
+	rwcnt = MatRowCnt(ORr);
+	for(i=0;i<rwcnt;i=i+1) begin
+		MatRowGet(ORr,i,ORrw);	
+		if (nonblank(ORrw.Shipd1) or nonblank(ORrw.Shipd2) or nonblank(ORrw.Invd)) then begin
+			goto LTableSortOR2;
+		end;
+	end;
+
+	TableSortAscending_OR(ORr);
+  //PutWindowRecord(wn,ORr);
+
+	LTableSortOR2:;
   RETURN;
 END;
 

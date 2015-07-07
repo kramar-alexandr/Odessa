@@ -81,6 +81,7 @@ external function Boolean GetForeignCurncyRate(string,var val,var val,var val,Da
 //external updating function boolean NPCreateCounterparty(record NPCounterpartyVc);	//Edit----------------------Dima  15.04.2015
 //external updating procedure GetRecipientContactPerson(string ,string );
 external function Boolean IsLetter(string);
+external procedure TableSortOR2(var record ORVc);//Edit----------------------Dima  07.07.2015
 
 procedure SetORAcceptanceFlag(var record ORVc ORr,record ORVc prevORr,LongInt stat)
 begin
@@ -1897,7 +1898,7 @@ begin
   //if ((ORr.DeliveryNewPost!=0) and (OR2r.DeliveryNewPost==0)) then begin
 	//	CheckCounterparty(ORr);							//Edit----------------------Dima  16.04.2015
 	//end;
-  
+  TableSortOR2(ORr);//Edit----------------------Dima  07.07.2015
   ORVcRecordUpdate = res; 
   return;
 end;
@@ -2080,7 +2081,7 @@ begin
   //if (ORr.DeliveryNewPost) then begin
 	//	CheckCounterparty(ORr);
 	//end;
-  
+  TableSortOR2(ORr);//Edit----------------------Dima  07.07.2015
   ORVcRecordSave = res; 
   return;
 end;
