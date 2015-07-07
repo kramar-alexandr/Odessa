@@ -1968,7 +1968,7 @@ begin
   v=6;vs = 20; h = 100;
   StaticText(50,15,"Путь к папке для хранения фискальных чеков:",false);
   EditField(h,v+=vs,400,"Папка",Normal,StoragePath,false,0);
-  EditField(h,v+=vs,200,"Название файла",Normal,FileName,false,0);
+ // EditField(h,v+=vs,200,"Название файла",Normal,FileName,false,0);
 
   EndWindow;
 end;

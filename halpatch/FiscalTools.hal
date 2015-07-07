@@ -4,14 +4,16 @@ procedure CreateFiscalFile(area filedata)				//Edit----------------------Dima  1
 begin
 	record FiscalSetLocalBlock Fiskalblock;
 	longint tick;
+	string 30 fileName;
 	
 	BlockLoad(Fiskalblock);
+	fileName = "forFP_FM_to_C"; //Setting of FP_ConstrolService  (FPRoutes.txt);
 	
 	tick = GetCurTick;
 	if (nonblank(Fiskalblock.StoragePath)) then begin
 		//if (DirExists(Fiskalblock.StoragePath))	then begin
 		if (FileExists(Fiskalblock.StoragePath & "\\checkconnect.txt")) then begin
-			WriteAreaToFile(filedata,Fiskalblock.StoragePath & "\\" & Fiskalblock.FileName & tick & ".txt",0);
+			WriteAreaToFile(filedata,Fiskalblock.StoragePath & "\\" & fileName & tick & ".txt",0);
 		end else begin
 			MessageBox(31065,"");
 		end;
