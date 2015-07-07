@@ -2177,3 +2177,21 @@ begin
   MakeFiscalReceipt(IVr);
 
 end;
+
+
+global procedure ReprintFiscalReceipt()		//Edit----------------------Dima  07.07.2015
+begin
+	integer wn;
+	record RcVc RepSpec;
+	record IVVc IVr;
+	
+	wn = CurWindow;
+	DeselectWindow(wn,false);	
+	GetWindowRecord(wn,RepSpec);
+	
+	IVr.SerNr = RepSpec.long1;
+	if (ReadFirstMain(IVr,1,true)) then begin
+			MakeFiscalReceipt(IVr);
+	end;	
+	
+end;

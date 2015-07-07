@@ -15,7 +15,8 @@ begin
   Setting("Настройки моей регистрации",MyAccountTClass,modSL); //Edit***************************Sasha2,11:59 07.11.2014
   Setting("Настройки отображения баллов карты лояльности",MaxPointLoyCardTClass,modPOS);	//Edit------------Dima  23.12.2014
   Setting("Локальные настройки фискального принтера",FiscalSetLocalTClass,modPOS);//Edit----------------------Dima  10.06.2015
-  Setting("Печать на фискальном принтере",FiscalPrintingTClass,modPOS);
+  Setting("Печать на фискальном принтере",FiscalPrintingTClass,modPOS);				//Edit----------------------Dima  10.06.2015
+  Setting("Перепечатать чек",ReprintingFiscalReceiptTClass,modPOS);					//Edit----------------------Dima  07.07.2015
   
   Report("Анализ поставщика",VEAnaRClass,VEAnaRn,0,modPO);
   Report("Отчет по товарам по классификации (поставщику)",VERepRClass,VERepRn,0,modPO); //Edit***************************Sasha2,14:08 31.07.2014
