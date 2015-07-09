@@ -248,6 +248,8 @@ begin
 			SHr.NPIntDocNumber = "";
 			SHr.NPCostOnSite = "";
 			SHr.NPDocumentRef = "";
+			SHr.NPStatus = "";
+			SHr.NPStatusCode = 0;
 			PutWindowrecord(wn,SHr);
 		end;
   end; 
