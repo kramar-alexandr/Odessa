@@ -6209,7 +6209,7 @@ begin
   Sizeable(-1,-1,0,0);
   UseView(StockMovVc);
   ActiveFieldOnNew("SentTransDate");
-  Tile(0,90,false,"",TransDate);
+  Tile(0,100,false,"",TransDate);
   v = 6; vs = 20; h = 110; h2 = 300; h3 = 500; h4 = 620;
   EditField(h,v,80, "Номер",Normal,SerNr,false,TSerSClass);
   CheckBox(h2,v,0,"Зарезервировано",Reserved);
@@ -6228,7 +6228,7 @@ begin
     end;
     EditField(h3,v,80,"на склад",Normal,ToLocation,false,LocationSClass);
   end;
-  CheckBox(h3-100,v+vs,0,"Перемещать включая резерв",MoveIncludingReserve);//Edit----------------------Dima  18.06.2015
+  CheckBox(h3-100,v=v+vs,0,"Перемещать включая резерв",MoveIncludingReserve);//Edit----------------------Dima  18.06.2015
   tilenr = 1;
   if (HasPositions or HasModWHM or HasLocalization("PRT")) then begin
     TileButton(tilenr,"Позиции"); tilenr = tilenr + 1;
