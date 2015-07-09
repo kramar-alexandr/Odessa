@@ -2406,7 +2406,20 @@ begin
 end;
 
 
+procedure  ArrayFromArray(array string MotherArray, var array string newArray,integer fr, integer to)
+begin
+integer i,j;
+	ClearArray(newArray);
+	j=0;
+	for(i=fr;i<=to;i=i+1) begin
+		if (nonblank(MotherArray[i])) then begin
+			newArray[j] = MotherArray[i];
+			j=j+1;
+		end;
+	end;
 
+return;
+end;
 
 global updating
 procedure NPUpdateENstatusMn(record RcVc RepSpec)
@@ -2415,13 +2428,14 @@ begin
   boolean TrHs;
   string 200 getParam,host,page;
   xml xdata;
-  longint i;
+  longint i,k;
   record NPSettingsBlock NPSettingsb;
   record SHVc SHr,oldSHr;
-  array string 50 documents;
+  array string 50 documents,tempArray;
   array longint deliveries;
   vector string 50 statuses;
   string 200 docNumber,status;
+  integer steps;
 
   
 	BlockLoad(NPSettingsb); 
@@ -2439,43 +2453,50 @@ begin
 		if (TrHs and (SHr.NPStatusCode==0)) then begin
 				documents[i] = SHr.NPIntDocNumber;
 				i=i+1;
-				//LogText(0,SHr.SerNr & "  : " & SHr.NPIntDocNumber);
 			end;  
   end;
    
-
-	CreateDescriptRequestDocumentTrackig(host, page, NPSettingsb.APIkey, documents, mainRequest); 
-
-  if(MySendRawWebRequest(host,"443",true,"POST",page & getParam,"text/xml","",false,mainRequest,replyarea,10)) then begin  
-    writeareatofile(replyarea,"1statusesReply.txt",0);
-    
-    GetXMLArea(replyarea);
-    
-		xdata = ParseXMLArea(replyarea);
-		i = 0;
-
-		while(XmlNodeExists(xdata,"root/data/item[" & i & "]/Barcode")) begin
-			
-			docNumber = XmlGet(xdata,"root/data/item[" & i & "]/Barcode");
-			status = XmlGet(xdata,"root/data/item[" & i & "]/StateName");
-			
-			SHr.NPIntDocNumber = docNumber;
-			if (ReadFirstKey("NPIntDocNumber",SHr,1,true)) then begin
-					if (SHr.NPStatus != status) then begin
-						RecordCopy(oldSHr,SHr);
-						SHr.NPStatus = status;
-						if (status == USetStr(31063)) then begin
-							SHr.NPStatusCode = 1;
+	steps = documents.length / 10;
+	
+	for(k=0;k<=steps;k=k+1) begin
+	
+		ArrayFromArray(documents,tempArray,k*10,(k+1)*10-1);
+  	SetAreaZeroSize(mainRequest);
+		CreateDescriptRequestDocumentTrackig(host, page, NPSettingsb.APIkey, tempArray, mainRequest); 
+  	
+  	if(MySendRawWebRequest(host,"443",true,"POST",page & getParam,"text/xml","",false,mainRequest,replyarea,15)) then begin  
+  	  writeareatofile(replyarea,"1statusesReply.txt",0);
+  	  
+  	  GetXMLArea(replyarea);
+  	  
+			xdata = ParseXMLArea(replyarea);
+			i = 0;
+  	
+			while(XmlNodeExists(xdata,"root/data/item[" & i & "]/Barcode")) begin
+				
+				docNumber = XmlGet(xdata,"root/data/item[" & i & "]/Barcode");
+				status = XmlGet(xdata,"root/data/item[" & i & "]/StateName");
+				
+				SHr.NPIntDocNumber = docNumber;
+				if (ReadFirstKey("NPIntDocNumber",SHr,1,true)) then begin
+						if (SHr.NPStatus != status) then begin
+							RecordCopy(oldSHr,SHr);
+							SHr.NPStatus = status;
+							if (status == USetStr(31063)) then begin
+								SHr.NPStatusCode = 1;
+							end;
+							RecordUpdate(oldSHr,SHr,false);
 						end;
-						RecordUpdate(oldSHr,SHr,false);
-					end;
-			end;			
-			i = i + 1;
-		end;
-		
-    end else begin
- 		logtext(0,"Hansa World: No Connection to api.novaposhta.ua");
+				end;			
+				i = i + 1;
+			end;
+			
+  	  end else begin
+ 			logtext(0,"Hansa World: No Connection to api.novaposhta.ua");
+  	end;
+  
   end;
+  
   LNPUpdateENstatusMn:;
   return;
 end;
