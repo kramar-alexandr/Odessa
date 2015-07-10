@@ -82,6 +82,8 @@ external function Boolean GetForeignCurncyRate(string,var val,var val,var val,Da
 //external updating procedure GetRecipientContactPerson(string ,string );
 external function Boolean IsLetter(string);
 external procedure TableSortOR2(var record ORVc);//Edit----------------------Dima  07.07.2015
+external updating function boolean NPDeleteCounterparty(record NPCounterpartyVc);
+remote updating function boolean CheckCounterparty(var record ORVc);
 
 procedure SetORAcceptanceFlag(var record ORVc ORr,record ORVc prevORr,LongInt stat)
 begin
@@ -1872,6 +1874,7 @@ begin
   LongInt res;
 	val fr,to1,to2;//Edit---------------------------Dima 29.01.2015
 	Date edt;	//Edit--------------------------------Dima 29.01.2015
+	record NPCounterpartyVc NPCounterpartyr;
 
   ORr.Prntdf = 0;
   AutDelNonStockItem(ORr);
@@ -1892,6 +1895,19 @@ begin
   if (OR2r.Closed==0 and ORr.Closed!=0 and ORr.CustomStatusFlag!=5) then begin //Edit***************************Sasha2,16:19 04.02.2015 {
     ORr.CustomStatusFlag = 5;
   end; //Edit***************************Sasha2,16:19 04.02.2015 }
+  if(ORr.DeliveryNewPost != 0)then begin
+	  if(ORr.NPPhone == OR2r.NPPhone and (ORr.NPLastName != OR2r.NPLastName or ORr.NPFirstName != OR2r.NPFirstName)) then begin
+	  	NPCounterpartyr.Phone = OR2r.NPPhone;
+	  	NPCounterpartyr.LastName = OR2r.NPLastName;
+	  	NPCounterpartyr.FirstName = OR2r.NPFirstName;
+	  	if(readfirstKey("Phone",NPCounterpartyr, 3, true)) then begin
+	  		NPDeleteCounterparty(NPCounterpartyr);
+	  		CheckCounterparty(ORr);
+	  		
+	  	end;
+	  end;
+  end;
+
   
   Recalculate_CustomStatusFlagText(ORr); //Edit----------------------Dima  24.03.2015
   

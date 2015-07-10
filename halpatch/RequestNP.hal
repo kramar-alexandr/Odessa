@@ -1568,7 +1568,7 @@ procedure CreateCounterpartyRequest(string aWeb, string aPage, string aKey,strin
 begin
   string 200 getParam, host, page, webAddr;
   area basestring;
-  string 50 firstname,lastname,middlename,email,city,ownershipForm;
+  string 50 firstname,lastname,middlename,email,city,ownershipForm, ref;
   string 20 phone,counterpartyProperty,type,edrpou;
   
   lastname = NPCr.LastName;  
@@ -1581,6 +1581,7 @@ begin
   email = NPCr.Email;
   edrpou = NPCr.EDRPOU;
   ownershipForm = NPCr.OwnershipForm;
+  ref = NPCr.Ref;
   
      
 	addtexttoarea("POST " & aPage & " HTTP/1.1" & chr(13) & chr(10),aRequest);
@@ -1599,6 +1600,12 @@ begin
   AddTextToArea("				<FirstName>" & ConvertXml(firstname) & "</FirstName>" & chr(13),aRequest);
   AddTextToArea("				<MiddleName>" & ConvertXml(middlename) & "</MiddleName>" & chr(13),aRequest);  
   AddTextToArea("				<Phone>" & ConvertXml(phone) & "</Phone>" & chr(13),aRequest);  
+  
+  if(aMethod == "update")then begin
+  	AddTextToArea("				<Ref>" & ConvertXml(ref) & "</Ref>" & chr(13),aRequest);  
+  end;
+
+  
   if (nonblank(email)) then begin 
   	AddTextToArea("				<Email>" & ConvertXml(email) & "</Email>" & chr(13),aRequest);
   end;  
@@ -1719,6 +1726,97 @@ begin
 end;
 
 
+//*******
+
+procedure deleteCounterpartyRequest(string aWeb, string aPage, string aKey,string aModel,string aMethod,string aParam,record NPCounterpartyVc NPCr, var area aRequest)
+begin
+  string 200 getParam, host, page, webAddr;
+  area basestring;
+  string 50 firstname,lastname,middlename,email,city,ownershipForm, ref;
+  string 20 phone,counterpartyProperty,type,edrpou;
+  
+  ref = NPCr.Ref;
+  
+     
+	addtexttoarea("POST " & aPage & " HTTP/1.1" & chr(13) & chr(10),aRequest);
+ 	addtexttoarea("host: " & aWeb & chr(13) & chr(10),aRequest);
+ 	AddTextToArea("" & chr(13) & chr(10),aRequest);
+ 	AddTextToArea("<?xml version=""1.0"" encoding=""UTF-8""?>" & chr(13),aRequest);
+  AddTextToArea("<file>"& chr(13),aRequest);
+  AddTextToArea("   <apiKey>" & ConvertXml(aKey) & "</apiKey>" & chr(13),aRequest);
+  AddTextToArea("   <modelName>" & ConvertXml(aModel) & "</modelName>" & chr(13),aRequest);
+  AddTextToArea("   <calledMethod>" & ConvertXml(aMethod) & "</calledMethod>" & chr(13),aRequest);
+  AddTextToArea("		<methodProperties>"& chr(13),aRequest);
+ 	AddTextToArea("				<Ref>" & ConvertXml(ref) & "</Ref>" & chr(13),aRequest);  
+        
+  AddTextToArea("		</methodProperties>" & chr(13),aRequest);
+  AddTextToArea("</file>" & chr(13),aRequest);
+  
+	AddTextToArea("" & chr(13) & chr(10),aRequest);
+	AddTextToArea("" & chr(13) & chr(10),aRequest);
+	AddTextToArea("" & chr(13) & chr(10),aRequest);
+	AddTextToArea("" & chr(13) & chr(10),aRequest);
+	
+	//writeareatofile(aRequest,"1CounterpartyDeleteRequest.txt",0);	
+		  
+return;
+end;
+
+global updating
+function boolean NPDeleteCounterparty(var record NPCounterpartyVc NPCounterpartyr)
+begin
+  area request,replyarea,mainRequest;
+  boolean res;
+  string 10 resStr;
+  string 200 getParam,host,page,webaddr,path;
+  area basestring;
+  xml xdata;
+  string 255 xpath, descr;
+  longint i,j;
+  record NPCounterpartyVc NPCr;
+  row NPCounterpartyVc NPCrw;
+  record NPCityVc NPCityr;
+  record NPSettingsBlock NPSettingsb;
+  
+	BlockLoad(NPSettingsb);
+  if (blank(NPSettingsb.APIkey)) then begin
+  	goto LNPDeleteCounterparty;
+  end;		
+  
+  host = "api.novaposhta.ua";
+  page = "/v2.0/xml/";
+  res = true;
+  
+	deleteCounterpartyRequest(host, page, NPSettingsb.APIkey, "Counterparty","delete", "",NPCounterpartyr, mainRequest);
+
+  if(MySendRawWebRequest(host,"443",true,"POST",page & getParam,"text/xml","",false,mainRequest,replyarea,10)) then begin  
+    //messagebox(0,"Connection on!");
+    //writeareatofile(replyarea,"1CounterpatyDeleteReply.txt",0);
+     
+    GetXMLArea(replyarea);
+    
+		xdata = ParseXMLArea(replyarea);
+		i = 0;
+		
+		
+		resStr = XmlGet(xdata,"root/success");
+		if (resStr=="false") then begin
+			res = false;
+			goto LNPDeleteCounterparty;
+		end else begin 
+			if(resStr=="true") then begin 
+				RecordDelete(NPCounterpartyr);
+			end;			
+		end;
+		
+    end else begin
+ 		logtext(0,"Hansa World: No Connection to api.novaposhta.ua");
+  end;	
+ 
+ 	LNPDeleteCounterparty:;
+ 	NPDeleteCounterparty = res;
+  return;
+end;
 
 
 procedure SaveCounterpartyAddressRequest(string aWeb, string aPage, string aKey,string aModel,string aMethod,string aParam,record RcVc RepSpec, var area aRequest)
