@@ -2166,7 +2166,8 @@ end;
 
 
 
-global procedure PrintFiscalReceipt()		//Edit----------------------Dima  10.06.2015
+global 
+updating procedure PrintFiscalReceipt()		//Edit----------------------Dima  10.06.2015
 begin
 	record IVVc IVr;
 	integer wn;
@@ -2175,11 +2176,16 @@ begin
   GetWindowRecord(wn,IVr);
   
   MakeFiscalReceipt(IVr);
+  if (IVr.FiscalFlag < 1) then begin
+    IVr.FiscalFlag = 1;
+    RECORDSTORE(IVr,true);
+  end;
 
 end;
 
 
-global procedure ReprintFiscalReceipt()		//Edit----------------------Dima  07.07.2015
+global 
+updating procedure ReprintFiscalReceipt()		//Edit----------------------Dima  07.07.2015
 begin
 	integer wn;
 	record RcVc RepSpec;
@@ -2192,6 +2198,10 @@ begin
 	IVr.SerNr = RepSpec.long1;
 	if (ReadFirstMain(IVr,1,true)) then begin
 			MakeFiscalReceipt(IVr);
+			if (IVr.FiscalFlag < 1) then begin
+        IVr.FiscalFlag = 1;
+        RECORDSTORE(IVr,true);
+      end;
 	end;	
 	
 end;

@@ -98,7 +98,7 @@ LkInvoiceTypeCredit:;
     ReRunWindowDef(wn);
     WindowFieldGotoForTouchScreen(wn,-1,"ivcashcommand",true);
     if (nonblank(Fiskalblock.StoragePath)) then begin
-	  	if (IVr.OKFlag > 0) then begin	
+	  	if (IVr.OKFlag > 0 and IVr.FiscalFlag > 0) then begin //Edit***************************Sasha2,14:05 14.07.2015	
 					MakeFiscalReceipt(IVr);		//Edit----------------------Dima  16.06.2015
 			end;
 		end;
@@ -174,7 +174,7 @@ BEGIN
     ResetDisplayDsm;  
     ReRunWindowDef(wn);
     if (nonblank(Fiskalblock.StoragePath)) then begin
-	  	if ((IV2r.OKFlag == 0) and (IVr.OKFlag > 0)) then begin	
+	  	if ((IV2r.OKFlag == 0) and (IVr.OKFlag > 0) and IVr.FiscalFlag > 0) then begin	
 					MakeFiscalReceipt(IVr);		//Edit----------------------Dima  16.06.2015
 			end; 
 		end;   
