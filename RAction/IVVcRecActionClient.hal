@@ -199,6 +199,7 @@ begin
     //IVr.CurncyCode = "UAH";				//	*****	Edit by Victor 04.11.14
     ResetDisplayDsm;
 //    ReRunWindowDef(wn);  in IVDClassOnOpenWindow
+    IVr.FiscalFlag = 1; //Edit***************************Sasha2,14:31 14.07.2015
     WindowFieldGotoForTouchScreen(wn,-1,"ivcashcommand",true);
   end;
   //IVr.CurncyCode = "UAH";				//	*****	Edit by Victor 04.11.14
