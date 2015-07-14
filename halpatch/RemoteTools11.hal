@@ -934,13 +934,13 @@ begin
       IVp.DelAddr4 = "";
       IVp.DelCountry = "";
     end;
-    if (HasLocalization("HRV")) then begin
+    /*if (HasLocalization("HRV")) then begin //Edit***************************Sasha2,16:34 14.07.2015 {
       if (LMb.SendFiscalInvoice==0) then begin
         IVp.FiscalFlag = CUr.FiscalFlag;
       end;
     end else begin
       IVp.FiscalFlag = CUr.FiscalFlag;
-    end;
+    end;*/ //Edit***************************Sasha2,16:34 14.07.2015 }
     IVp.SelfBilling = CUr.SelfBilling;
     IVp.VATNr = CUr.VATNr;
     IVp.InvComment = CUr.OrderComment;
