@@ -2454,3 +2454,184 @@ begin
   end;
   EndWindow;
 end;
+
+window IVJRClass:1
+	wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+	real h,h2,hs,v,v3,vm,vs,l;
+
+	WindowBegin("Определите журнал счетов",IVJRClass,CGRcW,RcType);
+	SetWRect(20,80,520,390);
+	vs = 20;
+	hs=148;
+	if (IsEnterprise) then begin
+		if (HasLocalization("ARG,HRV,LTU,LVA,POL,PRT,RUS") or (HasOfficialSerNr and HasPreferedOfficialSerNr==false))	then begin
+		Tile(0,40,false,"",f1);
+		end else begin
+			Tile(0,20,false,"",f1);
+		end;
+	end;
+
+	v = 6; h = 150;
+	if (HasPreferedOfficialSerNr) then begin
+		EditFieldTL(h,v,150,"Официальный номер",M4UStr,Normal,41,f6,false,0);
+		v = v + 20;
+		if (HasLocalization("POL,PRT")==false)	then begin
+			EditFieldTL(h,v, 150,"Номер сч/ф",M4Str,Normal,30,f1,false,0);
+			v = v + 20;
+		end;
+	end else begin
+		EditFieldTL(h,v,150,"Номер сч/ф",M4Str,Normal,30,f1,false,0);
+		v = v + 20;
+		if (HasOfficialSerNr) then begin
+			EditFieldTL(h,v,150,"№ для печати",M4UStr,Normal,41,f6,false,0);
+			v = v + 20;
+		end;
+	end;
+
+	if (IsEnterprise) then begin
+		TileButtons(v,2);
+		Tile(1,380,false,"1",f2);
+		v = 6;
+		vm = v;
+	end;
+	PeriodField(h,v,"Период");
+	EditFieldTL(h,v+=vs, 150,"Период кредит. сч/ф",M4UStr,Normal,21,Period2Str2,false,PerSClass);
+	EditFieldTL(h,v+=vs ,150,"Клиент",M4UStr,Normal,50,f2,false,CUSClass);
+	if (HasCategories) then begin
+		EditFieldTL(h,v+=vs ,70,"Категория",M4UStr,Normal,5,f3,false,CCatSClass);
+	end;
+	if (HasContactClassification) then begin
+		EditFieldTL(h,v+=vs ,70,"Виды классификации",M4UStr,Normal,60,f5,false,CTypeSClass);
+		EditFieldTL(h,v+=vs ,70,"Классификация",M4UStr,Normal,30,f4,false,CClassSClass);
+	end;
+	if (HasSalesman) then begin
+		EditFieldTL(h,v+=vs ,70,"Продавец",M4UStr,Normal,10,AccStr,false,UserSClass);
+	end;
+	if (HasObjects) then begin
+	 EditFieldTL(h,v+=vs,250,"Объект",M4UStr,Normal,60,ObjStr,false,ObjSClass);
+	 EditFieldTL(h,v+=vs,50,"Тип объекта",M4UStr,Normal,5,ObjType,false,OTSClass);
+		EditFieldTL(h,v+=vs,250,"Объект строки",M4UStr,Normal,60,f11,false,ObjSClass);	
+	end;
+	if (HasModTS) then begin
+		EditFieldTL(h,v+=vs,50,"Проект",M4UStr,Normal,20,FirstAcc,false,PRSClass);
+	end;
+	if (HasMultiLocations) then begin
+		EditFieldTL(h,v+=vs,70,"Склад",M4UStr,Normal,60,LastAcc,false,LocationSClass);
+	end;
+	if (IsEnterprise) then begin
+		EditFieldTL(h,v+=vs,50,"Условия оплаты",M4UStr,Normal,5,TransStr,false,PDSClass);
+		EditFieldTL(h,v+=vs,50,"Перв. клиент",M4Code,Normal,20,f12,false,CUSClass);	
+	end;
+	if (IsEnterprise) then begin
+		EditFieldTL(h,v3=(v+=vs),50,"Миним. сумма",M4Val,Normal,0,vals0,false,0);
+	end;
+	if (IsEnterprise) then begin
+		h = 320;
+		v = vm + 10;
+	end else begin
+		v = v + 40;
+		v3 = v + 20;
+		vm = v;
+	end;
+	ButtonFrame(h,v,123,5,"Статус");
+	CheckBox(h,v,0,"Неутвержденные",flags[1]);
+	CheckBox(h,v+=16,0,"Утвержденные",flags[2]);
+	if (IsEnterprise) then begin
+		RadioButton(h,v+=16,0,0,"Вкл. спорные",flags[7]);
+		RadioButton(h,v+=16,1,0,"Искл. спорные",flags[7]);
+		RadioButton(h,v+=16,2,0,"Только спорные",flags[7]);
+	end;
+	RadioButton(h,v+=20,0,0,"Вкл. фискальные",flags[8]);
+	RadioButton(h,v+=16,1,0,"Искл. фискальные",flags[8]);
+	RadioButton(h,v+=16,2,0,"Только фискальные",flags[8]);
+	EndFrame;
+
+	v3 = v3 + 41;
+	v = v3;
+	if (IsEnterprise) then begin
+		vm = v;
+	end;
+	ButtonFrame(h=148,v,123,3,"Функция");
+	RadioButton(h,v,0,0,"Сводный",ArtMode);
+	RadioButton(h,v+=16,1,0,"Подробный",ArtMode);
+	if (HasMultiCurrency) then begin
+		RadioButton(h,v+=16,4,0,"Сводный с валют.",ArtMode);
+	end;
+	EndFrame;
+	if (IsEnterprise==false and HasBase2) then begin
+		CheckBox(h,v+=42,0,"Пок-ть осн. валюта 1 & 2 Итоги",flags[12]);
+	end;
+
+	if (IsEnterprise) then begin
+		h2 = 320;
+		l = 160;
+	end else begin
+		h2 = h + 148;
+		l = 160;
+	end;
+	ButtonFrame(h2,v=vm,l,5,"Сортировка");
+	if (HasModNL) then begin
+		RadioButton(h2,v,0,0,"дате операции",flags[10]);
+	end else begin
+		RadioButton(h2,v,0,0,"дате сч/ф",flags[10]);
+	end;
+	if (HasLocalization("BRA,POL,PRT")) then begin
+		RadioButton(h2,v+=16,5,0,"номеру сч/ф",flags[10]);
+	end else begin
+		RadioButton(h2,v+=16,1,0,"номеру сч/ф",flags[10]);
+	end;
+	if (HasMultiLocations) then begin
+		RadioButton(h2,v+=16,2,0,"складу (из загол.)",flags[10]);
+	end;
+	if (HasOfficialSerNr) then begin
+		RadioButton(h2,v+=16,3,0,"№ для печати",flags[10]);
+	end;
+	if (IsEnterprise) then begin
+		RadioButton(h2,v+=16,4,0,"дате сч/ф",flags[10]);
+	end;
+	EndFrame;
+	if (IsEnterprise) then begin
+		Tile(2,330,false,"2",Stext);
+		v = 6;
+		EditFieldTL(h=150,v,100,"Группа товаров",M4UStr,Normal,21,Stext,false,ITSClass);
+		EditFieldTL(h,v+=vs,100,"Товар",M4UStr,Normal,41,f10,false,INSClass);
+		EditFieldTL(h=150,v+=vs,100,"Счет продаж",M4UStr,Normal,21,f7,false,AccSClass);
+		EditFieldTL(h=150,v+=vs,100,"Счет должника",M4UStr,Normal,21,f8,false,AccSClass);
+		if (StandardHansa==false) then begin
+			EditFieldTL(h=150,v+=vs,100,"Осн. партнер",M4UStr,Normal,20,f9,false,CUSClass);
+		end;
+		//		EditFieldTL(h,v+=vs,50,"Order Class",M4UStr,Normal,5,Stext,false,OrderClassSClass); // no more strings to use....
+		ButtonFrame(h=50,vm = (v+=40),123,4,"Вид счета");
+		CheckBox(h,v,0,"Счета-фактуры",flags[3]);
+		CheckBox(h,v+=16,0,"Кассовые ордера",flags[4]);
+		CheckBox(h,v+=16,0,"Счета кредита",flags[5]);
+		CheckBox(h,v+=16,0,"Счета пени",flags[6]);
+		CheckBox(h,v+=26,0,"Сч/ф, влияющие на книгу продаж",flags[19]);
+		StaticText(h+17,v+=30,"(не учитывать тип сч/ф)",false);
+		CheckBox(h=220,v=vm,0,"Показать коммент.",flags[11]);
+		CheckBox(h,v+=16,0,"Суммы в осн. валюте 1 и 2",flags[12]);
+		if (StandardHansa==false) then begin
+			CheckBox(h,v+=16,0,"Только фискальные сч/ф",flags[13]);
+		end;
+		CheckBox(h,v+=16,0,"Показывать аннулированные сч/ф",flags[14]);
+		CheckBox(h,v+=16,0,"Показывать счёт НДС",flags[15]);
+		CheckBox(h,v+=16,0,"Только нераспечатанные сч/ф",flags[17]);
+		CheckBox(h,v+=16,0,"Включая орг. клиентов",flags[18]);
+		CheckBox(h,v+=16,0,"Invoices with Total amount equal zero",flags[20]);
+		CheckBox(h+=hs,v=vm,0,"Показать № для печати",flags[16]);
+	end else begin
+		ButtonFrame(h+=148,v+=41,123,3,"Тип сч.");
+		CheckBox(h,v,0,"Счет",flags[3]);
+		CheckBox(h,v+=16,0,"Сч.на наличные",flags[4]);
+		CheckBox(h,v+=16,0,"Кредит-ноты",flags[5]);
+		if (HasLocalization("PRT")) then begin
+			CheckBox(h,v+=16,0,"Счета пени",flags[6]);
+		end;
+		EndFrame;
+		if (HasLocalization("PRT")) then begin
+			CheckBox(h,v+=24,0,"Invoices with Total equal zero",flags[20]);
+		end;
+	end;
+	EndWindow;
+end;

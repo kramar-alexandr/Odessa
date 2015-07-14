@@ -1115,6 +1115,20 @@ begin
         end;
       end;
       if (testf) then begin
+        if (RepSpec.flags[8]==1) then begin
+          if (IVr.FiscalFlag==1) then begin
+            testf = false;
+          end;
+        end;
+      end;
+      if (testf) then begin
+        if (RepSpec.flags[8]==2) then begin
+          if (IVr.FiscalFlag<>1) then begin
+            testf = false;
+          end;
+        end;
+      end;
+      if (testf) then begin
        if (nonblank(RepSpec.FirstAcc)) then begin
           if (RepSpec.FirstAcc<>IVr.PRCode) then begin
             testf = false;
