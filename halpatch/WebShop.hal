@@ -254,6 +254,7 @@ begin
   val qty,price,sum;
   string 255 artcode,artspec,inwarning,warning,errors;
   Boolean chsum, chsumConfirm;
+  string 10 rebgroup;
   
   logText(0,"WebGetOrder");
   webgetpostdata(aPost); //Edit***************************Sasha2,15:18 04.07.2014
@@ -276,6 +277,7 @@ begin
   nodeORCnt = XmlCountChildren(xmlPost,"orders");
   ORCnt = 0;
   for (i=0;i<nodeORCnt;i=i+1) begin 
+  	rebgroup = "";
 		if (XmlNodeExists(xmlPost,"orders/order" & i)) then begin
 			ORCnt = ORCnt + 1;
 			ORr.CustOrdNr = XmlGetAttribute(xmlPost,"orders/order" & i,"orderno"); 
@@ -288,8 +290,31 @@ begin
 			end;
 			ORr.OrdDate = CurrentDate;
 			Cur.eMail = XmlGetAttribute(xmlPost,"orders/order" & i,"email");
+			
+			rebgroup = XmlGetAttribute(xmlPost,"orders/order" & i,"group_id");
+			
 			if (!ReadFirstKey("eMail",Cur,1,true)) then begin
 				CreateCUFromXML(CUr,xmlPost,i,errors);
+			end else begin
+				if(nonblank(CUr.RebCode))then begin
+					if(CUr.CustCat=="WEB")then begin
+						switch(rebgroup)begin
+							case"6":if(CUr.RebCode<"5%")then begin CUr.RebCode = "5%"; end;
+							case"5":if(CUr.RebCode<"10%")then begin CUr.RebCode = "10%"; end;
+							case"4":if(CUr.RebCode<"15%")then begin CUr.RebCode = "15%"; end;
+							recordStore(CUr,true);
+						end;
+					end;
+				end else begin
+					if(CUr.CustCat=="WEB")then begin
+						switch(rebgroup)begin
+							case"6":CUr.RebCode = "5%";
+							case"5":CUr.RebCode = "10%";
+							case"4":CUr.RebCode = "15%";
+							recordStore(CUr,true);
+						end;
+					end;
+				end;
 			end;
 			ORr.CustCode = Cur.Code;
 			ORr.Addr0 = Cur.Name;
