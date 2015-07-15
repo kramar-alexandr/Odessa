@@ -2542,7 +2542,7 @@ begin
 		RadioButton(h,v+=16,1,0,"Искл. спорные",flags[7]);
 		RadioButton(h,v+=16,2,0,"Только спорные",flags[7]);
 	end;
-	RadioButton(h,v+=20,0,0,"Вкл. фискальные",flags[8]);
+	RadioButton(h,v+=20,0,0,"Все",flags[8]);
 	RadioButton(h,v+=16,1,0,"Искл. фискальные",flags[8]);
 	RadioButton(h,v+=16,2,0,"Только фискальные",flags[8]);
 	EndFrame;
