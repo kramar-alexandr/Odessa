@@ -1478,6 +1478,7 @@ begin
     //OpenCashDrawer_IVVc(IVr);// Edit ************************** Thursday, 25 June 2015 15:08:16
     CloseWindow(wn);
     RecordNew(newIVr);
+    newIVr.FiscalFlag = 1; //Edit***************************Sasha2,15:24 15.07.2015
     IVDefaultsClient(newIVr,dummyIVr,1,1);
     nwn = OpenWindow("IVDClass",1,0,"","",newIVr);
     /*if (blank(newIVr.CustCode)) then begin// Edit ************************** Thursday, 25 June 2015 15:11:07
