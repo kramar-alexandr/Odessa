@@ -18,9 +18,11 @@ Begin
 
 	for(i=0;i<rwcnt;i=i+1) begin
 		MatRowGet(ORr,i,ORrw);
-		if (ORrw.ArtCode<min) then begin
-			min = ORrw.ArtCode;
-			pos = i;		
+		if (nonblank(ORrw.ArtCode)) then begin
+			if (ORrw.ArtCode<min) then begin
+				min = ORrw.ArtCode;
+				pos = i;		
+			end;
 		end;
 	end;
 MinInTableOR = pos;
@@ -55,8 +57,8 @@ begin
 	end;
 	
 	//strange bug. Sometimes the matrix is shifted by 1 row
-	MatRowGet(ORr,0,ORrw);
-	if (blank(ORrw.ArtCode) and blank(ORrw.Sum)) then begin MatRowDelete(ORr,0);	end;
+	//MatRowGet(ORr,0,ORrw); 
+	//if (blank(ORrw.ArtCode) and blank(ORrw.Sum)) then begin MatRowDelete(ORr,0);	end;//if blank ArtCode maybe
 
 end;
 
@@ -150,7 +152,7 @@ Begin
 
 		switch (key) begin
 			case "ArtCode":		
-					if (SMrw.ArtCode<min) then begin
+					if ((SMrw.ArtCode<min) and nonblank(SMrw.ArtCode)) then begin
 						min = SMrw.ArtCode;
 						pos = i;		
 					end;
