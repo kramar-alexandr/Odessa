@@ -1312,3 +1312,115 @@ begin
   IPVc_PasteInvoiceOfficialSerNr = res;
   return;
 end;
+
+
+global 
+updating procedure SetORStatusFinished(record IPVc IPr)	//Edit----------------------Dima  15.07.2015
+begin
+  record ORVc ORr,oldORr;
+  record ARVc ARr;
+	record IVVc IVr,IV1r;
+  row IPVc IPrw;
+	val orderedSum;
+	integer rwcnt,i;
+	Boolean TrHs;
+	longint serialNr;	
+
+	
+	rwcnt = MatRowCnt(IPr);
+	
+	for(i=0;i<rwcnt;i=i+1) begin
+		MatRowGet(IPr,i,IPrw);
+		if (nonblank(IPrw.InvoiceNr)) then begin
+			orderedSum = 0;
+			TrHs = true;
+			IV1r.SerNr = IPrw.InvoiceNr;
+			ReadFirstMain(IV1r,1,true);
+			serialNr = IV1r.OrderNr;
+			
+			IVr.OrderNr = serialNr;
+			While(LoopKey("OrderNr",IVr,1,TrHs)) begin
+				if(IVr.OrderNr != serialNr) then begin TrHs = false; end;
+				ARr.InvoiceNr = IVr.SerNr;
+				if (ReadFirstMain(ARr,1,true)) then begin 
+					if (ARr.RVal>0) then begin TrHs = false; end;
+				end; //ARVc exist if only ARr.RVal>0 (invoice is open)
+				
+				if (TrHs) then begin
+					orderedSum = orderedSum + IVr.Sum4;
+				end;
+			end;
+			ResetLoop(IVr);
+			
+			ORr.SerNr = serialNr;
+			if (ReadFirstMain(ORr,1,true)) then begin
+				if (ORr.Sum4 == orderedSum) then begin
+						RecordCopy(oldORr,ORr);
+      			ORr.CustomStatusFlag = 3; //order is finished;
+      			RecordUpdate(oldORr,ORr,true);
+				end;	
+			end;		
+			
+		end;
+	
+	end;	
+end;
+
+
+global updating procedure AddPaymentToIPFromSH(record SHVc SHr)
+begin
+  record IPVc IPr,oldIPr;
+  row IPVc IPrw;
+  record IVVc IVr;
+  integer rwcnt,i;
+  boolean TrHs,exist;
+  Boolean installmentf;
+  val chk;  
+  
+  IPr.Sign = CurrentUser;
+  IPr.TransDate = CurrentDate;
+  TrHs = true;
+  exist = false;
+  
+  While(LoopKey("TransDate",IPr,1,TrHs)) begin
+		if (IPr.TransDate>CurrentDate) then begin TrHs = false; end;
+		
+		if ((IPr.Sign == CurrentUser) and (IPr.OKFlag==0)) then begin			
+			exist = true;
+			TrHs = false;
+			RecordCopy(oldIPr,IPr);
+		end;
+	end; 
+	
+	if (exist == false) then begin
+		RecordNew(IPr);
+  	IPr.SerNr = NextSerNr("IPVc",CurrentDate,-1,false,"");		
+	  IPr.Sign = CurrentUser;
+	  IPr.TransDate = CurrentDate;	 
+	end;
+	
+	rwcnt = MatRowCnt(IPr);
+	
+	IVr.OrderNr = SHr.OrderNr;
+	if (ReadFirstKey("OrderNr",IVr,1,true)) then begin
+	
+		IPrw.InvoiceNr = IVr.SerNr;
+		MatRowPut(IPr,rwcnt,IPrw);
+		PasteInvIn2IPr(IPr,rwcnt,CurrentDate,chk,false,installmentf);
+		MatRowGet(IPr,rwcnt,IPrw);
+		IPrw.BankCurncy = "UAH_R";
+		MatRowPut(IPr,rwcnt,IPrw);
+		IPVc_PasteBankCurncy(IPr,rwcnt);
+		
+		IPr.Comment = USetStr(9342) & ": " & CurrentUser;
+		
+		if (exist) then begin
+			RecordUpdate(oldIPr,IPr,true);
+		end else begin
+			RecordInsert(IPr,true);
+		end;
+	
+	end;
+	
+	
+end;

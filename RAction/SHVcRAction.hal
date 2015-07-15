@@ -68,6 +68,8 @@ external function val FindPUBaseRate2forSerialNr(string,string);
 external function string 30 GetCustomOfficialSerNr(); //Edit***************************Sasha2,11:42 08.01.2015
 external updating procedure SHVcToPackListVc(var record SHVc);									//Edit----------------------Dima  07.05.2015
 external updating procedure PackListVcToSHVc(record PackListVc,var record SHVc);	//Edit----------------------Dima  19.05.2015
+external updating procedure AddPaymentToIPFromSH(record SHVc);
+
 
 function Boolean StockMovOKedForSH(LongInt shnr,var LongInt stmovnr)
 begin
@@ -1464,6 +1466,8 @@ end;
 
 
 
+
+
 global
 updating function LongInt SHVcRecordSave(var record SHVc SHr,record SHVc SH2r,LongInt stat,LongInt long4)
 begin
@@ -1662,7 +1666,14 @@ begin
   	SHr.NPIntDocNumber = blankval;
   	SHr.NPDocumentRef = blankval;
   	SHr.NPCostOnSite = blankval;
-	end;  
+	end;
+
+  if (SHr.Assembly>0 and SH2r.Assembly==0) then begin
+		AddPaymentToIPFromSH(SHr);
+	end;	
+	
+
+		  
   SHVcRecordUpdate = res; 
   return;
 end;
