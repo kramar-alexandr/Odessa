@@ -1132,7 +1132,6 @@ begin
     StaticText(h2,v+20,tstr,false);
   end;
   
-  CheckBox(h3+100,4*av,0,"",FiscalFlag); //Edit***************************Sasha2,13:44 14.07.2015
 
 LDisplayRecordDetails_RUS01:;  
   return;
