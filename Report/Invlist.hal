@@ -899,6 +899,10 @@ begin
           end;
         end;
       end;
+      
+      CUr.Code = IVr.CustCode;// Edit ************************** Wednesday, 15 July 2015 15:11:18
+			ReadFirstMain(CUr,1,true);// Edit ************************** Wednesday, 15 July 2015 15:11:19
+			
       if ((nonblank(RepSpec.f3)) or (nonblank(RepSpec.f4)) or (nonblank(RepSpec.f5)) or (nonblank(RepSpec.f9))) then begin
         CUr.Code = IVr.CustCode;
         if (ReadFirstMain(CUr,1,true)) then begin
@@ -1371,7 +1375,7 @@ LkInvoiceTypeCredit1:;
                     OutStringOvst(0,"DblCustPS2",CreateInvoiceNumber(IVr.SerNr,IVr.OfficialSerNr),false,IVr.Invalid);
                   end;
                   OutDate(60,0,IVr.InvDate,false);
-                  OutString(90,0,IVr.RebCode,false); //Edit***************************Sasha2,9:30 03.06.2015
+                  OutString(90,0,CUr.RebCode,false); //Edit***************************Sasha2,9:30 03.06.2015
                   OutStringCut(120,170,0,IVr.Addr0,false,0);//Edit***************************Sasha2,9:30 03.06.2015
                   tstr = "";
                   if (IVr.InvType==kInvoiceTypeNormal or IVr.InvType==kInvoiceTypeNormalSpecialSales) then begin
@@ -1416,7 +1420,7 @@ LkInvoiceTypeCredit1:;
                 OutStringOvst(0,"DblCustPS2",CreateInvoiceNumber(IVr.SerNr,IVr.OfficialSerNr),false,IVr.Invalid);
               end;
               OutDate(60,0,IVr.InvDate,false);
-              OutString(90,0,IVr.RebCode,false); //Edit***************************Sasha2,9:30 03.06.2015
+              OutString(90,0,CUr.RebCode,false); //Edit***************************Sasha2,9:30 03.06.2015
               OutStringCut(120,220,0,IVr.Addr0,false,0); //Edit***************************Sasha2,9:34 03.06.2015
               tstr = "";
               if (IVr.InvType==kInvoiceTypeNormal or IVr.InvType==kInvoiceTypeNormalSpecialSales) then begin
@@ -1472,7 +1476,7 @@ LkInvoiceTypeCredit1:;
             StartFormat(15);
             OutString(0,"DblCustPS2",CreateInvoiceNumber(IVr.SerNr,IVr.OfficialSerNr),false);
             OutDate(60,0,IVr.InvDate,false);
-            OutString(90,0,IVr.RebCode,false); //Edit***************************Sasha2,9:30 03.06.2015
+            OutString(90,0,CUr.RebCode,false); //Edit***************************Sasha2,9:30 03.06.2015
             OutStringCut(120,275,0,IVr.Addr0,false,0); //Edit***************************Sasha2,9:35 03.06.2015
             tstr = "";
             if (IVr.InvType==kInvoiceTypeNormal or IVr.InvType==kInvoiceTypeNormalSpecialSales) then begin
@@ -1530,7 +1534,7 @@ LkInvoiceTypeCredit1:;
           StartFormat(15);
           OutString(0,"DblCustPS2",CreateInvoiceNumber(IVr.SerNr,IVr.OfficialSerNr),false);
           OutDate(60,0,IVr.InvDate,false);
-          OutString(90,0,IVr.RebCode,false); //Edit***************************Sasha2,9:30 03.06.2015
+          OutString(90,0,CUr.RebCode,false); //Edit***************************Sasha2,9:30 03.06.2015
           OutString(120,0,IVr.Addr0,false);
 //          OpM44o(120,295,0,&IVr.Addr0,M4Str,false,false);
           tstr = "";
