@@ -9367,3 +9367,58 @@ begin
   end;
   EndWindow;
 end;
+
+window IPLClass:1
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  real hoff,pos;
+  WindowBegin("Платежи",IPLClass,CGmlist,-);  
+  SetWRect(20,80,760,291);
+  Sizeable(-1,-1,0,0);
+  SpawnClass(IPDClass);
+  UseView(IPVc);
+  if (GuiType==kGuiiPhone) then begin
+    hoff = 50;
+  end;
+  RecordList(4,17,-21,-39);
+  if (HasOfficialSerNr) then begin
+    RlColKey(4,4,"№.",SerNr,false,SerNr); pos = 76;  
+    RlColKey(pos,pos,"Офиц. №",OfficialSerNr,false,OfficialSerNr); pos = pos + 110;  
+  end else begin
+    RlColKey(4,4,"№.",SerNr,false,SerNr); pos = 76;  
+  end;
+  RlColKey(pos,pos,  "OK",OKMark,false,OKMark); pos = pos + 35;  
+  RlColKey(pos,pos,"Дата опер.",TransDate,false,TransDate); pos = pos + 74;  
+  if (IsEnterprise) then begin
+    RlColKey(pos+hoff,pos+hoff,"Ссылка",RecNumber,false,RecNumber); pos = pos + 90;  
+    RlCol   (pos+hoff,pos+hoff,"Комментарий",Comment,false);  pos = pos + 100;  
+  end else begin
+    RlCol   (pos+hoff,pos+hoff,"Комментарий",Comment,false);  
+  end;
+  RlCol   (-180,-180,"Менеджер",Sign,false);			//Edit----------------------Dima  15.07.2015
+  if (HasMultiCurrency or HasBase2) then begin
+    RlColKey   (-121,-121,"Сумма",CurPayVal,true,CurPayVal);
+    RlCol   (-30,-30,"Валюта",PayCurCode,true);
+  end else begin
+    RlColKey   (-90,-90,"Сумма",CurPayVal,true,CurPayVal);
+  end;
+  SearchField("Найти");
+
+  if (GuiType==kGuiMetro) then begin
+    RowMenuBegin("");
+    RowMenuItem(0,"OK",'G','G',4312,"OKIPLsm");  
+    EndRowMenu;
+    if (IsEnterprise) then begin
+      SpecMenuGroup("",kSpecMenuGroupTypeButtonsInBottomBarRight,0);  
+      SpecialMenuWithIcon("Создать платежи клиентов",' ',4313,1,"IPFromIPLsm");  
+      SpecialMenuWithIcon("Экспортировать прямое дебетование",' ',4313,2,"IPDDExpIPLsm");  
+    end;
+  end else begin
+    SpecialMenu("OK",'G',0,"OKIPLsm");
+    if (IsEnterprise) then begin
+      SpecialMenu("Создать платежи клиентов",' ',1,"IPFromIPLsm");
+      SpecialMenu("Экспортировать прямое дебетование",' ',2,"IPDDExpIPLsm"); //!!PRODTRANSLATE
+    end;
+  end;
+  EndWindow;
+end;
