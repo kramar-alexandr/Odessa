@@ -302,8 +302,8 @@ begin
 							case"6":if(CUr.RebCode<"5%")then begin CUr.RebCode = "5%"; end;
 							case"5":if(CUr.RebCode<"10%")then begin CUr.RebCode = "10%"; end;
 							case"4":if(CUr.RebCode<"15%")then begin CUr.RebCode = "15%"; end;
-							recordStore(CUr,true);
 						end;
+						recordStore(CUr,true);
 					end;
 				end else begin
 					if(CUr.CustCat=="WEB")then begin
@@ -311,8 +311,8 @@ begin
 							case"6":CUr.RebCode = "5%";
 							case"5":CUr.RebCode = "10%";
 							case"4":CUr.RebCode = "15%";
-							recordStore(CUr,true);
 						end;
+						recordStore(CUr,true);
 					end;
 				end;
 			end;
