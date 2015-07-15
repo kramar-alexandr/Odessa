@@ -1414,7 +1414,7 @@ BEGIN
     GetPriceList(IVr.CustCat,IVr.TransDate,IVr.TransTime,IVr.PriceList,IVr.InclVAT);
     IVr.ExportFlag = CUr.ExportFlag;
     IVr.PayDeal = CUr.PayDeal;
-    IVr.FiscalFlag = CUr.FiscalFlag;
+    //IVr.FiscalFlag = CUr.FiscalFlag; //Edit***************************Sasha2,11:10 15.07.2015
     PastePDInInv(IVr,"",false);
   end;
   PasteCustInInv = found;

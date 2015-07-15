@@ -1536,7 +1536,7 @@ no way of making credit notes ?
   WarnFutureDate(true,IVr.TransDate);
   WarnFutureDate(true,IVr.InvDate);
   if (TouchScreenInterface) then begin
-    IVr.FiscalFlag = 0;
+    //IVr.FiscalFlag = 0; //Edit***************************Sasha2,11:10 15.07.2015
   end;
   IVr.FiscalDeviceSeqNr = -1;
   if (refreshloyaltydata) then begin 
