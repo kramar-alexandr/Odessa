@@ -3236,6 +3236,7 @@ RecordBegin(IPVc,-,"");
   RecordField(BranchID,M4Code,20,CUVc);
   RecordField(TerminalID,M4Str,60,0);
   RecordField(OfficialSerNrSerie,M4Str,30,0);
+  RecordField(CollectPayments,M4Mark,0,0);	//Edit----------------------Dima  16.07.2015
   ArrayBegin(Math,-,1);
   ArrayField(stp,M4Int,0,0);
   ArrayField(ovst,M4Int,0,0);

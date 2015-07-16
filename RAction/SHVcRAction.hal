@@ -1575,6 +1575,7 @@ global
 updating function LongInt SHVcRecordSaveAfter(var record SHVc SHr,record SHVc SH2r,LongInt stat,LongInt long4)
 begin
   LongInt res;
+	record ORVc ORr;
 
   if (SHr.OKFlag!=0) then begin
     SHUpdateItemHist(SHr);
@@ -1595,7 +1596,12 @@ begin
   end;
   
   if (SHr.Assembly>0) then begin	//Edit----------------------Dima  16.07.2015
-		AddPaymentToIPFromSH(SHr);
+  	  ORr.SerNr=SHr.OrderNr;				//Edit----------------------Dima  19.05.2015
+  		if (ReadFirstMain(ORr,1,true)) then begin
+  			if ((ORr.NPPaymentType == 0) and ORr.PrepaymentReceived) then begin
+					AddPaymentToIPFromSH(SHr);
+				end;
+			end;		
 	end;	
   
   SHVcRecordSaveAfter = res; 
@@ -1674,7 +1680,9 @@ begin
 	end;
 
   if (SHr.Assembly>0 and SH2r.Assembly==0) then begin	//Edit----------------------Dima  16.07.2015
-		AddPaymentToIPFromSH(SHr);
+  	if ((ORr.NPPaymentType == 0) and ORr.PrepaymentReceived) then begin
+			AddPaymentToIPFromSH(SHr);
+		end;
 	end;	
 	
 

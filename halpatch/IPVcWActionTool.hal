@@ -1376,8 +1376,7 @@ begin
   boolean TrHs,exist;
   Boolean installmentf;
   val chk;  
-  
-  IPr.Sign = CurrentUser;
+
   IPr.TransDate = CurrentDate;
   TrHs = true;
   exist = false;
@@ -1385,7 +1384,7 @@ begin
   While(LoopKey("TransDate",IPr,1,TrHs)) begin
 		if (IPr.TransDate>CurrentDate) then begin TrHs = false; end;
 		
-		if ((IPr.Sign == CurrentUser) and (IPr.OKFlag==0)) then begin			
+		if ((IPr.CollectPayments > 0) and (IPr.OKFlag==0)) then begin			
 			exist = true;
 			TrHs = false;
 			RecordCopy(oldIPr,IPr);
@@ -1395,7 +1394,7 @@ begin
 	if (exist == false) then begin
 		RecordNew(IPr);
   	IPr.SerNr = NextSerNr("IPVc",CurrentDate,-1,false,"");		
-	  IPr.Sign = CurrentUser;
+	  IPr.CollectPayments = 1;
 	  IPr.TransDate = CurrentDate;	 
 	end;
 	
