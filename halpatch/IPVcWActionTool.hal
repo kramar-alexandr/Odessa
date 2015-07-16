@@ -1372,6 +1372,7 @@ begin
   record IPVc IPr,oldIPr;
   row IPVc IPrw;
   record IVVc IVr;
+  record ORVc ORr;
   integer rwcnt,i;
   boolean TrHs,exist;
   Boolean installmentf;
@@ -1413,13 +1414,18 @@ begin
 		
 		IPr.Comment = USetStr(9342) & ": " & CurrentUser;
 		
+		ORr.SerNr = IVr.OrderNr;
+		ReadFirstMain(ORr,1,true);
+		
 		if (exist) then begin
 			RecordUpdate(oldIPr,IPr,true);
+			CreateRecordLink(ORr,CurrentCompany,IPr,CurrentCompany);
 		end else begin
 			RecordInsert(IPr,true);
+			CreateRecordLink(ORr,CurrentCompany,IPr,CurrentCompany);
 		end;
 	
-	end;
-	
+	end; 
+       
 	
 end;
