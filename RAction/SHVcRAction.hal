@@ -1593,6 +1593,11 @@ begin
   if (nonblank(SHr.OfficialSerNr)) then begin
     UpdateOffSerNr(SHr.SerNr,"SHVc",0,SHr.OfficialSerNr,false);
   end;
+  
+  if (SHr.Assembly>0) then begin	//Edit----------------------Dima  16.07.2015
+		AddPaymentToIPFromSH(SHr);
+	end;	
+  
   SHVcRecordSaveAfter = res; 
   return;
 end;
@@ -1668,7 +1673,7 @@ begin
   	SHr.NPCostOnSite = blankval;
 	end;
 
-  if (SHr.Assembly>0 and SH2r.Assembly==0) then begin
+  if (SHr.Assembly>0 and SH2r.Assembly==0) then begin	//Edit----------------------Dima  16.07.2015
 		AddPaymentToIPFromSH(SHr);
 	end;	
 	

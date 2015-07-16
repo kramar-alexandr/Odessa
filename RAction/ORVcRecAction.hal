@@ -1924,19 +1924,23 @@ updating function LongInt ORVcRecordUpdateAfter(var record ORVc ORr,record ORVc 
 begin
   LongInt res;
   val bc1v;
-  record SHVc SHr;
+  record SHVc SHr,oldSHr;
   
   if(ORr.DeliveryNewPost == 1)then begin		//Edit by Victor 02.06.15
 		SHr.OrderNr = ORr.SerNr;
 		if(ReadFirstKey("OrderKey",SHr, 1, true))then begin
 			if(ORr.NPPaymentType == 1 or (ORr.NPPaymentType == 0 and ORr.PrepaymentReceived == 1))then begin
+				RecordCopy(oldSHr,SHr);
 				SHr.Assembly = 1;
-				RecordStore(SHr, true);
+				//RecordStore(SHr, true);
+				RecordUpdate(oldSHr,SHr,true);//Edit----------------------Dima  16.07.2015
 			end;
 			
 			if(ORr.NPPaymentType == 0 and ORr.PrepaymentReceived == 0)then begin
+				RecordCopy(oldSHr,SHr);
 				SHr.Assembly = 0;
-				RecordStore(SHr, true);
+				//RecordStore(SHr, true);
+				RecordUpdate(oldSHr,SHr,true);//Edit----------------------Dima  16.07.2015
 			end;
 		end;
 	end;	// end edit
