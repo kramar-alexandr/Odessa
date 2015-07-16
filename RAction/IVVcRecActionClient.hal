@@ -13,6 +13,7 @@ remote updating procedure RraPasteInvInEDIInv(var record EDIIVVc,var LongInt);
 external procedure RecordActionIV_Print(var record IVVc,string,string,Integer,Boolean);
 external procedure ShowUnOkWarn(string,Integer);
 external procedure MakeFiscalReceipt(record IVVc); //Edit----------------------Dima  16.06.2015
+external procedure OpenCashBox(); //Edit***************************Sasha2,11:17 16.07.2015
 
 updating procedure acCreateEDIInv(record IVVc IVp)
 BEGIN
@@ -98,8 +99,12 @@ LkInvoiceTypeCredit:;
     ReRunWindowDef(wn);
     WindowFieldGotoForTouchScreen(wn,-1,"ivcashcommand",true);
     if (nonblank(Fiskalblock.StoragePath)) then begin
-	  	if (IVr.OKFlag > 0 and IVr.FiscalFlag > 0) then begin //Edit***************************Sasha2,14:05 14.07.2015	
-					MakeFiscalReceipt(IVr);		//Edit----------------------Dima  16.06.2015
+	  	if (IVr.OKFlag > 0) then begin 
+				if (IVr.FiscalFlag > 0) then begin //Edit***************************Sasha2,14:05 14.07.2015	
+				  MakeFiscalReceipt(IVr);		//Edit----------------------Dima  16.06.2015
+				end else begin
+				  OpenCashBox; //Edit***************************Sasha2,11:18 16.07.2015
+				end;
 			end;
 		end;
   end;
@@ -174,8 +179,12 @@ BEGIN
     ResetDisplayDsm;  
     ReRunWindowDef(wn);
     if (nonblank(Fiskalblock.StoragePath)) then begin
-	  	if ((IV2r.OKFlag == 0) and (IVr.OKFlag > 0) and IVr.FiscalFlag > 0) then begin	
-					MakeFiscalReceipt(IVr);		//Edit----------------------Dima  16.06.2015
+	  	if ((IV2r.OKFlag == 0) and (IVr.OKFlag > 0)) then begin	
+					if (IVr.FiscalFlag > 0) then begin //Edit***************************Sasha2,14:05 14.07.2015	
+  				  MakeFiscalReceipt(IVr);		//Edit----------------------Dima  16.06.2015
+  				end else begin
+  				  OpenCashBox; //Edit***************************Sasha2,11:18 16.07.2015
+  				end;
 			end; 
 		end;   
   end;
