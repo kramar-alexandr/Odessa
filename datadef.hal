@@ -3237,6 +3237,7 @@ RecordBegin(IPVc,-,"");
   RecordField(TerminalID,M4Str,60,0);
   RecordField(OfficialSerNrSerie,M4Str,30,0);
   RecordField(CollectPayments,M4Mark,0,0);	//Edit----------------------Dima  16.07.2015
+  RecordField(SalesGroup,M4Code,5,SalesGroupVc);	//Edit----------------------Dima  17.07.2015
   ArrayBegin(Math,-,1);
   ArrayField(stp,M4Int,0,0);
   ArrayField(ovst,M4Int,0,0);
@@ -3285,53 +3286,83 @@ RecordBegin(IPVc,-,"");
   ArrayField(InvoiceOfficialSerNr,M4Str,100,0);
 	RecordField(TakeOnRate,M4Rate,0,0);		//Edit------------------------Dima 29.01.2015
   EndArray;
-  MainKeyBegin(SerNr,0);
+  
+  MainKeyBegin(SerNr,1);
+  StoreInBaseKey;
+  AppendFieldToKeyName(SalesGroup);//Edit----------------------Dima  17.07.2015
   KeySegment(SerNr);
-  KeyBegin(ExportedFlag);
+  SubsetKeyBegin2(ExportedFlag);
+  StoreInBaseKey;
+  AppendFieldToKeyName(SalesGroup);//Edit----------------------Dima  17.07.2015
   KeySegment(ExportedFlag);
   KeySegment(SerNr);
-  KeyBegin(OKMark);
+  SubsetKeyBegin2(OKMark);
+  StoreInBaseKey;
+  AppendFieldToKeyName(SalesGroup);  //Edit----------------------Dima  17.07.2015
   KeySegment(OKMark);
   KeySegment(SerNr);
-  KeyBegin(TransDate);
+  SubsetKeyBegin2(TransDate);
+  StoreInBaseKey;
+  AppendFieldToKeyName(SalesGroup);  //Edit----------------------Dima  17.07.2015
   KeySegment(TransDate);
   KeySegment(SerNr);
-  KeyBegin(RecNumber);
+  SubsetKeyBegin2(RecNumber);
+  StoreInBaseKey;
+  AppendFieldToKeyName(SalesGroup);  
   KeySegment(RecNumber);
   KeySegment(SerNr);
-  KeyBegin(CurPayVal);
+  SubsetKeyBegin2(CurPayVal);
+  StoreInBaseKey;
+  AppendFieldToKeyName(SalesGroup);  
   KeySegment(CurPayVal);
   KeySegment(SerNr);
   SubsetKeyBegin2(PayMode);
   StoreInBaseKey;
+  AppendFieldToKeyName(SalesGroup); 
   AppendFieldToKeyName(PayMode);
   AppendMatrixFieldToKeyName(PayMode,0);
   KeySegment(TransDate);
-  KeySegment(SerNr);  
-  KeyBegin(Cashup);
+  KeySegment(SerNr);
+  SubsetKeyBegin2(Cashup);
+  StoreInBaseKey;
+  AppendFieldToKeyName(SalesGroup);  
   KeySegment(MachineName);
   KeySegment(DrawerCode);
   KeySegment(TransDate);
   KeySegment(RegTime);
   KeySegment(SerNr);
-  KeyBegin(OKFlagTransDate);
+  SubsetKeyBegin2(OKFlagTransDate);
+  StoreInBaseKey;
+  AppendFieldToKeyName(SalesGroup);
   KeySegment(OKFlag);
   KeySegment(TransDate);
   KeySegment(SerNr);
-  KeyBegin(OfficialSerNr);
+  SubsetKeyBegin2(OfficialSerNr);
+  StoreInBaseKey;
+  AppendFieldToKeyName(SalesGroup);  
   KeySegment(OfficialSerNr);
   KeySegment(SerNr);
-  KeyBegin(OfficialSerNrDate);
+  SubsetKeyBegin2(OfficialSerNrDate);
+  StoreInBaseKey;
+  AppendFieldToKeyName(SalesGroup);  
   KeySegment(OfficialSerNr);
   KeySegment(TransDate);
-  KeySegment(SerNr);    
-  KeyBegin(OpenOfficialSerNr2);
+  KeySegment(SerNr);
+  SubsetKeyBegin2(OpenOfficialSerNr2);
+  StoreInBaseKey;
+  AppendFieldToKeyName(SalesGroup);     
   KeySegment(OfficialSerNr2);
   KeySegment(SerNr);
-  KeyBegin(Prntdf);
+  SubsetKeyBegin2(Prntdf);
+  StoreInBaseKey;
+  AppendFieldToKeyName(SalesGroup);  //Edit----------------------Dima  17.07.2015
   KeySegment(Prntdf);
   KeySegment(SerNr);  
   EndRecord;
+  
+  
+
+  
 	
 	RecordBegin(UserDefRepLinesVc,-,"");
   RecordField(shortname,M4Str,20,0);

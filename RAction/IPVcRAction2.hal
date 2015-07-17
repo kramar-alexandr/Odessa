@@ -748,6 +748,7 @@ global
 updating function LongInt IPVcRecordSave(var record IPVc IPr,record IPVc IP2r,LongInt stat,LongInt long4)
 BEGIN
   LongInt res;
+  record UserVc Userr;     
 
   SetIPFlags(IPr);
   if (blanktime(IPr.RegTime)) then begin
@@ -760,6 +761,12 @@ BEGIN
   if (blank(IPr.OfficialSerNr)) then begin
     FindNextIPVcOfficialSerialNr(IPr);
   end;
+  
+  Userr.Code = CurrentUser;
+  if(readFirstMain(Userr, 1, true))then begin
+   	IPr.SalesGroup = Userr.SalesGroup;
+  end; 
+  
   IPVcRecordSave = res;
   RETURN;
 END;

@@ -967,6 +967,23 @@ end;
 
 
 global
+function Boolean IPLClassOnOpenWindow(Integer wn)	//Edit----------------------Dima  17.07.2015
+begin
+  date dt;
+  record UserVc Userr;
+  
+  Userr.Code = CurrentUser;
+  if(readFirstMain(Userr, 1, true))then begin
+   	SetWindowSubset(wn,Userr.SalesGroup);
+  end;  
+    
+  IPLClassOnOpenWindow = false;
+  return;
+end;
+
+
+
+global
 updating procedure OPExpandOPDsm()	//Edit----------------------Dima  25.03.2015
 BEGIN
   Integer wn,insertmode,updatemode,normalmode,rownr;

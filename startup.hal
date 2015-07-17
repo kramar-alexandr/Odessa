@@ -227,6 +227,8 @@ begin
 	Maintenance("Обновить регистры Новой почты",RequestNPVClass,RefreshAllInnerRegistersNP,modNPost);
 	Maintenance("Обновить статусы электронных накладных",RequestNPVClass,NPUpdateENstatusMn,modNPost);
 	
+	Maintenance("Установить группы продаж в регистр Платежи",MyVClass,SetSalesGroupToIPVcMn,modDBMain);	//Edit----------------------Dima  17.07.2015
+	
 	
 
   Import("Импорт цен",PLImportIClass,PLImportIn,modDI); //Added********************Dima 20.11.2014
