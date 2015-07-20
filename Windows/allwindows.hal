@@ -5486,12 +5486,12 @@ begin
   RlColKey(471,471,"Дата ОК",ShipOkDate,false,ShipOkDate); //Edit***************************Sasha2,13:48 06.02.2015
   RlColKey(541,541,"Наим.",Addr0,false,CustName); //Edit***************************Sasha2,13:48 06.02.2015
   if (IsEnterprise) then begin
-    RlColKey(-270,-270,"Коммент.",Comment,false,Comment); //Edit***************************Sasha2,12:43 28.01.2015
+    RlCol(-270,-270,"Коммент.",Comment,false); //Edit***************************Sasha2,12:43 28.01.2015
     //RlColKey(-180,-180,"Трансп. Но.",TransportNumber,false,TransportNumber); //Edit***************************Sasha2,12:43 28.01.2015
     //RlColKey(-80,-80,"Способ отгрузки",ShipMode,false,ShipMode); //Edit***************************Sasha2,12:45 28.01.2015
     RlColKey(-170,-170,"Маршрут",Sorting,false,Sorting); //Edit***************************Sasha2,12:45 28.01.2015
   end else begin
-    RlColKey(-270,-270,"Коммент.",Comment,false,Comment);
+    RlCol(-270,-270,"Коммент.",Comment,false);
   end;
   RlCol(-120,-120,"Зборка",Assembly,false);
   RlCol(-90,-90,"ЭН",NPPrinted,false);
