@@ -132,13 +132,17 @@ begin
 			paymentStatus = 3;
 			cashSum = AbsoluteVal(IVrw.Sum) * 100;
 		end;
-		if (IVrw.stp==kInvoiceRowTypeCreditCardPayment) then begin
+		if (IVrw.stp==kInvoiceRowTypeCreditCardPayment and IVrw.PayMode!="GC") then begin //Edit***************************Sasha2,15:02 27.07.2015
 			paymentStatus = 0;
 			cardSum = AbsoluteVal(IVrw.Sum) * 100;
 		end;
 		
-		if (IVrw.stp==kInvoiceRowTypeGiftVoucherPayment) then begin
-			VoucherNumbers[VoucherNumbers.length] = IVrw.GCNr;
+		if (IVrw.stp==kInvoiceRowTypeGiftVoucherPayment or IVrw.PayMode=="GC") then begin //Edit***************************Sasha2,15:02 27.07.2015
+			if (IVrw.GCNr>0) then begin
+			  VoucherNumbers[VoucherNumbers.length] = IVrw.GCNr;
+			end else begin
+			  VoucherNumbers[VoucherNumbers.length] = 0;
+			end;
 			VoucherSum[VoucherSum.length] =  AbsoluteVal(IVrw.Sum) * 100;
 		end;
 		
