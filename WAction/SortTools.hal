@@ -243,3 +243,88 @@ BEGIN
 	LTableSortStockMov_ByNameDsm:;
   RETURN;
 END;
+
+
+
+//----------------------------------------------IP  Sorting----------------------------------------------------//
+
+function Integer MinInTableIP(record IPVc IPr)	//Edit----------------------Dima  27.07.2015
+Begin
+	row IPVc IPrw;
+	integer rwcnt,i,pos;
+	string 70 min;
+
+	pos = -1;
+	rwcnt = MatRowCnt(IPr);
+	if (rwcnt>0) then begin
+		MatRowGet(IPr,0,IPrw);
+		min = IPrw.CustName;
+		pos = 0;
+	end;
+
+	for(i=0;i<rwcnt;i=i+1) begin
+		MatRowGet(IPr,i,IPrw);
+		if (nonblank(IPrw.CustCode)) then begin
+			if (IPrw.CustName < min) then begin
+				min = IPrw.CustName;
+				pos = i;
+			end;
+		end;
+	end;
+MinInTableIP = pos;
+return;
+end;
+
+
+
+
+procedure TableSortAscending_IP(var record IPVc IPr) //Edit----------------------Dima  27.07.2015
+begin
+	record IPVc oldIPr;
+	row IPVc IPrw;
+  Integer rwcnt,minPos,i;
+
+
+	RecordCopy(oldIPr,IPr);
+	rwcnt = MatRowCnt(IPr);
+
+	for(i=0;i<rwcnt;i=i+1) begin
+			MatRowDelete(IPr,0);
+	end;
+
+
+	for(i=0;i<rwcnt;i=i+1) begin
+		minPos = MinInTableIP(oldIPr);
+		if (minPos >= 0) then begin
+				MatRowGet(oldIPr,minPos,IPrw);
+				MatRowInsert(IPr,i,IPrw);
+				MatRowDelete(oldIPr,minPos);
+		end;
+	end;
+	
+
+end;
+
+
+global  //Edit----------------------Dima  27.07.2015
+procedure TableSortIPDsm()
+BEGIN
+	record IPVc IPr;
+	row IPVc IPrw;
+  Integer wn,rwcnt,i;
+
+  wn = CurWindow;
+	DeselectWindow(wn,false);
+	GetWindowRecord(wn,IPr);
+
+	if (IPr.OKFlag==1 ) then begin
+			MessageBox(31010,"");
+			goto LTableSortIPDsm;
+	end;
+	
+	TableSortAscending_IP(IPr);
+  PutWindowRecord(wn,IPr);
+
+	LTableSortIPDsm:;
+  RETURN;
+END;

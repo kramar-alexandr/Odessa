@@ -7363,6 +7363,7 @@ begin
         SpecialMenu("Create #VAT# Correction #S/L#",' ',17,"VATCorrectionIPDsm");
       end;
     end;
+    SpecialMenu("Cортировать таблицу",'',20,"TableSortIPDsm");//Edit----------------------Dima  27.07.2015
   end;
   EndWindow;
 end;
