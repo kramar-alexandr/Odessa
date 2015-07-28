@@ -4049,6 +4049,7 @@ if (HasTouchScreenLook==false) then begin
     EditField(h3,v+=vs,80,"Код транс. Интр.",Normal,IntrastatTransCode,true,IntrastatTransCodeSClass);
     EditField(h3,v+=vs,80,"Глоб. № трансп.",Normal,GlobalTransportNr,false,0);
     EditField(h3,v+=vs,80,"Глоб. дата трансп.",Normal,GlobalTransportDate,false,PasteCurDate);
+    EditField(h3,v+=vs,80,"Локальн.машина",Normal,MachineName,false,LocalMachineSClass); //Edit***************************Sasha2,9:37 28.07.2015
   end;
   Tile(5,170,false,"5",OrderNr);
   EditField(h1,v=vm,80,"Номер счета",ViewOnly,OrderNr,false,0);
