@@ -228,7 +228,7 @@ begin
 	Maintenance("Обновить статусы электронных накладных",RequestNPVClass,NPUpdateENstatusMn,modNPost);
 	
 	Maintenance("Установить группы продаж в регистр Платежи",MyVClass,SetSalesGroupToIPVcMn,modDBMain);	//Edit----------------------Dima  17.07.2015
-	
+	Maintenance("Отмениниь статус синхронизации счетов клиентов старше 10 дней",CancelSyncFlORVcVClass,CancelSyncFlORVcMn,modDBMain);//Edit---------------Vitalii 11:25 28.07.2015
 	
 
   Import("Импорт цен",PLImportIClass,PLImportIn,modDI); //Added********************Dima 20.11.2014

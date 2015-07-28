@@ -2635,3 +2635,16 @@ begin
 	end;
 	EndWindow;
 end;
+
+window CancelSyncFlORVcVClass:1 //Edit---------------Vitalii 11:29 28.07.2015
+ wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+ begin
+  real h,v,vs;
+
+  WindowBegin("Maintenance",CancelSyncFlORVcVClass,CGMnt,RcType);
+
+		SetWRect(20,80,380,180);
+		StaticText(30,75,"Нажмите запуск",false);
+
+  EndWindow;
+end;
