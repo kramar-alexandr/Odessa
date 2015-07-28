@@ -341,7 +341,10 @@ begin
 	
 	rwcnt = MatRowCnt(IPp);
 	for(i=rwcnt-1;i>-1;i=i-1) begin
-		RecordAction_raExpandPay(IPp,i);
+		MatRowGet(IPp,i,IPrw);
+		if (IPrw.InvoiceNr<0 and IPrw.CUPNr<0) then begin 
+			RecordAction_raExpandPay(IPp,i);
+		end;
 	end;
 	
 	//prepayment numbers
