@@ -469,11 +469,11 @@ string 10 nextline;
 		if (testf) then begin
 			logtext(0,"Sent order #" & ORr.SerNr & " SF:" & ORr.SyncFlag); //////////////////////
 			AddTextToArea(chr(9) & "<order" & j & " orderno='" & ORr.CustOrdNr & "'" & " status='" & ORr.CustomStatusFlag & "'" & ">" & nextline,aSync);
-			rwcnt = MatRowCnt(ORr);
+			/*rwcnt = MatRowCnt(ORr);
 			for (i=0;i<rwcnt;i=i+1) begin
 				MatRowGet(ORr,i,ORrw);
 				AddTextToArea(chr(9) & chr(9) & "<row" & i &  " SKU='" & ORrw.ArtCode & "'" & " Qty='" & ORrw.Quant & "'" & " PriceInitial='" & ORrw.Price & "'" & " PriceTotal='" & ORrw.Sum & "'" & "></row" & i & ">" & nextline,aSync);
-			end;
+			end;*/
 			AddTextToArea(chr(9) & "</order" & j & ">" & nextline,aSync);
 			j = j + 1;
 		end;
