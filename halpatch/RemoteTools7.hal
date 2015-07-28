@@ -158,7 +158,7 @@ return;
 end;
 
 
-function val SumInvoicesIP(record IPVc IPp)	//Edit----------------------Dima  05.02.2015
+function val SumInvoicesIP(record IPVc IPp,integer customerRows)	//Edit----------------------Dima  05.02.2015
 begin
 	row IPVc IPrw;
 	integer rwcnt,i;
@@ -166,7 +166,7 @@ begin
 
 	sum = 0;
 	rwcnt = MatRowCnt(IPp);
-	for(i=0; i<rwcnt; i=i+1) begin
+	for(i=rwcnt-customerRows;i<rwcnt;i=i+1) begin
 		MatRowGet(IPp,i,IPrw);
 		if (IPrw.InvoiceNr > 0) then begin
 				sum = sum + IPrw.BankVal;
@@ -177,14 +177,14 @@ return;
 end;
 
 
-procedure  RewriteIPMatrix(var record IPVc IPp, string bankCurCode,val cashvalue)		//Edit----------------------Dima  05.02.2015
+procedure  RewriteIPMatrix(var record IPVc IPp, string bankCurCode,val cashvalue,integer customerRows)		//Edit----------------------Dima  05.02.2015
 begin
 	integer rwcnt,i;
 	row IPVc IPrw;
 	val coef,v;
 
 	rwcnt = MatRowCnt(IPp);
-	MatRowGet(IPp,0,IPrw);
+	MatRowGet(IPp,rwcnt-customerRows,IPrw);			//first payment row of current client
 	if (bankCurCode != IPrw.BankCurncy) then begin
 			if (blank(IPp.TakeOnRate)) then begin
 					CurValToOtherCur(CurrentDate,IPrw.BankCurncy, IPrw.BankVal,bankCurCode,v,DefaultCurRoundOff);
@@ -194,7 +194,7 @@ begin
 			end;
 			
 			//invoices
-			for(i=0;i<rwcnt;i=i+1) begin
+			for(i=rwcnt-customerRows;i<rwcnt;i=i+1) begin
 					MatRowGet(IPp,i,IPrw);
 					if (bankCurCode == IPrw.RecCurncy) then begin		//for correct rounding + prepayment calculations
 						IPrw.BankVal = IPrw.RecVal;
@@ -211,29 +211,25 @@ begin
 					//CurValToOtherCur(CurrentDate,IPrw.BankCurncy, IPrw.BankVal,IPrw.RecCurncy,v,DefaultCurRoundOff);	//Edit----------------------Dima  27.03.2015
 						IPrw.RecVal = IPrw.BankVal/coef;				
 					//IPrw.RecVal = v;
-					IPrw.BankVal = cashvalue - SumInvoicesIP(IPp);	//for correct rounding
+					IPrw.BankVal = cashvalue - SumInvoicesIP(IPp,customerRows);	//for correct rounding
 					MatRowPut(IPp,i-1,IPrw);		
 			end;
 	end;
 
-	//prepayment number
-	MatRowGet(IPp,rwcnt-1,IPrw);
-	if (IPrw.InvoiceNr<0) then begin
-			IPrw.InvoiceNr = -1;
-			IPrw.CUPNr = NextCUPNumber;
-			MatRowPut(IPp,rwcnt-1,IPrw);
-	end;
+
   
 end;
 
 
+
+	
 
 global
 procedure RecordAction_raExpandPay(var record IPVc IPp,Integer rownr)
 begin
   row IPVc IP0rw;
   row IPVc newIPrw;
-  Integer i,rwcnt,currow;
+  Integer i,rwcnt,currow,customerRows;
   record ARVc ARr;
   record IVVc IVr;
   Boolean loopf,testf,installmentf;
@@ -243,11 +239,11 @@ begin
   record IPTBlock IPTb;
 	string 7 bankCurcode;
 
-
   BlockLoad(BCb);
   BlockLoad(IPTb);
   rwcnt = MatRowCnt(IPp);
   currow = rwcnt;
+  customerRows = 0;
   MatRowGet(IPp,rownr,IP0rw);
 
 	////Edit--------------------------------------------------------------------Dima  05.02.2015
@@ -304,6 +300,7 @@ begin
         ClearRow(IPp,newIPrw,1)
         newIPrw.InvoiceNr = ARr.InvoiceNr;
         MatRowPut(IPp,currow,newIPrw);
+        customerRows = customerRows + 1;
         if (PasteInvIn2IPr(IPp,currow,IPp.TransDate,chk,false,installmentf)) then begin
         end;     
 
@@ -326,15 +323,44 @@ begin
     newIPrw.RecVal = remv;
     MatRowPut(IPp,currow,newIPrw);
     IPVc_PasteRecVal(IPp,currow);
+    customerRows = customerRows + 1;
   end;
+//LogText(0,newIPrw.CustCode & "   :" & customerRows);
+	RewriteIPMatrix(IPp,bankCurcode,cashvalue,customerRows);	//Edit----------------------Dima  05.02.2015
 
-	RewriteIPMatrix(IPp,bankCurcode,cashvalue);	//Edit----------------------Dima  05.02.2015
-
-  IPSumup(IPp);
+  
   return;
 end;
 
 
+global procedure RecordAction_raExpandAllPayments(var record IPVc IPp)	//Edit----------------------Dima  27.07.2015
+begin
+	Integer i,rwcnt,currow;
+	longint CUPNumber;
+	row IPVc IPrw;
+	
+	LogText(0,"RecordAction_raExpandAllPayments");
+	rwcnt = MatRowCnt(IPp);
+	for(i=rwcnt-1;i>-1;i=i-1) begin
+		RecordAction_raExpandPay(IPp,i);
+	end;
+	
+	//prepayment numbers
+	rwcnt = MatRowCnt(IPp);
+	CUPNumber = NextCUPNumber;
+	for(i=0;i<rwcnt;i=i+1) begin
+		MatRowGet(IPp,i,IPrw);
+		if (IPrw.InvoiceNr<0) then begin
+				IPrw.InvoiceNr = -1;
+				IPrw.CUPNr = CUPNumber;
+				CUPNumber = CUPNumber + 1;
+				MatRowPut(IPp,i,IPrw);
+		end;
+	end;
+			
+	IPSumup(IPp);
+	  
+end;
 
 
 /* Changed the name of this function, because it has a "Global variety" that looks almost the same. */
