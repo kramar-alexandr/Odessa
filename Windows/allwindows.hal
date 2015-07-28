@@ -7026,7 +7026,7 @@ begin
   EditField(h2,v,-40,"Комментарий",Normal,Comment,false,0);
   if (IsEnterprise) then begin
     //EditField(h,v+=20,80,"Код авториз.",ViewOnly,AuthorizationCode,false,0);					//Edit----------------------Dima 29.01.2015
-		EditFieldTL(h+30,v+=20 ,70,"Принимать по курсу", M4Val,Normal,0,TakeOnRate,true,0);	//Edit----------------------Dima 29.01.2015		
+		EditFieldTL(h+30,v+=20 ,70,"Принимать по курсу", M4Val,Normal,0,TakeOnRate,false,0);	//Edit----------------------Dima 29.01.2015		
     CheckBox(-300,v,0,"Инф-ция о клиенте в записи",ARonTR);
     CheckBox(h4=-100,v,0,"OK",OKFlag);
   end else begin
@@ -7034,16 +7034,7 @@ begin
       EditField(h2,v+=vs,-40,"Reference",Normal,RecNumber,false,0);
     end;
   end;
-  if (HasLocalization("PRT")) then begin  v = v + vs;
-    if (HasOfficialSerNr) then begin
-      EditField(h,v,135,"Official No.",Normal,OfficialSerNr,false,LegalInvNrSClass);
-      if (HasNumberSeries) then begin
-        EditField(h2+104,v,100,"Official Ser No. 2",Normal,OfficialSerNr2,false,0);
-        EditField(h3+90,v,135,"Status",Normal,Status,false,SetSClass);  v = v + vs;
-      end;
-      v2 = 20;
-    end;
-  end;
+  EditField(h2,v,100,"Объект",Normal,AdditionalObjects,false,ObjSClass);		//Edit----------------------Dima  28.07.2015
   EnterSkip(Math);
   EditField(h,-21,100,"Подпись",ViewOnly,Sign,false,0);//Edit----------------------Dima  14.07.2015
   if (HasMultiCurrency) then begin
