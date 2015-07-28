@@ -325,9 +325,9 @@ begin
     IPVc_PasteRecVal(IPp,currow);
     customerRows = customerRows + 1;
   end;
-//LogText(0,newIPrw.CustCode & "   :" & customerRows);
-	RewriteIPMatrix(IPp,bankCurcode,cashvalue,customerRows);	//Edit----------------------Dima  05.02.2015
 
+	RewriteIPMatrix(IPp,bankCurcode,cashvalue,customerRows);	//Edit----------------------Dima  05.02.2015
+  //IPSumup(IPp); 					//transfered to RecordAction_raExpandAllPayments.  Dima  28.07.2015
   
   return;
 end;
@@ -339,7 +339,6 @@ begin
 	longint CUPNumber;
 	row IPVc IPrw;
 	
-	LogText(0,"RecordAction_raExpandAllPayments");
 	rwcnt = MatRowCnt(IPp);
 	for(i=rwcnt-1;i>-1;i=i-1) begin
 		RecordAction_raExpandPay(IPp,i);
