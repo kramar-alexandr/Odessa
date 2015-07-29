@@ -3238,6 +3238,7 @@ RecordBegin(IPVc,-,"");
   RecordField(OfficialSerNrSerie,M4Str,30,0);
   RecordField(CollectPayments,M4Mark,0,0);	//Edit----------------------Dima  16.07.2015
   RecordField(SalesGroup,M4Code,5,SalesGroupVc);	//Edit----------------------Dima  17.07.2015
+  RecordField(TakeOnRate,M4Rate,0,0);		//Edit------------------------Dima 29.01.2015
   RecordField(AdditionalObjects,M4Str,60,0);		//Edit------------------------Dima 29.01.2015
   ArrayBegin(Math,-,1);
   ArrayField(stp,M4Int,0,0);
@@ -3285,7 +3286,6 @@ RecordBegin(IPVc,-,"");
   ArrayField(TaxTemplateCode,M4UStr,60,TaxTemplateVc);
   ArrayField(TaxMatrix,M4PackedMatrix,0,TaxMatrixVc);
   ArrayField(InvoiceOfficialSerNr,M4Str,100,0);
-	RecordField(TakeOnRate,M4Rate,0,0);		//Edit------------------------Dima 29.01.2015
   EndArray;
   
   MainKeyBegin(SerNr,1);
