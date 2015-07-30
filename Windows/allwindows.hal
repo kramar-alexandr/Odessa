@@ -3574,6 +3574,7 @@ if (HasTouchScreenLook==false) then begin
     v = v + 20;
     vm = v;
   end;
+  EditField(500,vm,50,"Опт. курс грн.",Normal,OptUAHRate,false,0);	//Edit----------------------Dima  30.07.2015
   CheckBox(h4=-100,v,0,"OK",OKFlag);
   TileButton(1,"Сроки");
   TileButton(2,"Товары");

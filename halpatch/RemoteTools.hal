@@ -1344,6 +1344,7 @@ L20PasteOrdInInv:;
   IVp.CreditCard = ORp.CreditCard;
   IVp.AuthorizationCode = ORp.AuthorizationCode;
   IVp.Location = ORp.Location;
+  IVp.OptUAHRate = ORp.OptUAHRate;//Edit----------------------Dima  30.07.2015
   CUr.Code = ORp.CustCode;
   if (ReadFirstMain(CUr,1,true)) then begin end;
   if (fiscalf) then begin

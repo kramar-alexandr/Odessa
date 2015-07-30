@@ -1469,7 +1469,7 @@ RecordBegin(INVc,-,"artikel5");
   RecordField(ShipMark,M4Mark,0,0);
   RecordField(Objects,M4UStr,60,ObjVc);
   RecordField(ShipMode,M4Code,5,0);
-  RecordField(OrderStatus,M4Int,0,0); // есть ещё CustomStatusFlag
+  RecordField(OrderStatus,M4Int,0,0); // ж≤≤ жЇЮ CustomStatusFlag
   RecordField(PlanShip,M4Str,10,0);
   RecordField(SalesMan,M4UStr,60,UserVc);
   FieldIsUser(SalesMan);
@@ -1924,7 +1924,8 @@ RecordBegin(INVc,-,"artikel5");
   RecordBegin(IVVc,-,"IVVc3");	// Edit by Victor 10.11.14
   RecordField(SerNr,M4Long,0,0);
   SerialNoBlock(IVSerBlock);
-  DefineIVVcRecordType_Header(1);  
+  DefineIVVcRecordType_Header(1);
+  RecordField(OptUAHRate,M4Rate,0,0);	//Edit----------------------Dima  30.07.2015  
   DefineIVVcRecordType_Array;
   MainKeyBegin(SerNr,1);
   StoreInBaseKey;
