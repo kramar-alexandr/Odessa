@@ -283,7 +283,7 @@ begin
       IVr.SerNr = ARr.InvoiceNr;
       if (ReadFirstMain(IVr,1,true)) then begin
         testf = true;
-        if (IVr.Invalid!=0) then begin
+        if (IVr.Invalid!=0 or (IVr.TransDate > IPp.TransDate)) then begin	//Edit----------------------Dima  06.08.2015
           testf = false;
         end;
       end;
