@@ -266,7 +266,7 @@ begin
   AddTextToArea("				<RecipientsPhone>" & ConvertXml(RecipientsPhone) & "</RecipientsPhone>" & chr(13),aRequest);
   logtext(0,"ResipPhone--- " & ConvertXml(RecipientsPhone));
   
-	if (SeatsAmount>1) then begin
+	if (SeatsAmount>0) then begin
 		AddTextToArea("		<OptionsSeat>"& chr(13),aRequest);
 		for(i=0;i<SeatsAmount;i=i+1) begin
 			MatRowGet(PackListr,i,PackListrw);
