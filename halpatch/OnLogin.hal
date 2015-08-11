@@ -1,0 +1,69 @@
+remote procedure SetServerBuildProductCode();
+external function Boolean ProductInDemoMode();
+external updating procedure WelcomeWClassNewInstallClient();
+remote procedure OnLoginReadCurLicenses();
+external updating procedure DoUpdateLicenseStatus(record CurLicensesBlock);
+external procedure OpenTableLayoutCLass(Integer,string,LongInt,Integer);
+external procedure ActVcRecordDefClient(var record ActVc);
+external procedure WindowFieldGotoForTouchScreen(Integer,Integer,string,Boolean);
+remote procedure IVCashVcRecordDefaultsClientRemote(var record IVCashVc,record LocalMachineBlock);
+external function LongInt RestAccVcRecordDefaultsClient(LongInt,var record RestAccVc,record RestAccVc,LongInt,LongInt);
+remote function Boolean PasteCustInCashInv(var record IVCashVc,string,string,var string);
+external updating function Boolean ReopenSavedWindows();
+external procedure OnLogin2();
+external function Integer OpenToDoWClass(string,string,record RcVc);
+external function Integer OpenMasterWClass();
+external function Integer OpenMasterWClass2(string,string);
+remote updating function Integer ClockOutWClassDoRemote(record RcVc,string,Date,Time,Boolean);
+remote updating function Integer ClockInWClassDoRemote(string,Date,Time);
+external function Boolean IsOffice(Boolean);
+external updating procedure AutoSearchForNewerVersion();
+remote updating function Boolean OnLoginRemote(var Boolean,var Boolean,var Boolean,Boolean,Date,Time,string,var Integer,var Integer,var LongInt,var string,var Boolean,var record RcVc,var string,var string);
+remote updating function Boolean OnLoginRemote_IV(Boolean,var record IVVc,var Boolean,var Boolean,var Boolean,Boolean,Date,Time,string,var Integer,var Integer,var LongInt,var string,var string,var string);
+remote updating function Boolean OnLoginRemote_RestAcc(var record RestAccvc,var Boolean,var Boolean,var Boolean,Boolean,Date,Time,string,var Integer,var Integer,var LongInt,var string,var string,var string);
+external procedure RegisterAtPresenceServer(string,Integer,Integer,string,Boolean);
+remote updating function Boolean OnLogoutRemote(string);
+external function Boolean TouchScreenLook();
+external function Boolean CheckIfOfflineCompanyExists(Integer);
+external function LongInt IVDefaultsClient(var record IVVc,record IVVc,LongInt,LongInt);
+remote updating procedure SilentlyActivatePersDesktop();
+external updating procedure UpdateLocalUserChargeFields();
+external updating procedure UpdateLocalCompaniesChargeFields();
+external updating procedure InitMarketPlaceLicenseCopytoClient();
+external updating function Boolean UserLicensesExpired();
+
+
+global
+updating function Boolean OnLogout(string user)
+BEGIN
+  Boolean res;
+  string 255 userstr;
+  record SyncStatusBlock SSb;
+// called on CLIENT
+   
+  if (PresenceWasSuccessful) then begin
+    userstr = user;
+    if (blank(userstr)) then begin
+      userstr = CurrentUser;
+    end;
+    if (UserActive) and ((SingleUserMode) or (ClientMode)) then begin
+      asyncremote.RegisterAtPresenceServer(user,0,1,DeviceOperatingSystem,false);
+    end;
+  end;
+  res = OnLogoutRemote(user);
+  
+  if (IsLiveSyncPOS and CompanyProgramMode==kProgramModeLiveSync) then begin
+    BlockLoad(SSb);
+    if ((SSb.InitialSyncDone==1) and (OpenLoginAfterLogout==false)) then begin
+      SynchronizeWithServer;
+    end;
+  end;
+  
+  
+  if(ClientMode and (currentuser=="KV_1" or currentuser=="KV_2" or currentuser=="RAY_1" or currentuser=="RAY_2") and currenttime>stringtotime("18:00:00"))then begin
+  	messagebox(31097,"");
+  end;
+  
+  OnLogout = true;
+  RETURN;  
+END;
