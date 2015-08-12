@@ -592,11 +592,19 @@ begin
   Integer vcnt;
   val vatv,t1;
   string 255 frin,toin;
+  time timeFrom, timeTo;//Edit----------------------Dima  12.08.2015
 
   RepSpec.sStartDate2 = FirstInRange(RepSpec.Period2Str2,10);
   RepSpec.sEndDate2 = LastInRange(RepSpec.Period2Str2,10);
   totinv = 0;
   runnr = 1;
+
+	timeFrom = StringToTime(RepSpec.d1Code);
+	timeTo = StringToTime(RepSpec.d2Code);
+	
+	LogText(0,timeTo);
+	
+  
   Split2Str2(RepSpec.f6,froffic,tooffic,40);  
   BlockLoad(DPb);
   BlockLoad(ARb);
@@ -883,6 +891,9 @@ begin
     end;
     if (TrHs) then begin
       testf = true;
+      
+      if ((IVr.TransTime<=timeFrom) or (IVr.TransTime>=timeTo)) then begin	testf=false;	end;//Edit----------------------Dima  12.08.2015
+      
       if (nonblank(RepSpec.TransStr)) then begin
         if (RepSpec.TransStr<>IVr.PayDeal) then begin
           testf = false;

@@ -125,6 +125,11 @@ vector val salesum,cost,rent,salary,rentsalary;
 vector string 70 items;
 vector longint qty;
 longint length,k;
+time timeFrom, timeTo;
+
+	timeFrom = StringToTime(RepSpec.f5);
+	timeTo = StringToTime(RepSpec.f6);
+
 	
 	viewcost = UserCanAction("ViewCostPrice",true);
 	length = 0;
@@ -182,7 +187,8 @@ longint length,k;
 		if (IVr.InvDate > RepSpec.sEndDate) then begin	TrHs=false;	testf=false;	end;		
 		if (nonblank(RepSpec.f3) and (IVr.Location!=RepSpec.f3)) then begin	testf=false;	end;
 		if (nonblank(RepSpec.f4) and (IVr.SalesMan!=RepSpec.f4)) then begin	testf=false;	end;
-		
+		if ((IVr.TransTime<=timeFrom) or (IVr.TransTime>=timeTo)) then begin	testf=false;	end;
+	
 		fr = IVr.FrRate;
 		to = IVr.ToRateB1;
 		if(fr==0 or to==0)then begin
@@ -201,7 +207,7 @@ longint length,k;
 
 				if(testf1) then begin
 				
-					if ((RepSpec.ArtMode == 1)) then begin	//Edit----------------------Dima  25.06.2015
+					if ((RepSpec.ArtMode == 1)) then begin			//Consolidated  //Edit----------------------Dima  25.06.2015
 						if (blank(items[IVrw.ArtCode])) then begin
 								items[IVrw.ArtCode] = IVrw.Spec;
 								itemCodes[length] = IVrw.ArtCode;

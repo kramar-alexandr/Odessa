@@ -1,0 +1,2484 @@
+external function Boolean IsEnterprise();
+external function Boolean HasLocalMachines();
+
+external procedure In2Period(var string,var Date,var Date);
+external function Boolean UserHasLimitedAccess(var string,var string);
+external function Integer GetVATLaw();
+
+global
+procedure PPInvVClassReportDefaults(Integer wn)
+BEGIN
+  record RcVc RepSpec;
+  
+  DeselectWindow(wn,false);
+  GetWindowRecord(wn,RepSpec);
+  ReportDefaults(RepSpec,"PPInvVClass");  
+  RepSpec.Stext = RepSpec.Period2Str;
+  PutWindowRecord(wn,RepSpec);
+  SelectWindow(wn);
+  RETURN;
+END;
+
+global
+procedure OcupatationRClassReportDefaults(Integer wn)
+BEGIN
+  record RcVc RepSpec;
+  record ResTypeVc ResTyper;
+  Boolean testf;
+  
+  DeselectWindow(wn,false);
+  GetWindowRecord(wn,RepSpec);
+  ReportDefaults(RepSpec,"OcupatationRClass");  
+  RepSpec.Stext = RepSpec.Period2Str;
+  
+  testf = LoopMain(ResTyper,1,true);
+  RepSpec.f1 = ResTyper.Code;
+  if (nonblank(RepSpec.f1)) then begin
+    RepSpec.f1 = RepSpec.f1 & ":";
+    ResTyper.Code = "ZZZZZ";
+    testf = ReadLastMain(ResTyper,1,false);
+    RepSpec.f1 = RepSpec.f1 & ResTyper.Code;
+  end;
+  PutWindowRecord(wn,RepSpec);
+  SelectWindow(wn);
+  RETURN;
+END;
+
+global
+procedure ColCLInVClassReportDefaults(Integer wn)
+BEGIN
+  record RcVc RepSpec;
+  
+  DeselectWindow(wn,false);
+  GetWindowRecord(wn,RepSpec);
+  ReportDefaults(RepSpec,"ColCLInVClass");  
+  RepSpec.d1 = CurrentDate;
+  PutWindowRecord(wn,RepSpec);
+  SelectWindow(wn);
+  RETURN;
+END;
+
+global
+procedure ColCLOutVClassReportDefaults(Integer wn)
+BEGIN
+  record RcVc RepSpec;
+  
+  DeselectWindow(wn,false);
+  GetWindowRecord(wn,RepSpec);
+  ReportDefaults(RepSpec,"ColCLOutVClass");  
+  RepSpec.d1 = CurrentDate;
+  PutWindowRecord(wn,RepSpec);
+  SelectWindow(wn);
+  RETURN;
+END;
+
+global
+procedure GIOListRClassReportDefaults(Integer wn)
+BEGIN
+  record RcVc RepSpec;
+  
+  DeselectWindow(wn,false);
+  GetWindowRecord(wn,RepSpec);
+  ReportDefaults(RepSpec,"GIOListRClass");  
+  RepSpec.flags[1] = 1;
+  RepSpec.flags[2] = 1;
+  PutWindowRecord(wn,RepSpec);
+  SelectWindow(wn);
+  RETURN;
+END;
+
+global
+procedure SVOListRClassReportDefaults(Integer wn)
+BEGIN
+  record RcVc RepSpec;
+  
+  DeselectWindow(wn,false);
+  GetWindowRecord(wn,RepSpec);
+  ReportDefaults(RepSpec,"SVOListRClass");  
+  RepSpec.flags[1] = 1;
+  RepSpec.flags[2] = 1;
+  RepSpec.flags[4] = 1;
+  RepSpec.flags[5] = 1;
+  RepSpec.flags[7] = 1;
+  RepSpec.flags[8] = 1;
+  PutWindowRecord(wn,RepSpec);
+  SelectWindow(wn);
+  RETURN;
+END;
+
+global
+procedure WOListRClassReportDefaults(Integer wn)
+BEGIN
+  record RcVc RepSpec;
+  
+  DeselectWindow(wn,false);
+  GetWindowRecord(wn,RepSpec);
+  ReportDefaults(RepSpec,"WOListRClass");  
+  RepSpec.flags[1] = 1;
+  RepSpec.flags[2] = 1;
+  RepSpec.flags[4] = 1;
+  PutWindowRecord(wn,RepSpec);
+  SelectWindow(wn);
+  RETURN;
+END;
+
+global
+procedure WSListRClassReportDefaults(Integer wn)
+BEGIN
+  record RcVc RepSpec;
+  
+  DeselectWindow(wn,false);
+  GetWindowRecord(wn,RepSpec);
+  ReportDefaults(RepSpec,"WSListRClass");  
+  RepSpec.flags[1] = 1;
+  RepSpec.flags[3] = 1;
+  PutWindowRecord(wn,RepSpec);
+  SelectWindow(wn);
+  RETURN;
+END;
+
+global
+procedure SVOINRClassReportDefaults(Integer wn)
+BEGIN
+  record RcVc RepSpec;
+  
+  DeselectWindow(wn,false);
+  GetWindowRecord(wn,RepSpec);
+  ReportDefaults(RepSpec,"SVOINRClass");  
+  RepSpec.flags[1] = 1;
+  RepSpec.flags[2] = 1;
+  RepSpec.flags[3] = 1;
+  RepSpec.flags[5] = 1;
+  PutWindowRecord(wn,RepSpec);
+  SelectWindow(wn);
+  RETURN;
+END;
+
+global
+procedure SVOStockRClassReportDefaults(Integer wn)
+BEGIN
+  record RcVc RepSpec;
+  
+  DeselectWindow(wn,false);
+  GetWindowRecord(wn,RepSpec);
+  ReportDefaults(RepSpec,"SVOStockRClass");  
+  RepSpec.flags[2] = 1;
+  RepSpec.flags[3] = 1;
+  RepSpec.flags[4] = 1;
+  RepSpec.flags[7] = 1;
+  RepSpec.flags[8] = 1;
+  PutWindowRecord(wn,RepSpec);
+  SelectWindow(wn);
+  RETURN;
+END;
+
+global
+procedure AT2PortFormRClassReportDefaults(Integer wn)
+BEGIN
+  record RcVc RepSpec;
+  
+  DeselectWindow(wn,false);
+  GetWindowRecord(wn,RepSpec);
+  ReportDefaults(RepSpec,"AT2PortFormRClass");  
+  RepSpec.flags[5] = 1;
+  RepSpec.Comparison = 2;
+  PutWindowRecord(wn,RepSpec);
+  SelectWindow(wn);
+  RETURN;
+END;
+
+global
+procedure AT2FYRevRClassReportDefaults(Integer wn)
+BEGIN
+  record RcVc RepSpec;
+  
+  DeselectWindow(wn,false);
+  GetWindowRecord(wn,RepSpec);
+  ReportDefaults(RepSpec,"AT2FYRevRClass");  
+  RepSpec.Comparison = 2;
+  PutWindowRecord(wn,RepSpec);
+  SelectWindow(wn);
+  RETURN;
+END;
+
+global
+procedure AT2FYWrofRClassReportDefaults(Integer wn)
+BEGIN
+  record RcVc RepSpec;
+  
+  DeselectWindow(wn,false);
+  GetWindowRecord(wn,RepSpec);
+  ReportDefaults(RepSpec,"AT2FYWrofRClass");  
+  RepSpec.Comparison = 2;
+  RepSpec.flags[3] = 1;
+  RepSpec.flags[5] = 1;
+  PutWindowRecord(wn,RepSpec);
+  SelectWindow(wn);
+  RETURN;
+END;
+
+global
+procedure AT2WriteJRClassReportDefaults(Integer wn)
+BEGIN
+  record RcVc RepSpec;
+  
+  DeselectWindow(wn,false);
+  GetWindowRecord(wn,RepSpec);
+  ReportDefaults(RepSpec,"AT2WriteJRClass");  
+  RepSpec.flags[1] = 1;
+  RepSpec.flags[2] = 1;
+  PutWindowRecord(wn,RepSpec);
+  SelectWindow(wn);
+  RETURN;
+END;
+
+global
+procedure AT2HistRClassReportDefaults(Integer wn)
+BEGIN
+  record RcVc RepSpec;
+  
+  DeselectWindow(wn,false);
+  GetWindowRecord(wn,RepSpec);
+  ReportDefaults(RepSpec,"AT2HistRClass");  
+  RepSpec.flags[1] = 1;
+  RepSpec.flags[2] = 1;
+  RepSpec.flags[3] = 1;
+  RepSpec.flags[4] = 1;
+  PutWindowRecord(wn,RepSpec);
+  SelectWindow(wn);
+  RETURN;
+END;
+
+global
+procedure AT2HistPortRClassReportDefaults(Integer wn)
+BEGIN
+  record RcVc RepSpec;
+  
+  DeselectWindow(wn,false);
+  GetWindowRecord(wn,RepSpec);
+  ReportDefaults(RepSpec,"AT2HistPortRClass");  
+  RepSpec.Comparison = 2;
+  PutWindowRecord(wn,RepSpec);
+  SelectWindow(wn);
+  RETURN;
+END;
+
+global
+procedure AT2GenSMVClassReportDefaults(Integer wn)
+BEGIN
+  record RcVc RepSpec;
+  
+  DeselectWindow(wn,false);
+  GetWindowRecord(wn,RepSpec);
+  ReportDefaults(RepSpec,"AT2GenSMVClass");  
+  RepSpec.flags[4] = 1;
+  RepSpec.flags[5] = 1;
+  PutWindowRecord(wn,RepSpec);
+  SelectWindow(wn);
+  RETURN;
+END;
+
+global
+procedure AT2GenTRVClassReportDefaults(Integer wn)
+BEGIN
+  record RcVc RepSpec;
+  
+  DeselectWindow(wn,false);
+  GetWindowRecord(wn,RepSpec);
+  ReportDefaults(RepSpec,"AT2GenTRVClass");  
+  RepSpec.flags[4] = 1;
+  RepSpec.flags[5] = 1;
+  PutWindowRecord(wn,RepSpec);
+  SelectWindow(wn);
+  RETURN;
+END;
+
+global
+procedure AT2GenSMRClassReportDefaults(Integer wn)
+BEGIN
+  record RcVc RepSpec;
+  
+  DeselectWindow(wn,false);
+  GetWindowRecord(wn,RepSpec);
+  ReportDefaults(RepSpec,"AT2GenSMRClass");  
+  RepSpec.flags[4] = 1;
+  RepSpec.flags[5] = 1;
+  PutWindowRecord(wn,RepSpec);
+  SelectWindow(wn);
+  RETURN;
+END;
+
+global
+procedure AT2StockTakeRClassReportDefaults(Integer wn)
+BEGIN
+  record RcVc RepSpec;
+  
+  DeselectWindow(wn,false);
+  GetWindowRecord(wn,RepSpec);
+  ReportDefaults(RepSpec,"AT2StockTakeRClass");  
+  RepSpec.flags[0] = 1;
+  RepSpec.flags[1] = 1;
+  PutWindowRecord(wn,RepSpec);
+  SelectWindow(wn);
+  RETURN;
+END;
+
+global
+procedure AT2DeprRClassReportDefaults(Integer wn)
+BEGIN
+  record RcVc RepSpec;
+  
+  DeselectWindow(wn,false);
+  GetWindowRecord(wn,RepSpec);
+  ReportDefaults(RepSpec,"AT2DeprRClass");  
+  RepSpec.flags[4] = 1;
+  RepSpec.flags[5] = 1;
+  PutWindowRecord(wn,RepSpec);
+  SelectWindow(wn);
+  RETURN;
+END;
+
+global
+procedure TaxDeprRClassReportDefaults(Integer wn)
+BEGIN
+  record RcVc RepSpec;
+  
+  DeselectWindow(wn,false);
+  GetWindowRecord(wn,RepSpec);
+  ReportDefaults(RepSpec,"TaxDeprRClass");  
+  RepSpec.flags[4] = 1;
+  RepSpec.flags[5] = 1;
+  PutWindowRecord(wn,RepSpec);
+  SelectWindow(wn);
+  RETURN;
+END;
+
+global
+procedure AT2GenTRRClassReportDefaults(Integer wn)
+BEGIN
+  record RcVc RepSpec;
+  
+  DeselectWindow(wn,false);
+  GetWindowRecord(wn,RepSpec);
+  ReportDefaults(RepSpec,"AT2GenTRRClass");  
+  RepSpec.flags[4] = 1;
+  RepSpec.flags[5] = 1;
+  PutWindowRecord(wn,RepSpec);
+  SelectWindow(wn);
+  RETURN;
+END;
+
+global
+procedure POSClientEClassReportDefaults(Integer wn)
+BEGIN
+  record RcVc RepSpec;
+  record ResTypeVc ResTyper;
+  Boolean testf;
+  
+  DeselectWindow(wn,false);
+  GetWindowRecord(wn,RepSpec);
+  ReportDefaults(RepSpec,"POSClientEClass");  
+  RepSpec.UsedOnly = 1;
+  RepSpec.flags[10] = 1;  
+  RepSpec.flags[0] = 1;  
+  RepSpec.flags[1] = 1;  
+  PutWindowRecord(wn,RepSpec);
+  SelectWindow(wn);
+  RETURN;
+END;
+
+global
+procedure POSClientRClassReportDefaults(Integer wn)
+BEGIN
+  record RcVc RepSpec;
+  
+  DeselectWindow(wn,false);
+  GetWindowRecord(wn,RepSpec);
+  ReportDefaults(RepSpec,"POSClientRClass");  
+  RepSpec.UsedOnly = 0;
+  RepSpec.flags[10] = 1;  
+  RepSpec.flags[0] = 1;  
+  RepSpec.flags[1] = 1;  
+  PutWindowRecord(wn,RepSpec);
+  SelectWindow(wn);
+  RETURN;
+END;
+
+global
+procedure POSUpdStockVClassReportDefaults(Integer wn)
+BEGIN
+  record RcVc RepSpec;
+  
+  DeselectWindow(wn,false);
+  GetWindowRecord(wn,RepSpec);
+  ReportDefaults(RepSpec,"POSUpdStockVClass");  
+  RepSpec.Period2Str = CurrentDate;
+  RepSpec.Period2Str = RepSpec.Period2Str & ":";
+  RepSpec.Period2Str = RepSpec.Period2Str & CurrentDate;
+  if (HasLocalMachines==false) then begin
+    RepSpec.FirstAcc = "*";
+  end;
+  PutWindowRecord(wn,RepSpec);
+  SelectWindow(wn);
+  RETURN;
+END;
+
+global
+procedure INrsRClassReportDef(var record RcVc RepSpec)
+BEGIN
+  record CostAccBlock CostAccr;
+  
+  BlockLoad(CostAccr);
+  
+  RepSpec.flags[1] = 1;
+  RepSpec.flags[2] = 1;
+  RepSpec.flags[3] = 1;
+  RepSpec.flags[6] = 1;
+  
+  if (IsEnterprise) then begin
+    RepSpec.flags[4] = 1;
+    RepSpec.flags[5] = 1;
+    RepSpec.flags[7] = 1;
+    RepSpec.flags[8] = 1;
+    RepSpec.flags[9] = 1;
+    RepSpec.flags[16] = 1;
+    RepSpec.flags[17] = 1;
+    RepSpec.flags[18] = 1;
+    RepSpec.flags[19] = 1;
+    RepSpec.flags[20] = 1;
+    RepSpec.flags[21] = 1;
+    RepSpec.flags[22] = 1;
+  end;
+
+  RepSpec.flags[11] = 1;
+// ?
+  switch (CostAccr.PrimaryCostModel) begin
+    case kCostModelQueued: RepSpec.flags[10] = 0;
+    otherwise              RepSpec.flags[10] = 1;
+  end;
+  
+  RETURN;
+END;
+
+global
+procedure INrsRClassReportDefaults(Integer wn)
+BEGIN
+  record RcVc RepSpec;
+  
+  DeselectWindow(wn,false);
+  GetWindowRecord(wn,RepSpec);
+  ReportDefaults(RepSpec,"INrsRClass");  
+  INrsRClassReportDef(RepSpec);
+  PutWindowRecord(wn,RepSpec);
+  SelectWindow(wn);
+  RETURN;
+END;
+
+global
+procedure INrsLithRClassReportDefaults(Integer wn)
+BEGIN
+  record RcVc RepSpec;
+  
+  DeselectWindow(wn,false);
+  GetWindowRecord(wn,RepSpec);
+  ReportDefaults(RepSpec,"INrsLithRClass");  
+  RepSpec.flags[1] = 1;
+  RepSpec.flags[2] = 1;
+  RepSpec.flags[3] = 1;
+  RepSpec.flags[4] = 1;
+  RepSpec.flags[5] = 1;
+  RepSpec.flags[6] = 1;
+  RepSpec.flags[7] = 1;
+  RepSpec.flags[8] = 1;
+  RepSpec.flags[9] = 1;
+  RepSpec.flags[11] = 1;
+  RepSpec.flags[21] = 1;
+  RepSpec.flags[22] = 1;
+  RepSpec.flags[25] = 1;
+  PutWindowRecord(wn,RepSpec);
+  SelectWindow(wn);
+  RETURN;
+END;
+
+global
+procedure CreateLoanIVVClassReportDefaults(Integer wn)
+BEGIN
+  record RcVc RepSpec;
+  
+  DeselectWindow(wn,false);
+  GetWindowRecord(wn,RepSpec);
+  ReportDefaults(RepSpec,"CreateLoanIVVClass");  
+  RepSpec.Stext = "" & RepSpec.sStartDate & ":" & RepSpec.sEndDate;
+  PutWindowRecord(wn,RepSpec);
+  SelectWindow(wn);
+  RETURN;
+END;
+
+global
+procedure AT2DeprPlanRClassReportDefaults(Integer wn)
+BEGIN
+  record RcVc RepSpec;
+  
+  DeselectWindow(wn,false);
+  GetWindowRecord(wn,RepSpec);
+  ReportDefaults(RepSpec,"AT2DeprPlanRClass");  
+  RepSpec.f6 = USetStr(11470);
+  RepSpec.flags[4] = 1;
+  RepSpec.flags[5] = 1;
+  PutWindowRecord(wn,RepSpec);
+  SelectWindow(wn);
+  RETURN;
+END;
+
+global
+procedure ActCalBookRClassReportDefaults(Integer wn)
+BEGIN
+  record RcVc RepSpec;
+  
+  GetWindowRecord(wn,RepSpec);
+  ReportDefaults(RepSpec,"ActCalBookRClass");  
+  RepSpec.flags[1] = 1;
+  PutWindowRecord(wn,RepSpec);
+  SelectWindow(wn);
+  RETURN;
+END;
+
+global
+procedure ExpJRClassReportDefaults(Integer wn)
+BEGIN
+  record RcVc RepSpec;
+  
+  GetWindowRecord(wn,RepSpec);
+  ReportDefaults(RepSpec,"ExpJRClass");  
+  RepSpec.flags[1] = 1;
+  PutWindowRecord(wn,RepSpec);
+  SelectWindow(wn);
+  RETURN;
+END;
+
+global
+procedure DAJRClassReportDefaults(Integer wn)
+begin
+  record RcVc RepSpec;
+  
+  GetWindowRecord(wn,RepSpec);
+  ReportDefaults(RepSpec,"DAJRClass");  
+  RepSpec.flags[1] = 1;
+  RepSpec.ArtMode = 1;
+  PutWindowRecord(wn,RepSpec);
+  SelectWindow(wn);
+  return;
+end;
+
+global
+procedure WLJRClassReportDefaults(Integer wn)
+BEGIN
+  record RcVc RepSpec;
+  
+  GetWindowRecord(wn,RepSpec);
+  ReportDefaults(RepSpec,"WLJRClass");  
+  RepSpec.flags[1] = 1;
+  RepSpec.flags[2] = 1;
+  PutWindowRecord(wn,RepSpec);
+  SelectWindow(wn);
+  RETURN;
+END;
+
+global
+procedure STCompRClassReportDefaults(Integer wn)
+BEGIN
+  record RcVc RepSpec;
+  
+  GetWindowRecord(wn,RepSpec);
+  DeselectWindow(wn,false);
+  ReportDefaults(RepSpec,"STCompRClass");  
+  RepSpec.RegDate = CurrentDate;
+  PutWindowRecord(wn,RepSpec);
+  SelectWindow(wn);
+  RETURN;
+END;
+
+global
+procedure STCompVClassReportDefaults(Integer wn)
+BEGIN
+  record RcVc RepSpec;
+  
+  GetWindowRecord(wn,RepSpec);
+  DeselectWindow(wn,false);
+  ReportDefaults(RepSpec,"STCompVClass");  
+  RepSpec.RegDate = CurrentDate;
+  RepSpec.flags[3] = 0;
+  PutWindowRecord(wn,RepSpec);
+  SelectWindow(wn);
+  RETURN;
+END;
+
+global
+procedure LithDiffRClassReportDefaults(Integer wn)
+BEGIN
+  record RcVc RepSpec;
+  
+  DeselectWindow(wn,false);
+  GetWindowRecord(wn,RepSpec);
+  ReportDefaults(RepSpec,"LithDiffRClass");  
+  RepSpec.flags[1] = 1;
+  RepSpec.flags[3] = 1;
+  PutWindowRecord(wn,RepSpec);
+  SelectWindow(wn);
+  RETURN;
+END;
+
+global
+procedure CUVERClassReportDefaults(Integer wn)
+BEGIN
+  record RcVc RepSpec;
+  
+  DeselectWindow(wn,false);
+  GetWindowRecord(wn,RepSpec);
+  ReportDefaults(RepSpec,"CUVERClass");  
+  RepSpec.flags[1] = 1;
+  RepSpec.flags[2] = 1;
+  PutWindowRecord(wn,RepSpec);
+  SelectWindow(wn);
+  RETURN;
+END;
+
+global
+procedure EMStatRClassReportDefaults(Integer wn)
+BEGIN
+  record RcVc RepSpec;
+  
+  DeselectWindow(wn,false);
+  GetWindowRecord(wn,RepSpec);
+  ReportDefaults(RepSpec,"EMStatRClass");  
+  RepSpec.flags[4] = 1;
+  RepSpec.flags[9] = 1;
+  PutWindowRecord(wn,RepSpec);
+  SelectWindow(wn);
+  RETURN;
+END;
+
+global
+procedure EMTimeStatRClassReportDefaults(Integer wn)
+BEGIN
+  record RcVc RepSpec;
+  
+  DeselectWindow(wn,false);
+  GetWindowRecord(wn,RepSpec);
+  ReportDefaults(RepSpec,"EMTimeStatRClass");  
+  RepSpec.flags[1] = 1;
+  RepSpec.flags[2] = 1;
+  RepSpec.flags[5] = 1;
+  PutWindowRecord(wn,RepSpec);
+  SelectWindow(wn);
+  RETURN;
+END;
+
+global
+procedure PrTransRClassReportDefaults(Integer wn)
+BEGIN
+  record RcVc RepSpec;
+  string 255 tstr;
+  
+  DeselectWindow(wn,false);
+  GetWindowRecord(wn,RepSpec);
+  ReportDefaults(RepSpec,"PrTransRClass");  
+  RepSpec.flags[1] = 1;
+  RepSpec.flags[2] = 1;
+  RepSpec.flags[3] = 1;
+  RepSpec.flags[4] = 1;
+  RepSpec.flags[5] = 1;
+  RepSpec.flags[8] = 1;
+  if (UserHasLimitedAccess(RepSpec.AccStr,tstr)) then begin
+  end;
+  PutWindowRecord(wn,RepSpec);
+  SelectWindow(wn);
+  RETURN;
+END;
+
+global
+procedure PriceRClassReportDefaults(Integer wn)
+BEGIN
+  record RcVc RepSpec;
+  record VarietyBlock Varb;
+  
+  BlockLoad(Varb);  
+  DeselectWindow(wn,false);
+  GetWindowRecord(wn,RepSpec);
+  ReportDefaults(RepSpec,"PriceRClass");  
+  RepSpec.flags[8] = 1;
+  RepSpec.flags[9] = 1;  
+  RepSpec.flags[7] = Varb.AutoVarietyDef;
+  PutWindowRecord(wn,RepSpec);
+  SelectWindow(wn);
+  RETURN;
+END;
+
+global
+procedure BudFollPRClassReportDefaults(Integer wn)
+BEGIN
+  record RcVc RepSpec;
+  
+  DeselectWindow(wn,false);
+  GetWindowRecord(wn,RepSpec);
+  ReportDefaults(RepSpec,"BudFollPRClass");  
+  RepSpec.flags[1] = 1;
+  RepSpec.flags[2] = 1;
+  RepSpec.flags[3] = 1;
+  RepSpec.flags[4] = 1;
+  PutWindowRecord(wn,RepSpec);
+  SelectWindow(wn);
+  RETURN;
+END;
+
+global
+procedure ActTodoRClassReportDefaults(Integer wn)
+BEGIN
+  record RcVc RepSpec;
+  
+  DeselectWindow(wn,false);
+  GetWindowRecord(wn,RepSpec);
+  ReportDefaults(RepSpec,"ActTodoRClass");  
+  RepSpec.flags[2] = 1;
+  RepSpec.f1 = CurrentUser;
+  PutWindowRecord(wn,RepSpec);
+  SelectWindow(wn);
+  RETURN;
+END;
+
+global
+procedure ActTodo2RClassReportDefaults(Integer wn)
+BEGIN
+  record RcVc RepSpec;
+  
+  DeselectWindow(wn,false);
+  GetWindowRecord(wn,RepSpec);
+  ReportDefaults(RepSpec,"ActTodo2RClass");  
+  RepSpec.flags[29] = 1;
+  RepSpec.f1 = CurrentUser;
+  PutWindowRecord(wn,RepSpec);
+  SelectWindow(wn);
+  RETURN;
+END;
+
+global
+procedure ProInvVClassReportDefaults(Integer wn)
+BEGIN
+  record RcVc RepSpec;
+  record ProjectBlock Prob;
+  
+  BlockLoad(Prob);
+  DeselectWindow(wn,false);
+  GetWindowRecord(wn,RepSpec);
+  ReportDefaults(RepSpec,"ProInvVClass");  
+  RepSpec.flags[6] = 0;
+  RepSpec.d1 = CurrentDate;
+  RepSpec.flags[9] = Prob.AddActInfo;
+  RepSpec.f6 = CurBranchID;
+  PutWindowRecord(wn,RepSpec);
+  SelectWindow(wn);
+  RETURN;
+END;
+
+global
+procedure MidStatChangeDefaults(var record RcVc RepSpec)
+BEGIN
+  record NightMaintBlock NMr;
+
+  BlockLoad(NMr);
+  RepSpec.f2 = "";
+  RepSpec.sStartDate = AddDay(CurrentDate,NMr.AddToDay);
+  if (nonblanktime(NMr.StartTime)) then begin
+    RepSpec.sStartTime = NMr.StartTime;
+  end else begin
+    RepSpec.sStartTime = CurrentTime;
+  end;
+  RepSpec.flags[0] = NMr.StateToDirty;
+  RepSpec.flags[1] = NMr.ChargeStay;
+  RepSpec.flags[2] = NMr.AddRepItems;
+  RepSpec.flags[3] = NMr.NoshowToNoshow;
+  RepSpec.flags[4] = NMr.DelChoutMes;
+  RepSpec.flags[5] = NMr.DelOldFollow;
+  RepSpec.flags[6] = NMr.CreateCleanAct;
+  RepSpec.flags[7] = NMr.DelRecHist;
+  RepSpec.flags[8] = NMr.PrelBookWIP;
+  RepSpec.flags[9] = NMr.AutoBookCashup;
+  RETURN;
+END;
+
+global
+procedure MidStatChangeVClassReportDefaults(Integer wn)
+Begin
+  record RcVc RepSpec;
+  
+  GetWindowRecord(wn,RepSpec);
+  ReportDefaults(RepSpec,"MidStatChangeVClass");   
+  MidStatChangeDefaults(RepSpec);
+  PutWindowRecord(wn,RepSpec);
+  return;
+end;
+
+global
+procedure MidStatRestDefaults(var record RcVc RepSpec)
+begin
+  record NightMaintRestBlock NMr;
+  record LocalMachineBlock LMb;
+
+  BlockLoad(NMr);
+  BlockLoad(LMb);
+  RepSpec.sStartDate = AddDay(CurrentDate,NMr.AddToDay);
+  RepSpec.sEndDate = RepSpec.sStartDate;
+  if (nonblanktime(NMr.StartTime)) then begin
+    RepSpec.sStartTime = NMr.StartTime;
+  end else begin
+    RepSpec.sStartTime = CurrentTime;
+  end;
+  RepSpec.flags[0] = NMr.UpdateStock;
+  RepSpec.FirstAcc = LMb.DefLocation;
+  return;
+end;
+
+global
+procedure MidStatRestVClassReportDefaults(Integer wn)
+begin
+  record RcVc RepSpec;
+
+  GetWindowRecord(wn,RepSpec);
+  ReportDefaults(RepSpec,"MidStatRestVClass");   
+  MidStatRestDefaults(RepSpec);
+  PutWindowRecord(wn,RepSpec);
+  return;
+end;
+
+global
+procedure BarGenSDVClassReportDefaults(Integer wn)
+begin
+  record RcVc RepSpec;
+  record LocalMachineBlock LMb;
+
+  BlockLoad(LMb);
+  DeselectWindow(wn,false);
+  GetWindowRecord(wn,RepSpec);
+  ReportDefaults(RepSpec,"BarGenSDVClass");  
+  RepSpec.FirstAcc = LMb.DefLocation;
+  PutWindowRecord(wn,RepSpec);
+  SelectWindow(wn);
+  return;
+end;
+
+global
+procedure STRLRClassReportDefaults(Integer wn)
+BEGIN
+  record RcVc RepSpec;
+  
+  DeselectWindow(wn,false);
+  GetWindowRecord(wn,RepSpec);
+  ReportDefaults(RepSpec,"STRLRClass");  
+  RepSpec.flags[1] = 1;
+  RepSpec.flags[2] = 1;
+  PutWindowRecord(wn,RepSpec);
+  SelectWindow(wn);
+  RETURN;
+END;
+
+global
+procedure OrdItemRClassReportDefaults(Integer wn)
+BEGIN
+  record RcVc RepSpec;
+  
+  DeselectWindow(wn,false);
+  GetWindowRecord(wn,RepSpec);
+  ReportDefaults(RepSpec,"OrdItemRClass");  
+  RepSpec.flags[2] = 1;
+  RepSpec.flags[3] = 0;
+  RepSpec.flags[4] = 0;
+  RepSpec.flags[5] = 1;
+  PutWindowRecord(wn,RepSpec);
+  SelectWindow(wn);
+  RETURN;
+END;
+
+global
+procedure VIJRClassReportDefaults(Integer wn)
+BEGIN
+  record RcVc RepSpec;
+  string 255 tstr;
+  
+  DeselectWindow(wn,false);
+  GetWindowRecord(wn,RepSpec);
+  ReportDefaults(RepSpec,"VIJRClass");  
+  RepSpec.flags[1] = 1;
+  RepSpec.flags[2] = 1;
+  RepSpec.flags[3] = 1;
+  RepSpec.flags[4] = 1;
+  RepSpec.flags[5] = 1;
+  if (HasLocalization("ITA")) and (IsStandardProduct) then begin
+    RepSpec.ArtMode = 3;
+  end;
+  if (UserHasLimitedAccess(RepSpec.AccStr,RepSpec.Stext)) then begin
+  end;
+  PutWindowRecord(wn,RepSpec);
+  SelectWindow(wn);
+  RETURN;
+END;
+
+global
+procedure NLRateRClassReportDefaults(Integer wn)
+BEGIN
+  record RcVc RepSpec;
+  
+  DeselectWindow(wn,false);
+  GetWindowRecord(wn,RepSpec);
+  ReportDefaults(RepSpec,"NLRateRClass");  
+  RepSpec.flags[1] = 0;
+  RepSpec.flags[2] = 1;
+  PutWindowRecord(wn,RepSpec);
+  SelectWindow(wn);
+  RETURN;
+END;
+
+global
+procedure ActCURClassReportDefaults(Integer wn)
+BEGIN
+  record RcVc RepSpec;
+  
+  DeselectWindow(wn,false);
+  GetWindowRecord(wn,RepSpec);
+  ReportDefaults(RepSpec,"ActCURClass");  
+  RepSpec.flags[1] = 1;
+  RepSpec.flags[2] = 1;
+  PutWindowRecord(wn,RepSpec);
+  SelectWindow(wn);
+  RETURN;
+END;
+
+global
+procedure CURClassReportDefaults(Integer wn)
+BEGIN
+  record RcVc RepSpec;
+  
+  DeselectWindow(wn,false);
+  GetWindowRecord(wn,RepSpec);
+  ReportDefaults(RepSpec,"CURClass");  
+  if (UserHasLimitedAccess(RepSpec.f2,RepSpec.Language)) then begin
+  end;
+/*  
+  if (BuildProductCode=="StandardCRM") then begin
+    RepSpec.flags[9] = 4;
+  end;
+*/  
+  RepSpec.sStartDate = "01-01-1980";
+  RepSpec.sEndDate = CurrentDate;
+  RepSpec.Period2Str = RepSpec.sStartDate & ":" & RepSpec.sEndDate;
+  PutWindowRecord(wn,RepSpec);
+  SelectWindow(wn);
+  RETURN;
+END;
+
+global
+procedure ActPersRClassReportDefaults(Integer wn)
+BEGIN
+  record RcVc RepSpec;
+  
+  DeselectWindow(wn,false);
+  GetWindowRecord(wn,RepSpec);
+  ReportDefaults(RepSpec,"ActPersRClass");  
+  RepSpec.flags[1] = 1;
+  RepSpec.flags[2] = 1;
+  RepSpec.flags[3] = 1;
+  RepSpec.flags[7] = 1;
+  PutWindowRecord(wn,RepSpec);
+  SelectWindow(wn);
+  RETURN;
+END;
+
+global
+procedure BonusRClassReportDefaults(Integer wn)
+BEGIN
+  record RcVc RepSpec;
+  
+  DeselectWindow(wn,false);
+  GetWindowRecord(wn,RepSpec);
+  ReportDefaults(RepSpec,"BonusRClass");  
+  RepSpec.flags[1] = 1;
+  RepSpec.flags[2] = 1;
+  RepSpec.flags[3] = 1;
+  RepSpec.flags[4] = 0;
+  RepSpec.UsedOnly = 0;
+  RepSpec.flags[10] = 1;
+  RepSpec.flags[17] = 1;
+  PutWindowRecord(wn,RepSpec);
+  SelectWindow(wn);
+  RETURN;
+END;
+
+global
+procedure RebuildSupVClassReportDefaults(Integer wn)
+BEGIN
+  record RcVc RepSpec;
+  
+  DeselectWindow(wn,false);
+  GetWindowRecord(wn,RepSpec);
+  ReportDefaults(RepSpec,"RebuildSupVClass");  
+  RepSpec.flags[1] = 1;
+  RepSpec.flags[2] = 1;
+  PutWindowRecord(wn,RepSpec);
+  SelectWindow(wn);
+  RETURN;
+END;
+
+global
+procedure BokundRClassReportDefaults(Integer wn)
+BEGIN
+  record RcVc RepSpec;
+  
+  DeselectWindow(wn,false);
+  GetWindowRecord(wn,RepSpec);
+  ReportDefaults(RepSpec,"BokundRClass");  
+  RepSpec.ArtMode = 1;
+  PutWindowRecord(wn,RepSpec);
+  SelectWindow(wn);
+  RETURN;
+END;
+
+global
+procedure InvFactEClassReportDefaults(Integer wn)
+BEGIN
+  record RcVc RepSpec;
+  record FactoringBlock factb;
+  
+  BlockLoad(factb);
+  DeselectWindow(wn,false);
+  GetWindowRecord(wn,RepSpec);
+  ReportDefaults(RepSpec,"InvFactEClass");  
+  RepSpec.flags[1] = 1;
+  RepSpec.FirstVer = factb.LastSerNr + 1;
+  RepSpec.f3 = factb.User;  
+  PutWindowRecord(wn,RepSpec);
+  SelectWindow(wn);
+  RETURN;
+END;
+
+global
+procedure ExpVATRClassReportDefaults(Integer wn)
+BEGIN
+  record RcVc RepSpec;
+  
+  DeselectWindow(wn,false);
+  GetWindowRecord(wn,RepSpec);
+  ReportDefaults(RepSpec,"ExpVATRClass");  
+  RepSpec.flags[1] = 1;
+  RepSpec.flags[2] = 1;
+  RepSpec.flags[7] = 0;
+  RepSpec.flags[8] = 0;
+  PutWindowRecord(wn,RepSpec);
+  SelectWindow(wn);
+  RETURN;
+END;
+
+global
+procedure LiquidityRClassReportDefaults(Integer wn)
+BEGIN
+  record RcVc RepSpec;
+  
+  DeselectWindow(wn,false);
+  GetWindowRecord(wn,RepSpec);
+  ReportDefaults(RepSpec,"LiquidityRClass");  
+  RepSpec.flags[10] = 1;
+  RepSpec.flags[11] = 1;
+  RepSpec.flags[12] = 1;
+  PutWindowRecord(wn,RepSpec);
+  SelectWindow(wn);
+  RETURN;
+END;
+
+global
+procedure GenPOFromORVClassReportDefaults(Integer wn)
+BEGIN
+  record RcVc RepSpec;
+  
+  DeselectWindow(wn,false);
+  GetWindowRecord(wn,RepSpec);
+  ReportDefaults(RepSpec,"GenPOFromORVClass");  
+  RepSpec.ArtMode = 0;
+  RepSpec.flags[1] = 0;
+  RepSpec.flags[2] = 1;
+  RepSpec.flags[4] = 2;
+  PutWindowRecord(wn,RepSpec);
+  SelectWindow(wn);
+  RETURN;
+END;
+
+global
+procedure PRStatRClassReportDefaults(Integer wn)
+BEGIN
+  record RcVc RepSpec;
+  
+  DeselectWindow(wn,false);
+  GetWindowRecord(wn,RepSpec);
+  ReportDefaults(RepSpec,"PRStatRClass");  
+  RepSpec.flags[1] = 1;
+  RepSpec.flags[2] = 1;
+  PutWindowRecord(wn,RepSpec);
+  SelectWindow(wn);
+  RETURN;
+END;
+
+global
+procedure SieEClassReportDefaults(Integer wn)
+BEGIN
+  record RcVc RepSpec;
+  
+  DeselectWindow(wn,false);
+  GetWindowRecord(wn,RepSpec);
+  ReportDefaults(RepSpec,"SieEClass");  
+  RepSpec.ArtMode = 2;
+  PutWindowRecord(wn,RepSpec);
+  SelectWindow(wn);
+  RETURN;
+END;
+
+global
+procedure ObjResRClassReportDefaults(Integer wn)
+BEGIN
+  record RcVc RepSpec;
+  Date d1,d2;
+  
+  DeselectWindow(wn,false);
+  GetWindowRecord(wn,RepSpec);
+  ReportDefaults(RepSpec,"ObjResRClass");  
+  RepSpec.flags[5] = 1;
+  if (nonblank(RepSpec.Period2Str)) then begin
+    d1 = StringToDate(FirstInRange(RepSpec.Period2Str,10));
+    d2 = StringToDate(LastInRange(RepSpec.Period2Str,10));
+    d1 = AddYear(d1,-1);
+    d2 = AddYear(d2,-1);
+    RepSpec.Stext = d1;
+    RepSpec.Stext = RepSpec.Stext & ":";
+    RepSpec.Stext = RepSpec.Stext & d2;
+  end;  
+  PutWindowRecord(wn,RepSpec);
+  SelectWindow(wn);
+  RETURN;
+END;
+
+global
+function Boolean ObjResRClassAfterEditField(Integer wn,string fieldname,Integer fn,Integer rownr,Integer changed)
+BEGIN
+  Boolean res;
+  Date d1,d2;
+  string 30 tstr;
+  record RcVc RepSpec;
+  
+  res = false;
+  switch (fieldname) begin
+    case "Stext":
+      GetWindowRecord(wn,RepSpec);
+      In2Period(RepSpec.Stext,d1,d2);
+      tstr = d1;
+      tstr = tstr & ":";
+      tstr = tstr & d2;
+      RepSpec.Stext = tstr;
+      PutWindowRecord(wn,RepSpec);
+  end;
+  ObjResRClassAfterEditField = res;
+  RETURN;
+END;
+
+global
+procedure CuArtSTRClassReportDef(var record RcVc RepSpec)
+begin
+  Date d1,d2;
+   record VarietyBlock Varb;
+
+  BlockLoad(Varb); 
+  RepSpec.flags[2] = Varb.AutoVarietyDef;
+  RepSpec.flags[5] = 1;
+  if (nonblank(RepSpec.Period2Str)) then begin
+    d1 = StringToDate(FirstInRange(RepSpec.Period2Str,10));
+    d2 = StringToDate(LastInRange(RepSpec.Period2Str,10));
+    d1 = AddYear(d1,-1);
+    d2 = AddYear(d2,-1);
+    RepSpec.Stext = d1;
+    RepSpec.Stext = RepSpec.Stext & ":";
+    RepSpec.Stext = RepSpec.Stext & d2;
+  end;  
+  return;
+end;
+
+global
+function Boolean CuArtSTRClassAfterEditField(Integer wn,string fieldname,Integer fn,Integer rownr,Integer changed)
+begin
+  Boolean res;
+  record RcVc RepSpec;
+  Date d1,d2;
+  string 255 tstr;
+  
+  res = false;
+  switch (fieldname) begin
+    case "Stext":
+      GetWindowRecord(wn,RepSpec);
+      In2Period(RepSpec.Stext,d1,d2);
+      tstr = d1;
+      tstr = tstr & ":";
+      tstr = tstr & d2;
+      RepSpec.Stext = tstr;
+      PutWindowRecord(wn,RepSpec);
+  end;
+  CuArtSTRClassAfterEditField = res;
+  return;
+end;
+
+global
+procedure CuArtSTRClassReportDefaults(Integer wn)
+BEGIN
+  record RcVc RepSpec;
+  
+  DeselectWindow(wn,false);
+  GetWindowRecord(wn,RepSpec);
+  ReportDefaults(RepSpec,"CuArtSTRClass");  
+  CuArtSTRClassReportDef(RepSpec);
+  PutWindowRecord(wn,RepSpec);
+  SelectWindow(wn);
+  RETURN;
+END;
+
+global
+procedure ArtST2RClassReportDefaults(Integer wn)
+BEGIN
+  record RcVc RepSpec;
+  Date d1,d2;
+  
+  DeselectWindow(wn,false);
+  GetWindowRecord(wn,RepSpec);
+  ReportDefaults(RepSpec,"ArtST2RClass");  
+  RepSpec.flags[5] = 1;
+  if (nonblank(RepSpec.Period2Str)) then begin
+    d1 = StringToDate(FirstInRange(RepSpec.Period2Str,10));
+    d2 = StringToDate(LastInRange(RepSpec.Period2Str,10));
+    d1 = AddYear(d1,-1);
+    d2 = AddYear(d2,-1);
+    RepSpec.Stext = d1;
+    RepSpec.Stext = RepSpec.Stext & ":";
+    RepSpec.Stext = RepSpec.Stext & d2;
+  end;  
+  PutWindowRecord(wn,RepSpec);
+  SelectWindow(wn);
+  RETURN;
+END;
+
+global
+procedure SHListRClassReportDefaults(Integer wn)
+BEGIN
+  record RcVc RepSpec;
+  
+  DeselectWindow(wn,false);
+  GetWindowRecord(wn,RepSpec);
+  ReportDefaults(RepSpec,"SHListRClass");  
+  RepSpec.flags[1] = 1;
+  RepSpec.flags[2] = 1;
+  PutWindowRecord(wn,RepSpec);
+  SelectWindow(wn);
+  RETURN;
+END;
+
+global
+procedure SLVATRClassReportDefaults(Integer wn)
+BEGIN
+  record RcVc RepSpec;
+  
+  DeselectWindow(wn,false);
+  GetWindowRecord(wn,RepSpec);
+  ReportDefaults(RepSpec,"SLVATRClass");  
+  RepSpec.flags[1] = 1;
+  RepSpec.flags[2] = 0;
+  RepSpec.flags[3] = 1;
+  RepSpec.flags[4] = 1;
+  RepSpec.flags[5] = 1;
+  RepSpec.flags[6] = 1;
+  PutWindowRecord(wn,RepSpec);
+  SelectWindow(wn);
+  RETURN;
+END;
+
+global
+procedure SLEUVATRClassReportDefaults(Integer wn)
+BEGIN
+  record RcVc RepSpec;
+  
+  DeselectWindow(wn,false);
+  GetWindowRecord(wn,RepSpec);
+  ReportDefaults(RepSpec,"SLEUVATRClass");  
+  RepSpec.flags[1] = 0;
+  RepSpec.flags[2] = 1;
+  RepSpec.flags[3] = 0;
+  PutWindowRecord(wn,RepSpec);
+  SelectWindow(wn);
+  RETURN;
+END;
+
+global
+procedure SLEUVATSloRClassReportDefaults(Integer wn)
+BEGIN
+  record RcVc RepSpec;
+  
+  DeselectWindow(wn,false);
+  GetWindowRecord(wn,RepSpec);
+  ReportDefaults(RepSpec,"SLEUVATSloRClass");  
+  RepSpec.flags[1] = 0;
+  RepSpec.flags[2] = 1;
+  RepSpec.flags[3] = 0;
+  PutWindowRecord(wn,RepSpec);
+  SelectWindow(wn);
+  RETURN;
+END;
+
+global
+procedure PLEUVATRClassReportDefaults(Integer wn)
+BEGIN
+  record RcVc RepSpec;
+  
+  DeselectWindow(wn,false);
+  GetWindowRecord(wn,RepSpec);
+  ReportDefaults(RepSpec,"PLEUVATRClass");  
+  RepSpec.flags[1] = 0;
+  RepSpec.flags[2] = 1;
+  RepSpec.flags[3] = 0;
+  PutWindowRecord(wn,RepSpec);
+  SelectWindow(wn);
+  RETURN;
+END;
+
+global
+procedure PLVATRClassReportDefaults(Integer wn)
+BEGIN
+  record RcVc RepSpec;
+  
+  DeselectWindow(wn,false);
+  GetWindowRecord(wn,RepSpec);
+  ReportDefaults(RepSpec,"PLVATRClass");  
+  RepSpec.flags[1] = 1;
+  RepSpec.flags[2] = 0;
+  RepSpec.flags[3] = 1;
+  RepSpec.flags[4] = 1;
+  RepSpec.flags[5] = 1;
+  RepSpec.flags[6] = 1;
+  PutWindowRecord(wn,RepSpec);
+  SelectWindow(wn);
+  RETURN;
+END;
+
+global
+procedure SLVATArgRClassReportDefaults(Integer wn)
+BEGIN
+  record RcVc RepSpec;
+  
+  DeselectWindow(wn,false);
+  GetWindowRecord(wn,RepSpec);
+  ReportDefaults(RepSpec,"SLVATArgRClass");  
+  RepSpec.flags[1] = 1;
+  RepSpec.flags[2] = 0;
+  RepSpec.flags[5] = 1;
+  RepSpec.flags[6] = 1;
+  RepSpec.flags[11] = 1;
+  PutWindowRecord(wn,RepSpec);
+  SelectWindow(wn);
+  RETURN;
+END;
+
+global
+procedure TBBudgetRClassReportDefaults(Integer wn)
+BEGIN
+  record RcVc RepSpec;
+  
+  DeselectWindow(wn,false);
+  GetWindowRecord(wn,RepSpec);
+  ReportDefaults(RepSpec,"TBBudgetRClass");  
+  RepSpec.UsedOnly = 1;
+  PutWindowRecord(wn,RepSpec);
+  SelectWindow(wn);
+  RETURN;
+END;
+
+global
+procedure BudgetQTRClassReportDefaults(Integer wn)
+BEGIN
+  record RcVc RepSpec;
+  
+  DeselectWindow(wn,false);
+  GetWindowRecord(wn,RepSpec);
+  ReportDefaults(RepSpec,"BudgetQTRClass");  
+  RepSpec.UsedOnly = 1;
+  PutWindowRecord(wn,RepSpec);
+  SelectWindow(wn);
+  RETURN;
+END;
+
+global
+procedure PLVAT3RClassReportDefaults(Integer wn)
+BEGIN
+  record RcVc RepSpec;
+  
+  DeselectWindow(wn,false);
+  GetWindowRecord(wn,RepSpec);
+  ReportDefaults(RepSpec,"PLVAT3RClass");  
+  RepSpec.flags[1] = 1;
+  RepSpec.flags[2] = 0;
+  RepSpec.flags[5] = 1;
+  RepSpec.flags[6] = 1;
+  PutWindowRecord(wn,RepSpec);
+  SelectWindow(wn);
+  RETURN;
+END;
+
+global
+procedure MainRClassReportDef(var record RcVc RepSpec)
+BEGIN
+  RepSpec.flags[1] = 0;
+  RepSpec.flags[6] = 0;
+  RepSpec.flags[7] = 2;
+  RepSpec.flags[21] = 1;
+  RepSpec.flags[22] = 1;
+  if (HasLocalization("POL")) and (IsStandardProduct) then begin
+    RepSpec.flags[10] = 1;
+  end;
+  RETURN;
+END;
+
+global
+procedure MainRClassReportDefaults(Integer wn)
+BEGIN
+  record RcVc RepSpec;
+  
+  DeselectWindow(wn,false);
+  GetWindowRecord(wn,RepSpec);
+  ReportDefaults(RepSpec,"MainRClass");  
+  MainRClassReportDef(RepSpec);
+  PutWindowRecord(wn,RepSpec);
+  SelectWindow(wn);
+  RETURN;
+END;
+
+global
+procedure CorspRClassReportDefaults(Integer wn)
+BEGIN
+  record RcVc RepSpec;
+  
+  DeselectWindow(wn,false);
+  GetWindowRecord(wn,RepSpec);
+  ReportDefaults(RepSpec,"CorspRClass");  
+  RepSpec.ArtMode = 1;
+  RepSpec.flags[6] = 0;
+  RepSpec.flags[7] = 1;
+  PutWindowRecord(wn,RepSpec);
+  SelectWindow(wn);
+  RETURN;
+END;
+
+global
+procedure CuPerRClassReportDefaults(Integer wn)
+BEGIN
+  record RcVc RepSpec;
+  
+  DeselectWindow(wn,false);
+  GetWindowRecord(wn,RepSpec);
+  ReportDefaults(RepSpec,"CuPerRClass");  
+  RepSpec.ArtMode = 1;
+  PutWindowRecord(wn,RepSpec);
+  SelectWindow(wn);
+  RETURN;
+END;
+
+global
+procedure CUPerEmailVClassReportDefaults(Integer wn)
+BEGIN
+  record RcVc RepSpec;
+  
+  DeselectWindow(wn,false);
+  GetWindowRecord(wn,RepSpec);
+  ReportDefaults(RepSpec,"CUPerEmailVClass");  
+  RepSpec.flags[28] = 1;
+  PutWindowRecord(wn,RepSpec);
+  SelectWindow(wn);
+  RETURN;
+END;
+
+global
+procedure ProListRClassReportDefaults(Integer wn)
+BEGIN
+  record RcVc RepSpec;
+  string 255 tstr;
+  
+  DeselectWindow(wn,false);
+  GetWindowRecord(wn,RepSpec);
+  ReportDefaults(RepSpec,"ProListRClass");  
+  RepSpec.ArtMode = 1;
+  RepSpec.flags[10] = 1;
+  RepSpec.flags[11] = 1;
+  RepSpec.flags[12] = 1;
+  RepSpec.flags[19] = 1;
+  RepSpec.flags[20] = 0;
+  if (UserHasLimitedAccess(RepSpec.f2,tstr)) then begin
+  end;
+  PutWindowRecord(wn,RepSpec);
+  SelectWindow(wn);
+  RETURN;
+END;
+
+global
+procedure APRClassReportDefaults(Integer wn)
+BEGIN
+  record RcVc RepSpec;
+  
+  DeselectWindow(wn,false);
+  GetWindowRecord(wn,RepSpec);
+  ReportDefaults(RepSpec,"APRClass");  
+  RepSpec.ArtMode = 1;
+  RepSpec.flags[1] = 1;
+  RepSpec.flags[24] = 1;
+  if (UserHasLimitedAccess(RepSpec.AccStr,RepSpec.f2)) then begin
+  end;
+  PutWindowRecord(wn,RepSpec);
+  SelectWindow(wn);
+  RETURN;
+END;
+
+global
+procedure ConsAPRClassReportDefaults(Integer wn)
+begin
+  record RcVc RepSpec;
+  
+  DeselectWindow(wn,false);
+  GetWindowRecord(wn,RepSpec);
+  ReportDefaults(RepSpec,"APRClass");  
+  RepSpec.ArtMode = 1;
+  RepSpec.flags[1] = 1;
+  RepSpec.IncDaughter = 1;
+  if (UserHasLimitedAccess(RepSpec.AccStr,RepSpec.f2)) then begin
+  end;
+  PutWindowRecord(wn,RepSpec);
+  SelectWindow(wn);
+  return;
+end;
+
+global
+procedure OPDRClassReportDefaults(Integer wn)
+BEGIN
+  record RcVc RepSpec;
+  
+  DeselectWindow(wn,false);
+  GetWindowRecord(wn,RepSpec);
+  ReportDefaults(RepSpec,"OPDRClass");  
+  RepSpec.OnlyUnprntd = 0;
+  PutWindowRecord(wn,RepSpec);
+  SelectWindow(wn);
+  RETURN;
+END;
+
+global
+procedure VIRClassReportDefaults(Integer wn)
+BEGIN
+  record RcVc RepSpec;
+  
+  DeselectWindow(wn,false);
+  GetWindowRecord(wn,RepSpec);
+  ReportDefaults(RepSpec,"VIRClass");  
+  RepSpec.OnlyUnprntd = 0;
+  PutWindowRecord(wn,RepSpec);
+  SelectWindow(wn);
+  RETURN;
+END;
+
+global
+procedure OP2DRClassReportDefaults(Integer wn)
+BEGIN
+  record RcVc RepSpec;
+  
+  DeselectWindow(wn,false);
+  GetWindowRecord(wn,RepSpec);
+  ReportDefaults(RepSpec,"OP2DRClass");  
+  RepSpec.OnlyUnprntd = 0;
+  PutWindowRecord(wn,RepSpec);
+  SelectWindow(wn);
+  RETURN;
+END;
+
+global
+procedure VSRClassReportDefaults(Integer wn)
+BEGIN
+  record RcVc RepSpec;
+  
+  DeselectWindow(wn,false);
+  GetWindowRecord(wn,RepSpec);
+  ReportDefaults(RepSpec,"VSRClass");  
+  RepSpec.flags[1] = 1;
+  PutWindowRecord(wn,RepSpec);
+  SelectWindow(wn);
+  RETURN;
+END;
+
+global
+procedure IPDRClassReportDefaults(Integer wn)
+BEGIN
+  record RcVc RepSpec;
+  
+  DeselectWindow(wn,false);
+  GetWindowRecord(wn,RepSpec);
+  ReportDefaults(RepSpec,"IPDRClass");  
+  RepSpec.OnlyUnprntd = 0;
+  PutWindowRecord(wn,RepSpec);
+  SelectWindow(wn);
+  RETURN;
+END;
+
+global
+procedure MPEClassReportDefaults(Integer wn)
+BEGIN
+  record RcVc RepSpec;
+  record OPTBlock OPTb;
+  record LocalMachineBlock LMb;
+  record BankFileBlock BFb;
+  
+  BlockLoad(OPTb);
+  BlockLoad(BFb);
+  BlockLoad(LMb);
+  DeselectWindow(wn,false);
+  GetWindowRecord(wn,RepSpec);
+  ReportDefaults(RepSpec,"MPEClass");  
+  RepSpec.OnlyUnprntd = 0;
+  if (GetVATLaw==27) then begin//vatEstonian
+    RepSpec.OnlyUnprntd = 1;
+  end;
+  RepSpec.ArtMode = OPTb.DOSFlag;
+  RepSpec.flags[7] = OPTb.BatchBooking;
+  RepSpec.flags[4] = OPTb.Bankfees;
+  RepSpec.flags[0] = OPTb.OnDUEDate;
+  RepSpec.f12 = LMb.DefExpCodepage;
+  RepSpec.Stext = BFb.BankBranchCode;
+  PutWindowRecord(wn,RepSpec);
+  SelectWindow(wn);
+  RETURN;
+END;
+
+global
+procedure PRPurRClassReportDefaults(Integer wn)
+BEGIN
+  record RcVc RepSpec;
+  
+  DeselectWindow(wn,false);
+  GetWindowRecord(wn,RepSpec);
+  ReportDefaults(RepSpec,"PRPurRClass");  
+  RepSpec.flags[1] = 1;
+  RepSpec.flags[2] = 1;
+  RepSpec.flags[3] = 1;
+  RepSpec.flags[4] = 1;
+  PutWindowRecord(wn,RepSpec);
+  SelectWindow(wn);
+  RETURN;
+END;
+
+global
+procedure PurRClassReportDefaults(Integer wn)
+BEGIN
+  record RcVc RepSpec;
+  record VarietyBlock Varb;
+  
+  BlockLoad(Varb);
+  DeselectWindow(wn,false);
+  GetWindowRecord(wn,RepSpec);
+  ReportDefaults(RepSpec,"PurRClass");  
+  RepSpec.flags[3] = 1;
+  RepSpec.flags[4] = 1;
+  RepSpec.flags[5] = 1;
+  RepSpec.flags[6] = Varb.AutoVarietyDef;
+  if (UserHasLimitedAccess(RepSpec.AccStr,RepSpec.Stext)) then begin
+  end;
+  PutWindowRecord(wn,RepSpec);
+  SelectWindow(wn);
+  RETURN;
+END;
+
+global
+procedure PurLocRClassReportDefaults(Integer wn)
+begin
+  record RcVc RepSpec;
+  record VarietyBlock Varb;
+  
+  BlockLoad(Varb);  
+  DeselectWindow(wn,false);
+  GetWindowRecord(wn,RepSpec);
+  ReportDefaults(RepSpec,"PurLocRClass");  
+  RepSpec.flags[3] = 1;
+  RepSpec.flags[4] = 1;
+  RepSpec.flags[5] = 1;
+  RepSpec.flags[6] = Varb.AutoVarietyDef;
+  PutWindowRecord(wn,RepSpec);
+  SelectWindow(wn);
+  return;
+end;
+
+global
+procedure INRClassReportDefaults(Integer wn)
+begin
+  record RcVc RepSpec;
+  record VarietyBlock Varb;
+  
+  BlockLoad(Varb);  
+  DeselectWindow(wn,false);
+  GetWindowRecord(wn,RepSpec);
+  ReportDefaults(RepSpec,"INRClass");  
+  RepSpec.flags[22] = Varb.AutoVarietyDef;
+  PutWindowRecord(wn,RepSpec);
+  SelectWindow(wn);
+  return;
+end;
+
+global
+procedure INReservRClassReportDefaults(Integer wn)
+begin
+  record RcVc RepSpec;
+  record VarietyBlock Varb;
+  
+  BlockLoad(Varb);  
+  DeselectWindow(wn,false);
+  GetWindowRecord(wn,RepSpec);
+  ReportDefaults(RepSpec,"INReservRClass");  
+  RepSpec.flags[0] = Varb.AutoVarietyDef;
+  PutWindowRecord(wn,RepSpec);
+  SelectWindow(wn);
+  return;
+end;
+
+global
+procedure ExpRClassReportDefaults(Integer wn)
+BEGIN
+  record RcVc RepSpec;
+  
+  DeselectWindow(wn,false);
+  GetWindowRecord(wn,RepSpec);
+  ReportDefaults(RepSpec,"ExpRClass");  
+  RepSpec.flags[1] = 1;
+  RepSpec.flags[2] = 1;
+  RepSpec.flags[3] = 1;
+  RepSpec.flags[4] = 1;
+  RepSpec.flags[5] = 1;
+  PutWindowRecord(wn,RepSpec);
+  SelectWindow(wn);
+  RETURN;
+END;
+
+global
+procedure CustSTRClassReportDefaults(Integer wn)
+BEGIN
+  record RcVc RepSpec;
+  
+  DeselectWindow(wn,false);
+  GetWindowRecord(wn,RepSpec);
+  ReportDefaults(RepSpec,"CustSTRClass");  
+  RepSpec.ArtMode = 1;
+  PutWindowRecord(wn,RepSpec);
+  SelectWindow(wn);
+  RETURN;
+END;
+
+global
+procedure ARRClassReportDefaults(Integer wn)
+BEGIN
+  record RcVc RepSpec;
+  string 255 tstr;
+  
+  DeselectWindow(wn,false);
+  GetWindowRecord(wn,RepSpec);
+  ReportDefaults(RepSpec,"ARRClass");  
+  RepSpec.ArtMode = 1;
+  RepSpec.flags[1] = 1;
+  if (UserHasLimitedAccess(RepSpec.f2,tstr)) then begin
+  end;
+  PutWindowRecord(wn,RepSpec);
+  SelectWindow(wn);
+  RETURN;
+END;
+
+global
+procedure ConsARRClassReportDefaults(Integer wn)
+begin
+  record RcVc RepSpec;
+  
+  DeselectWindow(wn,false);
+  GetWindowRecord(wn,RepSpec);
+  ReportDefaults(RepSpec,"ConsARRClass");  
+  RepSpec.ArtMode = 1;
+  RepSpec.flags[1] = 1;
+  RepSpec.IncDaughter = 1;
+  PutWindowRecord(wn,RepSpec);
+  SelectWindow(wn);
+  return;
+end;
+
+global
+procedure IVRClassReportDefaults(Integer wn)
+BEGIN
+  record RcVc RepSpec;
+  
+  DeselectWindow(wn,false);
+  GetWindowRecord(wn,RepSpec);
+  ReportDefaults(RepSpec,"IVRClass");  
+  RepSpec.flags[1] = 1;
+  RepSpec.flags[2] = 1;
+  RepSpec.flags[3] = 1;
+  RepSpec.flags[4] = 1;
+  PutWindowRecord(wn,RepSpec);
+  SelectWindow(wn);
+  RETURN;
+END;
+
+global
+procedure PIVRClassReportDefaults(Integer wn)
+begin
+  record RcVc RepSpec;
+  
+  DeselectWindow(wn,false);
+  GetWindowRecord(wn,RepSpec);
+  ReportDefaults(RepSpec,"PIVRClass");  
+  RepSpec.flags[1] = 1;
+  RepSpec.flags[2] = 1;
+  RepSpec.flags[3] = 1;
+  RepSpec.flags[4] = 1;
+  PutWindowRecord(wn,RepSpec);
+  SelectWindow(wn);
+  return;
+end;
+
+global
+procedure KIVRClassReportDefaults(Integer wn)
+begin
+  record RcVc RepSpec;
+  
+  DeselectWindow(wn,false);
+  GetWindowRecord(wn,RepSpec);
+  ReportDefaults(RepSpec,"KIVRClass");  
+  RepSpec.flags[2] = 1;
+  PutWindowRecord(wn,RepSpec);
+  SelectWindow(wn);
+  return;
+end;
+
+global
+procedure CIVRClassReportDefaults(Integer wn)
+begin
+  record RcVc RepSpec;
+  
+  DeselectWindow(wn,false);
+  GetWindowRecord(wn,RepSpec);
+  ReportDefaults(RepSpec,"CIVRClass");  
+  RepSpec.flags[3] = 1;
+  PutWindowRecord(wn,RepSpec);
+  SelectWindow(wn);
+  return;
+end;
+
+global
+procedure IIVRClassReportDefaults(Integer wn)
+begin
+  record RcVc RepSpec;
+  
+  DeselectWindow(wn,false);
+  GetWindowRecord(wn,RepSpec);
+  ReportDefaults(RepSpec,"IIVRClass");  
+  RepSpec.flags[4] = 1;
+  PutWindowRecord(wn,RepSpec);
+  SelectWindow(wn);
+  return;
+end;
+
+global
+procedure IVJRClassReportDefaults(Integer wn)
+BEGIN
+  record RcVc RepSpec;
+  string 255 tstr;
+  
+  DeselectWindow(wn,false);
+  GetWindowRecord(wn,RepSpec);
+  ReportDefaults(RepSpec,"IVJRClass");  
+  RepSpec.ArtMode = 0;
+  RepSpec.flags[1] = 0;
+  RepSpec.flags[2] = 1;
+  RepSpec.flags[3] = 1;
+  RepSpec.flags[4] = 1;
+  RepSpec.flags[5] = 1;
+  RepSpec.flags[6] = 1;
+  RepSpec.d1Code = "00:00:00";	//Edit----------------------Dima  12.08.2015
+  RepSpec.d2Code = "23:59:59";	//Edit----------------------Dima  12.08.2015
+  
+  
+  if (HasLocalization("ITA") and IsStandardProduct) then begin
+    RepSpec.flags[15] = 1;
+  end;
+  if (UserHasLimitedAccess(RepSpec.AccStr,tstr)) then begin
+  end;
+  PutWindowRecord(wn,RepSpec);
+  SelectWindow(wn);
+  RETURN;
+END;
+
+global
+procedure IVJ2RClassReportDefaults(Integer wn)
+BEGIN
+  record RcVc RepSpec;
+  
+  DeselectWindow(wn,false);
+  GetWindowRecord(wn,RepSpec);
+  ReportDefaults(RepSpec,"IVJ2RClass");  
+  RepSpec.ArtMode = 0;
+  RepSpec.flags[1] = 0;
+  RepSpec.flags[2] = 1;
+  RepSpec.flags[3] = 1;
+  RepSpec.flags[4] = 1;
+  RepSpec.flags[5] = 1;
+  RepSpec.flags[6] = 1;
+  PutWindowRecord(wn,RepSpec);
+  SelectWindow(wn);
+  RETURN;
+END;
+
+global
+procedure IVCashJRClassReportDefaults(Integer wn)
+BEGIN
+  record RcVc RepSpec;
+  
+  DeselectWindow(wn,false);
+  GetWindowRecord(wn,RepSpec);
+  ReportDefaults(RepSpec,"IVCashJRClass");  
+  RepSpec.ArtMode = 0;
+  RepSpec.flags[1] = 0;
+  RepSpec.flags[2] = 1;
+  PutWindowRecord(wn,RepSpec);
+  SelectWindow(wn);
+  RETURN;
+END;
+
+global
+procedure RestAccJRClassReportDefaults(Integer wn)
+BEGIN
+  record RcVc RepSpec;
+  
+  DeselectWindow(wn,false);
+  GetWindowRecord(wn,RepSpec);
+  ReportDefaults(RepSpec,"RestAccJRClass");  
+  RepSpec.ArtMode = 0;
+  RepSpec.flags[1] = 1;
+  RepSpec.flags[2] = 1;
+  PutWindowRecord(wn,RepSpec);
+  SelectWindow(wn);
+  RETURN;
+END;
+
+global
+procedure BarCashRClassReportDefaults(Integer wn)
+BEGIN
+  record RcVc RepSpec;
+  
+  DeselectWindow(wn,false);
+  GetWindowRecord(wn,RepSpec);
+  ReportDefaults(RepSpec,"BarCashRClass");  
+  RepSpec.sStartDate = CurrentDate;
+  RepSpec.sEndDate = CurrentDate;
+  RepSpec.flags[4] = 1;
+  RepSpec.Period2Str = RepSpec.sStartDate;
+  RepSpec.Period2Str = RepSpec.Period2Str & ":";
+  RepSpec.Period2Str = RepSpec.Period2Str & RepSpec.sEndDate;  
+  PutWindowRecord(wn,RepSpec);
+  SelectWindow(wn);
+  RETURN;
+END;
+
+
+global
+procedure AgedINRClassReportDefaults(Integer wn)
+BEGIN
+  record RcVc RepSpec;
+  record AgedBlock AgedRec;
+  
+  BlockLoad(AgedRec);  
+  DeselectWindow(wn,false);
+  GetWindowRecord(wn,RepSpec);
+  ReportDefaults(RepSpec,"AgedINRClass");
+  if (AgedRec.Per1!=-1) then begin
+    RepSpec.vals0 = AgedRec.Per1;
+  end;
+  if (AgedRec.Per2!=-1) then begin
+    RepSpec.vals1 = AgedRec.Per2;
+  end;
+  if (AgedRec.Per3!=-1) then begin
+    RepSpec.vals2 = AgedRec.Per3;
+  end;
+  if (AgedRec.Per4!=-1) then begin
+    RepSpec.vals3 = AgedRec.Per4;
+  end;
+  if (AgedRec.Per5!=-1) then begin
+    RepSpec.vals4 = AgedRec.Per5;
+  end;
+  if (AgedRec.Per6!=-1) then begin
+    RepSpec.long1 = AgedRec.Per6;
+  end;
+  PutWindowRecord(wn,RepSpec);
+  SelectWindow(wn);
+  RETURN;
+END;
+
+global
+procedure HousekeepingRClassReportDefaults(Integer wn)
+BEGIN
+  record RcVc RepSpec;
+  
+  DeselectWindow(wn,false);
+  GetWindowRecord(wn,RepSpec);
+  ReportDefaults(RepSpec,"HousekeepingRClass");  
+  RepSpec.d1 = CurrentDate;
+  RepSpec.flags[1] = 1;
+  RepSpec.flags[2] = 1;
+  RepSpec.flags[3] = 1;
+  RepSpec.flags[4] = 1;
+  RepSpec.flags[6] = 1;
+  PutWindowRecord(wn,RepSpec);
+  SelectWindow(wn);
+  RETURN;
+END;
+
+global
+procedure SalesTimeRClassReportDefaults(Integer wn)
+BEGIN
+  record RcVc RepSpec;
+  
+  DeselectWindow(wn,false);
+  GetWindowRecord(wn,RepSpec);
+  ReportDefaults(RepSpec,"SalesTimeRClass");  
+  RepSpec.sStartDate = AddDay(CurrentDate,-6);
+  RepSpec.sEndDate = CurrentDate;
+  RepSpec.Period2Str = RepSpec.sStartDate;
+  RepSpec.Period2Str = RepSpec.Period2Str & ":";
+  RepSpec.Period2Str = RepSpec.Period2Str & RepSpec.sEndDate;  
+  RepSpec.d1 = AddDay(CurrentDate,-6);
+  RepSpec.long1 = 1;
+  PutWindowRecord(wn,RepSpec);
+  SelectWindow(wn);
+  RETURN;
+END;
+
+global
+procedure SalesTimeEClassReportDefaults(Integer wn)
+BEGIN
+  record RcVc RepSpec;
+  
+  DeselectWindow(wn,false);
+  GetWindowRecord(wn,RepSpec);
+  ReportDefaults(RepSpec,"SalesTimeEClass");  
+  RepSpec.sStartDate = AddDay(CurrentDate,-6);
+  RepSpec.sEndDate = CurrentDate;
+  RepSpec.Period2Str = RepSpec.sStartDate;
+  RepSpec.Period2Str = RepSpec.Period2Str & ":";
+  RepSpec.Period2Str = RepSpec.Period2Str & RepSpec.sEndDate;  
+  RepSpec.d1 = AddDay(CurrentDate,-6);
+  RepSpec.long1 = 1;
+  PutWindowRecord(wn,RepSpec);
+  SelectWindow(wn);
+  RETURN;
+END;
+
+global
+procedure DetSalesTimeRClassReportDefaults(Integer wn)
+BEGIN
+  record RcVc RepSpec;
+  
+  DeselectWindow(wn,false);
+  GetWindowRecord(wn,RepSpec);
+  ReportDefaults(RepSpec,"DetSalesTimeRClass");  
+  RepSpec.sStartDate = AddDay(CurrentDate,-6);
+  RepSpec.sEndDate = CurrentDate;
+  RepSpec.Period2Str = RepSpec.sStartDate;
+  RepSpec.Period2Str = RepSpec.Period2Str & ":";
+  RepSpec.Period2Str = RepSpec.Period2Str & RepSpec.sEndDate;  
+  RepSpec.d1 = AddDay(CurrentDate,-6);
+  RepSpec.long1 = 1;
+  PutWindowRecord(wn,RepSpec);
+  SelectWindow(wn);
+  RETURN;
+END;
+
+global
+procedure MakeAutoClientsVClassReportDefaults(Integer wn)
+BEGIN
+  record RcVc RepSpec;
+  
+  DeselectWindow(wn,false);
+  GetWindowRecord(wn,RepSpec);
+  ReportDefaults(RepSpec,"MakeAutoClientsVClass");  
+  RepSpec.f1 = "clients";
+  RepSpec.flags[1] = 0;
+  RepSpec.flags[2] = 0;
+  RepSpec.flags[3] = 1;
+  RepSpec.flags[4] = 0;
+  RepSpec.flags[5] = 0;
+  RepSpec.flags[6] = 0;
+  RepSpec.flags[7] = 0;
+  RepSpec.flags[8] = 0;
+  RepSpec.flags[9] = 0;
+  RepSpec.flags[10] = 1;
+  RepSpec.flags[11] = 0;
+  RepSpec.flags[12] = 0;
+  PutWindowRecord(wn,RepSpec);
+  SelectWindow(wn);
+  RETURN;
+END;
+
+global
+procedure ResActivitiesRClassReportDefaults(Integer wn)
+BEGIN
+  record RcVc RepSpec;
+  
+  DeselectWindow(wn,false);
+  GetWindowRecord(wn,RepSpec);
+  ReportDefaults(RepSpec,"ResActivitiesRClass");  
+  RepSpec.flags[1] = 1;
+  PutWindowRecord(wn,RepSpec);
+  SelectWindow(wn);
+  RETURN;
+END;
+
+global
+procedure CLInJRClassReportDefaults(Integer wn)
+BEGIN
+  record RcVc RepSpec;
+  
+  DeselectWindow(wn,false);
+  GetWindowRecord(wn,RepSpec);
+  ReportDefaults(RepSpec,"CLInJRClass");  
+  RepSpec.flags[10] = 1;
+  RepSpec.flags[11] = 1;
+  RepSpec.flags[12] = 1;
+  RepSpec.flags[13] = 1;
+  RepSpec.flags[14] = 1;
+  RepSpec.flags[15] = 1;
+  RepSpec.flags[16] = 1;
+  PutWindowRecord(wn,RepSpec);
+  SelectWindow(wn);
+  RETURN;
+END;
+
+global
+procedure CLOutJRClassReportDefaults(Integer wn)
+BEGIN
+  record RcVc RepSpec;
+  
+  DeselectWindow(wn,false);
+  GetWindowRecord(wn,RepSpec);
+  ReportDefaults(RepSpec,"CLOutJRClass");  
+  RepSpec.flags[10] = 1;
+  RepSpec.flags[11] = 1;
+  RepSpec.flags[12] = 1;
+  RepSpec.flags[13] = 1;
+  RepSpec.flags[14] = 1;
+  RepSpec.flags[15] = 1;
+  RepSpec.flags[16] = 1;
+  RepSpec.flags[17] = 1;
+  PutWindowRecord(wn,RepSpec);
+  SelectWindow(wn);
+  RETURN;
+END;
+
+global
+procedure ShipableRClassReportDefaults(Integer wn)
+BEGIN
+  record RcVc RepSpec;
+  
+  DeselectWindow(wn,false);
+  GetWindowRecord(wn,RepSpec);
+  ReportDefaults(RepSpec,"ShipableRClass");  
+  RepSpec.flags[7] = 1;
+  RepSpec.flags[8] = 1;
+  RepSpec.f7 = StringFromSet(433,kOrderTypeNormal);
+  PutWindowRecord(wn,RepSpec);
+  SelectWindow(wn);
+  RETURN;
+END;
+
+global
+procedure CreateCOInvVClassReportDefaults(Integer wn)
+BEGIN
+  record RcVc RepSpec;
+  
+  DeselectWindow(wn,false);
+  GetWindowRecord(wn,RepSpec);
+  ReportDefaults(RepSpec,"CreateCOInvVClass");  
+  RepSpec.flags[2] = 1;
+  PutWindowRecord(wn,RepSpec);
+  SelectWindow(wn);
+  RETURN;
+END;
+
+global
+procedure CalcStockLevelsRClassReportDefaults(Integer wn)
+begin
+  record RcVc RepSpec;
+  
+  DeselectWindow(wn,false);
+  GetWindowRecord(wn,RepSpec);
+  ReportDefaults(RepSpec,"CalcStockLevelsRClass");  
+  RepSpec.flags[1] = 1;
+  RepSpec.flags[2] = 1;
+  RepSpec.flags[5] = 1;
+  PutWindowRecord(wn,RepSpec);
+  SelectWindow(wn);
+  return;
+end;
+
+global
+procedure ProdPlanRClassReportDefaults(Integer wn)
+begin
+  record RcVc RepSpec;
+  
+  DeselectWindow(wn,false);
+  GetWindowRecord(wn,RepSpec);
+  ReportDefaults(RepSpec,"ProdPlanRClass");  
+  RepSpec.flags[1] = 1;
+  RepSpec.flags[2] = 1;
+  RepSpec.flags[5] = 1;
+  PutWindowRecord(wn,RepSpec);
+  SelectWindow(wn);
+  return;
+end;
+
+global
+procedure ProdPlanVClassReportDefaults(Integer wn)
+begin
+  record RcVc RepSpec;
+  
+  DeselectWindow(wn,false);
+  GetWindowRecord(wn,RepSpec);
+  ReportDefaults(RepSpec,"ProdPlanVClass");  
+  RepSpec.flags[1] = 1;
+  RepSpec.flags[2] = 1;
+  PutWindowRecord(wn,RepSpec);
+  SelectWindow(wn);
+  return;
+end;
+
+global
+procedure POPlanRClassReportDefaults(Integer wn)
+begin
+  record RcVc RepSpec;
+  
+  DeselectWindow(wn,false);
+  GetWindowRecord(wn,RepSpec);
+  ReportDefaults(RepSpec,"POPlanRClass");  
+  RepSpec.flags[1] = 1;
+  RepSpec.flags[2] = 1;
+  RepSpec.flags[5] = 1;
+  PutWindowRecord(wn,RepSpec);
+  SelectWindow(wn);
+  return;
+end;
+
+global
+procedure POPlanVClassReportDefaults(Integer wn)
+begin
+  record RcVc RepSpec;
+  
+  DeselectWindow(wn,false);
+  GetWindowRecord(wn,RepSpec);
+  ReportDefaults(RepSpec,"POPlanVClass");  
+  RepSpec.flags[1] = 1;
+  RepSpec.flags[2] = 1;
+  PutWindowRecord(wn,RepSpec);
+  SelectWindow(wn);
+  return;
+end;
+
+global
+procedure POPlanOrdRClassReportDefaults(Integer wn)
+begin
+  record RcVc RepSpec;
+  
+  DeselectWindow(wn,false);
+  GetWindowRecord(wn,RepSpec);
+  ReportDefaults(RepSpec,"POPlanOrdRClass");  
+  RepSpec.flags[1] = 1;
+  RepSpec.flags[2] = 0;
+  RepSpec.flags[7] = 1;
+  PutWindowRecord(wn,RepSpec);
+  SelectWindow(wn);
+  return;
+end;
+
+global
+procedure POPlanOrdVClassReportDefaults(Integer wn)
+begin
+  record RcVc RepSpec;
+  
+  DeselectWindow(wn,false);
+  GetWindowRecord(wn,RepSpec);
+  ReportDefaults(RepSpec,"POPlanOrdVClass");  
+  RepSpec.flags[1] = 1;
+  RepSpec.flags[2] = 0;
+  PutWindowRecord(wn,RepSpec);
+  SelectWindow(wn);
+  return;
+end;
+
+global
+procedure ProdPlanProdRClassReportDefaults(Integer wn)
+begin
+  record RcVc RepSpec;
+  
+  DeselectWindow(wn,false);
+  GetWindowRecord(wn,RepSpec);
+  ReportDefaults(RepSpec,"ProdPlanProdRClass");  
+  RepSpec.flags[1] = 1;
+  RepSpec.flags[2] = 0;
+  PutWindowRecord(wn,RepSpec);
+  SelectWindow(wn);
+  return;
+end;
+
+global
+procedure ProdPlanProdVClassReportDefaults(Integer wn)
+begin
+  record RcVc RepSpec;
+  
+  DeselectWindow(wn,false);
+  GetWindowRecord(wn,RepSpec);
+  ReportDefaults(RepSpec,"ProdPlanProdVClass");  
+  RepSpec.flags[1] = 1;
+  RepSpec.flags[2] = 0;
+  PutWindowRecord(wn,RepSpec);
+  SelectWindow(wn);
+  return;
+end;
+
+global
+procedure ExpArrivalRClassReportDefaults(Integer wn)
+begin
+  record RcVc RepSpec;
+  
+  DeselectWindow(wn,false);
+  GetWindowRecord(wn,RepSpec);
+  ReportDefaults(RepSpec,"ExpArrivalRClass");  
+  RepSpec.flags[7] = 1;
+  PutWindowRecord(wn,RepSpec);
+  SelectWindow(wn);
+  return;
+end;
+
+global
+procedure InvInkassoEClassReportDefaults(Integer wn)
+begin
+  record RcVc RepSpec;
+  
+  DeselectWindow(wn,false);
+  GetWindowRecord(wn,RepSpec);
+  ReportDefaults(RepSpec,"InvInkassoEClass");  
+  RepSpec.long1 = -1;
+  PutWindowRecord(wn,RepSpec);
+  SelectWindow(wn);
+  return;
+end;
+
+global
+procedure LinkListRClassReportDefaults(Integer wn)
+begin
+  record RcVc RepSpec;
+  
+  DeselectWindow(wn,false);
+  GetWindowRecord(wn,RepSpec);
+  ReportDefaults(RepSpec,"LinkListRClass");  
+  RepSpec.flags[0] = 1;
+  RepSpec.flags[5] = 1;
+  PutWindowRecord(wn,RepSpec);
+  SelectWindow(wn);
+  return;
+end;
+
+procedure CURClassSpecPasteNamef1(Integer wn,var string psname)
+begin
+  record RcVc RepSpec;
+  
+  GetWindowRecord(wn,RepSpec);
+  switch (RepSpec.flags[9]) begin
+    case 0: psname = "CUSClass";
+    case 1: psname = "VESClass";
+    case 2: psname = "CUGuestSClass";
+    case 3: psname = "CUDealerSClass";
+    case 5: psname = "CUEmployeeSClass";
+    otherwise psname = "ContactCUSClass";
+  end;
+  return;
+end;
+
+global
+function string 40 CURClassSpecPasteName(Integer wn,string defpsname)
+begin
+  string 255 psname;
+  
+  psname = defpsname;
+  switch (WindowActiveField(wn)) begin
+    case "f1": CURClassSpecPasteNamef1(wn,psname);
+  end;
+  CURClassSpecPasteName = psname;
+  return;
+end;
+
+global
+function string 40 CUforAllCompaniesRClassSpecPasteName(Integer wn,string defpsname)
+begin
+  string 255 psname;
+  
+  psname = defpsname;
+  switch (WindowActiveField(wn)) begin
+    case "f1": CURClassSpecPasteNamef1(wn,psname);
+  end;
+  CUforAllCompaniesRClassSpecPasteName = psname;
+  return;
+end;
+
+procedure CuLabRClassSpecPasteNamef1(Integer wn,var string psname)
+begin
+  record RcVc RepSpec;
+  
+  GetWindowRecord(wn,RepSpec);
+  switch (RepSpec.flags[6]) begin
+    case 1: psname = "AllCUSClass";
+    case 2: psname = "AllVESClass";
+    otherwise psname = "ContactCUSClass";
+  end;
+  return;
+end;
+
+global
+function string 40 CuLabRClassSpecPasteName(Integer wn, string defpsname)
+begin
+  string 255 psname;
+  
+  psname = defpsname;
+  switch (WindowActiveField(wn)) begin
+    case "f1": CuLabRClassSpecPasteNamef1(wn,psname);
+  end;
+  CuLabRClassSpecPasteName = psname;
+end;
+
+
+
+global
+procedure SalesRClassReportDefaults(Integer wn)		//Edit----------------------Dima  12.08.2015
+BEGIN
+  record RcVc RepSpec;
+  
+  DeselectWindow(wn,false);
+  GetWindowRecord(wn,RepSpec);
+  ReportDefaults(RepSpec,"SalesRClass");  
+  RepSpec.f5 = "00:00:00";
+	RepSpec.f6 = "23:59:59";
+
+  PutWindowRecord(wn,RepSpec);
+  SelectWindow(wn);
+  return;
+END;  
