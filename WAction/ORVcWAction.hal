@@ -66,7 +66,7 @@ remote procedure ORVc_PasteNPPhone(var record ORVc);	//Edit---------------------
 remote procedure NP_PasteRecipientWarehouseDescOR(var record ORVc);
 remote function string 255 SendSMS(string, string, string,boolean,string);//Edit----------------------Dima  26.06.2015
 external function string 255 ReplaceAllSubStringInString(string, string, string);//Edit----------------------Dima  02.07.2015
-
+external procedure CheckItemsOnStockORRn(record RcVc); //Edit***************************Sasha2,15:31 12.08.2015
 
 global //Edit***************************Sasha2,15:51 04.02.2015 {
 function Integer ORLClassRowColor(record ORVc ORr)
@@ -2125,6 +2125,26 @@ begin
   end;
   return;
 end;
+
+global //Edit***************************Sasha2,15:22 12.08.2015 {
+procedure CheckItemsOnStockORDsm()	
+begin
+	record ORVc ORr;
+	record RcVc RepSpec;
+  Integer wn;
+  Boolean testf;
+
+  wn = CurWindow;
+  GetWindowRecord(wn,ORr);
+
+  //ReportDefaults(RepSpec,"KrediidiinfoRClass");
+  RepSpec.repname = "CheckItemsOnStockORRn";
+  RepSpec.Media = mtScreen;
+  RepSpec.long1 = ORr.SerNr;
+  RunReport(RepSpec,0);
+
+  return;
+end; //Edit***************************Sasha2,15:22 12.08.2015 }
 
 
 function string 255 ParseSMStext(string text, record ORVc ORr)	//Edit----------------------Dima  02.07.2015

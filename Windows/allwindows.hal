@@ -5419,6 +5419,7 @@ email not working yet
   if (StandardHansa==false) then begin
     SpecialMenu("Пересчитать вес и объем",' ',10,"RecalculateWeightORDsm");
   end;
+  SpecialMenu("Проверить наличие на складах товаров из счета",' ',7,"CheckItemsOnStockORDsm"); //Edit***************************Sasha2,15:20 12.08.2015
   SpecialMenu("Обновить товары валютного прейскуранта",' ',7,"UpdatePricesORDsm");
   SpecialMenu("Статус товара",'I',2,"ItemStatusORDsm");
   SpecialMenu("Поиск товара",'',1,"ItemSearchDsm");
