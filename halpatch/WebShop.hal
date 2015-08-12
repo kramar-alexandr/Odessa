@@ -121,6 +121,15 @@ begin
 		ISr.Location = loc4;
 		IS2r.Code = INr.Code;
 		IS2r.Location = loc5;
+		
+		PLr.ArtCode = INr.Code;
+		PLr.PLCode = "RRP";
+		if (ReadFirstMain(PLr,1,true)) then begin	//Edit----------------------Dima  12.08.2015
+			if (PLr.ExVatPrice < 2500) then begin		
+				loc5 = 0;
+			end;
+		end;		
+		
 		if((readfirstmain(ISr,2,true) and (ISr.Instock-ISr.OrddOut)>0) or (readfirstmain(IS2r,2,true) and (IS2r.Instock-IS2r.OrddOut)>0)) then begin dop_ostatok = dop_ostatok + 2; end;
 		
 		if (dop_ostatok>0) then begin			
