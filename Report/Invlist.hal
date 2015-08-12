@@ -138,7 +138,8 @@ begin
   OutString(70,0,tstr,false);
   OutDate(150,0,IVr.InvDate,false);
   OutDate(220,0,IVr.PayDate,false);
-  OutDate(290,0,IVr.TransDate,false);
+  OutDate(280,0,IVr.TransDate,false);
+  OutString(310,0,IVr.TransTime,false);//Edit----------------------Dima  12.08.2015
   OutLongInt(350,0,IVr.OrderNr,false);
   if (IVr.OKFlag==0) then begin
     OutString(480,0,USetStr(2366),true);
@@ -600,9 +601,7 @@ begin
   runnr = 1;
 
 	timeFrom = StringToTime(RepSpec.d1Code);
-	timeTo = StringToTime(RepSpec.d2Code);
-	
-	LogText(0,timeTo);
+	timeTo = StringToTime(RepSpec.d2Code);	
 	
   
   Split2Str2(RepSpec.f6,froffic,tooffic,40);  
@@ -730,6 +729,7 @@ begin
       end;
       StartFormat(15);
       OutString(0,0,USetStr(2352),false);//0
+      OutString(30,0,USetStr(5100),false);//Edit----------------------Dima  12.08.2015
       OutString(60,0,USetStr(2353),false);//60
       OutString(90,0,"%",false);//90 //Edit***************************Sasha2,9:36 03.06.2015
       OutString(120,0,USetStr(2354),false);//110
@@ -763,6 +763,7 @@ begin
     if (RepSpec.PocketPC == 0) then begin
       StartFormat(15);
       OutString(0,0,USetStr(2352),false);//0
+      OutString(30,0,USetStr(5100),false);//Edit----------------------Dima  12.08.2015
       OutString(60,0,USetStr(2353),false);//60
       OutString(90,0,"%",false);//90 //Edit***************************Sasha2,9:36 03.06.2015
       OutString(120,0,USetStr(2354),false);//110
@@ -787,7 +788,7 @@ begin
   if (RepSpec.ArtMode==1) then begin
     StartFormat(15);
 //    OutString(0,0,USetStr(3503),false);//0
-    OutString(0,0,USetStr(2352),false);//0
+    OutString(0,0,USetStr(2352),false);//0    
     OutString(150,0,USetStr(2353),false);//150
     OutString(180,0,"%",false);//90 //Edit***************************Sasha2,9:36 03.06.2015
     OutString(220,0,USetStr(2370),false);//220
@@ -1385,6 +1386,7 @@ LkInvoiceTypeCredit1:;
                   end else begin
                     OutStringOvst(0,"DblCustPS2",CreateInvoiceNumber(IVr.SerNr,IVr.OfficialSerNr),false,IVr.Invalid);
                   end;
+                  OutString(30,0,IVr.TransTime,false);//Edit----------------------Dima  12.08.2015
                   OutDate(60,0,IVr.InvDate,false);
                   OutString(90,0,CUr.RebCode,false); //Edit***************************Sasha2,9:30 03.06.2015
                   OutStringCut(120,170,0,IVr.Addr0,false,0);//Edit***************************Sasha2,9:30 03.06.2015
@@ -1430,6 +1432,7 @@ LkInvoiceTypeCredit1:;
               end else begin
                 OutStringOvst(0,"DblCustPS2",CreateInvoiceNumber(IVr.SerNr,IVr.OfficialSerNr),false,IVr.Invalid);
               end;
+              OutString(30,0,IVr.TransTime,false);//Edit----------------------Dima  12.08.2015
               OutDate(60,0,IVr.InvDate,false);
               OutString(90,0,CUr.RebCode,false); //Edit***************************Sasha2,9:30 03.06.2015
               OutStringCut(120,220,0,IVr.Addr0,false,0); //Edit***************************Sasha2,9:34 03.06.2015
@@ -1486,6 +1489,7 @@ LkInvoiceTypeCredit1:;
           if (RepSpec.ArtMode==4) then begin
             StartFormat(15);
             OutString(0,"DblCustPS2",CreateInvoiceNumber(IVr.SerNr,IVr.OfficialSerNr),false);
+            OutString(30,0,IVr.TransTime,false);//Edit----------------------Dima  12.08.2015
             OutDate(60,0,IVr.InvDate,false);
             OutString(90,0,CUr.RebCode,false); //Edit***************************Sasha2,9:30 03.06.2015
             OutStringCut(120,275,0,IVr.Addr0,false,0); //Edit***************************Sasha2,9:35 03.06.2015
@@ -1544,6 +1548,7 @@ LkInvoiceTypeCredit1:;
         if (RepSpec.ArtMode==3) then begin
           StartFormat(15);
           OutString(0,"DblCustPS2",CreateInvoiceNumber(IVr.SerNr,IVr.OfficialSerNr),false);
+          OutString(30,0,IVr.TransTime,false);//Edit----------------------Dima  12.08.2015
           OutDate(60,0,IVr.InvDate,false);
           OutString(90,0,CUr.RebCode,false); //Edit***************************Sasha2,9:30 03.06.2015
           OutString(120,0,IVr.Addr0,false);

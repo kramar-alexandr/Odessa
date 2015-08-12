@@ -68,6 +68,7 @@ begin
 		
 	if (ReportType==0) then begin //Detailed		
 		OutString(0,0,"Дата",false);
+		OutString(20,0,"Время",false);
 		OutString(40,0," № ",false);
 		OutString(60,0,"Склад",false);
 		OutString(90,0,"Код товара",false);
@@ -277,6 +278,7 @@ time timeFrom, timeTo;
 					if (RepSpec.ArtMode == 0) then begin			//Detailed report
 							StartFormat(15);
 							OutString(0,0,IVr.InvDate,false);
+							OutString(20,0,IVr.TransTime,false);
 							OutString(40,0,IVr.SerNr,false);
 							OutString(60,0,IVr.Location,false);
 							OutString(90,0,IVrw.ArtCode,false);
