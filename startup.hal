@@ -176,6 +176,8 @@ begin
    SString(31096,"SMS было отправлено");
    
    SString(31097,"Было ли сделано вынесение денег по кассе и Z-Отчет?");
+   
+   SString(31098,"Сохраните документ");
 	 
    
   Maintenance("Экспорт склада CSV",ExportStockCSVClass,ExportStockCSVMn,modSY);
