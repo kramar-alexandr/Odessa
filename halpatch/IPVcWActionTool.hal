@@ -1367,7 +1367,7 @@ begin
 end;
 
 
-global updating procedure AddPaymentToIPFromSH(record SHVc SHr)
+global updating procedure AddPaymentToIPFromSH(record SHVc SHr)	//Edit----------------------Dima  15.07.2015
 begin
   record IPVc IPr,oldIPr;
   row IPVc IPrw;
@@ -1409,6 +1409,7 @@ begin
 		PasteInvIn2IPr(IPr,rwcnt,CurrentDate,chk,false,installmentf);
 		MatRowGet(IPr,rwcnt,IPrw);
 		IPrw.BankCurncy = "UAH_R";
+		IPrw.AddTime = CurrentTime;
 		MatRowPut(IPr,rwcnt,IPrw);
 		IPVc_PasteBankCurncy(IPr,rwcnt);
 		

@@ -7153,9 +7153,10 @@ begin
     MatCol(t,-90,"Получено",0,RecVal,true,0);
     Flip(flipnr); flipnr = flipnr + 1;
     MatCol(t=kReceiptRowTypeNormal,190,"Текст",0,CustName,false,0);
-    MatCol(t,-270,"Сп.опл.",0,PayMode,false,PMSClass);
+    MatCol(t,-320,"Время",0,AddTime,false,0);				//Edit----------------------Dima  12.08.2015
+    MatCol(t,-250,"Сп.опл.",0,PayMode,false,PMSClass);
     if (StandardHansa==false) then begin
-      MatCol(t,-220,"№ чека",0,ChequeNr,false,0);
+      MatCol(t,-200,"№ чека",0,ChequeNr,false,0);
     end;
     MatCol(t,-130," Вал.",0,RecCurncy,true,CurncyCodeSClass);
     MatCol(t,-90,"Получено",0,RecVal,true,0);
@@ -7356,7 +7357,8 @@ begin
         SpecialMenu("Create #VAT# Correction #S/L#",' ',17,"VATCorrectionIPDsm");
       end;
     end;
-    SpecialMenu("Cортировать таблицу",'',20,"TableSortIPDsm");//Edit----------------------Dima  27.07.2015
+    SpecialMenu("Cортировать таблицу по имени клиента",'',20,"TableSortIPbyNameDsm");//Edit----------------------Dima  27.07.2015
+    SpecialMenu("Cортировать таблицу по времени",'',20,"TableSortIPbyTimeDsm");//Edit----------------------Dima  12.08.2015
   end;
   EndWindow;
 end;
@@ -9416,3 +9418,4 @@ begin
   end;
   EndWindow;
 end;
+

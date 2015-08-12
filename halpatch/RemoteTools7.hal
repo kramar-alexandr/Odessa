@@ -238,6 +238,7 @@ begin
   val v,remv,chk,cashvalue;  
   record IPTBlock IPTb;
 	string 7 bankCurcode;
+	time addTime;										//Edit----------------------Dima  12.08.2015
 
   BlockLoad(BCb);
   BlockLoad(IPTb);
@@ -245,6 +246,7 @@ begin
   currow = rwcnt;
   customerRows = 0;
   MatRowGet(IPp,rownr,IP0rw);
+  addTime = IP0rw.AddTime;
 
 	////Edit--------------------------------------------------------------------Dima  05.02.2015
 	bankCurcode = IP0rw.BankCurncy;
@@ -299,6 +301,7 @@ begin
 
         ClearRow(IPp,newIPrw,1)
         newIPrw.InvoiceNr = ARr.InvoiceNr;
+        newIPrw.AddTime = addTime;//Edit----------------------Dima  12.08.2015
         MatRowPut(IPp,currow,newIPrw);
         customerRows = customerRows + 1;
         if (PasteInvIn2IPr(IPp,currow,IPp.TransDate,chk,false,installmentf)) then begin

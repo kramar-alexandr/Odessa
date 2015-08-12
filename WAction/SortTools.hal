@@ -245,30 +245,46 @@ BEGIN
 END;
 
 
-
 //----------------------------------------------IP  Sorting----------------------------------------------------//
 
-function Integer MinInTableIP(record IPVc IPr)	//Edit----------------------Dima  27.07.2015
+function Integer MinInTableIP(record IPVc IPr, string key)	//Edit----------------------Dima  27.07.2015
 Begin
 	row IPVc IPrw;
 	integer rwcnt,i,pos;
 	string 70 min;
+	time minTime;
 
 	pos = -1;
 	rwcnt = MatRowCnt(IPr);
 	if (rwcnt>0) then begin
-		MatRowGet(IPr,0,IPrw);
-		min = IPrw.CustName;
-		pos = 0;
+		MatRowGet(IPr,0,IPrw);		
+		switch (key) begin
+			case "Client":
+				min = IPrw.CustName;
+			case "Time":
+				minTime = IPrw.AddTime;		
+		end;
+		pos = 0;		
 	end;
 
 	for(i=0;i<rwcnt;i=i+1) begin
 		MatRowGet(IPr,i,IPrw);
-		if (nonblank(IPrw.CustCode)) then begin
-			if (IPrw.CustName < min) then begin
-				min = IPrw.CustName;
-				pos = i;
-			end;
+		switch (key) begin
+			case "Client":
+				if (nonblank(IPrw.CustName)) then begin		
+					if (IPrw.CustName < min) then begin
+						min = IPrw.CustName;
+						pos = i;		
+					end;
+				end;
+
+			case "Time":
+				if (nonblank(IPrw.AddTime)) then begin	
+					if (IPrw.AddTime < minTime) then begin
+						minTime = IPrw.AddTime;
+						pos = i;		
+					end;
+				end;	
 		end;
 	end;
 MinInTableIP = pos;
@@ -278,12 +294,12 @@ end;
 
 
 
-procedure TableSortAscending_IP(var record IPVc IPr) //Edit----------------------Dima  27.07.2015
+
+procedure TableSortAscending_IP(var record IPVc IPr, string key) //Edit----------------------Dima  27.07.2015
 begin
 	record IPVc oldIPr;
 	row IPVc IPrw;
   Integer rwcnt,minPos,i;
-
 
 	RecordCopy(oldIPr,IPr);
 	rwcnt = MatRowCnt(IPr);
@@ -294,7 +310,7 @@ begin
 
 
 	for(i=0;i<rwcnt;i=i+1) begin
-		minPos = MinInTableIP(oldIPr);
+		minPos = MinInTableIP(oldIPr,key);
 		if (minPos >= 0) then begin
 				MatRowGet(oldIPr,minPos,IPrw);
 				MatRowInsert(IPr,i,IPrw);
@@ -307,7 +323,7 @@ end;
 
 
 global  //Edit----------------------Dima  27.07.2015
-procedure TableSortIPDsm()
+procedure TableSortIPbyNameDsm()
 BEGIN
 	record IPVc IPr;
 	row IPVc IPrw;
@@ -319,12 +335,36 @@ BEGIN
 
 	if (IPr.OKFlag==1 ) then begin
 			MessageBox(31010,"");
-			goto LTableSortIPDsm;
+			goto LTableSortIPbyNameDsm;
 	end;
 	
-	TableSortAscending_IP(IPr);
+	TableSortAscending_IP(IPr,"Client");
   PutWindowRecord(wn,IPr);
 
-	LTableSortIPDsm:;
+	LTableSortIPbyNameDsm:;
+  RETURN;
+END;
+
+
+global  //Edit----------------------Dima  12.08.2015
+procedure TableSortIPbyTimeDsm()
+BEGIN
+	record IPVc IPr;
+	row IPVc IPrw;
+  Integer wn,rwcnt,i;
+
+  wn = CurWindow;
+	DeselectWindow(wn,false);
+	GetWindowRecord(wn,IPr);
+
+	if (IPr.OKFlag==1 ) then begin
+			MessageBox(31010,"");
+			goto LTableSortIPbyTimeDsm;
+	end;
+	
+	TableSortAscending_IP(IPr,"Time");
+  PutWindowRecord(wn,IPr);
+
+	LTableSortIPbyTimeDsm:;
   RETURN;
 END;
