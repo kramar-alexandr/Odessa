@@ -1055,6 +1055,7 @@ begin
       POrw.CustomsCost = PIr.PurchaseCost;
       POrw.StockType = PIr.DefStockType;
       POrw.Spec = PIr.Comment;
+      POrw.Spec = INr.Name;// Edit ************************** Thursday, 13 August 2015 11:45:55
       POrw.VEUnit =  PIr.VEUnit;
       POrw.PIFactor = PIr.PIFactor;
       DivPIFactor(POrw.Quant,POrw.PIFactor,t);
@@ -1270,6 +1271,7 @@ begin
       POrw.CustomsCost = PIr.PurchaseCost;
       POrw.StockType = PIr.DefStockType;
       POrw.Spec = PIr.Comment;
+      POrw.Spec = INr.Name;// Edit ************************** Thursday, 13 August 2015 11:46:57
       POrw.VEUnit =  PIr.VEUnit;
       POrw.PIFactor = PIr.PIFactor;
     end else begin
