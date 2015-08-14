@@ -178,7 +178,7 @@ begin
 	record INVc INr;
 	record ItemStatusVc ISr;
 	integer rw,TotalQuantity,lmflag;
-	boolean continue,check;
+	boolean continue,check,found;
 	string 100 searchStr ;
 	string 20 keySort;
 	record LocalMachineBlock LMb; //Edit***************************Sasha2,10:14 23.01.2015
@@ -189,6 +189,7 @@ begin
   val step;
 	integer i,pos,startPos;
 	record LocationVc Locr;
+	record BarcodeVc Barcoder;
 
 	searchStr = RepSpec.f1;
 	BlockLoad(LMb); //Edit***************************Sasha2,10:14 23.01.2015
@@ -259,12 +260,49 @@ begin
 		OutString(0,0,"Cузьте критерий поиска",false);
 		end;
 	end;
+	
+
+
+	Barcoder.Barcode = searchStr;
+	if (ReadFirstMain(Barcoder,1,true)) then begin
+		INr.Code = 	Barcoder.Itemcode;
+		if (ReadFirstMain(INr,1,true)) then begin
+    	
+				for(i = 0; i < locations.length; i = i+1) begin
+					ISr.Code = INr.Code;
+					ISr.Location = locations[i];
+					if (ReadFirstMain(ISr,2,true)) then begin
+						LocBalValues[locations[i]] = ISr.Instock;
+					end;
+				end;
+			
+				StartFormat(15);			
+				OutString(0,0,INr.Code,false);
+				OutString(2,0,INr.DispGroups,false);
+				OutString(3,0,INr.Name,false);
+				OutString(5,0,INr.BarCode & "," & Barcoder.Barcode,false);
+				OutString(6,0,INr.AlternativeCode,false);
+    	
+				for(i = 0; i < locations.length; i = i+1) begin
+					OutString(LocPos[i],0,LocBalValues[locations[i]],false);		//Edit----------------------Dima  12.02.2015
+				end;
+				ClearVector(LocBalValues);
+    	
+				EndFormat;	
+				TotalQuantity=TotalQuantity+1;
+				found = true;
+		end;
+	end;	
+	
+	
+	
+	if (found==false) then begin
 
 	While (LoopKey(keySort,INr,1,continue)) begin
 		check=true;
 		
 		if (not (FindSubString(searchStr,INr.Code)  or FindSubString(searchStr,INr.Name) or 	FindSubString(searchStr,INr.DispGroups) or  FindSubString(searchStr,INr.BarCode)or  FindSubString(searchStr,INr.AlternativeCode))) then begin
-		check = false;
+					check = false;
 		end;
 	
 		if (check) then begin
@@ -294,6 +332,7 @@ begin
 		
 		end;
 	
+	end;
 	end;
 	
 	Black_Divider(0,1);
