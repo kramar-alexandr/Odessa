@@ -77,6 +77,7 @@ begin
 //	area ftpRoutine;
   string 200 tstr;
 	string 10 location,loc1,loc2,loc3,loc4,loc5,qty,price;
+	string 10 loc1t,loc2t,loc3t,loc4t,loc5t;
 	boolean testf;
 	integer inStock,dop_ostatok,pos;
 	//val qty;
@@ -94,11 +95,16 @@ begin
   ExtractObjWithSeparator(",",ExportStockCSVb.Location,true,pos,location);
   while (nonblank(location)) begin
     switch (location) begin
-      case "RYBRAY": loc1 = location;
+      case "RYBRAY":loc1 = location;
+      							loc1t = location;
       case "3-RAY": loc2 = location;
+      							loc2t = location;
       case "4-NIZ": loc3 = location;
+      							loc3t = location;
       case "1-KOC": loc4 = location;
-      case "6-KV": loc5 = location;
+      							loc4t = location;
+      case "6-KV": 	loc5 = location;
+										loc5t = location;
     end;
     ExtractObjWithSeparator(",",ExportStockCSVb.Location,true,pos,location);
   end;
@@ -119,18 +125,25 @@ begin
 		
 		ISr.Code = INr.Code;
 		ISr.Location = loc4;
+		;
+		
+					
+		PLr.ArtCode = INr.Code;
+		PLr.PLCode = ExportStockCSVb.PLCode;
+		if(!readfirstmain(PLr,2,true))then begin
+			testf = false;
+		end else begin
+			if (PLr.ExVatPrice < 2500) then begin		
+				loc5 = "";
+			end;
+		end;
+		
 		IS2r.Code = INr.Code;
 		IS2r.Location = loc5;
 		
-		PLr.ArtCode = INr.Code;
-		PLr.PLCode = "RRP";
-		if (ReadFirstMain(PLr,1,true)) then begin	//Edit----------------------Dima  12.08.2015
-			if (PLr.ExVatPrice < 2500) then begin		
-				loc5 = 0;
-			end;
-		end;		
-		
 		if((readfirstmain(ISr,2,true) and (ISr.Instock-ISr.OrddOut)>0) or (readfirstmain(IS2r,2,true) and (IS2r.Instock-IS2r.OrddOut)>0)) then begin dop_ostatok = dop_ostatok + 2; end;
+		
+		loc5 = loc5t;
 		
 		if (dop_ostatok>0) then begin			
 			qty = 200;
@@ -139,11 +152,7 @@ begin
 			qty = 0;
 			inStock = 2;
 		end;			
-		PLr.ArtCode = INr.Code;
-		PLr.PLCode = ExportStockCSVb.PLCode;
-		if(!readfirstmain(PLr,2,true))then begin
-			testf = false;
-		end;
+		
 				
 		if (testf==true) then begin
 		  price = ValToString(PLr.ExVatPrice,M4Val,"",".",0);
@@ -154,38 +163,6 @@ begin
 	end;	
 
 	WriteAreaToFile(importar,ExportStockCSVb.FileName,0);
-	
-	/*addtexttoarea("open " & ExportStockCSVb.HostIP & " " & ExportStockCSVb.Port, ftpRoutine);
-	addtexttoarea(chr(13) & chr(10),ftpRoutine);
-	
-	if (NonBlank(ExportStockCSVb.Login)) then begin
-		addtexttoarea(ExportStockCSVb.Login, ftpRoutine);
-		addtexttoarea(chr(13) & chr(10),ftpRoutine);
-	end else begin
-		addtexttoarea("anonymous", ftpRoutine);
-		addtexttoarea(chr(13) & chr(10),ftpRoutine);
-	end;
-	
-	if (NonBlank(ExportStockCSVb.Password)) then begin
-		addtexttoarea(ExportStockCSVb.Password, ftpRoutine);
-		addtexttoarea(chr(13) & chr(10),ftpRoutine);
-	end else begin
-		addtexttoarea("password", ftpRoutine);
-		addtexttoarea(chr(13) & chr(10),ftpRoutine);
-	end;
-	
-	addtexttoarea("cd /FTPTest", ftpRoutine);//выбор папки куда копировать файл на фтп
-	addtexttoarea(chr(13) & chr(10),ftpRoutine);
-	
-	addtexttoarea("put " & ExportStockCSVb.FileName, ftpRoutine);
-	addtexttoarea(chr(13) & chr(10),ftpRoutine);
-	
-	addtexttoarea("bye", ftpRoutine);
-	addtexttoarea(chr(13) & chr(10),ftpRoutine);
-	
-	WriteAreaToFile(ftpRoutine,"ftptransferroutine.ftp",0);*/
-	
-	//RunProgram("ftptransfer.bat",1);
 	
 	tstr = ExportStockCSVb.HostIP & " " & ExportStockCSVb.Port & " ";
 	if (NonBlank(ExportStockCSVb.Login)) then begin
