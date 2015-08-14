@@ -519,6 +519,20 @@ begin
     res = -1;
     goto LORVcRecordCheck;
   end;
+  
+  // Edit Start ---------------------------------------------- Edit Start
+	//Friday, 14 August 2015 11:00:32
+	
+  if(stat==updatemode)then begin
+  	if(ORr.CustomStatusFlag!=OR2r.CustomStatusFlag)then begin
+  		if(Nonblank(CUr.WarnText1))then begin
+  			messagebox(0,CUr.WarnText1);
+  		end;
+  	end;
+  end;
+  
+	// Edit End ---------------------------------------------- Edit End
+	
   if (CUr.CUType==0) then begin
     RecordCheckError(1120,ORr.CustCode,-1,"CustCode");      
     res = -1; 
