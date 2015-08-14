@@ -67,6 +67,7 @@ remote procedure NP_PasteRecipientWarehouseDescOR(var record ORVc);
 remote function string 255 SendSMS(string, string, string,boolean,string);//Edit----------------------Dima  26.06.2015
 external function string 255 ReplaceAllSubStringInString(string, string, string);//Edit----------------------Dima  02.07.2015
 external procedure CheckItemsOnStockORRn(record RcVc); //Edit***************************Sasha2,15:31 12.08.2015
+remote procedure GetAvailableItems(var record ORVc);
 
 global //Edit***************************Sasha2,15:51 04.02.2015 {
 function Integer ORLClassRowColor(record ORVc ORr)
@@ -2279,6 +2280,26 @@ begin
 end;
 
 
+
+global	
+procedure GetAvailableItemsDsm()
+begin
+  record ORVc ORr;
+  record RcVc RepSpec;
+  integer wn;
+  
+  wn = CurWindow;
+  DeselectWindow(wn,false);
+  GetWindowRecord(wn,ORr);
+
+	if (ORr.OKFlag==0 and ORr.Reserved==0) then begin
+		GetAvailableItems(ORr);
+	end;
+	
+	PutWindowRecord(wn,ORr);
+  
+return;
+end;
 
 
 global

@@ -1671,6 +1671,11 @@ RecordBegin(INVc,-,"artikel5");
   ArrayField(AddUnitQty3,M4UVal,0,0);//Edit***************************Sasha2,15:27 23.06.2014
   ArrayField(SumBase,M423Val,0,0);	//Edit --------------------------Dima 29.01.2015
   ArrayField(PriceBase,M423Val,0,0);	//Edit --------------------------Dima 29.01.2015
+  ArrayField(StockQuant,M4UVal,0,0);
+  ArrayField(OrderQuant,M4UVal,0,0);
+  ArrayField(ProcessingQuant,M4UVal,0,0);
+  ArrayField(UID,M4Int,0,0);
+  ArrayField(AvailableQuant,M4UVal,0,0);
   EndArray;
   MainKeyBegin(SerNr,1);
   StoreInBaseKey;

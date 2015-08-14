@@ -33,6 +33,7 @@ external function LongInt DateDiff(Date,Date);
 external procedure DisplayStrArray(array string);
 remote function string 20 FindCustRouteByLocation(string,string,string);
 remote procedure HandlePrintEAN13StockMov(record StockMovVc,var array record PUVc,var array integer); //Edit***************************Sasha2,16:15 26.01.2015
+remote procedure CollectOrdersForStockMove(var record StockMovVc, record RcVc);//Edit----------------------Dima  14.08.2015
 
 global
 procedure CalcNewPrice(val oldprice,string extra,var val newprice)
@@ -1367,3 +1368,17 @@ begin
 
 	return;
 end; //Edit***************************Sasha2,12:00 22.01.2015 }
+
+
+
+global  procedure CollectOrdersForStockMoveMn(record RcVc RepSpec)
+begin
+	record ORVc ORr;
+	record StockMovVc SMr;
+	Integer nwn;
+
+	
+	RecordNew(SMr);	
+	CollectOrdersForStockMove(SMr,RepSpec);
+	nwn = OpenWindow("StockMovDClass",0,CurWindow,"","",SMr);  
+end;

@@ -2655,3 +2655,21 @@ window CancelSyncFlORVcVClass:1 //Edit---------------Vitalii 11:29 28.07.2015
 
   EndWindow;
 end;
+
+
+window CollectOrdersForStockMoveVClass:1 //Edit----------------------Dima  14.08.2015
+ wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+ begin
+  real h,v,vs;
+
+  WindowBegin("Заказы для перемещения",CollectOrdersForStockMoveVClass,CGMnt,RcType);
+	SetWRect(20,80,480,320);
+  h = 100; vs = 30; v = 15;
+
+  PeriodField(h,v,"Период");
+  EditFieldTL(h,v+=vs,100,"Со склада",M4UStr,Normal,41,f1,false,LocationSClass);
+  EditFieldTL(h+200,v,100,"На склад",M4UStr,Normal,41,f2,false,LocationSClass);
+  StaticText(h-80,v+=40,"Из счетов клиенту за указанный период, будут собраны все недостающие товары",false);
+
+  EndWindow;
+end;

@@ -1878,7 +1878,32 @@ end;
 
 
 
-
+global procedure SetRowsUID(var record ORVc ORr)		//Edit----------------------Dima  14.08.2015
+begin
+	row ORVc ORrw;
+	integer rwcnt,i,maxUID,currentUID;
+	maxUID = 0;
+	
+	rwcnt = MatRowCnt(ORr);
+	for(i=0;i<rwcnt;i=i+1) begin
+		MatRowGet(ORr,i,ORrw);
+		if (maxUID < ORrw.UID) then begin
+			maxUID = ORrw.UID;
+		end;
+	end;
+	currentUID = maxUID + 1;
+		
+	for(i=0;i<rwcnt;i=i+1) begin
+		MatRowGet(ORr,i,ORrw);
+		if (ORrw.UID < 1 and nonblank(ORrw.ArtCode)) then begin
+			ORrw.UID = currentUID;
+			currentUID = currentUID + 1;
+			//LogText(0,ORrw.ArtCode & "   " & currentUID);
+			MatRowPut(ORr,i,ORrw);
+		end;
+	end;
+		
+end;
 
 
 
@@ -1929,6 +1954,7 @@ begin
 	//	CheckCounterparty(ORr);							//Edit----------------------Dima  16.04.2015
 	//end;
   TableSortOR2(ORr);//Edit----------------------Dima  07.07.2015
+  SetRowsUID(ORr);	//Edit----------------------Dima  14.08.2015
   ORVcRecordUpdate = res; 
   return;
 end;
@@ -2116,6 +2142,7 @@ begin
 	//	CheckCounterparty(ORr);
 	//end;
   TableSortOR2(ORr);//Edit----------------------Dima  07.07.2015
+  SetRowsUID(ORr);	//Edit----------------------Dima  14.08.2015
   ORVcRecordSave = res; 
   return;
 end;

@@ -1335,3 +1335,30 @@ return;
 end;
 
 
+
+global procedure GetAvailableItems(var record ORVc ORr)
+Begin
+	row ORVc ORrw;
+	integer rwcnt,i;
+	record ItemStatusVc ISr;
+	
+	rwcnt = MatRowCnt(ORr);
+	for(i=0;i<rwcnt;i=i+1) begin
+		MatRowGet(ORr,i,ORrw);
+		ISr.Code = ORrw.ArtCode;
+		ISr.Location = ";;;";
+		if (ReadFirstMain(ISr,2,true)) then begin
+			ORrw.StockQuant = ISr.Instock - ISr.RsrvQty;
+			ORrw.OrderQuant = 0;
+			ORrw.ProcessingQuant = 0;
+			ISr.Code = ORrw.ArtCode;
+			ISr.Location = ORr.Location;
+			if (ReadFirstMain(ISr,2,true)) then begin
+					ORrw.AvailableQuant = ISr.Instock - ISr.RsrvQty;
+			end;
+			MatRowPut(ORr,i,ORrw);
+		end;
+	end;
+
+
+end;
