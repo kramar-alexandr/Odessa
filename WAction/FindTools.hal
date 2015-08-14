@@ -583,6 +583,7 @@ begin
 	record SHVc SHr;
 	row SHVc SHrw;
 	record RcVc RepSpec;
+	record BarcodeVc Barcoder;
 	integer wn,mwn,RowNumber,curRow,rwcnt;
 	Boolean key;
 
@@ -609,6 +610,12 @@ begin
 			if(ReadFirstKey("AlternativeCode",INr1,1,true)) then begin
 				INr.Code = INr1.Code;
 				key = true;
+			end else begin
+				Barcoder.Barcode = RepSpec.f2;
+				if (ReadFirstMain(Barcoder,1,true)) then begin
+					INr.Code = Barcoder.Itemcode;
+					key = true;					
+				end;
 			end;
 		end;	
 	end;
@@ -658,6 +665,7 @@ begin
 	record INVc INr,INr1;
 	record StockMovVc SMr;
 	row StockMovVc SMrw;
+	record BarcodeVc Barcoder;
 	record RcVc RepSpec;
 	integer wn,mwn,RowNumber,curRow,rwcnt;
 	Boolean key,put;
@@ -699,6 +707,12 @@ begin
 			if(ReadFirstKey("AlternativeCode",INr1,1,true)) then begin
 				INr.Code = INr1.Code;
 				key = true;
+			end else begin
+				Barcoder.Barcode = searchstr;
+				if (ReadFirstMain(Barcoder,1,true)) then begin
+					INr.Code = Barcoder.Itemcode;
+					key = true;					
+				end;
 			end;
 		end;
 	end;
