@@ -47,6 +47,8 @@ external procedure GetCurncyRoundoff(string,string,string,var roundmode,var roun
 external function Integer GetVATLaw();
 remote function Boolean ORVc_AllowSales(record ORVc,var Integer,var LongInt);
 external function Boolean UserCanChangePendingRecord(Integer);
+remote procedure GetFullCurncyRate (var string,Date,var val,var val,var val,var val,var val);// Edit ************************** Friday, 14 August 2015 15:52:58
+
 
 global
 procedure RoundBelCash(string curncycode,var val rsum)
@@ -315,11 +317,40 @@ global
 procedure IVOpenPrepExists(string custcode) // There is one in Tool18....
 BEGIN
   record ARPayVc ARPayr;
+  boolean TrHs,testf;// Edit ************************** Friday, 14 August 2015 15:44:07
+  val sum;// Edit ************************** Friday, 14 August 2015 15:44:06
+  record CUVc CUr;
+  string 5 curncy;
+  val fr,to1,to2,br1,br2;
+  
+  curncy = "UAH_B";
   
   if (ProgramType!=typStdAccounts) then begin
+  	Cur.Code = custcode;
+  	readfirstmain(CUr,1,true);
     ARPayr.CustCode = custcode;
     if (ReadFirstKey("CustCode",ARPayr,1,true)) then begin
-      MessageBox(0,USetStr(2025));
+    	
+    	ARPayr.CustCode = custcode;
+    	TrHs = true;
+    	while(loopkey("CustCode",ARPayr,1,TrHs))begin// Edit ************************** Friday, 14 August 2015 15:51:08
+    		if(ARPayr.CustCode!=custcode)then begin TrHs = false; end;
+    		
+    		if(TrHs)then begin
+    			GetFullCurncyRate(curncy,ARPayr.PayDate,fr,to1,to2,br1,br2);
+    			sum = sum + ARPayr.BookRVal*fr/to1;
+    		end;
+    	end;// Edit ************************** Friday, 14 August 2015 15:51:05
+    	
+    	
+    	
+    	if(CUr.CustCat=="WEB")then begin
+    		if(sum>10)then begin
+    		 MessageBox(0,USetStr(2025));
+    		end;
+    	end else begin
+				MessageBox(0,USetStr(2025));
+      end;
     end;           
   end;           
   RETURN;
