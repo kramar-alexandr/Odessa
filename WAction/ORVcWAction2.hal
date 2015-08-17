@@ -322,8 +322,9 @@ BEGIN
   record CUVc CUr;
   string 5 curncy;
   val fr,to1,to2,br1,br2;
-  
-  curncy = "UAH_B";
+
+  curncy = "UAH_R";
+  sum = 0;
   
   if (ProgramType!=typStdAccounts) then begin
   	Cur.Code = custcode;
@@ -337,11 +338,10 @@ BEGIN
     		if(ARPayr.CustCode!=custcode)then begin TrHs = false; end;
     		
     		if(TrHs)then begin
-    			GetFullCurncyRate(curncy,ARPayr.PayDate,fr,to1,to2,br1,br2);
+    			GetFullCurncyRate(ARPayr.CurncyCode,ARPayr.PayDate,fr,to1,to2,br1,br2);
     			sum = sum + ARPayr.BookRVal*fr/to1;
     		end;
     	end;// Edit ************************** Friday, 14 August 2015 15:51:05
-    	
     	
     	
     	if(CUr.CustCat=="WEB")then begin
