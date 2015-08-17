@@ -7234,9 +7234,10 @@ begin
     Flip(flipnr); flipnr = flipnr + 1;
     MatCol(t=kReceiptRowTypeNormal,190,"Дебиторы",0,ARAcc,false,AccSClass);
     if (StandardHansa==false) then begin
-      MatCol(t,-320,"№ кред.договор.",0,CredManNr,false,CredManSClass);
+      MatCol(t,-400,"№ кред.договор.",0,CredManNr,false,CredManSClass);
     end;
-    MatCol(t,-220,"Комментарий",0,Comment,false,0);
+    MatCol(t,-300,"Оф.серийный номер",0,InvoiceOfficialSerNr,false,0);//Edit----------------------Dima  17.08.2015
+    MatCol(t,-200,"Комментарий",0,Comment,false,0);
     MatCol(t=kReceiptRowTypeWriteoff,-390,"Вал.",0,InvCurncy,true,0);
     MatCol(t,-350,"Сумма сч/ф",0,InvVal,true,0);
     MatCol(t,-260,"Вал.",0,BankCurncy,true,CurncyCodeSClass);
