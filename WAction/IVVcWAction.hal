@@ -69,7 +69,7 @@ external function val CalculateSerialNrQuantity(string,string,string,Boolean,val
 external procedure DisplayIVItem(record IVVc,Integer);
 remote procedure PastePDInInv(var record IVVc,string,Boolean);
 external procedure MakeFiscalReceipt(record IVVc);
-external procedure IVVc_PrintBTN_2002NP_Odessa(record IVVc,Boolean); //Edit***************************Sasha2,16:59 17.08.2015
+external function Boolean IVPrintReceipt(Integer,var record IVVc,var record IVVc,Integer,Boolean,Boolean,Integer,Integer); //Edit***************************Sasha2,16:59 17.08.2015
 
 
 procedure ChangeIVSerialNr(Integer wnst,var record IVVc IVp)
@@ -2167,13 +2167,13 @@ end;
 global 
 updating procedure PrintNonFiscalReceipt()	//Edit***************************Sasha2,17:00 17.08.2015 {
 begin
-	record IVVc IVr;
+	record IVVc IVr,prevIVr;
 	integer wn;
 
   wn = CurWindow;
   GetWindowRecord(wn,IVr);
   
-  IVVc_PrintBTN_2002NP_Odessa(IVr,true);
+  IVPrintReceipt(wn,IVr,prevIVr,-1,false,true,0,WindowState(wn));
   return;
 end; //Edit***************************Sasha2,17:00 17.08.2015 }
 
