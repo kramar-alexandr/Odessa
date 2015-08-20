@@ -43,9 +43,9 @@ external function Boolean GetAccName(string,var string,Integer);
 external function Integer TypeOfCurncy(var string,var Integer);
 external procedure GetFullCurncyRateText(Boolean,var string,val,val,val,val,val);
 external procedure GetFullCurncyRate (var string,Date,var val,var val,var val,var val,var val);
-external updating procedure WriteProcessQtyBackToORVc(var row StockMovVc);
 external updating procedure CheckDifferenceForWritingToORVc(record StockMovVc,record StockMovVc);
 external updating procedure ReserveReceivedItems(record StockMovVc);
+external updating procedure UpdateLinksToOrders(record StockMovVc,record StockMovVc);
 
 
 global
@@ -294,16 +294,14 @@ BEGIN
 		end;
 		
 		MatRowPut(StockMovr,i,StockMovrw);
-		
-		//WriteProcessQtyBackToORVc(StockMovrw);//Edit----------------------Dima  18.08.2015	
-	//	MatRowPut(StockMovr,i,StockMovrw);
 	end;
 	
 	CheckDifferenceForWritingToORVc(StockMovr,StockMov2r);//Edit----------------------Dima  19.08.2015
 	if ((StockMovr.OKFlag!=0) and (StockMov2r.OKFlag==0)) then begin
     ReserveReceivedItems(StockMovr);
-    LogText(0,"--ReserveReceivedItems");
-  end;  	
+  end; 
+  
+  UpdateLinksToOrders(StockMovr,StockMov2r); 	//Edit----------------------Dima  20.08.2015
 
 	//***
   

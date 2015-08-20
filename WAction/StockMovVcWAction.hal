@@ -1371,7 +1371,7 @@ end; //Edit***************************Sasha2,12:00 22.01.2015 }
 
 
 
-global  procedure CollectOrdersForStockMoveMn()
+global  procedure CollectOrdersForStockMoveMn()//Edit----------------------Dima  18.08.2015
 begin
 	record ORVc ORr;
 	record StockMovVc SMr;
@@ -1394,7 +1394,7 @@ end;
 
 
 global
-function Boolean CollectOrdersForStockMoveTClassOnOpenWindow(Integer wn)
+function Boolean CollectOrdersForStockMoveTClassOnOpenWindow(Integer wn)//Edit----------------------Dima  18.08.2015
 BEGIN
 	date dt;
 	record RcVc RepSpec;

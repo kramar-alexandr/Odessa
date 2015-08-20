@@ -46,8 +46,8 @@ external function Boolean GetAccName(string,var string,Integer);
 external function Integer TypeOfCurncy(var string,var Integer);
 external procedure GetFullCurncyRateText(Boolean,var string,val,val,val,val,val);
 external procedure GetFullCurncyRate (var string,Date,var val,var val,var val,var val,var val);
-external procedure ORVc_PasteQuant(var record ORVc,Integer,Boolean,var Boolean);
-external procedure ORSumup(var record ORVc);
+external procedure ORVc_PasteQuant(var record ORVc,Integer,Boolean,var Boolean);//Edit----------------------Dima  20.08.2015
+external procedure ORSumup(var record ORVc);//Edit----------------------Dima  20.08.2015
 
 global
 function LongInt StockMovVcRecordDefaults(var record StockMovVc StockMovr,record StockMovVc StockMov2r,LongInt stat,LongInt long4)
@@ -646,9 +646,8 @@ BEGIN
 					for(j=0;j<rwcnt2;j=j+1) begin
 						MatRowGet(ORr,j,ORrw);
 						if (ORrw.UID == StockMovrw.ORRowUID) then begin
-							//ORrw.ProcessingQuant = ORrw.ProcessingQuant - StockMovrw.OrderToMove;
 							ORrw.ProcessingQuant = ORrw.ProcessingQuant - StockMovrw.OrdQuant;
-							LogText(0,"delete order... " & StockMovrw.Quant);
+							//LogText(0,"delete order... " & StockMovrw.Quant);
 							MatRowPut(ORr,j,ORrw);
 							j = rwcnt2;
 						end;
@@ -743,58 +742,11 @@ BEGIN
   RETURN;
 END;
 
-/*
-function val Min(val v1,val v2)
-begin
-  val res;
-  
-  if (v1>v2) then begin
-    res = v2;
-  end else begin
-    res = v1;
-  end;
-  Min = res;
-  return;
-end;
 
 
 
 global updating
- procedure WriteProcessQtyBackToORVc(var row StockMovVc StockMovrw)		//Edit----------------------Dima  18.08.2015
-begin
-  integer rwcnt2,j;
-  row ORVc ORrw;
-  record ORVc ORr;
-  vector record ORVc vectorORVc;
-  array longint orders;
-  string 30 ORserial;
-
- 	if (nonblank(StockMovrw.ORSerial) and (StockMovrw.OrderToMove != StockMovrw.OrdQuant)) then begin		//if rewriting need					
-
-				ORr.SerNr = StockMovrw.ORSerial;
-				if (ReadFirstMain(ORr,1,true)) then begin				
-					rwcnt2 = MatRowCnt(ORr);
-					for(j=0;j<rwcnt2;j=j+1) begin
-						MatRowGet(ORr,j,ORrw);
-						if (ORrw.UID == StockMovrw.ORRowUID) then begin
-							ORrw.ProcessingQuant = ORrw.ProcessingQuant + Min(StockMovrw.OrdQuant,ORrw.OrderQuant);
-							LogText(0,"write processing... " & StockMovrw.OrdQuant);
-							MatRowPut(ORr,j,ORrw);
-							j = rwcnt2;
-						end;
-					end;	
-				end;
-				if (RecordStore(ORr,true)) then begin
-						StockMovrw.OrderToMove = Min(StockMovrw.OrdQuant,ORrw.OrderQuant);
-				end;
-	end; 
-end;*/
-
-
-
-
-global updating
- procedure WriteProcessQtyBackToORVc2(row StockMovVc StockMovrw, integer diff)		//Edit----------------------Dima  18.08.2015
+ procedure WriteProcessQtyBackToORVc(row StockMovVc StockMovrw, integer diff)		//Edit----------------------Dima  18.08.2015
 begin
   integer rwcnt,j;
   row ORVc ORrw;
@@ -812,7 +764,7 @@ begin
 						MatRowGet(ORr,j,ORrw);
 						if (ORrw.UID == StockMovrw.ORRowUID) then begin
 							ORrw.ProcessingQuant = ORrw.ProcessingQuant + diff;
-							LogText(0,"write processing... " & StockMovrw.OrdQuant);
+							//LogText(0,"write processing... " & StockMovrw.OrdQuant);
 							MatRowPut(ORr,j,ORrw);
 							j = rwcnt;
 						end;
@@ -825,7 +777,7 @@ end;
 
 
 
-global updating procedure CheckDifferenceForWritingToORVc(record StockMovVc StockMovr,record StockMovVc StockMov2r)
+global updating procedure CheckDifferenceForWritingToORVc(record StockMovVc StockMovr,record StockMovVc StockMov2r)//Edit----------------------Dima  20.08.2015
 begin
 	integer rwcnt,rwcnt2,i,j;
 	row StockMovVc SMrw,SMrw2;
@@ -850,7 +802,7 @@ begin
 						diff = -SMrw2.OrdQuant;
 				end;
 				if (diff!=0) then begin		
-					WriteProcessQtyBackToORVc2(SMrw2, diff);
+					WriteProcessQtyBackToORVc(SMrw2, diff);
 				end;
 		end;
 		
@@ -859,37 +811,48 @@ begin
 end;
 
 
-global updating procedure ReserveReceivedItems(record StockMovVc SMr)
+procedure FoundUniqueOrdersFromStockMov(record StockMovVc SMr,var array longint orders)//Edit----------------------Dima  20.08.2015
 begin
 	row StockMovVc SMrw;
-	integer rwcnt,i,processed,rwcnt2,j,k;
-	record ORVc ORr,oldORr;
-	row ORVc ORrw;
-	array longint orders;
+	integer rwcnt,i;
 	vector longint matches;
-	Boolean chsum;
-
 	
-	rwcnt = MatRowCnt(SMr);
-	processed = rwcnt;
-	
+	rwcnt = MatRowCnt(SMr);	
 	
 	for(i=0;i<rwcnt;i=i+1) begin
 		MatRowGet(SMr,i,SMrw);
 		if (SMrw.ORSerial>0) then begin
-			LogText(0,"row reading   " & SMrw.ORSerial);
+			//LogText(0,"row reading   " & SMrw.ORSerial);
 			if ((matches[SMrw.ORSerial])<0) then begin
 				matches[SMrw.ORSerial] = SMrw.ORSerial;
 				orders[orders.length] = SMrw.ORSerial;
 			end;		
 		end;
 	end;
+	  
+end;
+
+
+global updating procedure ReserveReceivedItems(record StockMovVc SMr)//Edit----------------------Dima  20.08.2015
+begin
+	row StockMovVc SMrw;
+	integer rwcnt,i,rwcnt2,j,k;
+	record ORVc ORr,oldORr;
+	row ORVc ORrw;
+	array longint orders;
 	
-	LogText(0,"orders number   " & orders.length);
+	Boolean chsum;
+
+	
+	rwcnt = MatRowCnt(SMr);
+		
+	FoundUniqueOrdersFromStockMov(SMr,orders);
+	
+	//LogText(0,"orders number   " & orders.length);
 	
 	for(i=0;i<orders.length;i=i+1) begin
 		ORr.SerNr = orders[i];
-		LogText(0,"read order " & ORr.SerNr);
+		//LogText(0,"read order " & ORr.SerNr);
 		if (ReadFirstMain(ORr,1,true)) then begin
 			rwcnt2 = MatRowCnt(ORr);
 			RecordCopy(oldORr,ORr);
@@ -906,7 +869,7 @@ begin
 							ORrw.ProcessingQuant = ORrw.ProcessingQuant - SMrw.Quant;
 							ORrw.OrderQuant = ORrw.OrderQuant - SMrw.Quant;
 							ORrw.Quant = ORrw.Quant + SMrw.Quant;
-							LogText(0,"reserved... " & SMrw.OrdQuant);
+							//LogText(0,"reserved... " & SMrw.OrdQuant);
 							MatRowPut(ORr,j,ORrw);
 							ORVc_PasteQuant(ORr,j,true,chsum);
 							j = rwcnt2;
@@ -918,11 +881,72 @@ begin
 			ORr.Reserved = 1;
 			RecordUpdate(oldORr,ORr,true);
 		end;
+	end;  
+end;
+
+
+
+global updating procedure CreateLinksToOrders(record StockMovVc SMr)//Edit----------------------Dima  20.08.2015
+begin
+	row StockMovVc SMrw;
+	integer rwcnt,i;
+	record ORVc ORr;
+	vector longint matches;
+	array longint orders;
+	
+	FoundUniqueOrdersFromStockMov(SMr,orders);
+	
+	for(i=0;i<orders.length;i=i+1) begin
+		ORr.SerNr = orders[i];
+		LogText(0,"link created " & ORr.SerNr);
+		if (ReadFirstMain(ORr,1,true)) then begin			
+		 	CreateRecordLink(SMr,CurrentCompany,ORr,CurrentCompany);
+		 	CreateRecordLink(ORr,CurrentCompany,SMr,CurrentCompany);
+		end; 	  
+	end;  
+end;
+
+
+global updating procedure UpdateLinksToOrders(record StockMovVc SMrNow,record StockMovVc SMrBefore)//Edit----------------------Dima  20.08.2015
+begin
+	row StockMovVc SMrw;
+	integer i,rwcnt2,j,number;
+	record ORVc ORr;
+	record RLinkVc RLinkr;
+	//vector longint matches;
+	array longint orders,toDelete;
+	boolean exist;
+	
+	FoundUniqueOrdersFromStockMov(SMrBefore,orders);
+	
+	rwcnt2 = MatRowCnt(SMrNow);
+	for(i=0;i<orders.length;i=i+1) begin
+		exist = false;
+		for(j=0;j<rwcnt2;j=j+1) begin
+			MatRowGet(SMrNow,j,SMrw);
+			if (SMrw.ORSerial == orders[i]) then begin
+				exist = true;
+				j = rwcnt2;
+			end;
+		end;
+		if (exist == false) then begin
+			toDelete[toDelete.length] = orders[i];
+		end;		
 	end;
 	
-
+	
+	for(i=0;i<toDelete.length;i=i+1) begin
+			ORr.SerNr = toDelete[i];
+			if (ReadFirstMain(ORr,i,true)) then begin
+				ReadRecordLink(SMrNow,number,ORr,RLinkr);
+				RecordDelete(RLinkr);
+				ReadRecordLink(ORr,number,SMrNow,RLinkr);
+				RecordDelete(RLinkr);				
+			end;
+	end;	
   
 end;
+
 
 
 global
@@ -989,18 +1013,19 @@ BEGIN
 		
 		MatRowPut(StockMovr,i,StockMovrw);
 				
-		WriteProcessQtyBackToORVc2(StockMovrw,StockMovrw.OrdQuant);//Edit----------------------Dima  18.08.2015
+		WriteProcessQtyBackToORVc(StockMovrw,StockMovrw.OrdQuant);//Edit----------------------Dima  18.08.2015
 
 	end;
 	
 
 	if (StockMovr.OKFlag!=0)  then begin		//Edit----------------------Dima  20.08.2015
     ReserveReceivedItems(StockMovr);
-    LogText(0,"--ReserveReceivedItems");
   end;
 	
 	
 	recordStore(StockMovr, true);
+	CreateLinksToOrders(StockMovr);		//Edit----------------------Dima  20.08.2015
+	
 	//***
   
   StockMovVcRecordSaveAfter = res;

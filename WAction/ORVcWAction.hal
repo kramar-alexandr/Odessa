@@ -68,6 +68,7 @@ remote function string 255 SendSMS(string, string, string,boolean,string);//Edit
 external function string 255 ReplaceAllSubStringInString(string, string, string);//Edit----------------------Dima  02.07.2015
 external procedure CheckItemsOnStockORRn(record RcVc); //Edit***************************Sasha2,15:31 12.08.2015
 remote procedure GetAvailableItems(var record ORVc);
+//external procedure ORVc_PasteOrderQuant(var record ORVc,record ORVc,Integer);
 
 global //Edit***************************Sasha2,15:51 04.02.2015 {
 function Integer ORLClassRowColor(record ORVc ORr)
@@ -1389,6 +1390,34 @@ begin
 end;
 
 
+function Boolean ORDClassOrderQuantEFAfter(Integer wn,Integer fn,Integer rownr,Integer changedf)//Edit----------------------Dima  20.08.2015
+begin   
+  record ORVc ORr,ORrBefore;
+  row ORVc ORrw,ORrw0;
+  val diff;
+/*
+doesn't work correct
+  if (changedf!=0) then begin 
+    GetWindowRecord(wn,ORr);
+    GetPrevWindowRecord(wn,ORrBefore);
+    MatRowGet(ORr,rownr,ORrw);
+    MatRowGet(ORrBefore,rownr,ORrw0);    
+    
+    MessageBox(0,ORrw0.OrderQuant & "  &  " & ORrw.OrderQuant);
+    
+  	diff = ORrw.OrderQuant - ORrw0.OrderQuant;
+		if ((ORrw.Quant-diff)>=0) then begin
+			ORrw.Quant = ORrw.Quant-diff;
+    end;
+    MatRowPut(ORr,rownr,ORrw);      
+    PutWindowRecord(wn,ORr);
+  end;
+ */ 
+  ORDClassOrderQuantEFAfter = true;
+  return;
+end;
+
+
 global
 function Boolean ORDClassAfterEditField(Integer wn,string fieldname,Integer fn, Integer rownr,Integer changed)
 BEGIN
@@ -1437,6 +1466,7 @@ BEGIN
     case "OrderType": res = ORDClassOrderTypeEFAfter(wn,rownr,changed!=0);
     case "NPPhone": res = ORDClassNPPhoneEFAfter(wn,changed);
     case "NPWarehouse": res = ORDClassNPWarehouseEFAfter(wn,changed);	//Edit----------------------Dima  15.04.2015
+    case "OrderQuant": res = ORDClassOrderQuantEFAfter(wn,fn,rownr,changed);	//Edit----------------------Dima  20.08.2015
   end;
   ORDClassAfterEditField = res;
   RETURN;
