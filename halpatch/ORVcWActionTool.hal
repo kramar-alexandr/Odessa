@@ -1345,6 +1345,7 @@ Begin
 	rwcnt = MatRowCnt(ORr);
 	for(i=0;i<rwcnt;i=i+1) begin
 		MatRowGet(ORr,i,ORrw);
+		if (nonblank(ORrw.ArtCode)) then begin
 		ISr.Code = ORrw.ArtCode;
 		ISr.Location = ";;;";
 		if (ReadFirstMain(ISr,2,true)) then begin
@@ -1357,6 +1358,7 @@ Begin
 					ORrw.AvailableQuant = ISr.Instock - ISr.RsrvQty;
 			end;
 			MatRowPut(ORr,i,ORrw);
+		end;
 		end;
 	end;
 

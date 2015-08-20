@@ -64,6 +64,7 @@ begin
   Setting("Поля, задаваемые пользователем - Товары",INUserLabelTClass,modSL);// Edit ************************** Thursday, 26 February 2015 18:04:55
   Setting("Настройки отправки СМС",SMSSettingsTClass,modTC); 	//Edit----------------------Dima  25.06.2015
   Setting("Настройки текста СМС",SMSTextTClass,modSO); 				//Edit----------------------Dima  26.06.2015
+  Setting("Собрать заказы для перемещения",CollectOrdersForStockMoveTClass,modSL);
   
   Report("Журнал суточных возмещений",DAJRClass,DAJRn,0,modCL);
   Report("Журнал авансовых отчетов",ExpJRClass,ExpRn,0,modCL);
@@ -178,6 +179,7 @@ begin
    SString(31097,"Было ли сделано вынесение денег по кассе и Z-Отчет?");
    
    SString(31098,"Сохраните документ");
+   SString(31099,"Отсутствует наименование склада");
 	 
    
   Maintenance("Экспорт склада CSV",ExportStockCSVClass,ExportStockCSVMn,modSY);
@@ -233,7 +235,7 @@ begin
 	
 	Maintenance("Установить группы продаж в регистр Платежи",MyVClass,SetSalesGroupToIPVcMn,modDBMain);	//Edit----------------------Dima  17.07.2015
 	Maintenance("Отменить статус синхронизации счетов клиентов старше 10 дней",CancelSyncFlORVcVClass,CancelSyncFlORVcMn,modDBMain);//Edit---------------Vitalii 11:25 28.07.2015
-	Maintenance("Собрать заказы для перемещения",CollectOrdersForStockMoveVClass,CollectOrdersForStockMoveMn,modSL);
+	
 
   Import("Импорт цен",PLImportIClass,PLImportIn,modDI); //Added********************Dima 20.11.2014
   Import("Импорт товаров",INImportIClass,INImportIn,modIN);//Added********************Dima 20.11.2014

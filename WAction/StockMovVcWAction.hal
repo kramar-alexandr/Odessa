@@ -1371,14 +1371,38 @@ end; //Edit***************************Sasha2,12:00 22.01.2015 }
 
 
 
-global  procedure CollectOrdersForStockMoveMn(record RcVc RepSpec)
+global  procedure CollectOrdersForStockMoveMn()
 begin
 	record ORVc ORr;
 	record StockMovVc SMr;
-	Integer nwn;
+	record RcVc RepSpec;
+	Integer nwn,wn;
 
+	wn = CurWindow;
+	DeselectWindow(wn,false);
+	GetWindowRecord(wn,RepSpec);
 	
-	RecordNew(SMr);	
-	CollectOrdersForStockMove(SMr,RepSpec);
-	nwn = OpenWindow("StockMovDClass",0,CurWindow,"","",SMr);  
+	if (nonblank(RepSpec.f2)) then begin	
+		RecordNew(SMr);	
+		CollectOrdersForStockMove(SMr,RepSpec);
+		nwn = OpenWindow("StockMovDClass",1,0,"","",SMr);
+	end else begin
+		MessageBox(31099,"");
+	end;
+
 end;
+
+
+global
+function Boolean CollectOrdersForStockMoveTClassOnOpenWindow(Integer wn)
+BEGIN
+	date dt;
+	record RcVc RepSpec;
+	
+	dt = AddDay(CurrentDate,-7);
+	RepSpec.Period2Str = dt & ":" & CurrentDate;
+	PutWindowRecord(wn,RepSpec);
+
+  CollectOrdersForStockMoveTClassOnOpenWindow = true;
+  RETURN;
+END;
