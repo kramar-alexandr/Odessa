@@ -84,6 +84,7 @@ external function Boolean IsLetter(string);
 external procedure TableSortOR2(var record ORVc);//Edit----------------------Dima  07.07.2015
 external updating function boolean NPDeleteCounterparty(record NPCounterpartyVc);
 remote updating function boolean CheckCounterparty(var record ORVc);
+external function LongInt DateDiff(Date,Date); //Edit***************************Sasha2,11:26 18.08.2015
 
 procedure SetORAcceptanceFlag(var record ORVc ORr,record ORVc prevORr,LongInt stat)
 begin
@@ -403,6 +404,22 @@ begin
   res = 0;
   insertmode = 1;//Rs_insert
   updatemode = 2;//Rs_update
+  if (ORr.OKFlag!=0 and ORr.Reserved!=0) then begin //Edit***************************Sasha2,11:24 18.08.2015 {
+    if (blankdate(ORr.ReservToDate)) then begin
+      ORr.ReservToDate = AddDay(ORr.OrdDate,3);
+    end else begin
+      if (DateDiff(ORr.ReservToDate,ORr.OrdDate)>31) then begin
+        RecordCheckError(32702,". " & UsetStr(14642) & "31 " & LowerCase(UsetStr(9640)),-1,"ReservToDate");      
+        res = -1;
+        goto LORVcRecordCheck;
+      end;
+      if (ORr.ReservToDate<ORr.OrdDate) then begin
+        RecordCheckError(32702,"",-1,"ReservToDate");      
+        res = -1;
+        goto LORVcRecordCheck; 
+      end;
+    end;
+  end; //Edit***************************Sasha2,11:24 18.08.2015 }
   if (ORr.OKFlag==0) then begin
     if (stat==updatemode) then begin
       if (OR2r.OKFlag==1) then begin unokf = true; end;
