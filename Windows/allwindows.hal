@@ -5250,7 +5250,7 @@ begin
   MatCol(t,-280,"Доступно",0,AvailableQuant,true,0);  
   MatCol(t,-210,"На складах",0,StockQuant,true,0);
   MatCol(t,-140,"Заказано",0,OrderQuant,true,0);
-  MatColTL(t,-70,"В обработке",0,M4UVal,Normal,0,ProcessingQuant,true,0);
+  MatColTL(t,-70,"В обработке",0,M4UVal,ViewOnly,0,ProcessingQuant,true,0);
  // MatColTL(t,-50,"UID",0,M4UVal,ViewOnly,0,UID,true,0); 
   InsertRowTest;
   DeleteRowTest;
