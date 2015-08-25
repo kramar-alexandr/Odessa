@@ -682,6 +682,7 @@ BEGIN
   row StockMovVc StockMovrw; //Edit***************************Sasha2,14:25 11.02.2015
   record INVc INr; //Edit***************************Sasha2,14:25 11.02.2015
   integer rwcnt,i; //Edit***************************Sasha2,14:25 11.02.2015
+  record ItemStatusVc ISr; //Edit***************************Sasha2,11:56 25.08.2015
 
   ihef = ItemHistExists("StockMovVc",StockMovr.SerNr);
   if ((StockMovr.SentOKFlag==0)) then begin
@@ -735,6 +736,35 @@ BEGIN
 			StockMovrw.stp=1;
 			MatRowPut(StockMovr,i,StockMovrw);
 		end;
+		
+		MatRowGet(StockMovr,i,StockMovrw);    //Edit***************************Sasha2,11:54 25.08.2015 {
+
+		if(nonblank(StockMovr.FrLocation))then begin
+			if(nonblank(StockMovrw.ArtCode)) then begin
+				ISr.Code = StockMovrw.ArtCode;
+				ISr.Location = StockMovr.FrLocation;
+				if(ReadFirstMain(ISr, 2, true))then begin
+					StockMovrw.FromQuant = ISr.Instock;
+				end else begin
+					StockMovrw.FromQuant = 0;
+				end;
+			end; 
+		end;
+		
+		if(nonblank(StockMovr.ToLocation))then begin
+			if(nonblank(StockMovrw.ArtCode)) then begin
+				ISr.Code = StockMovrw.ArtCode;
+				ISr.Location = StockMovr.ToLocation;
+				if(ReadFirstMain(ISr, 2, true))then begin
+					StockMovrw.ToQuant = ISr.Instock;
+				end else begin
+					StockMovrw.ToQuant = 0;
+				end;
+			end; 
+		end;
+		
+		MatRowPut(StockMovr,i,StockMovrw); //Edit***************************Sasha2,11:54 25.08.2015 }
+		
   end; //Edit***************************Sasha2,14:27 11.02.2015 }
   
 
@@ -984,7 +1014,7 @@ BEGIN
   //Edit by Victor 29.01.15 ***
   rwcnt = MatRowCnt(StockMovr);
 	
-	for (i=0;i<rwcnt;i=i+1) begin
+	/*for (i=0;i<rwcnt;i=i+1) begin ////Edit***************************Sasha2,12:02 25.08.2015
 		MatRowGet(StockMovr,i,StockMovrw);    
 
 		if(nonblank(StockMovr.FrLocation))then begin
@@ -1015,7 +1045,7 @@ BEGIN
 				
 		WriteProcessQtyBackToORVc(StockMovrw,StockMovrw.OrdQuant);//Edit----------------------Dima  18.08.2015
 
-	end;
+	end;*/
 	
 
 	if (StockMovr.OKFlag!=0)  then begin		//Edit----------------------Dima  20.08.2015
@@ -1039,6 +1069,7 @@ BEGIN
   row StockMovVc StockMovrw; //Edit***************************Sasha2,14:25 11.02.2015
   record INVc INr; //Edit***************************Sasha2,14:25 11.02.2015
   integer rwcnt,i; //Edit***************************Sasha2,14:25 11.02.2015
+  record ItemStatusVc ISr;
   
   if (blankdate(StockMovr.RegDate)) then begin
     StockMovr.RegDate = CurrentDate;
@@ -1082,6 +1113,37 @@ BEGIN
 			StockMovrw.stp=1;
 			MatRowPut(StockMovr,i,StockMovrw);
 		end;	
+		
+		MatRowGet(StockMovr,i,StockMovrw); //Edit***************************Sasha2,12:02 25.08.2015 {
+
+		if(nonblank(StockMovr.FrLocation))then begin
+			if(nonblank(StockMovrw.ArtCode)) then begin
+				ISr.Code = StockMovrw.ArtCode;
+				ISr.Location = StockMovr.FrLocation;
+				if(ReadFirstMain(ISr, 2, true))then begin
+					StockMovrw.FromQuant = ISr.Instock;
+				end else begin
+					StockMovrw.FromQuant = 0;
+				end;
+			end; 
+		end;
+		
+		if(nonblank(StockMovr.ToLocation))then begin
+			if(nonblank(StockMovrw.ArtCode)) then begin
+				ISr.Code = StockMovrw.ArtCode;
+				ISr.Location = StockMovr.ToLocation;
+				if(ReadFirstMain(ISr, 2, true))then begin
+					StockMovrw.ToQuant = ISr.Instock;
+				end else begin
+					StockMovrw.ToQuant = 0;
+				end;
+			end; 
+		end;
+		
+		MatRowPut(StockMovr,i,StockMovrw); //Edit***************************Sasha2,12:02 25.08.2015 }
+				
+		WriteProcessQtyBackToORVc(StockMovrw,StockMovrw.OrdQuant);//Edit----------------------Dima  18.08.2015
+		
   end; //Edit***************************Sasha2,14:27 11.02.2015 }
   
  

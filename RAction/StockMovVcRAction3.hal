@@ -264,7 +264,7 @@ BEGIN
   end;
   
   //Edit by Victor 29.01.15 ***
-  rwcnt = MatRowCnt(StockMovr);
+  /*rwcnt = MatRowCnt(StockMovr); //Edit***************************Sasha2,11:55 25.08.2015
 	
 	for (i=0;i<rwcnt;i=i+1) begin
 		MatRowGet(StockMovr,i,StockMovrw);    
@@ -294,7 +294,7 @@ BEGIN
 		end;
 		
 		MatRowPut(StockMovr,i,StockMovrw);
-	end;
+	end;*/ 
 	
 	CheckDifferenceForWritingToORVc(StockMovr,StockMov2r);//Edit----------------------Dima  19.08.2015
 	if ((StockMovr.OKFlag!=0) and (StockMov2r.OKFlag==0)) then begin
