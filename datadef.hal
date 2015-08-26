@@ -1923,9 +1923,70 @@ RecordBegin(INVc,-,"artikel5");
   AppendListFieldToKeyName(SalesMan);
   AppendListFieldToKeyName(SalesGroup);
   KeySegment(CustomStatusFlagText);
-  KeySegment(SerNr);  
-  EndRecord;
+  KeySegment(SerNr); 
   
+  SubsetKeyBegin2(ActShipSerNr);//Edit----------------------Dima  26.08.2015
+  StoreInBaseKey;
+  AppendListFieldToKeyName(SalesMan);
+  AppendListFieldToKeyName(SalesGroup);
+  KeySegment(SerNr);
+  KeySegment(ShipFlag);  
+  SubsetKeyBegin2(ActShipInvFlag);	//Edit----------------------Dima  26.08.2015
+  StoreInBaseKey;
+  AppendListFieldToKeyName(SalesMan);
+  AppendListFieldToKeyName(SalesGroup);
+  KeySegment(InvFlag);
+  KeySegment(SerNr);  
+  SubsetKeyBegin2(ActShipCustCode);	//Edit----------------------Dima  26.08.2015
+  StoreInBaseKey;
+  AppendListFieldToKeyName(SalesMan);
+  AppendListFieldToKeyName(SalesGroup);
+  KeySegment(CustCode);
+  KeySegment(SerNr);
+  SubsetKeyBegin2(ActShipName);	//Edit----------------------Dima  26.08.2015
+  StoreInBaseKey;
+  AppendListFieldToKeyName(SalesMan);
+  AppendListFieldToKeyName(SalesGroup);
+  KeySegment(Addr0);
+  KeySegment(SerNr);    
+  SubsetKeyBegin2(ActShipOrdDate);	//Edit----------------------Dima  26.08.2015
+  StoreInBaseKey;
+  AppendListFieldToKeyName(SalesMan);
+  AppendListFieldToKeyName(SalesGroup);
+  KeySegment(OrdDate);
+  KeySegment(SerNr);
+  SubsetKeyBegin2(ActShipCustOrdNr);//Edit----------------------Dima  26.08.2015
+  StoreInBaseKey;
+  AppendListFieldToKeyName(SalesMan);
+  AppendListFieldToKeyName(SalesGroup);
+  KeySegment(CustOrdNr);
+  KeySegment(SerNr);    
+  SubsetKeyBegin2(ActShipOKFlag);	//Edit----------------------Dima  26.08.2015
+  StoreInBaseKey;
+  AppendListFieldToKeyName(SalesMan);
+  AppendListFieldToKeyName(SalesGroup);
+  KeySegment(OKFlag);
+  KeySegment(SerNr);  
+  SubsetKeyBegin2(ActShipOrderClass);//Edit----------------------Dima  26.08.2015
+  StoreInBaseKey;
+  AppendListFieldToKeyName(SalesMan);
+  AppendListFieldToKeyName(SalesGroup);
+  KeySegment(OrderClass);
+  KeySegment(SerNr);  
+  SubsetKeyBegin2(ActShipSum4);			//Edit----------------------Dima  26.08.2015
+  StoreInBaseKey;
+  AppendListFieldToKeyName(SalesMan);
+  AppendListFieldToKeyName(SalesGroup);
+  KeySegment(Sum4);
+  KeySegment(SerNr);    
+  SubsetKeyBegin2(ActShipCustomStatusFlagText);	//Edit----------------------Dima  26.08.2015
+  StoreInBaseKey;
+  AppendListFieldToKeyName(SalesMan);
+  AppendListFieldToKeyName(SalesGroup);
+  KeySegment(CustomStatusFlagText);
+  KeySegment(SerNr);  
+   
+  EndRecord;
   
   
   RecordBegin(IVVc,-,"IVVc3");	// Edit by Victor 10.11.14

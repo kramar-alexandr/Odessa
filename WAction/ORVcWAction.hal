@@ -2332,6 +2332,17 @@ return;
 end;
 
 
+
+global 
+procedure OpenAllOrdersORVc()	//Edit----------------------Dima  02.07.2015
+begin
+	record ORVc ORr;
+	integer nwn,wn;
+	RecordNew(ORr);
+	nwn = OpenWindow("ORLClassGeneral",0,CurWindow,"","",ORr);
+end;
+
+
 global
 function integer  OLClassGerFilter()
 begin
@@ -2384,5 +2395,7 @@ global updating  procedure OpenORFilteringWindow4()
 begin
   	FilterORWindow(4);
 end;
+
+
 
 
