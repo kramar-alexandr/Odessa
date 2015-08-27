@@ -459,7 +459,7 @@ begin
     if (testf==false) then begin goto LSKIPIVROW_CalculateInvoiceSum; end;
     s1 = 0;
     s3 = 0;
-    if ((IVrw.stp==1) or (IVrw.stp==4)) then begin
+    if ((IVrw.stp==1) or (IVrw.stp==4) or IVrw.stp==kInvoiceRowTypeGiftVoucherSold) then begin// Edit ************************** Wednesday, 26 August 2015 18:22:20
       s1 = IVrw.Sum;
       s3 = FindVAT(IVrw.VATCode,IVrw.Sum,IVr.InclVAT,IVr.NoTAXonVAT);
       if (IVr.InvType==kInvoiceTypeCredit or IVr.InvType==kInvoiceTypeCreditSpecialSales) then begin
@@ -746,7 +746,7 @@ begin
           OutString(390,0,USetStr(3506),false);
         end;
       end else begin
-        OutStringAdjust(3,0,USetStr(2328),true,M4Val);
+        //OutStringAdjust(3,0,USetStr(2328),true,M4Val);// Edit ************************** Wednesday, 26 August 2015 17:52:28
         OutStringAdjust(4,0,USetStr(2329),true,M4Val);
       end;
       EndFormat;
@@ -1236,6 +1236,7 @@ begin
             switch (IVr.InvType) begin
               case kInvoiceTypeDownpayment:
                 iv = IVr.Sum3;
+                iv = IVr.Sum4;//// Edit ************************** Wednesday, 26 August 2015 18:12:13
                 ivnvat = IVr.Sum3;
                 ivvat = Blankval;
               case kInvoiceTypeCreditSpecialSales:
@@ -1243,6 +1244,7 @@ begin
               case kInvoiceTypeCredit:
 LkInvoiceTypeCredit1:;              
                 iv = IVr.Sum4 - IVr.TAX1Sum;
+                iv = IVr.Sum4;//// Edit ************************** Wednesday, 26 August 2015 18:12:13
                 ivnvat = IVr.Sum1;
                 ivvat = IVr.Sum3;
                 if (IVr.InclVAT!=0) then begin
@@ -1264,7 +1266,7 @@ LkInvoiceTypeCredit1:;
                   rwcnt = MatRowCnt(IVr);
                   for (i=0;i<rwcnt;i=i+1) begin
                     MatRowGet(IVr,i,IVrw);
-                    if (IVrw.stp==kInvoiceRowTypeNormal) then begin
+                    if (IVrw.stp==kInvoiceRowTypeNormal or IVrw.stp==kInvoiceRowTypeGiftVoucherSold) then begin
                       iv = iv + IVrw.Sum;
                       ivnvat = ivnvat + IVrw.Sum;
                       ivvat = ivvat + IVrw.Sum;
@@ -1272,12 +1274,14 @@ LkInvoiceTypeCredit1:;
                   end;
                 end else begin
                   iv = IVr.Sum4 - IVr.TAX1Sum;
+                  iv = IVr.Sum4;//// Edit ************************** Wednesday, 26 August 2015 18:12:13
                   ivnvat = IVr.Sum1;
                   ivvat = IVr.Sum3;
                 end;
             end;
           end else begin
             iv = IVr.Sum4 - IVr.TAX1Sum;
+            iv = IVr.Sum4;//// Edit ************************** Wednesday, 26 August 2015 18:12:13
             ivnvat = IVr.Sum1;
             ivvat = IVr.Sum3;
             if (IVr.InclVAT!=0) then begin
@@ -1455,7 +1459,7 @@ LkInvoiceTypeCredit1:;
                 OutVal(6,0,iv,M4Val,true);
                 OutVal(4,0,ivvat,M4Val,true);            
               end else begin
-                OutVal(3,0,ivnvat,M4Val,true);
+                //OutVal(3,0,ivnvat,M4Val,true);// Edit ************************** Wednesday, 26 August 2015 18:09:55
                 OutVal(4,0,iv,M4Val,true);
               end;
               if (HasMultiCurrency) then begin 
