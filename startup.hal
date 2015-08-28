@@ -64,8 +64,7 @@ begin
   Setting("Поля, задаваемые пользователем - Товары",INUserLabelTClass,modSL);// Edit ************************** Thursday, 26 February 2015 18:04:55
   Setting("Настройки отправки СМС",SMSSettingsTClass,modTC); 	//Edit----------------------Dima  25.06.2015
   Setting("Настройки текста СМС",SMSTextTClass,modSO); 				//Edit----------------------Dima  26.06.2015
-  Setting("Собрать заказы для перемещения",CollectOrdersForStockMoveTClass,modSO);//Edit----------------------Dima  21.08.2015  
-  Setting("СМС",SMSstackLClass,modSO);  //Edit----------------------Dima  27.08.2015
+  Setting("Собрать заказы для перемещения",CollectOrdersForStockMoveTClass,modSO);//Edit----------------------Dima  21.08.2015
   
   Report("Журнал суточных возмещений",DAJRClass,DAJRn,0,modCL);
   Report("Журнал авансовых отчетов",ExpJRClass,ExpRn,0,modCL);
@@ -236,8 +235,6 @@ begin
 	
 	Maintenance("Установить группы продаж в регистр Платежи",MyVClass,SetSalesGroupToIPVcMn,modDBMain);	//Edit----------------------Dima  17.07.2015
 	Maintenance("Отменить статус синхронизации счетов клиентов старше 10 дней",CancelSyncFlORVcVClass,CancelSyncFlORVcMn,modDBMain);//Edit---------------Vitalii 11:25 28.07.2015
-	Maintenance("Разослать СМС из стека",MyVClass,SendSMSFromStack,modDBMain);		//Edit----------------------Dima  27.08.2015
-	Maintenance("Пересохранить ORVc",MyVClass,ReSaveORVcMn,modDBMain);		//Edit----------------------Dima  28.08.2015
 	
 
   Import("Импорт цен",PLImportIClass,PLImportIn,modDI); //Added********************Dima 20.11.2014

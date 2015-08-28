@@ -2453,7 +2453,7 @@ begin
     if (indexname=="ActArtCodeOSFlag")  then begin res = 0; end;
   end;
   
-  if (ORr.Closed>0 or ORr.CustomStatusFlag>=3) then begin 		//Edit----------------------Dima  26.08.2015
+  if (ORr.ShipFlag>0 or ORr.Closed>0 or ORr.CustomStatusFlag>=4) then begin 		//Edit----------------------Dima  26.08.2015
     if (indexname=="ActShipSerNr")  then begin res = 0; end;
     if (indexname=="ActShipInvFlag")  then begin res = 0; end;
     if (indexname=="ActShipCustCode")  then begin res = 0; end;
@@ -2465,7 +2465,7 @@ begin
     if (indexname=="ActShipSum4")  then begin res = 0; end;
     if (indexname=="ActShipCustomStatusFlagText")  then begin res = 0; end;
   end;  //Edit--------------------------------------------------------------------------------------------------------------Dima  26.08.2015
-
+  
   ORVcRecordInIndex = res;
   return;
 end;
