@@ -378,7 +378,7 @@ BEGIN
   record ORVc ORr;
   record IVVc IVr;
   Integer wn,r,nwn,rownr;
-  Integer errcode;
+  Integer errcode,additionalday;
   Boolean testf;
   LongInt ErrorCode;
 
@@ -402,6 +402,23 @@ BEGIN
         if (testf) then begin
           r = RecordAction_raPasteOrdInInv(IVr,ORr.SerNr,true,errcode);
           if (r==0) then begin
+            if (ORr.Reserved!=0 and BlankDate(ORr.ReservToDate)) then begin //Edit***************************Sasha2,15:57 28.08.2015 {
+              additionalday = 0;
+              if (GetDateId(AddDay(CurrentDate,1))==7) then begin
+                additionalday = 1;
+              end else begin
+                if (GetDateId(AddDay(CurrentDate,2))==7) then begin
+                  additionalday = 1;
+                end else begin
+                  if (GetDateId(AddDay(CurrentDate,3))==7) then begin
+                    additionalday = 1;
+                  end;
+                end;
+              end;
+              ORr.ReservToDate = AddDay(CurrentDate,3 + additionalday);
+              RECORDSTORE(ORr,true);
+              PutWindowRecord(wn,ORr);
+            end; //Edit***************************Sasha2,15:57 28.08.2015 }
             if (MatRowCnt(IVr)!=0) then begin
               nwn = OpenWindow("IVDClass",1,0,"","",IVr);
               UpdateBrowses("ORVc");
