@@ -1607,6 +1607,7 @@ RecordBegin(INVc,-,"artikel5");
 	RecordField(NPWarehouseDesc,M4Str,200,0);//Edit----------------------Dima  08.05.2015	
 	RecordField(ReservToDate,M4Date,0,0); //Edit***************************Sasha2,14:48 14.08.2015
 	RecordField(FeedBackStatus,M4Int,0,0); //Edit***************************Sasha2,9:04 17.08.2015
+	RecordField(LastShipDate,M4Date,0,0);	//Edit----------------------Dima  28.08.2015
   ArrayBegin(Math,-,1);
   ArrayField(stp,M4Int,0,0);
   ArrayField(ArtCode,M4Code,20,INVc);
@@ -1984,6 +1985,18 @@ RecordBegin(INVc,-,"artikel5");
   AppendListFieldToKeyName(SalesMan);
   AppendListFieldToKeyName(SalesGroup);
   KeySegment(CustomStatusFlagText);
+  KeySegment(SerNr);  
+  SubsetKeyBegin2(LastShipDate);		//Edit----------------------Dima  28.08.2015
+  StoreInBaseKey;
+  AppendListFieldToKeyName(SalesMan);
+  AppendListFieldToKeyName(SalesGroup);
+  KeySegment(LastShipDate);
+  KeySegment(SerNr);  
+  SubsetKeyBegin2(ActLastShipDate);	//Edit----------------------Dima  28.08.2015
+  StoreInBaseKey;
+  AppendListFieldToKeyName(SalesMan);
+  AppendListFieldToKeyName(SalesGroup);
+  KeySegment(LastShipDate);
   KeySegment(SerNr);  
    
   EndRecord;
