@@ -2111,6 +2111,7 @@ begin
   Tile(0,20,false,"","Title1");
   TileButton(1,"Отправка реквизитов");
   TileButton(2,"Отгрузка");
+  TileButton(3,"Уведомления о звонках");
   
   Tile(1,100,false,"","Title1");
   v=6;
@@ -2121,6 +2122,14 @@ begin
   Tile(2,200,false,"","Title2");
   v=6;
   EditField(h,v+=vs,150,"Заголовок",Normal,Title2,false,0);  
+  
+  Tile(3,200,false,"","Title3");
+  v=6;
+  EditField(h,v+=vs,150,"Заголовок",Normal,Title3,false,0);
+  EditField(h,v+=vs,320,"Не дозвонились 1-й раз",Normal,Text31,false,0);
+  EditField(h,v+=vs,320,"Не дозвонились 2-й раз",Normal,Text32,false,0);
+  EditField(h,v+=vs,320,"Не дозвонились 3-й раз",Normal,Text33,false,0); 
+    
   EndWindow;
 end;
 

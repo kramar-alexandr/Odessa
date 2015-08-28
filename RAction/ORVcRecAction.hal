@@ -85,6 +85,8 @@ external procedure TableSortOR2(var record ORVc);//Edit----------------------Dim
 external updating function boolean NPDeleteCounterparty(record NPCounterpartyVc);
 remote updating function boolean CheckCounterparty(var record ORVc);
 external function LongInt DateDiff(Date,Date); //Edit***************************Sasha2,11:26 18.08.2015
+external updating function longint AddSMStoStack(string, string, string,string,string,longint,string);//Edit----------------------Dima  28.08.2015
+
 
 procedure SetORAcceptanceFlag(var record ORVc ORr,record ORVc prevORr,LongInt stat)
 begin
@@ -1923,6 +1925,33 @@ begin
 end;
 
 
+global updating procedure SendNoticeSMS(record ORVc ORr)	//Edit----------------------Dima  28.08.2015
+begin
+	string 20 phone;
+  record SMSTextBlock SMSb;
+  record CUVc CUr;
+  string 255 text;
+ 
+  BlockLoad(SMSb);	
+	
+	if (nonblank(ORr.NPPhone)) then begin
+		phone = ORr.NPPhone;
+	end else begin	
+		CUr.Code = ORr.CustCode;
+		ReadFirstMain(CUr,1,true);
+		phone = CUr.Phone;
+	end;
+	
+	switch (ORr.FeedBackStatus) begin	
+		case 1: text = SMSb.Text31;
+		case 2: text = SMSb.Text32;
+		case 3: text = SMSb.Text33;	
+	end;
+	
+	if (nonblank(text)) then begin
+  	AddSMStoStack(phone,SMSb.Title3,text,ORr.CustCode,"ORVc",ORr.SerNr,ORr.OrderClass);
+  end;
+end;
 
 global
 updating function LongInt ORVcRecordUpdate(var record ORVc ORr,record ORVc OR2r,LongInt stat,LongInt long4)
@@ -1972,6 +2001,11 @@ begin
 	//end;
   TableSortOR2(ORr);//Edit----------------------Dima  07.07.2015
   SetRowsUID(ORr);	//Edit----------------------Dima  14.08.2015
+  
+  if(OR2r.FeedBackStatus!=ORr.FeedBackStatus and ORr.FeedBackStatus > OR2r.FeedBackStatus) then begin
+  	SendNoticeSMS(ORr);
+  end;  
+  
   ORVcRecordUpdate = res; 
   return;
 end;

@@ -2182,10 +2182,11 @@ begin
 end; //Edit***************************Sasha2,15:22 12.08.2015 }
 
 
+global
 function string 255 ParseSMStext(string text, record ORVc ORr)	//Edit----------------------Dima  02.07.2015
 begin
   record UserVc Userr;
-	string 10 replaceSum,replaceCard;
+	string 10 replaceSum,replaceCard,replaceDate,replaceTime;
 	string 50 sum,card;
 	string 255 resString,temp;
   record SMSTextBlock SMSb;
@@ -2196,6 +2197,8 @@ begin
 	
 	replaceSum = "%Sum%";
 	replaceCard = "%Card%";
+	replaceDate = "%Date%";
+	replaceTime = "%Time%";
 	
 	Userr.Code = ORr.SalesMan;
 	if (ReadFirstMain(Userr,1,true) and nonblank(Userr.CardNumber)) then begin

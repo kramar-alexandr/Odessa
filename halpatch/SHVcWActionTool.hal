@@ -1790,6 +1790,7 @@ Begin
   string 15 title,placeWord;
   record SMSTextBlock SMSb;
   record SMSstackVc SMSstackr;
+  longint smsNr;
   
   BlockLoad(SMSb);  
   
@@ -1802,7 +1803,7 @@ Begin
   			placeWord = GetPlaceWord(placeNr);
   			text = USetStr(31091) & ORr.CustOrdNr & ". " & USetStr(31092) & SHr.NPIntDocNumber & "(" & placeNr & placeWord & ")";
   			
-  			AddSMStoStack(ORr.NPPhone,title,text,ORr.CustCode,"SHVc",SHr.SerNr,ORr.OrderClass);
+  			smsNr = AddSMStoStack(ORr.NPPhone,title,text,ORr.CustCode,"SHVc",SHr.SerNr,ORr.OrderClass);
 	 
 			end;
 	end; 

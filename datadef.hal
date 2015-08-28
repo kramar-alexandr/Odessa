@@ -4111,6 +4111,10 @@ RecordBegin(IPVc,-,"");
 	RecordField(Title1,M4Str,100,0);
 	RecordField(Title2,M4Str,100,0);
 	RecordField(DefaultCard,M4Str,100,0);
+	RecordField(Title3,M4Str,100,0);
+	RecordField(Text31,M4Str,255,0);
+	RecordField(Text32,M4Str,255,0);
+	RecordField(Text33,M4Str,255,0);	
 	EndBlock; 
 
 
