@@ -31,7 +31,9 @@ external procedure SumUpPackList(var record PackListVc);//Edit------------------
 external procedure NP_SumUpRowWeight(var record SHVc);
 external procedure NP_SumUpRowVolumes(var record SHVc);//Edit----------------------Dima  07.05.2015
 external procedure CurValToOtherCur(Date,string,val,string,var val,roundmode);	//Edit----------------------Dima  15.05.2015
-external function string 255 SendSMS(string, string, string,boolean,string);//Edit----------------------Dima  30.06.2015
+//external function string 255 SendSMS(string, string, string,boolean,string);//Edit----------------------Dima  30.06.2015
+external updating function string 255 SendSMS(record SMSstackVc, boolean);
+external updating function longint AddSMStoStack(string, string, string,string,string,longint,string);//Edit----------------------Dima  28.08.2015
 
 procedure SHChangeShip(record SHVc SHr,Integer rownr)
 BEGIN
@@ -1800,19 +1802,8 @@ Begin
   			placeWord = GetPlaceWord(placeNr);
   			text = USetStr(31091) & ORr.CustOrdNr & ". " & USetStr(31092) & SHr.NPIntDocNumber & "(" & placeNr & placeWord & ")";
   			
-  			SMSstackr.SerNr = NextSerNr("SMSstackVc",CurrentDate,-1,false,"");
-  			SMSstackr.Phone = ORr.NPPhone;
-  			SMSstackr.Title = title;
-  			SMSstackr.Text = text;
-  			SMSstackr.CustCode = ORr.CustCode;
-  			SMSstackr.CreationDate = CurrentDate;
-  			SMSstackr.CreationTime = CurrentTime;
-  			SMSstackr.SourceType = "SHVc";
-  			SMSstackr.SourceSerNr = SHr.SerNr;
-  			SMSstackr.OrderClass = ORr.OrderClass;
-  			RecordInsert(SMSstackr,true); 			
-  			LogText(0,"added to SMS stockVc " & SMSstackr.SerNr);
-				//response = SendSMS(ORr.NPPhone,text, title,true,ORr.OrderClass); 		 
+  			AddSMStoStack(ORr.NPPhone,title,text,ORr.CustCode,"SHVc",SHr.SerNr,ORr.OrderClass);
+	 
 			end;
 	end; 
 

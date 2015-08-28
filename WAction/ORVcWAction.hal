@@ -64,11 +64,15 @@ remote function Boolean SerialNrForOneItem(string,var record SerBalVc);
 external procedure SetupCustPS2Rn(string,record RcVc);	//Edit----------Dima  27.01.2015
 remote procedure ORVc_PasteNPPhone(var record ORVc);	//Edit----------------------Dima  15.04.2015
 remote procedure NP_PasteRecipientWarehouseDescOR(var record ORVc);
-remote function string 255 SendSMS(string, string, string,boolean,string);//Edit----------------------Dima  26.06.2015
+//remote function string 255 SendSMS(string, string, string,boolean,string);//Edit----------------------Dima  26.06.2015
+remote updating function string 255 SendSMS(record SMSstackVc, boolean);//Edit----------------------Dima  28.08.2015
 external function string 255 ReplaceAllSubStringInString(string, string, string);//Edit----------------------Dima  02.07.2015
 external procedure CheckItemsOnStockORRn(record RcVc); //Edit***************************Sasha2,15:31 12.08.2015
 remote procedure GetAvailableItems(var record ORVc);
-//external procedure ORVc_PasteOrderQuant(var record ORVc,record ORVc,Integer);
+remote updating function longint AddSMStoStack(string, string, string,string,string,longint,string);//Edit----------------------Dima  28.08.2015
+remote updating function string 255  CheckAndSendSMS(longint);	//Edit----------------------Dima  28.08.2015
+
+
 
 global //Edit***************************Sasha2,15:51 04.02.2015 {
 function Integer ORLClassRowColor(record ORVc ORr)
@@ -2262,6 +2266,7 @@ begin
   record RLinkVc RLinkr;
   string 200 response,text; 
   record SMSstackVc SMSstackr;
+  longint smsNr;
   
   wn = CurWindow;
   DeselectWindow(wn,false);
@@ -2278,28 +2283,12 @@ begin
  	
  	text = ParseSMStext(RepSpec.f2,ORr);
 	 
-  response = SendSMS(RepSpec.f1,text, RepSpec.f3,true,ORr.OrderClass);		//(Phone,Text,Title,  print Log?,..)
+ // response = SendSMS(RepSpec.f1,text, RepSpec.f3,true,ORr.OrderClass);		//(Phone,Text,Title,  print Log?,..)
   
-  RecordNew(SMSstackr);
-  SMSstackr.SerNr = NextSerNr("SMSstackVc",CurrentDate,-1,false,"");
-  SMSstackr.Phone = RepSpec.f1;
-  SMSstackr.Title = RepSpec.f3;
-  SMSstackr.Text = text;
-  SMSstackr.CustCode = ORr.CustCode;
-  SMSstackr.CreationDate = CurrentDate;
-  SMSstackr.CreationTime = CurrentTime;
-  SMSstackr.SendDate = CurrentDate;
-  SMSstackr.SendTime = CurrentTime;  
-  SMSstackr.SourceType = "ORVc";
-  SMSstackr.SourceSerNr = ORr.SerNr;
-  SMSstackr.OrderClass = ORr.OrderClass;
-  SMSstackr.Sent = 1;
-  SMSstackr.Error = response;
-  RecordStore(SMSstackr,true); 			
-  //MessageBox(0,"added to SMS stockVc " & SMSstackr.SerNr) ; 
+  smsNr = AddSMStoStack(RepSpec.f1,RepSpec.f3,text,ORr.CustCode,"ORVc",ORr.SerNr,ORr.OrderClass);
+	response = CheckAndSendSMS(smsNr);  
   
-  if (blank(response)) then begin
-    
+  if (blank(response)) then begin    
   	//attach note to ORr
 
 		Noter.SerNr = NextSerNr("NotepadVc",CurrentDate,-1,false,"");
