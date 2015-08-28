@@ -1779,7 +1779,7 @@ GetPlaceWord = wordRes;
 return;
 end;
 
-global function string 200 SendSMSNewPost(record SHVc SHr)//Edit----------------------Dima  30.06.2015
+global updating function string 200 SendSMSNewPost(record SHVc SHr)//Edit----------------------Dima  30.06.2015
 Begin
   record PackListVc PackListr;
   record ORVc ORr;
@@ -1787,6 +1787,7 @@ Begin
   string 200 response,text;
   string 15 title,placeWord;
   record SMSTextBlock SMSb;
+  record SMSstackVc SMSstackr;
   
   BlockLoad(SMSb);  
   
@@ -1798,11 +1799,25 @@ Begin
   			title = left(SMSb.Title2,11);			//limitation from ePochta
   			placeWord = GetPlaceWord(placeNr);
   			text = USetStr(31091) & ORr.CustOrdNr & ". " & USetStr(31092) & SHr.NPIntDocNumber & "(" & placeNr & placeWord & ")";
-				response = SendSMS(ORr.NPPhone,text, title,true,ORr.OrderClass); 		 
+  			
+  			SMSstackr.SerNr = NextSerNr("SMSstackVc",CurrentDate,-1,false,"");
+  			SMSstackr.Phone = ORr.NPPhone;
+  			SMSstackr.Title = title;
+  			SMSstackr.Text = text;
+  			SMSstackr.CustCode = ORr.CustCode;
+  			SMSstackr.CreationDate = CurrentDate;
+  			SMSstackr.CreationTime = CurrentTime;
+  			SMSstackr.SourceType = "SHVc";
+  			SMSstackr.SourceSerNr = SHr.SerNr;
+  			SMSstackr.OrderClass = ORr.OrderClass;
+  			RecordInsert(SMSstackr,true); 			
+  			LogText(0,"added to SMS stockVc " & SMSstackr.SerNr);
+				//response = SendSMS(ORr.NPPhone,text, title,true,ORr.OrderClass); 		 
 			end;
 	end; 
 
 SendSMSNewPost = response;
 return;
 end;
+
 
