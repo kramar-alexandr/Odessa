@@ -10,7 +10,7 @@ external procedure ExtractObjWithSeparator(string,string,Boolean,var Integer,var
 external procedure ORVc_PasteCurncyCode(var record ORVc,string);	//Edit--------------------Dima 23.01.2015
 external procedure ExportAllItems(record RepSpec);// Edit ************************** Thursday, 9 April 2015 15:35:46
 external procedure RefreshAllInnerRegistersNP;
-
+external updating procedure  SendSMSFromStack();//Edit----------------------Dima  28.08.2015
 SetLangMode(LangRussian,"RUS",0);
 
 
@@ -25,11 +25,12 @@ SetLangMode(LangRussian,"RUS",0);
 // Error8: some artcode warning 
 // Error9: order not found
 
-global procedure CustTimeTableAction()
+global updating procedure CustTimeTableAction()
 begin
   record RcVc RepSpec;
   time t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,curt,curtnew;
   string 5 hr,mn;
+  integer minute;
 
     t1 = StringToTime("8:00");
     t2 = StringToTime("10:00");
@@ -42,6 +43,7 @@ begin
     t9 = StringToTime("00:00");
     
     t10 = StringToTime("3:00");//Nowa poshta
+
     
     curt = CurrentTime; 
     hr = GetHour(curt);
@@ -49,6 +51,7 @@ begin
     	hr = "0" & hr;
     end;
     mn = GetMinute(curt);
+    minute = StringToInt(mn);
     if (len(mn)==1) then begin
     	mn = "0" & mn;
     end;
@@ -64,6 +67,9 @@ begin
     	RefreshAllInnerRegistersNP;
     end;    
     
+		if (Mod(minute,5)==0) then begin		//Edit----------------------Dima  28.08.2015
+			SendSMSFromStack;
+		end;    
 return;
 end;
 

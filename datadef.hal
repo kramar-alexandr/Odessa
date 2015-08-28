@@ -4117,7 +4117,44 @@ RecordBegin(IPVc,-,"");
 	BlockBegin(GlobalVariablesBlock,-,"");		//Edit----------------------Dima  10.06.2015
   BlockForAllCompanies;
 	RecordField(ORFilterKey,M4Int,0,0);
-	EndBlock;			   
+	EndBlock;
+	
+	
+  RecordBegin(SMSstackVc,-,""); 	//Edit----------------------Dima  27.08.2015
+  RecordField(SerNr,M4Long,0,0);
+  RecordField(Phone,M4Str,50,0);
+  RecordField(CustCode,M4Code,20,0);  
+  RecordField(SourceType,M4Str,20,0);
+  RecordField(SourceSerNr,M4Long,0,0);
+  RecordField(Title,M4Str,50,0);
+  RecordField(Text,M4Str,255,0);
+  RecordField(CreationDate,M4Date,0,0);
+  RecordField(CreationTime,M4Time,0,0);
+  RecordField(SendDate,M4Date,0,0);
+  RecordField(SendTime,M4Time,0,0);  
+  RecordField(Sent,M4Mark,0,0);
+  RecordField(Error,M4Str,50,0);
+  RecordField(OrderClass,M4Str,50,0);
+  MainKeyBegin(SerNr,0);
+  KeySegment(SerNr);
+  KeyBegin(Phone);
+  KeySegment(Phone);
+  KeySegment(SerNr);
+  KeyBegin(CustCode);
+  KeySegment(CustCode);
+  KeySegment(SerNr);
+  KeyBegin(SourceSerNr);
+  KeySegment(SourceType);
+  KeySegment(SourceSerNr);
+  KeySegment(SerNr);
+  KeyBegin(CreationDate);
+  KeySegment(CreationDate);
+  KeySegment(CreationDate);
+  KeySegment(SerNr);
+  KeyBegin(Sent);
+  KeySegment(Sent);
+  KeySegment(SerNr)      	  
+  EndRecord;				   
       	  	
 return;
 end;

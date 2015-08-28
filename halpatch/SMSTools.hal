@@ -135,7 +135,7 @@ begin
    
 
   if(MySendRawWebRequest(host,"80",false,"POST",page ,"text/xml","",false,mainRequest,replyarea,5))then begin 
-    writeareatofile(replyarea,"SMSReply.txt",0);
+   // writeareatofile(replyarea,"SMSReply.txt",0);
     GetXMLArea(replyarea);
 		xdata = ParseXMLArea(replyarea);
 
@@ -156,3 +156,106 @@ begin
   return;
 end;
 
+
+
+
+global updating
+procedure  SendSMSFromStack()		//Edit----------------------Dima  28.08.2015
+begin
+	record SMSstackVc SMSr;
+	boolean TrHs;
+	string 100 response;
+
+	
+	SMSr.Sent = 0;
+	TrHs = true;
+	While(LoopBackKey("Sent",SMSr,1,TrHs)) begin
+		if (SMSr.Sent != 0) then begin TrHs = false; end;
+		if (TrHs) then begin
+			//queued.SendSMS2(SMSr.Phone,SMSr.Text,SMSr.Title,false,SMSr.OrderClass);
+			response = SendSMS(SMSr.Phone,SMSr.Text,SMSr.Title,true,SMSr.OrderClass);
+  		SMSr.SendDate = CurrentDate;
+  		SMSr.SendTime = CurrentTime; 
+  		SMSr.Error = response;
+  		if (blank(response)) then begin
+				SMSr.Sent = 1;
+			end;
+  		RecordStore(SMSr,true);
+		end;	
+	end;
+  
+end;
+
+
+
+/*
+
+global updating
+procedure  SendSMSFromStackQueued()
+begin
+	record SMSstackVc SMSr;
+	boolean TrHs;
+  area replyarea,mainRequest;
+  string 200 host,page,response;
+  xml xdata;
+  string 15 correctPhone;
+  string 200 text, title, ordclass;		
+
+  		host = "my.epochta.ru";
+  		page = "/members/sms/xml.php";   			
+	
+	SMSr.Sent = 0;
+	TrHs = true;
+	While(LoopBackKey("Sent",SMSr,1,TrHs)) begin
+		if (SMSr.Sent != 0) then begin TrHs = false; end;
+		LogText(0,"READ  " & SMSr.SerNr);	
+		if (TrHs) then begin
+			//response = SendSMS(SMSr.Phone,SMSr.Text,SMSr.Title,true,SMSr.OrderClass);
+
+			text = SMSr.Text;
+			ordclass = SMSr.OrderClass;
+			title = SMSr.Title;
+			
+			response = "";
+  		 
+  		SetAreaZeroSize(replyarea);
+  		SetAreaZeroSize(mainRequest)
+  		 
+  		correctPhone = NormalizePhone(SMSr.Phone);
+  		
+			CreateSMSRequest(host & page,correctPhone,text,title, mainRequest,ordclass);   
+  		 
+  		
+  		if(MySendRawWebRequest(host,"80",false,"POST",page ,"text/xml","",false,mainRequest,replyarea,5))then begin 
+  		  writeareatofile(replyarea,"SMSReply.txt",0);
+  		  GetXMLArea(replyarea);
+				xdata = ParseXMLArea(replyarea);
+  		
+				response = XmlGet(xdata,"RESPONSE/status");
+				CheckEPochtaResponse(response);
+				
+				//if (writeLog) then begin 
+					LogText(0,"SMS was sent.  TEXT: " & text);
+				//end;		 
+				   
+  		end else begin
+ 				logtext(0,"Hansa World: No Connection to Epochta");
+ 				response = "Hansa World: No Connection to Epochta";
+  		end;
+  		
+  		SMSr.SendDate = CurrentDate;
+  		SMSr.SendTime = CurrentTime; 
+  		SMSr.Error = response;
+  		if (blank(response)) then begin
+				SMSr.Sent = 1;
+			end;
+			RecordStore(SMSr,true);
+ 			LogText(0,"WRITE  " & SMSr.SerNr);
+
+
+		end;
+	
+	end;  
+end;
+
+*/

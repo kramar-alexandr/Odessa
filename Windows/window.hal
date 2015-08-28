@@ -2677,3 +2677,55 @@ window CollectOrdersForStockMoveTClass:1 //Edit----------------------Dima  14.08
 	HalPushButton(-200,v+=50,-50,v+vs,"CollectOrdersForStockMoveMn","Создать перемещение");
   EndWindow;
 end;
+
+
+window SMSstackDClass:1		//Edit----------------------Dima  27.08.2015
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+	real h,h2,h3,v,vs;
+  WindowBegin("СМС",SMSstackDClass,CGview,-);  
+  UseView(SMSstackVc);
+  SetWRect(20,100,680,300);  
+  h=90; h2 = 300; h3 = 500; v = 10; vs = 20;
+  
+  EditField(h,v,100,"No.",Normal,SerNr,false,0);
+  EditField(h2,v,100,"Получатель",Normal,CustCode,false,0);
+  EditField(h3,v,100,"Телефон",Normal,Phone,false,0);
+  EditField(h,v+=vs,150,"Заголовок",Normal,Title,false,0);
+  CheckBox(h3,v,0,"Отправлено",Sent);
+  EditField(h,v+=vs,400,"Текст",Normal,Text,false,0);
+  EditField(h,v+=vs,100,"Дата создания",ViewOnly,CreationDate,false,0);
+  EditField(h2,v,100,"Время создания",ViewOnly,CreationTime,false,0);  
+  EditField(h,v+=vs,100,"Дата отправки",ViewOnly,SendDate,false,0);
+  EditField(h2,v,100,"Время отправки",ViewOnly,SendTime,false,0);
+  EditField(h,v+=vs,200,"Ошибка",ViewOnly,Error,false,0);
+  EditField(h,v+=vs,100,"№ документа",ViewOnly,SourceSerNr,false,0);
+  EditField(h2,v,100,"Тип док-та",ViewOnly,SourceType,false,0);   
+  EditField(h3,v,100,"Категория",Normal,OrderClass,false,0);
+  EndWindow;
+end;
+
+window SMSstackLClass:1		//Edit----------------------Dima  27.08.2015
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  WindowBegin("СМС",SMSstackLClass,CGmlist,SHView);
+  SpawnClass(SMSstackDClass);
+  SetWRect(20,80,800,500);
+  Sizeable(-1,-1,0,0);
+  UseView(SMSstackVc);
+  RecordList(4,17,-21,-39);
+  RlColKey(4,4,"SerNr",SerNr,false,SerNr);
+  RlColKey(70,70,"Телефон",Phone,false,Phone);
+  RlColKey(150,150,"Получатель",CustCode,false,CustCode);
+  RlColKey(230,230,"Создан(дата)",CreationDate,false,CreationDate);
+  RlColKey(290,290,"Создан(время)",CreationTime,false,CreationTime);
+  RlColKey(350,350,"Источник",SourceType,false,SourceType);
+  RlCol(400,400,"Текст",Text,false);
+  RlCol(-240,-240,"Отправлен",SendDate,false);
+  RlCol(-180,-180,"Отправлен",SendTime,false);
+  RlColKey(-120,-120,"Sent",Sent,false,Sent);
+	RlCol(-90,-90,"Error",Error,false);
+	
+  SearchField("Найти");
+  EndWindow;
+end;

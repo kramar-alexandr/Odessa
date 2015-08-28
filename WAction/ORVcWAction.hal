@@ -2261,6 +2261,7 @@ begin
   integer wn,mwn,notenr;
   record RLinkVc RLinkr;
   string 200 response,text; 
+  record SMSstackVc SMSstackr;
   
   wn = CurWindow;
   DeselectWindow(wn,false);
@@ -2277,7 +2278,25 @@ begin
  	
  	text = ParseSMStext(RepSpec.f2,ORr);
 	 
-  response = SendSMS(RepSpec.f1,text, RepSpec.f3,true,ORr.OrderClass);		//(Phone,Text,Title,  print Log)
+  response = SendSMS(RepSpec.f1,text, RepSpec.f3,true,ORr.OrderClass);		//(Phone,Text,Title,  print Log?,..)
+  
+  RecordNew(SMSstackr);
+  SMSstackr.SerNr = NextSerNr("SMSstackVc",CurrentDate,-1,false,"");
+  SMSstackr.Phone = RepSpec.f1;
+  SMSstackr.Title = RepSpec.f3;
+  SMSstackr.Text = text;
+  SMSstackr.CustCode = ORr.CustCode;
+  SMSstackr.CreationDate = CurrentDate;
+  SMSstackr.CreationTime = CurrentTime;
+  SMSstackr.SendDate = CurrentDate;
+  SMSstackr.SendTime = CurrentTime;  
+  SMSstackr.SourceType = "ORVc";
+  SMSstackr.SourceSerNr = ORr.SerNr;
+  SMSstackr.OrderClass = ORr.OrderClass;
+  SMSstackr.Sent = 1;
+  SMSstackr.Error = response;
+  RecordStore(SMSstackr,true); 			
+  //MessageBox(0,"added to SMS stockVc " & SMSstackr.SerNr) ; 
   
   if (blank(response)) then begin
     
