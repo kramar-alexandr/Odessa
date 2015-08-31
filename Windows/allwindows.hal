@@ -4984,7 +4984,7 @@ begin
   WindowBegin("‘чета клиентам",ORLClassGeneral,CGmlist,-);
   DynamicWindow;
   SpawnClass(ORDClass);
-  SetWRect(20,80,1060,298); //Edit***************************Sasha2,14:12 08.01.2015
+  SetWRect(20,80,1100,300); //Edit***************************Sasha2,14:12 08.01.2015
   Sizeable(-1,-1,0,0);
   UseView(ORVc);
   FormName(PrintORL);
