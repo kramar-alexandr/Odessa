@@ -2186,7 +2186,7 @@ global
 function string 255 ParseSMStext(string text, record ORVc ORr)	//Edit----------------------Dima  02.07.2015
 begin
   record UserVc Userr;
-	string 10 replaceSum,replaceCard,replaceDate,replaceTime;
+	string 10 replaceSum,replaceCard,replaceDate,replaceOrder;
 	string 50 sum,card;
 	string 255 resString,temp;
   record SMSTextBlock SMSb;
@@ -2198,7 +2198,7 @@ begin
 	replaceSum = "%Sum%";
 	replaceCard = "%Card%";
 	replaceDate = "%Date%";
-	replaceTime = "%Time%";
+	replaceOrder = "%Order%";
 	
 	Userr.Code = ORr.SalesMan;
 	if (ReadFirstMain(Userr,1,true) and nonblank(Userr.CardNumber)) then begin
@@ -2222,8 +2222,9 @@ begin
 
 	temp = ReplaceAllSubStringInString(replaceCard,card,text);
 	resString = ReplaceAllSubStringInString(replaceSum,sum,temp);
+	temp = ReplaceAllSubStringInString(replaceOrder,ORr.CustOrdNr,text);
 
-ParseSMStext = resString;
+ParseSMStext = temp;
 return;
 end;
 
