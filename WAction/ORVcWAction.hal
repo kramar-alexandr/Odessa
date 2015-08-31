@@ -2222,7 +2222,7 @@ begin
 
 	temp = ReplaceAllSubStringInString(replaceCard,card,text);
 	resString = ReplaceAllSubStringInString(replaceSum,sum,temp);
-	temp = ReplaceAllSubStringInString(replaceOrder,ORr.CustOrdNr,text);
+	temp = ReplaceAllSubStringInString(replaceOrder,ORr.CustOrdNr,resString);
 
 ParseSMStext = temp;
 return;
