@@ -2508,6 +2508,7 @@ begin
     if (indexname=="ActShipOrderClass")  then begin res = 0; end;
     if (indexname=="ActShipSum4")  then begin res = 0; end;
     if (indexname=="ActShipCustomStatusFlagText")  then begin res = 0; end;
+    if (indexname=="ActLastShipDate")  then begin res = 0; end;
   end;  //Edit--------------------------------------------------------------------------------------------------------------Dima  26.08.2015
 
   ORVcRecordInIndex = res;

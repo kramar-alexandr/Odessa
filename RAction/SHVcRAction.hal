@@ -1571,6 +1571,36 @@ LUpdateSerialNumberQuantity:;
   return;
 end;
 
+
+global updating procedure SetLastShipDate(record SHVc SHr)	//Edit----------------------Dima  31.08.2015
+begin
+	record ORVc ORr;
+	record SHVc SHr2;
+	date lastShipDate;
+	boolean TrHs;
+	
+	
+	SHr2.OrderNr = SHr.OrderNr;
+	lastShipDate = SHr.ShipOkDate;
+	TrHs = true;	
+	While(LoopKey("OrderKey",SHr2,1,TrHs)) begin
+		if(SHr2.OrderNr != SHr.OrderNr) then begin TrHs = false; end;
+		
+		if (TrHs) begin 
+			if (SHr2.ShipOkDate > lastShipDate) then begin
+				lastShipDate = SHr2.ShipOkDate;
+			end;
+		end;
+	end;
+	
+	ORr.SerNr = SHr.OrderNr;
+	if (ReadFirstMain(ORr,1,true)) then begin
+		ORr.LastShipDate = lastShipDate;
+		RecordStore(ORr,true);
+	end;  
+end;
+
+
 global
 updating function LongInt SHVcRecordSaveAfter(var record SHVc SHr,record SHVc SH2r,LongInt stat,LongInt long4)
 begin
@@ -1582,6 +1612,7 @@ begin
     SHUpdateSerialNr(SHr,false,true);
     SHUpdateStock(SHr,false,false);
     UpdateProjFromShip(SHr);
+    SetLastShipDate(SHr);//Edit----------------------Dima  31.08.2015
 //    SHOKStockMovemnts(SHr.SerNr);
   end;
   if (SHr.OrderNr!=-1) then begin
@@ -1714,6 +1745,9 @@ begin
   return;
 end;
 
+
+
+
 global
 updating function LongInt SHVcRecordUpdateAfter(var record SHVc SHr,record SHVc SH2r,LongInt stat,LongInt long4)
 begin
@@ -1752,12 +1786,9 @@ begin
         end;
       end;
     end;
+    SetLastShipDate(SHr);//Edit----------------------Dima  31.08.2015
   end;
-  if ((SH2r.OKFlag==0) and (SHr.OKFlag==0)) then begin
-//    UpdateSerialNumberQuantity(SH2r,false);//Not Used
-//    UpdateSerialNumberQuantity(SHr,true);//Not Used
-  end;
-//  if ((IVr.Invalid==0) and (IV2r.Invalid==0)) then begin
+
   if ((SHr.OKFlag==0) and (SH2r.OKFlag!=0)) then begin//unok
     UnOKDelivery(SHr,SH2r,true);
   end;

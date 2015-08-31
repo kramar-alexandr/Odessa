@@ -238,6 +238,7 @@ begin
 	Maintenance("Отменить статус синхронизации счетов клиентов старше 10 дней",CancelSyncFlORVcVClass,CancelSyncFlORVcMn,modDBMain);//Edit---------------Vitalii 11:25 28.07.2015
 	Maintenance("Пересохранить ORVc",MyVClass,ReSaveORVcMn,modDBMain);		//Edit----------------------Dima  28.08.2015
 	Maintenance("Разослать СМС из стека",MyVClass,SendSMSFromStack,modDBMain);		//Edit----------------------Dima  27.08.2015
+	Maintenance("Пересчитать ORVc.LastShipDate",MyVClass,UpdateLastShipDateMn,modDBMain);		//Edit----------------------Dima  31.08.2015
 	
 
   Import("Импорт цен",PLImportIClass,PLImportIn,modDI); //Added********************Dima 20.11.2014

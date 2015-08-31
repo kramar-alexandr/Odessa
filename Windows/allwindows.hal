@@ -4878,7 +4878,7 @@ begin
 
   WindowBegin("Счета клиентам (в обработке)",ORLClass,CGmlist,-);
   SpawnClass(ORDClass);
-  SetWRect(20,80,980,298); //Edit***************************Sasha2,14:12 08.01.2015
+  SetWRect(20,80,1060,298); //Edit***************************Sasha2,14:12 08.01.2015
   Sizeable(-1,-1,0,0);
   UseView(ORVc);
   
@@ -4914,6 +4914,8 @@ begin
   pos = pos + 130; //Edit***************************Sasha2,13:45 08.01.2015
   //RlColKey(pos,pos,"Оф.сер.номер",OfficialSerNr,false,OfficialSerNr); //Edit***************************Sasha2,13:45 08.01.2015
   RlCol(pos,pos,"Оф.сер.номер",OfficialSerNr,false);// Edit ************************** Thursday, 14 May 2015 23:15:45
+  pos = pos + 80;
+  RlColKey(pos,pos,"Отгрузка",LastShipDate,false,ActLastShipDate);//Edit----------------------Dima  31.08.2015
   if (IsEnterprise) then begin
     RlColKey(-260,-260,"Класс",OrderClass,false,ActShipOrderClass);
     RlColKey(-210,-210,"Итого",Sum4,true,ActShipSum4);
@@ -4982,7 +4984,7 @@ begin
   WindowBegin("Счета клиентам",ORLClassGeneral,CGmlist,-);
   DynamicWindow;
   SpawnClass(ORDClass);
-  SetWRect(20,80,980,298); //Edit***************************Sasha2,14:12 08.01.2015
+  SetWRect(20,80,1060,298); //Edit***************************Sasha2,14:12 08.01.2015
   Sizeable(-1,-1,0,0);
   UseView(ORVc);
   FormName(PrintORL);
@@ -5015,6 +5017,8 @@ begin
   pos = pos + 130; //Edit***************************Sasha2,13:45 08.01.2015
   //RlColKey(pos,pos,"Оф.сер.номер",OfficialSerNr,false,OfficialSerNr); //Edit***************************Sasha2,13:45 08.01.2015
   RlCol(pos,pos,"Оф.сер.номер",OfficialSerNr,false);// Edit ************************** Thursday, 14 May 2015 23:15:45
+  pos = pos + 80;
+  RlColKey(pos,pos,"Отгрузка",LastShipDate,false,LastShipDate);//Edit----------------------Dima  31.08.2015  
   if (IsEnterprise) then begin
     RlColKey(-260,-260,"Класс",OrderClass,false,OrderClass);
     RlColKey(-210,-210,"Итого",Sum4,true,Sum4);
@@ -5121,6 +5125,7 @@ begin
   EditField(h2,v+=vs,135,"Объекты",Normal,Objects,false,ObjSClass);
   EditField(h2,v+=vs,135,"Ссылка",Normal,RefStr,false,0);
   EditField(h2,v+=vs,135,"№ счета кл.",Normal,CustOrdNr,false,0);
+  EditField(h2,v+=vs,135,"Дата отгрузки",Normal,LastShipDate,false,0);//Edit----------------------Dima  31.08.2015
   EditField(h3 - 30,v=vm,80,"Продавец",Normal,SalesMan,false,UserSClass); //Edit***************************Sasha2,11:37 14.07.2014
   if (StandardHansa==false) then begin
     EditField(h3 - 30,v+=vs,80,"Проект",Normal,PRCode,false,PRSClass); //Edit***************************Sasha2,11:37 14.07.2014
