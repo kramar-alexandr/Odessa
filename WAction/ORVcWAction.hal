@@ -69,7 +69,7 @@ remote updating function string 255 SendSMS(record SMSstackVc, boolean);//Edit--
 external function string 255 ReplaceAllSubStringInString(string, string, string);//Edit----------------------Dima  02.07.2015
 external procedure CheckItemsOnStockORRn(record RcVc); //Edit***************************Sasha2,15:31 12.08.2015
 remote procedure GetAvailableItems(var record ORVc);
-remote updating function longint AddSMStoStack(string, string, string,string,string,longint,string);//Edit----------------------Dima  28.08.2015
+remote updating function longint AddSMStoStack(string, string, string,string,string,longint,string,date,time);//Edit----------------------Dima  28.08.2015
 remote updating function string 255  CheckAndSendSMS(longint);	//Edit----------------------Dima  28.08.2015
 
 
@@ -2288,7 +2288,7 @@ begin
 	 
  // response = SendSMS(RepSpec.f1,text, RepSpec.f3,true,ORr.OrderClass);		//(Phone,Text,Title,  print Log?,..)
   
-  smsNr = AddSMStoStack(RepSpec.f1,RepSpec.f3,text,ORr.CustCode,"ORVc",ORr.SerNr,ORr.OrderClass);
+  smsNr = AddSMStoStack(RepSpec.f1,RepSpec.f3,text,ORr.CustCode,"ORVc",ORr.SerNr,ORr.OrderClass,"","");
 	response = CheckAndSendSMS(smsNr);  
   
   if (blank(response)) then begin    

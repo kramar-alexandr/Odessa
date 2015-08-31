@@ -85,7 +85,7 @@ external procedure TableSortOR2(var record ORVc);//Edit----------------------Dim
 external updating function boolean NPDeleteCounterparty(record NPCounterpartyVc);
 remote updating function boolean CheckCounterparty(var record ORVc);
 external function LongInt DateDiff(Date,Date); //Edit***************************Sasha2,11:26 18.08.2015
-external updating function longint AddSMStoStack(string, string, string,string,string,longint,string);//Edit----------------------Dima  28.08.2015
+external updating function longint AddSMStoStack(string, string, string,string,string,longint,string,date,time);//Edit----------------------Dima  28.08.2015
 
 
 procedure SetORAcceptanceFlag(var record ORVc ORr,record ORVc prevORr,LongInt stat)
@@ -1941,7 +1941,7 @@ begin
   record SMSTextBlock SMSb;
   record CUVc CUr;
   string 255 text;
- 
+
   BlockLoad(SMSb);	
 	
 	if (nonblank(ORr.NPPhone)) then begin
@@ -1957,9 +1957,9 @@ begin
 		case 2: text = SMSb.Text32;
 		case 3: text = SMSb.Text33;	
 	end;
-	
+
 	if (nonblank(text)) then begin
-  	AddSMStoStack(phone,SMSb.Title3,text,ORr.CustCode,"ORVc",ORr.SerNr,ORr.OrderClass);
+  	AddSMStoStack(phone,SMSb.Title3,text,ORr.CustCode,"ORVc",ORr.SerNr,ORr.OrderClass,"","");
   end;
 end;
 

@@ -167,7 +167,7 @@ end;
 
 
 
-global updating function longint AddSMStoStack(string phone, string title, string text,string custcode,string docType,longint docSerNr,string OrderClass) 
+global updating function longint AddSMStoStack(string phone, string title, string text,string custcode,string docType,longint docSerNr,string OrderClass,date sendDate,time sendTime) 
 begin
 record SMSstackVc SMSr;
 longint smsNr;
@@ -178,8 +178,16 @@ longint smsNr;
   SMSr.Title = title;
   SMSr.Text = text;
   SMSr.CustCode = custcode;
-  SMSr.CreationDate = CurrentDate;
-  SMSr.CreationTime = CurrentTime; 
+  if (BlankDate(sendDate)) then begin
+  	SMSr.CreationDate = CurrentDate;
+  end else begin
+		SMSr.CreationDate = sendDate;
+	end;
+	if (BlankTime(sendTime)) then begin
+	  SMSr.CreationTime = CurrentTime; 
+	end else begin 
+		SMSr.CreationTime = sendTime; 
+	end; 
   SMSr.SourceType = docType;
   SMSr.SourceSerNr = docSerNr;
   SMSr.OrderClass = OrderClass;
@@ -203,7 +211,7 @@ begin
 	TrHs = true;
 	While(LoopBackKey("Sent",SMSr,1,TrHs)) begin
 		if (SMSr.Sent != 0) then begin TrHs = false; end;
-		if (TrHs) then begin
+		if (TrHs and ((SMSr.CreationDate<CurrentDate) or (SMSr.CreationDate==CurrentDate and SMSr.CreationTime<=CurrentTime))) then begin
 			//queued.SendSMS2(SMSr.Phone,SMSr.Text,SMSr.Title,false,SMSr.OrderClass);
 			response = SendSMS(SMSr,true);
 		end;	

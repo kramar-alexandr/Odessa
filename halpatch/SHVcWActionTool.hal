@@ -33,7 +33,7 @@ external procedure NP_SumUpRowVolumes(var record SHVc);//Edit-------------------
 external procedure CurValToOtherCur(Date,string,val,string,var val,roundmode);	//Edit----------------------Dima  15.05.2015
 //external function string 255 SendSMS(string, string, string,boolean,string);//Edit----------------------Dima  30.06.2015
 external updating function string 255 SendSMS(record SMSstackVc, boolean);
-external updating function longint AddSMStoStack(string, string, string,string,string,longint,string);//Edit----------------------Dima  28.08.2015
+external updating function longint AddSMStoStack(string, string, string,string,string,longint,string,date,time);//Edit----------------------Dima  28.08.2015
 
 procedure SHChangeShip(record SHVc SHr,Integer rownr)
 BEGIN
@@ -1803,7 +1803,7 @@ Begin
   			placeWord = GetPlaceWord(placeNr);
   			text = USetStr(31091) & ORr.CustOrdNr & ". " & USetStr(31092) & SHr.NPIntDocNumber & "(" & placeNr & placeWord & ")";
   			
-  			smsNr = AddSMStoStack(ORr.NPPhone,title,text,ORr.CustCode,"SHVc",SHr.SerNr,ORr.OrderClass);
+  			smsNr = AddSMStoStack(ORr.NPPhone,title,text,ORr.CustCode,"SHVc",SHr.SerNr,ORr.OrderClass,"","");
 	 
 			end;
 	end; 

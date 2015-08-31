@@ -2726,8 +2726,8 @@ begin
   RlColKey(4,4,"SerNr",SerNr,false,SerNr);
   RlColKey(70,70,"Телефон",Phone,false,Phone);
   RlColKey(150,150,"Получатель",CustCode,false,CustCode);
-  RlColKey(230,230,"Создан(дата)",CreationDate,false,CreationDate);
-  RlColKey(290,290,"Создан(время)",CreationTime,false,CreationTime);
+  RlColKey(230,230,"Отправить(дата)",CreationDate,false,CreationDate);
+  RlColKey(290,290,"Отправить(время)",CreationTime,false,CreationTime);
   RlColKey(350,350,"Источник",SourceType,false,SourceType);
   RlCol(400,400,"Текст",Text,false);
   RlCol(-240,-240,"Отправлен",SendDate,false);
