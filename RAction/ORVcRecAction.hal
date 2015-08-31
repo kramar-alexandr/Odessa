@@ -423,6 +423,12 @@ begin
       end;
     end;
   end; //Edit***************************Sasha2,11:24 18.08.2015 }
+  
+  if(ORr.FeedBackStatus==3 and ORr.FeedBackStatus > OR2r.FeedBackStatus) then begin	//Edit----------------------Dima  31.08.2015
+  	ORr.CustomStatusFlag = 4;
+		ORr.Closed = 1;
+	end;   
+  
   if (ORr.OKFlag==0) then begin
     if (stat==updatemode) then begin
       if (OR2r.OKFlag==1) then begin unokf = true; end;
@@ -1967,6 +1973,8 @@ begin
   end;
 end;
 
+
+
 global
 updating function LongInt ORVcRecordUpdate(var record ORVc ORr,record ORVc OR2r,LongInt stat,LongInt long4)
 begin
@@ -1974,6 +1982,7 @@ begin
 	val fr,to1,to2;//Edit---------------------------Dima 29.01.2015
 	Date edt;	//Edit--------------------------------Dima 29.01.2015
 	record NPCounterpartyVc NPCounterpartyr;
+	record ORVc oldORr;
 
   ORr.Prntdf = 0;
   AutDelNonStockItem(ORr);
@@ -2005,9 +2014,7 @@ begin
 	  		
 	  	end;
 	  end;
-  end;
-
-  
+  end;  
   Recalculate_CustomStatusFlagText(ORr); //Edit----------------------Dima  24.03.2015
   
   //if ((ORr.DeliveryNewPost!=0) and (OR2r.DeliveryNewPost==0)) then begin
@@ -2016,10 +2023,12 @@ begin
   TableSortOR2(ORr);//Edit----------------------Dima  07.07.2015
   SetRowsUID(ORr);	//Edit----------------------Dima  14.08.2015
   
-  if(OR2r.FeedBackStatus!=ORr.FeedBackStatus and ORr.FeedBackStatus > OR2r.FeedBackStatus) then begin
-  	SendNoticeSMS(ORr);
+  if(OR2r.FeedBackStatus!=ORr.FeedBackStatus and ORr.FeedBackStatus > OR2r.FeedBackStatus) then begin 
+  	SendNoticeSMS(ORr);			//Edit----------------------Dima  31.08.2015
   end;  
-  
+  if(OR2r.FeedBackStatus==3 and ORr.FeedBackStatus > OR2r.FeedBackStatus) then begin 
+  			ORr.CustomStatusFlag = 4;//Edit----------------------Dima  31.08.2015
+  end;
   ORVcRecordUpdate = res; 
   return;
 end;
