@@ -205,7 +205,7 @@ begin
 		if (SMSr.Sent != 0) then begin TrHs = false; end;
 		if (TrHs) then begin
 			//queued.SendSMS2(SMSr.Phone,SMSr.Text,SMSr.Title,false,SMSr.OrderClass);
-			response = SendSMS(SMSr,true,);
+			response = SendSMS(SMSr,true);
 		end;	
 	end;
   
