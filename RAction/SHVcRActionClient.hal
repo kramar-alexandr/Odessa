@@ -63,6 +63,8 @@ BEGIN
   record IVVc IVr;
   Integer nwn;
   string 200 response;
+  record SMSstackVc SMSr;
+  longint smsNr;  
 
   if ((SHp.OKFlag!=0) and (SH2p.OKFlag==0)) then begin
     BlockLoad(OSb);

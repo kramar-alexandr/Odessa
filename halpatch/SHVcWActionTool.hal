@@ -1789,7 +1789,7 @@ Begin
   string 200 response,text;
   string 15 title,placeWord;
   record SMSTextBlock SMSb;
-  record SMSstackVc SMSstackr;
+  record SMSstackVc SMSr;
   longint smsNr;
   
   BlockLoad(SMSb);  
@@ -1804,7 +1804,10 @@ Begin
   			text = USetStr(31091) & ORr.CustOrdNr & ". " & USetStr(31092) & SHr.NPIntDocNumber & "(" & placeNr & placeWord & ")";
   			
   			smsNr = AddSMStoStack(ORr.NPPhone,title,text,ORr.CustCode,"SHVc",SHr.SerNr,ORr.OrderClass,"","");
-	 
+	 			SMSr.SerNr = smsNr;
+  			if (ReadFirstMain(SMSr,1,true)) then begin	
+  				CreateRecordLink(SHr,CurrentCompany,SMSr,CurrentCompany);  
+  			end;
 			end;
 	end; 
 
