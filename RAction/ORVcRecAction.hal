@@ -1972,10 +1972,6 @@ begin
 	if (nonblank(text)) then begin
 		newtext = ParseSMStext(text,ORr);
   	smsNr =	AddSMStoStack(phone,SMSb.Title3,newtext,ORr.CustCode,"ORVc",ORr.SerNr,ORr.OrderClass,"","");
-  	SMSr.SerNr = smsNr;
-  	if (ReadFirstMain(SMSr,1,true)) then begin	
-  		CreateRecordLink(ORr,CurrentCompany,SMSr,CurrentCompany);  
-  	end;	
   end;
   
   

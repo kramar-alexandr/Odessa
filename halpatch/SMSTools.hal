@@ -167,6 +167,24 @@ begin
 end;
 
 
+global updating function CreateSMSlinks(record SMSstackVc SMSr,string docType,longint docSerNr)
+begin
+record ORVc ORr;
+record SHvc SHr;
+	switch(docType) begin
+		case "ORVc":
+				ORr.SerNr =  docSerNr;
+		  	if (ReadFirstMain(ORr,1,true)) then begin	
+  				CreateRecordLink(ORr,CurrentCompany,SMSr,CurrentCompany);  
+  			end;
+		case "SHVc":
+				SHr.SerNr =  docSerNr;
+		  	if (ReadFirstMain(SHr,1,true)) then begin	
+  				CreateRecordLink(SHr,CurrentCompany,SMSr,CurrentCompany);  
+  			end;  			
+	end;
+end;
+
 
 global updating function longint AddSMStoStack(string phone, string title, string text,string custcode,string docType,longint docSerNr,string OrderClass,date sendDate,time sendTime) 
 begin
@@ -195,6 +213,8 @@ longint smsNr;
   if (RecordInsert(SMSr,true)) then begin
 		smsNr = SMSr.SerNr;
 	end;
+	CreateSMSlinks(SMSr,docType,docSerNr);
+	
   AddSMStoStack = smsNr;
 end;
 

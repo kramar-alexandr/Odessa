@@ -2311,11 +2311,7 @@ begin
   	  end;     
   	end;
   	*/
-  	CloseWindow(wn);
-  	SMSr.SerNr = smsNr;
-  	if (ReadFirstMain(SMSr,1,true)) then begin	
-  		CreateRecordLink(ORr,CurrentCompany,SMSr,CurrentCompany);  
-  	end;  	
+  	CloseWindow(wn); 	
   end else begin
 		MessageBox(0,response);
 	end;
