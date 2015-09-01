@@ -1525,9 +1525,9 @@ begin
 		  				if(POrw.AddUnittext4 != POrw.UnitCode) then begin POrw.AddUnitQty4 = POrw.Quant / INr.AddUnitCoef4; end else begin POrw.AddUnitQty4 = POrw.Quant; end;
 						if(POrw.AddUnittext2 != POrw.UnitCode) then begin POrw.AddUnitQty2 = POrw.Quant / INr.AddUnitCoef2; end else begin POrw.AddUnitQty2 = POrw.Quant; end;
 		  			end;
-	  	end;
-	  	
+	  	end;	  	
 	  	MatRowPut(POr,rownr,POrw);
+	  	POVc_PasteQuant(POr,rownr);//Edit----------------------Dima  01.09.2015
 	  end;
     PutWindowRecord(wn,POr);
   end;

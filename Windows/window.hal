@@ -2131,7 +2131,7 @@ begin
   EditField(h,v+=vs,320,"Не дозвонились 2-й раз",Normal,Text32,false,0);
   EditField(h,v+=vs,320,"Не дозвонились 3-й раз",Normal,Text33,false,0); 
   
-  Tile(3,200,false,"","Title4");
+  Tile(4,200,false,"","Title4");
   v=6;
   EditField(h,v+=vs,150,"Заголовок",Normal,Title4,false,0);
   EditField(h,v+=vs,320,"Предупреждение",Normal,Text41,false,0);
