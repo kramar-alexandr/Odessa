@@ -2703,11 +2703,11 @@ begin
   EditField(h,v+=vs,150,"Заголовок",Normal,Title,false,0);
   CheckBox(h3,v,0,"Отправлено",Sent);
   EditField(h,v+=vs,400,"Текст",Normal,Text,false,0);
-  EditField(h,v+=vs,100,"Дата создания",ViewOnly,CreationDate,false,0);
-  EditField(h2,v,100,"Время создания",ViewOnly,CreationTime,false,0);  
-  EditField(h,v+=vs,100,"Дата отправки",ViewOnly,SendDate,false,0);
-  EditField(h2,v,100,"Время отправки",ViewOnly,SendTime,false,0);
-  EditField(h,v+=vs,200,"Ошибка",ViewOnly,Error,false,0);
+  EditField(h,v+=vs,100,"Отправить",ViewOnly,CreationDate,false,0);
+  EditField(h2,v,100,"Отправить",ViewOnly,CreationTime,false,0);  
+  EditField(h,v+=vs,100,"Отправлено",ViewOnly,SendDate,false,0);
+  EditField(h2,v,100,"Отправлено",ViewOnly,SendTime,false,0);
+  EditField(h,v+=vs,200,"Ошибка",Normal,Error,false,0);
   EditField(h,v+=vs,100,"№ документа",ViewOnly,SourceSerNr,false,0);
   EditField(h2,v,100,"Тип док-та",ViewOnly,SourceType,false,0);   
   EditField(h3,v,100,"Категория",Normal,OrderClass,false,0);

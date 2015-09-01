@@ -1948,6 +1948,8 @@ begin
   record SMSTextBlock SMSb;
   record CUVc CUr;
   string 255 text,newtext;
+  record SMSstackVc SMSr;
+  longint smsNr;
 
   BlockLoad(SMSb);	
 	
@@ -1969,8 +1971,14 @@ begin
 
 	if (nonblank(text)) then begin
 		newtext = ParseSMStext(text,ORr);
-  	AddSMStoStack(phone,SMSb.Title3,newtext,ORr.CustCode,"ORVc",ORr.SerNr,ORr.OrderClass,"","");
+  	smsNr =	AddSMStoStack(phone,SMSb.Title3,newtext,ORr.CustCode,"ORVc",ORr.SerNr,ORr.OrderClass,"","");
+  	SMSr.SerNr = smsNr;
+  	if (ReadFirstMain(SMSr,1,true)) then begin	
+  		CreateRecordLink(ORr,CurrentCompany,SMSr,CurrentCompany);  
+  	end;	
   end;
+  
+  
 end;
 
 
@@ -2023,10 +2031,9 @@ begin
   TableSortOR2(ORr);//Edit----------------------Dima  07.07.2015
   SetRowsUID(ORr);	//Edit----------------------Dima  14.08.2015
   
-  if(OR2r.FeedBackStatus!=ORr.FeedBackStatus and ORr.FeedBackStatus > OR2r.FeedBackStatus) then begin 
-  	SendNoticeSMS(ORr);			//Edit----------------------Dima  31.08.2015
-  end;  
+  
   if(OR2r.FeedBackStatus==3 and ORr.FeedBackStatus > OR2r.FeedBackStatus) then begin 
+  		//OR.Closed sets in the begining of ORVcRecordCheck
   			ORr.CustomStatusFlag = 4;//Edit----------------------Dima  31.08.2015
   end;
   ORVcRecordUpdate = res; 
@@ -2082,6 +2089,10 @@ begin
         CancelApprovalRequestActivities(kAcceptanceOR,"ORVc",ORr.SerNr,ORr.CustCode);
       end;
   end;
+  
+  if(OR2r.FeedBackStatus!=ORr.FeedBackStatus and ORr.FeedBackStatus > OR2r.FeedBackStatus) then begin 
+  	SendNoticeSMS(ORr);			//Edit----------------------Dima  31.08.2015
+  end;  
   
   ORVcRecordUpdateAfter = res; 
   return;

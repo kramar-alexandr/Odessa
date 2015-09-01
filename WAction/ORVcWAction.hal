@@ -2269,7 +2269,7 @@ begin
   integer wn,mwn,notenr;
   record RLinkVc RLinkr;
   string 200 response,text; 
-  record SMSstackVc SMSstackr;
+  record SMSstackVc SMSr;
   longint smsNr;
   
   wn = CurWindow;
@@ -2293,12 +2293,11 @@ begin
 	response = CheckAndSendSMS(smsNr);  
   
   if (blank(response)) then begin    
+  	/*
   	//attach note to ORr
-
 		Noter.SerNr = NextSerNr("NotepadVc",CurrentDate,-1,false,"");
 		LineTextPut(Noter,0,text & chr(13));
-		LineTextPut(Noter,0,USetStr(31073) & CurrentDate & " " & CurrentTime);
-		
+		LineTextPut(Noter,0,USetStr(31073) & CurrentDate & " " & CurrentTime);		
   	if (RecordStore(Noter,false)) then begin
   	  CreateRecordLink(ORr,CurrentCompany,Noter,CurrentCompany); 
   	  notenr = 1;
@@ -2311,8 +2310,12 @@ begin
   	    end;
   	  end;     
   	end;
+  	*/
   	CloseWindow(wn);
-  
+  	SMSr.SerNr = smsNr;
+  	if (ReadFirstMain(SMSr,1,true)) then begin	
+  		CreateRecordLink(ORr,CurrentCompany,SMSr,CurrentCompany);  
+  	end;  	
   end else begin
 		MessageBox(0,response);
 	end;
@@ -2353,6 +2356,22 @@ begin
 	RecordNew(ORr);
 	nwn = OpenWindow("ORLClassGeneral",0,CurWindow,"","",ORr);
 end;
+
+
+
+
+global
+function Boolean SMSstackDClassSentButtonAction(Integer wn,Integer value)	//Edit----------------------Dima  01.09.2015
+//!! transfer to SMSWAction when it was created
+BEGIN
+  Boolean res;
+
+  res = false;
+
+  SMSstackDClassSentButtonAction = res;
+  RETURN;
+END;
+
 
 
 global

@@ -153,6 +153,7 @@ begin
  		response = "Hansa World: No Connection to Epochta";
   end;
   
+  SMSr.Phone = correctPhone;
   SMSr.SendDate = CurrentDate;
   SMSr.SendTime = CurrentTime; 
   SMSr.Error = response;
@@ -211,7 +212,7 @@ begin
 	TrHs = true;
 	While(LoopBackKey("Sent",SMSr,1,TrHs)) begin
 		if (SMSr.Sent != 0) then begin TrHs = false; end;
-		if (TrHs and ((SMSr.CreationDate<CurrentDate) or (SMSr.CreationDate==CurrentDate and SMSr.CreationTime<=CurrentTime))) then begin
+		if (TrHs and ((SMSr.CreationDate<CurrentDate) or (SMSr.CreationDate==CurrentDate and SMSr.CreationTime<=CurrentTime)) and blank(SMSr.Error)) then begin
 			//queued.SendSMS2(SMSr.Phone,SMSr.Text,SMSr.Title,false,SMSr.OrderClass);
 			response = SendSMS(SMSr,true);
 		end;	
