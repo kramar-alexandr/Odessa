@@ -1102,6 +1102,7 @@ begin
 		
   MatRowGet(OPp,currow,newOPrw);
   newOPrw.RecVal = v;
+  newOPrw.PInvVal = v; 
   MatRowPut(OPp,currow,newOPrw);
   OPVc_PasteRecVal(OPp,currow);
   newOPrw.BankCurncy = bankcurncy;
