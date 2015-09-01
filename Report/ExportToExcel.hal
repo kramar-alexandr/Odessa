@@ -10,7 +10,7 @@ begin
   if (ReadFirstMain(POr,1,true)) then begin	  
   rwcnt=MatRowCnt(POr);
  
-	StartReportJob("---");
+	StartReportJob("ExportToExcel");
 	
 	EndHeader;
 
@@ -87,7 +87,7 @@ begin
   if (ReadFirstMain(PUr,1,true)) then begin	  
   rwcnt=MatRowCnt(PUr);
  
-	StartReportJob("---");
+	StartReportJob("ExportToExcel");
 	
 	EndHeader;
 
@@ -150,7 +150,7 @@ begin
   if (ReadFirstMain(StockMovr,1,true)) then begin	  
   rwcnt=MatRowCnt(StockMovr);
  
-	StartReportJob("---");
+	StartReportJob("ExportToExcel");
 	
 	EndHeader;
 
@@ -215,8 +215,7 @@ begin
   if (ReadFirstMain(ORr,1,true)) then begin	  
   rwcnt=MatRowCnt(ORr);
  
-	StartReportJob("---");
-LogText(0,"--ExportTableToExcelORRn**********");	
+	StartReportJob("ExportToExcel");
 	EndHeader;
 
 	SetRepCol(2,50);
@@ -251,6 +250,68 @@ LogText(0,"--ExportTableToExcelORRn**********");
 		OutString(6,0,ORrw.Price,false);
 		OutString(7,0,ORrw.vRebate,false);
 		OutString(8,0,ORrw.Sum,false);
+		EndFormat;	
+	end;		
+	EndJob;
+
+  end;
+
+return;
+end;
+
+
+
+
+global procedure ExportTableToExcelIVRn(record RcVc RepSpec)	//Edit--------Dima  23.01.2015
+begin
+  record IVVc IVr;
+  row	IVVc IVrw;
+  Integer rwcnt,i,wn;
+  
+  IVr.SerNr = RepSpec.long1;
+  if (ReadFirstMain(IVr,1,true)) then begin	  
+  rwcnt=MatRowCnt(IVr);
+ 
+	StartReportJob("ExportToExcel");
+	
+	EndHeader;
+
+	SetRepCol(2,50);
+	SetRepCol(3,100);
+	SetRepCol(4,150);
+	SetRepCol(5,200);
+	SetRepCol(6,250);
+	SetRepCol(7,300);
+	SetRepCol(8,350);
+	SetRepCol(9,400);
+
+
+
+	StartFormat(15);
+	OutString(0,0,"№",true);
+	OutString(2,0,"Товар",true);
+	OutString(3,0,"Кол-во",false);
+	OutString(5,0,"Описание",false);
+	OutString(6,0,"Цена",false);
+	OutString(7,0,"Скидка,%",false);
+	OutString(8,0,"Сумма",false);
+	EndFormat;
+	Black_Divider(0,1);
+
+	for(i=0;i<rwcnt;i=i+1) begin
+		MatRowGet(IVr,i,IVrw)
+		StartFormat(15);
+		if(IVrw.stp == kInvoiceRowTypeNormal)	then begin		
+			OutString(0,0,i+1,false);
+		end else begin
+			OutString(0,0,"",false);
+		end;
+		OutString(2,0,IVrw.ArtCode,false);
+		OutString(3,0,IVrw.Quant,false);
+		OutString(5,0,IVrw.Spec,false);
+		OutString(6,0,IVrw.Price,false);
+		OutString(7,0,IVrw.vRebate,false);
+		OutString(8,0,IVrw.Sum,false);
 		EndFormat;	
 	end;		
 	EndJob;

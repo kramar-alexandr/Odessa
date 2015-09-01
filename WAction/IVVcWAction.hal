@@ -2217,3 +2217,20 @@ begin
 	end;	
 	
 end;
+
+
+global//Edit----------------------Dima  01.09.2015
+procedure ExportToExcelIVDsm()
+begin
+  record IVVc IVr;
+  record RcVc RepSpec;
+  integer wn;
+  wn = CurWindow;
+  GetWindowRecord(wn,IVr);
+	RepSpec.Media = mtClipBoard; 
+  RepSpec.repname = "ExportTableToExcelIVRn";
+  RepSpec.flags[0] = wn;
+  RepSpec.long1 = IVr.SerNr;
+  RunReport(RepSpec,0);  
+return;
+end;
