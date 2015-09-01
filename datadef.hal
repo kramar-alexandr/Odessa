@@ -4127,7 +4127,10 @@ RecordBegin(IPVc,-,"");
 	RecordField(Title3,M4Str,100,0);
 	RecordField(Text31,M4Str,255,0);
 	RecordField(Text32,M4Str,255,0);
-	RecordField(Text33,M4Str,255,0);	
+	RecordField(Text33,M4Str,255,0);
+	RecordField(Title4,M4Str,100,0);
+	RecordField(Text41,M4Str,255,0);
+	RecordField(Text42,M4Str,255,0);		
 	EndBlock; 
 
 
