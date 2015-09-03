@@ -166,6 +166,10 @@ time timeFrom, timeTo;
 		Header(rw,"Продавец: " & RepSpec.f4,1);
 		rw=rw+1;
 	end;
+	if (NonBlank(RepSpec.f5)) then begin
+		Header(rw,"Классификация: " & RepSpec.f5,1);
+		rw=rw+1;
+	end;
 
 	EndHeader;
 	
@@ -189,6 +193,7 @@ time timeFrom, timeTo;
 		if (nonblank(RepSpec.f3) and (IVr.Location!=RepSpec.f3)) then begin	testf=false;	end;
 		if (nonblank(RepSpec.f4) and (IVr.SalesMan!=RepSpec.f4)) then begin	testf=false;	end;
 		if ((IVr.TransTime<=timeFrom) or (IVr.TransTime>=timeTo)) then begin	testf=false;	end;
+		if (nonblank(RepSpec.f2) and (IVr.SalesGroup!=RepSpec.f2)) then begin	testf=false;	end;	
 	
 		fr = IVr.FrRate;
 		to = IVr.ToRateB1;
@@ -203,7 +208,17 @@ time timeFrom, timeTo;
 				MatRowGet(IVr,i,IVrw);
 				if (IVrw.stp!=kInvoiceRowTypeNormal)then begin testf1=false; end;
 				if (nonblank(RepSpec.f1) and (IVrw.ArtCode!=RepSpec.f1)) then begin	testf1=false;	end;
-				if (nonblank(RepSpec.f2) and (IVr.SalesGroup!=RepSpec.f2)) then begin	testf1=false;	end;		
+				if (nonblank(RepSpec.f7)) then begin
+					if(nonblank(IVrw.ArtCode) and testf1)then begin
+					INr.Code = IVrw.ArtCode;
+						if(Readfirstmain(INr,1,true))then begin
+							if(!setinset(RepSpec.f7,INr.DispGroups))then begin
+								testf1 = false;
+							end;					
+						end;
+					end;
+				end;	
+				
 				if (blank(IVrw.ArtCode)) then begin	testf1=false;	end;
 
 				if(testf1) then begin
