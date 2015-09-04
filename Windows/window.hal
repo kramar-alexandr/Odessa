@@ -594,6 +594,7 @@ begin
 
   PeriodField(h,v+=vs,"Период");
   EditFieldTL(h,v+=vs,150,"Товар",M4UStr,Normal,41,f1,false,INSClass);
+  EditFieldTL(h,v+=vs,150,"Классификация",M4UStr,Normal,41,f7,false,DISClass);// Edit ************************** Thursday, 3 September 2015 16:59:45
   EditFieldTL(h,v+=vs,150,"Группа продаж",M4UStr,Normal,41,f2,false,0);
   EditFieldTL(h,v+=vs,150,"Склад",M4UStr,Normal,41,f3,false,LocationSClass);
   EditFieldTL(h,v+=vs,150,"Продавец",M4UStr,Normal,41,f4,false,UserSClass);
