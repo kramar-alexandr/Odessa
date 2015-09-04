@@ -399,7 +399,7 @@ some mistery code, what if customer has Sales Currency Defined?
             goto LIPVcRecordCheck;
           end;
           RecordClear(IVr);
-          if (nonblank(IPrw.InvoiceOfficialSerNr)) then begin
+  /*      if (nonblank(IPrw.InvoiceOfficialSerNr)) then begin
             IVr.OfficialSerNr = IPrw.InvoiceOfficialSerNr;
             if (ReadFirstKey("OfficialSerNr",IVr,1,true)==false) then begin
               RecordCheckError(1290," " & IPrw.InvoiceOfficialSerNr,i,"InvoiceOfficialSerNr");  //Edit----------------------Dima  17.08.2015    
@@ -407,6 +407,7 @@ some mistery code, what if customer has Sales Currency Defined?
               goto LIPVcRecordCheck;  
             end;
           end;
+  */
           RecordClear(IVr);
           if (IPrw.InvoiceNr>0) then begin
             IVr.SerNr = IPrw.InvoiceNr;
