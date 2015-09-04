@@ -2865,7 +2865,7 @@ RecordBegin(INVc,-,"artikel5");
 	ArrayField(stp,M4Int,0,0);//Edit----------------------Dima  16.02.2015
 	ArrayField(ORSerial,M4Long,0,0);//Edit----------------------Dima 18.08.2015
 	ArrayField(ORRowUID,M4UVal,0,0);//Edit----------------------Dima  18.08.2015
-	//ArrayField(OrderToMove,M4UVal,0,0);//store number of items (ordered for moving ) //Edit----------------------Dima  18.08.2015
+	ArrayField(OrderProcessing,M4UVal,0,0);//store number of items (ordered for moving ) //Edit----------------------Dima  18.08.2015
   EndArray;
       
   MainKeyBegin(SerNr,1);	// Edit by Victor 25.11.14 begin
