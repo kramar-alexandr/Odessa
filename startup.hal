@@ -181,6 +181,7 @@ begin
    
    SString(31098,"Сохраните документ");
    SString(31099,"Отсутствует наименование склада");
+   SString(31100,"Фискальный чек не будет напечатан для текущей счет-фактуры");
 	 
    
   Maintenance("Экспорт склада CSV",ExportStockCSVClass,ExportStockCSVMn,modSY);

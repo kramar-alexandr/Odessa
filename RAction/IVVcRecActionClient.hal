@@ -12,7 +12,7 @@ external updating procedure IVVc_SendToSerialPortDevices(Integer,LongInt,record 
 remote updating procedure RraPasteInvInEDIInv(var record EDIIVVc,var LongInt);
 external procedure RecordActionIV_Print(var record IVVc,string,string,Integer,Boolean);
 external procedure ShowUnOkWarn(string,Integer);
-external procedure MakeFiscalReceipt(record IVVc); //Edit----------------------Dima  16.06.2015
+external function Boolean MakeFiscalReceipt(record IVVc); //Edit----------------------Dima  16.06.2015
 external procedure OpenCashBox(); //Edit***************************Sasha2,11:17 16.07.2015
 
 updating procedure acCreateEDIInv(record IVVc IVp)
@@ -83,15 +83,6 @@ LkInvoiceTypeCredit:;
   IVVc_SendToSerialPortDevices(kSerialPortDeviceClassReceiptPrinter,Rs_insert,IVr,IV2r);// Edit ************************** Thursday, 25 June 2015 16:11:42
   //IVVc_SendToSerialPortDevices(kSerialPortDeviceClassFiscalPrinter,Rs_insert,IVr,IV2r);// Edit ************************** Thursday, 25 June 2015 16:11:37
   //IVVc_SendToSerialPortDevices(kSerialPortDeviceClassFiscalControlUnit,Rs_insert,IVr,IV2r);// Edit ************************** Thursday, 25 June 2015 16:11:29
-  /*if (HasLocalization("ARG")) then begin
-    tstr = GetWindowString(wn,"RLINK");
-    if (nonblank(tstr)) then begin
-      IVVc_LinkRecords(IVr,GetWindowString(wn,"RLINKFILENAME"),tstr);
-    end;
-  end;
-  if (HasLocalization("MEX")) then begin
-    IVVc_StoreEInvoice(IVr,IV2r,stat);
-  end;*/
   //SetPOSWindowDisplayChange(IVr.RetValue);// Edit ************************** Thursday, 25 June 2015 16:11:11
   //ShowUnOkWarn("IVVc",IVr.OKFlag);// Edit ************************** Thursday, 25 June 2015 16:11:11
   if (TouchScreenLook) then begin
@@ -101,7 +92,9 @@ LkInvoiceTypeCredit:;
     if (nonblank(Fiskalblock.StoragePath)) then begin
 	  	if (IVr.OKFlag > 0) then begin 
 				if (IVr.FiscalFlag > 0) then begin //Edit***************************Sasha2,14:05 14.07.2015	
-				  MakeFiscalReceipt(IVr);		//Edit----------------------Dima  16.06.2015
+				  if (MakeFiscalReceipt(IVr)==false) then begin	//Edit----------------------Dima  16.06.2015
+						MessageBox(31100,"");		//Edit----------------------Dima  08.09.2015
+					end;
 				end else begin
 				  OpenCashBox; //Edit***************************Sasha2,11:18 16.07.2015
 				end;
@@ -170,9 +163,6 @@ BEGIN
   IVVc_SendToSerialPortDevices(kSerialPortDeviceClassReceiptPrinter,Rs_update,IVr,IV2r);
   //IVVc_SendToSerialPortDevices(kSerialPortDeviceClassFiscalPrinter,Rs_update,IVr,IV2r);
   //IVVc_SendToSerialPortDevices(kSerialPortDeviceClassFiscalControlUnit,Rs_update,IVr,IV2r);
-  /*if (HasLocalization("MEX")) then begin
-    IVVc_StoreEInvoice(IVr,IV2r,stat);
-  end;*/
   //SetPOSWindowDisplayChange(IVr.RetValue);// Edit ************************** Thursday, 25 June 2015 16:12:55
   //ShowUnOkWarn("IVVc",IVr.OKFlag);// Edit ************************** Thursday, 25 June 2015 16:12:54
   if (TouchScreenLook) then begin
@@ -181,7 +171,9 @@ BEGIN
     if (nonblank(Fiskalblock.StoragePath)) then begin
 	  	if ((IV2r.OKFlag == 0) and (IVr.OKFlag > 0)) then begin	
 					if (IVr.FiscalFlag > 0) then begin //Edit***************************Sasha2,14:05 14.07.2015	
-  				  MakeFiscalReceipt(IVr);		//Edit----------------------Dima  16.06.2015
+				  	if (MakeFiscalReceipt(IVr)==false) then begin	//Edit----------------------Dima  16.06.2015
+							MessageBox(31100,"");		//Edit----------------------Dima  16.06.2015
+						end;
   				end else begin
   				  OpenCashBox; //Edit***************************Sasha2,11:18 16.07.2015
   				end;

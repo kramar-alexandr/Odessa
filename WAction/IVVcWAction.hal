@@ -68,7 +68,7 @@ external function Boolean SetUnitFactor(string,var val,val,val,val,var val,var v
 external function val CalculateSerialNrQuantity(string,string,string,Boolean,val,val,val,val);
 external procedure DisplayIVItem(record IVVc,Integer);
 remote procedure PastePDInInv(var record IVVc,string,Boolean);
-external procedure MakeFiscalReceipt(record IVVc);
+external function Boolean MakeFiscalReceipt(record IVVc);
 external function Boolean IVPrintReceipt(Integer,var record IVVc,var record IVVc,Integer,Boolean,Boolean,Integer,Integer); //Edit***************************Sasha2,16:59 17.08.2015
 
 
@@ -2183,12 +2183,16 @@ updating procedure PrintFiscalReceipt()		//Edit----------------------Dima  10.06
 begin
 	record IVVc IVr;
 	integer wn;
+	boolean res;
 
   wn = CurWindow;
   GetWindowRecord(wn,IVr);
   
-  MakeFiscalReceipt(IVr);
-  if (IVr.FiscalFlag < 1) then begin
+  res = MakeFiscalReceipt(IVr);
+  if (res==false) then begin
+		MessageBox(31100,"");		//Edit----------------------Dima  08.09.2015
+	end;
+  if (IVr.FiscalFlag < 1 and res) then begin
     IVr.FiscalFlag = 1;
     RECORDSTORE(IVr,true);
   end;
@@ -2202,6 +2206,7 @@ begin
 	integer wn;
 	record RcVc RepSpec;
 	record IVVc IVr;
+	boolean res;
 	
 	wn = CurWindow;
 	DeselectWindow(wn,false);	
@@ -2209,8 +2214,11 @@ begin
 	
 	IVr.SerNr = RepSpec.long1;
 	if (ReadFirstMain(IVr,1,true)) then begin
-			MakeFiscalReceipt(IVr);
-			if (IVr.FiscalFlag < 1) then begin
+			res = MakeFiscalReceipt(IVr);
+  		if (res==false) then begin
+				MessageBox(31100,"");		//Edit----------------------Dima  08.09.2015
+			end;			
+			if (IVr.FiscalFlag < 1 and res) then begin
         IVr.FiscalFlag = 1;
         RECORDSTORE(IVr,true);
       end;
