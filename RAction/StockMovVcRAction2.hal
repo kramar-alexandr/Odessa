@@ -820,7 +820,7 @@ begin
 			ORr.Reserved = 0;
 			RecordUpdate(oldORr,ORr,true);
 			RecordCopy(oldORr,ORr);
-			LogText(0,"reserving..." & orders[i]);
+			//LogText(0,"reserving..." & orders[i]);
 			for(k=0;k<rwcnt;k=k+1) begin
 				MatRowGet(SMr,k,SMrw);
 				if (orders[i]==SMrw.ORSerial) then begin
@@ -859,7 +859,7 @@ begin
 	
 	for(i=0;i<orders.length;i=i+1) begin
 		ORr.SerNr = orders[i];
-		LogText(0,"link created " & ORr.SerNr);
+		//LogText(0,"link created " & ORr.SerNr);
 		if (ReadFirstMain(ORr,1,true)) then begin			
 		 	CreateRecordLink(SMr,CurrentCompany,ORr,CurrentCompany);
 		 	CreateRecordLink(ORr,CurrentCompany,SMr,CurrentCompany);
