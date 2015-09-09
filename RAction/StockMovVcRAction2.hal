@@ -769,7 +769,7 @@ begin
 		end;
 		
 	end;
-	RecordStore(StockMovr,true);
+	//RecordStore(StockMovr,true);
   
 end;
 
