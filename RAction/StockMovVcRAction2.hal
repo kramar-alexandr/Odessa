@@ -769,8 +769,7 @@ begin
 		end;
 		
 	end;
-	//RecordStore(StockMovr,true);
-  
+	RecordStore(StockMovr,true);
 end;
 
 
@@ -826,7 +825,7 @@ begin
 				if (orders[i]==SMrw.ORSerial) then begin
 					for(j=0;j<rwcnt2;j=j+1) begin
 						MatRowGet(ORr,j,ORrw);
-						if (ORrw.UID == SMrw.ORRowUID) then begin
+						if (ORrw.UID == SMrw.ORRowUID) then begin						
 							receive = Min(SMrw.Quant,SMrw.OrderProcessing);
 							ORrw.ProcessingQuant = ORrw.ProcessingQuant - SMrw.OrderProcessing;
 							ORrw.OrderQuant = ORrw.OrderQuant - receive;
@@ -834,6 +833,7 @@ begin
 							MatRowPut(ORr,j,ORrw);
 							ORVc_PasteQuant(ORr,j,true,chsum);
 							j = rwcnt2;
+							//LogText(0,"reserved.... " & SMrw.ArtCode & "  " & receive);
 						end;
 					end;    	
 				end;
@@ -871,13 +871,15 @@ end;
 global updating procedure UpdateLinksToOrders(record StockMovVc SMrNow,record StockMovVc SMrBefore)//Edit----------------------Dima  20.08.2015
 begin
 	row StockMovVc SMrw;
-	integer i,rwcnt2,j,number;
+	integer i,rwcnt2,j,number,number2;
 	record ORVc ORr;
 	record RLinkVc RLinkr;
-	array longint orders,toDelete;
+	array longint orders,toDelete,curOrders;
 	boolean exist;
+	record StockMovVc SMrtemp;
 	
 	FoundUniqueOrdersFromStockMov(SMrBefore,orders);
+	FoundUniqueOrdersFromStockMov(SMrNow,curOrders);
 	
 	rwcnt2 = MatRowCnt(SMrNow);
 	for(i=0;i<orders.length;i=i+1) begin
@@ -891,19 +893,51 @@ begin
 		end;
 		if (exist == false) then begin
 			toDelete[toDelete.length] = orders[i];
+			//LogText(0,"delete link..." & orders[i]);
 		end;		
 	end;
 	
-	
-	for(i=0;i<toDelete.length;i=i+1) begin
+	if (toDelete.length > 0) then begin
+
+		number = 1;
+		while (ReadRecordLink(SMrNow,number,ORr,RLinkr)) begin
+			RecordDelete(RLinkr);	
+		end;
+		
+		for(i=0;i<curOrders.length;i=i+1) begin
+			ORr.SerNr = curOrders[i];
+			if (ReadFirstMain(ORr,1,true)) then begin			
+			 	CreateRecordLink(SMrNow,CurrentCompany,ORr,CurrentCompany);
+			end; 	
+		end;		
+		
+		number = 1;
+		for(i=0;i<toDelete.length;i=i+1) begin
 			ORr.SerNr = toDelete[i];
+			if (ReadFirstMain(ORr,1,true)) then begin
+				while (ReadRecordToLink(SMrNow,number,ORr,RLinkr)) begin
+					if (ORr.SerNr == toDelete[i]) then begin
+						RecordDelete(RLinkr);	
+					end;					
+					number = number+1;
+				end;	
+			end;	
+		end;	
+		
+	end;
+	
+	
+	/*
+	for(i=0;i<toDelete.length;i=i+1) begin
+		ORr.SerNr = toDelete[i];
 			if (ReadFirstMain(ORr,i,true)) then begin
 				ReadRecordLink(SMrNow,number,ORr,RLinkr);
 				RecordDelete(RLinkr);
 				ReadRecordLink(ORr,number,SMrNow,RLinkr);
 				RecordDelete(RLinkr);				
-			end;
+			end;			
 	end;	
+	*/
   
 end;
 
@@ -1003,10 +1037,7 @@ BEGIN
   end; //Edit***************************Sasha2,14:27 11.02.2015 }
   
 
-	CheckDifferenceForWritingToORVc(StockMovr,StockMov2r);//Edit----------------------Dima  19.08.2015
-	if ((StockMovr.OKFlag!=0) and (StockMov2r.OKFlag==0)) then begin
-    ReserveReceivedItems(StockMovr);
-  end; 
+
 
   StockMovVcRecordUpdate = res;
   RETURN;
@@ -1051,7 +1082,12 @@ BEGIN
   rwcnt = MatRowCnt(StockMovr);
 	
 	
-	//recordStore(StockMovr, true);
+	recordStore(StockMovr, true);
+	
+	
+	if (StockMovr.OKFlag!=0)  then begin		//Edit----------------------Dima  20.08.2015
+    ReserveReceivedItems(StockMovr);
+  end; 	
 	CreateLinksToOrders(StockMovr);		//Edit----------------------Dima  20.08.2015
 	
 	//***
@@ -1140,16 +1176,11 @@ BEGIN
 		
 		MatRowPut(StockMovr,i,StockMovrw); //Edit***************************Sasha2,12:02 25.08.2015 }
 				
-			CopyRow(StockMovr,StockMovrw,StockMovrw2);	
-		//WriteProcessQtyBackToORVc(StockMovrw,StockMovrw.OrdQuant);//Edit----------------------Dima  18.08.2015
+		CopyRow(StockMovr,StockMovrw,StockMovrw2);	
 		WriteProcessQtyBackToORVc(StockMovrw2,StockMovrw,true);
 		MatRowPut(StockMovr,i,StockMovrw);
   end; //Edit***************************Sasha2,14:27 11.02.2015 }
   
-  
-	if (StockMovr.OKFlag!=0)  then begin		//Edit----------------------Dima  20.08.2015
-    ReserveReceivedItems(StockMovr);
-  end; 
   
   StockMovVcRecordSave = res;
   RETURN;
