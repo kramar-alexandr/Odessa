@@ -450,6 +450,7 @@ begin
 		
 		while(XmlNodeExists(xdata,"root/data/item[" & i & "]/Description"))begin
 			city = XmlGet(xdata,"root/data/item[" & i & "]/Description");
+			NPCityr.City = city;
 			if(ReadFirstMain(NPCityr, 1, true))then begin //existing city
 				NPCityr.synchFlag = 1;
 				NPCityr.City = city;
@@ -581,6 +582,7 @@ begin
     
   while(XmlNodeExists(xdata,"root/data/item[" & i & "]/Description"))begin
 		descr = XmlGet(xdata,"root/data/item[" & i & "]/Description");
+		NPDr.Description = descr;
 		if(ReadFirstMain(NPDr, 1, true))then begin 
 			NPDr.synchFlag = 1;
 			NPDr.Description = descr;
