@@ -4155,6 +4155,7 @@ RecordBegin(IPVc,-,"");
   RecordField(Sent,M4Mark,0,0);
   RecordField(Error,M4Str,50,0);
   RecordField(OrderClass,M4Str,50,0);
+  RecordField(ReSend,M4Mark,0,0);
   MainKeyBegin(SerNr,0);
   KeySegment(SerNr);
   KeyBegin(Phone);

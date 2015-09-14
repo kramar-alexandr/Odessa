@@ -151,6 +151,7 @@ begin
   end else begin
  		logtext(0,"Hansa World: No Connection to Epochta");
  		response = "Hansa World: No Connection to Epochta";
+ 		SMSr.ReSend = 1;
   end;
   
   SMSr.Phone = correctPhone;
@@ -159,6 +160,7 @@ begin
   SMSr.Error = response;
   if (blank(response)) then begin
 		SMSr.Sent = 1;
+		SMSr.ReSend = 0;
 	end;
   RecordStore(SMSr,true);  
 
@@ -232,7 +234,7 @@ begin
 	TrHs = true;
 	While(LoopBackKey("Sent",SMSr,1,TrHs)) begin
 		if (SMSr.Sent != 0) then begin TrHs = false; end;
-		if (TrHs and ((SMSr.CreationDate<CurrentDate) or (SMSr.CreationDate==CurrentDate and SMSr.CreationTime<=CurrentTime)) and blank(SMSr.Error)) then begin
+		if (TrHs and ((SMSr.CreationDate<CurrentDate) or (SMSr.CreationDate==CurrentDate and SMSr.CreationTime<=CurrentTime)) and (blank(SMSr.Error) or (SMSr.ReSend==1)) ) then begin
 			//queued.SendSMS2(SMSr.Phone,SMSr.Text,SMSr.Title,false,SMSr.OrderClass);
 			response = SendSMS(SMSr,true);
 		end;	
