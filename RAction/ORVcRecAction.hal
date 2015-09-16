@@ -1447,10 +1447,12 @@ begin
     goto LORRemoveTest;
   end;
   ARPayHr.OrderNr = ORp.SerNr;
-  if (ReadFirstKey("OrderNr",ARPayHr,1,true)) then begin
-    if (errmf!=0) then begin MessageBox(1876," " & ORp.SerNr); end;
-    res = 0;
-    goto LORRemoveTest;
+  if(currentuser!="SA")then begin// Edit ************************** Tuesday, 15 September 2015 14:51:55
+		if (ReadFirstKey("OrderNr",ARPayHr,1,true)) then begin
+			if (errmf!=0) then begin MessageBox(1876," " & ORp.SerNr); end;
+			res = 0;
+			goto LORRemoveTest;
+		end;
   end;
   if (ORp.OKFlag!=0) then begin
     BlockLoad(DBLockRec);
