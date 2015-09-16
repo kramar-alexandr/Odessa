@@ -9615,3 +9615,507 @@ begin
   end;
   EndWindow;
 end;
+
+
+
+window USDClass:5
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  real h,h1,h2,h3,v,vm,vs,tilenr;
+  WindowBegin("Сотрудник",USDClass,CGview,UserView);
+  SetWRect(64,80,509,380);
+  Sizeable(-1,-1,0,0);
+  UseView(UserVc);
+  Tile(0,70,false,"",Code);
+  vs = 20; h=150; h2 = 290; h3 = 350;
+  EditField(h,v=6, 55,"Код",St_i,Code,false,0);
+  EditField(h,v+=vs,300,"ФИО",Normal,Name,false,0);
+  if (TestEnablerFile("DbgLics")) then begin
+    EditField(h,v+=vs,100,"Expires",ViewOnly,ExpiryDate,true,0);
+  end;
+  tilenr = 1;
+  TileButton(tilenr,"Доступ");  tilenr = tilenr + 1; // Not Found  
+  TileButton(tilenr,"Сер. номера");  tilenr = tilenr + 1; // Not Found  
+  TileButton(tilenr,"Продажи");  tilenr = tilenr + 1; // Not Found  
+  TileButton(tilenr,"Счета");  tilenr = tilenr + 1; // Not Found  
+  if (StandardHansa==false) then begin
+    TileButton(tilenr,"Калькуляция проектов");  tilenr = tilenr + 1; // Not Found  
+    TileButton(tilenr,"Web");  tilenr = tilenr + 1; // Not Found  
+    TileButton(tilenr,"Ввод времени");  tilenr = tilenr + 1; // Not Found  
+  end;
+  TileButton(tilenr,"Дата и числа");  tilenr = tilenr + 1; // Not Found  
+  CheckBox(h2,6,0,"Закрыт",Closed);
+  tilenr = 1;
+  Tile(tilenr,210,false,tilenr,AccessGroup);  tilenr = tilenr + 1;
+  EditField(h,v=6,300,"Группа доступа",Normal,AccessGroup,false,AccessSClass);
+  EditField(h,v+=vs,100,"Нач. уровень доступа",Normal,StartLevel,false,SetSClass);
+  if (StandardHansa==false) then begin
+    EditField(h,v+=vs,100,"Простая функция",Normal,OneFunction,false,OneFunctionSClass);
+    EditField(h,v+=vs,100,"Группа продажи",Normal,SalesGroup,false,SalesGroupSClass);
+  end;
+  EditField(h,v+=vs,100,"Язык",Normal,LangCode,false,LangSClass);
+  if (StandardHansa==false) then begin
+    EditField(h,v+=vs,100,"Ограничение клиента",Normal,CanUseOS,false,SetSClass);
+  end;
+  EditField(h,v+=vs,100,"Кода контакта",Normal,CustCode,false,ContactCUSClass);
+//  EditField(h,v+=vs,100,"Discount Password",Normal,OldPassWord,false,0);
+  if (StandardHansa==false) then begin
+    ButtonFrame(h2,v=44,165,3,"Ограниченный доступ");
+    RadioButton(h2,v,kLimitedAccessNoLimitation,0,"без ограничений",limitedAccess);
+    RadioButton(h2,v+=16,kLimitedAccessGroupOnly,0,"только группа",limitedAccess);
+    RadioButton(h2,v+=16,kLimitedAccessUserOnly,0,"только пользователь",limitedAccess);
+  end;
+if (HansaWorld) then begin
+  ButtonFrame(h2,v+=40,195,4,"Тип пользователя");
+  RadioButton(h2,v,0,kTypeOfUserNamed,"Именнованный",TypeOfUser);
+  RadioButton(h2,v+=16,kTypeOfUserConcurrent,0,"Конкурентный",TypeOfUser);
+  RadioButton(h2,v+=16,kTypeOfUserBusinessCommunicator,0,"Business Communicator (named)",TypeOfUser);
+  RadioButton(h2,v+=16,kTypeOfUserTimekeeper,0,"Контролер времени",TypeOfUser);
+  CheckBox(h2,v+=25,0,"Срок действия пароля не ограничен",PasswordNeverExpires);
+end;
+  Pict_Field(-175,8,-5,178,"");
+  if (GuiType==kGuiCocoa) then begin
+    PushButton(-160,182,-80,202,ToolImagePicker,"Доб. изобр");
+  end;
+//  CheckBox(h2,v+=25,0,"Allow FTP Access",FTPLogin);
+//  CheckBox(h2,v+=vs,0,"Only Voice Login",OnlyVoiceLogin); // No code for this
+  Tile(tilenr,150,false,tilenr,LastOrdNr);  tilenr = tilenr + 1;
+  EditField(h,vm=(v=6),65,"№ счетов кл.",Normal,LastOrdNr,false,0);
+  EditField(h,v+=vs,65,"№ отгрузки",Normal,LastShipNr,false,0);
+  EditField(h,v+=vs,65,"№ сч/ф кл.",Normal,LastInvNr,false,0);
+  EditField(h,v+=vs,65,"№ поступлений",Normal,LastPurNr,false,0);
+  EditField(h,v+=vs,65,"№ прих. орд.",Normal,LastCLInNr,false,0);
+  EditField(h,v+=vs,65,"№ сч/ф на нал.",Normal,LastIVCashNr,false,0);
+  if (StandardHansa==false) then begin
+    EditField(h,v+=vs,65,"Счет ресторана",Normal,LastRestAccNr,false,0);
+  end;
+//  EditField(h,v+=vs,100,"Official Inv. No.",Normal,LastOfficialSerNr,false,0);
+  EditField(h3,v=vm,65,"№ платежей кл.",Normal,LastPayNr,false,0);
+  EditField(h3,v+=vs,65,"№ записей опер.",Normal,LastTRNr,false,0);
+  EditField(h3,v+=vs,65,"№ сч/ф пост.",Normal,LastVINr,false,0);
+  EditField(h3,v+=vs,65,"№ платежей пост.",Normal,LastOPNr,false,0);
+  EditField(h3,v+=vs,65,"№ заказа пост.",Normal,LastPONr,false,0);
+  EditField(h3,v+=vs,65,"№ расход. орд.",Normal,LastCLOutNr,false,0);
+  EditField(h3,v+=vs,120,"Лич. код",Normal,IDCode,false,0);
+  Tile(tilenr,170,false,tilenr,Bonus);  tilenr = tilenr + 1;
+  EditField(h,vm=(v=6),65,"Премия",Normal,Bonus,true,0);
+  EditField(h3,v,120,"Ссылка",Normal,CurOurContact,false,0);
+  if (StandardHansa==false) then begin
+    EditField(h3+260,v,-20,"Миним. прейскурант",Normal,MinPLCode,false,PLDefSClass);
+  end;
+  EditField(h,v+=vs,65,"Склад",Normal,Location,false,LocationSClass);
+  EditField(h3,v,120,"Отдел",Normal,Department,false,DepSClass);
+  if (StandardHansa==false) then begin
+    EditField(h,v+=vs,65,"Склад обслуживания",Normal,ServLocation,false,LocationSClass);
+    EditField(h3,v,120,"Телефон 1",Normal,Phone1,false,0);
+    EditField(h,v+=vs,65,"Склад резерв. заказа",Normal,ReservLocation,false,LocationSClass);
+  end else begin
+    EditField(h,v+=vs,120,"Телефон 1",Normal,Phone1,false,0);   // From dict
+  end;
+  EditField(h3,v,120,"Телефон 2",Normal,Phone2,false,0);
+  if (StandardHansa==false) then begin
+    EditField(h,v+=vs,-20,"Доступ резерв. заказа",Normal,ReservLocAccess,false,ReservLocAccessSClass);
+  end;
+  EditField(h,v+=vs,-20,"E-mail",Normal,emailAddr,false,0);
+  EditField(h,v+=vs,-20,"Спецификация",Normal,Spec,false,0);
+  EditField(h,v+=vs,-20,"Комментарий",Normal,Comment,false,0);
+  EditField(h,v+=vs,200,"Реквизиты",Normal,CardNumber,false,0);//Edit----------------------Dima  02.07.2015
+//  EditField(h,v+=vs,65,"Expense A/C",Normal,CostAcc,false,AccSClass);
+  Tile(tilenr,50,false,tilenr,PersAcc);  tilenr = tilenr + 1;
+  EditField(h,vm=(v=6),65,"Счёт",Normal,PersAcc,false,AccSClass);
+  EditField(h3,v,120,"Объект",Normal,PersObjx,false,ObjSClass);
+  EditField(h,v+=vs,65,"Код сорт.",Normal,SortCode,false,0);  
+  EditField(h3,v,120,"Bank A/C",Normal,BankAcc,false,0);  
+  EditField(h3,v+=vs,-20,"Bank Name",Normal,BankName,false,BankSClass);  
+//  EditField(h,v+=vs,65,"Expense A/C",Normal,CostAcc,false,AccSClass);
+  if (StandardHansa==false) then begin
+    Tile(tilenr,170,true,tilenr,JobGroup);  tilenr = tilenr + 1;
+    EditField(h,vm=(v=6),55,"Рабочая группа",Normal,JobGroup,false,EGSClass);
+    EditField(h,v+=vs,100,"Описание работы",Normal,Job,false,0);
+    EditField(h,v+=vs,80,"Затраты в час",Normal,CostPrHour,false,0);
+    EditField(h,vm=(v+=vs),80,"Стоимость за час",Normal,PricePrHour,false,0);
+    EnterSkip(Math);
+    CheckBox(h2,v=20,0,"Разрешить только короткие коды",DisAllowOther);
+  //  CheckBox(h2,v,0,"Limited Access",limitedAccess);
+    v = v+50;
+    MatrixBegin(h-50,v=(vm+40),h+350,-7,-,99);
+    MatCol(1,24,"Код",0,Code,false,0);
+    MatCol(1,110,"Проект",0,PRCode,false,PRSClass);
+    MatCol(1,200,"Комментарий",0,Comment,false,0);
+    EndMatrix;
+    Tile(tilenr,30,false,tilenr,WebConf);  tilenr = tilenr + 1;
+    EditField(h,vm=(v=6),65,"Web-конференция",Normal,WebConf,true,0);
+    EditField(h3,v,65,"Первая страница Web",Normal,WebStartPage,false,0);
+    Tile(tilenr,50,false,tilenr,Supervisor);  tilenr = tilenr + 1;
+    v = 6;
+    EditField(h,vm=v,80,"Руководитель",Normal,Supervisor,false,UserSClass);
+    EditField(h,v+=20,80,"Дата создания",ViewOnly,DateCreated,false,0);
+    CheckBox(h2,v=vm,0,"Требовать ввода времени",ForceTimeEntry);
+  end;
+  Tile(tilenr,210,false,tilenr,LeadingZDay);  tilenr = tilenr + 1;
+  h = 70; h1 = h + 210; h2 = h + 330;
+
+  if (GuiType==kGuiCocoa) then begin
+    CheckBox(h,v,0,"Использовать настройки пользователя",UserEditCtlf);
+  end else begin
+    StaticText(190,v+=vs,"Стиль окна",true);
+    DropDownMenu(200,v=6,282,"WindowType",320);
+    CheckBox(h,v+=20,0,"Использовать настройки пользователя",UserEditCtlf);
+  end;
+  ButtonFrame(h,vm=(v+=42),200,5,"Формат даты");
+  RadioButton(h,v,0,0,"месяц, день, год",DateOrder);
+  RadioButton(h,v+=16,1,0,"день, месяц, год",DateOrder);
+  RadioButton(h,v+=16,2,0,"год, месяц, день",DateOrder);
+  if (StandardHansa==false and IsSberbankProduct==false) then begin
+    RadioButton(h,v+=16,m4_hijri,0,"Hijri",DateOrder); // We have some enum already in BCD that goes from 0 to 5..  
+    RadioButton(h,v+=16,m4_persian_date,0,"Persian",DateOrder);  
+  end;
+  EndFrame;
+  CheckBox(h,v+=24,0,"Две цифры даты",LeadingZDay);
+  CheckBox(h1,v,0,"Выводить разделитель тысяч",thousSepf);
+  CheckBox(h,v+=16,0,"Две цифры месяца",LeadingZMonth);
+  CheckBox(h,v+=16,0,"Четыре цифры года",LeadingCentury);
+  EditField(h2,v=vm,20,"Разделитель даты",Normal,DateSep,false,0);
+  EditField(h2,v+=20,20,"Разделитель целых",Normal,DecimalPt,false,0);
+  EditField(h2,v+=20,20,"Разделитель тысяч",Normal,ThousandSep,false,0);
+  SpecialMenu("Создать объект",'o',1,"CreateObjUserDsm");
+  EndWindow;
+end;
+
+
+
+window ArtStatIClass:1
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  boolean Colourf,DiscUPrf,GPPrcf,GPf,InStockf,Instock2f,LeadDatef,Locsf,NotRsrvdf,OrddOutf,POQtyf,Shpblef,Statf,Varf,CostPricef;
+  real h,hs,l,v;
+  WindowBegin("Cтатус товара",ArtStatIClass,CGother,RcType);
+  DynamicWindow;
+  ItemStatusUserSettings(CurrentUser,InStockf,OrddOutf,POQtyf,Shpblef,GPf,NotRsrvdf,GPPrcf,DiscUPrf,Instock2f,Varf,LeadDatef,Statf,Locsf,CostPricef);
+  l = 1200;//1040;
+  if (!InStockf) then begin l = l - 80; end;
+  if (!OrddOutf) then begin l = l - 80; end;
+  if (!POQtyf) then begin l = l - 80; end;
+  if (!Shpblef) then begin l = l - 80; end;
+  if (!NotRsrvdf) then begin l = l - 80; end;
+  if (!GPf) then begin l = l - 80; end;
+  if (!GPPrcf) then begin l = l - 80; end;
+  if (!DiscUPrf) then begin l = l - 80; end;
+  if (!Instock2f) then begin l = l - 80; end;
+  if (!LeadDatef) then begin l = l - 90; end;
+  if (!Varf) then begin l = l - 60; end;
+  if (!Locsf) then begin l = l - 60; end;
+  if (!Statf) then begin l = l - 60; end;
+  if (!CostPricef) then begin l = l - 60; end;
+  SetWRect(3,80,l,129);
+  Modality(2);
+  if (IsWebClient) then begin
+    v = 37;
+    h = 1;
+    hs = 70;
+  end else begin
+    v = 15;
+    h = 20;
+    hs = 80;
+  end;
+  StaticText(h,v,  "Товар",false);
+  if (InStockf) then begin
+//    StaticText(h+=(hs+10),v,  "Склад",false);
+    ColourPushButton(h+=(hs+6),v-12,h+67,v+3,"ArtStatIClassSL","Склад",1001);
+  end;
+  if (OrddOutf) then begin
+//    StaticText(h+=hs,v,  "Order",false);
+    ColourPushButton(h+=(hs+2),v-12,h+62,v+3,"ArtStatIClassOS","Счета кл.",1001);
+  end;
+  if (POQtyf) then begin
+//    StaticText(h+=hs,v,  "Purch.Ord",false);
+    ColourPushButton(h+=(hs-1),v-12,h+62,v+3,"ArtStatIClassPOS","Зак. пост.",1001);
+  end;
+  //if (Shpblef) then begin		//Edit----------------------Dima  09.07.2015
+  //  StaticText(h+=hs,v,  "Доступно",false);
+ // end;
+  if (NotRsrvdf) then begin
+    StaticText(h+=hs,v,  "Незарезерв.",false);
+  end;
+  if (GPf) then begin
+    StaticText(h+=hs,v,  "Прибыль",false);
+  end;
+  if (GPPrcf) then begin
+    StaticText(h+=hs,v,  "Прибыль,%",false);
+  end;
+  if (DiscUPrf) then begin
+    StaticText(h+=hs,v,  "Цена со ск.",false);
+  end;
+  if (Instock2f) then begin
+    StaticText(h+=hs,v,  "На складе,2",false);
+  end;
+  if (LeadDatef) then begin
+    StaticText(h+=hs,v,  "Дата",false);
+  end;
+  if (CostPricef) then begin
+    StaticText(h+=hs,v,  "Стоим.",false);
+  end;
+  if (IsWebClient) then begin
+    h = 1;
+  end else begin
+    h = 20;
+  end;
+  EditFieldTL(h,v+=10, 70,"",M4UStr,ViewOnly,20,f1,false,0);
+  if (InStockf) then begin
+    EditFieldTL(h+=(hs+10),v, 60,"",M4Str,ViewOnly,20,f2,true,0);
+  end;
+  if (OrddOutf) then begin		
+    EditFieldTL(h+=hs,v ,60,"",M4Str,ViewOnly,20,f3,true,0);
+  end;
+  if (POQtyf) then begin
+    EditFieldTL(h+=hs,v ,60,"",M4Str,ViewOnly,20,LastAcc,true,0);
+  end;
+  //if (Shpblef) then begin				//Edit----------------------Dima  09.07.2015
+  //  EditFieldTL(h+=hs,v ,60,"",M4Str,ViewOnly,20,FirstAcc,true,0);
+  //end;
+  if (NotRsrvdf) then begin
+    EditFieldTL(h+=hs,v ,60,"",M4Str,ViewOnly,20,Stext,true,0);
+  end;
+  if (GPf) then begin
+    EditFieldTL(h+=hs,v ,60,"",M4Str,ViewOnly,20,AccStr,true,0);
+  end;
+  if (GPPrcf) then begin
+    EditFieldTL(h+=hs,v ,60,"",M4Str,ViewOnly,20,ObjStr,true,0);
+  end;
+  if (DiscUPrf) then begin
+    EditFieldTL(h+=hs,v ,60,"",M4Str,ViewOnly,20,TransStr,true,0);
+  end;
+  if (Instock2f) then begin
+    EditFieldTL(h+=hs,v ,60,"",M4Str,ViewOnly,20,f4,true,0);
+  end;
+  if (LeadDatef) then begin
+    EditFieldTL(h+=hs,v ,70,"",M4Date,ViewOnly,0,d1,true,0);
+  end;
+  if (CostPricef) then begin
+    EditFieldTL(h+=hs,v ,70,"",M423Val,ViewOnly,0,vals4,true,0);
+  end;
+  if (IsWebClient) then begin
+    h = h - 200;
+    v = 1;
+  end else begin
+    v = 20;
+  end;
+  if (Varf) then begin
+    ColourPushButton(h+=87,v,h+58,v+26,"DoVARMaskStock","Вар.",1001);
+    //HalPushButton(h+=87,20,h+43,40,"DoVARMaskStock","Var");
+    Colourf = true;
+  end;
+  if (Locsf) then begin
+    if (Colourf) then begin
+      ColourPushButton(h+=62,v,h+58,v+26,"DoLocationItem","Скл.",1001);
+    end else begin
+      ColourPushButton(h+=87,v,h+58,v+26,"DoLocationItem","Скл.",1001);
+    end;
+    //HalPushButton(h+=47,v,h+43,40,"DoLocationItem","Loc");
+    Colourf = true;
+  end;
+  if (Statf) then begin
+    if (Varf) then begin
+      if (Colourf) then begin
+        ColourPushButton(h+=62,v,h+58,v+26,"DoFutureStockHist","Буд.",1001);
+      end else begin
+        ColourPushButton(h+=87,v,h+58,v+26,"DoFutureStockHist","Буд.",1001);
+      end;
+      //HalPushButton(h+=47,v,h+43,40,"DoFutureStockHist","Future");
+    end else begin
+      if (Colourf) then begin
+        ColourPushButton(h+=62,v,h+58,v+26,"DoFutureStockHist","Буд.",1001);
+      end else begin
+        ColourPushButton(h+=87,v,h+58,v+26,"DoFutureStockHist","Буд.",1001);
+      end;
+      //HalPushButton(h+=47,20,h+43,40,"DoFutureStockHist","Future");
+    end;
+    Colourf = true;
+  end;
+  EndWindow;
+end;
+
+window IVJRClass:1
+	wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+	real h,h2,hs,v,v3,vm,vs,l;
+
+	WindowBegin("Определите журнал счетов",IVJRClass,CGRcW,RcType);
+	SetWRect(20,80,520,390);
+	vs = 20;
+	hs=148;
+	if (IsEnterprise) then begin
+		if (HasLocalization("ARG,HRV,LTU,LVA,POL,PRT,RUS") or (HasOfficialSerNr and HasPreferedOfficialSerNr==false))	then begin
+		Tile(0,40,false,"",f1);
+		end else begin
+			Tile(0,20,false,"",f1);
+		end;
+	end;
+
+	v = 6; h = 150;
+	if (HasPreferedOfficialSerNr) then begin
+		EditFieldTL(h,v,150,"Официальный номер",M4UStr,Normal,41,f6,false,0);
+		v = v + 20;
+		if (HasLocalization("POL,PRT")==false)	then begin
+			EditFieldTL(h,v, 150,"Номер сч/ф",M4Str,Normal,30,f1,false,0);
+			v = v + 20;
+		end;
+	end else begin
+		EditFieldTL(h,v,150,"Номер сч/ф",M4Str,Normal,30,f1,false,0);
+		v = v + 20;
+		if (HasOfficialSerNr) then begin
+			EditFieldTL(h,v,150,"№ для печати",M4UStr,Normal,41,f6,false,0);
+			v = v + 20;
+		end;
+	end;
+
+	if (IsEnterprise) then begin
+		TileButtons(v,2);
+		Tile(1,380,false,"1",f2);
+		v = 6;
+		vm = v;
+	end;
+	PeriodField(h,v,"Период");
+	EditFieldTL(h,v+=vs, 150,"Период кредит. сч/ф",M4UStr,Normal,21,Period2Str2,false,PerSClass);
+	
+	EditFieldTL(h,v+=vs,65,"Время",M4Str,Normal,10,d1Code,true,0);//Edit----------------------Dima  12.08.2015
+	EditFieldTL(h+85,v,65,":",M4Str,Normal,10,d2Code,false,0);		//Edit----------------------Dima  12.08.2015
+	
+	EditFieldTL(h,v+=vs ,150,"Клиент",M4UStr,Normal,50,f2,false,CUSClass);
+	if (HasCategories) then begin
+		EditFieldTL(h,v+=vs ,70,"Категория",M4UStr,Normal,5,f3,false,CCatSClass);
+	end;
+	if (HasContactClassification) then begin
+		EditFieldTL(h,v+=vs ,70,"Виды классификации",M4UStr,Normal,60,f5,false,CTypeSClass);
+		EditFieldTL(h,v+=vs ,70,"Классификация",M4UStr,Normal,30,f4,false,CClassSClass);
+	end;
+	if (HasSalesman) then begin
+		EditFieldTL(h,v+=vs ,70,"Продавец",M4UStr,Normal,10,AccStr,false,UserSClass);
+	end;
+	if (HasObjects) then begin
+	 EditFieldTL(h,v+=vs,250,"Объект",M4UStr,Normal,60,ObjStr,false,ObjSClass);
+	 EditFieldTL(h,v+=vs,50,"Тип объекта",M4UStr,Normal,5,ObjType,false,OTSClass);
+		EditFieldTL(h,v+=vs,250,"Объект строки",M4UStr,Normal,60,f11,false,ObjSClass);	
+	end;
+	if (HasModTS) then begin
+		EditFieldTL(h,v+=vs,50,"Проект",M4UStr,Normal,20,FirstAcc,false,PRSClass);
+	end;
+	if (HasMultiLocations) then begin
+		EditFieldTL(h,v+=vs,70,"Склад",M4UStr,Normal,60,LastAcc,false,LocationSClass);
+	end;
+	if (IsEnterprise) then begin
+		EditFieldTL(h,v+=vs,50,"Условия оплаты",M4UStr,Normal,5,TransStr,false,PDSClass);
+		EditFieldTL(h,v+=vs,50,"Перв. клиент",M4Code,Normal,20,f12,false,CUSClass);	
+	end;
+	if (IsEnterprise) then begin
+		EditFieldTL(h,v3=(v+=vs),50,"Миним. сумма",M4Val,Normal,0,vals0,false,0);
+	end;
+	if (IsEnterprise) then begin
+		h = 320;
+		v = vm + 10;
+	end else begin
+		v = v + 40;
+		v3 = v + 20;
+		vm = v;
+	end;
+	ButtonFrame(h,v,123,5,"Статус");
+	CheckBox(h,v,0,"Неутвержденные",flags[1]);
+	CheckBox(h,v+=16,0,"Утвержденные",flags[2]);
+	if (IsEnterprise) then begin
+		RadioButton(h,v+=16,0,0,"Вкл. спорные",flags[7]);
+		RadioButton(h,v+=16,1,0,"Искл. спорные",flags[7]);
+		RadioButton(h,v+=16,2,0,"Только спорные",flags[7]);
+	end;
+	RadioButton(h,v+=20,0,0,"Все",flags[8]);
+	RadioButton(h,v+=16,1,0,"Искл. фискальные",flags[8]);
+	RadioButton(h,v+=16,2,0,"Только фискальные",flags[8]);
+	EndFrame;
+
+	v3 = v3 + 41;
+	v = v3;
+	if (IsEnterprise) then begin
+		vm = v;
+	end;
+	ButtonFrame(h=148,v,123,3,"Функция");
+	RadioButton(h,v,0,0,"Сводный",ArtMode);
+	RadioButton(h,v+=16,1,0,"Подробный",ArtMode);
+	if (HasMultiCurrency) then begin
+		RadioButton(h,v+=16,4,0,"Сводный с валют.",ArtMode);
+	end;
+	EndFrame;
+	if (IsEnterprise==false and HasBase2) then begin
+		CheckBox(h,v+=42,0,"Пок-ть осн. валюта 1 & 2 Итоги",flags[12]);
+	end;
+
+	if (IsEnterprise) then begin
+		h2 = 320;
+		l = 160;
+	end else begin
+		h2 = h + 148;
+		l = 160;
+	end;
+	ButtonFrame(h2,v=vm,l,5,"Сортировка");
+	if (HasModNL) then begin
+		RadioButton(h2,v,0,0,"дате операции",flags[10]);
+	end else begin
+		RadioButton(h2,v,0,0,"дате сч/ф",flags[10]);
+	end;
+	if (HasLocalization("BRA,POL,PRT")) then begin
+		RadioButton(h2,v+=16,5,0,"номеру сч/ф",flags[10]);
+	end else begin
+		RadioButton(h2,v+=16,1,0,"номеру сч/ф",flags[10]);
+	end;
+	if (HasMultiLocations) then begin
+		RadioButton(h2,v+=16,2,0,"складу (из загол.)",flags[10]);
+	end;
+	if (HasOfficialSerNr) then begin
+		RadioButton(h2,v+=16,3,0,"№ для печати",flags[10]);
+	end;
+	if (IsEnterprise) then begin
+		RadioButton(h2,v+=16,4,0,"дате сч/ф",flags[10]);
+	end;
+	EndFrame;
+	if (IsEnterprise) then begin
+		Tile(2,330,false,"2",Stext);
+		v = 6;
+		EditFieldTL(h=150,v,100,"Группа товаров",M4UStr,Normal,21,Stext,false,ITSClass);
+		EditFieldTL(h,v+=vs,100,"Товар",M4UStr,Normal,41,f10,false,INSClass);
+		EditFieldTL(h=150,v+=vs,100,"Счет продаж",M4UStr,Normal,21,f7,false,AccSClass);
+		EditFieldTL(h=150,v+=vs,100,"Счет должника",M4UStr,Normal,21,f8,false,AccSClass);
+		if (StandardHansa==false) then begin
+			EditFieldTL(h=150,v+=vs,100,"Осн. партнер",M4UStr,Normal,20,f9,false,CUSClass);
+		end;
+		//		EditFieldTL(h,v+=vs,50,"Order Class",M4UStr,Normal,5,Stext,false,OrderClassSClass); // no more strings to use....
+		ButtonFrame(h=50,vm = (v+=40),123,4,"Вид счета");
+		CheckBox(h,v,0,"Счета-фактуры",flags[3]);
+		CheckBox(h,v+=16,0,"Кассовые ордера",flags[4]);
+		CheckBox(h,v+=16,0,"Счета кредита",flags[5]);
+		CheckBox(h,v+=16,0,"Счета пени",flags[6]);
+		CheckBox(h,v+=26,0,"Сч/ф, влияющие на книгу продаж",flags[19]);
+		StaticText(h+17,v+=30,"(не учитывать тип сч/ф)",false);
+		CheckBox(h=220,v=vm,0,"Показать коммент.",flags[11]);
+		CheckBox(h,v+=16,0,"Суммы в осн. валюте 1 и 2",flags[12]);
+		if (StandardHansa==false) then begin
+			CheckBox(h,v+=16,0,"Только фискальные сч/ф",flags[13]);
+		end;
+		CheckBox(h,v+=16,0,"Показывать аннулированные сч/ф",flags[14]);
+		CheckBox(h,v+=16,0,"Показывать счёт НДС",flags[15]);
+		CheckBox(h,v+=16,0,"Только нераспечатанные сч/ф",flags[17]);
+		CheckBox(h,v+=16,0,"Включая орг. клиентов",flags[18]);
+		CheckBox(h,v+=16,0,"Invoices with Total amount equal zero",flags[20]);
+		CheckBox(h+=hs,v=vm,0,"Показать № для печати",flags[16]);
+	end else begin
+		ButtonFrame(h+=148,v+=41,123,3,"Тип сч.");
+		CheckBox(h,v,0,"Счет",flags[3]);
+		CheckBox(h,v+=16,0,"Сч.на наличные",flags[4]);
+		CheckBox(h,v+=16,0,"Кредит-ноты",flags[5]);
+		if (HasLocalization("PRT")) then begin
+			CheckBox(h,v+=16,0,"Счета пени",flags[6]);
+		end;
+		EndFrame;
+		if (HasLocalization("PRT")) then begin
+			CheckBox(h,v+=24,0,"Invoices with Total equal zero",flags[20]);
+		end;
+	end;
+	EndWindow;
+end;
