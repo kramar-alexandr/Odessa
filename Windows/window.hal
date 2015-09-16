@@ -2106,7 +2106,7 @@ begin
   real h,v,vs;
   WindowBegin("Текст СМС сообщений",SMSTextTClass,CGSbl,-);
   SetBlid(SMSTextBlock);
-  SetWRect(64,80,550,350);
+  SetWRect(64,80,630,350);
   vs = 20; h = 150;
   
   Tile(0,20,false,"","Title1");
@@ -2114,6 +2114,7 @@ begin
   TileButton(2,"Отгрузка");
   TileButton(3,"Уведомления о звонках");
   TileButton(4,"Снятие с резерва");
+  TileButton(5,"Самовывоз");
   
   Tile(1,100,false,"","Title1");
   v=6;
@@ -2136,7 +2137,12 @@ begin
   v=6;
   EditField(h,v+=vs,150,"Заголовок",Normal,Title4,false,0);
   EditField(h,v+=vs,320,"Предупреждение",Normal,Text41,false,0);
-  EditField(h,v+=vs,320,"Снято с резерва",Normal,Text42,false,0);    
+  EditField(h,v+=vs,320,"Снято с резерва",Normal,Text42,false,0); 
+  
+  Tile(5,200,false,"","Title5");
+  v=6;
+  EditField(h-70,v+=vs,150,"Заголовок",Normal,Title5,false,0);
+  EditField(h-70,v+=vs,320,"Текст",Normal,Text51,false,0);    
   EndWindow;
 end;
 

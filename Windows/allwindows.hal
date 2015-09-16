@@ -5136,6 +5136,7 @@ begin
     EditField(h3 - 30,v+=vs,80,"Тип счета",Normal,OrderType,false,SetSClass); //Edit***************************Sasha2,11:37 14.07.2014
     EditField(h3 - 30,v+=vs,80,"Контракт",Normal,ORCONr,false,ORCOSClass); //Edit***************************Sasha2,11:37 14.07.2014
   end;
+	CheckBox(h3 - 30,v+=22,0,"Самовывоз",SelfDelivery);	//Edit----------------------Dima  16.09.2015
 
   ButtonFrame(h4-30,v=20,100,5,"Статус"); //Edit***************************Sasha2,14:34 14.07.2014 {
   RadioButton(h4-30,v,0,0,"Новый",CustomStatusFlag);

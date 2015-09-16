@@ -69,7 +69,8 @@ external function string 30 GetCustomOfficialSerNr(); //Edit********************
 external updating procedure SHVcToPackListVc(var record SHVc);									//Edit----------------------Dima  07.05.2015
 external updating procedure PackListVcToSHVc(record PackListVc,var record SHVc);	//Edit----------------------Dima  19.05.2015
 external updating procedure AddPaymentToIPFromSH(record SHVc);
-
+external updating function longint AddSMStoStack(string, string, string,string,string,longint,string,date,time);//Edit----------------------Dima  16.09.2015
+external function string 255 ParseSMStext(string, record ORVc);//Edit----------------------Dima  16.09.2015
 
 function Boolean StockMovOKedForSH(LongInt shnr,var LongInt stmovnr)
 begin
@@ -1501,7 +1502,7 @@ begin
   		if (ReadFirstMain(PackListr,1,true)) then begin
   			PackListVcToSHVc(PackListr,SHr);  //Edit----------------------Dima  19.05.2015
   		end;
-  	end;  
+  	end;     	
   end;
   SHVcRecordSave = res; 
   return;
@@ -1675,7 +1676,12 @@ updating function LongInt SHVcRecordUpdate(var record SHVc SHr,record SHVc SH2r,
 begin
   LongInt res;
   record PackListVc PackListr;
-  record ORVc ORr;
+  record ORVc ORr;  
+  record SMSTextBlock SMSb;
+  record CUVc CUr;
+  string 255 newtext;
+
+	BlockLoad(SMSb);//Edit----------------------Dima  16.09.2015
 
   if ((SHr.OrderNr!=-1) and (SH2r.OKFlag==0)) then begin
     if (UpdateOrderFromShip(SHr,true,SH2r,true,false)) then begin end;
@@ -1699,8 +1705,17 @@ begin
   		SHVcToPackListVc(SHr);		
   		PackListr.SerNr = SHr.SerNr;
   		if (ReadFirstMain(PackListr,1,true)) then begin
-  			PackListVcToSHVc(PackListr,SHr);  //Edit----------------------Dima  19.05.2015
+  			PackListVcToSHVc(PackListr,SHr);  
   		end;
+  	end;
+  	
+  	if (ORr.SelfDelivery>0 and (SHr.OKFlag!=0) and (SH2r.OKFlag==0)) then begin			//Edit----------------------Dima  16.09.2015
+			CUr.Code = ORr.CustCode;
+			ReadFirstMain(CUr,1,true);
+			if (nonblank(SMSb.Text51)) then begin
+				newtext = ParseSMStext(SMSb.Text51,ORr);
+  			AddSMStoStack(CUr.Phone,SMSb.Title5,newtext,ORr.CustCode,"SHVc",SHr.SerNr,ORr.OrderClass,"","");
+  		end;			  		
   	end;  
   end;
   
@@ -1716,7 +1731,6 @@ begin
 		end;
 	end;	
 	
-
 		  
   SHVcRecordUpdate = res; 
   return;

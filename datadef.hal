@@ -1608,6 +1608,7 @@ RecordBegin(INVc,-,"artikel5");
 	RecordField(ReservToDate,M4Date,0,0); //Edit***************************Sasha2,14:48 14.08.2015
 	RecordField(FeedBackStatus,M4Int,0,0); //Edit***************************Sasha2,9:04 17.08.2015
 	RecordField(LastShipDate,M4Date,0,0);	//Edit----------------------Dima  28.08.2015
+	RecordField(SelfDelivery,M4Mark,0,0);	//Edit----------------------Dima  16.09.2015
   ArrayBegin(Math,-,1);
   ArrayField(stp,M4Int,0,0);
   ArrayField(ArtCode,M4Code,20,INVc);
@@ -4130,7 +4131,9 @@ RecordBegin(IPVc,-,"");
 	RecordField(Text33,M4Str,255,0);
 	RecordField(Title4,M4Str,100,0);
 	RecordField(Text41,M4Str,255,0);
-	RecordField(Text42,M4Str,255,0);		
+	RecordField(Text42,M4Str,255,0);
+	RecordField(Title5,M4Str,100,0);
+	RecordField(Text51,M4Str,255,0);			
 	EndBlock; 
 
 
