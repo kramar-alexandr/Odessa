@@ -54,14 +54,14 @@ global
 procedure RoundBelCash(string curncycode,var val rsum)
 BEGIN
   Integer rnd;
-    
+
   if (rsum<1000) then begin
     rsum=round((rsum*2),SetRoundModeD(-1))/2;
   end else begin
     rsum=round(rsum,SetRoundModeD(-1));
   end;
- 
-  RETURN;  
+
+  RETURN;
 END;
 
 global
@@ -71,7 +71,7 @@ begin
 
   GetCurncyRoundoff(curncycode,paymode,filename,rndtotal,roundlines,rndvat);
   rsum = Round(rsum,roundlines);
-  return;  
+  return;
 end;
 
 global
@@ -86,9 +86,9 @@ BEGIN
   BlockLoad(GOb);
   res = false;
   MatRowGet(ORp,rownr,ORrw);
-  p = ORrw.Price; 
+  p = ORrw.Price;
   CalcPrice(ORrw.BasePrice,ORrw.PriceFactor,ORrw.vRebate,p,GOb.UseDiscount);
-  ORrw.Price = p;  
+  ORrw.Price = p;
   CalcSum(ORrw.Quant,ORrw.Price,ORrw.PriceFactor,ORrw.vRebate,s,GOb.UseDiscount);
   if (GetVatLaw==46) then begin
     BlockLoad(BelRusCashr);
@@ -108,7 +108,7 @@ BEGIN
   end;
   if (ORrw.Price==0) then begin res = true; end;
   ORDchrsum = res;
-  RETURN;  
+  RETURN;
 END;
 
 global
@@ -144,7 +144,7 @@ global
 procedure ORVc_PastevRebate(var record ORVc ORp,Integer rownr,var Boolean chsum)
 BEGIN
   row ORVc ORrw;
-  
+
   MatRowGet(ORp,rownr,ORrw);
   if (ORrw.vRebate>100.00) then begin
     ORrw.vRebate = blankval;
@@ -169,15 +169,15 @@ BEGIN
   record ORVc ORr;
   record ActVc Actr;
   Integer wn,nwn;
-  
+
   wn = CurWindow;
   if (WindowState(wn)==Rs_normal) then begin
-    GetWindowRecord(wn,ORr);  
+    GetWindowRecord(wn,ORr);
     RecordNew(Actr);
     ActVcRecordDefClient(Actr);
     if (MakeActFromOR(ORr,Actr)) then begin
       nwn = OpenWindow("ActDClass",1,0,"","",Actr);
-      SetRLink(wn,true);  
+      SetRLink(wn,true);
     end;
   end;
   RETURN;
@@ -287,7 +287,7 @@ BEGIN
   Integer nwn;
   Integer r;
   string 255 errstr;
-  
+
   GetWindowRecord(wn,RepSpec);
   if (RepSpec.FirstVer<=0) then begin
     MessageBox(1058,"");
@@ -297,7 +297,7 @@ BEGIN
   r = RecordAction_raOrdDownPay(RepSpec.FirstVer,RepSpec.vals0,blankval,IVr,errstr,RepSpec.flags[1]);
   CloseWindow(wn);
   switch (r) begin
-    case -1: 
+    case -1:
       if (nonblank(errstr)) then begin
         MessageBox(0,errstr);
       end else begin
@@ -308,7 +308,7 @@ BEGIN
       nwn = OpenWindow("IVDClass",1,0,"","",IVr);
       UpdateBrowses("ORVc");
   end;
-LDownPayFromORVClassOnOKWindow:;  
+LDownPayFromORVClassOnOKWindow:;
   DownPayFromORVClassOnOKWindow = false;
   RETURN;
 END;
@@ -325,25 +325,25 @@ BEGIN
 
   curncy = "UAH_R";
   sum = 0;
-  
+
   if (ProgramType!=typStdAccounts) then begin
   	Cur.Code = custcode;
   	readfirstmain(CUr,1,true);
     ARPayr.CustCode = custcode;
     if (ReadFirstKey("CustCode",ARPayr,1,true)) then begin
-    	
+
     	ARPayr.CustCode = custcode;
     	TrHs = true;
     	while(loopkey("CustCode",ARPayr,1,TrHs))begin// Edit ************************** Friday, 14 August 2015 15:51:08
     		if(ARPayr.CustCode!=custcode)then begin TrHs = false; end;
-    		
+
     		if(TrHs)then begin
     			GetFullCurncyRate(ARPayr.CurncyCode,ARPayr.PayDate,fr,to1,to2,br1,br2);
     			sum = sum + ARPayr.BookRVal*fr/to1;
     		end;
     	end;// Edit ************************** Friday, 14 August 2015 15:51:05
-    	
-    	
+
+
     	if(CUr.CustCat=="WEB")then begin
     		if(sum>10)then begin
     		 MessageBox(0,USetStr(2025));
@@ -351,8 +351,8 @@ BEGIN
     	end else begin
 				MessageBox(0,USetStr(2025));
       end;
-    end;           
-  end;           
+    end;
+  end;
   RETURN;
 END;
 
@@ -395,7 +395,7 @@ BEGIN
           testf = false;
         end;
         if (!ORVc_AllowSales(ORr,rownr,ErrorCode)) then begin
-          WindowFieldGoto(wn,ORr,rownr,"ArtCode",true); 
+          WindowFieldGoto(wn,ORr,rownr,"ArtCode",true);
           MessageBox(ErrorCode,"");
           testf = false;
         end;
@@ -410,10 +410,10 @@ BEGIN
 									additionalday = 1;
 								end else begin
 									if (GetDateId(AddDay(CurrentDate,2))==7) then begin
-										additionalday = 1;
+										additionalday = 2;
 									end else begin
-										if (GetDateId(AddDay(CurrentDate,3))==7) then begin
-											additionalday = 1;
+										if (GetDateId(AddDay(CurrentDate,3))==7 or GetDateId(AddDay(CurrentDate,3))==6) then begin
+											additionalday = 2;
 										end;
 									end;
 								end;
@@ -474,19 +474,19 @@ BEGIN
     if (ORr.Closed==0) then begin
       if (UserCanAction("ORToSH",true)) then begin
         testf = true;
-        if (ORr.OKFlag==0) then begin 
+        if (ORr.OKFlag==0) then begin
           if (UserCanAction("NotOKORToSH",false)) then begin
             MessageBox(20054,"");
             testf = false;
-          end; 
+          end;
         end;
 /*JJDS
-        if (ORr.OrderType!=kOrderTypeNormal) then begin 
+        if (ORr.OrderType!=kOrderTypeNormal) then begin
           MessageBox(22072,"");
           testf = false;
           WindowFieldGoto(wn,ORr,-1,"OrderType",true);
         end;
-*/        
+*/
         if (testf) then begin
           if (BA_ORMinMarkupWarning(ORr,i)==true) then begin
             if (UserCanAction("DisallowSaleBelowGP",false)) then begin
@@ -500,7 +500,7 @@ BEGIN
           MessageBox(r,"");
           testf = false;
         end;
-        if (testf) then begin  
+        if (testf) then begin
           r = RecordAction_raPasteOrdInShip(SHr,ORr.SerNr,warning);
           if (r==0) then begin
             if (MatRowCnt(SHr)!=0) then begin
@@ -520,7 +520,7 @@ BEGIN
               MessageBox(r,"");
             end;
           end;
-        end;  
+        end;
       end else begin
         Beep;
       end;
@@ -549,7 +549,7 @@ BEGIN
       if (ORr.Closed==0) then begin
         testf = true;
         SHr.OrderNr = ORr.SerNr;
-        if (ORr.OKFlag==0) then begin 
+        if (ORr.OKFlag==0) then begin
           if (UserCanAction("NotOKORToSH",false)) then begin
             MessageBox(20054,"");
             testf = false;
@@ -564,7 +564,7 @@ BEGIN
           r = RecordAction_raPasteOrdInShip(SHr,ORr.SerNr,warning);
           if (r==0) then begin
             if (MatRowCnt(SHr)!=0) then begin
-              nwn = OpenWindow("SHDClass",1,0,"","",SHr);        
+              nwn = OpenWindow("SHDClass",1,0,"","",SHr);
               UpdateBrowses("ORVc");
               if (nonblank(warning)) then begin
                 MessageBox(0,warning);
@@ -576,11 +576,11 @@ BEGIN
             if (r==-1) then begin
               Beep;
             end else begin
-              MessageBox(r,"");          
+              MessageBox(r,"");
             end;
           end;
         end;
-      end;  
+      end;
     end else begin
       MessageBox(1274,StringFromStringSet(3,"ORToSH"));
     end;
@@ -612,7 +612,7 @@ BEGIN
         if (testf) then begin
           r = RecordAction_raPasteOrdInInv(IVr,ORr.SerNr,true,errcode);
           if (r==0) then begin
-            nwn = OpenWindow("IVDClass",1,0,"","",IVr);        
+            nwn = OpenWindow("IVDClass",1,0,"","",IVr);
             CustMessages("IVVc",IVr.CustCode);
             UpdateBrowses("ORVc");
             if (errcode>0) then begin
@@ -626,10 +626,10 @@ BEGIN
               MessageBox(2210,"");
             end else begin
               Beep;
-            end;          
+            end;
           end;
         end;
-      end;  
+      end;
     end else begin
       MessageBox(1274,StringFromStringSet(3,"ORToInv"));
     end;
@@ -714,7 +714,7 @@ begin
 
   wn = CurWindow;
   if (WindowState(wn)==Rs_normal) then begin
-    GetWindowRecord(wn,ORr);  
+    GetWindowRecord(wn,ORr);
     if (UserCanAction("ORToPO",true)) then begin
       testf = true;
       r = TestAcceptanceStatus(ORr.AcceptanceStatus);
@@ -744,7 +744,7 @@ BEGIN
   Integer r;
   Boolean testf;
   string 60 warning;
-  
+
   if ((GetWindowFileName(frwn)=="ORVc") and (GetWindowFileName(town)=="SHVc")) then begin
     if (ReadMarkedRecord(frwn,ORr)) then begin
       if ((ORr.Closed==0) and (IsRecordLocked(ORr)==false)) then begin
@@ -752,17 +752,17 @@ BEGIN
         SHr.OrderNr = ORr.SerNr;
         if (UserCanAction("ORToSH",true)) then begin
           testf = true;
-          if (ORr.OKFlag==0) then begin 
+          if (ORr.OKFlag==0) then begin
             if (UserCanAction("NotOKORToSH",false)) then begin
               testf = false;
-            end; 
+            end;
           end;
           r = TestAcceptanceStatus(ORr.AcceptanceStatus);
           if (r!=0) then begin
             MessageBox(r,"");
             testf = false;
           end;
-          if (testf) then begin  
+          if (testf) then begin
             r = RecordAction_raPasteOrdInShip(SHr,ORr.SerNr,warning);
             if (r==0) then begin
               UpdateBrowses("SHVc");
@@ -773,16 +773,16 @@ BEGIN
               if (r==-1) then begin
                 Beep;
               end else begin
-                MessageBox(r,"");          
+                MessageBox(r,"");
               end;
             end;
           end;
         end else begin
           MessageBox(1274,StringFromStringSet(3,"ORToSH"));
         end;
-      end;    
+      end;
     end;
-  end;  
+  end;
   RETURN;
 END;
 
@@ -794,7 +794,7 @@ BEGIN
   Integer errcode;
   Integer r;
   Boolean testf;
-  
+
   if ((GetWindowFileName(frwn)=="ORVc") and (GetWindowFileName(town)=="IVVc")) then begin
     if (ReadMarkedRecord(frwn,ORr)) then begin
       if ((ORr.Closed==0) and (IsRecordLocked(ORr)==false)) then begin
@@ -810,7 +810,7 @@ BEGIN
           if (testf) then begin
             r = RecordAction_raPasteOrdInInv(IVr,ORr.SerNr,true,errcode);
             if (r!=-1) then begin
-              IVOpenPrepExists(IVr.CustCode);      
+              IVOpenPrepExists(IVr.CustCode);
               UpdateBrowses("IVVc");
               if (errcode>0) then begin
                 MessageBox(errcode,"");
@@ -818,19 +818,19 @@ BEGIN
             end else begin
               if (IsProjOrder(ORr)) then begin
                 MessageBox(1096,"");
-              end;      
+              end;
             end;
           end;
         end else begin
           MessageBox(1274,StringFromStringSet(3,"ORToInv"));
         end;
-      end;    
+      end;
     end;
-  end;  
+  end;
   RETURN;
 END;
 
-global 
+global
 updating procedure CreateMailFromORDsm()
 BEGIN
   Integer wn,nwn;
@@ -844,7 +844,7 @@ BEGIN
   wn = CurWindow;
   if (WindowState(wn)==Rs_normal) then begin
     testf = true;
-    GetWindowRecord(wn,ORr);  
+    GetWindowRecord(wn,ORr);
     err = TestAcceptanceStatus(ORr.AcceptanceStatus);
     if (err!=0) then begin
       MessageBox(err,": " & ORr.SerNr);
@@ -902,7 +902,7 @@ BEGIN
   record ORVc ORr;
   Integer i;
   Integer wn;
-  
+
   wn = CurWindow;
   i = 1;
   while (GetRecordFromBrowse(ORr,wn,i)) begin
@@ -920,7 +920,7 @@ begin
   record ORVc ORr;
   Boolean testf;
   Integer err;
-  
+
   testf = true;
   DeselectWindow(wn,false);
   GetWindowRecord(wn,ORr);
@@ -943,7 +943,7 @@ BEGIN
   Integer i;
   Boolean testf;
   Integer r;
-  
+
   i = 1;
   while (GetRecordFromBrowse(ORr,wn,i)) begin
     testf = true;
@@ -1003,7 +1003,7 @@ function Boolean ORDClassUpdateTest(Integer wn)
 BEGIN
   Boolean res;
   record ORVc ORr;
-  
+
   res = true;
   GetWindowRecord(wn,ORr);
   if (ORr.Closed!=0) then begin
@@ -1018,8 +1018,8 @@ END;
 
 global
 function Boolean ORDClassExportFlagButtonAfter(Integer wn,Boolean changedf)
-begin        
-  record ORVc ORr;  
+begin
+  record ORVc ORr;
   Boolean res;
 
   DeselectWindow(wn,false);
@@ -1028,7 +1028,7 @@ begin
     ORSumup(ORr);
   end;
   PutWindowRecord(wn,ORr);
-  ORDClassExportFlagButtonAfter = res;  
+  ORDClassExportFlagButtonAfter = res;
   return;
 end;
 
@@ -1038,7 +1038,7 @@ begin
   Boolean testf;
   Integer i,rwcnt;
   row ORVc ORrw;
-  
+
   rwcnt = MatRowCnt(ORp);
   for (i=0;i<rwcnt;i=i+1) begin
     MatRowGet(ORp,i,ORrw);
@@ -1060,7 +1060,7 @@ begin
   Integer i,rwcnt;
   row ORVc ORrw;
   record INVc INr;
-  
+
   rwcnt = MatRowCnt(ORp);
   for (i=rownr;i<rwcnt;i=i+1) begin
     MatRowGet(ORp,i,ORrw);
@@ -1087,7 +1087,7 @@ begin
   Boolean testf;
   Integer i,rwcnt;
   row ORVc ORrw;
-  
+
   rwcnt = MatRowCnt(ORp);
   for (i=0;i<rwcnt;i=i+1) begin
     MatRowGet(ORp,i,ORrw);
@@ -1111,7 +1111,7 @@ begin
   Boolean testf;
   Integer i,rwcnt;
   row ORVc ORrw;
-  
+
   rwcnt = MatRowCnt(ORp);
   for (i=0;i<rwcnt;i=i+1) begin
     MatRowGet(ORp,i,ORrw);
@@ -1126,7 +1126,7 @@ LORInvdTest:;
   return;
 end;
 
-global 
+global
 function Boolean ORDClassDeleteRowTest(Integer wn,Integer rownr)
 begin
   record ORVc ORr;
@@ -1139,14 +1139,14 @@ begin
   string 60 location;
 
   res = true;
-  GetWindowRecord(wn,ORr);    
+  GetWindowRecord(wn,ORr);
   if (WindowState(wn)==Rs_update) then begin//Rs_update
     if (ORr.Closed==0) then begin
       if (ORr.OKFlag!=0) then begin
         res = false;
         MessageBox(20589,"");
         goto LORDClassDeleteRowTest;
-      end; 
+      end;
       if (ORAcceptanceStarted(ORr) and UserCanAction("ChangeRecordMatrixWhenPending",false)==false) then begin
         res = false;
         goto LORDClassDeleteRowTest;
@@ -1183,7 +1183,7 @@ begin
             rwcnt = MatRowCnt(ORr);
             i = rownr + 1;
             while (i<rwcnt) begin
-              MatRowGet(ORr,i,ORrw); 
+              MatRowGet(ORr,i,ORrw);
               if (ORrw.stp==kInvoiceRowTypeStructuredItemComponent) then begin
                 MatRowDelete(ORr,i);
                 puf = true;
@@ -1196,10 +1196,10 @@ begin
       end;
     end;
     if (puf) then begin
-      PutWindowRecord(wn,ORr);    
+      PutWindowRecord(wn,ORr);
     end;
   end;
-LORDClassDeleteRowTest:; 
+LORDClassDeleteRowTest:;
   ORDClassDeleteRowTest = res;
   return;
 end;
@@ -1212,7 +1212,7 @@ BEGIN
   if (rownr>=0) then begin
     GetWindowRecord(wn,ORr);
     ORSumup(ORr);
-    PutWindowRecord(wn,ORr);    
+    PutWindowRecord(wn,ORr);
   end;
   ORDClassOnOverStrike = true;
   RETURN;
@@ -1227,7 +1227,7 @@ BEGIN
   row ORVc ORrw;
   record INVc INr;
   Integer nwn;
-  
+
   nwn = FindWindow("SelectApproverWClass");
   if (nwn>0) then begin
     if (MotherWindow(nwn)==wn) then begin
@@ -1240,25 +1240,25 @@ BEGIN
       res = false;
       goto LORDClassActiveEditField;
     end;
-    if (ORAcceptanceStarted(ORr) and UserCanChangePendingRecord(rownr)==false) then begin 
-      res = false; 
-      goto LORDClassActiveEditField; 
+    if (ORAcceptanceStarted(ORr) and UserCanChangePendingRecord(rownr)==false) then begin
+      res = false;
+      goto LORDClassActiveEditField;
     end;
   end;
   res = true;
   GetWindowRecord(wn,ORr);
-  
+
   if (ORr.Closed!=0) then begin						//Edit---------------------------------Dima  27.03.2015
     switch (fieldname) begin
       case "CustomStatusFlag": ;
       otherwise
         res = false;
         goto LORDClassActiveEditField;
-    end;    
+    end;
   end;
-  
+
   switch (wnst) begin
-    case Rs_update:    
+    case Rs_update:
       GetPrevWindowRecord(wn,OR2r);
   end;
   switch (wnst) begin
@@ -1272,9 +1272,9 @@ BEGIN
             goto LORDClassActiveEditField;
         end;
       end;
-  end;  
+  end;
   switch (fieldname) begin
-    case "SerNr": 
+    case "SerNr":
       switch (wnst) begin
         case Rs_update:
            if (OR2r.OKFlag==0) then begin
@@ -1291,43 +1291,43 @@ BEGIN
     case "InvAddr3": res = HasLocalization("PRT")==false;
     case "InvAddr4": res = HasLocalization("PRT")==false;
     case "InvCountry": res = HasLocalization("PRT")==false;
-    case "PRCode": 
-      if (ORInvdTest(ORr)) then begin res = false; end;      
+    case "PRCode":
+      if (ORInvdTest(ORr)) then begin res = false; end;
       if (res) then begin
         if (nonblank(ORr.PRCode)) then begin
 //          if (ORShipd2Test(ORr)) then begin res = false; end;
           if (ORDelWithTBIV(ORr)) then begin res = false; end;
         end;
       end;
-    case "CustCode": 
-      if (ORShipdTest(ORr)) then begin res = false; end;      
-    case "FrRate": 
+    case "CustCode":
+      if (ORShipdTest(ORr)) then begin res = false; end;
+    case "FrRate":
       if (AllowCurChange(ORr.CurncyCode,false)==false) then begin res = false; end;
-    case "ToRateB1": 
+    case "ToRateB1":
       if (AllowCurChange(ORr.CurncyCode,false)==false) then begin res = false; end;
-    case "ToRateB2": 
+    case "ToRateB2":
       if (AllowCurChange(ORr.CurncyCode,false)==false) then begin res = false; end;
-    case "BaseRate1": 
+    case "BaseRate1":
       if (AllowCurChange(ORr.CurncyCode,true)==false) then begin res = false; end;
-    case "BaseRate2": 
-      if (AllowCurChange(ORr.CurncyCode,true)==false) then begin res = false; end;      
-    case "PriceList": 
+    case "BaseRate2":
+      if (AllowCurChange(ORr.CurncyCode,true)==false) then begin res = false; end;
+    case "PriceList":
       if (UserCanAction("ChangePrices",true)==false) then begin res = false; end;
-    case "Price": 
+    case "Price":
       if (UserCanAction("ChangeUnitPrices",true)==false) then begin res = false; end;
-    case "vRebate": 
+    case "vRebate":
       if (UserCanAction("ChangeUnitPrices",true)==false) then begin res = false; end;
-    case "Sum": 
+    case "Sum":
       if (UserCanAction("ChangeUnitPrices",true)==false) then begin res = false; end;
-    case "BranchID": 
+    case "BranchID":
       res = UserCanAction("AllowORBranchIDChange",false);
-    case "Shipd1": 
+    case "Shipd1":
        res = false;
-    case "Shipd2": 
+    case "Shipd2":
        res = false;
-    case "Invd": 
+    case "Invd":
        res = false;
-    case "Quant": 
+    case "Quant":
       MatRowGet(ORr,rownr,ORrw);
       switch (ORrw.stp) begin
         case kInvoiceRowTypeStructuredItemComponent:
@@ -1337,10 +1337,10 @@ BEGIN
       if (rownr>=0) then begin
         MatRowGet(ORr,rownr,ORrw);
         res = (ORrw.Shipd1>0)==false;
-      end else begin          
+      end else begin
         res = ORShipdTest(ORr)==false;
       end;
-    case "Spec": 
+    case "Spec":
       if (HasLocalization("PRT")) then begin
         MatRowGet(ORr,rownr,ORrw);
         if (nonblank(ORrw.ArtCode)) then begin
@@ -1368,7 +1368,7 @@ BEGIN
         end;
       end else begin
         if (res==false) then begin goto LORDClassActiveEditField; end;
-      end;      
+      end;
     end;
     if ((rownr>=0) and (rownr<WindowOldRowcnt(wn))) then begin
       switch (fieldname) begin
@@ -1380,13 +1380,13 @@ BEGIN
           if (changed!=0) then begin MessageBox(1304,""); end;
       end;
     end;
-  end;  
-LORDClassActiveEditField:;  
+  end;
+LORDClassActiveEditField:;
   ORDClassActiveEditField = res;
   RETURN;
 END;
 
-global 
+global
 function Boolean ORDClassInsertRowTest(Integer wn, Integer rownr)
 BEGIN
   Boolean res;
@@ -1422,7 +1422,7 @@ BEGIN
   end else begin
     res = false;
   end;
-LORDClassInsertRowTest:;  
+LORDClassInsertRowTest:;
   ORDClassInsertRowTest = res;
   RETURN;
 END;
@@ -1435,7 +1435,7 @@ begin
   string 20 tstr;
   Integer i,rwcnt;
   Boolean deliveredf;
-  
+
   wn = CurWindow;
   if (WindowState(wn)==Rs_normal) then begin
     DoUpdate(wn);
@@ -1463,7 +1463,7 @@ begin
         deliveredf = true;
         i = rwcnt;
       end;
-    end;   
+    end;
     if (deliveredf) then begin
       MessageBox(1304,"");
     end else begin
@@ -1475,10 +1475,10 @@ begin
       switch (t) begin
         case 17:
           WindowFieldGoto(wn,ORr,rownr,"Spec",true);
-      end;    
+      end;
     end;
   end;
-LAddORLineType:;  
+LAddORLineType:;
   return;
 end;
 
@@ -1516,7 +1516,7 @@ BEGIN
       GetWindowRecord(wn,ORr);
       if (UserCanAction("ORToRet",true)) then begin
         r = 20100;
-        if (CAb.RetCostPriceFromSH==0) then begin 
+        if (CAb.RetCostPriceFromSH==0) then begin
           if (CAb.RetFIFOQue!=0) then begin
             r = 20558;
           end else begin
@@ -1618,9 +1618,9 @@ END;
 
 global
 function Boolean ORDClassSwitchRow(Integer wn,Integer rownr)
-begin        
-  record ORVc ORr;  
-  row ORVc ORrw; 
+begin
+  record ORVc ORr;
+  row ORVc ORrw;
   Integer rwcnt;
   Boolean res;
   val t,tproc,unitprdisc,s,rowsum;
@@ -1629,7 +1629,7 @@ begin
 
   res = true;
   GetWindowRecord(wn,ORr);
-  rwcnt = MatRowCnt(ORr);  
+  rwcnt = MatRowCnt(ORr);
   if ((rownr<rwcnt) and (rownr>=0)) then begin
     location = ORr.Location;
     MatRowGet(ORr,rownr,ORrw);
@@ -1647,20 +1647,20 @@ begin
         if (blank(recepy)) then begin
           GetRecepy(ORrw.ArtCode,recepy);
         end;
-      end;  
+      end;
       if (nonblank(ORrw.Location)) then begin
         location = ORrw.Location;
       end;
     end;
     SendArtStat(ORrw.ArtCode,location,recepy,ORrw.rowGP,tproc,unitprdisc,ORr.OrdDate,1);
   end;
-LORDClassSwitchRow:;  
+LORDClassSwitchRow:;
   SetWindowNameArg(wn,ORrw.ArtCode & ":" & location);
-  ORDClassSwitchRow = res;  
+  ORDClassSwitchRow = res;
   return;
 end;
 
-global  
+global
 procedure ItemStatusORDsm()
 BEGIN
   record RcVc RepSpec;
@@ -1674,8 +1674,8 @@ BEGIN
   testf = ORDClassSwitchRow(wn,WindowActiveRow(wn));
   RETURN;
 END;
-      
-global 
+
+global
 procedure UpdatePricesORDsm()
 BEGIN
   Integer wn;
@@ -1685,7 +1685,7 @@ BEGIN
   DeselectWindow(wn,false);
   GetWindowRecord(wn,ORr);
   ORDUpdatePrices(ORr,WindowState(wn)==2);
-  PutWindowRecord(wn,ORr);  
+  PutWindowRecord(wn,ORr);
   RETURN;
 END;
 
@@ -1709,7 +1709,7 @@ BEGIN
           Beep;
         end;
       end else begin
-        if (r!=-1) then begin 
+        if (r!=-1) then begin
           MessageBox(r,"");
         end;
       end;
@@ -1740,7 +1740,7 @@ begin
   end;
   if (nonblank(typ)) then begin
     psname = "TRObjSClass";
-  end else begin    
+  end else begin
     psname = "ObjSClass";
   end;
   RETURN;
@@ -1753,7 +1753,7 @@ begin
 
   GetWindowRecord(wn,ORr);
   rownr = WindowActiveRow(wn);
-  DeselectWindow(wn,false); 
+  DeselectWindow(wn,false);
   WindowFieldGoto(wn,ORr,rownr,"ArtCode",false);
   return;
 end;
@@ -1761,7 +1761,7 @@ end;
 procedure ORDClassSpecPasteNamePlanShip(Integer wn,var string psname)
 begin
   record PlanDeliveryBlock PDb;
-    
+
   BlockLoad(PDb);
   switch (PDb.FieldType) begin
     case 2: psname = "";
@@ -1811,7 +1811,7 @@ BEGIN
   end;
   if (UserCanAction("ChangeReserved",true)==false) then begin
     res = false;
-  end;  
+  end;
   ORDClassReservedButtonAction = res;
   RETURN;
 END;
@@ -1823,7 +1823,7 @@ BEGIN
   record ORVc ORr;
   record ORVc prevORr;
   Integer err;
- 
+
   res = true;
   GetWindowRecord(wn,ORr);
   err = TestAcceptanceStatus(ORr.AcceptanceStatus);
@@ -1832,12 +1832,12 @@ BEGIN
     res = false;
     goto LORDClassOKFlagButtonAction;
   end;
-  
+
   if (ORr.Closed!=0) then begin			//Edit----------------------Dima  27.03.2015
 		res = false;
 		goto LORDClassOKFlagButtonAction;
-	end;  
-    
+	end;
+
   if (WindowState(wn)==Rs_normal) then begin
     if (ORr.Closed!=0) then begin
       res = false;
@@ -1850,7 +1850,7 @@ BEGIN
         end;
       end;
     end;
-  end;  
+  end;
   if (WindowState(wn)==Rs_update) then begin
     GetPrevWindowRecord(wn,prevORr);
     if (prevORr.Closed!=0) then begin
@@ -1861,15 +1861,15 @@ BEGIN
       if (HasLocalization("PRT")==false) then begin
         if (UserCanAction("UnOKOR",false) or UserCanAction("UnOKAll",false)) then begin
           res = true;
-        end; 
+        end;
       end;
     end;
-  end;  
+  end;
   if (UserCanAction("OROK",true)==false) then begin
     res = false;
     MessageBox(1274,StringFromStringSet(3,"OROK"));
-  end;  
-LORDClassOKFlagButtonAction:;  
+  end;
+LORDClassOKFlagButtonAction:;
   ORDClassOKFlagButtonAction = res;
   RETURN;
 END;
@@ -1880,17 +1880,17 @@ BEGIN
   Boolean res;
   record ORVc ORr;
   Integer normalmode,updatemode;
- 
+
   res = true;
   if (UserCanAction("DisallowORClose",false)) then begin
     res = false;
   end;
-  
+
    GetPrevWindowRecord(wn,ORr);		//Edit----------------------Dima  27.03.2015
   if (ORr.Closed!=0 ) then begin
 		res = false;
-	end;  
-  
+	end;
+
   ORDClassClosedButtonAction = res;
   RETURN;
 END;
@@ -1901,7 +1901,7 @@ BEGIN
   record ORVc ORr;
   Integer i;
   Integer wn;
-  
+
   if (UserCanAction("OROK",true)) then begin
     wn = CurWindow;
     i = 1;
@@ -1948,19 +1948,19 @@ BEGIN
         deliveredf = true;
         i = rwcnt;
       end;
-    end;   
+    end;
     if (deliveredf) then begin
       MessageBox(1304,"");
-    end else begin    
+    end else begin
       ClearRow(ORr,ORrw,9);
       MatRowInsert(ORr,rownr,ORrw);
       RecalcORSubtotal(ORr);
       PutWindowRecord(wn,ORr);
     end;
   end;
-LSubtotalORDsm:;  
+LSubtotalORDsm:;
   RETURN;
-END; 
+END;
 
 global
 updating procedure CreatePRFromORDsm()
@@ -1970,16 +1970,16 @@ begin
   record PRVc PRr;
   Integer err;
   Boolean cancelf;
-  
+
   wn = CurWindow;
   if (WindowState(wn)==0) then begin//Rs_normal
     DeselectWindow(wn,false);
-    GetWindowRecord(wn,ORr);  
+    GetWindowRecord(wn,ORr);
     PutWindowRecord(wn,ORr);
     if (ORr.Closed==0) then begin
       err = CreatePRFromORD(ORr,PRr);
       if (err==0) then begin
-        PutWindowRecord(wn,ORr);  
+        PutWindowRecord(wn,ORr);
         if (WindowDoOK(wn,0)) then begin
           nwn = OpenWindow("PRDClass",1,0,"","",PRr);
           UpdateBrowses("PRVc");
@@ -2002,15 +2002,15 @@ begin
   return;
 end;
 
-global 
+global
 procedure CreateTBBUFromORDsm()
 begin
   Integer wn,nwn,err;
   record ORVc ORr;
   record TBBUVc TBBUr;
-  
+
   wn = CurWindow;
-  GetWindowRecord(wn,ORr);  
+  GetWindowRecord(wn,ORr);
   if (nonblank(ORr.PRCode)) then begin
     if (ORr.Closed==0) then begin
       err = CreateTBBUFromORD(ORr,TBBUr);
@@ -2022,7 +2022,7 @@ begin
     end else begin
       Beep;
     end;
-  end;  
+  end;
   return;
 end;
 
@@ -2032,9 +2032,9 @@ begin
   row ORVc ORrw;
   Integer i,rwcnt;
   val st;
-  
+
   rwcnt = MatRowCnt(ORr);
-  
+
   for (i = 0; i<rwcnt; i = i + 1) begin
     MatRowGet(ORr,i,ORrw);
     if (ORrw.stp!=9) then begin
@@ -2045,7 +2045,7 @@ begin
       MatRowPut(ORr,i,ORrw);
     end;
   end;
-  
+
   return;
 end;
 
@@ -2056,7 +2056,7 @@ begin
   record ORVc ORr;
   Integer ApproverSelection;
   record RcVc RepSpec;
-  
+
   GetWindowRecord(wn,ORr);
   if (WindowState(wn)!=Rs_normal) then begin
     if (WindowDoOK(wn,0)==false) then begin
@@ -2082,7 +2082,7 @@ begin
   err = SendForAcceptance_ORVc(ORr,RepSpec);
   ApproverSelection = RepSpec.ArtMode;
   if ((ApproverSelection==kAcceptanceApproverSelectionManual) and (blank(ORr.AcceptanceBy))) then begin
-    switch (err) begin  
+    switch (err) begin
       case 0:
         if (CountObjects(RepSpec.f12)==1) then begin
           RepSpec.f1 = RepSpec.f12;
@@ -2095,7 +2095,7 @@ begin
         MessageBox(err,"");
     end;
   end else begin
-    switch (err) begin  
+    switch (err) begin
       case 0:
         PutWindowRecord(wn,ORr);
         if (WindowDoOK(wn,0)) then begin
@@ -2104,7 +2104,7 @@ begin
         MessageBox(err,"");
     end;
   end;
-LORSendforAcceptanceORDsm:;  
+LORSendforAcceptanceORDsm:;
   return;
 end;
 
@@ -2141,25 +2141,25 @@ begin
   record ORVc ORr;
   row ORVc ORrw;
   longint nwn,wn,rowno;
-  
+
   wn = CurWindow;
   GetWindowRecord(wn,ORr);
   rowno = WindowActiveRow(wn);
-  
+
   if (rowno>=0) then begin
     MatRowGet(ORr,rowno,ORrw);
     UnpackRowFieldMatrix(ORrw,"TaxMatrix",TMr);
   end else begin
     UnpackFieldMatrix(ORr,"TaxMatrix",TMr);
   end;
-  
+
   nwn = OpenWindow("TaxMatrixVClass",0,wn,"","",TMr);
   PutWindowString(nwn,"TaxMatrixActiveRow",rowno);
-  
+
   PutWindowRecord(nwn,TMr);
   PutWindowPrevRecord(nwn,TMr);
   SetWindowState(nwn,Rs_normal);
-  
+
   return;
 end;
 
@@ -2169,7 +2169,7 @@ begin
   record RcVc RepSpec;
   Integer nwn,wn;
   record ORVc ORr;
-  
+
   wn = CurWindow;
   if (WindowState(wn)!=Rs_insert) then begin
     GetWindowRecord(wn,ORr);
