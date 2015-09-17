@@ -11,6 +11,7 @@ external procedure ORVc_PasteCurncyCode(var record ORVc,string);	//Edit---------
 external procedure ExportAllItems(record RepSpec);// Edit ************************** Thursday, 9 April 2015 15:35:46
 external procedure RefreshAllInnerRegistersNP;
 external updating procedure  SendSMSFromStack();//Edit----------------------Dima  28.08.2015
+external function Boolean FindSubString(string,string);	//Edit----------------------Dima  17.09.2015
 SetLangMode(LangRussian,"RUS",0);
 
 
@@ -247,11 +248,11 @@ begin
   string 255 artcode,artspec,inwarning,warning,errors;
   Boolean chsum, chsumConfirm;
   string 10 rebgroup;
+
   
   logText(0,"WebGetOrder");
   webgetpostdata(aPost); //Edit***************************Sasha2,15:18 04.07.2014
   WRITEAREATOFILE(aPost,"post.txt",0);///////////////////////////////
-  
   
   xmlPost = PARSEXMLAREA(aPost);
   if (!XmlNodeExists(xmlPost,"messagestart")) then begin
@@ -328,6 +329,10 @@ begin
   		ORr.TransTime = CurrentTime;
   		ORr.SyncFlag = 0;
 			ORVc_PasteCurncyCode(ORr,"USD");		//Edit--------------------Dima 23.01.2015
+			if (FindSubString("Самовывоз",ORr.ShipAddr0)) then begin
+				ORr.SelfDelivery = 1;
+			end;			
+			
 
 			nodeRowCnt = XmlCountChildren(xmlPost,"orders/order" & i );
 			rowNr = 0;

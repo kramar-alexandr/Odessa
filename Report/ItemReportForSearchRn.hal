@@ -1,38 +1,6 @@
 external procedure ExtractObj(string,var Integer,var string);
-
+external function Boolean FindSubString(string,string);	//Edit----------------------Dima  17.09.2015
 SetLangMode(LangRussian,"RUS",0);
-
-
-function Boolean FindSubString( string Search, string Source )	//Edit--------------Dima
-begin
-	integer i,length,lengthSource,diff;
-	string 150 temp,str,inStr;
-	boolean res;
-	
-	res=false;
-	length=len(Search);
-	lengthSource=len(Source);
-	diff=lengthSource-length;
-
-	str=UpperCase(Search);   
-	inStr=UpperCase(Source);		
-	if (diff<0) then begin
-	goto	breakFunction;
-	end;
-	
-	for(i=0;i<=diff;i=i+1) begin
-	 temp=mid(inStr,i,length);
-	 if(temp==str) then begin
-	 	res = true;
-	 	goto breakFunction;
-	 end;	
-	end;
-
-	breakFunction:; // goto
-	FindSubString=res;
-return;  
-end;
-
 
 
 
