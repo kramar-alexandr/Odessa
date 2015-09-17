@@ -1,5 +1,8 @@
 //remote function Boolean FindSubString( string , string );
+external function Boolean FindSubString(string,string);	//Edit----------------------Dima  17.09.2015
   SetLangMode(LangRussian,"RUS",0); 
+
+/*
 
 function Boolean FindSubString( string Search, string Source )
 begin
@@ -31,6 +34,7 @@ begin
 return;  
 end;
 
+*/
 
 //flags[0] - MotherWindow
 //flags[1] - текущая строка в таблице
