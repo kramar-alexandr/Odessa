@@ -1356,7 +1356,7 @@ begin
 			if (ReadFirstMain(ORr,1,true)) then begin
 				if (ORr.Sum4 == orderedSum) then begin
 						RecordCopy(oldORr,ORr);
-      			ORr.CustomStatusFlag = 3; //order is finished;
+      			ORr.CustomStatusFlag = 9; //order is finished;
       			RecordUpdate(oldORr,ORr,true);
 				end;	
 			end;		

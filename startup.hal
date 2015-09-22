@@ -183,8 +183,21 @@ begin
    SString(31099,"Отсутствует наименование склада");
    SString(31100,"Фискальный чек не будет напечатан для текущей счет-фактуры");
    SString(31101,"Автоотмена. ");
-	 
    
+	 SString(31102,"Новый");
+	 SString(31103,"В обработке");
+	 SString(31104,"Подтвержден");
+	 SString(31105,"Не дозвонились");
+	 SString(31106,"Заказ отменен");
+	 SString(31107,"В сборке");
+	 SString(31108,"Собран");
+	 SString(31109,"Отправлен");
+	 SString(31110,"Доставлен");	
+	 SString(31111,"Завершен");
+	 SString(31112,"Отменен");
+	 //..SString(31120,"Reserv");
+ 
+  
   Maintenance("Экспорт склада CSV",ExportStockCSVClass,ExportStockCSVMn,modSY);
   Maintenance("Экспорт CSV для мобильного",MyVClass,ExportAllItems,modSY);	//Edit----------------------Dima  24.03.2015
 

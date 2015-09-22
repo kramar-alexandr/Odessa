@@ -425,7 +425,7 @@ begin
   end; //Edit***************************Sasha2,11:24 18.08.2015 }
   
   if(ORr.FeedBackStatus==3 and ORr.FeedBackStatus > OR2r.FeedBackStatus) then begin	//Edit----------------------Dima  31.08.2015
-  	ORr.CustomStatusFlag = 4;
+  	ORr.CustomStatusFlag = 10;
 		ORr.Closed = 1;
 	end;   
   
@@ -1902,12 +1902,17 @@ global
 procedure Recalculate_CustomStatusFlagText(var record ORVc ORr) 	//Edit----------------------Dima  24.03.2015
 begin
 	  switch (ORr.CustomStatusFlag) begin
-    case 0: ORr.CustomStatusFlagText = USetStr(31034);
-    case 1: ORr.CustomStatusFlagText = USetStr(31035);
-    case 2: ORr.CustomStatusFlagText = USetStr(31036);
-    case 3: ORr.CustomStatusFlagText = USetStr(31037);
-    case 4: ORr.CustomStatusFlagText = USetStr(31038);
-    case 5: ORr.CustomStatusFlagText = USetStr(31039);           
+    case 0: ORr.CustomStatusFlagText = USetStr(31102);
+    case 1: ORr.CustomStatusFlagText = USetStr(31103);
+    case 2: ORr.CustomStatusFlagText = USetStr(31104);
+    case 3: ORr.CustomStatusFlagText = USetStr(31105);
+    case 4: ORr.CustomStatusFlagText = USetStr(31106);
+    case 5: ORr.CustomStatusFlagText = USetStr(31107);
+    case 6: ORr.CustomStatusFlagText = USetStr(31108);
+    case 7: ORr.CustomStatusFlagText = USetStr(31109);
+    case 8: ORr.CustomStatusFlagText = USetStr(31110);
+    case 9: ORr.CustomStatusFlagText = USetStr(31111);
+    case 10: ORr.CustomStatusFlagText = USetStr(31112);           
 
   end;
 
@@ -2006,8 +2011,8 @@ begin
 		GetForeignCurncyRate("UAH",fr,to1,to2,ORr.OrdDate,edt);
     ORr.OptUAHRate = fr/to1;
   end;
-  if (OR2r.Closed==0 and ORr.Closed!=0 and ORr.CustomStatusFlag!=5) then begin //Edit***************************Sasha2,16:19 04.02.2015 {
-    ORr.CustomStatusFlag = 5;
+  if (OR2r.Closed==0 and ORr.Closed!=0 and ORr.CustomStatusFlag!=10) then begin //Edit***************************Sasha2,16:19 04.02.2015 {
+    ORr.CustomStatusFlag = 10;
   end; //Edit***************************Sasha2,16:19 04.02.2015 }
   if(ORr.DeliveryNewPost != 0)then begin
 	  if(ORr.NPPhone == OR2r.NPPhone and (ORr.NPLastName != OR2r.NPLastName or ORr.NPFirstName != OR2r.NPFirstName)) then begin
@@ -2032,7 +2037,7 @@ begin
   
   if(OR2r.FeedBackStatus==3 and ORr.FeedBackStatus > OR2r.FeedBackStatus) then begin 
   		//OR.Closed sets in the begining of ORVcRecordCheck
-  			ORr.CustomStatusFlag = 4;//Edit----------------------Dima  31.08.2015
+  			ORr.CustomStatusFlag = 10;//Edit----------------------Dima  31.08.2015
   end;
   ORVcRecordUpdate = res; 
   return;
@@ -2216,8 +2221,8 @@ begin
 		GetForeignCurncyRate("UAH",fr,to1,to2,ORr.OrdDate,edt);
     ORr.OptUAHRate = fr/to1;
   end;
-  if (ORr.Closed!=0 and ORr.CustomStatusFlag!=5) then begin //Edit***************************Sasha2,16:19 04.02.2015 {
-    ORr.CustomStatusFlag = 5;
+  if (ORr.Closed!=0 and ORr.CustomStatusFlag!=10) then begin //Edit***************************Sasha2,16:19 04.02.2015 {
+    ORr.CustomStatusFlag = 10;
   end; //Edit***************************Sasha2,16:19 04.02.2015 }
   Recalculate_CustomStatusFlagText(ORr);
   
@@ -2519,7 +2524,7 @@ begin
     if (indexname=="ActArtCodeOSFlag")  then begin res = 0; end;
   end;
   
-  if (ORr.Closed>0  or ORr.CustomStatusFlag>=3) then begin 		//Edit----------------------Dima  26.08.2015
+  if (ORr.Closed>0  or ORr.CustomStatusFlag>=9) then begin 		//Edit----------------------Dima  26.08.2015
     if (indexname=="ActShipSerNr")  then begin res = 0; end;
     if (indexname=="ActShipInvFlag")  then begin res = 0; end;
     if (indexname=="ActShipCustCode")  then begin res = 0; end;

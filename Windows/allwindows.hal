@@ -4370,11 +4370,11 @@ end else begin
     if (IVr.SerNr>0) then begin
       nr = nr & IVr.SerNr;
     end;
-		
+
 		if(nonblank(IVr.LoyaltyCardNr))then begin
 			points = GetLoyPoints(IVr.LoyaltyCardNr);
 		end;
-		
+
     /*LCr.SerNr = IVr.LoyaltyCardNr;
 		if(ReadFirstMain(LCr,1,true))then begin
 			points = LCr.PointsBalance;
@@ -4869,7 +4869,7 @@ begin
 end;
 
 window ORLClass:3
-//данное окно фильтрует записи. 
+//данное окно фильтрует записи.
 //все записи доступны в окне ORLClassGeneral
 //Edit----------------------Dima  26.08.2015
   wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
@@ -4882,12 +4882,12 @@ begin
   SetWRect(20,80,1060,298); //Edit***************************Sasha2,14:12 08.01.2015
   Sizeable(-1,-1,0,0);
   UseView(ORVc);
-  
+
   FormName(PrintORL);
   h = 50; v = 5;
   HalPushButton(h,v,h+100,v+12,"OpenAllOrdersORVc","Все записи");//Edit----------------------Dima  26.08.2015
-  
-  RecordList(4,50,-21,-39);//Edit----------------------Dima  26.08.2015 
+
+  RecordList(4,50,-21,-39);//Edit----------------------Dima  26.08.2015
   RlColKey(4,4,"Но.",SerNr,false,ActShipSerNr);//Edit----------------------Dima  26.08.2015
   RlColKey(79,79,"ОК",OKFlag,false,ActShipOKFlag);
   pos = 111;
@@ -4989,8 +4989,8 @@ begin
   Sizeable(-1,-1,0,0);
   UseView(ORVc);
   FormName(PrintORL);
-  
-  RecordList(4,4,-21,-39);//Edit----------------------Dima  26.08.2015 
+
+  RecordList(4,4,-21,-39);//Edit----------------------Dima  26.08.2015
   RlColKey(4,4,"Но.",SerNr,false,SerNr);//Edit----------------------Dima  26.08.2015
   RlColKey(79,79,"ОК",OKFlag,false,OKFlag);
   pos = 111;
@@ -5019,7 +5019,7 @@ begin
   //RlColKey(pos,pos,"Оф.сер.номер",OfficialSerNr,false,OfficialSerNr); //Edit***************************Sasha2,13:45 08.01.2015
   RlCol(pos,pos,"Оф.сер.номер",OfficialSerNr,false);// Edit ************************** Thursday, 14 May 2015 23:15:45
   pos = pos + 80;
-  RlColKey(pos,pos,"Отгрузка",LastShipDate,false,LastShipDate);//Edit----------------------Dima  31.08.2015  
+  RlColKey(pos,pos,"Отгрузка",LastShipDate,false,LastShipDate);//Edit----------------------Dima  31.08.2015
   if (IsEnterprise) then begin
     RlColKey(-260,-260,"Класс",OrderClass,false,OrderClass);
     RlColKey(-210,-210,"Итого",Sum4,true,Sum4);
@@ -5140,11 +5140,16 @@ begin
 
   ButtonFrame(h4-30,v=20,100,5,"Статус"); //Edit***************************Sasha2,14:34 14.07.2014 {
   RadioButton(h4-30,v,0,0,"Новый",CustomStatusFlag);
-  RadioButton(h4-30,v+=16,1,0,"Обрабатывается",CustomStatusFlag);
-  RadioButton(h4-30,v+=16,2,0,"В ожидании оплаты",CustomStatusFlag);
-  RadioButton(h4-30,v+=16,3,0,"Завершён",CustomStatusFlag);
-  RadioButton(h4-30,v+=16,4,0,"Отменён",CustomStatusFlag);
-  RadioButton(h4-30,v+=16,5,0,"Закрыт",CustomStatusFlag); //Edit***************************Sasha2,14:34 14.07.2014 }
+  RadioButton(h4-30,v+=16,1,0,"В обработке",CustomStatusFlag);
+  RadioButton(h4-30,v+=16,2,0,"Подтвержден",CustomStatusFlag);
+  RadioButton(h4-30,v+=16,3,0,"Не дозвонились",CustomStatusFlag);
+  RadioButton(h4-30,v+=16,4,0,"Заказ изменен",CustomStatusFlag);
+  RadioButton(h4-30,v+=16,5,0,"В сборке",CustomStatusFlag);
+  RadioButton(h4-30,v+=16,6,0,"Собран",CustomStatusFlag);
+  RadioButton(h4-30,v+=16,7,0,"Отправлен",CustomStatusFlag);
+  RadioButton(h4-30,v+=16,8,0,"Доставлен",CustomStatusFlag);
+  RadioButton(h4-30,v+=16,9,0,"Завершен",CustomStatusFlag);
+  RadioButton(h4-30,v+=16,10,0,"Отменен",CustomStatusFlag); //Edit***************************Sasha2,14:34 14.07.2014 }
 
   //CheckBox(h4,v=6,0,"Закрыт",Closed); //Edit***************************Sasha2,11:28 14.07.2014
   //CheckBox(h4,v+=16,0,"Зарезервир.",Reserved); //Edit***************************Sasha2,11:28 14.07.2014
@@ -5364,11 +5369,11 @@ begin
   MatCol(t=1,32,"Товар",0,ArtCode,false,ForSaleINSClass);
   MatCol(t,94,"Описание",0,Spec,false,0);
   MatCol(t,-350,"Кол-во",0,Quant,true,0);
-  MatCol(t,-280,"Доступно",0,AvailableQuant,true,0);  
+  MatCol(t,-280,"Доступно",0,AvailableQuant,true,0);
   MatCol(t,-210,"На складах",0,StockQuant,true,0);
   MatCol(t,-140,"Заказано",0,OrderQuant,true,0);
   MatColTL(t,-70,"В обработке",0,M4UVal,Normal,0,ProcessingQuant,true,0);
- // MatColTL(t,-50,"UID",0,M4UVal,ViewOnly,0,UID,true,0); 
+ // MatColTL(t,-50,"UID",0,M4UVal,ViewOnly,0,UID,true,0);
   InsertRowTest;
   DeleteRowTest;
   EndMatrix;
@@ -5530,12 +5535,12 @@ begin
 
   Tile(9,300,false,"9",FeedBackStatus);	//Edit***************************Sasha2,10:31 17.08.2015 {
   h1 = 50;
-  ButtonFrame(h1,v=40,210,4,"Статус обратной связи с клиентом"); 
+  ButtonFrame(h1,v=40,210,4,"Статус обратной связи с клиентом");
   RadioButton(h1,v,0,0,"Обратная связь от клиента получена",FeedBackStatus);
   RadioButton(h1,v+=16,1,0,"Не дозвонились 1-ый раз",FeedBackStatus);
   RadioButton(h1,v+=16,2,0,"Не дозвонились 2-ой раз",FeedBackStatus);
   RadioButton(h1,v+=16,3,0,"Не дозвонились 3-ий раз. Заказ закрыт",FeedBackStatus); //Edit***************************Sasha2,10:31 17.08.2015 }
-  
+
 //  EditField(h1+200,v,80,"#VAT Code#",Normal,CustVATCode,false,0);
   EnterSkip(OrdDate);
   if (GuiType==kGuiMetro) then begin // Temporarily disabled on Windows 8
@@ -5765,11 +5770,11 @@ begin
   MatCol(1,-150,"Скл.",0,InStock,true,0);
   MatCol(1,-98,"Зак.",0,Ordered,true,0);
   MatCol(1,-50,"Своб.",0,Ship,true,0);
-  
+
   /*MatCol(1,-150,"Зак.",0,Ordered,true,0);// Edit ************************** Monday, 22 June 2015 13:27:50
   MatCol(1,-98,"Скл.",0,InStock,true,0);
   MatCol(1,-50,"Своб.",0,Ship,true,0);*/
-  
+
   if (HasCustItem) then begin
     MatCol(t=kInvoiceRowTypeStructuredItemComponent,-230,"Код товара кл.",0,CustArtCode,false,CUINSClass);
     MatCol(t,-150,"Заказано",0,Ordered,true,0);
@@ -6034,7 +6039,7 @@ begin
   	h3=600;
 		EditField(h3,v,70,"Наложенный платеж",ViewOnly,NPCostCOD,false,0);
 		EditField(h3,v+=vs,70,"Нов. наложен. платеж",Normal,NPCostCODEdit,false,0);
-		EditField(h1,v+=25,350,"Комментарий",Normal,NPComment,false,0);		
+		EditField(h1,v+=25,350,"Комментарий",Normal,NPComment,false,0);
 
 
 		Black_Divider(0,1);
@@ -6605,7 +6610,7 @@ t=1;    //Edit----------------------Dima  25.02.2015
     MatCol(t,-180,"С места",0,FrPosCode,false,UsedPosSClass);
     MatCol(t,-90,"На место",0,ToPosCode,false,FreePosSClass);
   end;
-  
+
 
   	Flip(flipnr); flipnr = flipnr + 1;//Edit----------------------Dima 18.08.2015
 t=0;
@@ -6614,12 +6619,12 @@ t=0;
     MatCol(t,-230,"В обработке",0,OrderProcessing,false,0);
     MatColTL(t,-130,"№ счета",0,M4Long,ViewOnly,0,ORSerial,false,0);
     //MatColTL(t,-90,"UID строки",0,-1,ViewOnly,0,ORRowUID,false,0);
-t=1;  
+t=1;
     MatCol(t,32,"Товар",0,ArtCode,false,INSClass);
     MatCol(t,86,"Наименование",0,Spec,false,0);
     MatCol(t,-230,"В обработке",0,OrderProcessing,false,0);
     MatColTL(t,-130,"№ счета",0,M4Long,ViewOnly,0,ORSerial,false,0);
-   // MatColTL(t,-90,"UID строки",0,-1,ViewOnly,0,ORRowUID,false,0); 
+   // MatColTL(t,-90,"UID строки",0,-1,ViewOnly,0,ORRowUID,false,0);
 
   DeleteRowTest;
   EndMatrix;
@@ -7181,7 +7186,7 @@ begin
   EditField(h2,v,-40,"Комментарий",Normal,Comment,false,0);
   if (IsEnterprise) then begin
     //EditField(h,v+=20,80,"Код авториз.",ViewOnly,AuthorizationCode,false,0);					//Edit----------------------Dima 29.01.2015
-		EditFieldTL(h+30,v+=20 ,70,"Принимать по курсу", M4Val,Normal,0,TakeOnRate,false,0);	//Edit----------------------Dima 29.01.2015		
+		EditFieldTL(h+30,v+=20 ,70,"Принимать по курсу", M4Val,Normal,0,TakeOnRate,false,0);	//Edit----------------------Dima 29.01.2015
     CheckBox(-300,v,0,"Инф-ция о клиенте в записи",ARonTR);
     CheckBox(h4=-100,v,0,"OK",OKFlag);
   end else begin
@@ -9523,7 +9528,7 @@ window IPLClass:1
   wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
 begin
   real hoff,pos;
-  WindowBegin("Платежи",IPLClass,CGmlist,-);  
+  WindowBegin("Платежи",IPLClass,CGmlist,-);
   SetWRect(20,80,760,291);
   Sizeable(-1,-1,0,0);
   SpawnClass(IPDClass);
@@ -9533,18 +9538,18 @@ begin
   end;
   RecordList(4,17,-21,-39);
   if (HasOfficialSerNr) then begin
-    RlColKey(4,4,"№.",SerNr,false,SerNr); pos = 76;  
-    RlColKey(pos,pos,"Офиц. №",OfficialSerNr,false,OfficialSerNr); pos = pos + 110;  
+    RlColKey(4,4,"№.",SerNr,false,SerNr); pos = 76;
+    RlColKey(pos,pos,"Офиц. №",OfficialSerNr,false,OfficialSerNr); pos = pos + 110;
   end else begin
-    RlColKey(4,4,"№.",SerNr,false,SerNr); pos = 76;  
+    RlColKey(4,4,"№.",SerNr,false,SerNr); pos = 76;
   end;
-  RlColKey(pos,pos,  "OK",OKMark,false,OKMark); pos = pos + 35;  
-  RlColKey(pos,pos,"Дата опер.",TransDate,false,TransDate); pos = pos + 74;  
+  RlColKey(pos,pos,  "OK",OKMark,false,OKMark); pos = pos + 35;
+  RlColKey(pos,pos,"Дата опер.",TransDate,false,TransDate); pos = pos + 74;
   if (IsEnterprise) then begin
-    RlColKey(pos+hoff,pos+hoff,"Ссылка",RecNumber,false,RecNumber); pos = pos + 90;  
-    RlCol   (pos+hoff,pos+hoff,"Комментарий",Comment,false);  pos = pos + 100;  
+    RlColKey(pos+hoff,pos+hoff,"Ссылка",RecNumber,false,RecNumber); pos = pos + 90;
+    RlCol   (pos+hoff,pos+hoff,"Комментарий",Comment,false);  pos = pos + 100;
   end else begin
-    RlCol   (pos+hoff,pos+hoff,"Комментарий",Comment,false);  
+    RlCol   (pos+hoff,pos+hoff,"Комментарий",Comment,false);
   end;
   RlCol   (-180,-180,"Менеджер",Sign,false);			//Edit----------------------Dima  15.07.2015
   if (HasMultiCurrency or HasBase2) then begin
@@ -9557,12 +9562,12 @@ begin
 
   if (GuiType==kGuiMetro) then begin
     RowMenuBegin("");
-    RowMenuItem(0,"OK",'G','G',4312,"OKIPLsm");  
+    RowMenuItem(0,"OK",'G','G',4312,"OKIPLsm");
     EndRowMenu;
     if (IsEnterprise) then begin
-      SpecMenuGroup("",kSpecMenuGroupTypeButtonsInBottomBarRight,0);  
-      SpecialMenuWithIcon("Создать платежи клиентов",' ',4313,1,"IPFromIPLsm");  
-      SpecialMenuWithIcon("Экспортировать прямое дебетование",' ',4313,2,"IPDDExpIPLsm");  
+      SpecMenuGroup("",kSpecMenuGroupTypeButtonsInBottomBarRight,0);
+      SpecialMenuWithIcon("Создать платежи клиентов",' ',4313,1,"IPFromIPLsm");
+      SpecialMenuWithIcon("Экспортировать прямое дебетование",' ',4313,2,"IPDDExpIPLsm");
     end;
   end else begin
     SpecialMenu("OK",'G',0,"OKIPLsm");
@@ -9634,16 +9639,16 @@ begin
     EditField(h,v+=vs,100,"Expires",ViewOnly,ExpiryDate,true,0);
   end;
   tilenr = 1;
-  TileButton(tilenr,"Доступ");  tilenr = tilenr + 1; // Not Found  
-  TileButton(tilenr,"Сер. номера");  tilenr = tilenr + 1; // Not Found  
-  TileButton(tilenr,"Продажи");  tilenr = tilenr + 1; // Not Found  
-  TileButton(tilenr,"Счета");  tilenr = tilenr + 1; // Not Found  
+  TileButton(tilenr,"Доступ");  tilenr = tilenr + 1; // Not Found
+  TileButton(tilenr,"Сер. номера");  tilenr = tilenr + 1; // Not Found
+  TileButton(tilenr,"Продажи");  tilenr = tilenr + 1; // Not Found
+  TileButton(tilenr,"Счета");  tilenr = tilenr + 1; // Not Found
   if (StandardHansa==false) then begin
-    TileButton(tilenr,"Калькуляция проектов");  tilenr = tilenr + 1; // Not Found  
-    TileButton(tilenr,"Web");  tilenr = tilenr + 1; // Not Found  
-    TileButton(tilenr,"Ввод времени");  tilenr = tilenr + 1; // Not Found  
+    TileButton(tilenr,"Калькуляция проектов");  tilenr = tilenr + 1; // Not Found
+    TileButton(tilenr,"Web");  tilenr = tilenr + 1; // Not Found
+    TileButton(tilenr,"Ввод времени");  tilenr = tilenr + 1; // Not Found
   end;
-  TileButton(tilenr,"Дата и числа");  tilenr = tilenr + 1; // Not Found  
+  TileButton(tilenr,"Дата и числа");  tilenr = tilenr + 1; // Not Found
   CheckBox(h2,6,0,"Закрыт",Closed);
   tilenr = 1;
   Tile(tilenr,210,false,tilenr,AccessGroup);  tilenr = tilenr + 1;
@@ -9724,9 +9729,9 @@ end;
   Tile(tilenr,50,false,tilenr,PersAcc);  tilenr = tilenr + 1;
   EditField(h,vm=(v=6),65,"Счёт",Normal,PersAcc,false,AccSClass);
   EditField(h3,v,120,"Объект",Normal,PersObjx,false,ObjSClass);
-  EditField(h,v+=vs,65,"Код сорт.",Normal,SortCode,false,0);  
-  EditField(h3,v,120,"Bank A/C",Normal,BankAcc,false,0);  
-  EditField(h3,v+=vs,-20,"Bank Name",Normal,BankName,false,BankSClass);  
+  EditField(h,v+=vs,65,"Код сорт.",Normal,SortCode,false,0);
+  EditField(h3,v,120,"Bank A/C",Normal,BankAcc,false,0);
+  EditField(h3,v+=vs,-20,"Bank Name",Normal,BankName,false,BankSClass);
 //  EditField(h,v+=vs,65,"Expense A/C",Normal,CostAcc,false,AccSClass);
   if (StandardHansa==false) then begin
     Tile(tilenr,170,true,tilenr,JobGroup);  tilenr = tilenr + 1;
@@ -9767,8 +9772,8 @@ end;
   RadioButton(h,v+=16,1,0,"день, месяц, год",DateOrder);
   RadioButton(h,v+=16,2,0,"год, месяц, день",DateOrder);
   if (StandardHansa==false and IsSberbankProduct==false) then begin
-    RadioButton(h,v+=16,m4_hijri,0,"Hijri",DateOrder); // We have some enum already in BCD that goes from 0 to 5..  
-    RadioButton(h,v+=16,m4_persian_date,0,"Persian",DateOrder);  
+    RadioButton(h,v+=16,m4_hijri,0,"Hijri",DateOrder); // We have some enum already in BCD that goes from 0 to 5..
+    RadioButton(h,v+=16,m4_persian_date,0,"Persian",DateOrder);
   end;
   EndFrame;
   CheckBox(h,v+=24,0,"Две цифры даты",LeadingZDay);
@@ -9864,7 +9869,7 @@ begin
   if (InStockf) then begin
     EditFieldTL(h+=(hs+10),v, 60,"",M4Str,ViewOnly,20,f2,true,0);
   end;
-  if (OrddOutf) then begin		
+  if (OrddOutf) then begin
     EditFieldTL(h+=hs,v ,60,"",M4Str,ViewOnly,20,f3,true,0);
   end;
   if (POQtyf) then begin
@@ -9977,10 +9982,10 @@ begin
 	end;
 	PeriodField(h,v,"Период");
 	EditFieldTL(h,v+=vs, 150,"Период кредит. сч/ф",M4UStr,Normal,21,Period2Str2,false,PerSClass);
-	
+
 	EditFieldTL(h,v+=vs,65,"Время",M4Str,Normal,10,d1Code,true,0);//Edit----------------------Dima  12.08.2015
 	EditFieldTL(h+85,v,65,":",M4Str,Normal,10,d2Code,false,0);		//Edit----------------------Dima  12.08.2015
-	
+
 	EditFieldTL(h,v+=vs ,150,"Клиент",M4UStr,Normal,50,f2,false,CUSClass);
 	if (HasCategories) then begin
 		EditFieldTL(h,v+=vs ,70,"Категория",M4UStr,Normal,5,f3,false,CCatSClass);
@@ -9995,7 +10000,7 @@ begin
 	if (HasObjects) then begin
 	 EditFieldTL(h,v+=vs,250,"Объект",M4UStr,Normal,60,ObjStr,false,ObjSClass);
 	 EditFieldTL(h,v+=vs,50,"Тип объекта",M4UStr,Normal,5,ObjType,false,OTSClass);
-		EditFieldTL(h,v+=vs,250,"Объект строки",M4UStr,Normal,60,f11,false,ObjSClass);	
+		EditFieldTL(h,v+=vs,250,"Объект строки",M4UStr,Normal,60,f11,false,ObjSClass);
 	end;
 	if (HasModTS) then begin
 		EditFieldTL(h,v+=vs,50,"Проект",M4UStr,Normal,20,FirstAcc,false,PRSClass);
@@ -10005,7 +10010,7 @@ begin
 	end;
 	if (IsEnterprise) then begin
 		EditFieldTL(h,v+=vs,50,"Условия оплаты",M4UStr,Normal,5,TransStr,false,PDSClass);
-		EditFieldTL(h,v+=vs,50,"Перв. клиент",M4Code,Normal,20,f12,false,CUSClass);	
+		EditFieldTL(h,v+=vs,50,"Перв. клиент",M4Code,Normal,20,f12,false,CUSClass);
 	end;
 	if (IsEnterprise) then begin
 		EditFieldTL(h,v3=(v+=vs),50,"Миним. сумма",M4Val,Normal,0,vals0,false,0);
