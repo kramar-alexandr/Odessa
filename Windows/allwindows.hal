@@ -4879,7 +4879,7 @@ begin
 
   WindowBegin("Счета клиентам (в обработке)",ORLClass,CGmlist,-);
   SpawnClass(ORDClass);
-  SetWRect(20,80,1060,298); //Edit***************************Sasha2,14:12 08.01.2015
+  SetWRect(20,80,1060,500); //Edit***************************Sasha2,14:12 08.01.2015
   Sizeable(-1,-1,0,0);
   UseView(ORVc);
 
@@ -4985,7 +4985,7 @@ begin
   WindowBegin("Счета клиентам",ORLClassGeneral,CGmlist,-);
   DynamicWindow;
   SpawnClass(ORDClass);
-  SetWRect(20,80,1100,300); //Edit***************************Sasha2,14:12 08.01.2015
+  SetWRect(20,80,1100,500); //Edit***************************Sasha2,14:12 08.01.2015
   Sizeable(-1,-1,0,0);
   UseView(ORVc);
   FormName(PrintORL);
@@ -5114,7 +5114,7 @@ begin
   TileButton(8,"Новая почта");
   TileButton(9,"Обр.связь с кл."); //Edit***************************Sasha2,10:29 17.08.2015
   Tile(1,110,false,"1",OrdDate);
-  vs = 20; h1 = 110; h2 = 290; h3 = 530; h4 = -100;
+  vs = 22; h1 = 110; h2 = 290; h3 = 530; h4 = -100;
   EditField(h1,vm=(v=6),82,"Дата",Normal,OrdDate,false,PasteCurDate);
   EditField(h1,v+=vs,25,"Условия оплаты",Normal,PayDeal,false,PDSClass);
   EditField(h1,v+=vs,82,"Заплан. отгрузка",Normal,PlanShip,false,PasteCurDate);
@@ -5136,7 +5136,7 @@ begin
     EditField(h3 - 30,v+=vs,80,"Тип счета",Normal,OrderType,false,SetSClass); //Edit***************************Sasha2,11:37 14.07.2014
     EditField(h3 - 30,v+=vs,80,"Контракт",Normal,ORCONr,false,ORCOSClass); //Edit***************************Sasha2,11:37 14.07.2014
   end;
-	CheckBox(h3 - 30,v+=22,0,"Самовывоз",SelfDelivery);	//Edit----------------------Dima  16.09.2015
+	CheckBox(h3 - 30,v+=40,0,"Самовывоз",SelfDelivery);	//Edit----------------------Dima  16.09.2015
 
   ButtonFrame(h4-30,v=20,100,5,"Статус"); //Edit***************************Sasha2,14:34 14.07.2014 {
   RadioButton(h4-30,v,0,0,"Новый",CustomStatusFlag);
@@ -5193,11 +5193,13 @@ begin
 //  MatCol(t,94,"Var",0,VARList,true,VARSClass);
 //  MatCol(t,144,"Qty",0,Quant,true,0);
   t = 1;
+/*  //Edit----------------------Dima  23.09.2015
   if (HasVarieties) then begin
     MatCol(t,94,"Кол-во",0,Quant,true,MATVARINSClass);
   end else begin
     MatCol(t,94,"Кол-во",0,Quant,true,0);
   end;
+*/
   EnterSkip(ArtCode);
   MatCol(t=kInvoiceRowTypeStructuredItemComponent,32,"Товар",0,ArtCode,false,ForSaleINSClass);
 //  MatCol(t,94,"Var",0,VARList,true,VARSClass);
@@ -5218,16 +5220,20 @@ begin
   Flip(flipnr); flipnr = flipnr + 1;
 //  MatCol(t=1,194,"Description",0,Spec,false,0);
   t = 1;
-  MatCol(t,144,"Описание",0,Spec,false,0);
-  MatCol(t,-235,"Цена",0,Price,true,PLSClass);
-  MatCol(t,-135,"%",0,vRebate,true,0);
-  MatCol(t,-100,"Сумма",0,Sum,true,0);
+  MatCol(t,95,"Необходимо",0,NecessaryQuant,true,0);
+  MatCol(t,155,"Кол-во",0,Quant,true,0);
+  MatCol(t,215,"Доступно",0,AvailableQuant,true,0);
+  MatCol(t,275,"Описание",0,Spec,false,0);
+  MatCol(t,-205,"Цена",0,Price,true,PLSClass);
+  MatCol(t,-125,"%",0,vRebate,true,0);
+  MatCol(t,-90,"Сумма",0,Sum,true,0);
   MatCol(t=kInvoiceRowTypeStructuredItemComponent,144,"Описание",0,Spec,false,0);
   MatCol(t,-235,"Цена",0,Price,true,PLSClass);
   MatCol(t,-135,"%",0,vRebate,true,0);
   MatCol(t,-100,"Сумма",0,Sum,true,0);
   Flip(flipnr); flipnr = flipnr + 1;
   t = 1;
+  MatCol(t,94,"Кол-во",0,Quant,true,0);
   MatCol(t,144,"Описание",0,Spec,false,0);
   if (UseTaxTemplatesforTaxCalc) then begin
     MatCol(t,-284,"Код товара клиента",0,CustArtCode,false,CUINSClass);
@@ -5254,6 +5260,7 @@ begin
   end;
   Flip(flipnr); flipnr = flipnr + 1;
   t = 1;
+  MatCol(t,94,"Кол-во",0,Quant,true,0);
   MatCol(t,144,"Описание",0,Spec,false,0);
   MatCol(t,344,"Тип заказа",0,OrderType,false,SetSClass);
   if (UserCanAction("ViewCostPrice",true)) then begin //Edit***************************Sasha2,10:07 10.11.2014
@@ -5279,6 +5286,7 @@ begin
   end;
   Flip(flipnr); flipnr = flipnr + 1;
   t = 1;
+  MatCol(t,94,"Кол-во",0,Quant,true,0);
   MatCol(t,144,"Описание",0,Spec,false,0);
   MatCol(t,-300,"Продавцы",0,Salesmen,false,UserSClass);
   MatCol(t,-236,"Отгруж.",0,Shipd1,true,0);
@@ -5292,6 +5300,7 @@ begin
   MatCol(t,-80,"Структура",0,Recepy,false,RecSClass);
   Flip(flipnr); flipnr = flipnr + 1;
   t = 1;
+  MatCol(t,94,"Кол-во",0,Quant,true,0);
   MatCol(t,144,"Описание",0,Spec,false,0);
   MatCol(t,-290,"Серийный номер",0,SerialNr,false,SerialNrSClass);
   MatCol(t,-150,"Запланированная отгрузка",0,PlanShipRow,true,PasteCurDate);
@@ -5302,6 +5311,7 @@ begin
   MatCol(t,-70,"Фактор цены",0,PriceFactor,true,0);
   Flip(flipnr); flipnr = flipnr + 1;
   t = 1;
+  MatCol(t,94,"Кол-во",0,Quant,true,0);
   MatCol(t,144,"Описание",0,Spec,false,0);
   MatCol(t,-315,"Накладная",0,ShipNote,false,0);
   MatCol(t,-210,"Склад",0,Location,false,LocationSClass);
@@ -5318,6 +5328,7 @@ begin
   MatCol(t,-90,"Источник",0,Source,true,SourceSClass);
   if (StandardHansa==false) then begin
     Flip(flipnr); flipnr = flipnr + 1;
+    MatCol(t=1,94,"Кол-во",0,Quant,true,0);
     MatCol(t=1,144,"Дата получения",0,PickingDate,false,PasteCurDate);
     MatCol(t,-390,"Время пол.",0,PickingTime,false,PasteCurTime);
     MatCol(t,-320,"Дата погр.",0,InloadingDate,true,PasteCurDate);
@@ -5333,6 +5344,7 @@ begin
   end;
   Flip(flipnr); flipnr = flipnr + 1;
   t = 1;
+  MatCol(t,94,"Кол-во",0,Quant,true,0);
   MatCol(t,144,"Описание",0,Spec,false,0);
   MatCol(t,-315,"Ед.",0,UnitCode,false,UnitSClass);
   MatCol(t,-260,"Кол-во ед.",0,UnitFactQuant,true,0);
@@ -5368,11 +5380,12 @@ begin
   Flip(flipnr); flipnr = flipnr + 1; 					//Edit----------------------Dima  14.08.2015
   MatCol(t=1,32,"Товар",0,ArtCode,false,ForSaleINSClass);
   MatCol(t,94,"Описание",0,Spec,false,0);
-  MatCol(t,-350,"Кол-во",0,Quant,true,0);
-  MatCol(t,-280,"Доступно",0,AvailableQuant,true,0);
-  MatCol(t,-210,"На складах",0,StockQuant,true,0);
-  MatCol(t,-140,"Заказано",0,OrderQuant,true,0);
-  MatColTL(t,-70,"В обработке",0,M4UVal,Normal,0,ProcessingQuant,true,0);
+  MatCol(t,-370,"Необходимо",0,NecessaryQuant,true,0);
+  MatCol(t,-305,"Кол-во",0,Quant,true,0);
+  MatCol(t,-245,"Доступно",0,AvailableQuant,true,0);
+  MatCol(t,-185,"На складах",0,StockQuant,true,0);
+  MatCol(t,-120,"Заказано",0,OrderQuant,true,0);
+  MatColTL(t,-60,"В обработке",0,M4UVal,Normal,0,ProcessingQuant,true,0);
  // MatColTL(t,-50,"UID",0,M4UVal,ViewOnly,0,UID,true,0);
   InsertRowTest;
   DeleteRowTest;

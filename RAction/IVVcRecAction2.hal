@@ -96,6 +96,7 @@ external procedure InvVat(Integer,Integer,Integer,Integer,string,val,var val,var
 external function Boolean EInvoiceWithPDFFileTest(string,string,var record EInvCUVc);
 external updating procedure RoyaltyIVRemoved(record IVVc);
 external function string 20 GetCustomOfficialSerNr; //Edit***************************Sasha2,16:54 28.01.2015
+external procedure Recalculate_CustomStatusFlagText(var record ORVc);	//Edit----------------------Dima  22.09.2015
 
 procedure SetIVAcceptanceFlag(var record IVVc IVr,record IVVc prevIVr,LongInt stat)
 begin
@@ -462,6 +463,8 @@ BEGIN
   LongInt res;
   Boolean testf;
   record EInvoiceBlock EIb;
+  record SHVc SHr;//Edit----------------------Dima  22.09.2015
+  record ORVc ORr;//Edit----------------------Dima  22.09.2015
 
   if (IVr.Invalid==0) then begin
     if (IVr.OKFlag!=0) then begin
@@ -503,7 +506,20 @@ BEGIN
     if (nonblank(IVr.LoyaltyCardNr) and (IVr.Points!=0)) then begin
       AddPointsHist(IVr.SerNr,"IVVc",IVr.InvType);
       IVVc_LoyaltyCardPointsRedemption(IVr,false);
-    end;   
+    end;
+    
+    ORr.SerNr = IVr.OrderNr;									//Edit----------------------Dima  22.09.2015
+    SHr.OrderNr = IVr.OrderNr;
+    if (ReadFirstKey("OrderKey",SHr,1,true)) then begin
+			if(ReadFirstMain(ORr,1,true)) then begin
+				if (ORr.CustomStatusFlag < 5) then begin
+						ORr.CustomStatusFlag = 5;
+						Recalculate_CustomStatusFlagText(ORr);
+						RecordStore(ORr,true);
+				end;
+			end;
+		end;
+		   
   end;
 LIVVcRecordSaveAfter:;
   IVVcRecordSaveAfter = res; 
@@ -945,13 +961,28 @@ BEGIN
   record RLinkVc RLinkr;
   record RLinkVc oldRLinkr;
   Integer notenr;
+  record ORVc ORr;
+  record SHVc SHr;
     
   ihef = ItemHistExists("IVVc",IVr.SerNr);
   if (IVr.OKFlag==1) then begin
     if (ihef==false) then begin
       CheckCUBalDate(IVr.CustCode,IVr.TransDate);    
       SalesmanStats(IVr,IV2r,true);
-    end;
+    end;    
+    
+    ORr.SerNr = IVr.OrderNr;									//Edit----------------------Dima  22.09.2015
+    SHr.OrderNr = IVr.OrderNr;
+    if (ReadFirstKey("OrderKey",SHr,1,true)) then begin
+			if(ReadFirstMain(ORr,1,true)) then begin
+				if (ORr.CustomStatusFlag < 5) then begin
+						ORr.CustomStatusFlag = 5;
+						Recalculate_CustomStatusFlagText(ORr);
+						RecordStore(ORr,true);
+				end;
+			end;
+		end;
+    
   end;  
   if (IVr.OKFlag!=0) and (IV2r.OKFlag==0) then begin
     if (ihef==false) then begin

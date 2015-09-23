@@ -363,6 +363,7 @@ begin
 								ORrw.Spec = artspec;
 							end;
 							ORrw.Quant = qty;
+							ORrw.NecessaryQuant = qty;
 							MatRowPut(ORr,rowNr,ORrw);
 							if (OptFeature.NoQtyDepPrices==0) then begin
 						      ORVc_PasteQuant(ORr,rowNr,true,chsum);

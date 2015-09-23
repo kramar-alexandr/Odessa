@@ -1680,6 +1680,7 @@ RecordBegin(INVc,-,"artikel5");
   ArrayField(ProcessingQuant,M4UVal,0,0);
   ArrayField(UID,M4UVal,0,0);
   ArrayField(AvailableQuant,M4UVal,0,0);
+  ArrayField(NecessaryQuant,M4UVal,0,0);
   EndArray;
   MainKeyBegin(SerNr,1);
   StoreInBaseKey;

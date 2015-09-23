@@ -14,6 +14,7 @@ external function Boolean FindStringInString(string, string);
 external function boolean MySendRawWebRequest(string, string, boolean, string, string, string, string, boolean, area, var area, integer);
 external function string 255 ConvertXml(string);
 external function string 255 ConvertXmlString(string,Boolean);
+external updating procedure UpdateORVcNewPostStatuses(record SHVc);
 
 
 SetLangMode(LangRussian,"RUS",0); 
@@ -2580,6 +2581,7 @@ begin
 								SHr.NPStatusCode = 1;
 							end;
 							RecordUpdate(oldSHr,SHr,false);
+							UpdateORVcNewPostStatuses(SHr);
 						end;
 				end;			
 				i = i + 1;
