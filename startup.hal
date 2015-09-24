@@ -194,7 +194,7 @@ begin
 	 SString(31109,"Отправлен");
 	 SString(31110,"Доставлен");	
 	 SString(31111,"Завершен");
-	 SString(31112,"Отменен");
+	 SString(31112,"Отменён");
 	 
 	 SString(31120,"Відправлено");
 	 SString(31121,"Прибув у відділення");
@@ -256,6 +256,7 @@ begin
 	Maintenance("Пересохранить ORVc",MyVClass,ReSaveORVcMn,modDBMain);		//Edit----------------------Dima  28.08.2015
 	Maintenance("Разослать СМС из стека",MyVClass,SendSMSFromStack,modDBMain);		//Edit----------------------Dima  27.08.2015
 	Maintenance("Пересчитать ORVc.LastShipDate",MyVClass,UpdateLastShipDateMn,modDBMain);		//Edit----------------------Dima  31.08.2015
+	Maintenance("Установить новые статусы в Счетах клиентам",MyVClass,SetNewStatusesORVcMn,modDBMain);		//Edit----------------------Dima  23.09.2015
 	
 
   Import("Импорт цен",PLImportIClass,PLImportIn,modDI); //Added********************Dima 20.11.2014

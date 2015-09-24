@@ -87,6 +87,7 @@ remote updating function boolean CheckCounterparty(var record ORVc);
 external function LongInt DateDiff(Date,Date); //Edit***************************Sasha2,11:26 18.08.2015
 external updating function longint AddSMStoStack(string, string, string,string,string,longint,string,date,time);//Edit----------------------Dima  28.08.2015
 external function string 255 ParseSMStext(string, record ORVc);
+external procedure GetAvailableItems(var record ORVc);
 
 
 procedure SetORAcceptanceFlag(var record ORVc ORr,record ORVc prevORr,LongInt stat)
@@ -1898,7 +1899,7 @@ end; //Edit***************************Sasha2,11:57 15.07.2014 }
 
 
 
-
+global
 function boolean CheckORVcConfirmStatus(record ORVc ORr)			//Edit----------------------Dima  23.09.2015
 begin
 integer i,rwcnt;
@@ -1907,7 +1908,7 @@ boolean res;
 
 	res = true;
 
-	if (ORr.CustomStatusFlag > 3) then begin
+	if (ORr.CustomStatusFlag > 3 or ORr.Reserved==0) then begin
 		res = false;
 		goto LCheckORVcConfirmStatus;
 	end;
@@ -1955,9 +1956,9 @@ begin
 	record ORVc ORr;
 	string 50 sent, received,received2;
 	
-	sent = USetStr(31063);
+	sent = USetStr(31120);
 	received = USetStr(31121);
-	received2 = USetStr(31120);
+	received2 = USetStr(31063);
 	
 	if (SHr.NPStatus == sent or SHr.NPStatus == received or SHr.NPStatus == received2) then begin
 	
@@ -2055,6 +2056,8 @@ begin
 	Date edt;	//Edit--------------------------------Dima 29.01.2015
 	record NPCounterpartyVc NPCounterpartyr;
 	record ORVc oldORr;
+	row ORVc ORrw;
+	integer rwcnt;
 
   ORr.Prntdf = 0;
   AutDelNonStockItem(ORr);
@@ -2072,6 +2075,13 @@ begin
 		GetForeignCurncyRate("UAH",fr,to1,to2,ORr.OrdDate,edt);
     ORr.OptUAHRate = fr/to1;
   end;
+  
+  rwcnt = MatRowCnt(ORr);
+  MatRowGet(ORr,0,ORrw);
+  if (blank(ORrw.AvailableQuant)) then begin
+  	GetAvailableItems(ORr);		//only first time //Edit----------------------Dima  24.09.2015
+	end;
+  
   if (OR2r.Reserved==0 and ORr.Reserved!=0) then begin
 		ORr.CustomStatusFlag = 1;	//Edit----------------------Dima  22.09.2015
 	end;
@@ -2080,6 +2090,7 @@ begin
 	end;		
   if (OR2r.Closed==0 and ORr.Closed!=0 and ORr.CustomStatusFlag!=10) then begin //Edit***************************Sasha2,16:19 04.02.2015 {
     ORr.CustomStatusFlag = 10;
+    ORr.Comment = USetStr(31112) & ORr.Comment;
   end; //Edit***************************Sasha2,16:19 04.02.2015 }
   if(ORr.DeliveryNewPost != 0)then begin
 	  if(ORr.NPPhone == OR2r.NPPhone and (ORr.NPLastName != OR2r.NPLastName or ORr.NPFirstName != OR2r.NPFirstName)) then begin
@@ -2100,6 +2111,7 @@ begin
   if(OR2r.FeedBackStatus==3 and ORr.FeedBackStatus > OR2r.FeedBackStatus) then begin 
   		//OR.Closed sets in the begining of ORVcRecordCheck
   			ORr.CustomStatusFlag = 10;//Edit----------------------Dima  31.08.2015
+  			ORr.Comment = USetStr(31112) & ORr.Comment;
   end;    
       
   Recalculate_CustomStatusFlagText(ORr); //Edit----------------------Dima  24.03.2015

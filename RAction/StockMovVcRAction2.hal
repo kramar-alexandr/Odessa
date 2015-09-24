@@ -48,7 +48,7 @@ external procedure GetFullCurncyRateText(Boolean,var string,val,val,val,val,val)
 external procedure GetFullCurncyRate (var string,Date,var val,var val,var val,var val,var val);
 external procedure ORVc_PasteQuant(var record ORVc,Integer,Boolean,var Boolean);//Edit----------------------Dima  20.08.2015
 external procedure ORSumup(var record ORVc);//Edit----------------------Dima  20.08.2015
-
+external procedure GetAvailableItems(var record ORVc);	//Edit----------------------Dima  24.09.2015
 
 function val Min(val v1,val v2)
 begin
@@ -839,6 +839,7 @@ begin
 				end;
 			end;
 			ORSumup(ORr);
+			GetAvailableItems(ORr);
 			ORr.Reserved = 1;
 			RecordUpdate(oldORr,ORr,true);
 		end;

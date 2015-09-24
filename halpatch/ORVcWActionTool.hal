@@ -1355,7 +1355,11 @@ Begin
 			ISr.Code = ORrw.ArtCode;
 			ISr.Location = ORr.Location;
 			if (ReadFirstMain(ISr,2,true)) then begin
-					ORrw.AvailableQuant = ISr.Instock - ISr.RsrvQty;
+					if (ORr.Reserved==0) then begin
+						ORrw.AvailableQuant = ISr.Instock - ISr.RsrvQty;
+					end else begin
+						ORrw.AvailableQuant = ISr.Instock - (ISr.RsrvQty - ORrw.Quant);
+					end;
 			end;
 			MatRowPut(ORr,i,ORrw);
 		end;
