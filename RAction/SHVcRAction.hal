@@ -1921,3 +1921,27 @@ begin
   return;
 end;
 
+
+global
+function LongInt SHVcRecordInIndex(record SHVc SHr,string indexname)	//Edit----------------------Dima  25.09.2015
+begin
+  LongInt res;
+  
+  res = 1;
+  
+  if ((SHr.OKFlag!=0) and (Blank(SHr.NPCityRecipient) or SHr.NPStatus==USetStr(31063)) ) then begin 		//Edit----------------------Dima  26.08.2015
+    if (indexname=="ActFinishSerNr")  then begin res = 0; end;
+    if (indexname=="ActFinishOrderKey")  then begin res = 0; end;
+    if (indexname=="ActFinishOKFlag")  then begin res = 0; end;
+    if (indexname=="ActFinishCustCode")  then begin res = 0; end;
+    if (indexname=="ActFinishShipDate")  then begin res = 0; end;
+    if (indexname=="ActFinishCustName")  then begin res = 0; end;
+    if (indexname=="ActFinishSorting")  then begin res = 0; end;
+    if (indexname=="ActFinishOfficialSerNr")  then begin res = 0; end;
+    if (indexname=="ActFinishShipOkDate")  then begin res = 0; end;
+    if (indexname=="ActFinishNPStatus")  then begin res = 0; end;
+  end;  //Edit--------------------------------------------------------------------------------------------------------------Dima  26.08.2015
+
+  SHVcRecordInIndex = res;
+  return;
+end;

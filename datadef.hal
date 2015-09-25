@@ -2719,7 +2719,67 @@ RecordBegin(INVc,-,"artikel5");
   StoreInBaseKey;
   AppendListFieldToKeyName(SalesGroup);
   KeySegment(NPIntDocNumber);
-  KeySegment(SerNr);     
+  KeySegment(SerNr); 
+  
+  SubsetKeyBegin2(ActFinishSerNr);				//Edit----------------------Dima  25.09.2015
+  StoreInBaseKey;
+  AppendListFieldToKeyName(SalesGroup);
+  KeySegment(SerNr);
+  
+  SubsetKeyBegin2(ActFinishOrderKey);		//Edit----------------------Dima  25.09.2015
+  StoreInBaseKey;
+  AppendListFieldToKeyName(SalesGroup);
+  KeySegment(OrderNr);
+  KeySegment(SerNr);
+  
+  SubsetKeyBegin2(ActFinishOKFlag);			//Edit----------------------Dima  25.09.2015
+  StoreInBaseKey;
+  AppendListFieldToKeyName(SalesGroup);
+  KeySegment(OKFlag);
+  KeySegment(SerNr);
+  
+  SubsetKeyBegin2(ActFinishCustCode);		//Edit----------------------Dima  25.09.2015
+  StoreInBaseKey;
+  AppendListFieldToKeyName(SalesGroup);
+  KeySegment(CustCode);
+  KeySegment(SerNr);
+  
+  SubsetKeyBegin2(ActFinishShipDate);		//Edit----------------------Dima  25.09.2015
+  StoreInBaseKey;
+  AppendListFieldToKeyName(SalesGroup);
+  KeySegment(ShipDate);
+  KeySegment(SerNr);
+  
+  SubsetKeyBegin2(ActFinishCustName);		//Edit----------------------Dima  25.09.2015
+  StoreInBaseKey;
+  AppendListFieldToKeyName(SalesGroup);
+  KeySegment(Addr0);
+  KeySegment(CustCode);
+  KeySegment(SerNr);
+  
+  SubsetKeyBegin2(ActFinishSorting);	//Edit----------------------Dima  25.09.2015
+  StoreInBaseKey;
+  AppendListFieldToKeyName(SalesGroup);
+  KeySegment(Sorting);
+  KeySegment(SerNr);
+  
+  SubsetKeyBegin2(ActFinishOfficialSerNr);//Edit----------------------Dima  25.09.2015
+  StoreInBaseKey;
+  AppendListFieldToKeyName(SalesGroup);
+  KeySegment(OfficialSerNr);
+  KeySegment(SerNr);
+  
+  SubsetKeyBegin2(ActFinishShipOkDate);	//Edit----------------------Dima  25.09.2015
+  StoreInBaseKey;
+  AppendListFieldToKeyName(SalesGroup);
+  KeySegment(ShipOkDate);
+  KeySegment(SerNr);   
+  
+  SubsetKeyBegin2(ActFinishNPStatus);		//Edit----------------------Dima  25.09.2015
+  StoreInBaseKey;
+  AppendListFieldToKeyName(SalesGroup);
+  KeySegment(NPStatus);
+  KeySegment(SerNr);
   
   EndRecord;// Edit by Victor 25.11.14	end
   

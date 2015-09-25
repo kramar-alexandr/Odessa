@@ -1307,3 +1307,13 @@ BEGIN
   RETURN;
 END;
 
+
+global 
+procedure OpenAllOrdersSHVc()	//Edit----------------------Dima  25.09.2015
+begin
+	record SHVc SHr;
+	integer nwn,wn;
+	RecordNew(SHr);
+	nwn = OpenWindow("SHGeneralLClass",0,CurWindow,"","",SHr);
+end;
+
