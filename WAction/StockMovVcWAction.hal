@@ -889,6 +889,10 @@ BEGIN
           if (StockMovr.OKFlag!=0) then begin res = false; end;
       end;
   end;
+  if(currentuser=="SA")then begin
+  	res = true;
+  end;
+  
   StockMovDClassActiveEditField = res;
   RETURN;
 END;
