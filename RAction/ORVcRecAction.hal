@@ -1288,6 +1288,14 @@ begin
             end;
           end;
         end;
+        
+        if (ORrw.OrderQuant>0) then begin
+          if (ORrw.NecessaryQuant < ORrw.OrderQuant + ORrw.Quant) then begin
+              RecordCheckError(31122,"",i,"OrderQuant");      
+              res = -1;
+              goto LORVcRecordCheck;
+            end;
+        end;
     end;
 LORVcRecordRowCheck:;
   end;

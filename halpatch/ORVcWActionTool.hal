@@ -1336,7 +1336,7 @@ end;
 
 
 
-global procedure GetAvailableItems(var record ORVc ORr)
+global procedure GetAvailableItems(var record ORVc ORr)	//Edit----------------------Dima  29.09.2015
 Begin
 	row ORVc ORrw;
 	integer rwcnt,i;
@@ -1350,8 +1350,10 @@ Begin
 		ISr.Location = ";;;";
 		if (ReadFirstMain(ISr,2,true)) then begin
 			ORrw.StockQuant = ISr.Instock - ISr.RsrvQty;
-			ORrw.OrderQuant = 0;
-			ORrw.ProcessingQuant = 0;
+			if (blank(ORrw.OrderQuant) and blank(ORrw.ProcessingQuant)) then begin
+				ORrw.OrderQuant = 0;
+				ORrw.ProcessingQuant = 0;
+			end;			
 			ISr.Code = ORrw.ArtCode;
 			ISr.Location = ORr.Location;
 			if (ReadFirstMain(ISr,2,true)) then begin
@@ -1366,5 +1368,6 @@ Begin
 		end;
 	end;
 
-
 end;
+
+

@@ -5138,7 +5138,7 @@ begin
   end;
 	CheckBox(h3 - 30,v+=40,0,"Самовывоз",SelfDelivery);	//Edit----------------------Dima  16.09.2015
 
-  ButtonFrame(h4-30,v=20,110,10,"Статус"); //Edit***************************Sasha2,14:34 14.07.2014 {
+  ButtonFrame(h4-30,v=20,110,11,"Статус"); //Edit***************************Sasha2,14:34 14.07.2014 {
   RadioButton(h4-30,v,0,0,"Новый",CustomStatusFlag);
   RadioButton(h4-30,v+=16,1,0,"В обработке",CustomStatusFlag);
   RadioButton(h4-30,v+=16,2,0,"Подтвержден",CustomStatusFlag);

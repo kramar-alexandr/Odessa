@@ -661,6 +661,7 @@ BEGIN
 						MatRowGet(ORr,j,ORrw);
 						if (ORrw.UID == StockMovrw.ORRowUID) then begin
 							ORrw.ProcessingQuant = ORrw.ProcessingQuant - StockMovrw.OrderProcessing;
+							LogText(0,"remove...  SM " & StockMovr.SerNr & "  "& StockMovrw.ArtCode  &" processing qty " & "  SM: " & StockMovrw.OrderProcessing & " OR: " & ORrw.ProcessingQuant);
 							MatRowPut(ORr,j,ORrw);
 							j = rwcnt2;
 						end;
@@ -825,7 +826,7 @@ begin
 				if (orders[i]==SMrw.ORSerial) then begin
 					for(j=0;j<rwcnt2;j=j+1) begin
 						MatRowGet(ORr,j,ORrw);
-						if (ORrw.UID == SMrw.ORRowUID) then begin						
+						if (ORrw.UID == SMrw.ORRowUID) then begin	
 							receive = Min(SMrw.Quant,SMrw.OrderProcessing);
 							ORrw.ProcessingQuant = ORrw.ProcessingQuant - SMrw.OrderProcessing;
 							ORrw.OrderQuant = ORrw.OrderQuant - receive;
@@ -833,7 +834,7 @@ begin
 							MatRowPut(ORr,j,ORrw);
 							ORVc_PasteQuant(ORr,j,true,chsum);
 							j = rwcnt2;
-							//LogText(0,"reserved.... " & SMrw.ArtCode & "  " & receive);
+							LogText(0,"reserved....  " & SMr.SerNr & " -> " & ORr.SerNr & " ArtCode:" & SMrw.ArtCode & "  " & receive & " qty:" & ORrw.Quant);
 						end;
 					end;    	
 				end;

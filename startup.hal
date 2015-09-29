@@ -198,6 +198,7 @@ begin
 	 
 	 SString(31120,"Відправлено");
 	 SString(31121,"Прибув у відділення");
+	 SString(31122,"Кол-во заказанного товара превышает кол-во необходимого");
  
   
   Maintenance("Экспорт склада CSV",ExportStockCSVClass,ExportStockCSVMn,modSY);
