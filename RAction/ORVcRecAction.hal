@@ -428,6 +428,7 @@ begin
   if(ORr.FeedBackStatus==3 and ORr.FeedBackStatus > OR2r.FeedBackStatus) then begin	//Edit----------------------Dima  31.08.2015
   	ORr.CustomStatusFlag = 10;
 		ORr.Closed = 1;
+		ORr.Addr0 = USetStr(31112) & ORr.Addr0;
 	end;   
   
   if (ORr.OKFlag==0) then begin
@@ -2098,7 +2099,7 @@ begin
 	end;		
   if (OR2r.Closed==0 and ORr.Closed!=0 and ORr.CustomStatusFlag!=10) then begin //Edit***************************Sasha2,16:19 04.02.2015 {
     ORr.CustomStatusFlag = 10;
-    ORr.Comment = USetStr(31112) & ORr.Comment;
+    ORr.Addr0 = USetStr(31112) & ORr.Addr0;
   end; //Edit***************************Sasha2,16:19 04.02.2015 }
   if(ORr.DeliveryNewPost != 0)then begin
 	  if(ORr.NPPhone == OR2r.NPPhone and (ORr.NPLastName != OR2r.NPLastName or ORr.NPFirstName != OR2r.NPFirstName)) then begin
@@ -2119,7 +2120,7 @@ begin
   if(OR2r.FeedBackStatus==3 and ORr.FeedBackStatus > OR2r.FeedBackStatus) then begin 
   		//OR.Closed sets in the begining of ORVcRecordCheck
   			ORr.CustomStatusFlag = 10;//Edit----------------------Dima  31.08.2015
-  			ORr.Comment = USetStr(31112) & ORr.Comment;
+  			ORr.Addr0 = USetStr(31112) & ORr.Addr0;
   end;    
       
   Recalculate_CustomStatusFlagText(ORr); //Edit----------------------Dima  24.03.2015

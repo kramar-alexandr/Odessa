@@ -1320,6 +1320,7 @@ begin
   record ORVc ORr,oldORr;
   record ARVc ARr;
 	record IVVc IVr,IV1r;
+	record SHVc SHr;
   row IPVc IPrw;
 	val orderedSum;
 	integer rwcnt,i;
@@ -1354,10 +1355,13 @@ begin
 			
 			ORr.SerNr = serialNr;
 			if (ReadFirstMain(ORr,1,true)) then begin
-				if (ORr.Sum4 == orderedSum) then begin
-						RecordCopy(oldORr,ORr);
-      			ORr.CustomStatusFlag = 9; //order is finished;
-      			RecordUpdate(oldORr,ORr,true);
+				SHr.OrderNr = ORr.SerNr;
+				if (ReadFirstKey("OrderKey",SHr,1,true)) then begin
+					if (ORr.Sum4 == orderedSum and SHr.OKFlag!=0) then begin
+							RecordCopy(oldORr,ORr);
+      				ORr.CustomStatusFlag = 9; //order is finished;
+      				RecordUpdate(oldORr,ORr,true);
+					end;
 				end;	
 			end;		
 			
