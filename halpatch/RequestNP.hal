@@ -330,7 +330,8 @@ begin
 	AddTextToArea("" & chr(13) & chr(10),mainRequest);
 	AddTextToArea("" & chr(13) & chr(10),mainRequest);
 
-	//writeareatofile(mainRequest,"1Request.txt",0);
+	writeareatofile(mainRequest,"1CreateENRequest.txt",0);
+	
 	//messagebox(0,"In");
 
   if(MySendRawWebRequest(host,"443",true,"POST",page & getParam,"text/xml","",false,mainRequest,replyarea,10))then begin  //WORK! 
