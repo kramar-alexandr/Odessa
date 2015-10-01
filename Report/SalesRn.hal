@@ -185,9 +185,9 @@ time timeFrom, timeTo;
 	IVr.InvDate = RepSpec.sStartDate;
 	While (LoopKey("InvDate",IVr,1,TrHs)) begin
 		testf=true;
-		cred = 1;
+		cred = 1;		
 		if(IVr.InvType==kInvoiceTypeCredit)then begin
-			cred = -1;
+			cred = -1;			
 		end;	
 		if (IVr.InvDate > RepSpec.sEndDate) then begin	TrHs=false;	testf=false;	end;		
 		if (nonblank(RepSpec.f3) and (IVr.Location!=RepSpec.f3)) then begin	testf=false;	end;
@@ -270,11 +270,14 @@ time timeFrom, timeTo;
 								rwGPpercent = rwGP*100/ivrowqtycost;
 								total2 = total2 + ivrowqtycost;
 								total3 = total3 + rwGP;
-															
-						end else begin //Edit***************************Sasha2,17:57 16.02.2015 }
+												
+						end else begin //Edit***************************Sasha2,17:57 16.02.2015 }			
 							rowCostUnit = IVrw.FIFORowVal/IVrw.Quant*cred;
 							ivrowqtycost = IVrw.FIFORowVal;
-							total2 = total2 + IVrw.FIFORowVal;
+							if (IVrw.Quant<0) then begin
+								ivrowqtycost = -ivrowqtycost;	//Edit----------------------Dima  01.10.2015 (problems with return of goods)
+							end;		
+							total2 = total2 + ivrowqtycost;
 							//total3 = total3 + IVrw.rowGP;// Edit ************************** Wednesday, 1 July 2015 15:36:00
 							total3 = total3 + (rowSum-ivrowqtycost)*cred;
 							//rwGP = IVrw.rowGP*cred;// Edit ************************** Wednesday, 1 July 2015 15:34:30
