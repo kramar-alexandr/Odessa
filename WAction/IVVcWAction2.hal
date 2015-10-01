@@ -712,6 +712,12 @@ BEGIN
       res = ActiveField(IVr,IV2r,rownr,fieldname,wnst,true);
     end;
   end;
+  
+  
+  if (fieldname=="FIFO" or fieldname=="FIFORowVal" and CurrentUser=="SA") then begin
+		res = true;		//Edit------------------FIX!!!--------------------Dima  01.10.2015
+	end;  
+  
 LIVDClassActiveEditField:;
   IVDClassActiveEditField = res;
   RETURN;
