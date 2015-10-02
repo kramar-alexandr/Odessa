@@ -259,7 +259,12 @@ time timeFrom, timeTo;
   							end;
 							end; RESETLOOP(SHp);
 							sum = MulRateToBase1(IVr.CurncyCode,IVrw.Sum,IVr.FrRate,IVr.ToRateB1,IVr.ToRateB2,IVr.BaseRate1,IVr.BaseRate2,DefaultCurRoundOff);
+							
 							if (printf) then begin
+								if(SHrw.FIFORowVal/SHrw.Ship/SHrw.BBCostPrice>1.3 or SHrw.FIFORowVal/SHrw.Ship/SHrw.BBCostPrice<-1.3)then begin
+									SHrw.FIFORowVal = SHrw.BBCostPrice*SHrw.Ship;// Edit ************************** Friday, 2 October 2015 16:33:42
+								end;
+							
 								ivrowqtycost = (SHrw.FIFORowVal/SHrw.Ship)*IVrw.Quant;
 								rowCostUnit = SHrw.FIFORowVal/SHrw.Ship*cred;
 							end else begin
@@ -270,8 +275,16 @@ time timeFrom, timeTo;
 								rwGPpercent = rwGP*100/ivrowqtycost;
 								total2 = total2 + ivrowqtycost;
 								total3 = total3 + rwGP;
+<<<<<<< Updated upstream
 												
 						end else begin //Edit***************************Sasha2,17:57 16.02.2015 }			
+=======
+															
+						end else begin //Edit***************************Sasha2,17:57 16.02.2015 }
+							if(IVrw.FIFORowVal/IVrw.Quant*cred/IVrw.BasePrice>1.3 or IVrw.FIFORowVal/IVrw.Quant*cred/IVrw.BasePrice<-1.3)then begin
+								IVrw.FIFORowVal = IVrw.BasePrice*IVrw.Quant;// Edit ************************** Friday, 2 October 2015 16:33:42
+							end;
+>>>>>>> Stashed changes
 							rowCostUnit = IVrw.FIFORowVal/IVrw.Quant*cred;
 							ivrowqtycost = IVrw.FIFORowVal;
 							if (IVrw.Quant<0) then begin
