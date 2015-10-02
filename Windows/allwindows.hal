@@ -6608,9 +6608,12 @@ t=1;
   MatCol(t,210,"Получ.кол.",0,Quant,true,0);
   MatCol(t,272,"Наименование",0,Spec,false,0);
   if (UserCanAction("ViewCostPrice",true)) then begin //Edit***************************Sasha2,10:34 10.11.2014
-  	MatCol(t,-260,"Старая цена",0,SentOldPrice,true,0);
-  	MatCol(t,-160,"Накл. расх.",0,SentExtraSCost,true,0);
-  	MatCol(t,-80,"Новая цена",0,SentNewPrice,true,0);
+  	MatCol(t,-250,"Старая цена",0,SentOldPrice,true,0);
+  	MatCol(t,-200,"OldPrice",0,OldPrice,true,0);
+  	//MatCol(t,-160,"Накл. расх.",0,SentExtraSCost,true,0);
+  	MatCol(t,-150,"NewPrice",0,NewPrice,true,0);
+  	MatCol(t,-100,"Новая цена",0,SentNewPrice,true,0);
+  	MatCol(t,-50,"FIFORow",0,FIFORowVal,true,0);
   end; //Edit***************************Sasha2,10:35 10.11.2014
 
 t=0;
