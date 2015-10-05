@@ -1,4 +1,6 @@
 external function val MulRateToBase1(var string,val,val,val,val,val,val,roundmode); //Edit***************************Sasha2,9:40 17.02.2015
+external function val AbsoluteVal(val);
+
 SetLangMode(LangRussian,"RUS",0);
 
 
@@ -260,28 +262,62 @@ time timeFrom, timeTo;
 							end; RESETLOOP(SHp);
 							sum = MulRateToBase1(IVr.CurncyCode,IVrw.Sum,IVr.FrRate,IVr.ToRateB1,IVr.ToRateB2,IVr.BaseRate1,IVr.BaseRate2,DefaultCurRoundOff);
 							if (printf) then begin
-								if(SHrw.FIFORowVal/SHrw.Ship/SHrw.BBCostPrice>1.3 or SHrw.FIFORowVal/SHrw.Ship/SHrw.BBCostPrice<-1.3)then begin
-									SHrw.FIFORowVal = SHrw.BBCostPrice*SHrw.Ship;// Edit ************************** Friday, 2 October 2015 17:11:02
+								if(AbsoluteVal(SHrw.FIFORowVal/SHrw.Ship)>SHrw.BBCostPrice)then begin
+									if(SHrw.FIFORowVal/SHrw.Ship/SHrw.BBCostPrice>1.5 or SHrw.FIFORowVal/SHrw.Ship/SHrw.BBCostPrice<-1.5)then begin
+										SHrw.FIFORowVal = SHrw.BBCostPrice*SHrw.Ship;// Edit ************************** Friday, 2 October 2015 17:11:02
+									end;
 								end;
+								if(AbsoluteVal(SHrw.FIFORowVal/SHrw.Ship)<SHrw.BBCostPrice)then begin
+									if(SHrw.FIFORowVal/SHrw.Ship/SHrw.BBCostPrice<0.5 or SHrw.FIFORowVal/SHrw.Ship/SHrw.BBCostPrice>-0.5)then begin
+										SHrw.FIFORowVal = SHrw.BBCostPrice*SHrw.Ship;// Edit ************************** Friday, 2 October 2015 17:11:02
+									end;
+								end;
+								if(SHrw.FIFORowVal==0 and SHrw.BBCostPrice>0)then begin
+									SHrw.FIFORowVal = SHrw.BBCostPrice*SHrw.Ship;
+								end;
+									
 								ivrowqtycost = (SHrw.FIFORowVal/SHrw.Ship)*IVrw.Quant;
+								if (IVrw.Quant<0 or IVr.InvType==kInvoiceTypeCredit) then begin
+									if(ivrowqtycost>0)then begin
+										ivrowqtycost = -ivrowqtycost;	//Edit----------------------Dima  01.10.2015 (problems with return of goods)
+									end;
+								end;
+								
+								
 								rowCostUnit = SHrw.FIFORowVal/SHrw.Ship*cred;
 							end else begin
 								ivrowqtycost = IVrw.BasePrice*IVrw.Quant;
 								rowCostUnit = IVrw.BasePrice*cred;
-							end;								
+							end;						
+							
+										
 								rwGP = sum - ivrowqtycost;
 								rwGPpercent = rwGP*100/ivrowqtycost;
 								total2 = total2 + ivrowqtycost;
 								total3 = total3 + rwGP;
 												
 						end else begin //Edit***************************Sasha2,17:57 16.02.2015 }			
-							if(IVrw.FIFORowVal/IVrw.Quant*cred/IVrw.BasePrice>1.3 or IVrw.FIFORowVal/IVrw.Quant*cred/IVrw.BasePrice<-1.3)then begin
-								IVrw.FIFORowVal = IVrw.BasePrice*IVrw.Quant;// Edit ************************** Friday, 2 October 2015 17:11:05
+							
+							if(AbsoluteVal(IVrw.FIFORowVal/IVrw.Quant*cred)>IVrw.BasePrice)then begin
+								if(IVrw.FIFORowVal/IVrw.Quant*cred/IVrw.BasePrice>1.6 or IVrw.FIFORowVal/IVrw.Quant*cred/IVrw.BasePrice<-1.6)then begin
+									IVrw.FIFORowVal = IVrw.BasePrice*IVrw.Quant;// Edit ************************** Friday, 2 October 2015 17:11:05
+								end;
 							end;
-							rowCostUnit = IVrw.FIFORowVal/IVrw.Quant*cred;
-							ivrowqtycost = IVrw.FIFORowVal;
-							if (IVrw.Quant<0) then begin
-								ivrowqtycost = -ivrowqtycost;	//Edit----------------------Dima  01.10.2015 (problems with return of goods)
+							if(AbsoluteVal(IVrw.FIFORowVal/IVrw.Quant*cred)<IVrw.BasePrice)then begin
+								if(IVrw.FIFORowVal/IVrw.Quant*cred/IVrw.BasePrice<0.5 or IVrw.FIFORowVal/IVrw.Quant*cred/IVrw.BasePrice>-0.5)then begin
+									IVrw.FIFORowVal = IVrw.BasePrice*IVrw.Quant;// Edit ************************** Friday, 2 October 2015 17:11:05
+								end;
+							end;
+							if(IVrw.FIFORowVal==0 and IVrw.BasePrice>0)then begin
+								IVrw.FIFORowVal = IVrw.BasePrice*IVrw.Quant;
+							end;
+							
+							rowCostUnit = IVrw.FIFORowVal/IVrw.Quant;
+							ivrowqtycost = IVrw.FIFORowVal*cred;
+							if (IVrw.Quant<0 or IVr.InvType==kInvoiceTypeCredit) then begin
+								if(ivrowqtycost>0)then begin
+									ivrowqtycost = -ivrowqtycost;	//Edit----------------------Dima  01.10.2015 (problems with return of goods)
+								end;
 							end;		
 							total2 = total2 + ivrowqtycost;
 							//total3 = total3 + IVrw.rowGP;// Edit ************************** Wednesday, 1 July 2015 15:36:00
