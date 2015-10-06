@@ -49,6 +49,7 @@ external procedure GetFullCurncyRate (var string,Date,var val,var val,var val,va
 external procedure ORVc_PasteQuant(var record ORVc,Integer,Boolean,var Boolean);//Edit----------------------Dima  20.08.2015
 external procedure ORSumup(var record ORVc);//Edit----------------------Dima  20.08.2015
 external procedure GetAvailableItems(var record ORVc);	//Edit----------------------Dima  24.09.2015
+external updating procedure UnOk_StockMovVc(var record StockMovVc, boolean);
 
 function val Min(val v1,val v2)
 begin
@@ -590,188 +591,7 @@ BEGIN
   RETURN;
 END;
 
-global
-function LongInt StockMovVcRecordRemoveTest(var record StockMovVc StockMovr,record StockMovVc StockMov2r,LongInt long3,LongInt long4)
-BEGIN
-  LongInt res;
-  record DBLockBlock DBLockRec;
 
-  res = 1;
-  BlockLoad(DBLockRec);
-  if (StockMovr.OKFlag!=0) then begin
-    if (StockMovr.TransDate<=DBLockRec.DeleteBeforeDate) then begin
-      goto LStockMovVcRecordRemoveTest;
-    end;
-    if (long3>0) then begin
-      MessageBox(1544,"");
-    end;
-    res = 0;
-  end;
-  if (StockMovr.SentOKFlag!=0) then begin
-    if (StockMovr.SentTransDate<=DBLockRec.DeleteBeforeDate) then begin
-      goto LStockMovVcRecordRemoveTest;
-    end;
-    if (long3>0) then begin
-      MessageBox(1544,"");
-    end;
-    res = 0;
-  end;
-  if (StockMovr.OrdFlag!=0) then begin
-    if (long3>0) then begin
-      MessageBox(1544,"");
-    end;
-    res = 0;
-  end;
-LStockMovVcRecordRemoveTest:;
-  StockMovVcRecordRemoveTest = res; 
-  RETURN;
-END;
-
-global
-updating function LongInt StockMovVcRecordRemove(var record StockMovVc StockMovr,record StockMovVc StockMov2r,LongInt stat,LongInt long4)
-BEGIN
-  LongInt res;
-  integer rwcnt,i,rwcnt2,j;
-  row ORVc ORrw;
-  row StockMovVc StockMovrw;
-  record ORVc ORr;
-
-  if (StockMovr.IntORNo!=-1) then begin
-    if (UpdateIntOrderFromStockMov(StockMov2r,StockMovr,false)) then begin end;
-  end;
-  if (StockMovr.OKFlag==0) then begin
-    StockMovSetPositionStatus(StockMovr,0);
-  end;
-  UpdateInStockMovFromStockMov(StockMovr,true);
-  if (UpdateForkLiftQueue(StockMovr,true)) then begin end;
-  
-  if (nonblank(StockMovr.OfficialSerNr)) then begin 
-    DeleteOffSerNr(StockMovr.SerNr,"StockMovVc");
-  end;
-  
-  rwcnt = MatRowCnt(StockMovr);  
-  for(i=0;i<rwcnt;i=i+1) begin
-  	MatRowGet(StockMovr,i,StockMovrw);
-  	
-		if (StockMovrw.ORSerial>0) then begin						//Edit----------------------Dima  18.08.2015
-				ORr.SerNr = StockMovrw.ORSerial;
-				if (ReadFirstMain(ORr,1,true)) then begin				
-					rwcnt2 = MatRowCnt(ORr);
-					for(j=0;j<rwcnt2;j=j+1) begin
-						MatRowGet(ORr,j,ORrw);
-						if (ORrw.UID == StockMovrw.ORRowUID) then begin
-							ORrw.ProcessingQuant = ORrw.ProcessingQuant - StockMovrw.OrderProcessing;
-							LogText(0,"remove...  SM " & StockMovr.SerNr & "  "& StockMovrw.ArtCode  &" processing qty " & "  SM: " & StockMovrw.OrderProcessing & " OR: " & ORrw.ProcessingQuant);
-							MatRowPut(ORr,j,ORrw);
-							j = rwcnt2;
-						end;
-					end;	
-				end;
-				RecordStore(ORr,true);
-		end;			
-	end;	//Edit----------------------Dima  20.08.2015
-		  
-  
-  StockMovVcRecordRemove = res;
-  RETURN;
-END;
-
-global
-updating function LongInt StockMovVcRecordRemoveAfter(var record StockMovVc StockMovr,record StockMovVc StockMov2r,LongInt stat,LongInt long4)
-BEGIN
-  LongInt res;
-
-  if (StockMovr.Reserved!=0) then begin
-    StockMovUpdateReserved(StockMovr,true,true);
-  end;
-  StockMovVcRecordRemoveAfter = res;
-  RETURN;
-END;
-
-
-
-
-
-global updating
- procedure WriteProcessQtyBackToORVc(row StockMovVc SMrw2,var row StockMovVc SMrw,boolean found)//Edit----------------------Dima  04.09.2015
-begin
-  integer rwcnt,j;
-  row ORVc ORrw;
-  record ORVc ORr;
-
-
- 	if (SMrw2.ORSerial>0) then begin		//if rewriting need					
-
-				ORr.SerNr = SMrw2.ORSerial;
-				if (ReadFirstMain(ORr,1,true)) then begin				
-					rwcnt = MatRowCnt(ORr);
-					for(j=0;j<rwcnt;j=j+1) begin
-						MatRowGet(ORr,j,ORrw);
-						if (ORrw.UID == SMrw2.ORRowUID) then begin
-							
-							if (SMrw2.OrderProcessing > 0) then begin
-							//removing								
-								ORrw.ProcessingQuant = ORrw.ProcessingQuant - SMrw2.OrderProcessing;
-								MatRowPut(ORr,j,ORrw);
-							end;
-							
-							//insertion
-							if (found) then begin
-								MatRowGet(ORr,j,ORrw);
-								SMrw.OrderProcessing = Min(ORrw.OrderQuant - ORrw.ProcessingQuant,SMrw.OrdQuant);
-								ORrw.ProcessingQuant = ORrw.ProcessingQuant + SMrw.OrderProcessing;
-								MatRowPut(ORr,j,ORrw);
-								j = rwcnt;
-							end;			
-											
-						end; 
-					end;
-					
-					if (RecordStore(ORr,true)) then begin		end; 
-				end; 			 
- 	end;		
-
-end; 
-
-
-
-
-global updating procedure CheckDifferenceForWritingToORVc(record StockMovVc StockMovr,record StockMovVc StockMov2r)//Edit----------------------Dima  20.08.2015
-begin
-	integer rwcnt,rwcnt2,i,j,put;
-	row StockMovVc SMrw,SMrw2;
-	integer UID,diff;
-	boolean found;
-	
-	rwcnt = MatRowCnt(StockMov2r);
-	for(i=0;i<rwcnt;i=i+1) begin
-		MatRowGet(StockMov2r,i,SMrw2);
-		if (SMrw2.ORSerial>0) then begin
-				rwcnt2 = MatRowCnt(StockMovr);
-				found = false;
-				for(j=0;j<rwcnt2;j=j+1) begin
-					MatRowGet(StockMovr,j,SMrw);
-					if ((SMrw2.ORRowUID == SMrw.ORRowUID) and (SMrw2.ArtCode == SMrw.ArtCode)) then begin	
-						put = j;
-						j = rwcnt2;
-						found = true;
-						diff = SMrw.OrdQuant - SMrw2.OrdQuant;						
-					end;
-				end;
-				if (found == false) then begin  //row was deleted
-						diff = -SMrw2.OrdQuant;
-				end;
-				if (diff!=0) then begin		
-					WriteProcessQtyBackToORVc(SMrw2,SMrw,found);
-					if (found) then begin
-						MatRowPut(StockMovr,put,SMrw);
-					end;
-				end;
-		end;
-		
-	end;
-	RecordStore(StockMovr,true);
-end;
 
 
 procedure FoundUniqueOrdersFromStockMov(record StockMovVc SMr,var array longint orders)//Edit----------------------Dima  20.08.2015
@@ -913,35 +733,411 @@ begin
 			end; 	
 		end;		
 		
-		number = 1;
 		for(i=0;i<toDelete.length;i=i+1) begin
+			number = 1;
 			ORr.SerNr = toDelete[i];
 			if (ReadFirstMain(ORr,1,true)) then begin
-				while (ReadRecordToLink(SMrNow,number,ORr,RLinkr)) begin
-					if (ORr.SerNr == toDelete[i]) then begin
-						RecordDelete(RLinkr);	
-					end;					
+				while (ReadRecordLink(ORr,number,SMrtemp,RLinkr)) begin
+					if (SMrtemp.SerNr == SMrNow.SerNr) then begin
+						RecordDelete(RLinkr);					
+					end;										
 					number = number+1;
 				end;	
 			end;	
-		end;	
+		end;
+	
 		
 	end;
-	
-	
-	/*
-	for(i=0;i<toDelete.length;i=i+1) begin
-		ORr.SerNr = toDelete[i];
-			if (ReadFirstMain(ORr,i,true)) then begin
-				ReadRecordLink(SMrNow,number,ORr,RLinkr);
-				RecordDelete(RLinkr);
-				ReadRecordLink(ORr,number,SMrNow,RLinkr);
-				RecordDelete(RLinkr);				
-			end;			
-	end;	
-	*/
-  
 end;
+
+
+
+
+function Boolean CheckWritingQtyBackToORVc(row StockMovVc SMrw2,var row StockMovVc SMrw,boolean found,var longint sernr)//Edit----------------------Dima  04.09.2015
+begin
+  integer rwcnt,j;
+  row ORVc ORrw;
+  record ORVc ORr;
+  integer ORprocessTemp,SMprocessTemp;
+  boolean res;
+
+	res = true;
+ 	if (SMrw2.ORSerial>0) then begin		
+				ORr.SerNr = SMrw2.ORSerial;
+				if (ReadFirstMain(ORr,1,true)) then begin				
+					rwcnt = MatRowCnt(ORr);
+					for(j=0;j<rwcnt;j=j+1) begin
+						MatRowGet(ORr,j,ORrw);
+						if (ORrw.UID == SMrw2.ORRowUID) then begin
+							
+							if (SMrw2.OrderProcessing > 0) then begin						
+								ORprocessTemp = ORrw.ProcessingQuant - SMrw2.OrderProcessing;
+							end;
+							if (found) then begin
+								MatRowGet(ORr,j,ORrw);
+								SMprocessTemp = Min(ORrw.OrderQuant - ORprocessTemp,SMrw.OrdQuant);
+								ORprocessTemp = ORprocessTemp + SMprocessTemp;
+								j = rwcnt;
+							end;							
+							if (SMprocessTemp>ORrw.OrderQuant) then begin
+								res = false;
+								goto LCheckWritingQtyBackToORVc;
+							end;
+							if (ORprocessTemp<0 or ORprocessTemp>ORrw.NecessaryQuant-ORrw.Quant) then begin
+								res = false;
+								sernr = ORr.SerNr;
+								goto LCheckWritingQtyBackToORVc;
+							end;
+											
+						end; 
+					end;
+
+				end; 			 
+ 	end;		
+	LCheckWritingQtyBackToORVc:;
+	CheckWritingQtyBackToORVc = res;
+return;
+end; 
+
+
+
+
+global  function boolean CheckLogistics(record StockMovVc StockMovr,record StockMovVc StockMov2r,var integer rownr,var longint sernr)//Edit----------------------Dima  20.08.2015
+begin
+	integer rwcnt,rwcnt2,i,j,put;
+	row StockMovVc SMrw,SMrw2;
+	integer UID,diff;
+	boolean found,res;
+	
+	res = true;
+	rwcnt = MatRowCnt(StockMov2r);
+	for(i=0;i<rwcnt;i=i+1) begin
+		MatRowGet(StockMov2r,i,SMrw2);
+		if (SMrw2.ORSerial>0) then begin
+				rwcnt2 = MatRowCnt(StockMovr);
+				found = false;
+				for(j=0;j<rwcnt2;j=j+1) begin
+					MatRowGet(StockMovr,j,SMrw);
+					if ((SMrw2.ORRowUID == SMrw.ORRowUID) and (SMrw2.ArtCode == SMrw.ArtCode)) then begin	
+						rownr = j;
+						j = rwcnt2;
+						found = true;
+						diff = SMrw.OrdQuant - SMrw2.OrdQuant;						
+					end;
+				end;
+				if (found == false) then begin  //row was deleted
+						diff = -SMrw2.OrdQuant;
+				end;
+				if (diff!=0) then begin		
+					if (CheckWritingQtyBackToORVc(SMrw2,SMrw,found,sernr)==false) then begin
+						res = false;
+						goto LCheckLogistics;
+					end;
+				end;
+		end;		
+	end;
+	LCheckLogistics:;
+	CheckLogistics = res;
+return;
+end;
+
+
+global function boolean CheckReserveFromLogisitcs(record StockMovVc SMr,var integer rownr,var longint sernr)//Edit----------------------Dima  06.10.2015
+begin
+	row StockMovVc SMrw;
+	integer rwcnt,i,rwcnt2,j,k;
+	record ORVc ORr;
+	row ORVc ORrw;
+	array longint orders;
+	val receive;
+	val procQty,ordQty,Qty;	
+	Boolean res;
+
+	res = true;
+	rwcnt = MatRowCnt(SMr);
+		
+	FoundUniqueOrdersFromStockMov(SMr,orders);
+	
+	for(i=0;i<orders.length;i=i+1) begin
+		ORr.SerNr = orders[i];
+		if (ReadFirstMain(ORr,1,true)) then begin
+			rwcnt2 = MatRowCnt(ORr);
+
+			for(k=0;k<rwcnt;k=k+1) begin
+				MatRowGet(SMr,k,SMrw);
+				if (orders[i]==SMrw.ORSerial) then begin
+					for(j=0;j<rwcnt2;j=j+1) begin
+						MatRowGet(ORr,j,ORrw);
+						if (ORrw.UID == SMrw.ORRowUID) then begin	
+							receive = Min(SMrw.Quant,SMrw.OrderProcessing);
+							procQty = ORrw.ProcessingQuant - SMrw.OrderProcessing;
+							ordQty = ORrw.OrderQuant - receive;
+							Qty = ORrw.Quant + receive;
+
+							j = rwcnt2;
+							
+							if (procQty<0 or ordQty<0 or Qty>ORrw.NecessaryQuant) then begin
+								rownr = k;
+								res = false;
+								sernr = orders[i];
+								goto LCheckReserveFromLogisitcs;
+							end;
+						end;
+					end;    	
+				end;
+			end;
+
+		end;
+	end; 
+	LCheckReserveFromLogisitcs:;
+	CheckReserveFromLogisitcs = res;
+return;	 
+end;
+
+
+
+global  function boolean CheckRemoveLogistics(record StockMovVc StockMovr,var longint sernr)//Edit----------------------Dima  20.08.2015
+begin
+	integer rwcnt,rwcnt2,i,j;
+	row StockMovVc StockMovrw;
+	integer UID,diff;
+	boolean found,res;
+	record ORVc ORr;
+	row ORVc ORrw;
+	val procQty;
+	
+	res = true;
+  rwcnt = MatRowCnt(StockMovr);  
+  for(i=0;i<rwcnt;i=i+1) begin
+  	MatRowGet(StockMovr,i,StockMovrw);
+  		
+		if (StockMovrw.ORSerial>0) then begin						//Edit----------------------Dima  18.08.2015
+				ORr.SerNr = StockMovrw.ORSerial;
+				if (ReadFirstMain(ORr,1,true)) then begin				
+					rwcnt2 = MatRowCnt(ORr);
+					for(j=0;j<rwcnt2;j=j+1) begin
+						MatRowGet(ORr,j,ORrw);
+						if (ORrw.UID == StockMovrw.ORRowUID) then begin
+							procQty = ORrw.ProcessingQuant - StockMovrw.OrderProcessing;
+							j = rwcnt2;
+							
+							if (procQty<0) then begin
+									res = false;
+									sernr = ORr.SerNr;
+									goto LCheckRemoveLogistics;
+							end;	
+						end;
+					end;	
+				end;
+		end;
+	end;	
+		
+	LCheckRemoveLogistics:;
+	CheckRemoveLogistics = res;
+return;
+end;
+
+
+
+global
+function LongInt StockMovVcRecordRemoveTest(var record StockMovVc StockMovr,record StockMovVc StockMov2r,LongInt long3,LongInt long4)
+BEGIN
+  LongInt res,ORsernr;
+  record DBLockBlock DBLockRec;
+  integer rownr;
+
+  res = 1;
+  BlockLoad(DBLockRec);
+  if (StockMovr.OKFlag!=0) then begin
+    if (StockMovr.TransDate<=DBLockRec.DeleteBeforeDate) then begin
+      goto LStockMovVcRecordRemoveTest;
+    end;
+    if (long3>0) then begin
+      MessageBox(1544,"");
+    end;
+    res = 0;
+  end;
+  if (StockMovr.SentOKFlag!=0) then begin
+    if (StockMovr.SentTransDate<=DBLockRec.DeleteBeforeDate) then begin
+      goto LStockMovVcRecordRemoveTest;
+    end;
+    if (long3>0) then begin
+      MessageBox(1544,"");
+    end;
+    res = 0;
+  end;
+  if (StockMovr.OrdFlag!=0) then begin
+    if (long3>0) then begin
+      MessageBox(1544,"");
+    end;
+    res = 0;
+  end;
+  
+  if(CheckRemoveLogistics(StockMovr,ORsernr)==false) then begin		//Edit----------------------Dima  06.10.2015         
+        MessageBox(31123,ORsernr);              
+        res = 0; 
+        goto LStockMovVcRecordRemoveTest;  
+	end;
+  
+  
+LStockMovVcRecordRemoveTest:;
+  StockMovVcRecordRemoveTest = res; 
+  RETURN;
+END;
+
+global
+updating function LongInt StockMovVcRecordRemove(var record StockMovVc StockMovr,record StockMovVc StockMov2r,LongInt stat,LongInt long4)
+BEGIN
+  LongInt res;
+  integer rwcnt,i,rwcnt2,j;
+  row ORVc ORrw;
+  row StockMovVc StockMovrw;
+  record ORVc ORr;
+
+  if (StockMovr.IntORNo!=-1) then begin
+    if (UpdateIntOrderFromStockMov(StockMov2r,StockMovr,false)) then begin end;
+  end;
+  if (StockMovr.OKFlag==0) then begin
+    StockMovSetPositionStatus(StockMovr,0);
+  end;
+  UpdateInStockMovFromStockMov(StockMovr,true);
+  if (UpdateForkLiftQueue(StockMovr,true)) then begin end;
+  
+  if (nonblank(StockMovr.OfficialSerNr)) then begin 
+    DeleteOffSerNr(StockMovr.SerNr,"StockMovVc");
+  end;
+  
+  rwcnt = MatRowCnt(StockMovr);  
+  for(i=0;i<rwcnt;i=i+1) begin
+  	MatRowGet(StockMovr,i,StockMovrw);
+  	
+		if (StockMovrw.ORSerial>0) then begin						//Edit----------------------Dima  18.08.2015
+				ORr.SerNr = StockMovrw.ORSerial;
+				if (ReadFirstMain(ORr,1,true)) then begin				
+					rwcnt2 = MatRowCnt(ORr);
+					for(j=0;j<rwcnt2;j=j+1) begin
+						MatRowGet(ORr,j,ORrw);
+						if (ORrw.UID == StockMovrw.ORRowUID) then begin
+							ORrw.ProcessingQuant = ORrw.ProcessingQuant - StockMovrw.OrderProcessing;
+							LogText(0,"remove...  SM " & StockMovr.SerNr & "  "& StockMovrw.ArtCode  &" processing qty " & "  SM: " & StockMovrw.OrderProcessing & " OR: " & ORrw.ProcessingQuant);
+							MatRowPut(ORr,j,ORrw);
+							j = rwcnt2;
+						end;
+					end;	
+				end;
+				RecordStore(ORr,true);
+		end;			
+	end;	//Edit----------------------Dima  20.08.2015
+		  
+  
+  StockMovVcRecordRemove = res;
+  RETURN;
+END;
+
+global
+updating function LongInt StockMovVcRecordRemoveAfter(var record StockMovVc StockMovr,record StockMovVc StockMov2r,LongInt stat,LongInt long4)
+BEGIN
+  LongInt res;
+
+  if (StockMovr.Reserved!=0) then begin
+    StockMovUpdateReserved(StockMovr,true,true);
+  end;
+  StockMovVcRecordRemoveAfter = res;
+  RETURN;
+END;
+
+
+
+
+
+global updating
+ procedure WriteProcessQtyBackToORVc(row StockMovVc SMrw2,var row StockMovVc SMrw,boolean found)//Edit----------------------Dima  04.09.2015
+begin
+  integer rwcnt,j;
+  row ORVc ORrw;
+  record ORVc ORr;
+
+
+ 	if (SMrw2.ORSerial>0) then begin		//if rewriting need					
+
+				ORr.SerNr = SMrw2.ORSerial;
+				if (ReadFirstMain(ORr,1,true)) then begin				
+					rwcnt = MatRowCnt(ORr);
+					for(j=0;j<rwcnt;j=j+1) begin
+						MatRowGet(ORr,j,ORrw);
+						if (ORrw.UID == SMrw2.ORRowUID) then begin
+							
+							if (SMrw2.OrderProcessing > 0) then begin
+							//first remove row							
+								ORrw.ProcessingQuant = ORrw.ProcessingQuant - SMrw2.OrderProcessing;
+								MatRowPut(ORr,j,ORrw);
+							end;
+							
+							//then insert it again
+							if (found) then begin
+								MatRowGet(ORr,j,ORrw);
+								SMrw.OrderProcessing = Min(ORrw.OrderQuant - ORrw.ProcessingQuant,SMrw.OrdQuant);
+								ORrw.ProcessingQuant = ORrw.ProcessingQuant + SMrw.OrderProcessing;
+								LogText(0,"new quant  " & ORrw.ProcessingQuant);
+								MatRowPut(ORr,j,ORrw);
+								j = rwcnt;
+							end;			
+											
+						end; 
+					end;
+					
+					if (RecordStore(ORr,true)) then begin		end; 
+				end; 			 
+ 	end;		
+
+end; 
+
+
+
+
+global updating procedure CheckDifferenceForWritingToORVc(var record StockMovVc StockMovr,record StockMovVc StockMov2r)//Edit----------------------Dima  20.08.2015
+begin
+	integer rwcnt,rwcnt2,i,j,put;
+	row StockMovVc SMrw,SMrw2;
+	integer UID,diff;
+	boolean found;
+	
+	rwcnt = MatRowCnt(StockMov2r);
+	for(i=0;i<rwcnt;i=i+1) begin
+		MatRowGet(StockMov2r,i,SMrw2);
+		if (SMrw2.ORSerial>0) then begin
+				rwcnt2 = MatRowCnt(StockMovr);
+				found = false;
+				for(j=0;j<rwcnt2;j=j+1) begin
+					MatRowGet(StockMovr,j,SMrw);
+					if ((SMrw2.ORRowUID == SMrw.ORRowUID) and (SMrw2.ArtCode == SMrw.ArtCode) and (SMrw2.ORSerial == SMrw.ORSerial)) then begin	
+						put = j;
+						j = rwcnt2;
+						found = true;
+						diff = SMrw.OrdQuant - SMrw2.OrdQuant;				
+						LogText(0,put & "   " & diff);
+					end;
+				end;
+				if (found == false) then begin  //row was deleted
+						diff = -SMrw2.OrdQuant;
+				end;
+				if (diff!=0) then begin		
+					WriteProcessQtyBackToORVc(SMrw2,SMrw,found);
+					if (found) then begin
+						MatRowPut(StockMovr,put,SMrw);
+					end;
+				end;
+		end;
+		
+	end;
+	//RecordStore(StockMovr,true);
+end;
+
+
+
+
+
+
 
 
 
@@ -959,12 +1155,12 @@ BEGIN
   if ((StockMovr.SentOKFlag==0)) then begin
     if ((StockMovr.OKFlag!=0) and (StockMov2r.OKFlag==0)) then begin
       if (ihef==false) then begin
-        StockMovr.FrLocOKNr = NextLocOKNr(StockMovr.FrLocation);
+        StockMovr.FrLocOKNr = NextLocOKNr(StockMovr.FrLocation);       
       end;
     end;
   end else begin
     if ((StockMovr.SentOKFlag!=0) and (StockMov2r.SentOKFlag==0)) then begin
-      if (ihef==false) then begin
+      if (ihef==false) then begin     
         StockMovr.FrLocOKNr = NextLocOKNr(StockMovr.FrLocation);
         StockMovr.ToThrouLocOKNr = NextLocOKNr(StockMovr.ThrouLocation);
       end;
@@ -972,7 +1168,7 @@ BEGIN
   end;
   if ((StockMovr.OKFlag!=0) and (StockMov2r.OKFlag==0)) then begin
     if ((StockMovr.SentOKFlag!=0)) then begin
-      if (ihef==false) then begin
+      if (ihef==false) then begin    
         StockMovr.FrThrouLocOKNr = NextLocOKNr(StockMovr.ThrouLocation);
       end;
     end;
@@ -1038,7 +1234,15 @@ BEGIN
 		
   end; //Edit***************************Sasha2,14:27 11.02.2015 }
   
-
+  CheckDifferenceForWritingToORVc(StockMovr,StockMov2r);//Edit----------------------Dima  19.08.2015
+/*  
+  if ((StockMovr.OKFlag==0) and (StockMov2r.OKFlag!=0)) then begin		//UnOk//Edit----------------------Dima  02.10.2015
+    	UnOk_StockMovVc(StockMovr,true);
+  end;
+  if ((StockMovr.SentOKFlag==0) and (StockMov2r.SentOKFlag!=0)) then begin 
+    	UnOk_StockMovVc(StockMovr,false);
+  end;    	
+*/
 
 
   StockMovVcRecordUpdate = res;

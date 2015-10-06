@@ -17,6 +17,7 @@ external procedure FindStockValueInclStockReserv(LongInt,string,string,string,va
 external function Boolean DisallowFutureDateCheck(Boolean,Date,string,Integer);
 external updating procedure UpdateTrans_Stock(record TRVc);
 external function Integer IsUnOKAllowed_StockMovVc(record StockMovVc);
+//external function Integer IsUnOKAllowed_StockMovVc(record StockMovVc,boolean);
 external function Boolean AllowedToTakeFromThisLoc(record LocationVc);
 external function Integer CheckStockMovRowFromPosition(record StockMovVc,row StockMovVc,record LocationVc,record INVc,
                                               Integer,Boolean,var LongInt,var string,var integer,var string,boolean);
@@ -53,9 +54,12 @@ external function Boolean SerialNrAvail(string,string,string,val);
 external procedure FindStockValue(string,string,var record ItemStatusVc);
 external function Boolean Date2Test(string,Date,string,Integer);
 external function Boolean SerNrTestStockMovVc(LongInt,Date,var Boolean);
+external function boolean CheckReserveFromLogisitcs(record StockMovVc,var integer,var longint);//Edit----------------------Dima  06.10.2015
+external  function boolean CheckLogistics(record StockMovVc,record StockMovVc,var integer,var longint);//Edit----------------------Dima  06.10.2015
+
 
 function Integer CheckStockMovRowToPosition(record StockMovVc SMp,row StockMovVc StockMovrw,record LocationVc LocToRec,record INVc INr,
-                                            Integer rownr,var LongInt error,var string errorstr,var integer errorrownr,var string fieldstr,boolean UnOKedCheckSerialf)
+                                            Integer rownr,var LongInt error,var string errorstr,var integer errorrownr,var string fieldstr,boolean UnOKedCheckSerialf)                                            
 BEGIN
   Integer res;
   string 20 topos,topos2;
@@ -589,13 +593,13 @@ BEGIN
   Boolean transreceivef,gentrans,transsendf,testf,test2f,checksendf,checkreceivef;
   val prev,orsrv;
   Integer errcode;
-  LongInt sernr;
+  LongInt sernr, ORsernr;
   string 20 frlocation,tolocation;
   string 255 frpos,topos;
   record POSVc POSr;
   string 255 objstr,errstr,oldOfficialSerNr,tstr,tstr2,c;
   record OrdSettBlock OrdSettRec;
-  Boolean unokf,intorf,shf;
+  Boolean unokf,intorf,shf,unoksent;
   transaction string 255 gRuniningMaint;
   record LegalInvNrBlock LINrb;
   row LegalInvNrBlock LINrbrw;
@@ -630,6 +634,14 @@ BEGIN
       if (SM2p.OKFlag==1) then begin unokf = true; end;
     end;
   end;
+  
+  if (SMp.SentOKFlag==0) then begin				//Edit----------------------Dima  02.10.2015 (UnOk)
+    if (stat==updatemode) then begin
+      if (SM2p.SentOKFlag==1) then begin unoksent = true; end;
+    end;
+  end;  
+
+
   if (unokf) then begin
     errcode = IsUnOKAllowed_StockMovVc(SMp);
     if (errcode!=0) then begin
@@ -640,7 +652,33 @@ BEGIN
       res = -1; 
     end;
     goto LCheckStockMovRecord;
-  end;  
+  end;
+
+/*  
+  if (unokf) then begin
+    errcode = IsUnOKAllowed_StockMovVc(SMp,true);
+    if (errcode!=0) then begin
+      error = errcode;
+      errorstr = "";
+      rownr = -1;
+      fieldstr = "TransDate";            
+      res = -1; 
+    end;
+    goto LCheckStockMovRecord;
+  end;
+  
+  if (unoksent) then begin														//Edit----------------------Dima  02.10.2015
+    errcode = IsUnOKAllowed_StockMovVc(SMp,false);
+    if (errcode!=0) then begin
+      error = errcode;
+      errorstr = "";
+      rownr = -1;
+      fieldstr = "TransDate";            
+      res = -1; 
+    end;
+    goto LCheckStockMovRecord;
+  end; 
+*/   
   if (stat==Rs_update) then begin
     if (SM2p.OKFlag!=0) then begin
       goto LCheckStockMovRecord;
@@ -1876,6 +1914,27 @@ already checked few lines above
     end;
     end;
   end;
+  
+  
+  if(CheckLogistics(SMp,SM2p,rownr,ORsernr)==false) then begin		//Edit----------------------Dima  06.10.2015
+        error = 31123;
+        errorstr = ORsernr;
+        fieldstr = "OrdQuant";                 
+        res = 31123; 
+        goto LCheckStockMovRecord;  
+	end;
+	
+	if ((SMp.OKFlag!=0) and (SM2p.OKFlag==0)) then begin
+    if (CheckReserveFromLogisitcs(SMp,rownr,ORsernr)==false) then begin
+        error = 31123;
+        errorstr = ORsernr;
+        fieldstr = "OrdQuant";                 
+        res = 31123; 
+        goto LCheckStockMovRecord; 
+		end;
+  end; 	  //Edit----------------------------------------------------------------Dima  06.10.2015
+  
+  
 LStockMovVcRecordCheck_GenTrans:;
   if (gentrans==false) then begin transsendf = false; end;
   if (gentrans==false) then begin transreceivef = false; end;

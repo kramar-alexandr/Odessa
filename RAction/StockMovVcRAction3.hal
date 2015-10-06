@@ -67,7 +67,6 @@ begin
   end;
   StockMovUpdateSerialNr(SMr,SM2r,true);
 
-
 //  StockMovUpdateCostPrice(StockMovr,StockMov2r);//JJRECALCSTOCK
 /*
 //JJRECALCSTOCK
@@ -297,7 +296,7 @@ BEGIN
 	end;*/ 
   
   
-	CheckDifferenceForWritingToORVc(StockMovr,StockMov2r);//Edit----------------------Dima  19.08.2015
+	//CheckDifferenceForWritingToORVc(StockMovr,StockMov2r);//Edit----------------------Dima  19.08.2015
 	if ((StockMovr.OKFlag!=0) and (StockMov2r.OKFlag==0)) then begin
     ReserveReceivedItems(StockMovr);
   end;   
