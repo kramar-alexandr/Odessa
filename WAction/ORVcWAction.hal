@@ -2219,11 +2219,11 @@ global
 function string 255 ParseSMStext(string text, record ORVc ORr)	//Edit----------------------Dima  02.07.2015
 begin
   record UserVc Userr;
-	string 10 replaceSum,replaceCard,replaceDate,replaceOrder;
+	string 10 replaceSum,replaceCard,replaceDate,replaceOrder,replaceCommission;
 	string 50 sum,card;
 	string 255 resString,temp;
   record SMSTextBlock SMSb;
-  val tempVal,tempsum;
+  val tempVal,tempsum,commission,tempCommission;
   roundmode rmde;
   
   BlockLoad(SMSb);	
@@ -2232,7 +2232,9 @@ begin
 	replaceCard = "%Card%";
 	replaceDate = "%Date%";
 	replaceOrder = "%Order%";
+	replaceCommission = "%Commission%";
 	
+	//Card
 	Userr.Code = ORr.SalesMan;
 	if (ReadFirstMain(Userr,1,true) and nonblank(Userr.CardNumber)) then begin
 				card = Userr.CardNumber;		
@@ -2240,24 +2242,37 @@ begin
 				card = SMSb.DefaultCard;
 	end;	
 	
-	
+	//Sum
 	rmde = SetRoundMode(0,kRoundingDirectionToFromPosInf,kRoundingModeTruncate,kRoundingStepNone);
 	tempsum = round(ORr.Sum4,rmde);// Edit ************************** Friday, 3 July 2015 10:17:36
 	if (tempsum<ORr.Sum4) then begin
 		tempsum = tempsum +1;
-	end;
+	end;	
 	
 	tempVal = Round(tempsum * 1.005,rmde);
 	if (tempVal<tempsum * 1.005) then begin
 		tempVal = tempVal +1;
 	end;
 	sum = tempVal;
+	
+	//Commission
+	if (ORr.Sum4*SMSb.Commission*0.01 < SMSb.CommissionMin) then begin
+		commission = SMSb.CommissionMin;
+	end else begin
+		commission = ORr.Sum4*SMSb.Commission*0.01;
+	end;
+	tempCommission = round(commission,SetRoundModeD(0));
+	if (tempCommission<commission) then begin
+		tempCommission = tempCommission +1;
+	end;
+	commission = tempCommission;	
 
 	temp = ReplaceAllSubStringInString(replaceCard,card,text);
 	resString = ReplaceAllSubStringInString(replaceSum,sum,temp);
 	temp = ReplaceAllSubStringInString(replaceOrder,ORr.CustOrdNr,resString);
+	resString = ReplaceAllSubStringInString(replaceCommission,commission,temp);
 
-ParseSMStext = temp;
+ParseSMStext = resString;
 return;
 end;
 

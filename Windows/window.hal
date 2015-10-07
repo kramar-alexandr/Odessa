@@ -2106,8 +2106,8 @@ begin
   real h,v,vs;
   WindowBegin("Текст СМС сообщений",SMSTextTClass,CGSbl,-);
   SetBlid(SMSTextBlock);
-  SetWRect(64,80,630,350);
-  vs = 20; h = 150;
+  SetWRect(64,80,630,450);
+  vs = 20; h = 170;
   
   Tile(0,20,false,"","Title1");
   TileButton(1,"Отправка реквизитов");
@@ -2119,8 +2119,10 @@ begin
   Tile(1,100,false,"","Title1");
   v=6;
   EditField(h,v+=vs,150,"Заголовок",Normal,Title1,false,0);
-  EditField(h,v+=vs,320,"Текст",Normal,Requisites,false,0);
+  EditField(h,v+=vs,360,"Текст",Normal,Requisites,false,0);
   EditField(h,v+=vs,150,"Реквизиты (по-умолчанию)",Normal,DefaultCard,false,0);
+  EditField(h,v+=30,80,"Комиссия (%)",Normal,Commission,false,0);
+  EditField(h,v+=vs,80,"Минимальная комиссия (грн)",Normal,CommissionMin,false,0);
   
   Tile(2,200,false,"","Title2");
   v=6;
