@@ -429,7 +429,11 @@ begin
   	ORr.CustomStatusFlag = 10;
 		ORr.Closed = 1;
 		ORr.Addr0 = USetStr(31112) & ORr.Addr0;
-	end;   
+	end;
+	
+	//if (ORr.CustomStatusFlag==10 and OR2r.CustomStatusFlag!=10) then begin		//Edit----------------------Dima  07.10.2015
+	//ORr.Reserved = 0;
+	//end;	   
   
   if (ORr.OKFlag==0) then begin
     if (stat==updatemode) then begin
@@ -1290,7 +1294,7 @@ begin
           end;
         end;
         
-        if (ORrw.OrderQuant>0) then begin
+        if (ORrw.OrderQuant>0) then begin							//Edit----------------------Dima  06.10.2015
           if (ORrw.NecessaryQuant < ORrw.OrderQuant + ORrw.Quant) then begin
               RecordCheckError(31122,"",i,"OrderQuant");      
               res = -1;
