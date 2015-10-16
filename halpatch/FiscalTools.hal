@@ -91,6 +91,7 @@ begin
   discountType = 0; //absolute value of discount
   totalRebate= 0 ;
   giftSum = 0;
+  cardSum = 0;
   prepaymentSum = 0;
 	rwcnt = MatRowCnt(IVr);
 	res = true;
@@ -142,7 +143,7 @@ begin
 		end;
 		if (IVrw.stp==kInvoiceRowTypeCreditCardPayment and IVrw.PayMode!="GC") then begin //Edit***************************Sasha2,15:02 27.07.2015
 			paymentStatus = 0;
-			cardSum = AbsoluteVal(IVrw.Sum) * 100;
+			cardSum = cardSum + AbsoluteVal(IVrw.Sum) * 100;
 		end;
 		
 		if (IVrw.stp==kInvoiceRowTypeGiftVoucherPayment or IVrw.PayMode=="GC") then begin //Edit***************************Sasha2,15:02 27.07.2015
