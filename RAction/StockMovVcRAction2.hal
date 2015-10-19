@@ -118,6 +118,8 @@ BEGIN
   LongInt res;
   string 10 curcode;
   val fr,to1,to2,br1,br2;
+  integer i,rwcnt;
+  row StockMovVc SMrw;
   Date bd;
   Time bt;
 
@@ -163,7 +165,18 @@ BEGIN
   if (HasLocalization("PRT")) then begin
     StockMovr.PlanSendTime = "";
     StockMovr.PlanSendDate = "";
-  end;  
+  end;
+  rwcnt = MatRowCnt(StockMovr);
+  for(i=0;i<rwcnt;i=i+1) begin
+		MatRowGet(StockMovr,i,SMrw);
+		if (nonblank(SMrw.ORSerial)) then begin
+			SMrw.ORSerial = "";
+			SMrw.ORRowUID = blankval;
+			SMrw.OrderProcessing = blankval;
+			MatRowPut(StockMovr,i,SMrw);
+		end;
+	end;
+	
   StockMovVcRecordDuplicate = res; 
   RETURN;
 END;
