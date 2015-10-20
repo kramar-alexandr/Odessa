@@ -35,6 +35,13 @@ begin
 			str = GetStringFromArea(a,i,1);
 			if(str==(chr(60)))then begin
 				res = GetAreaFromArea(a,i,alen-i,out);
+				str = GetStringFromArea(out,0,13);
+				if(str!="<?xml version")then begin
+					logtext(0,"XML file not valid")
+					SetAreaZeroSize(a);
+					goto GetXMLAreaPoint2;
+				end;
+				
 				goto GetXMLAreaPoint;
 			end;
 		end;
