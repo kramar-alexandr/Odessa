@@ -348,7 +348,7 @@ begin
   vs = 20; h = 120;
   PeriodField(h,v=6,"Период");
   EditFieldTL(h,v+=vs,150,"Товар",M4UStr,Normal,41,f1,false,INSClass);
-  EditFieldTL(h,v+=vs,150,"Склад",M4UStr,Normal,41,f2,false,LocationSClass);
+  EditFieldTL(h,v+=vs,150,"Склады продаж",M4UStr,Normal,41,f2,false,LocationSClass);
   EditFieldTL(h,v+=vs,150,"Остатки на складах",M4UStr,Normal,41,f4,false,LocationSClass);
   EditFieldTL(h,v+=vs,150,"Классификация",M4UStr,Normal,30,f3,false,DISClass);
 
