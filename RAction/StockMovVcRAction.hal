@@ -2013,6 +2013,8 @@ LStockMovVcRecordCheck_GenTrans:;
     end;
   end;
 LCheckStockMovRecord:;
+
+	logtext(0,"111 " & res & " " & error & " " & errorstr);
   if (res!=0) then begin 
     SMp.OfficialSerNrSerie = "";
   end;
