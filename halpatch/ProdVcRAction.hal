@@ -269,8 +269,10 @@ BEGIN
   Boolean unokf;
   record BatchTextVc BTr;
 	array val incost;// Edit ************************** Thursday, 23 April 2015 11:06:54
+	array integer inrow;// Edit ************************** Wednesday, 21 October 2015 16:19:30
 	integer ci;// Edit ************************** Thursday, 23 April 2015 11:06:55
 	val totcost;
+	array integer totqty;// Edit ************************** Wednesday, 21 October 2015 16:26:04
 
 	
   rowno = -1;
@@ -825,47 +827,66 @@ BEGIN
   end;
 // Edit Start ---------------------------------------------- Edit Start
 	//Thursday, 23 April 2015 11:09:44
+	if(Prodp.ManualCost==0)then begin
+		rwcnt = matrowcnt(Prodp);
+		For(i=0;i<rwcnt;i=i+1) begin
+			matrowget(Prodp,i,Prodrw);
+			if(Prodrw.InQty!=0 and nonblank(Prodrw.Item))then begin
+				incost[ci] = Prodrw.ItemCost;
+				inrow[ci] = i;
+				totcost = totcost + Prodrw.ItemCost;
+				ci = ci+1;
+			end;
+		end; 
+		
+		
+		ci = 0;
+		For(i=0;i<rwcnt;i=i+1) begin
+			matrowget(Prodp,i,Prodrw);
+			if(nonblank(Prodrw.Item))then begin
+				totqty[ci] = totqty[ci] + Prodrw.OutQty;
+			end;
+			if(Prodrw.InQty!=0 and nonblank(Prodrw.Item) and i!=inrow[ci])then begin
+				logtext(0,ci & " " & totqty[ci] & " " & incost[ci]);
+				ci = ci+1;
+			end;
+		end; 
+		logtext(0,ci & " " & totqty[ci] & " " & incost[ci]);
+		
+		ci = 0;
+		For(i=0;i<rwcnt;i=i+1) begin
+			matrowget(Prodp,i,Prodrw);
+			if(Prodrw.OutQty!=0 and nonblank(Prodrw.Item))then begin
+				Prodrw.RelVal = incost[ci]/totcost*100/totqty[ci]*Prodrw.OutQty;
+				matrowput(Prodp,i,Prodrw);
+			end;
+			if(Prodrw.InQty!=0 and nonblank(Prodrw.Item) and i!=inrow[ci])then begin
+				ci = ci+1;
+			end;
+		end; 
 	
-	rwcnt = matrowcnt(Prodp);
-	For(i=0;i<rwcnt;i=i+1) begin
-	  matrowget(Prodp,i,Prodrw);
-	  if(Prodrw.InQty!=0 and nonblank(Prodrw.Item))then begin
-	  	incost[ci] = Prodrw.ItemCost;
-	  	totcost = totcost + Prodrw.ItemCost;
-	  	ci = ci+1;
-	  end;
-	end; 
-	ci = 0;
-	For(i=0;i<rwcnt;i=i+1) begin
-	  matrowget(Prodp,i,Prodrw);
-	  if(Prodrw.OutQty!=0 and nonblank(Prodrw.Item))then begin
-	  	Prodrw.RelVal = incost[ci]/totcost*100;
-	  	ci = ci+1;
-	  	matrowput(Prodp,i,Prodrw);
-	  end;
-	end; 
 	
-	
-	if (check!=0) then begin
-    if (blank(Prodp.Routing)) then begin
-      if (donotcalctimecostf==false) then begin
-        if (stat==updatemode) then begin
-          SetProdTime(Prodp,Prod2p,true);
-          ProdCalcItemCost(Prodp,Prod2p,true);
-       end else begin
-          SetProdTime(Prodp,Prod2p,false);
-          ProdCalcItemCost(Prodp,Prod2p,false);
-        end;
-      end;
-      ProdFillFIFO(Prodp,true);
-    end;
-  end;
-  if (Prodp.PRStatusFlag==5) then begin
-    if (blank(Prodp.StandProblem)) then begin
-      fieldnam = "StandProblem";
-      res = 1058; 
-      goto LProdVcRecordCheck;
-    end;
+		if (check!=0) then begin
+			if (blank(Prodp.Routing)) then begin
+				if (donotcalctimecostf==false) then begin
+					if (stat==updatemode) then begin
+						SetProdTime(Prodp,Prod2p,true);
+						ProdCalcItemCost(Prodp,Prod2p,true);
+				 end else begin
+						SetProdTime(Prodp,Prod2p,false);
+						ProdCalcItemCost(Prodp,Prod2p,false);
+					end;
+				end;
+				ProdFillFIFO(Prodp,true);
+			end;
+		end;
+		if (Prodp.PRStatusFlag==5) then begin
+			if (blank(Prodp.StandProblem)) then begin
+				fieldnam = "StandProblem";
+				res = 1058; 
+				goto LProdVcRecordCheck;
+			end;
+		end;
   end;
 	
 	// Edit End ---------------------------------------------- Edit End

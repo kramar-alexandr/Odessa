@@ -248,6 +248,7 @@ begin
   string 255 artcode,artspec,inwarning,warning,errors;
   Boolean chsum, chsumConfirm;
   string 10 rebgroup;
+  record RebVc Rebr,Reb2r;
 
   
   logText(0,"WebGetOrder");
@@ -291,10 +292,18 @@ begin
 			end else begin
 				if(nonblank(CUr.RebCode))then begin
 					if(CUr.CustCat=="WEB")then begin
+						Rebr.Code = CUr.RebCode;
+						readfirstmain(Rebr,1,true);
 						switch(rebgroup)begin
-							case"6":if(CUr.RebCode<"5%")then begin CUr.RebCode = "5%"; end;
-							case"5":if(CUr.RebCode<"10%")then begin CUr.RebCode = "10%"; end;
-							case"4":if(CUr.RebCode<"15%")then begin CUr.RebCode = "15%"; end;
+							case"6":Reb2r.Code = "5%";
+											readfirstmain(Reb2r,1,true);// Edit ************************** Thursday, 22 October 2015 10:08:00
+											if(Rebr.vra0<Reb2r.vra0)then begin CUr.RebCode = "5%"; end;
+							case"5":Reb2r.Code = "10%";
+											readfirstmain(Reb2r,1,true);// Edit ************************** Thursday, 22 October 2015 10:07:59
+											if(Rebr.vra0<Reb2r.vra0)then begin CUr.RebCode = "10%"; end;
+							case"4":Reb2r.Code = "15%";
+											readfirstmain(Reb2r,1,true);// Edit ************************** Thursday, 22 October 2015 10:07:58
+											if(Rebr.vra0<Reb2r.vra0)then begin CUr.RebCode = "15%"; end;
 						end;
 						recordStore(CUr,true);
 					end;
