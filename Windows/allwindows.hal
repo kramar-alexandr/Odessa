@@ -9484,7 +9484,7 @@ begin
   EditField(h4,v,250,"Наим.",Normal,RecName,false,0);
   //EditField(h,v+=vs,80,"Структ.",Normal,Recepy,false,RecSClass);// Edit ************************** Thursday, 23 April 2015 11:24:53
   EditField(h4,v+=vs,80,"Дата нач.",Normal,StartDate,false,PasteCurDate);
-  //EditField(h2,v,80,"Дата оконч.",Normal,ProdDate,false,PasteCurDate);// Edit ************************** Thursday, 23 April 2015 11:25:51
+  EditField(h2,v,80,"Дата оконч.",Normal,ProdDate,false,PasteCurDate);// Edit ************************** Thursday, 23 April 2015 11:25:51
   EditField(h,vm=(v+=vs),80,"Кол-во",Normal,Qty,true,0);
   //EditField(h4,v,80,"Время нач.",Normal,StartTime,false,PasteCurTime);// Edit ************************** Thursday, 23 April 2015 11:25:45
   //EditField(h2,v,80,"Время оконч.",Normal,EndTime,false,PasteCurTime);// Edit ************************** Thursday, 23 April 2015 11:25:46
@@ -9519,7 +9519,7 @@ begin
   RadioButton(h3,v+=16,2,0,"Начато",PRStatusFlag);
   RadioButton(h3,v+=16,3,0,"Завершено",PRStatusFlag);
   RadioButton(h3,v+=16,5,0,"Завершено, но не принято",PRStatusFlag);
-  CheckBox(h2,v+=30,0,"Ручное изменение стоимости",ManualCost);	//Edit----------------------Dima  23.10.2015
+  //CheckBox(h2,v+=30,0,"Ручное изменение стоимости",ManualCost);	//Edit----------------------Dima  23.10.2015
   Tile(1,120,true,"1",Math);
   v=20;
   MatrixBegin(4,v,-50,-30,-,300);

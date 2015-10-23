@@ -32,7 +32,7 @@ begin
   		     newPUrw.ArtCode = PUrw.ArtCode;  		     
   		     newPUrw.BarCode = PUrw.BarCode;
   		     newPUrw.PrintQuant = PUrw.PrintQuant;
-  		     GetPartsOfString(PUrw.Spec,20,parts);
+  		     GetPartsOfString(PUrw.Spec,24,parts);
   		     newPUrw.Spec = parts[0];
   		     newPUrw.POReconComment = parts[1];
   		     newPUrw.VIReconComment = parts[2];
@@ -50,7 +50,7 @@ begin
   		     newPUrw.ArtCode = SMrw.ArtCode;
   		     newPUrw.BarCode = SMrw.BarCode;
   		     newPUrw.PrintQuant = SMrw.PrintQuant;
-  		     GetPartsOfString(SMrw.Spec,20,parts);
+  		     GetPartsOfString(SMrw.Spec,24,parts);
   		     newPUrw.Spec = parts[0];
   		     newPUrw.POReconComment = parts[1];
   		     newPUrw.VIReconComment = parts[2];  		        
@@ -68,7 +68,7 @@ begin
     
     SetAreaZeroSize(aLabel);
       //addtexttoarea("q592" & chr(13) & chr(10),aLabel); //Set Label Width 74 mm
-      addtexttoarea("q320" & chr(13) & chr(10),aLabel); //Set Label Width 57      
+      addtexttoarea("q304" & chr(13) & chr(10),aLabel); //Set Label Width 57      
       //addtexttoarea("Q120,16" & chr(13) & chr(10),aLabel); //Set Label Height 10mm
       addtexttoarea("Q200,16" & chr(13) & chr(10),aLabel); //Set Label Height 39
       //addtexttoarea("R280,0" & chr(13) & chr(10),aLabel);

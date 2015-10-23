@@ -273,7 +273,7 @@ BEGIN
 	integer ci;// Edit ************************** Thursday, 23 April 2015 11:06:55
 	val totcost;
 	array integer totqty;// Edit ************************** Wednesday, 21 October 2015 16:26:04
-
+	val subTotalRelVal,totRelVal;
 	
   rowno = -1;
   extracom = "";
@@ -827,18 +827,37 @@ BEGIN
   end;
 // Edit Start ---------------------------------------------- Edit Start
 	//Thursday, 23 April 2015 11:09:44
-	if(Prodp.ManualCost==0)then begin
+	
+	
+	
+	
+		// checking for  percent's sum (should be 100%)
+		For(i=rwcnt-1;i>=0;i=i-1) begin
+			matrowget(Prodp,i,Prodrw);
+			if(Prodrw.OutQty!=0) then begin
+				subTotalRelVal = subTotalRelVal + Prodrw.RelVal;
+			end else begin
+				if (subTotalRelVal!=100) then begin
+					fieldnam = "RelVal";
+					rowno = i;
+					res = 31124; 
+					goto LProdVcRecordCheck;								
+				end;
+				subTotalRelVal = 0;
+			end;
+		end;	
+	
+	
 		rwcnt = matrowcnt(Prodp);
 		For(i=0;i<rwcnt;i=i+1) begin
 			matrowget(Prodp,i,Prodrw);
 			if(Prodrw.InQty!=0 and nonblank(Prodrw.Item))then begin
-				incost[ci] = Prodrw.ItemCost;
+				incost[ci] = Prodrw.ItemCost*Prodrw.InQty;
 				inrow[ci] = i;
-				totcost = totcost + Prodrw.ItemCost;
+				totcost = totcost + Prodrw.ItemCost*Prodrw.InQty;
 				ci = ci+1;
 			end;
 		end; 
-		
 		
 		ci = 0;
 		For(i=0;i<rwcnt;i=i+1) begin
@@ -847,23 +866,23 @@ BEGIN
 				totqty[ci] = totqty[ci] + Prodrw.OutQty;
 			end;
 			if(Prodrw.InQty!=0 and nonblank(Prodrw.Item) and i!=inrow[ci])then begin
-				logtext(0,ci & " " & totqty[ci] & " " & incost[ci]);
 				ci = ci+1;
 			end;
 		end; 
-		logtext(0,ci & " " & totqty[ci] & " " & incost[ci]);
 		
 		ci = 0;
 		For(i=0;i<rwcnt;i=i+1) begin
 			matrowget(Prodp,i,Prodrw);
 			if(Prodrw.OutQty!=0 and nonblank(Prodrw.Item))then begin
-				Prodrw.RelVal = incost[ci]/totcost*100/totqty[ci]*Prodrw.OutQty;
+				Prodrw.ItemCost = incost[ci]*Prodrw.RelVal/100/Prodrw.OutQty;
 				matrowput(Prodp,i,Prodrw);
 			end;
 			if(Prodrw.InQty!=0 and nonblank(Prodrw.Item) and i!=inrow[ci])then begin
 				ci = ci+1;
 			end;
-		end; 
+		end; 		
+
+	// Edit End ---------------------------------------------- Edit End	
 	
 	
 		if (check!=0) then begin
@@ -871,13 +890,13 @@ BEGIN
 				if (donotcalctimecostf==false) then begin
 					if (stat==updatemode) then begin
 						SetProdTime(Prodp,Prod2p,true);
-						ProdCalcItemCost(Prodp,Prod2p,true);
+						//ProdCalcItemCost(Prodp,Prod2p,true);
 				 end else begin
 						SetProdTime(Prodp,Prod2p,false);
-						ProdCalcItemCost(Prodp,Prod2p,false);
+						//ProdCalcItemCost(Prodp,Prod2p,false);
 					end;
 				end;
-				ProdFillFIFO(Prodp,true);
+				//ProdFillFIFO(Prodp,true);
 			end;
 		end;
 		if (Prodp.PRStatusFlag==5) then begin
@@ -887,9 +906,7 @@ BEGIN
 				goto LProdVcRecordCheck;
 			end;
 		end;
-  end;
-	
-	// Edit End ---------------------------------------------- Edit End
+
 	
   if (transf) then begin
     if (stat==updatemode) then begin
@@ -932,7 +949,9 @@ BEGIN
 LProdVcRecordCheck:;
   if (res!=0) then begin
     Prodp.SerNr = oldnr;
-  end;
+  end;  
+  
+  
   DoProdVcRecordCheck = res;
   RETURN;
 END;
@@ -1343,7 +1362,8 @@ BEGIN
     if (ItemHistExists("ProdVc",Prodr.SerNr)==false) then begin
       Prodr.LocOKNr = NextLocOKNr(Prodr.Location);
     end;
-  end;
+  end;  
+  
   ProdVcRecordUpdate = res;
   RETURN;
 END;
@@ -1397,6 +1417,9 @@ BEGIN
   if ((Prodr.PRStatusFlag==0) and (Prod2r.PRStatusFlag!=0)) then begin//unok
     UnOKProduction(Prodr,Prod2r,true);
   end;
+
+  
+  
   ProdVcRecordUpdateAfter = res;
   RETURN;
 END;
