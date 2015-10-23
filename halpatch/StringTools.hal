@@ -125,3 +125,26 @@ begin
 	FindSubString=res;
 return;  
 end;
+
+
+global
+procedure GetPartsOfString(string str,integer size,var array string parts)	//Edit----------------------Dima  22.10.2015
+begin
+	string 255 tempStr;
+	string 255 shortPart;
+	integer i;
+	
+	tempStr = str;
+	ClearArray(parts);
+	
+	while(tempStr!="") begin
+		shortPart = Left(tempStr,size);
+		tempStr = Right(tempStr,Len(tempStr)-size);
+		while (Left(shortPart,1)==" ") begin
+			i=i+1;
+			shortPart = Right(shortPart,size-i);
+		end;
+		parts[parts.length] = shortPart;
+	end;
+  
+end;

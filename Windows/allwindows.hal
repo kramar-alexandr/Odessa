@@ -2574,7 +2574,8 @@ begin
    SpecialMenu("Выгрузить таблицу в буфер обмена",'',1,"ExportToExcelPUDsm"); // edit ----------Dima 26.11.2014, 23.01.2015
   end;
   SpecialMenu("Присвоить товарам штрихкоды",'',14,"SetEAN13PUDsm"); //Edit***************************Sasha2,10:38 21.01.2015
-  SpecialMenu("Распечатать EAN13 этикетки 5*13",'',14,"PrintEAN13PUDsm"); //Edit***************************Sasha2,10:38 21.01.2015
+//  SpecialMenu("Распечатать EAN13 этикетки 5*13",'',14,"PrintEAN13PUDsm"); //Edit***************************Sasha2,10:38 21.01.2015
+  SpecialMenu("Распечатать EAN13 этикетки 5*13",'',14,"PrintLabelEANDsm");		//Edit----------------------Dima  21.10.2015
   SpecialMenu("Создать перемещение",' ',8,"CreateStockMovFromPUsm");
   EndWindow;
 end;
@@ -6816,7 +6817,8 @@ t=1;
     end;
   end;
    SpecialMenu("Выгрузить таблицу в буфер обмена",'',1,"ExportToExcelStockMovDsm"); // edit ----------Dima 26.11.2014
-  SpecialMenu("Распечатать EAN13 этикетки 5*13",'',1,"PrintEAN13StockMovDsm"); //Edit***************************Sasha2,12:04 11.02.2015
+  //SpecialMenu("Распечатать EAN13 этикетки 5*13",'',1,"PrintEAN13StockMovDsm"); //Edit***************************Sasha2,12:04 11.02.2015
+  SpecialMenu("Распечатать EAN13 этикетки 5*13",'',1,"PrintLabelEANDsm");
 	SpecialMenu("Отсортировать таблицу по коду",'',20,"TableSortStockMov_ByCodeDsm"); 	//Edit----------------------Dima  11.02.2015
 	SpecialMenu("Отсортировать таблицу по наименованию",'',20,"TableSortStockMov_ByNameDsm"); 	//Edit----------------------Dima  11.02.2015
   EndWindow;
@@ -9517,6 +9519,7 @@ begin
   RadioButton(h3,v+=16,2,0,"Начато",PRStatusFlag);
   RadioButton(h3,v+=16,3,0,"Завершено",PRStatusFlag);
   RadioButton(h3,v+=16,5,0,"Завершено, но не принято",PRStatusFlag);
+  CheckBox(h2,v+=30,0,"Ручное изменение стоимости",ManualCost);	//Edit----------------------Dima  23.10.2015
   Tile(1,120,true,"1",Math);
   v=20;
   MatrixBegin(4,v,-50,-30,-,300);

@@ -57,6 +57,8 @@ remote procedure HandleSetEAN13PU(var record PUVc); //Edit**********************
 remote procedure HandlePrintEAN13PU(record PUVc,var array record PUVc,var array integer); //Edit***************************Sasha2,16:15 26.01.2015
 
 forward function Boolean PUDClassSwitchRow(Integer,Integer);
+external procedure PrintEAN13StockMovDsm();
+external procedure Zebra_Printing(record RcVc);
 
 function val UnitCalcQty(string Unittext,val UnitXval,val UnitYval,val UnitZval,val defqty)
 BEGIN
@@ -1184,3 +1186,54 @@ begin
 
 	return;
 end; //Edit***************************Sasha2,12:00 22.01.2015 }
+
+
+global procedure PrintLabelEANDsm()
+begin
+	record RcVc RepSpec;
+	integer nwn;
+	nwn = OpenWindow("ChooseLabelPrinterTClass",0,CurWindow,"","",RepSpec);      
+end;
+
+
+global procedure ChoosePrinter()	//Edit----------------------Dima  21.10.2015
+begin
+	integer wn,mwn;
+	record PUVc PUr;
+	record StockMovVc StockMovr;
+	record RCVc RepSpec;
+	string 20 windowClass;
+
+
+	wn = CurWindow;
+	DeselectWindow(wn,false);	
+	GetWindowRecord(wn,RepSpec);
+		
+	mwn = MotherWindow(wn);	
+	windowClass = GetWindowClass(mwn);
+	switch (windowClass) begin
+		case "StockMovDClass":
+			CloseWindow(wn);
+			SelectWindow(mwn);
+			if (RepSpec.flags[1]==0) then begin
+				PrintEAN13StockMovDsm;
+			end;
+			if (RepSpec.flags[1]==1) then begin
+				RepSpec.flags[2] = mwn;
+				RepSpec.f1 = "StockMovVc";
+				Zebra_Printing(RepSpec);
+			end;
+		case "PUDClass":
+			CloseWindow(wn);
+			SelectWindow(mwn);
+			if (RepSpec.flags[1]==0) then begin
+				PrintEAN13PUDsm;
+			end;
+			if (RepSpec.flags[1]==1) then begin
+				RepSpec.flags[2] = mwn;
+				RepSpec.f1 = "PUVc";
+				Zebra_Printing(RepSpec);
+			end;					
+	end;	
+
+end;

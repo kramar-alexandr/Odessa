@@ -2253,3 +2253,41 @@ begin
   SearchField("Найти");
   EndWindow;
 end;
+
+
+window ChooseLabelPrinterTClass:1				//Edit----------------------Dima  25.06.2015
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  real h,v,vs;
+  WindowBegin("Печать этикеток",ChooseLabelPrinterTClass,CGother,RcType);
+  SetWRect(64,80,500,300);
+  v=20;vs = 20; h = 70;
+  UseView(RcVc);
+  statictext(40,v,"Выберите способ печати этикеток",false);
+	RadioButton(h,v+=30,0,0,"Печать на листе А4",flags[1]);
+	RadioButton(h,v+=16,1,0,"Печатать на принтере Zebra",flags[1]);
+  v=v+30;
+  h=300;
+  ColourPushButton(h,v,h+100,v+30,"ChoosePrinter","Печатать",8);
+  EndWindow;
+end;
+
+
+window ZebraPrinterTClass:1 //Edit***************************Sasha2,16:12 25.09.2014 {
+ wtag("language","UKR"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  real h,v,vs,f;
+  WindowBegin("Настройка принтера Zebra",ZebraPrinterTClass,CGSbl,-);
+  SetBlid(ZebraPrinterBlock);
+  SetWRect(64,80,480,150);
+  h=150;f=150;
+  v=6;vs=20;
+    StaticText(h,vs,"Для Windows _____________",false);
+    EditField(h,v+=vs,f,"Название компьютера",Normal,CompNameWin,false,0); 
+    EditField(h,v+=vs,f,"Название принтера",Normal,PrinterNameWin,false,0); 
+    StaticText(h,v+=2*vs,"Для Mac OS ______________",false);
+    EditField(h,v+=6,f,"Название принтера",Normal,PrinterNameMac,false,0);
+  EndWindow;
+end; //Edit***************************Sasha2,16:12 25.09.2014 }
+
+

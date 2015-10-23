@@ -4391,6 +4391,20 @@ RecordBegin(IPVc,-,"");
   KeySegment(ProdClass);
   KeySegment(SerNr);
   EndRecord;
+  
+  BlockBegin(ZebraPrinterBlock,-,""); //Edit***************************Sasha2,11:36 15.07.2015 {
+  BlockForAllCompanies;
+  RecordField(PrinterNameMac,M4Str,200,0);
+  RecordField(ParamIn1,M4Int,0,0);
+  RecordField(ParamIn2,M4Int,0,0);
+  RecordField(CompNameWin,M4Str,200,0);
+  RecordField(PrinterNameWin,M4Str,200,0);
+  RecordField(ParamStr3,M4Str,200,0);
+  RecordField(ParamStr4,M4Str,200,0);
+  RecordField(ParamVal1,M4Val,0,0);
+  RecordField(ParamVal2,M4Val,0,0);
+  EndBlock; //Edit***************************Sasha2,11:36 15.07.2015 }  
+  
 	      	  	
 return;
 end;
