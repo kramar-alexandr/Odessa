@@ -126,9 +126,9 @@ begin
   string 15 correctPhone;
 
 	response = "";
-   
   
-  host = "my.epochta.ru";
+  //host = "my.epochta.ru";
+  host = "api.atompark.com";
   page = "/members/sms/xml.php"; 
    
   correctPhone = NormalizePhone(SMSr.Phone);
