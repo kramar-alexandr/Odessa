@@ -681,9 +681,9 @@ BEGIN
 							MatRowPut(ORr,j,ORrw);
 							j = rwcnt2;
 						end;
-					end;	
-				end;
-				RecordStore(ORr,true);
+					end;
+					RecordStore(ORr,true);	
+				end;				
 		end;			
 	end;	//Edit----------------------Dima  20.08.2015
 		  
