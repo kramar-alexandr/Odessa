@@ -88,7 +88,7 @@ external function LongInt DateDiff(Date,Date); //Edit***************************
 external updating function longint AddSMStoStack(string, string, string,string,string,longint,string,date,time);//Edit----------------------Dima  28.08.2015
 external function string 255 ParseSMStext(string, record ORVc);
 external procedure GetAvailableItems(var record ORVc);
-
+external updating procedure AddPaymentToIPFromSH(record SHVc);
 
 procedure SetORAcceptanceFlag(var record ORVc ORr,record ORVc prevORr,LongInt stat)
 begin
@@ -2154,6 +2154,9 @@ begin
 		if(ReadFirstKey("OrderKey",SHr, 1, true))then begin
 			if(ORr.NPPaymentType == 1 or (ORr.NPPaymentType == 0 and ORr.PrepaymentReceived == 1))then begin
 				RecordCopy(oldSHr,SHr);
+				if (SHr.Assembly == 1) then begin	//Edit----------------------Dima  28.10.2015
+					AddPaymentToIPFromSH(SHr);			//if SHr.Assembly == 1 already, RecordUpdate will not start,because nothing is changed
+				end;
 				SHr.Assembly = 1;
 				//RecordStore(SHr, true);
 				RecordUpdate(oldSHr,SHr,true);//Edit----------------------Dima  16.07.2015

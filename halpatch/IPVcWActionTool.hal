@@ -31,6 +31,7 @@ external function Boolean GetAccCur(string,var string);
 external procedure CurValToOtherCur(Date,string,val,string,var val,roundmode);
 external function Boolean GetPMCurrency(string,var string);
 external procedure GetFullCurncyRate (var string,Date,var val,var val,var val,var val,var val);
+external procedure ServerToClientMessage(string);
 
 /*
 procedure GetIPVAT(record AccBlock ARAb,record IVVc IVp,var val payvp,var val vatvalp,var string vatcode,var string taxtemplatecode)
@@ -1382,6 +1383,7 @@ begin
   Boolean installmentf;
   val chk;  
 
+
   IPr.TransDate = CurrentDate;
   TrHs = true;
   exist = false;
@@ -1423,8 +1425,11 @@ begin
 		ReadFirstMain(ORr,1,true);
 		
 		if (exist) then begin
-			RecordUpdate(oldIPr,IPr,true);
-			CreateRecordLink(ORr,CurrentCompany,IPr,CurrentCompany);
+			if (RecordUpdate(oldIPr,IPr,true)==0) then begin
+				CreateRecordLink(ORr,CurrentCompany,IPr,CurrentCompany);
+			end else begin	
+				clientremoteasync.ServerToClientMessage(USetStr(31125) & IPr.SerNr & ". " & USetStr(31126));	//Edit----------------------Dima  28.10.2015
+			end;
 		end else begin
 			RecordInsert(IPr,true);
 			CreateRecordLink(ORr,CurrentCompany,IPr,CurrentCompany);
