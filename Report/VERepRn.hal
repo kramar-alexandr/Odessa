@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 remote procedure LookupInHist(string, Date, Date, string,var val,var val,var val,var val,var val,var val,var val,var val,var val,var val,var val);
 external function Boolean SetInSet2(string,string);
 remote procedure CollectOrderRows(var record ORVc,Date,Date,string);
