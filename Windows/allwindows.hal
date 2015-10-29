@@ -10195,3 +10195,56 @@ begin
 	end;
 	EndWindow;
 end;
+
+
+window PIDClass:1
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  real h,h2,h3,v,vs;
+  WindowBegin("Товар поставщика",PIDClass,CGview,-);
+  SetWRect(20,80,527,380);
+//  Sizeable(-1,-1,0,0);
+  UseView(PIVc);
+  Tile(0,90,false,"",ItemCode);
+  v = 10; vs = 20; h = 80; h2 = 230; h3 = 380;
+  EditField(h,v, 82,"Товар",Normal,ItemCode,false,INSClass);
+  EditField(h2,v,-40,"Наим.",Normal,Comment,false,0);
+  EditField(h,v+=vs ,82,"Поставщик",Normal,VECode,false,VESClass);
+  EditField(h2,v,-40,"Наим.",Normal,VEName,false,0);
+  EditField(h,v+=vs ,82,"Склад",Normal,Location,false,LocationSClass);
+  TileButton(1,"Цена");
+  TileButton(2,"Текст");
+  CheckBox(h2+100,v,0,"По умолчанию",DefaultChoice);
+  Tile(1,190,false,"1",PurPrice);
+  EditField(h=120,v=6 ,82,"Цена",Normal,PurPrice,true,0);
+  EditField(h3,v ,70,"Стоимость покупки",Normal,PurchaseCost,true,0);
+  EditField(h,v+=vs,50,"Валюта",Normal,CurncyCode,true,CurncyCodeSClass);
+  EditField(h3,v ,70,"Преобразование кол-ва",Normal,PIFactor,true,0);
+  EditField(h,v+=vs ,82,"Код товара пост.",Normal,VEItemCode,false,0);
+  EditField(h3,v ,70,"Единица измерения",Normal,VEUnit,false,UnitSClass);
+/*  EditField(h,v+=vs ,200,"Comment",Normal,Comment,false,0);*/
+  EditField(h,v+=vs ,82,"Обычно заказ. к-во",Normal,NormPOQty,true,0);
+  EditField(h3,v ,82,"Миним. заказ. кол-во",Normal,MinPOQty,true,0);
+  EditField(h,v+=vs ,82,"Производитель",Normal,Manufacturer,false,VESClass);
+  EditField(h3,v ,50,"Страна производителя",Normal,OrgCountry,false,CountrySClass);
+  if (HasSalesman) then begin
+    EditField(h,v+=vs,60,"Продавец",Normal,SalesMan,false,UserSClass);
+    if (StandardHansa==false) then begin
+      EditField(h3,v,60,"Группа продажи",Normal,SalesGroup,false,SalesGroupSClass);
+    end;
+  end;
+  EditField(h,v+=vs ,50,"Дней на доставку",Normal,PlannedDelDays,false,0);
+  EditField(h,v+=vs ,50,"Последний номер заказа",Normal,LastOrder,false,0);
+  EditField(h,v+=vs ,50,"Последнее изменение",Normal,LastChange,false,0);
+  
+  if (StandardHansa==false) then begin
+    ButtonFrame(h3,v+=vs,123,2,"Опред. тип склада");
+    RadioButton(h3,v,kStockTypePurchased,0,"Приобретение",DefStockType);
+    RadioButton(h3,v+=16,kStockTypeConsignment,0,"Комиссия",DefStockType);
+  end;
+  Tile(2,100,true,"2",Math);
+  MatrixBegin(4,v=24,-32,-20,-,99);
+  MatCol(1,24,"Текст",0,Text,false,0);
+  EndMatrix;
+  EndWindow;
+end;

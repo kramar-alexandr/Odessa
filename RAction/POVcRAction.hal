@@ -584,7 +584,7 @@ begin
 			PIr.VECode = POr.VECode;
 			PIr.Location = "";
 			If(readfirstmain(PIr,3,true))then begin
-				if(PIr.LastOrder>=POr.SerNr)then begin
+				if(PIr.LastOrder<=POr.SerNr)then begin// Edit ************************** Thursday, 29 October 2015 12:06:06
 					PIr.CurncyCode = POr.CurncyCode;
 					PIr.PurPrice = POrw.Price;
 					PIr.LastChange = POr.TransDate;
