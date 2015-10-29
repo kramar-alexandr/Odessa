@@ -2220,8 +2220,9 @@ function string 255 ParseSMStext(string text, record ORVc ORr)	//Edit-----------
 begin
   record UserVc Userr;
 	string 10 replaceSum,replaceCard,replaceDate,replaceOrder,replaceCommission;
-	string 50 sum,card;
+	string 50 sum,card,commisionStr;
 	string 255 resString,temp;
+	longint  IntVal;
   record SMSTextBlock SMSb;
   val tempVal,tempsum,commission,tempCommission;
   roundmode rmde;
@@ -2253,7 +2254,8 @@ begin
 	if (tempVal<tempsum * 1.005) then begin
 		tempVal = tempVal +1;
 	end;
-	sum = tempVal;
+	IntVal = tempVal; //cut zero after coma
+	sum = IntVal;
 	
 	//Commission
 	if (ORr.Sum4*SMSb.Commission*0.01 < SMSb.CommissionMin) then begin
@@ -2265,12 +2267,13 @@ begin
 	if (tempCommission<commission) then begin
 		tempCommission = tempCommission +1;
 	end;
-	commission = tempCommission;	
+	IntVal = tempCommission;
+	commisionStr = IntVal;	
 
 	temp = ReplaceAllSubStringInString(replaceCard,card,text);
 	resString = ReplaceAllSubStringInString(replaceSum,sum,temp);
 	temp = ReplaceAllSubStringInString(replaceOrder,ORr.CustOrdNr,resString);
-	resString = ReplaceAllSubStringInString(replaceCommission,commission,temp);
+	resString = ReplaceAllSubStringInString(replaceCommission,commisionStr,temp);
 
 ParseSMStext = resString;
 return;
