@@ -13,6 +13,16 @@ return;
 end;
 
 
+
+global procedure ServerToClientMessage(string msg)		//Edit----------------------Dima  28.10.2015
+begin
+
+	MessageBox(0,msg);	
+
+return;
+end;
+
+
 /*	------------------------------
 
 
