@@ -1428,7 +1428,7 @@ begin
 			if (RecordUpdate(oldIPr,IPr,true)==0) then begin
 				CreateRecordLink(ORr,CurrentCompany,IPr,CurrentCompany);
 			end else begin	
-				clientremoteasync.ServerToClientMessage(USetStr(31125) & IPr.SerNr & ". " & USetStr(31126));	//Edit----------------------Dima  28.10.2015
+				//clientremoteasync.ServerToClientMessage(USetStr(31125) & IPr.SerNr & ". " & USetStr(31126));	//Edit----------------------Dima  28.10.2015
 			end;
 		end else begin
 			RecordInsert(IPr,true);
