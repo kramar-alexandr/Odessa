@@ -744,7 +744,55 @@ BEGIN
         checkreceivef = true;
       end;
     end;
-  end;  
+  end; 
+  
+  
+  if (SMp.OKFlag!=0 and SMp.TransDate>CurrentDate) then begin
+  	if (stat==Rs_update) then begin																																								//Edit----------------------Dima  02.11.2015
+  		if(SMp.OKFlag!=0 and SM2p.OKFlag==0) then begin	
+  	    error = 31127;
+  	    errorstr = "";
+  	    rownr = -1;
+	  	  fieldstr = "TransDate";
+  	    res = -1;
+		    goto LCheckStockMovRecord;
+		   end; 
+  	end;
+  	if (stat==Rs_insert) then begin		
+  		if(SMp.OKFlag!=0) then begin
+  	    error = 31127;
+  	    errorstr = "";
+  	    rownr = -1;
+	  	  fieldstr = "TransDate";
+  	    res = -1;
+		    goto LCheckStockMovRecord;
+		   end; 
+  	end; 
+  end;    
+  
+  if (SMp.SentOKFlag!=0 and SMp.SentTransDate>CurrentDate) then begin
+  	if (stat==Rs_update) then begin																																							//Edit----------------------Dima  02.11.2015
+  		if(SMp.SentOKFlag!=0 and SM2p.SentOKFlag==0) then begin	
+  	    error = 31127;
+  	    errorstr = "";
+  	    rownr = -1;
+				fieldstr = "SentTransDate";
+  	    res = -1;
+		    goto LCheckStockMovRecord;
+		   end; 
+  	end;
+  	if (stat==Rs_insert) then begin		
+  		if(SMp.SentOKFlag!=0) then begin
+  	    error = 31127;
+  	    errorstr = "";
+  	    rownr = -1;
+				fieldstr = "SentTransDate";
+  	    res = -1;
+		    goto LCheckStockMovRecord;
+		   end; 
+  	end; 
+  end;   
+   
 
   switch (stat) begin
     case Rs_update:
