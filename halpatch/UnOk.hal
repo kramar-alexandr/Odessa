@@ -314,8 +314,23 @@ end;
 global function longint CheckUnOKStockMov(record StockMovVc SMr, boolean UnOk_OkFlag)
 begin
 Integer res;
+row StockMovVc SMrw;
+integer i,rwcnt;
 res = 0;
 
+	if (SMr.Reserved>0) then begin
+		res = 20884;	
+		goto LCheckUnOKStockMov;
+	end;
+	rwcnt = MatRowCnt(SMr);
+	for(i=0;i<rwcnt;i=i+1) begin
+		MatRowGet(SMr,i,SMrw);
+		if (SMrw.ORSerial>0) then begin
+			res = 20884;	
+			goto LCheckUnOKStockMov;
+		end;
+	end;
+	
 	if (UnOk_OkFlag) then begin
   		if (CheckRemainQtyInStock(SMr,SMr.ToLocation)==false) then begin
 					res = 20884;
@@ -326,6 +341,7 @@ res = 0;
   		end;	
 	end;
 
+LCheckUnOKStockMov:;
 CheckUnOKStockMov = res;
 return;
 end;
