@@ -2,6 +2,7 @@ external function Integer AccrualSimulationsTransferred(LongInt,string);
 external function Boolean ReadFirstItem(string,var record INVc,Boolean,Boolean);
 external procedure GetFullCurncyRate (var string,Date,var val,var val,var val,var val,var val);
 external function Integer PMCheckType(string,var string,var string);
+external function longint CheckUnOKStockMov(record StockMovVc, boolean);
 
 global
 function Boolean CheckCurncy(string paymode,string curncy)
@@ -1154,6 +1155,7 @@ LIsUnOKAllowed_PUVc:;
   return;
 end;
 
+/*
 global
 function Integer IsUnOKAllowed_StockMovVc(record StockMovVc SMp)
 begin  
@@ -1179,6 +1181,40 @@ LIsUnOKAllowed_StockMovVc:;
   IsUnOKAllowed_StockMovVc = res;
   return;
 end;
+*/
+
+
+
+
+
+global updating
+function Integer IsUnOKAllowed_StockMovVc(record StockMovVc SMp, boolean UnOk_OkFlag)	//Edit----------------------Dima  02.11.2015
+begin  
+  Integer res;
+  record MainStockBlock MSb;
+
+  res = 0;
+  
+  if (nonblank(SMp.Hash)) then begin
+    res = 20650;
+    goto LIsUnOKAllowed_StockMovVc;
+  end;  
+
+  if (UserCanAction("UnOKAll",false)) then begin
+		res = CheckUnOKStockMov(SMp,UnOk_OkFlag);		//Edit----------------------Dima  02.10.2015
+
+  end else begin
+    res = 20884;
+    goto LIsUnOKAllowed_StockMovVc;
+  end;
+
+LIsUnOKAllowed_StockMovVc:;  
+  IsUnOKAllowed_StockMovVc = res;
+  return;
+end;
+
+
+
 
 global
 function Integer IsUnOKAllowed_LeaveTransferVc(record LeaveTransferVc LTr)

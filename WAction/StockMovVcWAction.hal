@@ -983,7 +983,9 @@ begin
   GetWindowRecord(wn,StockMovr);
   if (WindowState(wn)==normalmode) then begin
     if (StockMovr.SentOKFlag!=0) then begin
-      res = false;
+    	if (UserCanAction("UnOKAll",false)==false) then begin		//Edit----------------------Dima  02.11.2015
+      	res = false;		
+      end;
     end;
     if (StockMovr.OKFlag!=0) then begin
       res = false;
@@ -1031,7 +1033,9 @@ begin
   GetWindowRecord(wn,StockMovr);
   if (WindowState(wn)==normalmode) then begin
     if (StockMovr.OrdFlag!=0) then begin
-      res = false;
+    	if (UserCanAction("UnOKAll",false)==false) then begin		//Edit----------------------Dima  02.11.2015
+	      res = false;
+      end;
     end;
     if (StockMovr.OKFlag!=0) then begin
       res = false;

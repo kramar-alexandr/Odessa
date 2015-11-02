@@ -1,0 +1,717 @@
+external function val AbsoluteVal(val);
+
+global function longint CheckUnOkPUVc(record PUVc PUp)
+begin
+	record ItemHistVc IHr;
+	Integer res,count;
+	boolean TrHs;
+	row PUVc PUrw;
+	integer	rwcnt,i; 
+
+	res = 0;	
+	rwcnt = MatRowCnt(PUp);
+
+  for(i=0;i<rwcnt;i=i+1) begin
+  	MatRowGet(PUp,i,PUrw);
+  	IHr.FileName = "PUVc";
+  	IHr.TransNr = PUp.SerNr;
+  	IHr.Row = i;
+  	TrHs = true;
+  	count = 0;
+  	While(LoopKey("FNTransNr",IHr,3,TrHs)) begin	
+  		if(IHr.TransNr!=PUp.SerNr or IHr.Row!=i) then begin TrHs=false;  end;
+  		
+  		if (TrHs) then begin
+				if (IHr.RemQty != IHr.Qty) then begin
+					res = 20884;
+					goto LCheckUnOkPUVc;
+				end;
+				count=count+1;
+			end;
+			
+		end;
+		
+		if(count==0) then begin //records don't exist
+			res = 20884;
+			goto LCheckUnOkPUVc;
+		end;
+
+  end;
+
+
+LCheckUnOkPUVc:;
+CheckUnOkPUVc = res;
+return;
+end;
+
+
+updating procedure RemoveSerialNrRecord(record ItemHistVc IHr)
+begin
+  record SerBalVc SerBalr;
+  
+	if (nonblank(IHr.SerialNr)) then begin
+		SerBalr.Serial = IHr.SerialNr;
+		SerBalr.Item = IHr.ArtCode;
+		SerBalr.Location = IHr.Location;
+		if (ReadFirstMain(SerBalr,3,true)) then begin
+				RecordDelete(SerBalr);
+		end;
+	end;    
+end;
+
+
+
+updating procedure ReturnSerialNrRecord(record ItemHistVc IHr)
+begin
+  record SerBalVc SerBalr;
+  
+	if (nonblank(IHr.SerialNr)) then begin
+		SerBalr.Serial = IHr.SerialNr;
+		SerBalr.Item = IHr.ArtCode;
+		SerBalr.Location = IHr.Location;
+		if (ReadFirstMain(SerBalr,3,true)) then begin
+			SerBalr.Quant = 1;
+			RecordStore(SerBalr,true);
+		end;
+	end;  
+   
+end;
+
+
+
+
+
+
+
+global updating 
+procedure UnOk_PUVc(var record PUVc PUp)
+begin
+  record ItemHistVc IHr;  
+	Integer res;
+	boolean TrHs;
+	
+	res = 0;
+	TrHs = true; 
+
+	  IHr.FileName = "PUVc";
+  	IHr.TransNr = PUp.SerNr;
+  	TrHs = true;
+  	While(LoopKey("FNTransNr",IHr,2,TrHs)) begin	
+  		if(IHr.TransNr!=PUp.SerNr) then begin TrHs=false; end;
+  		if (TrHs) then begin
+  		
+  				RemoveSerialNrRecord(IHr);  		
+  							
+					RecordDelete(IHr);
+					StepBack(IHr);
+					//LogText(0,"DELETED  " & IHr.ArtCode);
+			end; 
+  	end;
+  	
+  	PUp.LocOKNr = BlankVal;
+
+  LUnOk_PUVc:;
+  return;
+end;
+
+
+
+
+global function longint CheckUnOkSHVc(record SHVc SHr)
+begin
+	record ItemHistVc IHr;
+	Integer res;
+	boolean TrHs;
+	row SHVc SHrw;
+	integer	rwcnt,i;
+	val totQty; 
+
+	res = 0;	
+	totQty = 0;
+	//rwcnt = MatRowCnt(SHr);
+
+//  for(i=0;i<rwcnt;i=i+1) begin
+//  	MatRowGet(SHr,i,SHrw);
+  	IHr.FileName = "SHVc";
+  	IHr.TransNr = SHr.SerNr;
+  	TrHs = true;
+  	While(LoopKey("FNTransNr",IHr,2,TrHs)) begin	
+  		if(IHr.TransNr!=SHr.SerNr) then begin TrHs=false;  end;
+  		
+  		if (TrHs) then begin	
+				totQty = totQty + (-IHr.Qty);
+			end;
+			
+		end; 
+
+  
+	if (totQty != SHr.TotQty) then begin
+		res = 20884;
+		goto LCheckUnOkSHVc;
+	end;  
+LogText(0,"check ok  " & totQty);
+LCheckUnOkSHVc:;
+CheckUnOkSHVc = res;
+return;
+end;
+
+
+global updating 
+procedure UnOk_SHVc(var record SHVc SHr)
+begin
+// you should  delete SHVc after UnOk.
+//Creation new document is easier then rewriting code
+  record ItemHistVc IHr,IH2r;
+	row SHVc SHrw;
+	integer	rwcnt,i;  
+	Integer res;
+	boolean TrHs;
+	
+	res = 0;
+	TrHs = true;
+  rwcnt = MatRowCnt(SHr);
+  
+
+	IHr.FileName = "SHVc";
+  IHr.TransNr = SHr.SerNr;
+  TrHs = true;
+  While(LoopKey("FNTransNr",IHr,2,TrHs)) begin	
+  	if(IHr.TransNr!=SHr.SerNr) then begin TrHs=false; end;
+  	if (TrHs) then begin
+  			IH2r.SerNr = IHr.Source;
+  			if (ReadFirstMain(IH2r,1,true)) then begin
+  				IH2r.RemQty = IH2r.RemQty - IHr.Qty;  //SHVc has negative Qty
+  				if (RecordStore(IH2r,true)) then begin
+  				
+	  				ReturnSerialNrRecord(IH2r);  				
+	  				RemoveSerialNrRecord(IHr);
+	  				//LogText(0,"DELETED  " & IHr.ArtCode & "   " & IHr.SerNr);
+	  				
+	  				//ORrw.Shipd1 need to update----------------//
+						RecordDelete(IHr);
+						StepBack(IHr);
+					end; 
+  			end;
+		end; 
+  end;
+ 
+  SHr.LocOKNr = BlankVal;
+
+  return;
+end;
+
+
+
+
+function boolean CheckRemainQtyInStock(record StockMovVc SMr, string location)
+begin
+	boolean testf,TrHs;
+	boolean res;
+	record ItemHistVc IHr;
+	integer rwcnt,i;
+	
+	rwcnt = MatRowCnt(SMr);
+	res = true;
+	
+LogText(0,"CheckRemainQtyInStock")	;
+	for(i=0;i<rwcnt;i=i+1) begin	
+	
+		IHr.FileName = "StockMovVc";
+  	IHr.TransNr = SMr.SerNr;
+  	IHr.Row = i;
+  	TrHs = true;
+  
+  	
+  	While(LoopKey("FNTransNr",IHr,3,TrHs)) begin	
+  		testf = true;
+  		if(IHr.TransNr!=SMr.SerNr) then begin TrHs=false; testf=false; end;
+  		if(IHr.Location!=location) then begin testf=false; end;
+  		
+  		if (testf) then begin
+  		LogText(0,"check   " & IHr.SerNr);
+  				if (IHr.RemQty != IHr.Qty) then begin
+						res = false;
+						goto LCheckRemainQtyInStock;
+					end;
+			end; 
+  	end;
+  	ResetLoop(IHr);
+
+	end;
+
+	LCheckRemainQtyInStock:;
+	CheckRemainQtyInStock = res;
+	return;
+end;
+
+
+updating
+procedure RemoveIHrecordsStockMov(string fromLoc, string toLoc, longint SerialNr, integer rownr)
+begin
+	boolean testf,TrHs;
+	record ItemHistVc IHr,IH2r;
+	record SerBalVc SerBalr;
+	
+LogText(0,"RemoveIHrecordsStockMov");	
+	IHr.FileName = "StockMovVc";
+  IHr.TransNr = SerialNr;
+  IHr.Row = rownr;  
+	TrHs = true;
+	
+	//delete records "from location"
+  While(LoopKey("FNTransNr",IHr,3,TrHs)) begin	
+  	testf = true;
+  	if(IHr.TransNr!=SerialNr) then begin TrHs=false; testf=false; end;
+  	if(IHr.Location!=fromLoc) then begin testf=false; end;
+  	
+  	if (testf) then begin
+  			IH2r.SerNr = IHr.Source;
+  			if (ReadFirstMain(IH2r,1,true)) then begin
+  				IH2r.RemQty = IH2r.RemQty + (-IHr.Qty);  //IHr.Qty has negative Qty
+  				if (RecordStore(IH2r,true)) then begin
+  				LogText(0,"DELETED fr " & IHr.SerNr & "    : " & IHr.ArtCode);
+  				
+						ReturnSerialNrRecord(IHr);  		
+  				
+						RecordDelete(IHr);
+						StepBack(IHr);
+					end;
+					
+
+					
+  			end;
+		end; 
+  end;
+  ResetLoop(IHr);
+  
+  //delete records "to location"
+  IHr.FileName = "StockMovVc";
+  IHr.TransNr = SerialNr;
+  IHr.Row = rownr;
+  TrHs = true;
+  While(LoopKey("FNTransNr",IHr,3,TrHs)) begin	
+  	testf = true;
+  	if(IHr.TransNr!=SerialNr) then begin TrHs=false; end;
+  	if(IHr.Location!=toLoc or IHr.Qty<0) then begin testf=false; end;
+  	
+  	if (testf) then begin
+  	
+				RemoveSerialNrRecord(IHr);	
+  	
+				RecordDelete(IHr);
+				LogText(0,"DELETED to " & IHr.SerNr & "    : " & IHr.ArtCode);
+				StepBack(IHr);
+		end; 
+  end;  	
+	
+  
+end;
+
+
+
+
+
+global function longint CheckUnOKStockMov(record StockMovVc SMr, boolean UnOk_OkFlag)
+begin
+Integer res;
+res = 0;
+
+	if (UnOk_OkFlag) then begin
+  		if (CheckRemainQtyInStock(SMr,SMr.ToLocation)==false) then begin
+					res = 20884;
+  		end;	
+	end else begin
+  		if (CheckRemainQtyInStock(SMr,SMr.ThrouLocation)==false) then begin
+					res = 20884;
+  		end;	
+	end;
+
+CheckUnOKStockMov = res;
+return;
+end;
+
+
+updating
+procedure UnOK_UpdateISfromSM(string artcode,string location,integer quant)
+begin
+  record ItemStatusVc ISr;
+  //need only for SMr.ToLocation
+  //for other locations IS recalculates correctly
+  ISr.Code = artcode;
+  ISr.Location = location;
+  if (ReadFirstMain(ISr,2,true)) then begin
+		ISr.Instock = ISr.Instock - quant;
+		RecordStore(ISr,true);
+	end;
+	
+  ISr.Code = artcode;
+  ISr.Location = ";;;";	
+  if (ReadFirstMain(ISr,2,true)) then begin
+		ISr.Instock = ISr.Instock - quant;
+		RecordStore(ISr,true);
+	end;	
+	
+end;
+
+
+
+global updating 
+procedure UnOk_StockMovVc(var record StockMovVc SMr, boolean UnOk_OkFlag)
+begin
+
+  record ItemHistVc IHr,IH2r;
+	row StockMovVc SMrw;
+	integer	rwcnt,i;  
+	Integer res;
+	boolean TrHs;
+	string 20 checkLocation;
+	
+	res = 0;
+	TrHs = true;
+  rwcnt = MatRowCnt(SMr);  	
+
+  
+  for(i=0;i<rwcnt;i=i+1) begin
+  	MatRowGet(SMr,i,SMrw);
+  	if (UnOk_OkFlag) then begin 	//Ok
+  		if (SMr.SentOKFlag==0) then begin
+  			RemoveIHrecordsStockMov(SMr.FrLocation,SMr.ToLocation ,SMr.SerNr,i); 	
+  		end else begin
+				RemoveIHrecordsStockMov(SMr.ThrouLocation,SMr.ToLocation ,SMr.SerNr,i);
+			end;
+			UnOK_UpdateISfromSM(SMrw.ArtCode,SMr.ToLocation,SMrw.Quant);
+		end else begin								//SentOk
+			RemoveIHrecordsStockMov(SMr.FrLocation,SMr.ThrouLocation ,SMr.SerNr,i);	
+		end;
+	end;  
+  
+	if (UnOk_OkFlag) then begin 
+		if (SMr.SentOKFlag==0) then begin
+				SMr.FrLocOKNr = BlankVal;
+				SMr.ToLocOKNr = BlankVal;
+		end;
+	end else begin	
+				SMr.FrLocOKNr = BlankVal;
+				SMr.ToLocOKNr = BlankVal;
+				SMr.FrThrouLocOKNr = BlankVal;
+				SMr.ToThrouLocOKNr = BlankVal;			
+	end;	
+	
+
+  LUnOk_StockMovVc:;
+  return;
+end;	
+
+
+
+
+
+
+
+global function boolean CheckUnOkIVVc(record IVVc IVr)
+begin
+	record ItemHistVc IHr;
+	boolean TrHs,res;
+	row IVVc IVrw;
+	integer	rwcnt,i,count;
+	val Qty; 
+
+	res = true;	
+	rwcnt = MatRowCnt(IVr);
+
+  for(i=0;i<rwcnt;i=i+1) begin
+  	MatRowGet(IVr,i,IVrw);
+  	IHr.FileName = "IVVc";
+  	IHr.TransNr = IVr.SerNr;
+  	IHr.Row = i;
+  	TrHs = true;
+  	count = 0;  	
+
+		if (IVrw.stp == kInvoiceRowTypeNormal) then begin
+			Qty = 0;
+  		While(LoopKey("FNTransNr",IHr,3,TrHs)) begin	
+  			if(IHr.TransNr!=IVr.SerNr or IHr.Row!=i) then begin TrHs=false;  end;
+  			
+  			if (TrHs) then begin	
+					Qty = Qty + IHr.Qty;
+					
+					if (IVrw.Quant<0 and IHr.RemQty != IHr.Qty) then begin
+						res = false;
+						goto LCheckUnOkIVVc;					
+					end;
+					if (IVr.InvType==kInvoiceTypeCredit and IHr.RemQty != IHr.Qty) then begin
+						res = false;
+						goto LCheckUnOkIVVc;					
+					end;										
+					count = count + 1;
+				end;
+				
+			end;
+			if ((AbsoluteVal(Qty) != AbsoluteVal(IVrw.Quant)) or count==0) then begin 
+						res = false;
+						goto LCheckUnOkIVVc;			
+			end;
+
+		end;
+	end;	
+
+LogText(0,"check ok  " );
+LCheckUnOkIVVc:;
+CheckUnOkIVVc = res;
+return;
+end;
+
+
+
+global updating 
+procedure UnOk_IVVc(var record IVVc IVr)
+begin
+  record ItemHistVc IHr,IH2r;
+	row IVVc IVrw;
+	integer	rwcnt,i;  
+	Integer res;
+	boolean TrHs;
+	string 20 checkLocation;
+	record INVc INr;	
+	
+  rwcnt = MatRowCnt(IVr);  	
+
+  
+  for(i=0;i<rwcnt;i=i+1) begin
+  	MatRowGet(IVr,i,IVrw);
+  	if (IVrw.stp == kInvoiceRowTypeNormal) then begin
+  	
+			IHr.FileName = "IVVc";
+  		IHr.TransNr = IVr.SerNr;
+  		IHr.Row = i;  
+			TrHs = true;  	
+  		While(LoopKey("FNTransNr",IHr,3,TrHs)) begin	
+  			if(IHr.TransNr!=IVr.SerNr or IHr.Row!=i) then begin TrHs=false;end;
+  			
+  			if (TrHs) then begin
+  				INr.Code = IVrw.ArtCode;
+  				ReadFirstMain(INr,1,true);
+  				if (INr.ItemType==1 or INr.ItemType==2) then begin
+  				
+						if (IVrw.Quant>0) then begin	    	
+  						IH2r.SerNr = IHr.Source;
+  						if (ReadFirstMain(IH2r,1,true)) then begin
+  							IH2r.RemQty = IH2r.RemQty + (-IHr.Qty);  //this IHr has negative Qty
+  							RecordStore(IH2r,true);
+			  				ReturnSerialNrRecord(IH2r);
+			  				RemoveSerialNrRecord(IHr);
+							end;					
+						end;
+						
+						  	
+						LogText(0,"DELETED  " & IHr.SerNr & "    : " & IHr.ArtCode);
+						// if (IVrw.Quant<0 or IVr.InvType==kInvoiceTypeCredit)	then  -  just remove
+							
+					end;
+					RecordDelete(IHr);
+					StepBack(IHr);
+							
+  			end;
+			end; 
+  	end; 
+  	
+	end; 
+	
+	IVr.LocOKNr = BlankVal; 
+  
+
+
+  return;
+end;
+
+
+
+
+
+
+global function longint CheckUnOkRetVc(record RetVc Retr)
+begin
+	record ItemHistVc IHr;
+	Integer res,count;
+	boolean TrHs;
+	row PUVc PUrw;
+	integer	rwcnt,i; 
+
+	res = 0;	
+	rwcnt = MatRowCnt(Retr);
+
+  IHr.FileName = "RetVc";
+  IHr.TransNr = Retr.SerNr;
+
+  TrHs = true;
+  count = 0;
+  While(LoopKey("FNTransNr",IHr,3,TrHs)) begin	
+  	if(IHr.TransNr!=Retr.SerNr) then begin TrHs=false;  end;
+  	
+  	if (TrHs) then begin
+			if (IHr.RemQty != IHr.Qty) then begin
+				res = 20884;
+				goto LCheckUnOkRetVc;
+			end;
+		end;
+		
+	end;
+LCheckUnOkRetVc:;
+CheckUnOkRetVc = res;
+return;
+end;
+
+
+global updating 
+procedure UnOk_RetVc(var record RetVc Retr)
+begin
+  record ItemHistVc IHr;  
+	Integer res;
+	boolean TrHs;
+	
+	res = 0;
+
+	IHr.FileName = "RetVc";
+  IHr.TransNr = Retr.SerNr;
+  TrHs = true;
+  While(LoopKey("FNTransNr",IHr,2,TrHs)) begin	
+  	if(IHr.TransNr!=Retr.SerNr) then begin TrHs=false; end;
+  	if (TrHs) then begin
+
+				RecordDelete(IHr);
+				StepBack(IHr);
+		end; 
+  end;
+  
+  Retr.LocOKNr = BlankVal;
+
+  return;
+end;
+
+
+
+global function longint CheckUnOkRetPUVc(record RetPUVc RetPUr)
+begin
+	record ItemHistVc IHr;
+	Integer res;
+	boolean TrHs;
+	val totQty;
+
+	res = 0;	
+
+  IHr.FileName = "RetPUVc";
+  IHr.TransNr = RetPUr.SerNr;
+  TrHs = true;
+  While(LoopKey("FNTransNr",IHr,2,TrHs)) begin	
+  	if(IHr.TransNr!=RetPUr.SerNr) then begin TrHs=false;  end;
+  	
+  	if (TrHs) then begin	
+			totQty = totQty + (-IHr.Qty);
+		end;		
+	end; 
+  
+	if (totQty != RetPUr.SumQuant) then begin
+		res = 20884;
+		goto LCheckUnOkRetPUVc;
+	end;
+LCheckUnOkRetPUVc:;
+CheckUnOkRetPUVc = res;
+return;
+end;
+
+
+global updating 
+procedure UnOk_RetPUVc(var record RetPUVc RetPUr)
+begin
+  record ItemHistVc IHr,IH2r;  
+	Integer res;
+	boolean TrHs;
+	
+	res = 0;
+
+  IHr.FileName = "RetPUVc";
+  IHr.TransNr = RetPUr.SerNr;
+  TrHs = true;
+  While(LoopKey("FNTransNr",IHr,2,TrHs)) begin	
+  	if(IHr.TransNr!=RetPUr.SerNr) then begin TrHs=false; end;
+  	if (TrHs) then begin
+  			IH2r.SerNr = IHr.Source;
+  			if (ReadFirstMain(IH2r,1,true)) then begin
+  				IH2r.RemQty = IH2r.RemQty - IHr.Qty;  
+  				if (RecordStore(IH2r,true)) then begin
+						//statuses and serial numbers are put back by themselves
+						RecordDelete(IHr);
+						StepBack(IHr);
+					end; 
+  			end;
+		end;
+  end;
+  
+  RetPUr.LocOKNr = BlankVal;
+
+  return;
+end;
+
+
+
+global function longint CheckUnOkSDVc(record SDVc SDr)
+begin
+	record ItemHistVc IHr;
+	Integer res;
+	boolean TrHs;
+	val totQty;
+
+	res = 0;	
+
+  IHr.FileName = "SDVc";
+  IHr.TransNr = SDr.SerNr;
+  TrHs = true;
+  While(LoopKey("FNTransNr",IHr,2,TrHs)) begin	
+  	if(IHr.TransNr!=SDr.SerNr) then begin TrHs=false;  end;
+  	
+  	if (TrHs) then begin	
+			totQty = totQty + (-IHr.Qty);
+		end;		
+	end; 
+  
+	if (totQty != SDr.TotQty) then begin
+		res = 20884;
+		goto LCheckUnOkSDVc;
+	end;
+LCheckUnOkSDVc:;
+CheckUnOkSDVc = res;
+return;
+end;
+
+
+global updating 
+procedure UnOk_SDVc(var record SDVc SDr)
+begin
+  record ItemHistVc IHr,IH2r;  
+	Integer res;
+	boolean TrHs;
+	
+	res = 0;
+
+  IHr.FileName = "SDVc";
+  IHr.TransNr = SDr.SerNr;
+  TrHs = true;
+  While(LoopKey("FNTransNr",IHr,2,TrHs)) begin	
+  	if(IHr.TransNr!=SDr.SerNr) then begin TrHs=false; end;
+  	if (TrHs) then begin
+  			IH2r.SerNr = IHr.Source;
+  			if (ReadFirstMain(IH2r,1,true)) then begin
+  				IH2r.RemQty = IH2r.RemQty - IHr.Qty; 
+  				if (RecordStore(IH2r,true)) then begin
+						//statuses and serial numbers are put back by themselves
+						RecordDelete(IHr);
+						StepBack(IHr);
+					end; 
+  			end;
+		end;
+  end;
+  
+  SDr.LocOKNr = BlankVal;
+
+  return;
+end;
