@@ -2154,18 +2154,19 @@ begin
 		if(ReadFirstKey("OrderKey",SHr, 1, true))then begin
 			if(ORr.NPPaymentType == 1 or (ORr.NPPaymentType == 0 and ORr.PrepaymentReceived == 1))then begin
 				RecordCopy(oldSHr,SHr);
-				if (SHr.Assembly == 1) then begin	//Edit----------------------Dima  28.10.2015
-					AddPaymentToIPFromSH(SHr);			//if SHr.Assembly == 1 already, RecordUpdate will not start,because nothing is changed
+				
+				//if SHr.Assembly == 1 already, RecordUpdate will not start,because nothing is changed
+				//so we run  AddPaymentToIPFromSH, but only first time
+				if (SHr.Assembly == 1 and OR2r.PrepaymentReceived == 0) then begin	//Edit----------------------Dima  28.10.2015
+					AddPaymentToIPFromSH(SHr);			
 				end;
 				SHr.Assembly = 1;
-				//RecordStore(SHr, true);
 				RecordUpdate(oldSHr,SHr,true);//Edit----------------------Dima  16.07.2015
 			end;
 			
 			if(ORr.NPPaymentType == 0 and ORr.PrepaymentReceived == 0)then begin
 				RecordCopy(oldSHr,SHr);
 				SHr.Assembly = 0;
-				//RecordStore(SHr, true);
 				RecordUpdate(oldSHr,SHr,true);//Edit----------------------Dima  16.07.2015
 			end;
 		end;

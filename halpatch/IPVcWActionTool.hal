@@ -1419,7 +1419,7 @@ begin
 		MatRowPut(IPr,rwcnt,IPrw);
 		IPVc_PasteBankCurncy(IPr,rwcnt);
 		
-		IPr.Comment = USetStr(9342) & ": " & CurrentUser;
+		IPr.Comment = USetStr(9342) & ": " & CurrentUser;	//Manager: user
 		
 		ORr.SerNr = IVr.OrderNr;
 		ReadFirstMain(ORr,1,true);
