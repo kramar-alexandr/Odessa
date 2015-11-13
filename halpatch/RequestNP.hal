@@ -15,7 +15,8 @@ external function boolean MySendRawWebRequest(string, string, boolean, string, s
 external function string 255 ConvertXml(string);
 external function string 255 ConvertXmlString(string,Boolean);
 external updating procedure UpdateORVcNewPostStatuses(record SHVc);
-
+external procedure StripSpace(var string,string);
+external function string 255 StripCharacter(string,string);
 
 SetLangMode(LangRussian,"RUS",0); 
 
@@ -26,6 +27,7 @@ begin
   area out;
   longint nodelen,res;
   string 100 str;
+  string 255 str2;
   		
   res = 0;
   
@@ -34,10 +36,15 @@ begin
 		for(i=0;i<alen;i=i+1)begin
 			str = GetStringFromArea(a,i,1);
 			if(str==(chr(60)))then begin
-				res = GetAreaFromArea(a,i,alen-i,out);
-				str = GetStringFromArea(out,0,13);
-				if(str!="<?xml version")then begin
-					logtext(0,"XML file not valid")
+				res = GetAreaFromArea(a,i,alen-i,out);	
+				str = GetStringFromArea(out,0,13);		
+				str2 = GetStringFromArea(out,GetAreaLength(out)-50,50);
+				str2 = StripCharacter(str2,chr(0));
+				str2 = StripCharacter(str2,chr(10));				
+				str2 = Right(str2,7);
+				//check correctness of XML file
+				if(str!="<?xml version" or str2!="</root>")then begin	//Edit----------------------Dima  13.11.2015
+					logtext(0,"XML file not valid:  beginning: " & str & "  ending:" & str2);
 					SetAreaZeroSize(a);
 					goto GetXMLAreaPoint2;
 				end;
@@ -46,7 +53,7 @@ begin
 			end;
 		end;
 	end else begin
-				logtext(0,"XML file is empty.")
+				logtext(0,"XML file is empty.");
 				SetAreaZeroSize(a);
 				goto GetXMLAreaPoint2;
 		end;
@@ -435,9 +442,12 @@ begin
   if(MySendRawWebRequest(host,"443",true,"POST",page & getParam,"text/xml","",false,mainRequest,replyarea,10))then begin  //WORK! 
     //messagebox(0,"Connection on!");
     logtext(0,"Hansa World::New Post: Cyties updating");
-    //writeareatofile(replyarea,"1getStatusReply.txt",0);
+    //writeareatofile(replyarea,"1getStatusReplyCyties.txt",0);
     
     GetXMLArea(replyarea);
+  	if (GetAreaLength(replyarea)==0) then begin
+  		goto LNPGetCytiesRequestMn;
+  	end;    
     
 		xdata = ParseXMLArea(replyarea);
 
@@ -570,6 +580,9 @@ begin
     //writeareatofile(replyarea,"1getStatusReply.txt",0);
     
     GetXMLArea(replyarea);
+    if (GetAreaLength(replyarea)==0) then begin
+  		goto LNPGetDescriptionRequestMn;
+  	end; 
     
    //addfiletoarea("1XML.txt",replyarea,false); 
   xdata = ParseXMLArea(replyarea);
