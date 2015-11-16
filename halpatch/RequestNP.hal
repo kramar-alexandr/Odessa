@@ -70,6 +70,55 @@ begin
 end;
 
 
+global
+procedure GetXMLArea_check(var area a,string checkword)		//Edit----------------------Dima  16.11.2015
+begin
+  longint alen,i,outlen;
+  area out;
+  longint nodelen,res;
+  string 100 str;
+  string 255 str2;
+  		
+  res = 0;
+  
+  alen = GetAreaLength(a);
+  if(alen>0)then begin  
+		for(i=0;i<alen;i=i+1)begin
+			str = GetStringFromArea(a,i,1);
+			if(str==(chr(60)))then begin
+				res = GetAreaFromArea(a,i,alen-i,out);	
+				str = GetStringFromArea(out,0,13);		
+				str2 = GetStringFromArea(out,GetAreaLength(out)-50,50);
+				str2 = StripCharacter(str2,chr(0));
+				str2 = StripCharacter(str2,chr(10));				
+				str2 = Right(str2,len(checkword));
+				//check correctness of XML file
+				if(str!="<?xml version" or str2!=checkword)then begin	
+					logtext(0,"XML file not valid:  beginning: " & str & "  ending:" & str2);
+					SetAreaZeroSize(a);
+					goto GetXMLAreaPoint2;
+				end;
+				
+				goto GetXMLAreaPoint;
+			end;
+		end;
+	end else begin
+				logtext(0,"XML file is empty.");
+				SetAreaZeroSize(a);
+				goto GetXMLAreaPoint2;
+		end;
+	
+	GetXMLAreaPoint:;
+	
+	setareazerosize(a);
+	outlen = GetAreaLength(out);
+	GetAreaFromArea(out,0,outlen,a);
+	
+	GetXMLAreaPoint2:;
+	   
+  return;
+end;
+
 
 procedure NPParseErrors(xml xdata,var string errors)
 begin
