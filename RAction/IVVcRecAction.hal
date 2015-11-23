@@ -1605,6 +1605,15 @@ LkInvoiceTypeCredit:;
       end;
     end;
   end;
+  
+  ORr.SerNr = IVp.OrderNr;		//Edit----------------------Dima  23.11.2015
+  if (ReadFirstMain(ORr,1,true)) then begin
+		if (ORr.OrderClass=="WEB" and ORr.NPPaymentType == 0 and ORr.PrepaymentReceived == 0) then begin
+			 RecordCheckError(31128,IVp.CustOrdNr,-1,"CustOrdNr");      
+       res = -1; 
+       goto L99;			 
+		end;
+	end;
 
   RecordNew(TRr);
   
