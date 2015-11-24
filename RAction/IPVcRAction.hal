@@ -515,7 +515,13 @@ some mistery code, what if customer has Sales Currency Defined?
                end;
               end;
               if (ARHistr.CustCode!=IPrw.CustCode) then begin
-                RecordCheckError(1218,"",i,"CUPNr");      
+              	if (stat==updatemode) then begin
+	                tstr = chr(13) &  chr(13) & USetStr(31125) & IPp.SerNr;
+	              end else begin 
+	              	tstr = "";
+	              end;
+                RecordCheckError(1218,tstr,i,"CUPNr"); 
+                //RecordCheckError(1218,"",i,"CUPNr"); 
                 res = -1; 
                 goto LIPVcRecordCheck;
               end;
@@ -571,7 +577,12 @@ moved to ForceUniquePP part above
                 MatRowGet(IPp,j,IP2rw);
                 if ((IP2rw.CUPNr!=-1) and (IP2rw.InvoiceNr==-1) and (IP2rw.CUPNr==IPrw.CUPNr)) then begin
                   if (IP2rw.CustCode!=IPrw.CustCode) then begin
-                    RecordCheckError(1218,"",i,"CUPNr");      
+              			if (stat==updatemode) then begin
+	              		  tstr = chr(13) &  chr(13) & USetStr(31125) & IPp.SerNr;
+	              		end else begin 
+	              			tstr = "";
+	              		end;                  
+                    //RecordCheckError(1218,"",i,"CUPNr");      
                     res = -1; 
                     goto LIPVcRecordCheck;
                   end;                
@@ -711,7 +722,13 @@ we don't have to check pmobject since it goes to diffrent account then OPrw.Obje
                   if (IPrsr.CustCode==CUr.Code)  then begin tmpf = true; end;
                 end;  
                 if (tmpf==false) then begin
-                  RecordCheckError(1218,"",i,"InvoiceNr");      
+              		if (stat==updatemode) then begin
+	              	  tstr = chr(13) &  chr(13) & USetStr(31125) & IPp.SerNr;
+	              	end else begin 
+	              		tstr = "";
+	              	end;    
+                	RecordCheckError(1218,tstr,i,"CUPNr");                
+									//RecordCheckError(1218,"",i,"InvoiceNr");      
                   res = -1; 
                   goto LIPVcRecordCheck;
                 end;  

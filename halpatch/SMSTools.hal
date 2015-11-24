@@ -1,6 +1,7 @@
 external function boolean MySendRawWebRequest(string, string, boolean, string, string, string, string, boolean, area, var area, integer);
 external function string 255 ConvertXml(string);
 external procedure GetXMLArea(var area);
+external procedure GetXMLArea_check(var area,string);
 
 
 function string 15 NormalizePhone(string phone)
@@ -53,7 +54,7 @@ procedure  CheckEPochtaResponse(var string response)	//Edit---------------------
 begin
 	integer v;
 	v = StringToInt(response);
-	
+		
 	if (v <= 0) then begin
 		switch(v) begin
 			case -1: response = USetStr(31075);
@@ -137,8 +138,8 @@ begin
    
 
   if(MySendRawWebRequest(host,"80",false,"POST",page ,"text/xml","",false,mainRequest,replyarea,5))then begin 
-   // writeareatofile(replyarea,"SMSReply.txt",0);
-    GetXMLArea(replyarea);
+    writeareatofile(replyarea,"SMSReply.txt",0);
+    GetXMLArea_check(replyarea,"</RESPONSE>");
 		xdata = ParseXMLArea(replyarea);
 
 		response = XmlGet(xdata,"RESPONSE/status");
@@ -286,7 +287,7 @@ begin
 
   if(MySendRawWebRequest(host,"80",false,"POST",page ,"text/xml","",false,mainRequest,replyarea,5))then begin 
    // writeareatofile(replyarea,"SMSReply.txt",0);
-    GetXMLArea(replyarea);
+    GetXMLArea_check(replyarea);
 		xdata = ParseXMLArea(replyarea);
 
 		response = XmlGet(xdata,"RESPONSE/status");

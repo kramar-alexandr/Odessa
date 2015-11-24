@@ -159,8 +159,7 @@ end;
 global updating 
 procedure UnOk_SHVc(var record SHVc SHr)
 begin
-// you should  delete SHVc after UnOk.
-//Creation new document is easier then rewriting code
+
   record ItemHistVc IHr,IH2r;
 	row SHVc SHrw;
 	integer	rwcnt,i;  
@@ -203,7 +202,7 @@ end;
 
 
 
-function boolean CheckRemainQtyInStock(record StockMovVc SMr, string location)
+function boolean CheckRemainQtyInStock(record StockMovVc SMr, string location)		//Edit----------------------Dima  13.10.2015
 begin
 	boolean testf,TrHs;
 	boolean res;
@@ -246,7 +245,7 @@ end;
 
 
 updating
-procedure RemoveIHrecordsStockMov(string fromLoc, string toLoc, longint SerialNr, integer rownr)
+procedure RemoveIHrecordsStockMov(string fromLoc, string toLoc, longint SerialNr, integer rownr)	//Edit----------------------Dima  13.10.2015
 begin
 	boolean testf,TrHs;
 	record ItemHistVc IHr,IH2r;
@@ -311,17 +310,17 @@ end;
 
 
 
-global function longint CheckUnOKStockMov(record StockMovVc SMr, boolean UnOk_OkFlag)
+global function longint CheckUnOKStockMov(record StockMovVc SMr, boolean UnOk_OkFlag)	//Edit----------------------Dima  13.10.2015
 begin
 Integer res;
 row StockMovVc SMrw;
 integer i,rwcnt;
 res = 0;
 
-	if (SMr.Reserved>0) then begin
-		res = 20884;	
-		goto LCheckUnOKStockMov;
-	end;
+	//if (SMr.Reserved>0) then begin
+		//res = 20884;	
+		//goto LCheckUnOKStockMov;
+	//end;
 	rwcnt = MatRowCnt(SMr);
 	for(i=0;i<rwcnt;i=i+1) begin
 		MatRowGet(SMr,i,SMrw);
@@ -347,12 +346,47 @@ return;
 end;
 
 
+/*
+
 updating
-procedure UnOK_UpdateISfromSM(string artcode,string location,integer quant)
+procedure UnOK_UpdateISfromSM_private(string artcode,string location,integer quant,string field)	//Edit----------------------Dima  12.11.2015
 begin
   record ItemStatusVc ISr;
-  //need only for SMr.ToLocation
-  //for other locations IS recalculates correctly
+
+  ISr.Code = artcode;
+  ISr.Location = location;
+  if (ReadFirstMain(ISr,2,true)) then begin
+  	switch(field) begin
+  		case "RsrvQty":
+	  			ISr.RsrvQty = ISr.RsrvQty + quant;
+	  	case "Instock":	
+	  			ISr.Instock = ISr.Instock - quant;	
+	  end;	
+		RecordStore(ISr,true);
+	end;
+	LogText(0,"upd IS  " & isReserv);
+end;
+
+
+
+updating
+procedure UnOK_UpdateISfromSM(string artcode,string location,integer quant,boolean isReserv)	//Edit----------------------Dima  13.10.2015
+begin
+	
+	UnOK_UpdateISfromSM_private(artcode,location,quant,isReserv);
+	UnOK_UpdateISfromSM_private(artcode,";;;",quant,isReserv);
+	
+end;
+
+*/
+
+
+
+updating
+procedure UnOK_UpdateISfromSM(string artcode,string location,integer quant)	//Edit----------------------Dima  13.11.2015
+begin
+  record ItemStatusVc ISr;
+
   ISr.Code = artcode;
   ISr.Location = location;
   if (ReadFirstMain(ISr,2,true)) then begin
@@ -365,39 +399,77 @@ begin
   if (ReadFirstMain(ISr,2,true)) then begin
 		ISr.Instock = ISr.Instock - quant;
 		RecordStore(ISr,true);
-	end;	
-	
+	end;
 end;
 
 
 
+updating
+procedure UnOK_UpdateISreservedfromSM(string artcode,string location,integer quant,boolean isReserv)	//Edit----------------------Dima  13.11.2015
+begin
+  record ItemStatusVc ISr;
+
+	if (isReserv) then begin
+  	ISr.Code = artcode;
+  	ISr.Location = location;
+  	if (ReadFirstMain(ISr,2,true)) then begin
+			ISr.RsrvQty = ISr.RsrvQty + quant;
+			RecordStore(ISr,true);
+		end;
+		
+  	ISr.Code = artcode;
+  	ISr.Location = ";;;";	
+  	if (ReadFirstMain(ISr,2,true)) then begin
+			ISr.RsrvQty = ISr.RsrvQty + quant;
+			RecordStore(ISr,true);
+		end;
+	end;
+end;
+
+
+
+
 global updating 
-procedure UnOk_StockMovVc(var record StockMovVc SMr, boolean UnOk_OkFlag)
+procedure UnOk_StockMovVc(var record StockMovVc SMr, boolean UnOk_OkFlag)	//Edit----------------------Dima  13.10.2015
 begin
 
   record ItemHistVc IHr,IH2r;
 	row StockMovVc SMrw;
 	integer	rwcnt,i;  
 	Integer res;
-	boolean TrHs;
+	boolean TrHs,isReserv;
 	string 20 checkLocation;
 	
 	res = 0;
 	TrHs = true;
-  rwcnt = MatRowCnt(SMr);  	
+  rwcnt = MatRowCnt(SMr);
+  isReserv = false;
+  
+  if (SMr.Reserved!=0) then begin
+  	isReserv = true;
+  end; 	  	
 
   
   for(i=0;i<rwcnt;i=i+1) begin
   	MatRowGet(SMr,i,SMrw);
   	if (UnOk_OkFlag) then begin 	//Ok
   		if (SMr.SentOKFlag==0) then begin
-  			RemoveIHrecordsStockMov(SMr.FrLocation,SMr.ToLocation ,SMr.SerNr,i); 	
+  			RemoveIHrecordsStockMov(SMr.FrLocation,SMr.ToLocation ,SMr.SerNr,i);
+  			UnOK_UpdateISreservedfromSM(SMrw.ArtCode,SMr.FrLocation,SMrw.OrdQuant,isReserv); 	//only when reserv
   		end else begin
 				RemoveIHrecordsStockMov(SMr.ThrouLocation,SMr.ToLocation ,SMr.SerNr,i);
+				//UGLY CODE!!
+				//THE BUG EXISTS SOMEWHERE IN HANSA CODE
+				//IF SentQuant>Quant, HANSA PUT INCORRECT NUMBER INTO THE ISVC.ThrouLocation RECORD (after UnOk)
+				//so we need fix the difference
+				UnOK_UpdateISfromSM(SMrw.ArtCode,SMr.ThrouLocation,SMrw.SentQuant-SMrw.Quant);
+				//end---UGLY CODE					
 			end;
-			UnOK_UpdateISfromSM(SMrw.ArtCode,SMr.ToLocation,SMrw.Quant);
+			UnOK_UpdateISfromSM(SMrw.ArtCode,SMr.ToLocation,SMrw.Quant);					//only for SMr.ToLocation. for other locations ISVc recalculates correctly
 		end else begin								//SentOk
-			RemoveIHrecordsStockMov(SMr.FrLocation,SMr.ThrouLocation ,SMr.SerNr,i);	
+			RemoveIHrecordsStockMov(SMr.FrLocation,SMr.ThrouLocation ,SMr.SerNr,i);
+			UnOK_UpdateISreservedfromSM(SMrw.ArtCode,SMr.FrLocation,SMrw.OrdQuant,isReserv); 		//only when reserv
+			
 		end;
 	end;  
   

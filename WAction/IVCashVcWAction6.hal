@@ -70,6 +70,7 @@ external function Integer OpenCCPayWindow(string,longint,integer,val,val,val,str
                           string,Integer);
 external procedure PCEftpos_Transaction_Request(Integer,val,val,Boolean,string,string,string);
 external procedure IVFinishAndPrint();
+external procedure DisplayIVItem(record IVVc,Integer);//Edit----------------------Dima  24.11.2015
 
 procedure SetPOSWindowDisplay_PaymentRow(string spec,val v)
 begin
@@ -2511,6 +2512,7 @@ begin
         IVVc_PasteLoyaltyCardNr(IVr,LMb);
         IVSumup(IVr,true);
 //        IVSumupSoftEditFields(mwn,IVr);
+				DisplayIVItem(IVr,SelectedListLine(mwn));	//Edit----------------------Dima  24.11.2015
         PutWindowRecord(mwn,IVr);
         
 //        WindowDoOK(mwn,0);

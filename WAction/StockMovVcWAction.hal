@@ -961,9 +961,6 @@ begin
       end;
     end;
   end;  
-  if(currentuser=="SA")then begin// Edit ************************** Tuesday, 20 October 2015 16:34:27
-  	res = true;
-  end;
   StockMovDClassOKFlagButtonAction = res;
   return;
 end;
@@ -1012,9 +1009,6 @@ begin
     MessageBox(20080,"");
     res = false;
   end;
-  if(currentuser=="SA")then begin// Edit ************************** Tuesday, 20 October 2015 16:34:27
-  	res = true;
-  end;
   StockMovDClassSentOKFlagButtonAction = res;
   return;
 end;
@@ -1056,9 +1050,6 @@ begin
       res = false;
     end;
   end;  
-  if(currentuser=="SA")then begin// Edit ************************** Tuesday, 20 October 2015 16:34:27
-  	res = true;
-  end;
   StockMovDClassOrdFlagButtonAction = res;
   return;
 end;

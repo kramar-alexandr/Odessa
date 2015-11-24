@@ -2060,6 +2060,24 @@ begin
 end;
 
 
+global updating procedure AcceptIVVcFromORVcweb(record ORVc ORr)	//Edit----------------------Dima  23.11.2015
+begin
+	record IVVc IVr,oldIVr;
+	
+	IVr.OrderNr = ORr.SerNr;
+	if (ORr.OrderClass=="WEB" and ORr.NPPaymentType == 0 and ORr.PrepaymentReceived == 1) then begin
+		if (ReadFirstKey("OrderNr",IVr,1,true)) then begin
+			RecordCopy(oldIVr,IVr);
+			IVr.OKFlag = 1;
+			if (RecordUpdate(oldIVr,IVr,true) != 0) then begin
+        //RecordCheckError(31128,IVr.SerNr,-1,"SerNr");
+      end;
+		end;
+	end;
+  
+end;
+
+
 
 global
 updating function LongInt ORVcRecordUpdate(var record ORVc ORr,record ORVc OR2r,LongInt stat,LongInt long4)
@@ -2149,23 +2167,28 @@ begin
   val bc1v;
   record SHVc SHr,oldSHr;
   
+  if (ORr.NPPaymentType == 0 and ORr.PrepaymentReceived == 1 and OR2r.PrepaymentReceived == 0) then begin
+  	AcceptIVVcFromORVcweb(ORr);
+  end;
+  
   if(ORr.DeliveryNewPost == 1)then begin		//Edit by Victor 02.06.15
 		SHr.OrderNr = ORr.SerNr;
 		if(ReadFirstKey("OrderKey",SHr, 1, true))then begin
 			if(ORr.NPPaymentType == 1 or (ORr.NPPaymentType == 0 and ORr.PrepaymentReceived == 1))then begin
 				RecordCopy(oldSHr,SHr);
-				if (SHr.Assembly == 1) then begin	//Edit----------------------Dima  28.10.2015
-					AddPaymentToIPFromSH(SHr);			//if SHr.Assembly == 1 already, RecordUpdate will not start,because nothing is changed
+				
+				//if SHr.Assembly == 1 already, RecordUpdate will not start,because nothing is changed
+				//so we run  AddPaymentToIPFromSH, but only first time
+				if (SHr.Assembly == 1 and OR2r.PrepaymentReceived == 0) then begin	//Edit----------------------Dima  28.10.2015
+					AddPaymentToIPFromSH(SHr);			
 				end;
 				SHr.Assembly = 1;
-				//RecordStore(SHr, true);
 				RecordUpdate(oldSHr,SHr,true);//Edit----------------------Dima  16.07.2015
 			end;
 			
 			if(ORr.NPPaymentType == 0 and ORr.PrepaymentReceived == 0)then begin
 				RecordCopy(oldSHr,SHr);
 				SHr.Assembly = 0;
-				//RecordStore(SHr, true);
 				RecordUpdate(oldSHr,SHr,true);//Edit----------------------Dima  16.07.2015
 			end;
 		end;
