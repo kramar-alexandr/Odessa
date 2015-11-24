@@ -492,11 +492,8 @@ begin
   if(MySendRawWebRequest(host,"443",true,"POST",page & getParam,"text/xml","",false,mainRequest,replyarea,10))then begin  //WORK! 
     //messagebox(0,"Connection on!");
     logtext(0,"Hansa World::New Post: Cyties updating");
-<<<<<<< HEAD
-    writeareatofile(replyarea,"1getStatusReplyCyties.txt",0);
-=======
     //writeareatofile(replyarea,"1getStatusReplyCyties.txt",0);
->>>>>>> origin/master
+
     
     GetXMLArea(replyarea);
   	if (GetAreaLength(replyarea)==0) then begin
