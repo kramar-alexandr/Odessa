@@ -44,6 +44,7 @@ begin
 				str2 = Right(str2,7);
 				//check correctness of XML file
 				if(str!="<?xml version" or str2!="</root>")then begin	//Edit----------------------Dima  13.11.2015
+					writeareatofile(a,"1warehouses" & GetCurTick & ".txt",0);
 					logtext(0,"XML file not valid:  beginning: " & str & "  ending:" & str2);
 					SetAreaZeroSize(a);
 					goto GetXMLAreaPoint2;
@@ -491,11 +492,7 @@ begin
   if(MySendRawWebRequest(host,"443",true,"POST",page & getParam,"text/xml","",false,mainRequest,replyarea,10))then begin  //WORK! 
     //messagebox(0,"Connection on!");
     logtext(0,"Hansa World::New Post: Cyties updating");
-<<<<<<< HEAD
-    writeareatofile(replyarea,"1getStatusReplyCyties.txt",0);
-=======
     //writeareatofile(replyarea,"1getStatusReplyCyties.txt",0);
->>>>>>> origin/master
     
     GetXMLArea(replyarea);
   	if (GetAreaLength(replyarea)==0) then begin
@@ -1010,6 +1007,8 @@ begin
   record NPWarehouseVc NPWr;
   record NPCityVc NPCr;
   record NPSettingsBlock NPSettingsb;
+  Boolean notSynchronize;
+  //register will not synchronize if any error occures (incorrect XML file, not  response,...)
   
 	BlockLoad(NPSettingsb);  
   if (blank(NPSettingsb.APIkey)) then begin
@@ -1021,7 +1020,18 @@ begin
   page = "/v2.0/xml/";
   //cityRef = "ru"; //ua ru en 
   
-  NPCr.City = "";
+  //LogText(0,CountRecords("NPWarehouseVc") & "   before");
+  
+	if(CountRecords("NPWarehouseVc") > 0) then begin
+		NPWr.CityRef = "";
+		while (LoopMain(NPWr,1,true)) begin
+			NPWr.synchFlag = 0;
+			if (RecordStore(NPWr,true)) then begin		end;
+		end;
+	end;   
+  
+  
+  	NPCr.City = "";
 		while (LoopMain(NPCr,1,true)) begin
 			cityRef = NPCr.Ref;
 			cityName = NPCr.City;
@@ -1031,15 +1041,19 @@ begin
 			LsendRequestAgainGet1: ;
 			if(MySendRawWebRequest(host,"443",true,"POST",page & getParam,"text/xml","",false,mainRequest,replyarea,10))then begin 
 				logtext(0,"Hansa World: GetWarehouses - " & cityName);
+					//writeareatofile(replyarea,"1warehouses.txt",0);
+
 		
 				GetXMLArea(replyarea);
-				//writeareatofile(replyarea,"1CargoTypeReply2.txt",0);
+	
+				
+			  if (GetAreaLength(replyarea)==0) then begin	notSynchronize = true; LogText(0,cityName); goto L2222; 	end;
 		
 				xdata = ParseXMLArea(replyarea);
 				i = 0;
-
+				
 //				NPWr.Description = "";
-				while(XmlNodeExists(xdata,"root/data/item[" & i & "]/Description"))begin
+				while(XmlNodeExists(xdata,"root/data/item[" & i & "]/Description")) begin
 					RecordNew(NPWr);
 					descr = XmlGet(xdata,"root/data/item[" & i & "]/Description");
 						NPWr.Description = descr;
@@ -1054,7 +1068,7 @@ begin
 						NPWr.Longitude = XmlGet(xdata,"root/data/item[" & i & "]/Longitude"); 
 						NPWr.Latitude = XmlGet(xdata,"root/data/item[" & i & "]/Latitude"); 
 						NPWr.City = cityName;
-					
+						NPWr.synchFlag = 1;
 						if (RecordStore(NPWr,true)) then begin		end;
 		
 					i = i + 1;
@@ -1066,12 +1080,31 @@ begin
 					millisleep(100);
 					goto LsendRequestAgainGet1;
 				end;
+				if (repeat>=3) then begin notSynchronize = true;LogText(0,cityName);	  end;
 				repeat = 0;
 				
 				logtext(0,"Hansa World: No Connection to api.novaposhta.ua. There is no "  & cityName);
 			end;
 		end;
 		
+		if (notSynchronize==false) then begin
+			TrHs = true;
+			Resetloop(NPWr);
+			NPWr.synchFlag = 0;
+			i = 0;
+			while (LoopKey("synchFlag",NPWr,1,TrHs)) begin
+				if (NPWr.synchFlag!=0) then begin TrHs = false; end;
+				if (TrHs) then begin
+					RecordDelete(NPWr);
+					StepBack(NPWr);
+					i=i+1;
+				end;
+			end;
+			LogText(0,"deleted " & i);
+		end;
+		
+		//LogText(0,CountRecords("NPWarehouseVc") & "   after");		
+		L2222:;
  	LNPGetWarehouseMn:;
   return;
 end;
