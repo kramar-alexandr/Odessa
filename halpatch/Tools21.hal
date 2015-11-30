@@ -2,7 +2,8 @@ external function Integer AccrualSimulationsTransferred(LongInt,string);
 external function Boolean ReadFirstItem(string,var record INVc,Boolean,Boolean);
 external procedure GetFullCurncyRate (var string,Date,var val,var val,var val,var val,var val);
 external function Integer PMCheckType(string,var string,var string);
-external function longint CheckUnOKStockMov(record StockMovVc, boolean);
+external function longint CheckUnOKStockMov(record StockMovVc, boolean);//Edit----------------------Dima  10.11.2015
+external function boolean CheckUnOkIVVc(record IVVc);//Edit----------------------Dima  30.11.2015
 
 global
 function Boolean CheckCurncy(string paymode,string curncy)
@@ -663,6 +664,7 @@ BEGIN
         goto LIsUnOKAllowed_IVVc;
       end;
     end else begin
+    /*																								//Edit----------------------Dima  08.10.2015
       rwcnt = MatRowCnt(IVp);
       for (i=0;i<rwcnt;i=i+1) begin
         MatRowGet(IVp,i,IVrw);
@@ -672,7 +674,18 @@ BEGIN
             goto LIsUnOKAllowed_IVVc;
           end;
         end;
-      end;    
+      end;			*/	
+      
+      if (UserCanAction("UnOKAll",false)) then begin	//Edit----------------------Dima  08.10.2015
+      	if (CheckUnOkIVVc(IVp)==false) then begin	
+      	      res = 1273;
+      	      goto LIsUnOKAllowed_IVVc;				
+				end;
+			end else begin
+      	  res = 1273;
+      	  goto LIsUnOKAllowed_IVVc;	
+      end;
+          
     end;
   end;
   if (IVp.Invalid!=0) then begin

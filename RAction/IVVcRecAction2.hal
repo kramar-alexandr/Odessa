@@ -97,6 +97,7 @@ external function Boolean EInvoiceWithPDFFileTest(string,string,var record EInvC
 external updating procedure RoyaltyIVRemoved(record IVVc);
 external function string 20 GetCustomOfficialSerNr; //Edit***************************Sasha2,16:54 28.01.2015
 external procedure Recalculate_CustomStatusFlagText(var record ORVc);	//Edit----------------------Dima  22.09.2015
+external updating procedure UnOk_IVVc(var record IVVc);//Edit----------------------Dima  30.11.2015
 
 procedure SetIVAcceptanceFlag(var record IVVc IVr,record IVVc prevIVr,LongInt stat)
 begin
@@ -894,6 +895,7 @@ LkInvoiceTypeCredit:;
           end;
       end;
       IVr.Prntdf = 0;
+      UnOk_IVVc(IVr);	//Edit----------------------Dima  30.11.2015
   end;
 LIVVcRecordUpdate:;
   IVVcRecordUpdate = res; 
