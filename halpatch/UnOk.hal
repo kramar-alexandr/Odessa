@@ -525,18 +525,22 @@ begin
 					
 					if (IVrw.Quant<0 and IHr.RemQty != IHr.Qty) then begin
 						res = false;
+						Logtext(0,"---1");
 						goto LCheckUnOkIVVc;					
 					end;
 					if (IVr.InvType==kInvoiceTypeCredit and IHr.RemQty != IHr.Qty) then begin
 						res = false;
+						Logtext(0,"---2");
 						goto LCheckUnOkIVVc;					
 					end;										
 					count = count + 1;
 				end;
 				
 			end;
+			ResetLoop(IVr);
 			if ((AbsoluteVal(Qty) != AbsoluteVal(IVrw.Quant)) or count==0) then begin 
 						res = false;
+						Logtext(0,"---3 " & IVrw.ArtCode & "    row " & i  & "  count " & count);
 						goto LCheckUnOkIVVc;			
 			end;
 
