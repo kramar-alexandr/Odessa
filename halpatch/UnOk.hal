@@ -30,7 +30,8 @@ begin
 			end;
 			
 		end;
-		
+		ResetLoop(IHr);
+				
 		if(count==0) then begin //records don't exist
 			res = 20884;
 			goto LCheckUnOkPUVc;
@@ -520,18 +521,15 @@ begin
   		While(LoopKey("FNTransNr",IHr,3,TrHs)) begin	
   			if(IHr.TransNr!=IVr.SerNr or IHr.Row!=i) then begin TrHs=false;  end;
   			
-  			logtext(0,IHr.TransNr & " " & IVr.SerNr & " " & IHr.Row & " " & i);
   			if (TrHs) then begin	
 					Qty = Qty + IHr.Qty;
 					
 					if (IVrw.Quant<0 and IHr.RemQty != IHr.Qty) then begin
 						res = false;
-						Logtext(0,"---1");
 						goto LCheckUnOkIVVc;					
 					end;
 					if (IVr.InvType==kInvoiceTypeCredit and IHr.RemQty != IHr.Qty) then begin
 						res = false;
-						Logtext(0,"---2");
 						goto LCheckUnOkIVVc;					
 					end;										
 					count = count + 1;
@@ -541,7 +539,7 @@ begin
 			ResetLoop(IHr);
 			if ((AbsoluteVal(Qty) != AbsoluteVal(IVrw.Quant)) or count==0) then begin 
 						res = false;
-						Logtext(0,"---3 " & IVrw.ArtCode & "    row " & i  & "  count " & count);
+						//Logtext(0,"---3 " & IVrw.ArtCode & "    row " & i  & "  count " & count);
 						goto LCheckUnOkIVVc;			
 			end;
 
@@ -551,9 +549,7 @@ begin
 LogText(0,"check ok  " );
 LCheckUnOkIVVc:;
 
-if(currentuser=="SA")then begin
-	res = true;
-end;
+
 
 CheckUnOkIVVc = res;
 return;
