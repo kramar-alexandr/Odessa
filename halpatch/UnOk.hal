@@ -520,6 +520,7 @@ begin
   		While(LoopKey("FNTransNr",IHr,3,TrHs)) begin	
   			if(IHr.TransNr!=IVr.SerNr or IHr.Row!=i) then begin TrHs=false;  end;
   			
+  			logtext(0,IHr.TransNr & " " & IVr.SerNr & " " & IHr.Row & " " & i);
   			if (TrHs) then begin	
 					Qty = Qty + IHr.Qty;
 					
@@ -537,7 +538,7 @@ begin
 				end;
 				
 			end;
-			ResetLoop(IVr);
+			ResetLoop(IHr);
 			if ((AbsoluteVal(Qty) != AbsoluteVal(IVrw.Quant)) or count==0) then begin 
 						res = false;
 						Logtext(0,"---3 " & IVrw.ArtCode & "    row " & i  & "  count " & count);
@@ -549,6 +550,11 @@ begin
 
 LogText(0,"check ok  " );
 LCheckUnOkIVVc:;
+
+if(currentuser=="SA")then begin
+	res = true;
+end;
+
 CheckUnOkIVVc = res;
 return;
 end;
@@ -576,7 +582,8 @@ begin
 			IHr.FileName = "IVVc";
   		IHr.TransNr = IVr.SerNr;
   		IHr.Row = i;  
-			TrHs = true;  	
+			TrHs = true;  
+				
   		While(LoopKey("FNTransNr",IHr,3,TrHs)) begin	
   			if(IHr.TransNr!=IVr.SerNr or IHr.Row!=i) then begin TrHs=false;end;
   			
@@ -605,6 +612,7 @@ begin
 							
   			end;
 			end; 
+			resetloop(IHr);
   	end; 
   	
 	end; 
