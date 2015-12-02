@@ -5145,11 +5145,12 @@ begin
   RadioButton(h4-30,v+=16,2,0,"Подтвержден",CustomStatusFlag);
   RadioButton(h4-30,v+=16,3,0,"Не дозвонились",CustomStatusFlag);
   RadioButton(h4-30,v+=16,4,0,"Заказ изменен",CustomStatusFlag);
+  RadioButton(h4-30,v+=16,11,0,"В ожидании оплаты",CustomStatusFlag);
   RadioButton(h4-30,v+=16,5,0,"В сборке",CustomStatusFlag);
   RadioButton(h4-30,v+=16,6,0,"Собран",CustomStatusFlag);
   RadioButton(h4-30,v+=16,7,0,"Отправлен",CustomStatusFlag);
   RadioButton(h4-30,v+=16,8,0,"Доставлен",CustomStatusFlag);
-  RadioButton(h4-30,v+=16,9,0,"Завершен",CustomStatusFlag);
+  RadioButton(h4-30,v+=16,9,0,"Завершен",CustomStatusFlag);		//Edit----------------------Dima  01.09.2015
   RadioButton(h4-30,v+=16,10,0,"Отменен",CustomStatusFlag); //Edit***************************Sasha2,14:34 14.07.2014 }
 
   //CheckBox(h4,v=6,0,"Закрыт",Closed); //Edit***************************Sasha2,11:28 14.07.2014

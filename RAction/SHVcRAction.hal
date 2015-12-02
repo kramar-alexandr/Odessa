@@ -1616,7 +1616,7 @@ begin
   if (ReadFirstKey("OrderNr",IVr,1,true)) then begin
   	if (IVr.OKFlag!=0) then begin
 			if(ReadFirstMain(ORr,1,true)) then begin
-				if (ORr.CustomStatusFlag < 5) then begin
+				if (ORr.CustomStatusFlag < 5 or ORr.CustomStatusFlag == 11) then begin
 						ORr.CustomStatusFlag = 5;
 						Recalculate_CustomStatusFlagText(ORr);
 						RecordStore(ORr,true);

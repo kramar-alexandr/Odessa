@@ -1951,6 +1951,7 @@ begin
     case 2: ORr.CustomStatusFlagText = USetStr(31104);
     case 3: ORr.CustomStatusFlagText = USetStr(31105);
     case 4: ORr.CustomStatusFlagText = USetStr(31106);
+    case 11: ORr.CustomStatusFlagText = USetStr(31036);
     case 5: ORr.CustomStatusFlagText = USetStr(31107);
     case 6: ORr.CustomStatusFlagText = USetStr(31108);
     case 7: ORr.CustomStatusFlagText = USetStr(31109);
@@ -2118,7 +2119,8 @@ begin
 	end;
 	if (CheckORVcConfirmStatus(ORr)) then begin
 		ORr.CustomStatusFlag = 2;
-	end;		
+	end;
+		
   if (OR2r.Closed==0 and ORr.Closed!=0 and ORr.CustomStatusFlag!=10) then begin //Edit***************************Sasha2,16:19 04.02.2015 {
     ORr.CustomStatusFlag = 10;
     ORr.Addr0 = USetStr(31112) & ORr.Addr0;
@@ -2597,6 +2599,7 @@ begin
   ORr.TransTime = ""; //Edit***************************Sasha2,13:50 15.07.2014
   ORr.SyncFlag = 0; //Edit***************************Sasha2,13:50 15.07.2014
   ORr.CustomStatusFlag = 0; //Edit***************************Sasha2,13:50 15.07.2014
+  ORr.PrepaymentReceived = 0;
   
   ORVcRecordDuplicate = res;  
   return;
@@ -2658,7 +2661,7 @@ begin
     if (indexname=="ActArtCodeOSFlag")  then begin res = 0; end;
   end;
   
-  if (ORr.Closed>0  or ORr.CustomStatusFlag>=9) then begin 		//Edit----------------------Dima  26.08.2015
+  if (ORr.Closed>0  or (ORr.CustomStatusFlag>=9 and ORr.CustomStatusFlag!=11)) then begin 		//Edit----------------------Dima  26.08.2015
     if (indexname=="ActShipSerNr")  then begin res = 0; end;
     if (indexname=="ActShipInvFlag")  then begin res = 0; end;
     if (indexname=="ActShipCustCode")  then begin res = 0; end;

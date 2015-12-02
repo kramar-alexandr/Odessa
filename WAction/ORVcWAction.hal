@@ -85,6 +85,7 @@ begin
     case 2: res = kRowcolorYellow;
     case 3: res = kRowcolorRed;
     case 4: res = kRowcolorRed;
+    case 11: res = kRowcolorGreen;
     case 5: res = kRowcolorGreen;
     case 6: res = kRowcolorGreen;
     case 7: res = kRowcolorGreen;
@@ -110,6 +111,7 @@ begin
     case 2: res = kRowcolorYellow;
     case 3: res = kRowcolorRed;
     case 4: res = kRowcolorRed;
+    case 11: res = kRowcolorGreen;
     case 5: res = kRowcolorGreen;
     case 6: res = kRowcolorGreen;
     case 7: res = kRowcolorGreen;

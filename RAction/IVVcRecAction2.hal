@@ -503,27 +503,32 @@ BEGIN
   if (nonblank(IVr.OfficialSerNr)) then begin
     UpdateOffSerNr(IVr.SerNr,"IVVc",IVr.InvType,IVr.OfficialSerNr,false);
   end;
+  
   if (IVr.OKFlag!=0) then begin
     if (nonblank(IVr.LoyaltyCardNr) and (IVr.Points!=0)) then begin
       AddPointsHist(IVr.SerNr,"IVVc",IVr.InvType);
       IVVc_LoyaltyCardPointsRedemption(IVr,false);
     end;
-    
-    ORr.SerNr = IVr.OrderNr;									//Edit----------------------Dima  22.09.2015
-    SHr.OrderNr = IVr.OrderNr;
-    if(IVr.OrderNr>-1)then begin// Edit ************************** Tuesday, 29 September 2015 11:07:07
-			if (ReadFirstKey("OrderKey",SHr,1,true)) then begin
-				if(ReadFirstMain(ORr,1,true)) then begin
-					if (ORr.CustomStatusFlag < 5) then begin
-							ORr.CustomStatusFlag = 5;
-							Recalculate_CustomStatusFlagText(ORr);
-							RecordStore(ORr,true);
-					end;
-				end;
-			end;
-		end;
-		   
   end;
+  
+  
+  SHr.OrderNr = IVr.OrderNr;			//Edit----------------------Dima  02.12.2015
+  ORr.SerNr = IVr.OrderNr;
+  if(IVr.OrderNr>-1)then begin		// Edit ************************** Tuesday, 29 September 2015 11:07:07
+  	if(ReadFirstMain(ORr,1,true)) then begin
+  		if (ORr.OrderClass=="WEB" and ORr.NPPaymentType==0 and ORr.PrepaymentReceived==0 and ORr.CustomStatusFlag < 5) then begin
+  			ORr.CustomStatusFlag = 11;
+  		end;
+  		if (ReadFirstKey("OrderKey",SHr,1,true) and IVr.OKFlag!=0) then begin
+				if (ORr.CustomStatusFlag < 5 or ORr.CustomStatusFlag == 11) then begin
+						ORr.CustomStatusFlag = 5;    		
+				end;    		
+  		end;
+			Recalculate_CustomStatusFlagText(ORr);
+			RecordStore(ORr,true);    		
+  	end;
+	end;  
+  
 LIVVcRecordSaveAfter:;
   IVVcRecordSaveAfter = res; 
   RETURN;
@@ -977,10 +982,10 @@ BEGIN
     
     ORr.SerNr = IVr.OrderNr;									//Edit----------------------Dima  22.09.2015
     SHr.OrderNr = IVr.OrderNr;
-    if(IVr.OrderNr>-1)then begin
+    if(IVr.OrderNr>-1 and IVr.OKFlag!=0)then begin
 			if (ReadFirstKey("OrderKey",SHr,1,true)) then begin
 				if(ReadFirstMain(ORr,1,true)) then begin
-					if (ORr.CustomStatusFlag < 5) then begin
+					if (ORr.CustomStatusFlag < 5 or ORr.CustomStatusFlag == 11) then begin
 							ORr.CustomStatusFlag = 5;
 							Recalculate_CustomStatusFlagText(ORr);
 							RecordStore(ORr,true);
