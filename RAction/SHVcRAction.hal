@@ -1614,14 +1614,17 @@ begin
   ORr.SerNr = SHr.OrderNr;									//Edit----------------------Dima  22.09.2015
   IVr.OrderNr = SHr.OrderNr;
   if (ReadFirstKey("OrderNr",IVr,1,true)) then begin
-  	if (IVr.OKFlag!=0) then begin
-			if(ReadFirstMain(ORr,1,true)) then begin
+	  if(ReadFirstMain(ORr,1,true)) then begin
+  		if (ORr.OrderClass=="WEB" and ORr.NPPaymentType==0 and ORr.PrepaymentReceived==0 and ORr.CustomStatusFlag < 5) then begin
+  			ORr.CustomStatusFlag = 11;
+  		end;
+  		if (IVr.OKFlag!=0) then begin
 				if (ORr.CustomStatusFlag < 5 or ORr.CustomStatusFlag == 11) then begin
 						ORr.CustomStatusFlag = 5;
-						Recalculate_CustomStatusFlagText(ORr);
-						RecordStore(ORr,true);
 				end;
 			end;
+			Recalculate_CustomStatusFlagText(ORr);
+			RecordStore(ORr,true);
 		end;	
 	end;	
 

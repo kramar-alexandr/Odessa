@@ -516,16 +516,18 @@ BEGIN
   ORr.SerNr = IVr.OrderNr;
   if(IVr.OrderNr>-1)then begin		// Edit ************************** Tuesday, 29 September 2015 11:07:07
   	if(ReadFirstMain(ORr,1,true)) then begin
-  		if (ORr.OrderClass=="WEB" and ORr.NPPaymentType==0 and ORr.PrepaymentReceived==0 and ORr.CustomStatusFlag < 5) then begin
-  			ORr.CustomStatusFlag = 11;
-  		end;
-  		if (ReadFirstKey("OrderKey",SHr,1,true) and IVr.OKFlag!=0) then begin
-				if (ORr.CustomStatusFlag < 5 or ORr.CustomStatusFlag == 11) then begin
-						ORr.CustomStatusFlag = 5;    		
-				end;    		
-  		end;
-			Recalculate_CustomStatusFlagText(ORr);
-			RecordStore(ORr,true);    		
+  		if (ReadFirstKey("OrderKey",SHr,1,true)) then begin
+  			if (ORr.OrderClass=="WEB" and ORr.NPPaymentType==0 and ORr.PrepaymentReceived==0 and ORr.CustomStatusFlag < 5) then begin
+  				ORr.CustomStatusFlag = 11;
+  			end;
+  			if (IVr.OKFlag!=0) then begin
+					if (ORr.CustomStatusFlag < 5 or ORr.CustomStatusFlag == 11) then begin
+							ORr.CustomStatusFlag = 5;    		
+					end;    		
+  			end;
+				Recalculate_CustomStatusFlagText(ORr);
+				RecordStore(ORr,true);
+			end;    		
   	end;
 	end;  
   
