@@ -210,6 +210,7 @@ begin
   
   Maintenance("Экспорт склада CSV",ExportStockCSVClass,ExportStockCSVMn,modSY);
   Maintenance("Экспорт CSV для мобильного",MyVClass,ExportAllItems,modSY);	//Edit----------------------Dima  24.03.2015
+  Maintenance("FIXIHR",MyVClass,FixItemHistMn,modDBMain);	//Edit----------------------Dima  24.03.2015
 
   
   Maintenance("Пересчитать значение объема в карточке товара",RecalcINVolumeClass,RecalcINVolumeMn,modDBMain);//Edit***************************Sasha2,13:50 24.06.2014
