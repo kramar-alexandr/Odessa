@@ -181,6 +181,7 @@ begin
   			IH2r.SerNr = IHr.Source;
   			if (ReadFirstMain(IH2r,1,true)) then begin
   				IH2r.RemQty = IH2r.RemQty - IHr.Qty;  //SHVc has negative Qty
+  				IH2r.RemCostPrice = IH2r.TotCostPrice/IH2r.Qty*IH2r.RemQty;
   				if (RecordStore(IH2r,true)) then begin
   				
 	  				ReturnSerialNrRecord(IH2r);  				
@@ -268,6 +269,7 @@ LogText(0,"RemoveIHrecordsStockMov");
   			IH2r.SerNr = IHr.Source;
   			if (ReadFirstMain(IH2r,1,true)) then begin
   				IH2r.RemQty = IH2r.RemQty + (-IHr.Qty);  //IHr.Qty has negative Qty
+  				IH2r.RemCostPrice = IH2r.TotCostPrice/IH2r.Qty*IH2r.RemQty;  				
   				if (RecordStore(IH2r,true)) then begin
   				LogText(0,"DELETED fr " & IHr.SerNr & "    : " & IHr.ArtCode);
   				
@@ -592,6 +594,7 @@ begin
   						IH2r.SerNr = IHr.Source;
   						if (ReadFirstMain(IH2r,1,true)) then begin
   							IH2r.RemQty = IH2r.RemQty + (-IHr.Qty);  //this IHr has negative Qty
+			  				IH2r.RemCostPrice = IH2r.TotCostPrice/IH2r.Qty*IH2r.RemQty;
   							RecordStore(IH2r,true);
 			  				ReturnSerialNrRecord(IH2r);
 			  				RemoveSerialNrRecord(IHr);
@@ -733,7 +736,8 @@ begin
   	if (TrHs) then begin
   			IH2r.SerNr = IHr.Source;
   			if (ReadFirstMain(IH2r,1,true)) then begin
-  				IH2r.RemQty = IH2r.RemQty - IHr.Qty;  
+  				IH2r.RemQty = IH2r.RemQty - IHr.Qty;
+  				IH2r.RemCostPrice = IH2r.TotCostPrice/IH2r.Qty*IH2r.RemQty;  
   				if (RecordStore(IH2r,true)) then begin
 						//statuses and serial numbers are put back by themselves
 						RecordDelete(IHr);
@@ -797,7 +801,8 @@ begin
   	if (TrHs) then begin
   			IH2r.SerNr = IHr.Source;
   			if (ReadFirstMain(IH2r,1,true)) then begin
-  				IH2r.RemQty = IH2r.RemQty - IHr.Qty; 
+  				IH2r.RemQty = IH2r.RemQty - IHr.Qty;
+  				IH2r.RemCostPrice = IH2r.TotCostPrice/IH2r.Qty*IH2r.RemQty;  				 
   				if (RecordStore(IH2r,true)) then begin
 						//statuses and serial numbers are put back by themselves
 						RecordDelete(IHr);
