@@ -6496,7 +6496,7 @@ begin
   EnterSkip(Math);
   Tile(tilenr,79,true,tilenr,Math); tilenr = tilenr + 1;
   v = 24;
-  MatrixBegin(4,v,-50,-50,-,199);
+  MatrixBegin(4,v,-50,-50,-,2000);
 	MatTypedRow(stp);
   Flip(0);
   flipnr = 1;
