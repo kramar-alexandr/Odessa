@@ -21,7 +21,8 @@ external function roundmode DefaultRoundMode();
 remote function Boolean PUVc_PasteArtCode(var record PUVc,Integer,var string,var string);
 external procedure FindPUStockAcc(string,record CostAccBlock,string,string,string,record INVc,Integer,var string,var string,Boolean);
 external procedure PUSumUp(var record PUVc);
-
+external function Boolean StockMovVc_PasteArtCode(var record StockMovVc,Integer,Integer,var array string);
+external function Boolean StockMovVc_PasteQuant(var record StockMovVc,Integer);
 
 SetLangMode(LangRussian,"RUS",0);
 
@@ -480,6 +481,84 @@ begin
 			PUr.TotWeight = Weight;
 		RecordStore(PUr,true);
 		end;
+	end;
+
+return;
+end;
+
+
+global
+updating procedure SMImportIn()//   Edit-------------------------------------------Dima    23.12.2014  
+begin
+  record StockMovVc SMr,SM2r;
+  row StockMovVc SMrw;
+  record LocationVc Locr;
+  string 50 location,curLoc, artcode, quant,price;
+  Integer pucnt,changed;
+  record INVc INr;
+	integer coefx;
+	array string 100 warn;
+	
+	pucnt =0;
+	
+	recordnew(SMr);
+	while (TestEOF()==false) begin	
+
+		//location = ImportField;
+		artcode = ImportField;
+		quant = ImportField;
+		if (pucnt<=1999) then begin	//заполнение таблицы данными
+			INr.Code = artcode;
+			If(readfirstmain(INr,1,true))then begin
+				logtext(0,artcode);
+				SMrw.ArtCode = artcode;
+				matrowput(SMr,pucnt,SMrw);
+				changed = 1;
+				StockMovVc_PasteArtCode(SMr,pucnt,changed,warn);
+				matrowget(SMr,pucnt,SMrw);
+				SMrw.OrdQuant = StringToVal(quant,M4UVal);
+      	SMrw.Volume = INr.Volume * SMrw.OrdQuant; 
+     		SMrw.Weight = INr.Weight * SMrw.OrdQuant;
+				SMrw.Quant = StringToVal(quant,M4UVal);
+				MatRowPut(SMr,pucnt,SMrw);
+		    StockMovVc_PasteQuant(SMr,pucnt);
+
+				pucnt= pucnt + 1;	
+			end;
+		end else begin			//создание новой PU записи
+
+			SMr.TransDate = currentdate;
+			SMr.SerNr = NextSerNr("StockMovVc",SMr.TransDate,-1,false,"");
+			logtext(0,"store1" & SMr.SerNr);
+			recordstore(SMr,true);
+			recordNew(SMr);
+			pucnt = 0;
+			INr.Code = artcode;
+			If(readfirstmain(INr,1,true))then begin
+				SMrw.ArtCode = artcode;
+				matrowput(SMr,pucnt,SMrw);
+				changed = 1;
+				StockMovVc_PasteArtCode(SMr,pucnt,changed,warn);
+				matrowget(SMr,pucnt,SMrw);
+				SMrw.OrdQuant = StringToVal(quant,M4UVal);
+				SMrw.Volume = INr.Volume * SMrw.OrdQuant; 
+				SMrw.Weight = INr.Weight * SMrw.OrdQuant;
+				SMrw.Quant = StringToVal(quant,M4UVal);
+				MatRowPut(SMr,pucnt,SMrw);
+				StockMovVc_PasteQuant(SMr,pucnt);
+
+				pucnt= pucnt + 1;	
+			end;
+		end;
+		
+		if (NextImportLine(true)) then begin end;
+	end;
+
+	if (pucnt>0) then begin	//добавление последней записи
+			SMr.TransDate = currentdate;
+ 			SMr.SerNr = NextSerNr("StockMovVc",SMr.TransDate,-1,false,"");
+ 			logtext(0,"store" & SMr.SerNr);
+			recordstore(SMr,true);
 	end;
 
 return;

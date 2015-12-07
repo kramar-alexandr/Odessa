@@ -272,6 +272,7 @@ begin
   Import("€мпорт товаров",INImportIClass,INImportIn,modIN);//Added********************Dima 20.11.2014
   Import("‡аменить группу товара",INReplaceGroupIClass,INReplaceGroupIn,modIN);//Added********************Dima 21.11.2014
   Import("€мпорт поступлений на склад",PUImportIClass,PUImportIn,modIN);//Added********************Dima 24.12.2014
+  Import("€мпорт перемещений",PUImportIClass,SMImportIn,modIN);
  	Import("€мпорт товаров RAW",INImportIClass,ImportRawItems,modDBMain);//Added********************Dima 20.11.2014
  	Import("€мпорт товаров RAW2",INImportIClass,OdessaIn,modDBMain);//Added********************Dima 20.11.2014
  	Import("€мпорт классификаций товаров",INImportIClass,ImportVEClassIn,modDBMain);//Added********************Dima 20.11.2014
