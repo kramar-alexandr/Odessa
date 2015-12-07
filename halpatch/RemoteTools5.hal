@@ -716,7 +716,10 @@ BEGIN
   BlockLoad(OSb);
   Locr.Code = ORr.Location;
   ReadFirstMain(Locr,1,true);
-
+	
+	
+	Locr.RequirePos = 0;// Edit ************************** Monday, 7 December 2015 13:54:43
+	
   if (Locr.RequirePos!=0) then begin 
     if (ISMAINTENANCE==false) then begin
       res = 2299;
