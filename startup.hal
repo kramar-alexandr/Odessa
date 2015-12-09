@@ -207,7 +207,7 @@ begin
 	 SString(31127,"Нельзя сохранять будущим числом");
    SString(31128,"Не получена предоплата для счета №");
  
- SString(31888,"КОС-2");//temporary
+ SString(31888,"КОС_2");//temporary
   
   Maintenance("Экспорт склада CSV",ExportStockCSVClass,ExportStockCSVMn,modSY);
   Maintenance("Экспорт CSV для мобильного",MyVClass,ExportAllItems,modSY);	//Edit----------------------Dima  24.03.2015
