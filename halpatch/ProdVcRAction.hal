@@ -237,6 +237,46 @@ begin
   return;
 end;
 
+
+function longint CheckPositionsInProduction(record ProdVc Prodp,var integer rowno)		//Edit----------------------Dima  09.12.2015
+Begin
+	longint res;
+	integer rwcnt,i;
+	record LocationVc Locr;
+	row ProdVc Prodrw;
+	record PosVc Posr;
+	
+	res = 0;
+	Locr.Code = Prodp.Location;
+	ReadFirstMain(Locr,1,true);	
+	
+	rwcnt = MatRowCnt(Prodp);
+	for(i=0;i<rwcnt;i=i+1) begin
+		MatRowGet(Prodp,i,Prodrw);
+		rowno = i;
+		if (blank(Prodrw.PosCode)) then begin
+			res = 31129;
+			goto LCheckPositionsInProduction;
+		end else begin	
+			Posr.Code = Prodrw.PosCode;
+			if (ReadFirstMain(Posr,1,true)) then begin
+				if(Posr.Location != Locr.Code) then begin
+					res = 31130;
+					goto LCheckPositionsInProduction;					
+				end;
+			end else begin	
+					res = 31130;
+					goto LCheckPositionsInProduction;				
+			end;	
+		end;			
+	end;	
+
+	LCheckPositionsInProduction:;
+	CheckPositionsInProduction = res;
+return;
+end;
+
+
 global
 updating function LongInt DoProdVcRecordCheck(var record ProdVc Prodp,record ProdVc Prod2p,LongInt stat,LongInt check,Boolean donotcalctimecostf,var record TRVc gTRp,var Integer rowno,var string extracom,var string fieldnam)
 BEGIN
@@ -439,12 +479,22 @@ BEGIN
       res = 1120; 
       goto LProdVcRecordCheck;
     end;
+ /*	//Edit----------------------Dima  09.12.2015
     if (Locr.RequirePos!=0) then begin
       extracom = " " & location; 
       fieldnam = "Location";
       res = 1748; 
       goto LProdVcRecordCheck;
+    end;	
+    */
+    if (Locr.RequirePos!=0) then begin		//Edit----------------------Dima  09.12.2015
+    		res = CheckPositionsInProduction(Prodp,rowno);
+    		if(res != 0) then begin
+        	fieldnam = "PosCode"; 
+        	goto LProdVcRecordCheck;					
+				end;
     end;
+    
   end;  
   if (nonblank(Prodp.ProdClass)) then begin
     ProdClassr.Code = Prodp.ProdClass;
@@ -951,7 +1001,6 @@ LProdVcRecordCheck:;
     Prodp.SerNr = oldnr;
   end;  
   
-  
   DoProdVcRecordCheck = res;
   RETURN;
 END;
@@ -1111,11 +1160,13 @@ BEGIN
       end else begin
         t5 = t3;
       end;
-*/      
+*/   
+   
     if (testf) then begin
       if (ShouldItemUpdateStock(Prodrw.Item)==false) then begin t3 = blankval; end;
       UpdateInstock("ProdVc",Prodp.SerNr,Prodrw.Item,location,Prodp.ProdDate,t3,t,t,t,t,q2,t2,t,t);
-      UpdatePosition(Prodrw.Item,location,Prodrw.PosCode,t2,q2,t);
+//      UpdatePosition(Prodrw.Item,location,Prodrw.PosCode,t2,q2,t);
+      UpdatePosition(Prodrw.Item,location,Prodrw.PosCode,t3,q2,t);	//Edit----------------------Dima  09.12.2015
     end;
   end;
   if (futprodf) then begin

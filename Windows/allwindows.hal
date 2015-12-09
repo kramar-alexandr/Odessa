@@ -9535,6 +9535,11 @@ begin
   MatCol(1,-70," Ст-ть",0,ItemCost,true,0);
   //MatCol(1,-100,"Труд.",0,ExtraCost,true,0);
   //MatCol(1,-40,"Коэфф.",0,Coefficient,false,0);
+	Flip(2);
+  MatCol(1,-250,"Затр.",0,InQty,true,0);
+  MatCol(1,-200,"Выпуск",0,OutQty,true,0);
+  MatCol(1,-150,"Место",0,PosCode,true,UsedPosSClass);
+
   /*Flip(2);
   MatCol(1,-375,"Объекты",0,Objects,false,ObjSClass);
   MatCol(1,-310,"Затр.",0,InQty,true,0);
@@ -9560,7 +9565,7 @@ begin
   EndMatrix;
   v=v+1;
   VTab(-35,v,-16,v+vs,ToolFlip,1,"A");
-  //v=v+vs;  VTab(-35,v,-16,v+vs,ToolFlip,2,"B");
+  v=v+vs;  VTab(-35,v,-16,v+vs,ToolFlip,2,"B");
   //v=v+vs;  VTab(-35,v,-16,v+vs,ToolFlip,3,"C");
   //v=v+vs;  VTab(-35,v,-16,v+vs,ToolFlip,4,"D");
   //v=v+vs;  VTab(-35,v,-16,v+vs,ToolFlip,5,"E");
