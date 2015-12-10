@@ -1965,6 +1965,15 @@ return;
 end;
 
 
+procedure SetCustomStatusFlagBack(var record ORVc ORr,record ORVc OR2r)
+begin
+	if(OR2r.FeedBackStatus!=0 and ORr.FeedBackStatus==0) then begin 
+		ORr.CustomStatusFlag = 1;
+
+	end;
+end;
+
+
 global updating procedure UpdateORVcNewPostStatuses(record SHVc SHr)		//Edit----------------------Dima  23.09.2015
 begin
 	record ORVc ORr;
@@ -2113,6 +2122,8 @@ begin
   if (blank(ORrw.AvailableQuant)) then begin
   	GetAvailableItems(ORr);		//only first time //Edit----------------------Dima  24.09.2015
 	end;
+	
+	SetCustomStatusFlagBack(ORr,OR2r);
   
   if (OR2r.Reserved==0 and ORr.Reserved!=0) then begin
 		ORr.CustomStatusFlag = 1;	//Edit----------------------Dima  22.09.2015

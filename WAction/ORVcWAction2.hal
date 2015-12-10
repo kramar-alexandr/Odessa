@@ -49,7 +49,6 @@ remote function Boolean ORVc_AllowSales(record ORVc,var Integer,var LongInt);
 external function Boolean UserCanChangePendingRecord(Integer);
 remote procedure GetFullCurncyRate (var string,Date,var val,var val,var val,var val,var val);// Edit ************************** Friday, 14 August 2015 15:52:58
 
-
 global
 procedure RoundBelCash(string curncycode,var val rsum)
 BEGIN
@@ -401,27 +400,29 @@ BEGIN
         end;
         if (testf) then begin
           r = RecordAction_raPasteOrdInInv(IVr,ORr.SerNr,true,errcode);
+          MessageBox(0,"bbb");
           if (r==0) then begin
-          	ORr.SerNr = ORr.SerNr;
-          	if(readfirstmain(ORr,1,true))then begin
-							if (ORr.Reserved!=0 and BlankDate(ORr.ReservToDate)) then begin //Edit***************************Sasha2,15:57 28.08.2015 {
-								additionalday = 0;
-								if (GetDateId(AddDay(CurrentDate,1))==7) then begin
-									additionalday = 1;
-								end else begin
-									if (GetDateId(AddDay(CurrentDate,2))==7) then begin
-										additionalday = 2;
-									end else begin
-										if (GetDateId(AddDay(CurrentDate,3))==7 or GetDateId(AddDay(CurrentDate,3))==6) then begin
-											additionalday = 2;
+ 							 // ORr.SerNr = ORr.SerNr;
+ 							  //if(readfirstmain(ORr,1,true))then begin	//Problems with window updating.//Edit----------------------Dima  10.12.2015
+										if (ORr.Reserved!=0 and BlankDate(ORr.ReservToDate)) then begin //Edit***************************Sasha2,15:57 28.08.2015 {
+											additionalday = 0;
+											if (GetDateId(AddDay(CurrentDate,1))==7) then begin
+												additionalday = 1;
+											end else begin
+												if (GetDateId(AddDay(CurrentDate,2))==7) then begin
+													additionalday = 2;
+												end else begin
+													if (GetDateId(AddDay(CurrentDate,3))==7 or GetDateId(AddDay(CurrentDate,3))==6) then begin
+														additionalday = 2;
+													end;
+												end;
+											end;
+											ORr.ReservToDate = AddDay(CurrentDate,3 + additionalday);
+											PutWindowRecord(wn,ORr);
+											WindowDoOK(wn,0)	//Edit----------------------Dima  10.12.2015
+											//RECORDSTORE(ORr,true);				
 										end;
-									end;
-								end;
-								ORr.ReservToDate = AddDay(CurrentDate,3 + additionalday);
-								RECORDSTORE(ORr,true);
-								PutWindowRecord(wn,ORr);
-							end;
-            end; //Edit***************************Sasha2,15:57 28.08.2015 }
+ 							 // end;//Edit***************************Sasha2,15:57 28.08.2015 }							
             if (MatRowCnt(IVr)!=0) then begin
               nwn = OpenWindow("IVDClass",1,0,"","",IVr);
               UpdateBrowses("ORVc");

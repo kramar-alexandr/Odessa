@@ -2375,8 +2375,8 @@ end;
 
 
 
-global	
-procedure GetAvailableItemsDsm()
+global	updating
+procedure GetAvailableItemsDsm()	//Edit----------------------Dima  10.08.2015
 begin
   record ORVc ORr;
   record RcVc RepSpec;
@@ -2391,6 +2391,7 @@ begin
 	end;
 	
 	PutWindowRecord(wn,ORr);
+  WindowDoOK(wn,0);
   
 return;
 end;
