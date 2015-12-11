@@ -131,9 +131,7 @@ begin
 		if((readfirstmain(ISr,2,true) and (ISr.Instock-ISr.OrddOut)>0) or (readfirstmain(IS2r,2,true) and (IS2r.Instock-IS2r.OrddOut)>0) or (readfirstmain(IS3r,2,true) and (IS3r.Instock-IS3r.OrddOut)>0)) then begin dop_ostatok = dop_ostatok + 1; end;
 		
 		ISr.Code = INr.Code;
-		ISr.Location = loc4;
-		;
-		
+		ISr.Location = loc4;	
 					
 		PLr.ArtCode = INr.Code;
 		PLr.PLCode = ExportStockCSVb.PLCode;
@@ -183,6 +181,10 @@ begin
 	  tstr = tstr & "password ";
 	end;
 	tstr = tstr & ExportStockCSVb.DirName & " " & ExportStockCSVb.FileName;
+	
+	millisleep(500);
+	
+	//logtext(0,tstr);
 	RunProgram("./ftptransfer.sh", tstr);
 
 LExportStockCSVMn:;
