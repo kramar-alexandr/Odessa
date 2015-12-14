@@ -74,6 +74,8 @@ external procedure ExtractObj(string,var Integer,var string);
 external updating function Boolean DoXMLExport_IVVc(var record IVVc);
 remote procedure RecalcDiscountIVD(var record IVVc);//Edit-----------------------------------Dima 29.01.2015
 remote procedure IVVc_PastePriceList(var record IVVc);// Edit ************************** Wednesday, 4 February 2015 14:34:16
+remote function Boolean PasteCust2InInv(var record IVVc,record LocalMachineBlock,string,Boolean,var string,var string,var string,var string,var string);
+remote procedure IVDUpdatePrices(var record IVVc,Boolean);// Edit ************************** Monday, 14 December 2015 15:16:18
 
 global
 procedure NPTSIVOpenLClassOpenExecute(Integer wn)
@@ -508,7 +510,7 @@ begin
   record POSButtonsVc POSBr;
   row POSButtonsVc POSBrw;
   record IVVc prevIVr;
-  record IVVc IVr;
+  record IVVc IVr,IV2r;
   row IVVc IVrw;
   Boolean found;
   record RahaxiBlock Rahaxib;
@@ -519,6 +521,10 @@ begin
   string 255 tstr,t2;
   val ccval;
   val t,t1;
+  string 255 warning;// Edit ************************** Monday, 14 December 2015 14:59:46
+  record LocalMachineBlock LMb;// Edit ************************** Monday, 14 December 2015 15:00:05
+  string 255 errstr,prepstr,invdatewarn,transdatewarn;// Edit ************************** Monday, 14 December 2015 15:00:23
+  Integer err;// Edit ************************** Monday, 14 December 2015 15:01:27
   transaction record RcVc gNPTSRepSpec;
 
   wn = CurWindow;
@@ -684,12 +690,40 @@ begin
         RepSpec.repname = "SearchCuRn";
         RepSpec.Media = mtScreen;
         RepSpec.flags[0] = 4;
-        RecordCopy(gNPTSRepSpec,RepSpec);
-        nwn = OpenWindow("NPTSSearchCURClass",0,wn,"","",gNPTSRepSpec);
-        gNPTSRepSpec.UsedOnly = wn;
-        gNPTSRepSpec.flags[0] = 4;
-        PutWindowRecord(nwn,gNPTSRepSpec);
-        WindowFieldGoto(nwn,gNPTSRepSpec,-1,"f1",true);
+        if(nonblank(POSBrw.Code))then begin// Edit ************************** Monday, 14 December 2015 14:56:12// Edit ************************** Monday, 14 December 2015 14:56:14
+					if (IVr.OKFlag==0) and (IVr.Invalid==0) then begin
+						BlockLoad(LMb);
+						GetPrevWindowRecord(wn,IV2r);
+						BlockLoad(LMb);
+						IV2r.CustCode = IVr.CustCode;
+						IVr.CustCode = POSBrw.Code;
+						if (PasteCust2InInv(IVr,LMb,IV2r.CustCode,true,warning,errstr,prepstr,invdatewarn,transdatewarn)) then begin
+							if (nonblank(warning)) then begin
+								MessageBox(0,warning);
+							end;
+							if (err!=0) then begin
+								MessageBox(0,err);
+							end;
+						end;
+						if (MatRowCnt(IVr)>0) then begin 
+							IVDUpdatePrices(IVr,false);// Edit ************************** Monday, 14 December 2015 15:16:22
+							IVSumup(IVr,true);// Edit ************************** Monday, 14 December 2015 15:17:12
+							//DisplayIVItem(IVr,rownr);
+						end; 
+						PutWindowRecord(wn,IVr);
+						ReRunWindowDef(wn);
+						IVDClass_RefreshStringList(wn,IVr);// Edit ************************** Monday, 14 December 2015 15:19:44
+						//WindowFieldGoto(mwn,IVr,-1,"ivcashcommand",false);
+						WindowFieldGotoForTouchScreen(wn,-1,"ivcashcommand",false);
+					end;
+        end else begin// Edit ************************** Monday, 14 December 2015 14:56:13
+					RecordCopy(gNPTSRepSpec,RepSpec);
+					nwn = OpenWindow("NPTSSearchCURClass",0,wn,"","",gNPTSRepSpec);
+					gNPTSRepSpec.UsedOnly = wn;
+					gNPTSRepSpec.flags[0] = 4;
+					PutWindowRecord(nwn,gNPTSRepSpec);
+					WindowFieldGoto(nwn,gNPTSRepSpec,-1,"f1",true);
+        end;
         goto LIVDClassTouchScreenPasteButtonDo;
       case kPOSButtonTypeSelectSalesman:
         // nwn = OpenWindow("UserNPTSSClass",0,wn,"","",RepSpec);

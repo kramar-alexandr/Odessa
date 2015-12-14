@@ -2512,10 +2512,13 @@ begin
         IVVc_PasteLoyaltyCardNr(IVr,LMb);
         IVSumup(IVr,true);
 //      IVSumupSoftEditFields(mwn,IVr);
-							rownr = SelectedListLine(mwn);
-							if (rownr<0 or rownr>MatRowCnt(IVr)-1) then begin
-								rownr = MatRowCnt(IVr)-1;
-							end;
+				rownr = SelectedListLine(mwn);
+				if (rownr<0 or rownr>MatRowCnt(IVr)-1) then begin
+					rownr = MatRowCnt(IVr)-1;
+					if(rownr<0)then begin
+						rownr = 0;//FIX Edit ************************** Monday, 14 December 2015 15:09:00
+					end;
+				end;
 				DisplayIVItem(IVr,rownr);
         PutWindowRecord(mwn,IVr);
         
