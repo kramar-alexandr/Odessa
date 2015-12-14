@@ -10383,3 +10383,40 @@ begin
   end;
   EndWindow;
 end;
+
+window FreePosSClass:1
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  WindowBegin("Выберите место",FreePosSClass,CGslist,-);
+  SetWRect(240,80,700,298);
+  Sizeable(-1,-1,0,0);
+  UseView(PosVc);
+  SpawnClass(PosDClass);
+  RecordList(4,17,-21,-39);
+  RlColKey(4,2,"Код",Code,false,MainKey); //Edit***************************Sasha2,18:00 14.12.2015 {
+  RlColKey(100,100,"Участок",LocArea,false,LocArea);
+  RlColKey(200,200, "Комментарий",Comment,false,Comment);
+  RlColKey(300,300,"Склад",Location,false,Location);
+  RlColKey(400,400,"Высота",Height,false,Height); //Edit***************************Sasha2,18:00 14.12.2015 }
+  SearchField("Найти");
+  EndWindow;
+end;
+
+window UsedPosSClass:1
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  WindowBegin("Выберите место",UsedPosSClass,CGslist,-);
+  SetWRect(240,80,700,298);
+  Sizeable(-1,-1,0,0);
+  UseView(PosVc);
+  SpawnClass(PosDClass);
+  RecordList(4,17,-21,-39);
+  RlColKey(4,2,"Код",Code,false,MainKey); //Edit***************************Sasha2,18:00 14.12.2015 {
+  RlColKey(100,100,"Участок",LocArea,false,LocArea);
+  RlColKey(200,200, "Комментарий",Comment,false,Comment);
+  RlColKey(300,300,"Склад",Location,false,Location);
+  RlColKey(400,400,"Высота",Height,false,Height); //Edit***************************Sasha2,18:00 14.12.2015 }
+  SearchField("Найти");
+  EndWindow;
+end;
+

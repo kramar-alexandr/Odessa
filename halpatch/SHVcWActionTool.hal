@@ -943,6 +943,9 @@ BEGIN
       Retrw.Objects = SHrw.Objects;
       Retrw.BestBefore = SHrw.BestBefore;
       Retrw.PosCode = SHrw.PosCode;
+      if (blank(Retrw.PosCode) and  SHr.Location=="1-KOC") then begin //Edit***************************Sasha2,17:34 14.12.2015 {
+        Retrw.PosCode = "ŠŽ‘_2";
+      end; //Edit***************************Sasha2,17:34 14.12.2015 }
       Retrw.Coefficient = SHrw.Coefficient;
       Retrw.BBCostPrice = SHrw.BBCostPrice;
       Retrw.CostAcc = SHrw.CostAcc;
