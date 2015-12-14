@@ -286,6 +286,8 @@ begin
 	Import("€мпорт Accss",INImportIClass,ImpAccss,modDBMain);
 	Import("€мпорт user",INImportIClass,ImpUser,modDBMain);
 	Import("€мпорт Item/Classification",INImportIClass,ImportNewItemsWithClassIn,modDBMain); //Edit***************************Sasha2,10:26 16.04.2015
+	Import("€мпорт Item/Classification",INImportIClass,ImportNewItemsWithClassIn,modIN); //Edit***************************Sasha2,10:26 16.04.2015
+
 	Import("€мпорт eMail/‘кидка",INImportIClass,ImportCUDiscountIn,modDBMain);
 	
 	Import("€мпорт email to cu",INImportIClass,UpdateCUEmailsIn,modDBMain);// Edit ************************** Tuesday, 26 May 2015 16:49:15

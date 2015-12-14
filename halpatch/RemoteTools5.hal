@@ -929,7 +929,7 @@ L10PasteOrdInShip:;
       SHrw.PosCode = ORrw.Position;
       if (SHp.Location == "1-KOC") then begin		//Latin liters	//Edit-----===============================-----------------Dima  07.12.2015
 				SHrw.PosCode = USetStr(31888); 						//ŠŽ‘-2	//Cyrillic liters
-			end;      
+			end;    
       SHrw.DespatchRowTime = ORrw.DespatchRowTime;
       SHrw.SalesAcc = ORrw.SalesAcc;
       if (nonblankdate(ORrw.DespatchRowDate)) then begin
@@ -1113,7 +1113,6 @@ BEGIN
     end;
   end;
 
-	logtext(0,"Create SH from OR " & ORr.SerNr);
   res = PasteOrdInShip(aStockMovr,asmcnt,ORr,SHp,true,"",0,"","",aincode,aloc,aserialnr,aqty,acnt);
   if (EarlierReservationsExists(ORr)) then begin
     warning = USetStr(20562);
