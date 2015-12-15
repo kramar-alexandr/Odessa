@@ -77,12 +77,14 @@ begin
   record ORVc ORr;
   row ORVc ORrw;
   row SHVc SHrw;
-  Integer i,rwcnt;
+  Integer i,rwcnt,counter;
   Integer orrwcnt;
   val totqty,taxsum,sum,t,t1;
   val totv,totw;
   record INVc INr;
-  val cost;	//Edit----------------------Dima  15.05.2015
+  val cost,advance;	//Edit----------------------Dima  15.05.2015
+  record SHVc SHcheck;	//Edit----------------------Dima  15.12.2015
+  boolean TrHs;
   
   ORr.SerNr = SHr.OrderNr;
   if (ReadFirstMain(ORr,1,true)) then begin
@@ -112,6 +114,24 @@ begin
   	SHr.NPCost = cost;
   	if (ORr.NPPaymentType==1) then begin		//cash on delivery
   		SHr.NPCostCOD = cost;
+  		if (ORr.Advance>0) then begin
+  			//we put an advance only in the first SH document//Edit----------------------Dima  15.12.2015
+  			TrHs = true;
+  			SHcheck.OrderNr = SHr.OrderNr;
+  			While(LoopKey("OrderKey",SHcheck,1,TrHs)) begin
+					if (SHcheck.OrderNr != SHr.OrderNr) then begin TrHs = false; end;
+					if (TrHs) then begin
+						counter = counter+1;
+					end;
+				end;
+				advance = ORr.Advance;
+  			if (ORr.Advance>cost) then begin
+					advance = cost;
+				end;
+				if (counter<=1) then begin
+					SHr.NPCostCODEdit = cost-advance;
+				end;
+			end;
   	end;
   end;
   SHr.TotQty = Round(totqty,SetRoundModeD(2));

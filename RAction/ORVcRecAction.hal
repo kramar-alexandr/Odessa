@@ -2153,8 +2153,9 @@ begin
   
   LogText(0,ORr.SerNr & ":  Shipment was created   " & SHr.SerNr);  
   
-  warning = SendPaymentSMS(ORr); 
-
+  if (ORr.NPPaymentType == 0) then begin
+	  warning = SendPaymentSMS(ORr); 
+	end;
 end;
 
 
