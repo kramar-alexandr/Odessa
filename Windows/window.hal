@@ -924,7 +924,8 @@ window ChangeCUCategoryVClass:1 //Edit----------------------Dima  17.02.2015
  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
  begin
 WindowBegin("Заменить таблицу скидок",ChangeCUCategoryVClass,CGMnt,RcType);
-  SetWRect(20,180,360,220);
+  SetWRect(20,180,360,420);
+  Sizeable(-1,-1,0,0);
   EditField(120,10, 100,"Для категории",Normal,f1,false,CCatSClass);
   EditField(50,50, 70,"С",Normal,f2,false,RebSClass);
   EditField(200,50, 70,"На",Normal,f3,false,RebSClass);

@@ -149,6 +149,9 @@ BEGIN
   CUr.NoMailPosting = CSb.NoMailPosting;
   CUr.OnAccount = CSb.OnAccount;
   CUr.AllowLogin = CSb.AllowLogin;
+  
+  
+  CUr.RebCode = "0%";
   if (IsBooks==false) or (ValuePack(1)) then begin
     if (CSb.CurrentUserasSalesman!=0) then begin
       Userr.Code = CurrentUser;

@@ -199,6 +199,7 @@ begin
     mwn = MotherWindow(wn);
     //CloseWindow(wn); //Edit***************************Sasha2,11:40 21.11.2014
     RecordNew(CUr);
+    CUr.RebCode = "0%";
     nwn = OpenWindow("CUNPTDSClass",1,mwn,"","",CUr);
     WindowFieldGoto(nwn,CUr,-1,"Name",true);
   end else begin
