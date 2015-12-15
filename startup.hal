@@ -67,7 +67,9 @@ begin
   Setting("Настройки текста СМС",SMSTextTClass,modSO); 				//Edit----------------------Dima  26.06.2015
   Setting("Собрать заказы для перемещения",CollectOrdersForStockMoveTClass,modSO);//Edit----------------------Dima  21.08.2015
   Setting("СМС",SMSstackLClass,modSO);  //Edit----------------------Dima  27.08.2015
-  
+  //Edit-------------------Vitalii 16:07 14.12.2015
+  Setting("История цен",PLHistLClass,modDI);
+
   Report("Журнал суточных возмещений",DAJRClass,DAJRn,0,modCL);
   Report("Журнал авансовых отчетов",ExpJRClass,ExpRn,0,modCL);
   Report("Журнал  расчетов с ПЛ",PersPerRClass,PersPerRn,0,modCL);

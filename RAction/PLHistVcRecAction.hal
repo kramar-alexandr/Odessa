@@ -1,0 +1,8 @@
+global
+updating function LongInt PLHistVcRecordRemoveTest(var record PLHistVc PLHistr,record PLHistVc PLHist2r,LongInt stat,LongInt long4)
+BEGIN
+	
+	PLHistVcRecordRemoveTest = 0;
+	
+	RETURN;
+END;

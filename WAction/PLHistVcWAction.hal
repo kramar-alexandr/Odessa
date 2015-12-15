@@ -1,0 +1,45 @@
+global 
+function Boolean PLHistDClassInsertRowTest(Integer wn, Integer rownr)
+BEGIN
+
+  PLHistDClassInsertRowTest = false;
+
+  RETURN;
+END;
+
+global 
+function Boolean PLHistDClassDeleteRowTest(Integer wn, Integer rownr)
+BEGIN
+
+  PLHistDClassDeleteRowTest = false;
+
+  RETURN;
+END;
+
+global
+function Boolean PLHistDClassActiveEditField(Integer wn,string fieldname,Integer fn,Integer wnst,Integer rownr,Integer changed)
+begin
+  
+  PLHistDClassActiveEditField = false;
+  
+  return;
+end;
+
+global
+procedure PLHistDClassButtonFlags(Integer wn,var Boolean duplOK,var Boolean newOK,var Boolean saveOK,var Boolean restOK)
+begin
+  duplOK = false;
+  newOK = false;
+  saveOK = false;
+  //restOK = false;
+  return;
+end;
+
+global
+function Boolean PLHistDClassUpdateTest(Integer wn)
+BEGIN
+  
+  PLHistDClassUpdateTest = false;
+  
+  RETURN;
+END;

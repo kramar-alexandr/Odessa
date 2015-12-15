@@ -2,6 +2,7 @@ external procedure IVVc_PasteQuant(var record IVVc,Integer,Boolean,var Boolean,s
 external function val AbsoluteVal(val);
 external procedure IVSumup(var record IVVc,Boolean);
 external procedure ImportResultMessage(integer, integer,integer);
+external procedure UpdateHistForPLVc(record PLVc,string);
 
 SetLangMode(LangRussian,"RUS",0);
 
@@ -61,6 +62,7 @@ while (TestEOF()==false) begin
 					end;
 			end;
 			recordstore(PLr,true);
+			UpdateHistForPLVc(PLr,"import");
 		end else begin
 			PLDefr.Code = plCode;
 			INr.Code = artCode;
@@ -74,6 +76,7 @@ while (TestEOF()==false) begin
 						PLr.Comment = INr.Name;
 					end;
 					recordstore(PLr,true);
+					UpdateHistForPLVc(PLr,"import");
 				end;
 			end;
 		end;	

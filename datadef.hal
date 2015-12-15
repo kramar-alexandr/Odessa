@@ -4409,7 +4409,24 @@ RecordBegin(IPVc,-,"");
   RecordField(ParamVal2,M4Val,0,0);
   EndBlock; //Edit***************************Sasha2,11:36 15.07.2015 }  
   
-	      	  	
+  //Edit-------------------Vitalii 14:02 14.12.2015
+  RecordBegin(PLHistVc,-,"PriceHistory");
+  RecordField(PLCode,M4Code,5,PLVc);
+  RecordField(ArtCode,M4Code,20,INVc);
+  RecordField(CustCode,M4Code,20,CUVc);
+  RecordField(Math,M4Matrix,0,0);
+  ArrayBegin(Math,-,1);
+  ArrayField(ChDate,M4Date,0,0);
+  ArrayField(ChTime,M4Time,0,0);
+  ArrayField(UserCode,M4Code,20,0);
+  ArrayField(Price,M423Val,0,0);
+  ArrayField(StatusStr,M4Str,20,0);
+  EndArray;
+  MainKeyBegin(PLCode,0);
+  KeySegment(ArtCode);
+  KeySegment(PLCode);
+  KeySegment(CustCode);
+  EndRecord;
 return;
 end;
 

@@ -10424,3 +10424,43 @@ begin
   EndWindow;
 end;
 
+//Edit-------------------Vitalii 16:09 14.12.2015
+window PLHistLClass:1
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  WindowBegin("История цен",PLHistLClass,CGmlist,-);
+  SpawnClass(PLHistDClass);
+  SetWRect(64,80,509,298);
+  Sizeable(-1,-1,0,0);
+  UseView(PLHistVc);
+  RecordList(4,17,-21,-39);
+  RlColKey(4,2,"Товар",ArtCode,false,PLCode);
+  RlCol(100,100, "Прейскурант",PLCode,false);
+  RlCol(200,200, "Клиент",CustCode,false);
+  SearchField("Найти");
+  EndWindow;
+end;
+
+window PLHistDClass:2
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  real h,v,vs;
+  WindowBegin("История цен",PLHistDClass,CGview,-);
+  SetWRect(64,80,509,380);
+  UseView(PLHistVc);
+  v = 10; vs = 20; h = 120;
+  EditField(h,v, 70,"Товар",ViewOnly,ArtCode,false,INSClass);
+  EditField(h,v+=vs,50,"Прейскурант",ViewOnly,PLCode,false,PLDefSClass);
+  EditField(h,v+=vs,307,"Клиент",ViewOnly,CustCode,false,0);
+  v=v+40;
+  MatrixBegin(30,v,-30,-10,-,300);
+  MatCol(1,30,"Дата",0,ChDate,false,0);
+  MatCol(1,100,"Время",0,ChTime,false,0);
+  MatCol(1,170,"Пользователь",0,UserCode,true,0);
+  MatCol(1,240,"Цена",0,Price,true,0);
+  MatCol(1,310,"Статус",0,StatusStr,true,0);
+  InsertRowTest;
+  DeleteRowTest;
+  EndMatrix;
+  EndWindow;
+end;
