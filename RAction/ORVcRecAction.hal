@@ -1954,6 +1954,30 @@ end;
 
 
 
+global
+function boolean CheckORVcWaitingStatus(record ORVc ORr)			//Edit----------------------Dima  23.09.2015
+begin
+integer i,rwcnt;
+row ORVc ORrw;
+boolean res;
+
+	res = false;
+	
+	rwcnt = MatRowCnt(ORr);
+	for(i=0;i<rwcnt;i=i+1) begin
+		MatRowGet(ORr,i,ORrw);
+		if (ORrw.OrderQuant > 0) then begin
+			res = true;
+			i = rwcnt;
+		end;
+	end;	
+
+	CheckORVcWaitingStatus = res;
+return;
+end;
+
+
+
 global 
 procedure Recalculate_CustomStatusFlagText(var record ORVc ORr) 	//Edit----------------------Dima  24.03.2015
 begin
@@ -2206,6 +2230,16 @@ begin
 	  ORr.CustomStatusFlag = 12;
 	  ORr.WaitingForItemsDate = CurrentDate;
 	  ORr.WaitingForItemsTime = CurrentTime;
+	end;
+	
+	if (CheckORVcWaitingStatus(ORr)) then begin
+			if (NonBlankDate(ORr.WaitingForItemsDate) and (HoursDiffWithoutRestDays(ORr.WaitingForItemsDate,ORr.WaitingForItemsTime,CurrentDate,CurrentTime) > 18)) then begin
+				ORr.CustomStatusFlag = 13;
+			end else begin
+	  		ORr.CustomStatusFlag = 12;
+	  		ORr.WaitingForItemsDate = CurrentDate;
+	  		ORr.WaitingForItemsTime = CurrentTime;
+			end;
 	end;
 	
 	if (CheckORVcConfirmStatus(ORr)==true  and ORr.Reserved!=0  and (ORr.CustomStatusFlag < 5 or ORr.CustomStatusFlag > 11)) then begin //recalculate after StockMov (logistics)
