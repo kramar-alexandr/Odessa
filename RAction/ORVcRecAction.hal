@@ -2447,15 +2447,25 @@ begin
   if (ORr.Reserved!=0) then begin
 		ORr.CustomStatusFlag = 1;											//Edit----------------------Dima  22.09.2015
 	end;
-	if (CheckORVcConfirmStatus(ORr)) then begin			//Edit----------------------Dima  23.09.2015
+	if (ORr.AutoCreation!=0 and ORr.Reserved!=0) then begin
 		ORr.CustomStatusFlag = 2;
 	end;	
+	if (CheckORVcConfirmStatus(ORr) and ORr.Reserved!=0 ) then begin			//Edit----------------------Dima  23.09.2015
+		ORr.CustomStatusFlag = 2;
+	end;
+	if (ORr.CustomStatusFlag == 2 and CheckORVcConfirmStatus(ORr)==false) then begin
+	  ORr.CustomStatusFlag = 12;
+	  ORr.WaitingForItemsDate = CurrentDate;
+	  ORr.WaitingForItemsTime = CurrentTime;
+	end;		
   if (ORr.Closed!=0 and ORr.CustomStatusFlag!=10) then begin //Edit***************************Sasha2,16:19 04.02.2015 {
     ORr.CustomStatusFlag = 10;
   end; //Edit***************************Sasha2,16:19 04.02.2015 }
   if(ORr.FeedBackStatus==1 or ORr.FeedBackStatus==2) then begin
   		ORr.CustomStatusFlag = 3;		//Edit----------------------Dima  22.09.2015
-  end;   
+  end;
+  
+     
   Recalculate_CustomStatusFlagText(ORr);
   
   //if (ORr.DeliveryNewPost) then begin
