@@ -1609,6 +1609,10 @@ RecordBegin(INVc,-,"artikel5");
 	RecordField(FeedBackStatus,M4Int,0,0); //Edit***************************Sasha2,9:04 17.08.2015
 	RecordField(LastShipDate,M4Date,0,0);	//Edit----------------------Dima  28.08.2015
 	RecordField(SelfDelivery,M4Mark,0,0);	//Edit----------------------Dima  16.09.2015
+	RecordField(AutoCreation,M4Mark,0,0);
+	RecordField(Advance,M423Val,0,0);
+	RecordField(WaitingForItemsDate,M4Date,0,0);
+	RecordField(WaitingForItemsTime,M4Time,0,0);
   ArrayBegin(Math,-,1);
   ArrayField(stp,M4Int,0,0);
   ArrayField(ArtCode,M4Code,20,INVc);

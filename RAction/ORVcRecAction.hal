@@ -87,8 +87,13 @@ remote updating function boolean CheckCounterparty(var record ORVc);
 external function LongInt DateDiff(Date,Date); //Edit***************************Sasha2,11:26 18.08.2015
 external updating function longint AddSMStoStack(string, string, string,string,string,longint,string,date,time);//Edit----------------------Dima  28.08.2015
 external function string 255 ParseSMStext(string, record ORVc);
+external updating function string 255  CheckAndSendSMS(longint);
 external procedure GetAvailableItems(var record ORVc);
 external updating procedure AddPaymentToIPFromSH(record SHVc);
+remote updating function Integer RecordAction_raPasteOrdInInv(var record IVVc,LongInt,Boolean,var Integer);	//Edit----------------------Dima  14.12.2015
+remote updating function Integer RecordAction_raPasteOrdInShip(var record SHVc,LongInt,var string);					//Edit----------------------Dima  14.12.2015
+external function LongInt HoursDiffWithoutRestDays(Date,Time,Date,Time);
+
 
 procedure SetORAcceptanceFlag(var record ORVc ORr,record ORVc prevORr,LongInt stat)
 begin
@@ -1353,6 +1358,13 @@ LORVcRecordRowCheck:;
   
   end;	//Edit----end----------------------------------Dima  15.04.2015
   
+  if (ORr.AutoCreation!=0 and blank(ORr.Advance)) then begin	//Edit----------------------Dima  16.12.2015
+      RecordCheckError(31131,"",-1,"Advance"); 
+      res = -1; 
+      goto LORVcRecordCheck;		
+	end;
+  
+  
   if (ORr.DeliveryNewPost) then begin					//Edit by Victor 20.05.2015
   	if (nonblank(ORr.NPFirstName)) then begin
   		tmpStr = ORr.NPFirstName;
@@ -1920,12 +1932,12 @@ row ORVc ORrw;
 boolean res;
 
 	res = true;
-
+/*
 	if (ORr.CustomStatusFlag > 3 or ORr.Reserved==0) then begin
 		res = false;
 		goto LCheckORVcConfirmStatus;
 	end;
-	
+*/	
 	rwcnt = MatRowCnt(ORr);
 	for(i=0;i<rwcnt;i=i+1) begin
 		MatRowGet(ORr,i,ORrw);
@@ -1951,6 +1963,8 @@ begin
     case 2: ORr.CustomStatusFlagText = USetStr(31104);
     case 3: ORr.CustomStatusFlagText = USetStr(31105);
     case 4: ORr.CustomStatusFlagText = USetStr(31106);
+    case 12: ORr.CustomStatusFlagText = USetStr(31113);
+    case 13: ORr.CustomStatusFlagText = USetStr(31114);
     case 11: ORr.CustomStatusFlagText = USetStr(31036);
     case 5: ORr.CustomStatusFlagText = USetStr(31107);
     case 6: ORr.CustomStatusFlagText = USetStr(31108);
@@ -2065,8 +2079,32 @@ begin
 		newtext = ParseSMStext(text,ORr);
   	smsNr =	AddSMStoStack(phone,SMSb.Title3,newtext,ORr.CustCode,"ORVc",ORr.SerNr,ORr.OrderClass,"","");
   end;
-  
-  
+end;
+
+global updating function string 200 SendPaymentSMS(record ORVc ORr) //Edit----------------------Dima  14.12.2015
+begin
+	string 200 response,text;
+	longint smsNr;
+  record CUVc CUr;
+  record SMSTextBlock SMSb;
+  string 20 phone
+
+	BlockLoad(SMSb);
+
+	if (nonblank(ORr.NPPhone)) then begin
+		phone = ORr.NPPhone;
+	end else begin	
+		CUr.Code = ORr.CustCode;
+		ReadFirstMain(CUr,1,true);
+		phone = CUr.Phone;
+	end;
+
+  text = ParseSMStext(SMSb.Requisites,ORr);  
+  smsNr = AddSMStoStack(phone,SMSb.Title1,text,ORr.CustCode,"ORVc",ORr.SerNr,ORr.OrderClass,"","");
+	response = CheckAndSendSMS(smsNr); 
+
+SendPaymentSMS = response;
+return;
 end;
 
 
@@ -2085,6 +2123,38 @@ begin
 		end;
 	end;
   
+end;
+
+updating
+procedure MakeInvoiceAndShipmentForOR(record ORVc ORr)		//Edit----------------------Dima  14.12.2015
+begin
+	integer res,error;
+	string 60 warning;
+	record IVVc IVr,oldIVr;
+	record SHVc SHr;
+
+	RecordNew(IVr);
+	res = RecordAction_raPasteOrdInInv(IVr,ORr.SerNr,true,error);
+  LogText(0,ORr.SerNr & ":  Invoice was created   " & IVr.SerNr);	
+  if (error>0 or res>0) then begin
+    LogText(error,"");
+    LogText(res,"");
+  end;
+  if (ORr.NPPaymentType==1) then begin	// set OK if not prepayment
+		RecordCopy(oldIVr,IVr);
+		IVr.OKFlag = 1;
+		if (RecordUpdate(oldIVr,IVr,true) != 0) then begin end;
+  end;
+  
+  res = RecordAction_raPasteOrdInShip(SHr,ORr.SerNr,warning);
+  if (nonblank(warning)) then begin
+    LogText(0,warning);
+  end;
+  
+  LogText(0,ORr.SerNr & ":  Shipment was created   " & SHr.SerNr);  
+  
+  warning = SendPaymentSMS(ORr); 
+
 end;
 
 
@@ -2128,9 +2198,18 @@ begin
   if (OR2r.Reserved==0 and ORr.Reserved!=0) then begin
 		ORr.CustomStatusFlag = 1;	//Edit----------------------Dima  22.09.2015
 	end;
-	if (CheckORVcConfirmStatus(ORr)) then begin
+	if (ORr.AutoCreation!=0 and OR2r.AutoCreation==0 and ORr.Reserved!=0) then begin
 		ORr.CustomStatusFlag = 2;
 	end;
+	if (ORr.CustomStatusFlag == 2 and CheckORVcConfirmStatus(ORr)==false) then begin
+	  ORr.CustomStatusFlag = 12;
+	  ORr.WaitingForItemsDate = CurrentDate;
+	  ORr.WaitingForItemsTime = CurrentTime;
+	end;
+	
+	if (CheckORVcConfirmStatus(ORr)==true  and ORr.Reserved!=0  and (ORr.CustomStatusFlag < 5 or ORr.CustomStatusFlag > 11)) then begin //recalculate after StockMov (logistics)
+		ORr.CustomStatusFlag = 2;
+	end;	
 		
   if (OR2r.Closed==0 and ORr.Closed!=0 and ORr.CustomStatusFlag!=10) then begin //Edit***************************Sasha2,16:19 04.02.2015 {
     ORr.CustomStatusFlag = 10;
@@ -2156,8 +2235,8 @@ begin
   		//OR.Closed sets in the begining of ORVcRecordCheck
   			ORr.CustomStatusFlag = 10;//Edit----------------------Dima  31.08.2015
   			ORr.Addr0 = USetStr(31112) & ORr.Addr0;
-  end;    
-      
+  end;
+   
   Recalculate_CustomStatusFlagText(ORr); //Edit----------------------Dima  24.03.2015
   
   //if ((ORr.DeliveryNewPost!=0) and (OR2r.DeliveryNewPost==0)) then begin
@@ -2168,7 +2247,6 @@ begin
   
 
   
-
   ORVcRecordUpdate = res; 
   return;
 end;
@@ -2234,6 +2312,12 @@ begin
   if(OR2r.FeedBackStatus!=ORr.FeedBackStatus and ORr.FeedBackStatus > OR2r.FeedBackStatus) then begin 
   	SendNoticeSMS(ORr);			//Edit----------------------Dima  31.08.2015
   end;  
+  
+  
+  if (ORr.CustomStatusFlag == 2 and ORr.AutoCreation!=0) then begin //Edit----------------------Dima  17.12.2015
+  	MakeInvoiceAndShipmentForOR(ORr);
+  end;  
+  
   
   ORVcRecordUpdateAfter = res; 
   return;
@@ -2672,7 +2756,7 @@ begin
     if (indexname=="ActArtCodeOSFlag")  then begin res = 0; end;
   end;
   
-  if (ORr.Closed>0  or (ORr.CustomStatusFlag>=9 and ORr.CustomStatusFlag!=11)) then begin 		//Edit----------------------Dima  26.08.2015
+  if (ORr.Closed>0  or (ORr.CustomStatusFlag==9 or ORr.CustomStatusFlag==10)) then begin 		//Edit----------------------Dima  26.08.2015
     if (indexname=="ActShipSerNr")  then begin res = 0; end;
     if (indexname=="ActShipInvFlag")  then begin res = 0; end;
     if (indexname=="ActShipCustCode")  then begin res = 0; end;

@@ -4,6 +4,7 @@ external updating procedure RecordActionOR_Print(var record ORVc,string,Boolean)
 external procedure RecordActionOR_Print2(record ORVc);
 remote function Boolean ifCustomerWithCurrentPhoneExist(string,var string );
 remote updating function boolean CheckCounterparty(var record ORVc);
+remote updating function string 200 SendPaymentSMS(record ORVc);	//Edit----------------------Dima  14.12.2015
 
 global
 function LongInt ORVcRecordDefaultsClient(LongInt wn,var record ORVc ORr,record ORVc OR2r,LongInt long3,LongInt long4)
@@ -72,6 +73,7 @@ BEGIN
 	record CUVc CUr;
 	string 20 code;
 	boolean TrHs;
+	string 200 response;
 
   BlockLoad(AutoActionRec);
   if (AutoActionRec.Or2Printing==2) then begin
@@ -91,6 +93,15 @@ BEGIN
 			MessageBox(31047,"");
 		end;
 	end;
+
+/*	
+  if (ORp.CustomStatusFlag == 11 and ORp.AutoCreation!=0) then begin 	//Edit----------------------Dima  14.12.2015
+  	response = SendPaymentSMS(ORp);
+  	if (nonblank(response)) then begin
+			MessageBox(0,response);
+		end;  	
+  end;  	
+*/
 
   ORVcRecordUpdateClient = res;
   RETURN;

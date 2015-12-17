@@ -12,6 +12,8 @@ external procedure ExportAllItems(record RepSpec);// Edit **********************
 external procedure RefreshAllInnerRegistersNP;
 external updating procedure  SendSMSFromStack();//Edit----------------------Dima  28.08.2015
 external function Boolean FindSubString(string,string);	//Edit----------------------Dima  17.09.2015
+external updating procedure CheckWaitingTimeForGoods();
+
 SetLangMode(LangRussian,"RUS",0);
 
 
@@ -70,7 +72,11 @@ begin
     
 		if (Mod(minute,5)==0) then begin		//Edit----------------------Dima  28.08.2015
 			SendSMSFromStack;
-		end;    
+		end;
+		
+		if (curtnew==t1 or curtnew==t7) then begin 
+			CheckWaitingTimeForGoods
+		end;
 return;
 end;
 

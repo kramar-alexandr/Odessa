@@ -71,7 +71,7 @@ external procedure CheckItemsOnStockORRn(record RcVc); //Edit*******************
 remote procedure GetAvailableItems(var record ORVc);
 remote updating function longint AddSMStoStack(string, string, string,string,string,longint,string,date,time);//Edit----------------------Dima  28.08.2015
 remote updating function string 255  CheckAndSendSMS(longint);	//Edit----------------------Dima  28.08.2015
-
+remote function LongInt HoursDiffWithoutRestDays(Date,Time,Date,Time);
 
 
 global //Edit***************************Sasha2,15:51 04.02.2015 {
@@ -85,6 +85,8 @@ begin
     case 2: res = kRowcolorYellow;
     case 3: res = kRowcolorRed;
     case 4: res = kRowcolorRed;
+    case 12: res = kRowcolorYellow;
+    case 13: res = kRowcolorRed;
     case 11: res = kRowcolorGreen;
     case 5: res = kRowcolorGreen;
     case 6: res = kRowcolorGreen;
@@ -94,6 +96,12 @@ begin
     case 10: res = kRowColorNone;
     otherwise res = kRowColorNone;
   end;
+  
+  if (ORr.CustomStatusFlag == 12) then begin					//Edit----------------------Dima  15.12.2015
+  	if (HoursDiffWithoutRestDays(ORr.WaitingForItemsDate,ORr.WaitingForItemsTime,CurrentDate,CurrentTime) > 18) then begin
+  		res = kRowcolorRed;
+  	end;
+  end;  
   
   ORLClassRowColor = res;
   return;
@@ -111,6 +119,8 @@ begin
     case 2: res = kRowcolorYellow;
     case 3: res = kRowcolorRed;
     case 4: res = kRowcolorRed;
+    case 12: res = kRowcolorYellow;
+    case 13: res = kRowcolorRed;
     case 11: res = kRowcolorGreen;
     case 5: res = kRowcolorGreen;
     case 6: res = kRowcolorGreen;
@@ -119,6 +129,12 @@ begin
     case 9: res = kRowColorNone;
     case 10: res = kRowColorNone;
     otherwise res = kRowColorNone;
+  end;
+  
+  if (ORr.CustomStatusFlag == 12) then begin					//Edit----------------------Dima  15.12.2015
+  	if (HoursDiffWithoutRestDays(ORr.WaitingForItemsDate,ORr.WaitingForItemsTime,CurrentDate,CurrentTime) > 18) then begin
+  		res = kRowcolorRed;
+  	end;
   end;
   
   ORLClassGeneralRowColor = res;
@@ -2247,7 +2263,9 @@ begin
 	
 	//Sum
 	rmde = SetRoundMode(0,kRoundingDirectionToFromPosInf,kRoundingModeTruncate,kRoundingStepNone);
-	tempsum = round(ORr.Sum4,rmde);// Edit ************************** Friday, 3 July 2015 10:17:36
+	tempsum = ORr.Sum4 - ORr.Advance;
+	tempsum = round(tempsum,rmde);
+	//tempsum = round(ORr.Sum4,rmde);// Edit ************************** Friday, 3 July 2015 10:17:36
 	if (tempsum<ORr.Sum4) then begin
 		tempsum = tempsum +1;
 	end;	

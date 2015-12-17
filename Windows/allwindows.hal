@@ -5137,14 +5137,17 @@ begin
     EditField(h3 - 30,v+=vs,80,"Тип счета",Normal,OrderType,false,SetSClass); //Edit***************************Sasha2,11:37 14.07.2014
     EditField(h3 - 30,v+=vs,80,"Контракт",Normal,ORCONr,false,ORCOSClass); //Edit***************************Sasha2,11:37 14.07.2014
   end;
-	CheckBox(h3 - 30,v+=40,0,"Самовывоз",SelfDelivery);	//Edit----------------------Dima  16.09.2015
+	CheckBox(h3 - 30,v+=80,0,"Самовывоз",SelfDelivery);	//Edit----------------------Dima  16.09.2015
+	CheckBox(h1,v,0,"Автосоздание документов",AutoCreation);	//Edit----------------------Dima  16.09.2015
 
   ButtonFrame(h4-30,v=20,110,11,"Статус"); //Edit***************************Sasha2,14:34 14.07.2014 {
   RadioButton(h4-30,v,0,0,"Новый",CustomStatusFlag);
-  RadioButton(h4-30,v+=16,1,0,"В обработке",CustomStatusFlag);
+  RadioButton(h4-30,v+=16,1,0,"Открыт",CustomStatusFlag);
   RadioButton(h4-30,v+=16,2,0,"Подтвержден",CustomStatusFlag);
   RadioButton(h4-30,v+=16,3,0,"Не дозвонились",CustomStatusFlag);
   RadioButton(h4-30,v+=16,4,0,"Заказ изменен",CustomStatusFlag);
+  RadioButton(h4-30,v+=16,12,0,"В ожидании товаров",CustomStatusFlag);
+  RadioButton(h4-30,v+=16,13,0,"Не достаточно товаров",CustomStatusFlag);
   RadioButton(h4-30,v+=16,11,0,"В ожидании оплаты",CustomStatusFlag);
   RadioButton(h4-30,v+=16,5,0,"В сборке",CustomStatusFlag);
   RadioButton(h4-30,v+=16,6,0,"Собран",CustomStatusFlag);
@@ -5546,6 +5549,7 @@ begin
   RadioButton(h1,v+=20,1,0,"Наложенный платеж",NPPaymentType);
 
 	CheckBox(h2,v-20,0,"Предоплата получена",PrepaymentReceived);
+  EditField(h1,v+40,70,"Аванс",Normal,Advance,false,0);	
   CheckBox(h1,v+200,0,"Доставка Новой почтой",DeliveryNewPost);
 
   Tile(9,300,false,"9",FeedBackStatus);	//Edit***************************Sasha2,10:31 17.08.2015 {

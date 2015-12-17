@@ -60,6 +60,11 @@ external function Boolean FindItemVAR(string,var string,var string,var string,va
 forward procedure ORVc_PasteQuant(var record ORVc,Integer,Boolean,var Boolean);
 external updating function boolean NPCreateCounterparty(record NPCounterpartyVc);	//Edit----------------------Dima  15.04.2015
 external updating procedure GetRecipientContactPerson(string ,string );	//Edit----------------------Dima  05.05.2015
+external function val HoursDifference(Date,Time,Date,Time);			//Edit----------------------Dima  14.12.2015
+external procedure Recalculate_CustomStatusFlagText(var record ORVc);		//Edit----------------------Dima  15.12.2015
+
+
+
 
 global
 procedure ORVc_PasteInvCountry(var record ORVc ORp,string oldCountryCode)
@@ -1371,3 +1376,79 @@ Begin
 end;
 
 
+
+
+procedure SetNextWorkingDayToDate(var Date d)					//Edit----------------------Dima  14.12.2015
+begin
+	while(GetDateId(d)==6 or GetDateId(d)==7) begin
+  	d=AddDay(d,1);
+  end;
+end;
+
+
+
+global function LongInt HoursDiffWithoutRestDays(Date d1,Time t1,Date d2,Time t2)	//Edit----------------------Dima  14.12.2015
+begin
+	LongInt multiplicator;
+	val hours;
+  integer resthours;
+  Time endTime,startTime;
+  Date startDay,endDay;
+  
+  resthours = 48; //saturday + sunday
+  multiplicator = 0;
+  
+  //LogText(0,d1 & " -----  " & d2);
+  //LogText(0,HoursDiff(CurrentDate,CurrentTime,CurrentDate,CurrentTime));
+  
+  endTime = t2;
+  endDay = d2;
+  startTime = t1;
+  startDay = d1;
+
+  if (GetDateId(d1)==6 or GetDateId(d1)==7) then begin
+		startTime = StringToTime("00:00:01");
+		SetNextWorkingDayToDate(startDay);
+	end;  
+  
+  if (GetDateId(d2)==6 or GetDateId(d2)==7) then begin
+		endTime = StringToTime("00:00:01");
+		SetNextWorkingDayToDate(endDay);
+	end;  
+  hours = HoursDifference(startDay,startTime,endDay,endTime);
+  
+  //Then substract rest days;  
+	if (hours>168) then begin	//week
+		multiplicator = hours / 168; 
+		hours = hours - multiplicator*resthours;
+	end;	
+
+	if (GetDateId(startDay)>GetDateId(endDay)) then begin 
+		hours = hours - resthours;
+	end;
+	
+	HoursDiffWithoutRestDays = hours;
+	return;
+end;
+
+
+global updating procedure CheckWaitingTimeForGoods()
+begin
+	record ORVc ORr;
+	boolean TrHs;
+	
+	TrHs = true;
+	ORr.CustomStatusFlagText = USetStr(31113);
+	While(LoopKey("CustomStatusFlagText",ORr,1,TrHs)) begin
+		if (ORr.CustomStatusFlagText!=USetStr(31113)) then begin TrHs = false; end;
+		if (TrHs) then begin
+			//LogText(0,ORr.SerNr & "    tooo long...");
+			if (HoursDiffWithoutRestDays(ORr.WaitingForItemsDate,ORr.WaitingForItemsTime,CurrentDate,CurrentTime) > 18) then begin
+						//LogText(0,ORr.SerNr & "    changed.");
+						ORr.CustomStatusFlag = 13;
+						Recalculate_CustomStatusFlagText(ORr);
+						RecordStore(ORr,true);
+			end;
+		end;
+	end;  
+end;
