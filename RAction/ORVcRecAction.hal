@@ -2740,6 +2740,8 @@ begin
   ORr.SyncFlag = 0; //Edit***************************Sasha2,13:50 15.07.2014
   ORr.CustomStatusFlag = 0; //Edit***************************Sasha2,13:50 15.07.2014
   ORr.PrepaymentReceived = 0;
+  ORr.WaitingForItemsDate = "";
+  ORr.WaitingForItemsTime = "";//Edit----------------------Dima  17.12.2015
   
   ORVcRecordDuplicate = res;  
   return;
