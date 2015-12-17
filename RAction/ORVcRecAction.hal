@@ -2597,6 +2597,7 @@ begin
   ORr.LocalMachineCode = CurMachineName;
   ORr.OfficialSerNr = "";
   ORr.OfficialSerNrSerie = "";
+  ORr.Advance = 0;
   ORVcRecordDefaults = res;  
   return;
 end;

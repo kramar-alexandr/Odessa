@@ -85,7 +85,7 @@ begin
     case 2: res = kRowcolorYellow;
     case 3: res = kRowcolorRed;
     case 4: res = kRowcolorRed;
-    case 12: res = kRowcolorYellow;
+    case 12: res = kRowcolorRed;
     case 13: res = kRowcolorRed;
     case 11: res = kRowcolorGreen;
     case 5: res = kRowcolorGreen;
@@ -99,7 +99,7 @@ begin
   
   if (ORr.CustomStatusFlag == 12) then begin					//Edit----------------------Dima  15.12.2015
   	if (HoursDiffWithoutRestDays(ORr.WaitingForItemsDate,ORr.WaitingForItemsTime,CurrentDate,CurrentTime) > 18) then begin
-  		res = kRowcolorRed;
+  		res = kRowcolorYellow;
   	end;
   end;  
   
@@ -119,7 +119,7 @@ begin
     case 2: res = kRowcolorYellow;
     case 3: res = kRowcolorRed;
     case 4: res = kRowcolorRed;
-    case 12: res = kRowcolorYellow;
+    case 12: res = kRowcolorRed;
     case 13: res = kRowcolorRed;
     case 11: res = kRowcolorGreen;
     case 5: res = kRowcolorGreen;
@@ -133,9 +133,9 @@ begin
   
   if (ORr.CustomStatusFlag == 12) then begin					//Edit----------------------Dima  15.12.2015
   	if (HoursDiffWithoutRestDays(ORr.WaitingForItemsDate,ORr.WaitingForItemsTime,CurrentDate,CurrentTime) > 18) then begin
-  		res = kRowcolorRed;
+  		res = kRowcolorYellow;
   	end;
-  end;
+  end; 
   
   ORLClassGeneralRowColor = res;
   return;

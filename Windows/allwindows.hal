@@ -5551,7 +5551,7 @@ begin
 	CheckBox(h2,v-20,0,"Предоплата получена",PrepaymentReceived);
   EditField(h1,v+40,70,"Аванс",Normal,Advance,false,0);	
   CheckBox(h1,v+200,0,"Доставка Новой почтой",DeliveryNewPost);
-  CheckBox(h3,v+200,0,"Автосоздание документов",AutoCreation);	//Edit----------------------Dima  16.09.2015 
+  CheckBox(h3-100,v+200,0,"Автосоздание документов",AutoCreation);	//Edit----------------------Dima  16.09.2015 
 
   Tile(9,300,false,"9",FeedBackStatus);	//Edit***************************Sasha2,10:31 17.08.2015 {
   h1 = 50;
