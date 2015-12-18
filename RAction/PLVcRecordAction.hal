@@ -126,7 +126,7 @@ begin
 end;
 
 global
-updating procedure UpdateHistForPLVc(record PLVc PLr, string stat)
+updating procedure UpdateHistForPLVc(record PLVc PLr, record PLVc oldPLr, string stat)
 BEGIN
 	record PLHistVc PLHr;
 	row PLHistVc PLHrw;
@@ -162,6 +162,16 @@ BEGIN
 		end;
 	end else begin
 		RecordNew(PLHr);
+		if (stat != "create") then begin
+			PLHrw.ChDate = "";
+			PLHrw.ChTime = "";
+			PLHrw.UserCode = "";
+			PLHrw.Price = oldPLr.ExVatPrice;
+			PLHrw.StatusStr = "before changes";
+			if oldPLr.ExVatPrice != blankval then begin
+				MatRowPut(PLHr,0,PLHrw);
+			end;
+		end;
 		PLHr.PLCode = PLr.PLCode;
 		PLHr.ArtCode = PLr.ArtCode;
 		PLHr.CustCode = PLr.CustCode;
@@ -182,7 +192,7 @@ updating function LongInt PLVcRecordImportAfter(var record PLVc PLr,record PLVc 
 BEGIN
 	LongInt res;
 	
-	UpdateHistForPLVc(PLr,"import");
+	UpdateHistForPLVc(PLr,PL2r,"import");
 
 	PLVcRecordImportAfter = res;
 	RETURN;
@@ -193,7 +203,7 @@ updating function LongInt PLVcRecordSaveAfter(var record PLVc PLr,record PLVc PL
 BEGIN
 	LongInt res;
 	
-	UpdateHistForPLVc(PLr,"create");
+	UpdateHistForPLVc(PLr,PL2r,"create");
 	
 	PLVcRecordSaveAfter = res;
 	RETURN;
@@ -204,7 +214,7 @@ updating function LongInt PLVcRecordUpdateAfter(var record PLVc PLr,record PLVc 
 BEGIN
 	LongInt res;
 	
-	UpdateHistForPLVc(PLr,"change");
+	UpdateHistForPLVc(PLr,PL2r,"change");
 	
 	PLVcRecordUpdateAfter = res;
 	RETURN;
@@ -215,7 +225,7 @@ updating function LongInt PLVcRecordRemoveAfter(var record PLVc PLr,record PLVc 
 BEGIN
 	LongInt res;
 	
-	UpdateHistForPLVc(PLr,"delete");
+	UpdateHistForPLVc(PLr,PL2r,"delete");
 	
 	PLVcRecordRemoveAfter = res;
 	RETURN;

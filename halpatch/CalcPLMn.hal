@@ -3,7 +3,7 @@ external procedure CheckFlush(var Integer,Integer);
 external function val DivWithRateToBase1(string,Date,val,roundmode);
 external function val MulWithRateToBase1(var string,Date,val,roundmode);
 external function Boolean GetPurchaseItem(string,string,var record PIVc);
-external procedure UpdateHistForPLVc(record PLVc,string);
+external procedure UpdateHistForPLVc(record PLVc,record PLVc,string);
 
 procedure GetPurchItemPrice(string ItemCode,var val newprp)
 begin
@@ -198,7 +198,7 @@ begin
                   end else begin
                     bres = RecordStore(PLr,true);
                   end;
-				  UpdateHistForPLVc(PLr,"change");
+				  UpdateHistForPLVc(PLr,oldPLr,"change");
                   CheckFlush(flushcnt,10);
                 end;
               end;
@@ -212,7 +212,7 @@ begin
               if (AddPricef==true) then begin
                 PLr.ExVatPrice = exvatpr;
                 bres = RecordStore(PLr,true);
-				UpdateHistForPLVc(PLr,"change");
+				UpdateHistForPLVc(PLr,oldPLr,"change");
                 CheckFlush(flushcnt,10);
               end;
             end;
@@ -234,7 +234,7 @@ begin
                 PLQrw.ExVatPrice = exvatpr;
                 MatRowPut(PLQr,0,PLQrw);
                 bres = RecordStore(PLr,true);
-				UpdateHistForPLVc(PLr,"change");
+				UpdateHistForPLVc(PLr,oldPLr,"change");
                 CheckFlush(flushcnt,10);
               end;
             end;
@@ -248,7 +248,7 @@ begin
                   RecordCopy(oldPLr,PLr);
                   PLr.CostPrice = INr.InPrice;
                   RecordUpdate(oldPLr,PLr,false);
-				  UpdateHistForPLVc(PLr,"change");
+				  UpdateHistForPLVc(PLr,oldPLr,"change");
                 end;
               end;
             end else begin
@@ -260,7 +260,7 @@ begin
                 PLr.CostPrice = INr.InPrice;
                 PLr.BBGenTrans = 1;
                 bres = RecordStore(PLr,true);
-				UpdateHistForPLVc(PLr,"change");
+				UpdateHistForPLVc(PLr,oldPLr,"change");
               end;
             end;
         end;
@@ -338,7 +338,7 @@ begin
                   end else begin
                     bres = RecordStore(PLr,true);
                   end;
-				  UpdateHistForPLVc(PLr,"change");
+				  UpdateHistForPLVc(PLr,oldPLr,"change");
                   CheckFlush(flushcnt,10);              
                 end;
               end;
@@ -352,7 +352,7 @@ begin
               if (AddPricef==true) then begin
                 PLr.ExVatPrice = exvatpr;
                 bres = RecordStore(PLr,true);
-				UpdateHistForPLVc(PLr,"change");
+				UpdateHistForPLVc(PLr,oldPLr,"change");
                 CheckFlush(flushcnt,10);
               end;
             end;

@@ -2,7 +2,7 @@ external procedure IVVc_PasteQuant(var record IVVc,Integer,Boolean,var Boolean,s
 external function val AbsoluteVal(val);
 external procedure IVSumup(var record IVVc,Boolean);
 external procedure ImportResultMessage(integer, integer,integer);
-external procedure UpdateHistForPLVc(record PLVc,string);
+external procedure UpdateHistForPLVc(record PLVc,record PLVc,string);
 
 SetLangMode(LangRussian,"RUS",0);
 
@@ -41,7 +41,7 @@ begin
   record PLVc PLr;
   record PLVc oldPLr;
   record PLDefVc PLDefr;
-  record INVc	INr;
+  record INVc INr;
   string 50 plCode, artCode, price;
   val pr;
 
@@ -53,7 +53,8 @@ while (TestEOF()==false) begin
 	if (nonblank(plCode) and nonblank(artCode) and (pr > 0) ) then begin
 		PLr.PLCode = plCode;
 		PLr.ArtCode = artCode;	
-		if (ReadFirstMain(PLr,2,true)) then begin		
+		if (ReadFirstMain(PLr,2,true)) then begin
+			RecordCopy(oldPLr,PLr);
 			PLr.ExVatPrice = pr;
 			if (blank(PLr.Comment)) then begin
 					INr.Code = artCode;
@@ -62,7 +63,7 @@ while (TestEOF()==false) begin
 					end;
 			end;
 			recordstore(PLr,true);
-			UpdateHistForPLVc(PLr,"import");
+			UpdateHistForPLVc(PLr,oldPLr,"import");
 		end else begin
 			PLDefr.Code = plCode;
 			INr.Code = artCode;
@@ -76,7 +77,7 @@ while (TestEOF()==false) begin
 						PLr.Comment = INr.Name;
 					end;
 					recordstore(PLr,true);
-					UpdateHistForPLVc(PLr,"import");
+					UpdateHistForPLVc(PLr,oldPLr,"import");
 				end;
 			end;
 		end;	
