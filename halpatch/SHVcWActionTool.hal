@@ -35,6 +35,8 @@ external procedure CurValToOtherCur(Date,string,val,string,var val,roundmode);	/
 external updating function string 255 SendSMS(record SMSstackVc, boolean);
 external updating function longint AddSMStoStack(string, string, string,string,string,longint,string,date,time);//Edit----------------------Dima  28.08.2015
 
+SetLangMode(LangRussian,"RUS",0); 
+
 procedure SHChangeShip(record SHVc SHr,Integer rownr)
 BEGIN
   row SHVc SHrw;
