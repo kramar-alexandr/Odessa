@@ -291,7 +291,7 @@ BEGIN
   end;
   if (check!=0) then begin
     if (MSb.dontAllowOvership==1) then begin
-      if (SMp.OKFlag==1) or (SMp.SentOKFlag==1) then begin
+      if ((SMp.OKFlag==1) or (SMp.SentOKFlag==1)) then begin
         if (INr.ItemType==1) then begin        
           prev = 0;
           for (j=0;j<rownr;j=j+1) begin           
@@ -522,7 +522,6 @@ BEGIN		//Edit----------------------Dima  18.06.2015
     	goto LCheckStockMovRowWhenOrdered;
   end;    
 
-
   if (check!=0) then begin
     if (MSb.dontAllowOvership==1) then begin
       if (SMp.OrdFlag==1) then begin
@@ -533,7 +532,9 @@ BEGIN		//Edit----------------------Dima  18.06.2015
             if ((StockMovrw.ArtCode==StockMov2rw.ArtCode) and ((StockMovrw.SerialNr==StockMov2rw.SerialNr) and (SNrb.BulkSerialNos==0))) then begin
             	prev = prev + StockMov2rw.OrdQuant;
             end;
-          end;          
+          end; 
+          
+                   
           if (SNrb.BulkSerialNos!=0) then begin
           	//stockreservq is reserv from special register (not ItemStatus)
           	//curDocReserv is reserv from current document SM
@@ -1706,8 +1707,9 @@ BEGIN
         orsrv = 0;
         if (stat==updatemode) then begin        
           if (RecordValid(SM2p)) then begin
-            if (SM2p.Reserved!=0) then begin
-              for (j=0;j<MatRowCnt(SM2p);j=j+1) begin
+            if (SM2p.Reserved==0) then begin							//Edit----------------------Dima  18.12.2015
+              //for (j=0;j<MatRowCnt(SM2p);j=j+1) begin		//Edit----------------------Dima  18.12.2015
+              for (j=0;j<i;j=j+1) begin
                 MatRowGet(SM2p,j,StockMov2rw);
                 if (StockMov2rw.ArtCode==StockMovrw.ArtCode) then begin
                   orsrv = orsrv + StockMov2rw.OrdQuant;
@@ -1716,7 +1718,8 @@ BEGIN
             end;
           end;
         end;
-        if ((StockMovrw.OrdQuant)>(ISr.Instock-ISr.RsrvQty+orsrv)) then begin // StockRsrvQty ?
+        //if ((StockMovrw.OrdQuant)>(ISr.Instock-ISr.RsrvQty+orsrv)) then begin		//Edit----------------------Dima  18.12.2015
+        if ((StockMovrw.OrdQuant)>(ISr.Instock-ISr.RsrvQty-orsrv)) then begin // StockRsrvQty ?
           error = 20011;
           errorstr = "";
           rownr = i;
