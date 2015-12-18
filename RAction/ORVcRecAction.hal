@@ -2280,6 +2280,9 @@ begin
   TableSortOR2(ORr);//Edit----------------------Dima  07.07.2015
   SetRowsUID(ORr);	//Edit----------------------Dima  14.08.2015
   
+  if (ORr.OrderClass == "RETAI" and ORr.Reserved!=0 and OR2r.Reserved==0) then begin		//Edit----------------------Dima  18.12.2015
+	  ORr.ReservToDate = AddDay(CurrentDate,1);
+	end;  
 
   
   ORVcRecordUpdate = res; 
@@ -2501,6 +2504,10 @@ begin
   
      
   Recalculate_CustomStatusFlagText(ORr);
+  
+  if (ORr.OrderClass == "RETAI" and ORr.Reserved!=0) then begin		//Edit----------------------Dima  18.12.2015
+	  ORr.ReservToDate = AddDay(CurrentDate,1);
+	end;    
   
   //if (ORr.DeliveryNewPost) then begin
 	//	CheckCounterparty(ORr);

@@ -1088,6 +1088,9 @@ BEGIN
       ORp.DelAddr4 = "";
       ORp.DelCountry = "";
     end;
+    if (CUr.CustCat=="WEB" or CUr.CustCat=="RETAI") then begin		//Edit----------------------Dima  18.12.2015
+    	ORp.OrderClass = CUr.CustCat;
+    end;
     ORp.Region = CUr.Region;
     ORp.Sorting = FindCustRoute(ORp.CustCode,ORp.Location,ORp.DelAddrCode);
     ORp.InvoiceToCode = CUr.InvoiceToCode;
