@@ -167,6 +167,8 @@ BEGIN
 			PLHrw.ChTime = "";
 			PLHrw.UserCode = "";
 			PLHrw.Price = oldPLr.ExVatPrice;
+			logtext(0,"-----------" & oldPLr.ExVatPrice);
+	
 			PLHrw.StatusStr = "before changes";
 			if oldPLr.ExVatPrice != blankval then begin
 				MatRowPut(PLHr,0,PLHrw);
@@ -180,7 +182,7 @@ BEGIN
 		PLHrw.UserCode = CurrentUser;
 		PLHrw.Price = PLr.ExVatPrice;
 		PLHrw.StatusStr = stat;
-		MatRowPut(PLHr,0,PLHrw);
+		MatRowPut(PLHr,1,PLHrw);
 		RecordStore(PLHr,true);
 	end;
 	RETURN;
