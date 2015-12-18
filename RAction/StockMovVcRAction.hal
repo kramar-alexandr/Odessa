@@ -289,7 +289,9 @@ BEGIN
     res = -1;
     goto LCheckStockMovRow;
   end;
-  if (check!=0) then begin
+  
+  
+  if (check!=0 and SMp.Reserved==0) then begin
     if (MSb.dontAllowOvership==1) then begin
       if ((SMp.OKFlag==1) or (SMp.SentOKFlag==1)) then begin
         if (INr.ItemType==1) then begin        
@@ -522,7 +524,8 @@ BEGIN		//Edit----------------------Dima  18.06.2015
     	goto LCheckStockMovRowWhenOrdered;
   end;    
 
-  if (check!=0) then begin
+
+  if (check!=0 and SMp.Reserved==0) then begin
     if (MSb.dontAllowOvership==1) then begin
       if (SMp.OrdFlag==1) then begin
         if (INr.ItemType==1) then begin        
