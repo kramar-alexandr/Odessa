@@ -93,7 +93,7 @@ begin
 	string 10 loc1t,loc2t,loc3t,loc4t,loc5t;
 	boolean testf;
 	integer inStock,dop_ostatok,pos;
-	//val qty;
+	integer realqty;
 	
 	BlockLoad(ExportStockCSVb);
 	
@@ -125,6 +125,7 @@ begin
 	INr.Code = "";
 	location = ExportStockCSVb.Location;
 	while (loopmain(INr,1,true)) begin
+		realqty = 0;
 	  testf = true;
 	  dop_ostatok = 0;
 	  
@@ -135,6 +136,7 @@ begin
 		IS3r.Code = INr.Code;
 		IS3r.Location = loc3;
 		if((readfirstmain(ISr,2,true) and (ISr.Instock-ISr.OrddOut)>0) or (readfirstmain(IS2r,2,true) and (IS2r.Instock-IS2r.OrddOut)>0) or (readfirstmain(IS3r,2,true) and (IS3r.Instock-IS3r.OrddOut)>0)) then begin dop_ostatok = dop_ostatok + 1; end;
+		realqty = realqty + ISr.Instock-ISr.OrddOut + IS2r.Instock-IS2r.OrddOut + IS3r.Instock-IS3r.OrddOut;
 		
 		ISr.Code = INr.Code;
 		ISr.Location = loc4;	
@@ -153,11 +155,15 @@ begin
 		IS2r.Location = loc5;
 		
 		if((readfirstmain(ISr,2,true) and (ISr.Instock-ISr.OrddOut)>0) or (readfirstmain(IS2r,2,true) and (IS2r.Instock-IS2r.OrddOut)>0)) then begin dop_ostatok = dop_ostatok + 2; end;
-		
+		realqty = realqty + ISr.Instock-ISr.OrddOut + IS2r.Instock-IS2r.OrddOut;
 		loc5 = loc5t;
 		
-		if (dop_ostatok>0) then begin			
-			qty = 200;
+		if (dop_ostatok>0) then begin	
+			if(realqty>10)then begin		
+				qty = 200;
+			end else begin
+				qty = realqty;
+			end;
 			inStock = 1;
 		end else begin	
 			qty = 0;
