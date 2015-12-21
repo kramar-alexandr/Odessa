@@ -589,7 +589,10 @@ begin
 	record RcVc RepSpec;
 	record BarcodeVc Barcoder;
 	integer wn,mwn,RowNumber,curRow,rwcnt;
+	integer sQuant;
 	Boolean key;
+	
+	sQuant = 2;	//.stp
 
   wn=CurWindow;
   //DeselectWindow(wn,true);
@@ -633,8 +636,14 @@ begin
 						MatRowGet(SHr,RowNumber,SHrw);
 						if (SHrw.Ship < SHrw.Ordered) then begin
 							SHrw.Ship = SHrw.Ship+1;
+							SHrw.stp = sQuant;
 							MatRowPut(SHr,RowNumber,SHrw);
 							PutWindowRecord(mwn,SHr);
+
+			  						WindowFieldGoto(mwn,SHr,RowNumber,"Ship",true);
+										DeselectWindow(mwn,false);									
+										WindowFieldGoto(wn,RepSpec,-1,"f1",false);							
+							
 							goto LSH_AddOneItemToShip;
 						end else begin
           		curRow = curRow+1; //we try to find the same item in next rows
@@ -654,7 +663,8 @@ begin
 	end;	
 
 	LSH_AddOneItemToShip:;
-	selectWindow(wn);
+	//selectWindow(wn);
+
 return;  
 end;
 
@@ -777,29 +787,49 @@ end;
 
 
 
-procedure UnOverStrike(integer wn)//Edit----------------------Dima  16.02.2015
+procedure UnSelect(integer wn)//Edit----------------------Dima  16.02.2015
 Begin
 	record StockMovVc SMr;
 	row StockMovVc SMrw;
+	record SHVc SHr;
+	row SHVc SHrw;	
 	record RcVc RepSpec;
 	integer mwn,i,rwcnt;
-
+	string 20 windowClass;	
 
   GetWindowRecord(wn,RepSpec);
   mwn = RepSpec.flags[0];
-  GetWindowRecord(mwn,SMr);
-	rwcnt = MatRowCnt(SMr);
 
-	for(i=0;i<rwcnt;i=i+1) begin
-			MatRowGet(SMr,i,SMrw);
-			if(SMrw.stp!=1 and SMrw.stp!=0) then begin
-					SMrw.stp=1;
-					MatRowPut(SMr,i,SMrw);
-					PutWindowRecord(mwn,SMr);
-					goto LUnOverStrike;
-			end;		
-	end;
-LUnOverStrike:;
+	windowClass = GetWindowClass(mwn);
+
+  switch(windowClass) begin
+  	case "StockMovDClass":		
+  		GetWindowRecord(mwn,SMr);
+			rwcnt = MatRowCnt(SMr);	
+				for(i=0;i<rwcnt;i=i+1) begin
+						MatRowGet(SMr,i,SMrw);
+						if(SMrw.stp!=1 and SMrw.stp!=0) then begin
+								SMrw.stp=1;
+								MatRowPut(SMr,i,SMrw);
+								PutWindowRecord(mwn,SMr);
+								goto LUnSelect;
+						end;		
+				end;
+		case "SHDClass":		
+  		GetWindowRecord(mwn,SHr);
+			rwcnt = MatRowCnt(SHr);	
+				for(i=0;i<rwcnt;i=i+1) begin
+						MatRowGet(SHr,i,SHrw);
+						if(SHrw.stp!=1 and SHrw.stp!=0) then begin
+								SHrw.stp=1;
+								MatRowPut(SHr,i,SHrw);
+								PutWindowRecord(mwn,SHr);
+								goto LUnSelect;
+						end;		
+				end;
+	end;			
+					
+LUnSelect:;
 return;
 end;
 
@@ -825,6 +855,22 @@ begin
   return;
 end;
 
+
+
+global		//Edit----------------------Dima  21.12.2015
+function Boolean TableSearchAdditionIClassAfterEditField(Integer wn,string fieldname,Integer fn,Integer rownr,Integer changed)
+BEGIN
+	record RcVc RepSpec;
+	boolean res;
+
+	GetWindowRecord(wn,RepSpec);
+	if (nonblank(RepSpec.f2)) then begin
+		UnSelect(wn);
+	end;
+
+  TableSearchAdditionIClassAfterEditField = res;
+  RETURN;
+END;
 
 
 
@@ -862,7 +908,7 @@ BEGIN
 
 	GetWindowRecord(wn,RepSpec);
 	if (nonblank(RepSpec.f2) or nonblank(RepSpec.f3)) then begin
-		UnOverStrike(wn);
+		UnSelect(wn);
 	end;
 
   TableSearchAddition2IClassAfterEditField = res;

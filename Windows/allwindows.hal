@@ -5731,12 +5731,15 @@ window SHDClass:1
 begin
   real h,h0,h1,h2,h3,h4,h5,h6,t,v,vm,vs;
   Integer tilenr,f,flipnr,i;
+  integer sQuant;
 
   WindowBegin("Отгрузка",SHDClass,CGview,-);
   SetWRect(20,80,800,520);
   Sizeable(-1,-1,0,0);
   UseView(SHVc);
   vs = 20;
+  sQuant = 2;	//.stp //Edit----------------------Dima  21.12.2015
+  
   Tile(0,74,false,"",SerNr);
   EditField(75,vm=(v=6),95,"Но.",Normal,SerNr,false,TSerSClass);
   EditField(75,v+=20,95,"Грузополуч-ль",ViewOnly,CustCode,false,0);
@@ -5825,6 +5828,9 @@ begin
   v = 20;
   MatrixBegin(4,v,-50,-35,-,999);// Edit ************************** Thursday, 25 June 2015 17:29:44
   MatTypedRow(stp);
+  
+  //Кривой код, но по-другому не получилось. Убрал Flip(0), Везде дублируются поля из Flip(0). Без этого плохо отображается //Edit----------------------Dima  21.12.2015
+  /*
   Flip(0);
   MatCol(1,32,"Товар",0,ArtCode,false,ForSaleINSClass);
 //  MatCol(1,94,"Var",0,VARList,false,VARSClass);
@@ -5833,28 +5839,30 @@ begin
   MatCol(t=kInvoiceRowTypeStructuredItemComponent,32,"Товар",0,ArtCode,false,ForSaleINSClass);
 //  MatCol(t,94,"Var",0,VARList,false,VARSClass);
 //  MatCol(t,144,"Description",0,Spec,false,0);
-  MatCol(t,94,"Наименование",0,Spec,false,0);
+  MatCol(t,94,"Наименование",0,Spec,false,0);  
+  */
+  
   flipnr = 1;
   Flip(flipnr); flipnr = flipnr + 1;
+  MatCol(1,32,"Товар",0,ArtCode,false,ForSaleINSClass);
+  MatCol(1,94,"Наименование",0,Spec,false,0);  
   if (HasCustItem) then begin
     MatCol(1,-230,"Товар кл.",0,CustArtCode,false,CUINSClass);
   end;
   MatCol(1,-150,"Скл.",0,InStock,true,0);
   MatCol(1,-98,"Зак.",0,Ordered,true,0);
   MatCol(1,-50,"Своб.",0,Ship,true,0);
-
-  /*MatCol(1,-150,"Зак.",0,Ordered,true,0);// Edit ************************** Monday, 22 June 2015 13:27:50
-  MatCol(1,-98,"Скл.",0,InStock,true,0);
-  MatCol(1,-50,"Своб.",0,Ship,true,0);*/
-
+  
+  t = sQuant;
+  MatCol(t=sQuant,32,"Товар",0,ArtCode,false,ForSaleINSClass);	//Edit----------------------Dima  21.12.2015
+  MatCol(t,94,"Наименование",0,Spec,false,0);  									//Edit----------------------Dima  21.12.2015
   if (HasCustItem) then begin
-    MatCol(t=kInvoiceRowTypeStructuredItemComponent,-230,"Код товара кл.",0,CustArtCode,false,CUINSClass);
-    MatCol(t,-150,"Заказано",0,Ordered,true,0);
-  end else begin
-    MatCol(t=kInvoiceRowTypeStructuredItemComponent,-147,"Заказано",0,Ordered,true,0);
+    MatCol(t,-230,"Товар кл.",0,CustArtCode,false,CUINSClass);
   end;
-  MatCol(t,-98,"Скл.",0,InStock,true,0);
-  MatCol(t,-50,"Своб.",0,Ship,true,0);
+  MatCol(t,-150,"Скл.",0,InStock,true,0);
+  MatCol(t,-98,"Зак.",0,Ordered,true,0);
+  MatCol(t,-70,"Своб.",0,Ship,true,0);  
+  
   Flip(flipnr); flipnr = flipnr + 1;
   if (IsEnterprise==false) then begin
     if (HasSerialNumbers) then begin
@@ -5868,23 +5876,24 @@ begin
     end;
     if (HasLocalization("RUS")) then begin
       Flip(flipnr); flipnr = flipnr + 1;
+  		MatCol(1,32,"Товар",0,ArtCode,false,ForSaleINSClass);		//Edit----------------------Dima  21.12.2015
+  		MatCol(1,94,"Наименование",0,Spec,false,0);       
       MatCol(1,-230,"Ед-ца",0,UnitCode,false,UnitSClass);
       MatCol(1,-180,"Название",0,UnitComment,false,0);
     end;
   end else begin
+  	MatCol(1,32,"Товар",0,ArtCode,false,ForSaleINSClass);		//Edit----------------------Dima  21.12.2015
+  	MatCol(1,94,"Наименование",0,Spec,false,0);  
     MatCol(1,-350,"Серийный номер",0,SerialNr,false,SerialNrSClass);
     MatCol(1,-250,"Срок годности",0,BestBefore,false,0);
     MatCol(1,-150,"Склад",0,Location,false,LocationSClass);
     if (StandardHansa==false) then begin
       MatCol(1,-50,"Место",0,PosCode,false,UsedPosSClass);
     end;
-    MatCol(t=kInvoiceRowTypeStructuredItemComponent,-350,"Серийный номер",0,SerialNr,false,SerialNrSClass);
-    MatCol(t,-250,"Срок годности",0,BestBefore,false,0);
-    MatCol(t,-150,"Склад",0,Location,false,LocationSClass);
-    if (StandardHansa==false) then begin
-      MatCol(t,-50,"Место",0,PosCode,false,UsedPosSClass);
-    end;
+
     Flip(flipnr); flipnr = flipnr + 1;
+  	MatCol(1,32,"Товар",0,ArtCode,false,ForSaleINSClass);		//Edit----------------------Dima  21.12.2015
+  	MatCol(1,94,"Наименование",0,Spec,false,0); 				    
     if (UserCanAction("ViewCostPrice",true)) then begin //Edit***************************Sasha2,10:20 10.11.2014 {
     	MatCol(1,-400,"Ц.обр.закупки",0,BBCostPrice,false,0);
     	MatCol(1,-320,"FIFO по строке",0,FIFORowVal,false,0);
@@ -5908,6 +5917,8 @@ begin
     end;
     MatCol(t,-40,"Коэфф.",0,Coefficient,false,0);
     Flip(flipnr); flipnr = flipnr + 1;
+  	MatCol(1,32,"Товар",0,ArtCode,false,ForSaleINSClass);		//Edit----------------------Dima  21.12.2015
+  	MatCol(1,94,"Наименование",0,Spec,false,0);     
     MatCol(1,-400,"Структура",0,Recepy,false,0);
     MatCol(1,-320,"Источник",0,Source,false,SourceSClass);
     MatCol(1,-240,"Отфактурирован",0,Invd,false,0);
@@ -5923,6 +5934,8 @@ begin
       MatCol(t,-80,"Время отправки",0,DespatchRowTime,false,PasteCurTime);
     end;
     Flip(flipnr); flipnr = flipnr + 1;
+  	MatCol(1,32,"Товар",0,ArtCode,false,ForSaleINSClass);		//Edit----------------------Dima  21.12.2015
+  	MatCol(1,94,"Наименование",0,Spec,false,0);     
     MatCol(1,-400,"Счет реал.",0,SalesAcc,false,AccSClass);
     MatCol(1,-330,"Счет стоим.",0,CostAcc,false,AccSClass);
     MatCol(1,-250,"Объекты",0,Objects,false,ObjSClass);
@@ -5937,6 +5950,8 @@ begin
     MatCol(t,-45,"Выс.",0,UnitZval,true,0);
     if (StandardHansa==false) then begin
       Flip(flipnr); flipnr = flipnr + 1;
+	  	MatCol(1,32,"Товар",0,ArtCode,false,ForSaleINSClass);		//Edit----------------------Dima  21.12.2015
+	  	MatCol(1,94,"Наименование",0,Spec,false,0);       
       MatCol(1,-300,"Упаковок",0,RowPackages,false,0);
       MatCol(1,-220,"Тип",0,PackageType,false,PackTypeSClass);
       MatCol(1,-170,"Описание",0,PackageDesc,false,0);
@@ -5947,6 +5962,7 @@ begin
       MatCol(t,-70,"Акциз",0,ExciseNr,false,0);
     end;
   end;
+  
   InsertRowTest;
   DeleteRowTest;
   EndMatrix;

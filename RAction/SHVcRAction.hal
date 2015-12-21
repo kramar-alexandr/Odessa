@@ -1709,6 +1709,8 @@ begin
   record SMSTextBlock SMSb;
   record CUVc CUr;
   string 255 newtext;
+  integer i;
+  row SHVc SHrw;
 
 	BlockLoad(SMSb);//Edit----------------------Dima  16.09.2015
 
@@ -1758,7 +1760,15 @@ begin
   	if ((ORr.NPPaymentType == 0) and ORr.PrepaymentReceived) then begin
 			AddPaymentToIPFromSH(SHr);
 		end;
-	end;	
+	end;
+	
+	for(i=0;i<MatRowCnt(SHr);i=i+1) begin			//Edit----------------------Dima  21.12.2015 //stp used for cells shifting (item paste procedure)
+		MatRowGet(SHr,i,SHrw);
+		if (SHrw.stp==2) then begin
+				SHrw.stp=1;
+				MatRowPut(SHr,i,SHrw);
+		end;
+	end;
 	
 		  
   SHVcRecordUpdate = res; 
