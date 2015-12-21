@@ -1708,20 +1708,21 @@ BEGIN
       if (OrdSettRec.dontAllowOverreserving!=0) then begin
         FindStockValue(StockMovrw.ArtCode,SMp.FrLocation,ISr);
         orsrv = 0;
-        if (stat==updatemode) then begin        
-          if (RecordValid(SM2p)) then begin
+        //if (stat==updatemode) then begin        
+          //if (RecordValid(SM2p)) then begin
             //if (SM2p.Reserved==0) then begin							//Edit----------------------Dima  18.12.2015
               //for (j=0;j<MatRowCnt(SM2p);j=j+1) begin		//Edit----------------------Dima  18.12.2015
               for (j=0;j<i;j=j+1) begin
-                MatRowGet(SM2p,j,StockMov2rw);
+                MatRowGet(SMp,j,StockMov2rw);
                 if (StockMov2rw.ArtCode==StockMovrw.ArtCode) then begin
                   orsrv = orsrv + StockMov2rw.OrdQuant;
                 end;
               end;
            // end;
-          end;
-        end;
+          //end;
+        //end;
         //if ((StockMovrw.OrdQuant)>(ISr.Instock-ISr.RsrvQty+orsrv)) then begin		//Edit----------------------Dima  18.12.2015
+        //LogText(0,StockMovrw.ArtCode & "   --  instock " & ISr.Instock & "  res " & ISr.RsrvQty & "   orsrv " & orsrv);
         if ((StockMovrw.OrdQuant)>(ISr.Instock-ISr.RsrvQty-orsrv)) then begin // StockRsrvQty ?
           error = 20011;
           errorstr = "";
