@@ -130,7 +130,7 @@ updating procedure UpdateHistForPLVc(record PLVc PLr, record PLVc oldPLr, string
 BEGIN
 	record PLHistVc PLHr;
 	row PLHistVc PLHrw;
-	integer i;
+	integer i,cnt;
 	
 	PLHr.PLCode = PLr.PLCode;
 	PLHr.ArtCode = PLr.ArtCode;
@@ -162,16 +162,16 @@ BEGIN
 		end;
 	end else begin
 		RecordNew(PLHr);
-		if (stat != "create") then begin
+		cnt = 0;
+		if (stat != "create" and stat != "delete") then begin
 			PLHrw.ChDate = "";
 			PLHrw.ChTime = "";
 			PLHrw.UserCode = "";
 			PLHrw.Price = oldPLr.ExVatPrice;
-			logtext(0,"-----------" & oldPLr.ExVatPrice);
-	
 			PLHrw.StatusStr = "before changes";
 			if oldPLr.ExVatPrice != blankval then begin
 				MatRowPut(PLHr,0,PLHrw);
+				cnt = 1;
 			end;
 		end;
 		PLHr.PLCode = PLr.PLCode;
@@ -182,7 +182,7 @@ BEGIN
 		PLHrw.UserCode = CurrentUser;
 		PLHrw.Price = PLr.ExVatPrice;
 		PLHrw.StatusStr = stat;
-		MatRowPut(PLHr,1,PLHrw);
+		MatRowPut(PLHr,cnt,PLHrw);
 		RecordStore(PLHr,true);
 	end;
 	RETURN;
