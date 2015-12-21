@@ -163,7 +163,7 @@ BEGIN
 	end else begin
 		RecordNew(PLHr);
 		cnt = 0;
-		if (stat != "create") then begin
+		if (stat != "create" and stat != "delete") then begin
 			PLHrw.ChDate = "";
 			PLHrw.ChTime = "";
 			PLHrw.UserCode = "";
