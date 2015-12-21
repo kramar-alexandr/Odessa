@@ -1704,6 +1704,31 @@ BEGIN
       res = 1826; 
       goto LCheckStockMovRecord;
     end;
+    
+    if (stat == insertmode) then begin		//Edit----------------------Dima  21.12.2015
+    	if (SMp.Reserved!=0) then begin
+    	  if (OrdSettRec.dontAllowOverreserving!=0) then begin
+    	    FindStockValue(StockMovrw.ArtCode,SMp.FrLocation,ISr);
+    	   		orsrv = 0;
+    	      for (j=0;j<i;j=j+1) begin
+    	        MatRowGet(SMp,j,StockMov2rw);
+    	        if (StockMov2rw.ArtCode==StockMovrw.ArtCode) then begin
+    	          orsrv = orsrv + StockMov2rw.OrdQuant;
+    	        end;
+    	      end;
+    	    if ((StockMovrw.OrdQuant)>(ISr.Instock-ISr.RsrvQty-orsrv)) then begin // StockRsrvQty ?
+    	      error = 20011;
+    	      errorstr = "";
+    	      rownr = i;
+    	      fieldstr = "OrdQuant";            
+    	      res = -1;
+    	      goto LCheckStockMovRecord;
+    	    end;
+    	  end;
+    	end; 
+    end;
+    
+    if (stat == updatemode) then begin
     if (SMp.Reserved!=0 and SM2p.Reserved==0) then begin
       if (OrdSettRec.dontAllowOverreserving!=0) then begin
         FindStockValue(StockMovrw.ArtCode,SMp.FrLocation,ISr);
@@ -1732,6 +1757,7 @@ BEGIN
           goto LCheckStockMovRecord;
         end;
       end;
+    end;
     end;
     if (SMp.SentOKFlag!=0) then begin
       if (blank(StockMovrw.SentQuant)) then begin
