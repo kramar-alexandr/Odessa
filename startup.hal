@@ -278,6 +278,8 @@ begin
 	Maintenance("Пересчитать ORVc.LastShipDate",MyVClass,UpdateLastShipDateMn,modDBMain);		//Edit----------------------Dima  31.08.2015
 	Maintenance("Установить новые статусы в Счетах клиентам",MyVClass,SetNewStatusesORVcMn,modDBMain);		//Edit----------------------Dima  23.09.2015
 	
+	Maintenance("FixRecordLink",MyVClass,FixRecordLinkMn,modDBMain);// Edit ************************** Tuesday, 22 December 2015 10:04:05
+	
 
   Import("Импорт цен",PLImportIClass,PLImportIn,modDI); //Added********************Dima 20.11.2014
   Import("Импорт товаров",INImportIClass,INImportIn,modIN);//Added********************Dima 20.11.2014

@@ -194,7 +194,7 @@ updating function LongInt PLVcRecordImportAfter(var record PLVc PLr,record PLVc 
 BEGIN
 	LongInt res;
 	
-	UpdateHistForPLVc(PLr,PL2r,"import");
+//	UpdateHistForPLVc(PLr,PL2r,"import");
 
 	PLVcRecordImportAfter = res;
 	RETURN;
