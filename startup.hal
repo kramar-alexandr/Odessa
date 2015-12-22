@@ -8,7 +8,11 @@ begin
 	Module("Новая почта","",730,modNPost);
 	Register("Города","Города",NPCityVc,modNPost);
 	Register("Отделения","Отделения",NPWarehouseVc,modNPost);
-	Register("Стандартные коробки","Стандартные коробки",StandBoxesVc,modNPost);	
+	Register("Стандартные коробки","Стандартные коробки",StandBoxesVc,modNPost);
+	
+	
+	Register("ARVc","ARVc",ARVc,modDBMain);//Edit----------------------Dima  22.12.2015
+  Register("APVc","APVc",APVc,modDBMain);	
  
   Setting("Настройки WebShop",WebShopSettingsTClass,modSO); //Edit***************************Sasha2,10:22 14.07.2014
   Setting("Настройки экспорта склада CSV",ExportStockCSVTClass,modSY);

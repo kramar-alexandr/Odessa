@@ -10481,3 +10481,85 @@ begin
   EndMatrix;
   EndWindow;
 end;
+
+
+
+window ARDClass:1
+  wtag("language","ENG"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  real h,h1,h2,t,v,vs;
+  WindowBegin("Price Point Sheet ",ARDClass,CGview,-);
+  SetWRect(20,80,512,639);
+  UseView(ARVc);
+  vs = 20; h=150; h1=100; h2=220;
+  EditField(h,v=10, 70, "InvoiceNr",ViewOnly,InvoiceNr,false,0);
+  EditField(h,v+=20, 82, "Date",ViewOnly,DueDate,false,0);
+  EditField(h,v+=20, 82, "RVal",ViewOnly,RVal,false,0);
+  EditField(h,v+=20, 82, "CustCode",ViewOnly,CustCode,false,0);
+  EditField(h,v+=20, 82, "ARRebDate",ViewOnly,ARRebDate,false,0);
+  EditField(h,v+=20, 82, "ARCurncyCode",ViewOnly,ARCurncyCode,false,0);
+  EditField(h,v+=20, 82, "CustName",ViewOnly,CustName,false,0);
+  EditField(h,v+=20, 82, "BookRVal",ViewOnly,BookRVal,false,0);
+  EditField(h,v+=20, 82, "OfficialSerNr",ViewOnly,OfficialSerNr,false,0);
+  EditField(h,v+=20, 82, "ARRebDate2",ViewOnly,ARRebDate2,false,0);
+  
+  EndWindow;
+end;
+
+window ARLClass:10
+  wtag("language","ENG"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer") 
+begin
+  WindowBegin("ARVc",ARLClass,CGmlist,-); 
+  SetWRect(20,80,800,298);
+  Sizeable(-1,-1,0,0);
+  SpawnClass(ARDClass);
+  UseView(ARVc);
+  RecordList(4,17,-21,-39);
+  RlColKey(4,4,"No.",InvoiceNr,false,InvoiceNr); 
+  RlColKey(111,111,"Invoice date",DueDate,false,DueDate); 
+  RlColKey(220,200,"Customer",CustName,false,CustName); 
+  SearchField("Search "); 
+  
+  EndWindow;
+end;
+
+
+window APDClass:1
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  real h,h1,h2,t,v,vs;
+  WindowBegin("Прайс поинт лист",APDClass,CGview,-);
+  SetWRect(20,80,512,639);
+  UseView(APVc);
+  vs = 20; h=150; h1=100; h2=220;
+  EditField(h=150,v=10, 70, "InvoiceNr",ViewOnly,InvoiceNr,false,0);
+  EditField(h,v+=20, 82, "SerNr",ViewOnly,SerNr,false,0);
+  EditField(h,v+=20, 82, "Date",ViewOnly,DueDate,false,0);
+  EditField(h,v+=20, 82, "RVal",ViewOnly,RVal,false,0);
+  EditField(h,v+=20, 82, "VECode",ViewOnly,VECode,false,0);
+  EditField(h,v+=20, 82, "RebDate",ViewOnly,RebDate,false,0);
+  EditField(h,v+=20, 82, "CurncyCode",ViewOnly,CurncyCode,false,0);
+  EditField(h,v+=20, 82, "VEName",ViewOnly,VEName,false,0);
+  EditField(h,v+=20, 82, "BookRVal",ViewOnly,BookRVal,false,0);
+  EditField(h,v+=20, 82, "OPNr",ViewOnly,OPNr,false,0);
+  EditField(h,v+=20, 82, "RebDate2",ViewOnly,RebDate2,false,0);
+  
+  EndWindow;
+end;
+
+window APLClass:10
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","iPad") 
+begin
+  WindowBegin("ARVc",APLClass,CGmlist,-); 
+  SetWRect(20,80,800,298);
+  Sizeable(-1,-1,0,0);
+  SpawnClass(APDClass);
+  UseView(APVc);
+  RecordList(4,17,-21,-39);
+  RlColKey(4,4,"Номер",SerNr,false,SerNr); 
+  RlColKey(111,111,"Дата сч/ф",DueDate,false,DueDate); 
+  RlColKey(220,200,"Клиент",VEName,false,VEName); 
+  SearchField("Поиск"); 
+  
+  EndWindow;
+end;
