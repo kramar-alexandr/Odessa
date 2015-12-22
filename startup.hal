@@ -280,6 +280,9 @@ begin
 	
 	Maintenance("FixRecordLink",MyVClass,FixRecordLinkMn,modDBMain);// Edit ************************** Tuesday, 22 December 2015 10:04:05
 	
+	Maintenance("FixPOSMn",MyVClass,FixPOSMn,modDBMain);// Edit ************************** Tuesday, 22 December 2015 10:04:05
+	
+	
 
   Import("€мпорт цен",PLImportIClass,PLImportIn,modDI); //Added********************Dima 20.11.2014
   Import("€мпорт товаров",INImportIClass,INImportIn,modIN);//Added********************Dima 20.11.2014
