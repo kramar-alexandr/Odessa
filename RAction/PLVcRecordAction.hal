@@ -188,18 +188,6 @@ BEGIN
 	RETURN;
 END;
 
-
-global
-updating function LongInt PLVcRecordImportAfter(var record PLVc PLr,record PLVc PL2r,LongInt stat,LongInt long4)
-BEGIN
-	LongInt res;
-	
-//	UpdateHistForPLVc(PLr,PL2r,"import");
-
-	PLVcRecordImportAfter = res;
-	RETURN;
-END;
-
 global
 updating function LongInt PLVcRecordSaveAfter(var record PLVc PLr,record PLVc PL2r,LongInt stat,LongInt long4)
 BEGIN
