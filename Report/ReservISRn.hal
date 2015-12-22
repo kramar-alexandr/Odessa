@@ -1,0 +1,46 @@
+external function LongInt DateDiff(Date,Date);
+
+SetLangMode(LangRussian,"RUS",0);
+
+global procedure  ReservISRn(record RcVc RepSpec)
+begin
+record ItemStatusVc ISr;
+boolean TrHs,testf;
+integer diff,pos;
+
+  StartReportnoheaderJob("„исбаланс статуса зарезер.товара");
+  
+  StartFormat(15)
+    pos = 0;
+    OutString(pos,0,USetStr(3523),false); //ArtCode
+    //OutString(pos+=50,0,USetStr(4063),false); //Name
+    OutString(pos+=70,0,USetStr(12701),false); //In stock
+    OutString(pos+=70,0,USetStr(12172),false); //In reserv
+    OutString(pos+=70,0,USetStr(16097),false); //Difference
+    OutString(pos+=70,0,USetStr(2765),false); //Stock
+  endformat;
+  
+  TrHs = true;
+  ISr.Code = "";
+  while(loopmain(ISr,1,TrHs)) begin
+    testf = true;
+    if (ISr.Location==";;;") then begin testf = false; end;
+    if(testf)then begin
+      diff = ISr.Instock - ISr.RsrvQty;
+      if(diff<0)then begin
+        StartFormat(15)
+          pos = 0;
+          OutString(pos,0,ISr.Code,false); //ArtCode
+          //OutString(pos+=50,0,ORrw.Spec,false); //Name
+          OutString(pos+=70,0,ISr.Instock,false); //In stock
+          OutString(pos+=70,0,ISr.RsrvQty,false); //In reserv
+          OutString(pos+=70,0,diff,false); //Difference
+          OutString(pos+=70,0,ISr.Location,false); //Stock
+        endformat;
+      end;
+    end;    
+  end;
+  endjob;
+return;
+end;
+

@@ -1,0 +1,94 @@
+external function LongInt DateDiff(Date,Date);
+
+SetLangMode(LangRussian,"RUS",0);
+
+global procedure  ReservStstRn(record RcVc RepSpec)
+begin
+record ORVc ORr;
+row ORVc ORrw;
+string 255 client;
+boolean TrHs,testf,TrHs1;
+integer i,mtrw,mtrw1,j;
+record RetVc Retr;
+row RetVc Retrw;
+integer quant,pos;
+
+  client="";
+  if(nonblank(RepSpec.f1))then begin
+    client = RepSpec.f1;
+  end;
+  StartReportnoheaderJob("Резерв по счетам");
+  
+  StartFormat(15)
+    pos = 0;
+    OutString(pos,0,USetStr(7815),false);//Client
+    OutString(pos+=40,0,USetStr(3523),false);//ArtCode
+    OutString(pos+=40,0,USetStr(4063),false);//Name
+    OutString(pos+=150,0,USetStr(3524),false);//Order #
+    OutString(pos+=40,0,USetStr(3543),false);//Ord. date
+    OutString(pos+=40,0,USetStr(13724),false); //Ordered
+    OutString(pos+=40,0,USetStr(5510),false);//In reserv
+    OutString(pos+=40,0,USetStr(11050),false);//shipped
+    //OutString(pos+=40,0,USetStr(2634),false);//In Invoice
+    OutString(pos+=40,0,USetStr(4045),false);//Days in reserv
+    OutString(pos+=40,0,USetStr(2765),false);//Stock
+  endformat;
+  
+  ORr.Reserved = 1;
+  TrHs = true;
+  while(loopkey("Reserved",ORr,1,TrHs))begin
+    testf = true;
+    if(nonblank(client) and ORr.CustCode!=client)then begin testf = false; end;
+    if(ORr.Reserved==0)then begin testf = false; TrHs = false; end;
+    if(ORr.Closed!=0)then begin testf = false; end;
+    if(ORr.ShipFlag!=0)then begin testf = false; end;
+    
+    if(testf)then begin
+      mtrw = matrowcnt(ORr);
+      For(i=0;i<mtrw;i=i+1) begin
+        Matrowget(ORr,i,ORrw);
+        
+        quant = ORrw.Quant - ORrw.Shipd2;
+        /*Retr.OrdNr = ORr.SerNr;
+        TrHs1 = true;
+        while(loopkey("OrdNr",Retr,1,TrHs1))begin
+          if(Retr.OrdNr!=ORr.SerNr)then begin TrHs1=false; end;
+          if(TrHs1)then begin
+            mtrw1 = matrowcnt(Retr);
+            for(j=0;j<mtrw1;j=j+1)begin
+              matrowget(Retr,j,Retrw);
+              if(Retrw.ArtCode==ORrw.ArtCode and Retrw.OrdRow==i)then begin
+                quant = quant - Retrw.Quant;
+              end;
+            end;
+          end;
+        end;
+        resetloop(Retr);*/
+        
+        if(quant>0)then begin
+          StartFormat(15)
+            pos = 0;
+            OutString(pos,0,ORr.CustCode,false);//Client
+            OutString(pos+=40,0,ORrw.ArtCode,false);//ArtCode
+            OutString(pos+=40,0,ORrw.Spec,false);//Name
+            OutString(pos+=150,"DblORVc",ORr.SerNr,false);//Order #
+            OutString(pos+=40,0,ORr.OrdDate,false);//Ord. date
+            OutString(pos+=40,0,ORrw.Quant,false); //Ordered
+            OutString(pos+=40,0,quant,false);//In reserv
+            OutString(pos+=40,0,ORrw.Shipd2,false);//shipped
+            //OutString(pos+=40,0,ORrw.Invd - ORrw.Shipd2,false);//In Invoice
+            OutString(pos+=40,0,DateDiff(currentDate,ORr.OrdDate),false);//Days in reserv
+            if(nonblank(ORrw.Location))then begin
+              OutString(pos+=40,0,ORrw.Location,false);//Stock
+            end else begin
+              OutString(pos+=40,0,ORr.Location,false);//Stock
+            end;
+          endformat;
+        end;
+      end; 
+    end;    
+  end;
+  endjob;
+return;
+end;
+

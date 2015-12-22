@@ -84,6 +84,8 @@ begin
 
   //Report("Статистика НДС по аванс. отчетам",ExpVATRClass,ExpVATRn,0,modCL);
   //Report("Журнал путевых листов",WLJRClass,WLJRn,0,modCL);
+  Report("Резерв по счетам",ReservStatRClass,ReservStstRn,0,modSO);
+  Report("Дисбаланс статуса зарезер.товара",ReservISRClass,ReservISRn,0,modSO);
   
   Export("Экспорт статистики продаж",ExpSalesStatClass,ExpSalesStatEn,modSL);// Edit ************************** Thursday, 26 February 2015 18:04:57
   Export("Экспорт товаров в CSV розница",ExpItemsBarCodesEClass,ExpItemsBarCodesEn,modSL);// Edit ************************** Thursday, 26 February 2015 18:04:57

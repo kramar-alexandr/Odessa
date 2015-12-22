@@ -2292,3 +2292,27 @@ begin
 end; //Edit***************************Sasha2,16:12 25.09.2014 }
 
 
+window ReservStatRClass:1 ///Edit***************************Sasha2,16:03 22.12.2015 {
+ wtag("language","UKR"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  real h,v;
+  WindowBegin("Резерв по счетам",ReservStatRClass,CGRcW,RcType);
+    UseView(RcVc);
+    SetWRect(20,120,400,350);
+    h=120; v=10;
+    EditField(h,20,150,"Клиент",Normal,f1,false,CUSClass);
+  EndWindow;
+end; //Edit***************************Sasha2,16:04 22.12.2015 }
+
+window ReservISRClass:1 ///Edit***************************Sasha2,16:03 22.12.2015 {
+ wtag("language","UKR"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  real h,v;
+  WindowBegin("Дисбаланс статуса зарезер.товара",ReservISRClass,CGRcW,RcType);
+    UseView(RcVc);
+    SetWRect(20,120,400,350);
+    h=120; v=10;
+    //EditField(h,20,150,"Клиент",Normal,f1,false,CUSClass);
+  EndWindow;
+end; //Edit***************************Sasha2,16:04 22.12.2015 }
+
