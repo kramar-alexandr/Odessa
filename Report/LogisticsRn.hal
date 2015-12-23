@@ -1,0 +1,132 @@
+external procedure ExtractObj(string,var Integer,var string);
+
+SetLangMode(LangRussian,"RUS",0);
+
+
+
+function boolean CheckProcessingQtyinOrder(record ORVc ORr)		//Edit----------------------Dima  23.12.2015
+begin
+	boolean res;
+	integer i;
+	row ORVc ORrw;
+	
+	res = false;
+
+	for(i=0;i<MatRowCnt(ORr);i=i+1) begin
+		MatRowGet(ORr,i,ORrw);
+		if (ORrw.OrderQuant!=0 or ORrw.ProcessingQuant!=0) then begin
+			res = true;
+			i = MatRowCnt(ORr);
+		end;
+	end;
+	CheckProcessingQtyinOrder = res;
+return;
+end;
+
+
+
+global procedure LogisticsBalanceRn(record RcVc RepSpec)		//Edit----------------------Dima  23.12.2015
+begin
+	integer rw,i,rwcnt;
+	record StockMovVc SMr;
+	row StockMovVc SMrw;
+	record ORVc ORr;
+	row ORVc ORrw;
+	vector integer processQty,ordQty;
+	vector string 100 moves;
+	boolean testf,TrHs;
+	string 20 ref;
+	
+	StartReportJob("Баланс логистики");
+	if (nonblank(RepSpec.f1)) then begin
+		rw=1;
+  	Header(rw,"Склад: " & RepSpec.f1,1);
+  end;
+  	rw=2;
+  	Header(rw,"Период: " & RepSpec.sStartDate & ":" & RepSpec.sEndDate,1);
+	EndHeader;
+	
+	
+	
+	
+	SMr.ToLocation = RepSpec.f1;
+	TrHs = true;
+	While(LoopKey("ToLocOK",SMr,1,TrHs)) begin
+		testf = true;
+		if (SMr.OrdTransDate < RepSpec.sStartDate or SMr.OrdTransDate > RepSpec.sEndDate) then begin testf=false; end;
+		if (SMr.ToLocation != RepSpec.f1) then begin testf=false; TrHs=false; end;
+		
+		if (testf) then begin
+			for(i=0;i<MatRowCnt(SMr);i=i+1) begin
+				MatRowGet(SMr,i,SMrw);
+				if (nonblank(SMrw.ORSerial)) then begin
+					ref = SMrw.ORSerial & ":" & SMrw.ORRowUID;
+					ordQty[ref]	=	ordQty[ref] + SMrw.OrdQuant;
+					if (SMr.OKFlag!=0) then begin
+						processQty[ref] = processQty[ref] + SMrw.OrderProcessing;				
+					end;
+					moves[ref]=moves[ref] & SMr.SerNr & ",";
+				end;
+			end;
+		end;
+
+	end;	
+	
+
+
+		Startformat(20);
+			OutString(20,0,"№ Счета",false);
+			OutString(30,0,"Товар",false);
+			OutString(70,0,"UID",false);
+			OutString(100,0,"Необходимо",false);
+			OutString(130,0,"Кол-во",false);
+			OutString(160,0,"Заказано",false); 
+			OutString(190,0,"Обработка",false);
+			
+			OutString(250,0,"Треб. кол-во",false); 
+			OutString(300,0,"В обработке",false); 
+			OutString(350,0,"Перемещения",false);   
+		EndFormat;	
+	
+		ORr.OrdDate = RepSpec.sStartDate;
+		TrHs = true;
+		While(LoopKey("OrdDate",ORr,1,TrHs)) begin
+			testf = true;
+			if (ORr.Location!=RepSpec.f1) then begin testf=false; end;
+			if (ORr.OrdDate > RepSpec.sEndDate) then begin testf=false; TrHs = false; end;
+			
+			if (testf and CheckProcessingQtyinOrder(ORr)) then begin
+		
+				Startformat(15);
+					OutStringID(20,"DblORVc",ORr.SerNr,false,ORr.SerNr);
+				EndFormat;
+				
+				rwcnt = MatRowCnt(ORr);
+				for (i=0;i<rwcnt;i=i+1) begin
+					MatRowGet(ORr,i,ORrw);
+					if (ORrw.OrderQuant!=0 or ORrw.ProcessingQuant!=0) then begin
+						ref = ORr.SerNr & ":" & ORrw.UID;
+						Startformat(15);
+							OutString(30,0,ORrw.ArtCode,false);
+							OutString(70,0,ORrw.UID,false); 
+							OutString(100,0,ORrw.NecessaryQuant,false); 
+							OutString(130,0,ORrw.Quant,false); 
+							OutString(160,0,ORrw.OrderQuant,false); 
+							OutString(190,0,ORrw.ProcessingQuant,false); 
+							
+							OutString(250,0,ordQty[ref],false); 
+							OutString(300,0,processQty[ref],false); 
+							OutString(350,0,moves[ref],false); 							
+						EndFormat;			
+					end;
+				end;
+				
+			end;
+	
+		end;
+	
+	EndJob;
+
+  
+end;
+

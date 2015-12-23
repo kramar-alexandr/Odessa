@@ -80,12 +80,11 @@ begin
   Report("Журнал выплат",PPJRClass,PPRn,0,modCL);
   Report("Отчет по складу (модифицированный)",NewINRClass,NewInvValRn,0,modIN);
   Report("Товары на местах",INPosRClass,INPosRn,0,modIN);// Edit ************************** Tuesday, 17 March 2015 17:19:38
-		Report("Получить статус электронных накладных",ENGetStatusRClass,ENGetStatusRn,0,modNPost);//Edit----------------------Dima  27.05.2015
+	Report("Получить статус электронных накладных",ENGetStatusRClass,ENGetStatusRn,0,modNPost);//Edit----------------------Dima  27.05.2015
+	Report("Баланс товаров для логистики",LogisticsBalanceRClass,LogisticsBalanceRn,0,modSO);//Edit----------------------Dima  23.12.2015
 
   //Report("Статистика НДС по аванс. отчетам",ExpVATRClass,ExpVATRn,0,modCL);
   //Report("Журнал путевых листов",WLJRClass,WLJRn,0,modCL);
-  Report("Резерв по счетам",ReservStatRClass,ReservStstRn,0,modSO);
-  Report("Дисбаланс статуса зарезер.товара",ReservISRClass,ReservISRn,0,modSO);
   
   Export("Экспорт статистики продаж",ExpSalesStatClass,ExpSalesStatEn,modSL);// Edit ************************** Thursday, 26 February 2015 18:04:57
   Export("Экспорт товаров в CSV розница",ExpItemsBarCodesEClass,ExpItemsBarCodesEn,modSL);// Edit ************************** Thursday, 26 February 2015 18:04:57
