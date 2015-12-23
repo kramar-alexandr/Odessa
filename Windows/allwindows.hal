@@ -5323,14 +5323,16 @@ begin
   if (StandardHansa==false) then begin
     MatCol(t,-145,"Место",0,Position,true,UsedPosSClass);
   end;
-  MatCol(t,-90,"Источник",0,Source,true,SourceSClass);
+  //MatCol(t,-90,"Источник",0,Source,true,SourceSClass);
+  MatColTL(t,-90,"ID",0,M4UVal,ViewOnly,0,UID,true,0);// Edit ************************** Wednesday, 23 December 2015 10:41:28
   MatCol(t=kInvoiceRowTypeStructuredItemComponent,144,"Описание",0,Spec,false,0);
   MatCol(t,-315,"Накладная",0,ShipNote,false,0);
   MatCol(t,-210,"Склад",0,Location,false,LocationSClass);
   if (StandardHansa==false) then begin
     MatCol(t,-145,"Место",0,Position,true,UsedPosSClass);
   end;
-  MatCol(t,-90,"Источник",0,Source,true,SourceSClass);
+  //MatCol(t,-90,"Источник",0,Source,true,SourceSClass);
+  MatColTL(t,-90,"ID",0,M4UVal,ViewOnly,0,UID,true,0);// Edit ************************** Wednesday, 23 December 2015 10:41:28
   if (StandardHansa==false) then begin
     Flip(flipnr); flipnr = flipnr + 1;
     MatCol(t=1,94,"Кол-во",0,Quant,true,0);
@@ -6715,7 +6717,7 @@ t=1;
     MatCol(t,86,"Наименование",0,Spec,false,0);
     MatCol(t,-230,"В обработке",0,OrderProcessing,false,0);
     MatColTL(t,-130,"№ счета",0,M4Long,Normal,0,ORSerial,false,0);
-   // MatColTL(t,-90,"UID строки",0,-1,ViewOnly,0,ORRowUID,false,0);
+    MatColTL(t,-40,"UID",0,M4UVal,ViewOnly,0,ORRowUID,false,0);
 
   DeleteRowTest;
   EndMatrix;

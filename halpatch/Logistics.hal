@@ -338,7 +338,7 @@ begin
 								MatRowGet(ORr,j,ORrw);
 								SMrw.OrderProcessing = Min(ORrw.OrderQuant - ORrw.ProcessingQuant,SMrw.OrdQuant);
 								ORrw.ProcessingQuant = ORrw.ProcessingQuant + SMrw.OrderProcessing;
-								LogText(0,"new quant  " & ORrw.ProcessingQuant);
+								LogText(0,"new quant  " & ORr.SerNr & " " & j & ORrw.ProcessingQuant);
 								MatRowPut(ORr,j,ORrw);
 								j = rwcnt;
 							end;			
