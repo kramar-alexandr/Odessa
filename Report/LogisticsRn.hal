@@ -62,7 +62,7 @@ begin
 				if (nonblank(SMrw.ORSerial)) then begin
 					ref = SMrw.ORSerial & ":" & SMrw.ORRowUID;
 					ordQty[ref]	=	ordQty[ref] + SMrw.OrdQuant;
-					if (SMr.OKFlag!=0) then begin
+					if (SMr.OKFlag==0) then begin
 						processQty[ref] = processQty[ref] + SMrw.OrderProcessing;				
 					end;
 					moves[ref]=moves[ref] & SMr.SerNr & ",";
@@ -99,6 +99,7 @@ begin
 		
 				Startformat(15);
 					OutStringID(20,"DblORVc",ORr.SerNr,false,ORr.SerNr);
+					OutString(50,0,ORr.OrdDate,false);
 				EndFormat;
 				
 				rwcnt = MatRowCnt(ORr);
