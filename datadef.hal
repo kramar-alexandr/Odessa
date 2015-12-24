@@ -1589,7 +1589,7 @@ RecordBegin(INVc,-,"artikel5");
   RecordField(CustomStatusFlag,M4Int,0,0); //Edit***************************Sasha2,13:21 14.07.2014
   RecordField(SyncFlag,M4Int,0,0); //Edit***************************Sasha2,10:19 15.07.2014
 	RecordField(OptUAHRate,M4Rate,0,0);//Edit------------------------Dima 29.01.2015
-	RecordField(CustomStatusFlagText,M4Str,20,0);	//Edit----------------------Dima  24.03.2015	
+	RecordField(CustomStatusFlagText,M4Str,40,0);	//Edit----------------------Dima  24.03.2015	
 	RecordField(NPFirstName,M4Str,80,0);					//Edit----------------------Dima  15.04.2015
 	RecordField(NPMiddleName,M4Str,80,0);
 	RecordField(NPLastName,M4Str,80,0);
@@ -1613,6 +1613,7 @@ RecordBegin(INVc,-,"artikel5");
 	RecordField(Advance,M423Val,0,0);
 	RecordField(WaitingForItemsDate,M4Date,0,0);
 	RecordField(WaitingForItemsTime,M4Time,0,0);
+	RecordField(Group_Status,M4Str,0,40);
   ArrayBegin(Math,-,1);
   ArrayField(stp,M4Int,0,0);
   ArrayField(ArtCode,M4Code,20,INVc);
@@ -1689,7 +1690,7 @@ RecordBegin(INVc,-,"artikel5");
   MainKeyBegin(SerNr,1);
   StoreInBaseKey;
   AppendListFieldToKeyName(SalesMan);
-  AppendListFieldToKeyName(SalesGroup);
+  AppendListFieldToKeyName(SalesGroup);  
   KeySegment(SerNr);
   SynchronizationIndex;
   SubsetKeyBegin2(ExportedFlag);
@@ -1702,24 +1703,32 @@ RecordBegin(INVc,-,"artikel5");
   StoreInBaseKey;
   AppendListFieldToKeyName(SalesMan);
   AppendListFieldToKeyName(SalesGroup);
+  AppendListFieldToKeyName(Group_Status);							//Edit----------------------Dima  24.12.2015
+  AppendListFieldToKeyName(CustomStatusFlagText);  
   KeySegment(CustCode);
   KeySegment(SerNr);
   SubsetKeyBegin2(InvFlag);
   StoreInBaseKey;
   AppendListFieldToKeyName(SalesMan);
   AppendListFieldToKeyName(SalesGroup);
+  AppendListFieldToKeyName(Group_Status);							//Edit----------------------Dima  24.12.2015
+  AppendListFieldToKeyName(CustomStatusFlagText);  
   KeySegment(InvFlag);
   KeySegment(SerNr);
   SubsetKeyBegin2(ShipFlag);
   StoreInBaseKey;
   AppendListFieldToKeyName(SalesMan);
   AppendListFieldToKeyName(SalesGroup);
+  AppendListFieldToKeyName(Group_Status);
+  AppendListFieldToKeyName(CustomStatusFlagText);    
   KeySegment(ShipFlag);
   KeySegment(SerNr);
   SubsetKeyBegin2(Name);
   StoreInBaseKey;
   AppendListFieldToKeyName(SalesMan);
-  AppendListFieldToKeyName(SalesGroup);
+  AppendListFieldToKeyName(SalesGroup); 
+  AppendListFieldToKeyName(Group_Status);
+  AppendListFieldToKeyName(CustomStatusFlagText);   
   KeySegment(Addr0);
   KeySegment(SerNr);
   SubsetKeyBegin2(PRCode);
@@ -1732,6 +1741,8 @@ RecordBegin(INVc,-,"artikel5");
   StoreInBaseKey;
   AppendListFieldToKeyName(SalesMan);
   AppendListFieldToKeyName(SalesGroup);
+  AppendListFieldToKeyName(Group_Status);
+  AppendListFieldToKeyName(CustomStatusFlagText);  
   KeySegment(OrderClass);
   KeySegment(SerNr);
   SubsetKeyBegin2(OSFlag);
@@ -1758,12 +1769,16 @@ RecordBegin(INVc,-,"artikel5");
   StoreInBaseKey;
   AppendListFieldToKeyName(SalesMan);
   AppendListFieldToKeyName(SalesGroup);
+  AppendListFieldToKeyName(Group_Status);
+  AppendListFieldToKeyName(CustomStatusFlagText);  
   KeySegment(OrdDate);
   KeySegment(SerNr);
   SubsetKeyBegin2(CustOrdNr);
   StoreInBaseKey;
   AppendListFieldToKeyName(SalesMan);
   AppendListFieldToKeyName(SalesGroup);
+  AppendListFieldToKeyName(Group_Status);
+  AppendListFieldToKeyName(CustomStatusFlagText);  
   KeySegment(CustOrdNr);
   KeySegment(SerNr);
   KeyBegin(InvoiceCode);
@@ -1821,6 +1836,8 @@ RecordBegin(INVc,-,"artikel5");
   StoreInBaseKey;
   AppendListFieldToKeyName(SalesMan);
   AppendListFieldToKeyName(SalesGroup);
+  AppendListFieldToKeyName(Group_Status);
+  AppendListFieldToKeyName(CustomStatusFlagText);  
   KeySegment(Sum4);
   KeySegment(SerNr);
   SubsetKeyBegin2(QuoteNr);
@@ -1848,6 +1865,8 @@ RecordBegin(INVc,-,"artikel5");
   StoreInBaseKey;
   AppendListFieldToKeyName(SalesMan);
   AppendListFieldToKeyName(SalesGroup);
+  AppendListFieldToKeyName(Group_Status);
+  AppendListFieldToKeyName(CustomStatusFlagText);  
   KeySegment(OKFlag);
   KeySegment(SerNr);
 
@@ -1929,82 +1948,91 @@ RecordBegin(INVc,-,"artikel5");
   StoreInBaseKey;
   AppendListFieldToKeyName(SalesMan);
   AppendListFieldToKeyName(SalesGroup);
+  AppendListFieldToKeyName(Group_Status);
+  AppendListFieldToKeyName(CustomStatusFlagText);  
   KeySegment(CustomStatusFlagText);
   KeySegment(SerNr); 
   
   SubsetKeyBegin2(ActShipSerNr);//Edit----------------------Dima  26.08.2015
   StoreInBaseKey;
   AppendListFieldToKeyName(SalesMan);
-  AppendListFieldToKeyName(SalesGroup);
+  AppendListFieldToKeyName(SalesGroup); 
   KeySegment(SerNr);
   KeySegment(ShipFlag);  
   SubsetKeyBegin2(ActShipInvFlag);	//Edit----------------------Dima  26.08.2015
   StoreInBaseKey;
   AppendListFieldToKeyName(SalesMan);
-  AppendListFieldToKeyName(SalesGroup);
+  AppendListFieldToKeyName(SalesGroup);  
   KeySegment(InvFlag);
   KeySegment(SerNr);  
   SubsetKeyBegin2(ActShipCustCode);	//Edit----------------------Dima  26.08.2015
   StoreInBaseKey;
   AppendListFieldToKeyName(SalesMan);
-  AppendListFieldToKeyName(SalesGroup);
+  AppendListFieldToKeyName(SalesGroup);   
   KeySegment(CustCode);
   KeySegment(SerNr);
   SubsetKeyBegin2(ActShipName);	//Edit----------------------Dima  26.08.2015
   StoreInBaseKey;
   AppendListFieldToKeyName(SalesMan);
-  AppendListFieldToKeyName(SalesGroup);
+  AppendListFieldToKeyName(SalesGroup); 
   KeySegment(Addr0);
   KeySegment(SerNr);    
   SubsetKeyBegin2(ActShipOrdDate);	//Edit----------------------Dima  26.08.2015
   StoreInBaseKey;
   AppendListFieldToKeyName(SalesMan);
-  AppendListFieldToKeyName(SalesGroup);
+  AppendListFieldToKeyName(SalesGroup);   
   KeySegment(OrdDate);
   KeySegment(SerNr);
   SubsetKeyBegin2(ActShipCustOrdNr);//Edit----------------------Dima  26.08.2015
   StoreInBaseKey;
   AppendListFieldToKeyName(SalesMan);
-  AppendListFieldToKeyName(SalesGroup);
+  AppendListFieldToKeyName(SalesGroup);   
   KeySegment(CustOrdNr);
   KeySegment(SerNr);    
   SubsetKeyBegin2(ActShipOKFlag);	//Edit----------------------Dima  26.08.2015
   StoreInBaseKey;
   AppendListFieldToKeyName(SalesMan);
-  AppendListFieldToKeyName(SalesGroup);
+  AppendListFieldToKeyName(SalesGroup);  
   KeySegment(OKFlag);
   KeySegment(SerNr);  
   SubsetKeyBegin2(ActShipOrderClass);//Edit----------------------Dima  26.08.2015
   StoreInBaseKey;
   AppendListFieldToKeyName(SalesMan);
-  AppendListFieldToKeyName(SalesGroup);
+  AppendListFieldToKeyName(SalesGroup);  
   KeySegment(OrderClass);
   KeySegment(SerNr);  
   SubsetKeyBegin2(ActShipSum4);			//Edit----------------------Dima  26.08.2015
   StoreInBaseKey;
   AppendListFieldToKeyName(SalesMan);
-  AppendListFieldToKeyName(SalesGroup);
+  AppendListFieldToKeyName(SalesGroup); 
   KeySegment(Sum4);
   KeySegment(SerNr);    
   SubsetKeyBegin2(ActShipCustomStatusFlagText);	//Edit----------------------Dima  26.08.2015
   StoreInBaseKey;
   AppendListFieldToKeyName(SalesMan);
-  AppendListFieldToKeyName(SalesGroup);
+  AppendListFieldToKeyName(SalesGroup);  
   KeySegment(CustomStatusFlagText);
   KeySegment(SerNr);  
   SubsetKeyBegin2(LastShipDate);		//Edit----------------------Dima  28.08.2015
   StoreInBaseKey;
   AppendListFieldToKeyName(SalesMan);
-  AppendListFieldToKeyName(SalesGroup);
+  AppendListFieldToKeyName(SalesGroup);  
   KeySegment(LastShipDate);
   KeySegment(SerNr);  
   SubsetKeyBegin2(ActLastShipDate);	//Edit----------------------Dima  28.08.2015
   StoreInBaseKey;
   AppendListFieldToKeyName(SalesMan);
-  AppendListFieldToKeyName(SalesGroup);
+  AppendListFieldToKeyName(SalesGroup);  
   KeySegment(LastShipDate);
-  KeySegment(SerNr);  
-   
+  KeySegment(SerNr);
+  SubsetKeyBegin2(SerNrSubSets);	//Edit----------------------Dima  24.12.2015
+  StoreInBaseKey;
+  AppendListFieldToKeyName(SalesMan);
+  AppendListFieldToKeyName(SalesGroup); 
+  AppendListFieldToKeyName(Group_Status);
+  AppendListFieldToKeyName(CustomStatusFlagText);    
+  KeySegment(SerNr);
+
   EndRecord;
   
   
