@@ -3298,7 +3298,7 @@ begin
   integer wn;
 
   BlockLoad(LMb); //Edit***************************Sasha2,10:14 23.01.2015
-  ReportDefaults(RepSpec,"GoodsReport1RClass");
+  ReportDefaults(RepSpec,"ReportForItemSearchRClass");
   RepSpec.Media = mtScreen;
   RepSpec.flags[0] = CurWindow; //Mother window
   RepSpec.repname = "ItemReportForSearchRn";

@@ -10487,10 +10487,10 @@ end;
 
 
 window ARDClass:1
-  wtag("language","ENG"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
 begin
   real h,h1,h2,t,v,vs;
-  WindowBegin("Price Point Sheet ",ARDClass,CGview,-);
+  WindowBegin("ARVc",ARDClass,CGview,-);
   SetWRect(20,80,512,639);
   UseView(ARVc);
   vs = 20; h=150; h1=100; h2=220;
@@ -10509,7 +10509,7 @@ begin
 end;
 
 window ARLClass:10
-  wtag("language","ENG"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer") 
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer") 
 begin
   WindowBegin("ARVc",ARLClass,CGmlist,-); 
   SetWRect(20,80,800,298);
@@ -10530,7 +10530,7 @@ window APDClass:1
   wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
 begin
   real h,h1,h2,t,v,vs;
-  WindowBegin("Прайс поинт лист",APDClass,CGview,-);
+  WindowBegin("APVc",APDClass,CGview,-);
   SetWRect(20,80,512,639);
   UseView(APVc);
   vs = 20; h=150; h1=100; h2=220;
@@ -10550,9 +10550,9 @@ begin
 end;
 
 window APLClass:10
-  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","iPad") 
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer") 
 begin
-  WindowBegin("ARVc",APLClass,CGmlist,-); 
+  WindowBegin("APVc",APLClass,CGmlist,-); 
   SetWRect(20,80,800,298);
   Sizeable(-1,-1,0,0);
   SpawnClass(APDClass);
