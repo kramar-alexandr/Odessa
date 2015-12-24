@@ -1657,6 +1657,7 @@ begin
   record NPCounterpartySenderVc NPCounterSr;
  	record NPCargoTypeVc	NPCargoTyper;
  	record NPPaymentFormsVc NPPayFormr;
+ 	val insuranceCost;
  
   
   cashOnDelivery = 1;
@@ -1724,7 +1725,12 @@ begin
 			goto LCheckENremote;			
 		end;	
 		
-		if (SHr.NPCostCODEdit>SHr.NPCostEdit) then begin	
+		if (nonblank(SHr.NPCostEdit)) then begin
+			insuranceCost = SHr.NPCostEdit;
+		end else begin 
+			insuranceCost = SHr.NPCost;
+		end;
+		if (SHr.NPCostCODEdit>insuranceCost) then begin	
 			res = false;
 			errCode = 31060;
 			goto LCheckENremote;			
