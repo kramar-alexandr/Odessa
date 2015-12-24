@@ -117,12 +117,13 @@ function Boolean ORLClassOnOpenWindow(Integer wn)
 begin
   date dt;
   record UserVc Userr;
+  string 50 subset;
   
   if(UserCanAction("VievAllSalesGroupDocuments", true)==false) then begin
 		Userr.Code = CurrentUser;
 		if(readFirstMain(Userr, 1, true))then begin
 			if(nonblank(Userr.SalesGroup))then begin
-				SetWindowSubset(wn,Userr.SalesGroup);
+					SetWindowSubset(wn,Userr.SalesGroup);	
 			end;
 		end;  
 	end;
@@ -136,12 +137,17 @@ function Boolean ORLClassGeneralOnOpenWindow(Integer wn)
 begin
   date dt;
   record UserVc Userr;
+  string 50 subset;
+  
+  subset = GetWindowSubset(wn);
   
   if(UserCanAction("VievAllSalesGroupDocuments", true)==false) then begin
 		Userr.Code = CurrentUser;
 		if(readFirstMain(Userr, 1, true))then begin
 			if(nonblank(Userr.SalesGroup))then begin
-				SetWindowSubset(wn,Userr.SalesGroup);
+				if (nonblank(subset)) then begin
+					SetWindowSubset(wn,subset);
+				end;	
 			end;
 		end;  
 	end;

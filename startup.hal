@@ -243,7 +243,7 @@ begin
 	Maintenance("Установить флаги для Web-клиентов",MyVClass,PutFlagsForCUWeb,modDBMain);	//Edit----------------------Dima  11.02.2015
 	Maintenance("Создать карты лояльности клиентам \"WEB\"",MyVClass,CreateLoyaltyForWebClients,modDBMain);	//Edit***************************Sasha2,15:51 26.02.2015
 	Maintenance("Recalculate POVc.ActOkFlag",MyVClass,RecalculatePOVC_ActOkFlag_Mn,modDBMain);
-	Maintenance("Recalculate ORVc.CustomStatusFlagText",MyVClass,RecalculatePOVC_CustomStatusFlagText_Mn,modDBMain);	//Edit----------------------Dima  24.03.2015
+	Maintenance("Recalculate ORVc.CustomStatusFlagText",MyVClass,RecalculateORVC_CustomStatusFlagText_Mn,modDBMain);	//Edit----------------------Dima  24.03.2015
 	
 	Maintenance("Fix Prepayment",MyVClass,FixPrepaymentMn,modDBMain);	//Edit----------------------Dima  24.03.2015
 	
@@ -289,8 +289,7 @@ begin
 	Maintenance("FixRecordLink",MyVClass,FixRecordLinkMn,modDBMain);// Edit ************************** Tuesday, 22 December 2015 10:04:05
 	
 	Maintenance("FixPOSMn",MyVClass,FixPOSMn,modDBMain);// Edit ************************** Tuesday, 22 December 2015 10:04:05
-	Maintenance("RecalcARMn",MyVClass,RecalcARMn,modDBMain);// Edit ************************** Tuesday, 22 December 2015 10:04:05
-	
+	Maintenance("RecalcARMn",MyVClass,RecalcARMn,modDBMain);// Edit ************************** Tuesday, 22 December 2015 10:04:05	
 
   Import("Импорт цен",PLImportIClass,PLImportIn,modDI); //Added********************Dima 20.11.2014
   Import("Импорт товаров",INImportIClass,INImportIn,modIN);//Added********************Dima 20.11.2014

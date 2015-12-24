@@ -1998,6 +1998,8 @@ begin
     case 10: ORr.CustomStatusFlagText = USetStr(31112);           
 
   end;
+  
+  ORr.Group_Status = ORr.SalesGroup & ":" & ORr.CustomStatusFlagText;
 
 return;
 end;
@@ -2799,7 +2801,7 @@ global
 function LongInt ORVcRecordInIndex(record ORVc ORr,string indexname)
 begin
   LongInt res;
-  
+ 
   res = 1;
   if ((ORr.OSFlag==0) or (ORr.Sum4<=ORr.PrepaidAmount)) then begin 
     if (indexname=="ActSerNr")  then begin res = 0; end;
@@ -2825,7 +2827,7 @@ begin
     if (indexname=="ActLastShipDate")  then begin res = 0; end;
 
   end;  //Edit--------------------------------------------------------------------------------------------------------------Dima  26.08.2015
-
+ //LogText(0, ORr.SerNr & "   " & ORr.CustomStatusFlag & "    " & indexname & "   index   " & res);
   ORVcRecordInIndex = res;
   return;
 end;

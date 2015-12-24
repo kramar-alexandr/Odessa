@@ -4887,8 +4887,24 @@ begin
   FormName(PrintORL);
   h = 50; v = 5;
   HalPushButton(h,v,h+100,v+12,"OpenAllOrdersORVc","Все записи");//Edit----------------------Dima  26.08.2015
+	HalPushButton(h+=120,v,h+100,v+12,"OpenORStatusNew","Новый");
+	HalPushButton(h+=120,v,h+100,v+12,"OpenORStatusOpen","Открыт");
+	HalPushButton(h+=120,v,h+100,v+12,"OpenORStatusConfirm","Подтвержден");
+	HalPushButton(h+=120,v,h+100,v+12,"OpenORStatusNotCall","Не дозвонились");
+	HalPushButton(h+=120,v,h+100,v+12,"OpenORStatusChanged","Изменен");
+	HalPushButton(h+=120,v,h+100,v+12,"OpenORStatusWaitItems","Ожидание тов-в");
+	HalPushButton(h+=120,v,h+100,v+12,"OpenORStatusNotEnoughItems","Недос. тов-в");
+	v=v+28; h = 50;
+	HalPushButton(h+=120,v,h+100,v+12,"OpenORStatusWaitPay","Ожидание оплаты");
+	HalPushButton(h+=120,v,h+100,v+12,"OpenORStatusAssembly","В сборке");
+	HalPushButton(h+=120,v,h+100,v+12,"OpenORStatusAssembled","Собран");
+	HalPushButton(h+=120,v,h+100,v+12,"OpenORStatusSent","Отправлен");
+	HalPushButton(h+=120,v,h+100,v+12,"OpenORStatusDelivered","Доставлен");
+	HalPushButton(h+=120,v,h+100,v+12,"OpenORStatusFinished","Завершен");
+	HalPushButton(h+=120,v,h+100,v+12,"OpenORStatusCanceled","Отменен");
 
-  RecordList(4,50,-21,-39);//Edit----------------------Dima  26.08.2015
+
+  RecordList(4,80,-21,-39);//Edit----------------------Dima  26.08.2015
   RlColKey(4,4,"Но.",SerNr,false,ActShipSerNr);//Edit----------------------Dima  26.08.2015
   RlColKey(79,79,"ОК",OKFlag,false,ActShipOKFlag);
   pos = 111;
@@ -4992,7 +5008,7 @@ begin
   FormName(PrintORL);
 
   RecordList(4,4,-21,-39);//Edit----------------------Dima  26.08.2015
-  RlColKey(4,4,"Но.",SerNr,false,SerNr);//Edit----------------------Dima  26.08.2015
+  RlColKey(4,4,"Но.",SerNr,false,SerNrSubSets);//Edit----------------------Dima  26.08.2015
   RlColKey(79,79,"ОК",OKFlag,false,OKFlag);
   pos = 111;
   if (HasModIN) then begin

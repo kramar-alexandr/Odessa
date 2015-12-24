@@ -2476,13 +2476,34 @@ end;
 
 global updating procedure OpenORFilteringWindow1()
 begin
-  	FilterORWindow(1);
+ 	record ORVc ORr;
+	integer nwn,wn;
+	string 50 subset;
+	RecordNew(ORr);
+	
+	subset = USetStr(31107);
+	
+	//SetWindowSubset(nwn,subset);
+	nwn = OpenWindow("ORLClassGeneral",0,CurWindow,subset,"",ORr);
+
 end;
+
+
+
+
 
 
 global updating  procedure OpenORFilteringWindow2()
 begin
-  	FilterORWindow(2);
+ 	record ORVc ORr;
+	integer nwn,wn;
+	string 50 subset;
+	RecordNew(ORr);
+	
+	subset = "OPT:" & USetStr(31103);
+	
+	//SetWindowSubset(nwn,subset);
+	nwn = OpenWindow("ORLClassGeneral",0,CurWindow,subset,"",ORr);
 end;
 
 global updating  procedure OpenORFilteringWindow3()
@@ -2497,4 +2518,283 @@ end;
 
 
 
+
+global updating procedure OpenORStatusNew()
+begin
+ 	record ORVc ORr;
+ 	record UserVc Userr;
+	integer nwn,wn;
+	string 50 subset;
+	
+	Userr.Code = CurrentUser;
+	if (ReadFirstMain(Userr,1,true)) then begin
+		if (nonblank(Userr.SalesGroup)) then begin
+			subset = Userr.SalesGroup & ":";
+		end;
+	end;
+	
+	RecordNew(ORr);
+	subset = subset & USetStr(31102);
+	
+	LogText(0,subset);
+	nwn = OpenWindow("ORLClassGeneral",0,CurWindow,subset,"",ORr);
+end;
+
+global updating procedure OpenORStatusOpen()
+begin
+ 	record ORVc ORr;
+ 	record UserVc Userr;
+	integer nwn,wn;
+	string 50 subset;
+	
+	Userr.Code = CurrentUser;
+	if (ReadFirstMain(Userr,1,true)) then begin
+		if (nonblank(Userr.SalesGroup)) then begin
+			subset = Userr.SalesGroup & ":";
+		end;
+	end;
+	
+	RecordNew(ORr);
+	subset = subset &  USetStr(31103);
+	nwn = OpenWindow("ORLClassGeneral",0,CurWindow,subset,"",ORr);
+end;
+
+global updating procedure OpenORStatusConfirm()
+begin
+ 	record ORVc ORr;
+ 	record UserVc Userr;
+	integer nwn,wn;
+	string 50 subset;
+	
+	Userr.Code = CurrentUser;
+	if (ReadFirstMain(Userr,1,true)) then begin
+		if (nonblank(Userr.SalesGroup)) then begin
+			subset = Userr.SalesGroup & ":";
+		end;
+	end;
+	
+	RecordNew(ORr);
+	subset = subset & USetStr(31104);
+	nwn = OpenWindow("ORLClassGeneral",0,CurWindow,subset,"",ORr);
+end;
+
+global updating procedure OpenORStatusNotCall()
+begin
+ 	record ORVc ORr;
+ 	record UserVc Userr;
+	integer nwn,wn;
+	string 50 subset;
+	
+	Userr.Code = CurrentUser;
+	if (ReadFirstMain(Userr,1,true)) then begin
+		if (nonblank(Userr.SalesGroup)) then begin
+			subset = Userr.SalesGroup & ":";
+		end;
+	end;
+	
+	RecordNew(ORr);
+	subset = subset & USetStr(31105);
+	nwn = OpenWindow("ORLClassGeneral",0,CurWindow,subset,"",ORr);
+end;
+
+
+
+global updating procedure OpenORStatusChanged()
+begin
+ 	record ORVc ORr;
+ 	record UserVc Userr;
+	integer nwn,wn;
+	string 50 subset;
+	
+	Userr.Code = CurrentUser;
+	if (ReadFirstMain(Userr,1,true)) then begin
+		if (nonblank(Userr.SalesGroup)) then begin
+			subset = Userr.SalesGroup & ":";
+		end;
+	end;
+	
+	RecordNew(ORr);
+	subset = subset & USetStr(31106);
+	nwn = OpenWindow("ORLClassGeneral",0,CurWindow,subset,"",ORr);
+end;
+
+
+global updating procedure OpenORStatusWaitItems()
+begin
+ 	record ORVc ORr;
+ 	record UserVc Userr;
+	integer nwn,wn;
+	string 50 subset;
+	
+	Userr.Code = CurrentUser;
+	if (ReadFirstMain(Userr,1,true)) then begin
+		if (nonblank(Userr.SalesGroup)) then begin
+			subset = Userr.SalesGroup & ":";
+		end;
+	end;
+	
+	RecordNew(ORr);
+	subset = subset & USetStr(31113);
+	nwn = OpenWindow("ORLClassGeneral",0,CurWindow,subset,"",ORr);
+end;
+
+
+global updating procedure OpenORStatusNotEnoughItems()
+begin
+ 	record ORVc ORr;
+ 	record UserVc Userr;
+	integer nwn,wn;
+	string 50 subset;
+	
+	Userr.Code = CurrentUser;
+	if (ReadFirstMain(Userr,1,true)) then begin
+		if (nonblank(Userr.SalesGroup)) then begin
+			subset = Userr.SalesGroup & ":";
+		end;
+	end;
+	
+	RecordNew(ORr);
+	subset = subset & USetStr(31114);
+	nwn = OpenWindow("ORLClassGeneral",0,CurWindow,subset,"",ORr);
+end;
+
+
+global updating procedure OpenORStatusWaitPay()
+begin
+ 	record ORVc ORr;
+ 	record UserVc Userr;
+	integer nwn,wn;
+	string 50 subset;
+	
+	Userr.Code = CurrentUser;
+	if (ReadFirstMain(Userr,1,true)) then begin
+		if (nonblank(Userr.SalesGroup)) then begin
+			subset = Userr.SalesGroup & ":";
+		end;
+	end;
+	
+	RecordNew(ORr);
+	subset = subset & USetStr(31036);
+	nwn = OpenWindow("ORLClassGeneral",0,CurWindow,subset,"",ORr);
+end;
+
+
+global updating procedure OpenORStatusAssembly()
+begin
+ 	record ORVc ORr;
+ 	record UserVc Userr;
+	integer nwn,wn;
+	string 50 subset;
+	
+	Userr.Code = CurrentUser;
+	if (ReadFirstMain(Userr,1,true)) then begin
+		if (nonblank(Userr.SalesGroup)) then begin
+			subset = Userr.SalesGroup & ":";
+		end;
+	end;
+	
+	RecordNew(ORr);
+	subset = subset & USetStr(31107);
+	nwn = OpenWindow("ORLClassGeneral",0,CurWindow,subset,"",ORr);
+end;
+
+
+global updating procedure OpenORStatusAssembled()
+begin
+ 	record ORVc ORr;
+ 	record UserVc Userr;
+	integer nwn,wn;
+	string 50 subset;
+	
+	Userr.Code = CurrentUser;
+	if (ReadFirstMain(Userr,1,true)) then begin
+		if (nonblank(Userr.SalesGroup)) then begin
+			subset = Userr.SalesGroup & ":";
+		end;
+	end;
+	
+	RecordNew(ORr);
+	subset = subset & USetStr(31108);
+	nwn = OpenWindow("ORLClassGeneral",0,CurWindow,subset,"",ORr);
+end;
+
+
+global updating procedure OpenORStatusSent()
+begin
+ 	record ORVc ORr;
+ 	record UserVc Userr;
+	integer nwn,wn;
+	string 50 subset;
+	
+	Userr.Code = CurrentUser;
+	if (ReadFirstMain(Userr,1,true)) then begin
+		if (nonblank(Userr.SalesGroup)) then begin
+			subset = Userr.SalesGroup & ":";
+		end;
+	end;
+	
+	RecordNew(ORr);
+	subset = subset & USetStr(31109);
+	nwn = OpenWindow("ORLClassGeneral",0,CurWindow,subset,"",ORr);
+end;
+
+
+global updating procedure OpenORStatusDelivered()
+begin
+ 	record ORVc ORr;
+ 	record UserVc Userr;
+	integer nwn,wn;
+	string 50 subset;
+	
+	Userr.Code = CurrentUser;
+	if (ReadFirstMain(Userr,1,true)) then begin
+		if (nonblank(Userr.SalesGroup)) then begin
+			subset = Userr.SalesGroup & ":";
+		end;
+	end;
+	
+	RecordNew(ORr);
+	subset = subset & USetStr(31110);
+	nwn = OpenWindow("ORLClassGeneral",0,CurWindow,subset,"",ORr);
+end;
+
+global updating procedure OpenORStatusCanceled()
+begin
+ 	record ORVc ORr;
+ 	record UserVc Userr;
+	integer nwn,wn;
+	string 50 subset;
+	
+	Userr.Code = CurrentUser;
+	if (ReadFirstMain(Userr,1,true)) then begin
+		if (nonblank(Userr.SalesGroup)) then begin
+			subset = Userr.SalesGroup & ":";
+		end;
+	end;
+	
+	RecordNew(ORr);
+	subset = subset & USetStr(31112);
+	nwn = OpenWindow("ORLClassGeneral",0,CurWindow,subset,"",ORr);
+end;
+
+
+
+global updating procedure OpenORStatusFinished()
+begin
+ 	record ORVc ORr;
+ 	record UserVc Userr;
+	integer nwn,wn;
+	string 50 subset;
+	
+	Userr.Code = CurrentUser;
+	if (ReadFirstMain(Userr,1,true)) then begin
+		if (nonblank(Userr.SalesGroup)) then begin
+			subset = Userr.SalesGroup & ":";
+		end;
+	end;
+	
+	RecordNew(ORr);
+	subset = subset & USetStr(31111);
+	nwn = OpenWindow("ORLClassGeneral",0,CurWindow,subset,"",ORr);
+end;
 
