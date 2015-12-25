@@ -146,6 +146,7 @@ begin
 		if(readFirstMain(Userr, 1, true))then begin
 			if(nonblank(Userr.SalesGroup))then begin
 				if (nonblank(subset)) then begin
+					subset = Userr.SalesGroup & ":" & subset;
 					SetWindowSubset(wn,subset);
 				end;	
 			end;
