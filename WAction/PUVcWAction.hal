@@ -59,6 +59,8 @@ remote procedure HandlePrintEAN13PU(record PUVc,var array record PUVc,var array 
 forward function Boolean PUDClassSwitchRow(Integer,Integer);
 external procedure PrintEAN13StockMovDsm();
 external procedure Zebra_Printing(record RcVc);
+external function Boolean PUVcRowEFActiveCheck(string,Integer,Integer,Integer);
+external function Boolean PUVcEFActiveTest(Integer,Integer,record PUVc);
 
 function val UnitCalcQty(string Unittext,val UnitXval,val UnitYval,val UnitZval,val defqty)
 BEGIN
@@ -829,53 +831,57 @@ updating function Boolean PUDClassAfterEditField(Integer wn,string fieldname,Int
 BEGIN
   Boolean res;
 
-  switch (fieldname) begin
-    case "Location": res = PUDClassLocationEFAfter(wn,rownr,changed!=0);
-    case "CostPrice": res = PUDClassCostPriceEFAfter(wn,fn,rownr,changed);
-    case "BaseRate2": res = PUDClassBaseRate2EFAfter(wn,fn,rownr,changed);
-    case "BaseRate1": res = PUDClassBaseRate1EFAfter(wn,fn,rownr,changed);
-    case "ToRateB2": res = PUDClassToRateB2EFAfter(wn,fn,rownr,changed);
-    case "ToRateB1": res = PUDClassToRateB1EFAfter(wn,fn,rownr,changed);
-    case "FrRate": res = PUDClassFrRateEFAfter(wn,fn,rownr,changed);
-    case "CurncyCode": res = PUDClassCurncyCodeEFAfter(wn,fn,rownr,changed);
-    case "TransDate": res = PUDClassTransDateEFAfter(wn,changed!=0);
-    case "VECode": res = PUDClassVECodeEFAfter(wn,fn,rownr,changed);
-    case "UnitZval": res = PUDClassUnitZvalEFAfter(wn,fn,rownr,changed);
-    case "UnitYval": res = PUDClassUnitYvalEFAfter(wn,fn,rownr,changed);
-    case "UnitXval": res = PUDClassUnitXvalEFAfter(wn,fn,rownr,changed);
-    case "ArtCode": res = PUDClassArtCodeEFAfter(wn,fn,rownr,changed);
-    case "Quant": res = PUDClassQuantEFAfter(wn,fn,rownr,changed);
-    case "Sum": res = PUDClassSumEFAfter(wn,fn,rownr,changed);
-    case "UPrice": res = PUDClassUPriceEFAfter(wn,fn,rownr,changed);
-    case "ShipCost": res = PUDClassShipCostEFAfter(wn,fn,rownr,changed);
-    case "Cost1": res = PUDClassCost1EFAfter(wn,fn,rownr,changed);
-    case "Cost2": res = PUDClassCost2EFAfter(wn,fn,rownr,changed);
-    case "Cost3": res = PUDClassCost3EFAfter(wn,fn,rownr,changed);
-    case "Cost4": res = PUDClassCost4EFAfter(wn,fn,rownr,changed);
-    case "Cost5": res = PUDClassCost5EFAfter(wn,fn,rownr,changed);
-    case "RowCost1": res = PUDClassRowCost1EFAfter(wn,fn,rownr,changed);
-    case "RowCost2": res = PUDClassRowCost2EFAfter(wn,fn,rownr,changed);
-    case "RowCost3": res = PUDClassRowCost3EFAfter(wn,fn,rownr,changed);
-    case "RowCost4": res = PUDClassRowCost4EFAfter(wn,fn,rownr,changed);
-    case "RowCost5": res = PUDClassRowCost5EFAfter(wn,fn,rownr,changed);
-    case "Extra": res = PUDClassExtraEFAfter(wn,fn,rownr,changed);
-    case "CustomsCost": res = PUDClassCustomsCostEFAfter(wn,fn,rownr,changed);
-    case "VATCode": res = PUDClassVATCodeEFAfter(wn,fn,rownr,changed);
-    case "PONr": res = PUDClassPONrEFAfter(wn,rownr,changed!=0);
-    case "OrdRow": res = PUDClassOrdRowEFAfter(wn,rownr,changed!=0);
-    case "PosCode": res = PUDClassPosCodeEFAfter(wn,rownr,changed!=0);
-    case "ToPosCode": res = PUDClassToPosCodeEFAfter(wn,rownr,changed!=0);
-    case "FreightCode": res = PUDClassFreightCodeEFAfter(wn,fn,rownr,changed);
-    case "VEQuant": res = PUDClassVEQuantEFAfter(wn,rownr,changed!=0);
-    case "StockType": res = PUDClassStockTypeEFAfter(wn,rownr,changed!=0);
-    case "SerialNr": res = PUDClassSerialNrEFAfter(wn,rownr,changed!=0);
-    case "TaxTemplateCode": res = PUDClassTaxTemplateCodeEFAfter(wn,rownr,changed!=0);
-    case "scanbarcode": res = PUDClassScanBarcodeEFAfter(wn,fn,rownr,changed!=0);
-    case "TREO": res = PUDClassTREOEFAfter(wn,rownr,changed!=0);
-    case "VEItemCode": res = PUDClassVEItemCodeEFAfter(wn,rownr,changed!=0);
-    case "Volume": res = PUDClassVolumeWeightEFAfter(wn,rownr,changed!=0);// same// Edit ************************** Wednesday, July 9, 2014 at 11:41:44
-    case "Weight": res = PUDClassVolumeWeightEFAfter(wn,rownr,changed!=0);//same// Edit ************************** Wednesday, July 9, 2014 at 11:41:44
-    
+  if (currentuser!="SAUNOK") then begin //Edit-------------------Vitalii 10:43 25.12.2015
+	  switch (fieldname) begin
+		case "Location": res = PUDClassLocationEFAfter(wn,rownr,changed!=0);
+		case "CostPrice": res = PUDClassCostPriceEFAfter(wn,fn,rownr,changed);
+		case "BaseRate2": res = PUDClassBaseRate2EFAfter(wn,fn,rownr,changed);
+		case "BaseRate1": res = PUDClassBaseRate1EFAfter(wn,fn,rownr,changed);
+		case "ToRateB2": res = PUDClassToRateB2EFAfter(wn,fn,rownr,changed);
+		case "ToRateB1": res = PUDClassToRateB1EFAfter(wn,fn,rownr,changed);
+		case "FrRate": res = PUDClassFrRateEFAfter(wn,fn,rownr,changed);
+		case "CurncyCode": res = PUDClassCurncyCodeEFAfter(wn,fn,rownr,changed);
+		case "TransDate": res = PUDClassTransDateEFAfter(wn,changed!=0);
+		case "VECode": res = PUDClassVECodeEFAfter(wn,fn,rownr,changed);
+		case "UnitZval": res = PUDClassUnitZvalEFAfter(wn,fn,rownr,changed);
+		case "UnitYval": res = PUDClassUnitYvalEFAfter(wn,fn,rownr,changed);
+		case "UnitXval": res = PUDClassUnitXvalEFAfter(wn,fn,rownr,changed);
+		case "ArtCode": res = PUDClassArtCodeEFAfter(wn,fn,rownr,changed);
+		case "Quant": res = PUDClassQuantEFAfter(wn,fn,rownr,changed);
+		case "Sum": res = PUDClassSumEFAfter(wn,fn,rownr,changed);
+		case "UPrice": res = PUDClassUPriceEFAfter(wn,fn,rownr,changed);
+		case "ShipCost": res = PUDClassShipCostEFAfter(wn,fn,rownr,changed);
+		case "Cost1": res = PUDClassCost1EFAfter(wn,fn,rownr,changed);
+		case "Cost2": res = PUDClassCost2EFAfter(wn,fn,rownr,changed);
+		case "Cost3": res = PUDClassCost3EFAfter(wn,fn,rownr,changed);
+		case "Cost4": res = PUDClassCost4EFAfter(wn,fn,rownr,changed);
+		case "Cost5": res = PUDClassCost5EFAfter(wn,fn,rownr,changed);
+		case "RowCost1": res = PUDClassRowCost1EFAfter(wn,fn,rownr,changed);
+		case "RowCost2": res = PUDClassRowCost2EFAfter(wn,fn,rownr,changed);
+		case "RowCost3": res = PUDClassRowCost3EFAfter(wn,fn,rownr,changed);
+		case "RowCost4": res = PUDClassRowCost4EFAfter(wn,fn,rownr,changed);
+		case "RowCost5": res = PUDClassRowCost5EFAfter(wn,fn,rownr,changed);
+		case "Extra": res = PUDClassExtraEFAfter(wn,fn,rownr,changed);
+		case "CustomsCost": res = PUDClassCustomsCostEFAfter(wn,fn,rownr,changed);
+		case "VATCode": res = PUDClassVATCodeEFAfter(wn,fn,rownr,changed);
+		case "PONr": res = PUDClassPONrEFAfter(wn,rownr,changed!=0);
+		case "OrdRow": res = PUDClassOrdRowEFAfter(wn,rownr,changed!=0);
+		case "PosCode": res = PUDClassPosCodeEFAfter(wn,rownr,changed!=0);
+		case "ToPosCode": res = PUDClassToPosCodeEFAfter(wn,rownr,changed!=0);
+		case "FreightCode": res = PUDClassFreightCodeEFAfter(wn,fn,rownr,changed);
+		case "VEQuant": res = PUDClassVEQuantEFAfter(wn,rownr,changed!=0);
+		case "StockType": res = PUDClassStockTypeEFAfter(wn,rownr,changed!=0);
+		case "SerialNr": res = PUDClassSerialNrEFAfter(wn,rownr,changed!=0);
+		case "TaxTemplateCode": res = PUDClassTaxTemplateCodeEFAfter(wn,rownr,changed!=0);
+		case "scanbarcode": res = PUDClassScanBarcodeEFAfter(wn,fn,rownr,changed!=0);
+		case "TREO": res = PUDClassTREOEFAfter(wn,rownr,changed!=0);
+		case "VEItemCode": res = PUDClassVEItemCodeEFAfter(wn,rownr,changed!=0);
+		case "Volume": res = PUDClassVolumeWeightEFAfter(wn,rownr,changed!=0);// same// Edit ************************** Wednesday, July 9, 2014 at 11:41:44
+		case "Weight": res = PUDClassVolumeWeightEFAfter(wn,rownr,changed!=0);//same// Edit ************************** Wednesday, July 9, 2014 at 11:41:44
+		
+	  end;
+  end else begin //Edit-------------------Vitalii 10:44 25.12.2015
+	res = true;
   end;
   PUDClassAfterEditField = res;
   RETURN;
@@ -1237,3 +1243,123 @@ begin
 	end;	
 
 end;
+
+global
+function Boolean  AllowCurChange(string curcode,Boolean base)
+BEGIN
+  record CurncyCodeVc ccr;
+  Boolean res;
+  
+  res = true;
+  if (nonblank(curcode)) then begin
+    ccr.CurncyCode = curcode;
+    if (ReadFirstMain(ccr,1,true)) then begin
+      if (base) then begin
+        if (ccr.NoChangeBase!=0) then begin res = false; end;
+      end else begin
+        if (ccr.NoChangeForeign!=0) then begin res  = false; end;
+      end;
+    end;
+  end;
+  AllowCurChange = res;
+  RETURN;
+END;
+
+global
+function Boolean PUVcEFActiveCheck(string fieldname,Integer wn,Integer wnst)
+BEGIN
+  Boolean res;
+  record PUVc PUr;
+  record PUVc oldPUr;
+  Integer updatemode;
+
+  updatemode = 2;//Rs_update
+  res = true;
+  GetWindowRecord(wn,PUr);
+  switch (fieldname) begin
+    case "Comment": ;
+    case "FrRate": 
+      if (PUr.OKFlag!=0) then begin
+        res = false;
+      end else begin
+        if (AllowCurChange(PUr.CurncyCode,false)==false) then begin res = false; end;
+      end;
+    case "ToRateB1": 
+      if (PUr.OKFlag!=0) then begin
+        res = false;
+      end else begin
+        if (AllowCurChange(PUr.CurncyCode,false)==false) then begin res = false; end;
+      end;
+    case "ToRateB2": 
+      if (PUr.OKFlag!=0) then begin
+        res = false;
+      end else begin
+        if (AllowCurChange(PUr.CurncyCode,false)==false) then begin res = false; end;
+      end;
+    case "BaseRate1": 
+      if (PUr.OKFlag!=0) then begin
+        res = false;
+      end else begin
+        if (AllowCurChange(PUr.CurncyCode,true)==false) then begin res = false; end;
+      end;
+    case "BaseRate2": 
+      if (PUr.OKFlag!=0) then begin
+        res = false;
+      end else begin
+        if (AllowCurChange(PUr.CurncyCode,true)==false) then begin res = false; end;
+      end;
+    case "ShipCost": 
+      if (wnst==updatemode) then begin
+        if (PUr.OKFlag!=0) then begin
+          res = PUVcEFActiveTest(wn,-1,PUr);
+        end;  
+      end;  
+    case "CustomsCost": 
+      if (wnst==updatemode) then begin
+        if (PUr.OKFlag!=0) then begin
+          res = PUVcEFActiveTest(wn,-1,PUr);
+        end;  
+      end;  
+    case "LangCode": res = true;
+    case "VECode":
+       if (PUr.PONr>0) then begin res = false; end;
+    otherwise
+      if (wnst==updatemode) then begin
+        GetPrevWindowRecord(wn,PUr);
+        if (PUr.OKFlag!=0) then begin
+          res = false;
+        end;  
+      end;  
+  end;
+  PUVcEFActiveCheck = res;
+  RETURN;
+END;
+
+global
+function Boolean PUDClassActiveEditField(Integer wn,string fieldname,Integer fn,Integer wnst,Integer rownr,Integer changed)
+BEGIN
+  Boolean res;
+  Integer nwn;
+  
+  nwn = FindWindow("SelectApproverWClass");
+  if (nwn>0) then begin
+    if (MotherWindow(nwn)==wn) then begin
+      res = false;
+      goto LPUDClassActiveEditField;
+    end;
+  end;
+  if (rownr==-1) then begin
+    res = PUVcEFActiveCheck(fieldname,wn,wnst);
+  end else begin
+    res = PUVcRowEFActiveCheck(fieldname,wn,wnst,rownr);
+  end;
+LPUDClassActiveEditField:;
+     //Edit-------------------Vitalii 10:43 25.12.2015
+	 if (currentuser=="SAUNOK") then begin
+		res = true;
+	 end;
+  PUDClassActiveEditField = res;
+  RETURN;
+END;
+
+

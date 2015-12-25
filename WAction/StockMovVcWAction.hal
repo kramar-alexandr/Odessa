@@ -615,35 +615,39 @@ function Boolean StockMovDClassAfterEditField(Integer wn,string fieldname,Intege
 BEGIN
   Boolean res;
 
-  switch (fieldname) begin
-    case "SerialNr": res = StockMovDClassSerialNrEFAfter(wn,rownr,changed);
-    case "UnitZval": res = StockMovDClassUnitZvalEFAfter(wn,rownr,changed);
-    case "UnitYval": res = StockMovDClassUnitYvalEFAfter(wn,rownr,changed);
-    case "UnitXval": res = StockMovDClassUnitXvalEFAfter(wn,rownr,changed);
-    case "TransDate": res = StockMovDClassTransDateEFAfter(wn,changed);
-    case "SentTransDate": res = StockMovDClassSentTransDateEFAfter(wn,changed);
-    case "CurncyCode": res = StockMovDClassCurncyCodeEFAfter(wn,changed);
-    case "ArtCode": res = StockMovDClassArtCodeEFAfter(wn,rownr,changed);
-    case "Quant": res = StockMovDClassQuantEFAfter(wn,rownr,changed);
-    case "SentQuant": res = StockMovDClassSentQuantEFAfter(wn,rownr,changed);
-    case "OldPrice": res = StockMovDClassOldPriceEFAfter(wn,rownr,changed);
-    case "ExtraSCost": res = StockMovDClassExtraSCostEFAfter(wn,rownr,changed);
-    case "NewPrice": res = StockMovDClassNewPriceEFAfter(wn,rownr,changed);
-    case "ToPosCode": res = StockMovDClassToPosCodeEFAfter(wn,rownr,changed);
-    case "FreightCode": res = StockMovDClassFreightCodeEFAfter(wn,changed!=0);
-    case "FrLocation": res = StockMovDClassFrLocationEFAfter(wn,changed!=0);
-    case "ThrouLocation": res = StockMovDClassThrouLocationEFAfter(wn,changed!=0);
-    case "ToLocation": res = StockMovDClassToLocationEFAfter(wn,changed!=0);
-    case "PlanSendDate": res = StockMovDClassPlanSendEFAfter(wn,changed!=0);
-    case "PlanSendTime": res = StockMovDClassPlanSendEFAfter(wn,changed!=0);
-    case "PlanArrDate": res = StockMovDClassPlanArrEFAfter(wn,changed!=0);
-    case "PlanArrTime": res = StockMovDClassPlanArrEFAfter(wn,changed!=0);
-    case "ActSendDate": res = StockMovDClassDurationDateEFAfter(wn,changed!=0);
-    case "ActSendTime": res = StockMovDClassDurationTimeEFAfter(wn,changed!=0);
-    case "ActArrDate": res = StockMovDClassDurationDateEFAfter(wn,changed!=0);
-    case "ActArrTime": res = StockMovDClassDurationTimeEFAfter(wn,changed!=0);
-    case "ProdSerNr": res = StockMovDClassProdSerNrEFAfter(wn,changed!=0);
-    case "OrdQuant": res = StockMovDClassOrdQuantEFAfter(wn,rownr,changed); //Edit***************************Sasha2,12:39 10.02.2015
+  if (currentuser!="SAUNOK") then begin //Edit-------------------Vitalii 10:43 25.12.2015
+	  switch (fieldname) begin
+		case "SerialNr": res = StockMovDClassSerialNrEFAfter(wn,rownr,changed);
+		case "UnitZval": res = StockMovDClassUnitZvalEFAfter(wn,rownr,changed);
+		case "UnitYval": res = StockMovDClassUnitYvalEFAfter(wn,rownr,changed);
+		case "UnitXval": res = StockMovDClassUnitXvalEFAfter(wn,rownr,changed);
+		case "TransDate": res = StockMovDClassTransDateEFAfter(wn,changed);
+		case "SentTransDate": res = StockMovDClassSentTransDateEFAfter(wn,changed);
+		case "CurncyCode": res = StockMovDClassCurncyCodeEFAfter(wn,changed);
+		case "ArtCode": res = StockMovDClassArtCodeEFAfter(wn,rownr,changed);
+		case "Quant": res = StockMovDClassQuantEFAfter(wn,rownr,changed);
+		case "SentQuant": res = StockMovDClassSentQuantEFAfter(wn,rownr,changed);
+		case "OldPrice": res = StockMovDClassOldPriceEFAfter(wn,rownr,changed);
+		case "ExtraSCost": res = StockMovDClassExtraSCostEFAfter(wn,rownr,changed);
+		case "NewPrice": res = StockMovDClassNewPriceEFAfter(wn,rownr,changed);
+		case "ToPosCode": res = StockMovDClassToPosCodeEFAfter(wn,rownr,changed);
+		case "FreightCode": res = StockMovDClassFreightCodeEFAfter(wn,changed!=0);
+		case "FrLocation": res = StockMovDClassFrLocationEFAfter(wn,changed!=0);
+		case "ThrouLocation": res = StockMovDClassThrouLocationEFAfter(wn,changed!=0);
+		case "ToLocation": res = StockMovDClassToLocationEFAfter(wn,changed!=0);
+		case "PlanSendDate": res = StockMovDClassPlanSendEFAfter(wn,changed!=0);
+		case "PlanSendTime": res = StockMovDClassPlanSendEFAfter(wn,changed!=0);
+		case "PlanArrDate": res = StockMovDClassPlanArrEFAfter(wn,changed!=0);
+		case "PlanArrTime": res = StockMovDClassPlanArrEFAfter(wn,changed!=0);
+		case "ActSendDate": res = StockMovDClassDurationDateEFAfter(wn,changed!=0);
+		case "ActSendTime": res = StockMovDClassDurationTimeEFAfter(wn,changed!=0);
+		case "ActArrDate": res = StockMovDClassDurationDateEFAfter(wn,changed!=0);
+		case "ActArrTime": res = StockMovDClassDurationTimeEFAfter(wn,changed!=0);
+		case "ProdSerNr": res = StockMovDClassProdSerNrEFAfter(wn,changed!=0);
+		case "OrdQuant": res = StockMovDClassOrdQuantEFAfter(wn,rownr,changed); //Edit***************************Sasha2,12:39 10.02.2015
+	  end;
+  end else begin //Edit-------------------Vitalii 10:44 25.12.2015
+	res = true;
   end;
   StockMovDClassAfterEditField = res;
   RETURN;
@@ -889,10 +893,11 @@ BEGIN
           if (StockMovr.OKFlag!=0) then begin res = false; end;
       end;
   end;
-  if(currentuser=="SA")then begin
-  	res = true;
-  end;
   
+     //Edit-------------------Vitalii 10:43 25.12.2015
+	 if (currentuser=="SAUNOK") then begin
+		res = true;
+	 end;
   StockMovDClassActiveEditField = res;
   RETURN;
 END;
