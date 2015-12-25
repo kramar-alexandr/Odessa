@@ -137,18 +137,19 @@ function Boolean ORLClassGeneralOnOpenWindow(Integer wn)
 begin
   date dt;
   record UserVc Userr;
-  string 50 subset;
+  string 50 status,subset;
   
-  subset = GetWindowSubset(wn);
+  status = GetWindowSubset(wn);
   
   if(UserCanAction("VievAllSalesGroupDocuments", true)==false) then begin
 		Userr.Code = CurrentUser;
 		if(readFirstMain(Userr, 1, true))then begin
 			if(nonblank(Userr.SalesGroup))then begin
-				if (nonblank(subset)) then begin
-					subset = Userr.SalesGroup & ":" & subset;
-					SetWindowSubset(wn,subset);
-				end;	
+				subset = Userr.SalesGroup;
+				if (nonblank(status)) then begin
+					subset = subset & ":" & status;
+				end;
+				SetWindowSubset(wn,subset);	
 			end;
 		end;  
 	end;
