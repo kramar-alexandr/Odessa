@@ -802,35 +802,36 @@ global
 function Boolean SHDClassAfterEditField(Integer wn,string fieldname,Integer fn, Integer rownr,Integer changed)
 BEGIN
   Boolean res;
-
-  switch (fieldname) begin
-    case "RowPackages": res = SHDClassRowPackagesTypeEFAfter(wn,fn,rownr,changed);
-    case "PackageType": res = SHDClassPackageTypeEFAfter(wn,fn,rownr,changed);
-    case "DelAddrCode": res = SHDClassDelAddrCodeEFAfter(wn,fn,rownr,changed);
-    case "FreightCode": res = SHDClassFreightCodeEFAfter(wn,fn,rownr,changed);
-    case "Location": res = SHDClassLocationEFAfter(wn,rownr,changed!=0);
-    case "ShipDate": res = SHDClassShipDateEFAfter(wn,fn,rownr,changed);
-    case "SerialNr": res = SHDClassSerialNrEFAfter(wn,fn,rownr,changed);
-    case "UnitZval": res = SHDClassUnitZvalEFAfter(wn,fn,rownr,changed);
-    case "UnitYval": res = SHDClassUnitYvalEFAfter(wn,fn,rownr,changed);
-    case "UnitXval": res = SHDClassUnitXvalEFAfter(wn,fn,rownr,changed);
-    case "Ship": res = SHDClassShipEFAfter(wn,fn,rownr,changed);
-    case "PosCode": res = SHDClassPosCodeEFAfter(wn,rownr,changed);
-    case "ShipMode": res = SHDClassShipModeEFAfter(wn,changed!=0);
-    case "DelCountry": res = SHDClassDelCountryEFAfter(wn,changed!=0);
-    case "NPPackType1" : res = SHDClassNPPackTypeEFAfter(wn,changed,fieldname);	//Edit----------------------Dima  17.04.2015
-    case "NPPackType2" : res = SHDClassNPPackTypeEFAfter(wn,changed,fieldname);
-    case "NPPackType3" : res = SHDClassNPPackTypeEFAfter(wn,changed,fieldname);
-    case "NPPackType4" : res = SHDClassNPPackTypeEFAfter(wn,changed,fieldname);
-    case "NPPackType5" : res = SHDClassNPPackTypeEFAfter(wn,changed,fieldname);	
-    case "NPLength1" : res = SHDClassNPSizesEFAfter(wn,changed,fieldname); 
-    case "NPLength2" : res = SHDClassNPSizesEFAfter(wn,changed,fieldname);
-    case "NPLength3" : res = SHDClassNPSizesEFAfter(wn,changed,fieldname);
-    case "NPLength4" : res = SHDClassNPSizesEFAfter(wn,changed,fieldname);
-    case "NPLength5" : res = SHDClassNPSizesEFAfter(wn,changed,fieldname); 
-    case "NPWidth1" : res = SHDClassNPSizesEFAfter(wn,changed,fieldname);
-    case "NPWidth2" : res = SHDClassNPSizesEFAfter(wn,changed,fieldname);
-    case "NPWidth3" : res = SHDClassNPSizesEFAfter(wn,changed,fieldname);
+	
+  if (currentuser!="SAUNOK") then begin //Edit-------------------Vitalii 10:43 25.12.2015
+	  switch (fieldname) begin
+		case "RowPackages": res = SHDClassRowPackagesTypeEFAfter(wn,fn,rownr,changed);
+		case "PackageType": res = SHDClassPackageTypeEFAfter(wn,fn,rownr,changed);
+		case "DelAddrCode": res = SHDClassDelAddrCodeEFAfter(wn,fn,rownr,changed);
+		case "FreightCode": res = SHDClassFreightCodeEFAfter(wn,fn,rownr,changed);
+		case "Location": res = SHDClassLocationEFAfter(wn,rownr,changed!=0);
+		case "ShipDate": res = SHDClassShipDateEFAfter(wn,fn,rownr,changed);
+		case "SerialNr": res = SHDClassSerialNrEFAfter(wn,fn,rownr,changed);
+		case "UnitZval": res = SHDClassUnitZvalEFAfter(wn,fn,rownr,changed);
+		case "UnitYval": res = SHDClassUnitYvalEFAfter(wn,fn,rownr,changed);
+		case "UnitXval": res = SHDClassUnitXvalEFAfter(wn,fn,rownr,changed);
+		case "Ship": res = SHDClassShipEFAfter(wn,fn,rownr,changed);
+		case "PosCode": res = SHDClassPosCodeEFAfter(wn,rownr,changed);
+		case "ShipMode": res = SHDClassShipModeEFAfter(wn,changed!=0);
+		case "DelCountry": res = SHDClassDelCountryEFAfter(wn,changed!=0);
+		case "NPPackType1" : res = SHDClassNPPackTypeEFAfter(wn,changed,fieldname);	//Edit----------------------Dima  17.04.2015
+		case "NPPackType2" : res = SHDClassNPPackTypeEFAfter(wn,changed,fieldname);
+		case "NPPackType3" : res = SHDClassNPPackTypeEFAfter(wn,changed,fieldname);
+		case "NPPackType4" : res = SHDClassNPPackTypeEFAfter(wn,changed,fieldname);
+		case "NPPackType5" : res = SHDClassNPPackTypeEFAfter(wn,changed,fieldname);	
+		case "NPLength1" : res = SHDClassNPSizesEFAfter(wn,changed,fieldname); 
+		case "NPLength2" : res = SHDClassNPSizesEFAfter(wn,changed,fieldname);
+		case "NPLength3" : res = SHDClassNPSizesEFAfter(wn,changed,fieldname);
+		case "NPLength4" : res = SHDClassNPSizesEFAfter(wn,changed,fieldname);
+		case "NPLength5" : res = SHDClassNPSizesEFAfter(wn,changed,fieldname); 
+		case "NPWidth1" : res = SHDClassNPSizesEFAfter(wn,changed,fieldname);
+		case "NPWidth2" : res = SHDClassNPSizesEFAfter(wn,changed,fieldname);
+		case "NPWidth3" : res = SHDClassNPSizesEFAfter(wn,changed,fieldname);
 		case "NPWidth4" : res = SHDClassNPSizesEFAfter(wn,changed,fieldname);
 		case "NPWidth5" : res = SHDClassNPSizesEFAfter(wn,changed,fieldname);
 		case "NPHeight1" : res = SHDClassNPSizesEFAfter(wn,changed,fieldname);
@@ -851,6 +852,9 @@ BEGIN
 		case "NPSender" : res = SHDClassNPSenderEFAfter(wn,changed);
 		case "NPSenderWarehouse" : res = SHDClassSenderWarehouseEFAfter(wn,changed);
 		case "NPRecipientWarehouse" : res = SHDClassRecipientWarehouseEFAfter(wn,changed);		//Edit----------------------Dima  20.04.2015
+	end;
+  end else begin //Edit-------------------Vitalii 10:44 25.12.2015
+	res = true;
   end;
   SHDClassAfterEditField = res;
   RETURN;
@@ -1210,7 +1214,10 @@ BEGIN
    end else begin	      
    		res = false;
    end;
-     
+     //Edit-------------------Vitalii 10:43 25.12.2015
+	 if (currentuser=="SAUNOK") then begin
+		res = true;
+	 end;
   SHDClassActiveEditField = res;
   RETURN;
 END;
