@@ -718,11 +718,11 @@ BEGIN
 		res = true;		//Edit------------------FIX!!!--------------------Dima  01.10.2015
 	end;  
 	
-	if (CurrentUser=="SA") then begin
-		res = true;		//Edit------------------FIX!!!--------------------Dima  01.10.2015
-	end;
-  
 LIVDClassActiveEditField:;
+     //Edit-------------------Vitalii 10:43 25.12.2015
+	 if (currentuser=="SAUNOK") then begin
+		res = true;
+	 end;
   IVDClassActiveEditField = res;
   RETURN;
 END;
