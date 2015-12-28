@@ -35,8 +35,17 @@ begin
   Report("Отчет по ценам",PricesRepRClass,PricesRepRn,0,modDI);
 	Report("Поиск товаров",ReportForINItemSearchRClass,INItemReportForSearchRn,0,modIN);//Edit----------------------------------Dima 
 	Report("Поиск среди товаров",ReportForItemSearchRClass,INItemReportForSearchRn,0,modIN);//Edit----------------------------------Dima 
+	Report("Журнал суточных возмещений",DAJRClass,DAJRn,0,modCL);
+  Report("Журнал авансовых отчетов",ExpJRClass,ExpRn,0,modCL);
+  Report("Журнал  расчетов с ПЛ",PersPerRClass,PersPerRn,0,modCL);
+  Report("Журнал выплат",PPJRClass,PPRn,0,modCL);
+  Report("Отчет по складу (модифицированный)",NewINRClass,NewInvValRn,0,modIN);
+  Report("Товары на местах",INPosRClass,INPosRn,0,modIN);// Edit ************************** Tuesday, 17 March 2015 17:19:38
+	Report("Получить статус электронных накладных",ENGetStatusRClass,ENGetStatusRn,0,modNPost);//Edit----------------------Dima  27.05.2015
+	Report("Баланс товаров для логистики",LogisticsBalanceRClass,LogisticsBalanceRn,0,modSO);//Edit----------------------Dima  23.12.2015
 
-  
+  Report("Резерв по счетам",ReservStatRClass,ReservStstRn,0,modSO);
+  Report("Дисбаланс статуса резерва",ReservISRClass,ReservISRn,0,modSO);
   
   Setting("Авансовые отчеты",ExpLClass,modCL);
   Setting("Выплаты персоналу",PPLClass,modCL);
@@ -77,15 +86,7 @@ begin
   //Edit-------------------Vitalii 16:07 14.12.2015
   Setting("История цен",PLHistLClass,modDI);
 
-  Report("Журнал суточных возмещений",DAJRClass,DAJRn,0,modCL);
-  Report("Журнал авансовых отчетов",ExpJRClass,ExpRn,0,modCL);
-  Report("Журнал  расчетов с ПЛ",PersPerRClass,PersPerRn,0,modCL);
-  Report("Журнал выплат",PPJRClass,PPRn,0,modCL);
-  Report("Отчет по складу (модифицированный)",NewINRClass,NewInvValRn,0,modIN);
-  Report("Товары на местах",INPosRClass,INPosRn,0,modIN);// Edit ************************** Tuesday, 17 March 2015 17:19:38
-	Report("Получить статус электронных накладных",ENGetStatusRClass,ENGetStatusRn,0,modNPost);//Edit----------------------Dima  27.05.2015
-	Report("Баланс товаров для логистики",LogisticsBalanceRClass,LogisticsBalanceRn,0,modSO);//Edit----------------------Dima  23.12.2015
-
+  
   //Report("Статистика НДС по аванс. отчетам",ExpVATRClass,ExpVATRn,0,modCL);
   //Report("Журнал путевых листов",WLJRClass,WLJRn,0,modCL);
   
