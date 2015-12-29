@@ -2143,6 +2143,8 @@ begin
 		if (ReadFirstKey("OrderNr",IVr,1,true)) then begin
 			RecordCopy(oldIVr,IVr);
 			IVr.OKFlag = 1;
+			IVr.InvDate = CurrentDate;
+			IVr.TransDate = CurrentDate;//Edit----------------------Dima 29.12.2015
 			if (RecordUpdate(oldIVr,IVr,true) != 0) then begin
         //RecordCheckError(31128,IVr.SerNr,-1,"SerNr");
       end;
