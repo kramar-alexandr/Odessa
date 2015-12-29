@@ -45,6 +45,7 @@ begin
 	Report("Баланс товаров для логистики",LogisticsBalanceRClass,LogisticsBalanceRn,0,modSO);//Edit----------------------Dima  23.12.2015
 
   Report("Резерв по счетам",ReservStatRClass,ReservStstRn,0,modSO);
+  Report("Резерв по счетам (консолид.)",ReservStstConsolidRClass,ReservStstConsolidRn,0,modSO);
   Report("Дисбаланс статуса резерва",ReservISRClass,ReservISRn,0,modSO);
   
   Setting("Авансовые отчеты",ExpLClass,modCL);

@@ -2316,7 +2316,18 @@ begin
   EndWindow;
 end; //Edit***************************Sasha2,16:04 22.12.2015 }
 
-
+window ReservStstConsolidRClass:1 ///Edit***************************Sasha2,16:03 22.12.2015 {
+ wtag("language","UKR"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  real h,v,vs;
+  WindowBegin("Резерв по счетам (консолид.)",ReservStstConsolidRClass,CGRcW,RcType);
+    UseView(RcVc);
+    SetWRect(20,120,450,350);
+    h=120; v=20; vs=20;
+    EditField(h,v,150,"Клиент",Normal,f1,false,CUSClass);
+    EditField(h,v+=vs,150,"Склад",Normal,f2,false,LocationSClass);
+  EndWindow;
+end; //Edit***************************Sasha2,16:04 22.12.2015 }
 
 window LogisticsBalanceRClass:1		//Edit----------------------Dima  23.12.2015
   wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")

@@ -1,0 +1,134 @@
+external function LongInt DateDiff(Date,Date);
+
+SetLangMode(LangRussian,"RUS",0);
+
+global procedure  ReservStstConsolidRn(record RcVc RepSpec)
+begin
+record ORVc ORr;
+row ORVc ORrw;
+record ItemStatusVc ISr;
+string 255 client,location;
+boolean TrHs,testf,TrHs1;
+integer i,mtrw,mtrw1,j;
+record RetVc Retr;
+row RetVc Retrw;
+integer quant,pos,listCnt;
+array string 255 codesList,namesList;
+vector Boolean itemInListF;
+vector val reservInOr,rsrvQty,orddOut,instock;
+date fromdate;
+
+  client="";
+  listCnt = 0;
+  if(nonblank(RepSpec.f1))then begin
+    client = RepSpec.f1;
+  end;
+  if(nonblank(RepSpec.f2))then begin
+    location = RepSpec.f2;
+  end;
+  fromdate = CurrentDate;
+  fromdate = AddMonth(fromdate,-3);
+  
+  StartReportnoheaderJob("Резерв по счетам (консолид.)");
+  
+  /*StartFormat(15)
+    OutString(pos,0,"Отчет за последние 3 месяца. C " & fromdate,false);
+  endformat;
+  StartFormat(15)
+  endformat;*/
+  
+  StartFormat(15)
+    pos = 0;
+    OutString(pos,0,USetStr(7815),false);//Client
+    OutString(pos+=40,0,USetStr(3523),false);//ArtCode
+    OutString(pos+=40,0,USetStr(4063),false);//Name
+    
+    OutString(pos+=150,0,USetStr(5510) & "(" & USetStr(15807) & ")",false);//In reserv (Order)
+    OutString(pos+=50,0,USetStr(13555) & "(" & USetStr(12156) & ")",false); //In Stock (Status)
+    OutString(pos+=50,0,USetStr(5510) & "(" & USetStr(12156) & ")",false); //In reserv (Status)
+    OutString(pos+=50,0,USetStr(13768) & "(" & USetStr(12156) & ")",false); //Ordered (Status)
+    
+    OutString(pos+=50,0,USetStr(2765),false); //Stock
+  endformat;
+  
+  ORr.Reserved = 1;
+  //ORr.OrdDate = fromdate;
+  TrHs = true;
+  while(loopkey("Reserved",ORr,1,TrHs)) begin
+    testf = true;
+    if(nonblank(client) and ORr.CustCode!=client)then begin testf = false; end;
+    if(NonBlank(location) and location!=ORr.Location)then begin testf = false; end;
+    if(ORr.Reserved==0)then begin testf = false; TrHs = false; end;
+    if(ORr.Closed!=0)then begin testf = false; end;
+    //if(ORr.OrdDate<fromdate)then begin testf = false; end;
+    
+    if(testf)then begin
+      mtrw = matrowcnt(ORr);
+      For(i=0;i<mtrw;i=i+1) begin
+        Matrowget(ORr,i,ORrw);
+        if (NonBlank(ORrw.ArtCode)) then begin
+          if (itemInListF[ORrw.ArtCode]==false) then begin
+            codesList[listCnt] = ORrw.ArtCode;
+            namesList[listCnt] = ORrw.Spec;
+            listCnt = listCnt + 1;
+            ISr.Code = ORrw.ArtCode;
+            if (blank(location)) then begin
+              ISr.Location = ";;;";
+            end else begin
+              ISr.Location = location;
+            end;
+            if (ReadFirstMain(ISr,2,true)) then begin
+              rsrvQty[ORrw.ArtCode] = ISr.RsrvQty;
+              orddOut[ORrw.ArtCode] = ISr.OrddOut;
+              instock[ORrw.ArtCode] = ISr.Instock;
+            end else begin
+              rsrvQty[ORrw.ArtCode] = -1;
+              orddOut[ORrw.ArtCode] = -1;
+              instock[ORrw.ArtCode] = -1;
+            end;
+            itemInListF[ORrw.ArtCode] = true;
+          end;
+          
+          quant = ORrw.Quant - ORrw.Shipd2;
+          if(quant>0)then begin
+            reservInOr[ORrw.ArtCode] = reservInOr[ORrw.ArtCode] + quant;
+          end;
+        end;
+      end; 
+    end;    
+  end;
+  
+  for (i=0;i<listCnt;i=i+1) begin
+    if (Blank(reservInOr[codesList[i]])) then begin
+      reservInOr[codesList[i]] = 0;
+    end;
+    if (reservInOr[codesList[i]]!=rsrvQty[codesList[i]]) then begin
+      StartFormat(15)
+        pos = 0;
+        if (Blank(client)) then begin
+          OutString(pos,0,USetStr(12727),false); //All
+        end else begin
+          OutString(pos,0,client,false);//Client
+        end;
+        OutString(pos+=40,0,codesList[i],false);//ArtCode
+        OutString(pos+=40,0,namesList[i],false);//Name
+        
+        OutString(pos+=150,0,reservInOr[codesList[i]],false);//In reserv (Order)
+        OutString(pos+=50,0,instock[codesList[i]],false); //In Stock (Status)
+        OutString(pos+=50,0,rsrvQty[codesList[i]],false); //In reserv (Status)
+        OutString(pos+=50,0,orddOut[codesList[i]],false); //Ordered (Status)
+        
+        if(blank(location))then begin
+          OutString(pos+=50,0,USetStr(12727),false); //All
+        end else begin
+          OutString(pos+=50,0,location,false); //Stock
+        end;
+      endformat;
+    end;
+    
+  end;
+  
+  endjob;
+return;
+end;
+
