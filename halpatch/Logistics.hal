@@ -15,6 +15,7 @@ begin
   return;
 end;
 
+global
 procedure FoundUniqueOrdersFromStockMov(record StockMovVc SMr,var array longint orders)//Edit----------------------Dima  20.08.2015
 begin
 	row StockMovVc SMrw;
@@ -354,6 +355,85 @@ end;
 
 
 
+
+global updating
+ procedure CalculateProcessQtyForOrders(var vector record ORVc orders,var array longint orderNumbers,row StockMovVc SMrw2,var row StockMovVc SMrw,boolean found)	//Edit----------------------Dima  04.09.2015
+begin
+  integer rwcnt,j;
+  row ORVc ORrw;
+  record ORVc ORr;
+  boolean or_exist;
+  vector boolean checkingVector;
+  
+
+	for(j=0;j<orderNumbers.length;j=j+1) begin
+		checkingVector[orderNumbers[j]] = true;
+	end;
+
+
+ 	if (SMrw2.ORSerial>0) then begin		//if rewriting need					
+
+				ORr.SerNr = SMrw2.ORSerial;		
+				if (checkingVector[ORr.SerNr]) then begin 
+						or_exist = true;
+						ORr = orders[ORr.SerNr];				
+				end else begin
+					if (ReadFirstMain(ORr,1,true)) then begin
+						or_exist = true;
+						orders[ORr.SerNr] = ORr;
+						orderNumbers[orderNumbers.length] = ORr.SerNr;
+						checkingVector[ORr.SerNr] = true;					
+					end;
+				end;				
+				
+				if (or_exist) then begin				
+					rwcnt = MatRowCnt(ORr);
+					for(j=0;j<rwcnt;j=j+1) begin
+						MatRowGet(ORr,j,ORrw);
+						if (ORrw.UID == SMrw2.ORRowUID) then begin
+							
+							if (SMrw2.OrderProcessing > 0) then begin
+							//first remove row							
+								ORrw.ProcessingQuant = ORrw.ProcessingQuant - SMrw2.OrderProcessing;
+								MatRowPut(ORr,j,ORrw);
+							end;
+							
+							//then insert it again
+							if (found) then begin
+								MatRowGet(ORr,j,ORrw);
+								SMrw.OrderProcessing = Min(ORrw.OrderQuant - ORrw.ProcessingQuant,SMrw.OrdQuant);
+								ORrw.ProcessingQuant = ORrw.ProcessingQuant + SMrw.OrderProcessing;
+								LogText(0,"new quant  " & ORr.SerNr & "   row " & j & "     " &  ORrw.ProcessingQuant);
+								MatRowPut(ORr,j,ORrw);
+								j = rwcnt;
+							end;			
+											
+						end; 
+					end;
+					
+					//if (RecordStore(ORr,true)) then begin		end; 
+					orders[ORr.SerNr] = ORr;
+				end; 			 
+ 	end;		
+
+end; 
+
+
+global updating procedure StoreProcessingQtyToOrders(vector record ORVc orders,array longint orderNumbers)		//Edit----------------------Dima  28.12.2015
+begin
+	integer i,j;
+	record ORVc ORr;
+	row ORVc ORrw;
+	
+	for(i=0;i<orderNumbers.length;i=i+1) begin
+		ORr = orders[orderNumbers[i]];	
+		
+		if (RecordStore(ORr,true)) then begin		end; 
+	end;  
+end;
+
+
+
 //Write changes of quantity back to ORvc by reference
 global updating procedure CheckDifferenceForWritingToORVc(var record StockMovVc StockMovr,record StockMovVc StockMov2r)//Edit----------------------Dima  20.08.2015
 begin
@@ -361,8 +441,12 @@ begin
 	row StockMovVc SMrw,SMrw2;
 	integer UID,diff;
 	boolean found;
+	vector record ORVc orders;
+	array longint orderNumbers;
 	
+
 	rwcnt = MatRowCnt(StockMov2r);
+	
 	for(i=0;i<rwcnt;i=i+1) begin
 		MatRowGet(StockMov2r,i,SMrw2);
 		if (SMrw2.ORSerial>0) then begin
@@ -375,22 +459,21 @@ begin
 						j = rwcnt2;
 						found = true;
 						diff = SMrw.OrdQuant - SMrw2.OrdQuant;				
-						LogText(0,put & "   " & diff);
+						//LogText(0,"row  " & put & "   diff " & diff);
 					end;
 				end;
 				if (found == false) then begin  //row was deleted
 						diff = -SMrw2.OrdQuant;
 				end;
 				if (diff!=0) then begin		
-					WriteProcessQtyBackToORVc(SMrw2,SMrw,found);
+					CalculateProcessQtyForOrders(orders,orderNumbers,SMrw2,SMrw,found);
 					if (found) then begin
 						MatRowPut(StockMovr,put,SMrw);
 					end;
 				end;
 		end;
-		
 	end;
-	//RecordStore(StockMovr,true);
+	StoreProcessingQtyToOrders(orders,orderNumbers);
 end;
 
 

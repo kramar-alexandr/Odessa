@@ -53,6 +53,7 @@ external updating procedure CreateLinksToOrders(record StockMovVc);
 external updating procedure ReserveReceivedItems(record StockMovVc);
 external updating procedure CheckDifferenceForWritingToORVc(var record StockMovVc,record StockMovVc);
 external updating procedure UnOk_StockMovVc(var record StockMovVc, boolean);
+external procedure FoundUniqueOrdersFromStockMov(record StockMovVc,var array longint);//Edit----------------------Dima  28.12.2015
 
 global
 function LongInt StockMovVcRecordDefaults(var record StockMovVc StockMovr,record StockMovVc StockMov2r,LongInt stat,LongInt long4)
@@ -648,10 +649,12 @@ global
 updating function LongInt StockMovVcRecordRemove(var record StockMovVc StockMovr,record StockMovVc StockMov2r,LongInt stat,LongInt long4)
 BEGIN
   LongInt res;
-  integer rwcnt,i,rwcnt2,j;
+  integer rwcnt,i,rwcnt2,j,k;
   row ORVc ORrw;
   row StockMovVc StockMovrw;
   record ORVc ORr;
+  array longint orders;
+  boolean needstore;
 
   if (StockMovr.IntORNo!=-1) then begin
     if (UpdateIntOrderFromStockMov(StockMov2r,StockMovr,false)) then begin end;
@@ -664,31 +667,38 @@ BEGIN
   
   if (nonblank(StockMovr.OfficialSerNr)) then begin 
     DeleteOffSerNr(StockMovr.SerNr,"StockMovVc");
-  end;
+  end;  
   
+  FoundUniqueOrdersFromStockMov(StockMovr,orders);			//Edit----------------------Dima  28.12.2015
   rwcnt = MatRowCnt(StockMovr);  
-  for(i=0;i<rwcnt;i=i+1) begin
-  	MatRowGet(StockMovr,i,StockMovrw);
-  	
-		if (StockMovrw.ORSerial>0) then begin						//Edit----------------------Dima  18.08.2015
-				ORr.SerNr = StockMovrw.ORSerial;
-				if (ReadFirstMain(ORr,1,true)) then begin				
-					rwcnt2 = MatRowCnt(ORr);
-					for(j=0;j<rwcnt2;j=j+1) begin
-						MatRowGet(ORr,j,ORrw);
-						if (ORrw.UID == StockMovrw.ORRowUID) then begin
-							ORrw.ProcessingQuant = ORrw.ProcessingQuant - StockMovrw.OrderProcessing;
-							LogText(0,"remove...  SM " & StockMovr.SerNr & "  "& StockMovrw.ArtCode  &" processing qty " & "  SM: " & StockMovrw.OrderProcessing & " OR: " & ORrw.ProcessingQuant);
-							MatRowPut(ORr,j,ORrw);
-							j = rwcnt2;
-						end;
-					end;
-					RecordStore(ORr,true);	
-				end;				
-		end;			
-	end;	//Edit----------------------Dima  20.08.2015
-		  
   
+  for(k=0;k<orders.length;k=k+1) begin
+  	ORr.SerNr = orders[k];
+  	if (ReadFirstMain(ORr,1,true)) then begin
+  		rwcnt2 = MatRowCnt(ORr);
+  		for(i=0;i<rwcnt;i=i+1) begin
+  			MatRowGet(StockMovr,i,StockMovrw);
+  			
+				if (StockMovrw.ORSerial==orders[k]) then begin						//Edit----------------------Dima  18.08.2015
+						needstore = true;
+						for(j=0;j<rwcnt2;j=j+1) begin
+							MatRowGet(ORr,j,ORrw);
+							if ((ORrw.UID == StockMovrw.ORRowUID) and (ORr.SerNr == StockMovrw.ORSerial)) then begin
+								ORrw.ProcessingQuant = ORrw.ProcessingQuant - StockMovrw.OrderProcessing;
+								LogText(0,"remove...  SM " & StockMovr.SerNr & "  "& StockMovrw.ArtCode  &" processing qty " & "  SM: " & StockMovrw.OrderProcessing & " OR: " & ORrw.ProcessingQuant);
+								MatRowPut(ORr,j,ORrw);
+								//j = rwcnt2;
+							end;
+						end;
+					end;				
+			end;
+			if (needstore) then begin
+				RecordStore(ORr,true);
+			end;			
+						
+		end;	//Edit----------------------Dima  20.08.2015
+	end;
+		    
   StockMovVcRecordRemove = res;
   RETURN;
 END;
@@ -878,6 +888,7 @@ BEGIN
   record INVc INr; //Edit***************************Sasha2,14:25 11.02.2015
   integer rwcnt,i; //Edit***************************Sasha2,14:25 11.02.2015
   record ItemStatusVc ISr;
+  record StockMovVc SMempty;
   
   if (blankdate(StockMovr.RegDate)) then begin
     StockMovr.RegDate = CurrentDate;
@@ -907,6 +918,8 @@ BEGIN
     AddPortugueseSAFTHashToStockMov(StockMovr);
   end;
   
+  RecordNew(SMempty);
+  RecordCopy(SMempty,StockMovr);	//Edit----------------------Dima  28.12.2015
 
   rwcnt = MatRowCnt(StockMovr); //Edit***************************Sasha2,14:27 11.02.2015 {
   for (i=0;i<rwcnt;i=i+1) begin
@@ -949,13 +962,21 @@ BEGIN
 		end;
 		
 		MatRowPut(StockMovr,i,StockMovrw); //Edit***************************Sasha2,12:02 25.08.2015 }
+		
+		//StockMov2r doesn't exist during "Save" procedure
+		//So we create empty StockMov record to write difference (SM2r-SMr) to ORVc (logistics)
+		//It has been done to keep the same code in the StockMovVcRecordSave and StockMovVcRecordUpdate
+		MatRowGet(SMempty,i,StockMovrw);			//Edit----------------------Dima  28.12.2015
+		if (StockMovrw.ORSerial>0) then begin
+			StockMovrw.OrdQuant = 0;
+			MatRowPut(SMempty,i,StockMovrw);
+		end;			
 				
-		CopyRow(StockMovr,StockMovrw,StockMovrw2);	
-		WriteProcessQtyBackToORVc(StockMovrw2,StockMovrw,true);
-		MatRowPut(StockMovr,i,StockMovrw);
   end; //Edit***************************Sasha2,14:27 11.02.2015 }
   
   
+  CheckDifferenceForWritingToORVc(StockMovr,SMempty);//Edit----------------------Dima  28.12.2015
+ 
   StockMovVcRecordSave = res;
   RETURN;
 END;
