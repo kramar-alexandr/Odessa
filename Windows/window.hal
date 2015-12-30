@@ -2342,3 +2342,16 @@ begin
 
   EndWindow;
 end;
+
+window TovTestRClass:1
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  real h,v,vs;
+
+  WindowBegin("Несовпадения по складу 1-КОС",TovTestRClass,CGRcW,RcType);
+  SetWRect(20,80,400,200);
+  h = 110; v = 15; vs = 20;
+  //EditFieldTL(h,v,150,"Склад",M4UStr,Normal,30,f1,false,LocationSClass);
+  EndWindow;
+
+end;

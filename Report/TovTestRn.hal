@@ -1,0 +1,97 @@
+SetLangMode(LangRussian,"RUS",0);
+
+global procedure TovTestRn(record RcVc RepSpec)
+begin
+	record PISVc PISr;
+	record ItemStatusVc ISr;
+	record INVc INr;
+	boolean testf,TrHs,TrHs2;
+	vector val vect;
+	vector boolean INInArr;
+	array string 50 InArr;
+	integer i;
+	
+	StartReportNoHeaderJob("ερξβοΰδενθί οξ ρκλΰδσ 1-‘");
+	startformat(15);
+	OutString(0,0,"ξδ",false);
+	OutString(200,0,"νΰ ρκλΰδε",false);
+	OutString(300,0,"νΰ ‘_2",false);
+	OutString(400,0,"νΰ ‘’_3",false);
+	endformat;
+	i = 0;
+	TrHs = true;
+	INr.Code = "";
+	while loopmain(INr,1,TrHs) begin
+		PISr.ArtCode = INr.Code;
+		PISr.Location = "1-‘";
+		TrHs2 = true;
+		while loopmain(PISr,2,TrHs2) begin
+			testf = true;
+			if (PISr.Location != "1-‘") and (PISr.ArtCode != INr.Code) then begin
+				TrHs2 = false;
+				testf = false;
+			end;
+			if testf and (PISr.Position!="‘_2" or PISr.Position!="‘’_3") then begin
+				switch (PISr.Position) begin
+					case "‘_2":
+						testf = true;
+					case "‘’_3":
+						testf = true;
+					otherwise
+						testf = false;
+				end;
+			end;
+			if (testf) then begin
+				vect[PISr.ArtCode & ":" & PISr.Position] = vect[PISr.ArtCode & ":" & PISr.Position] + PISr.Instock;
+				if !INInArr[PISr.ArtCode] then begin
+					INInArr[PISr.ArtCode] = true;
+					InArr[i] = PISr.ArtCode;
+					i = i + 1;
+				end;
+			end;
+		end;
+		resetloop(PISr);
+		ISr.Code = INr.Code;
+		ISr.Location = "1-‘";
+		TrHs2 = true;
+		while loopmain(ISr,2,TrHs2) begin
+			if (ISr.Location != "1-‘") and (ISr.Code != INr.Code) then begin
+				TrHs2 = false;
+			end;
+			if (TrHs2) then begin
+				vect[ISr.Code] = vect[ISr.Code] + ISr.Instock;
+				if !INInArr[ISr.Code] then begin
+					INInArr[ISr.Code] = true;
+					InArr[i] = ISr.Code;
+					i = i + 1;
+				end;
+			end;
+		end;
+		resetloop(ISr);
+	end;
+	
+	for (i=0;i<InArr.length;i=i+1) begin
+		testf = false;
+		if (vect[InArr[i] & ":‘_2"]<0) then begin
+			testf = true;
+		end;
+		if (vect[InArr[i] & ":‘’_3"]<0) then begin
+			testf = true;
+		end;
+		if (vect[InArr[i] & ":‘_2"] + vect[InArr[i] & ":‘’_3"]) != vect[InArr[i]] then begin
+			testf = true;
+		end;
+		if testf then begin
+			startformat(15);
+			OutString(0,0,InArr[i],false);
+			OutString(200,0,vect[InArr[i]],false);
+			OutString(300,0,vect[InArr[i] & ":‘_2"],false);
+			OutString(400,0,vect[InArr[i] & ":‘’_3"],false);
+			endformat;
+		end;
+	end;
+	EndJob;
+
+  
+end;
+
