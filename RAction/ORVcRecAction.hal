@@ -90,9 +90,10 @@ external function string 255 ParseSMStext(string, record ORVc);
 external updating function string 255  CheckAndSendSMS(longint);
 external procedure GetAvailableItems(var record ORVc);
 external updating procedure AddPaymentToIPFromSH(record SHVc);
-remote updating function Integer RecordAction_raPasteOrdInInv(var record IVVc,LongInt,Boolean,var Integer);	//Edit----------------------Dima  14.12.2015
-remote updating function Integer RecordAction_raPasteOrdInShip(var record SHVc,LongInt,var string);					//Edit----------------------Dima  14.12.2015
+external updating function Integer RecordAction_raPasteOrdInInv(var record IVVc,LongInt,Boolean,var Integer);	//Edit----------------------Dima  14.12.2015
+external updating function Integer RecordAction_raPasteOrdInShip(var record SHVc,LongInt,var string);					//Edit----------------------Dima  14.12.2015
 external function LongInt HoursDiffWithoutRestDays(Date,Time,Date,Time);
+external procedure IVVc_PasteInvDate(var record IVVc,record LocalMachineBlock,var Integer,var Integer);//Edit----------------------Dima  06.01.2016
 
 
 procedure SetORAcceptanceFlag(var record ORVc ORr,record ORVc prevORr,LongInt stat)
@@ -2137,6 +2138,8 @@ end;
 global updating procedure AcceptIVVcFromORVcweb(record ORVc ORr)	//Edit----------------------Dima  23.11.2015
 begin
 	record IVVc IVr,oldIVr;
+  Integer err1,err2;
+  record LocalMachineBlock LMb;
 	
 	IVr.OrderNr = ORr.SerNr;
 	if (ORr.OrderClass=="WEB" and ORr.NPPaymentType == 0 and ORr.PrepaymentReceived == 1) then begin
@@ -2144,6 +2147,7 @@ begin
 			RecordCopy(oldIVr,IVr);
 			IVr.OKFlag = 1;
 			IVr.InvDate = CurrentDate;
+			IVVc_PasteInvDate(IVr,LMb,err1,err2);
 			IVr.TransDate = CurrentDate;//Edit----------------------Dima 29.12.2015
 			if (RecordUpdate(oldIVr,IVr,true) != 0) then begin
         //RecordCheckError(31128,IVr.SerNr,-1,"SerNr");

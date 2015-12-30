@@ -278,7 +278,13 @@ L12:;
     if ((IPrw.stp==1) or (IPrw.stp==5) or (IPrw.stp==6) or (IPrw.stp==7)) begin
         if (IPrw.ovst==0) then begin
           if (blank(IPrw.RecVal)) then begin
-            RecordCheckError(1854,"",i,"RecVal");      
+            if (stat==updatemode) then begin
+	            tstr = chr(13) &  chr(13) & USetStr(31125) & IPp.SerNr;
+	          end else begin 
+	          	tstr = "";
+	          end;          
+            RecordCheckError(1854,tstr,i,"RecVal");  //Edit----------------------Dima  30.12.2015    
+            //RecordCheckError(1854,"",i,"RecVal");      
             res = -1; 
             goto LIPVcRecordCheck;
           end;
