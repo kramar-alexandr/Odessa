@@ -11,31 +11,32 @@ begin
 	array string 50 InArr;
 	integer i;
 	
-	StartReportNoHeaderJob("Несовпадения по складу 1-КОС");
+	StartReportNoHeaderJob("Ќесовпадени€ по складу 1- ќ—");
 	startformat(15);
-	OutString(0,0,"Код",false);
+	OutString(0,0," од",false);
 	OutString(200,0,"на складе",false);
-	OutString(300,0,"на КОС_2",false);
-	OutString(400,0,"на ОСТ_3",false);
+	OutString(300,0,"на  ќ—_2",false);
+	OutString(400,0,"на ќ—“_3",false);
 	endformat;
 	i = 0;
 	TrHs = true;
 	INr.Code = "";
 	while loopmain(INr,1,TrHs) begin
+		resetloop(PISr);
 		PISr.ArtCode = INr.Code;
-		PISr.Location = "1-КОС";
+		PISr.Location = "1-KOC";
 		TrHs2 = true;
 		while loopmain(PISr,2,TrHs2) begin
 			testf = true;
-			if (PISr.Location != "1-КОС") and (PISr.ArtCode != INr.Code) then begin
+			if (PISr.Location != "1-KOC") and (PISr.ArtCode != INr.Code) then begin
 				TrHs2 = false;
 				testf = false;
 			end;
-			if testf and (PISr.Position!="КОС_2" or PISr.Position!="ОСТ_3") then begin
+			if testf then begin
 				switch (PISr.Position) begin
-					case "КОС_2":
+					case " ќ—_2":
 						testf = true;
-					case "ОСТ_3":
+					case "ќ—“_3":
 						testf = true;
 					otherwise
 						testf = false;
@@ -50,12 +51,15 @@ begin
 				end;
 			end;
 		end;
-		resetloop(PISr);
+		resetloop(ISr);
 		ISr.Code = INr.Code;
-		ISr.Location = "1-КОС";
+		ISr.Location = "1-KOC";
 		TrHs2 = true;
 		while loopmain(ISr,2,TrHs2) begin
-			if (ISr.Location != "1-КОС") and (ISr.Code != INr.Code) then begin
+			if (ISr.Location != "1-KOC") then begin
+				TrHs2 = false;
+			end;
+			if (ISr.Code != INr.Code) then begin
 				TrHs2 = false;
 			end;
 			if (TrHs2) then begin
@@ -67,26 +71,25 @@ begin
 				end;
 			end;
 		end;
-		resetloop(ISr);
 	end;
 	
 	for (i=0;i<InArr.length;i=i+1) begin
 		testf = false;
-		if (vect[InArr[i] & ":КОС_2"]<0) then begin
+		if (vect[InArr[i] & ": ќ—_2"]<0) then begin
 			testf = true;
 		end;
-		if (vect[InArr[i] & ":ОСТ_3"]<0) then begin
+		if (vect[InArr[i] & ":ќ—“_3"]<0) then begin
 			testf = true;
 		end;
-		if (vect[InArr[i] & ":КОС_2"] + vect[InArr[i] & ":ОСТ_3"]) != vect[InArr[i]] then begin
+		if (vect[InArr[i] & ": ќ—_2"] + vect[InArr[i] & ":ќ—“_3"]) != vect[InArr[i]] then begin
 			testf = true;
 		end;
 		if testf then begin
 			startformat(15);
 			OutString(0,0,InArr[i],false);
 			OutString(200,0,vect[InArr[i]],false);
-			OutString(300,0,vect[InArr[i] & ":КОС_2"],false);
-			OutString(400,0,vect[InArr[i] & ":ОСТ_3"],false);
+			OutString(300,0,vect[InArr[i] & ": ќ—_2"],false);
+			OutString(400,0,vect[InArr[i] & ":ќ—“_3"],false);
 			endformat;
 		end;
 	end;
