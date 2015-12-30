@@ -22,13 +22,17 @@ begin
 	TrHs = true;
 	INr.Code = "";
 	while loopmain(INr,1,TrHs) begin
-		resetloop(PISr);
+		/*resetloop(PISr);
 		PISr.ArtCode = INr.Code;
 		PISr.Location = "1-KOC";
 		TrHs2 = true;
 		while loopmain(PISr,2,TrHs2) begin
 			testf = true;
-			if (PISr.Location != "1-KOC") and (PISr.ArtCode != INr.Code) then begin
+			if (PISr.Location != "1-KOC") then begin
+				TrHs2 = false;
+				testf = false;
+			end;
+			if (PISr.ArtCode != INr.Code) then begin
 				TrHs2 = false;
 				testf = false;
 			end;
@@ -50,7 +54,18 @@ begin
 					i = i + 1;
 				end;
 			end;
-		end;
+		end;*/
+		PISr.ArtCode = INr.Code;
+		PISr.Location = "1-KOC";
+		PISr.Position = "ŠŽ‘_2":
+		ReadFirstMain(PISr,3,true);
+		vect[PISr.ArtCode & ":" & PISr.Position] = PISr.Instock;
+		PISr.ArtCode = INr.Code;
+		PISr.Location = "1-KOC";
+		PISr.Position = "Ž‘’_3":
+		ReadFirstMain(PISr,3,true);
+		vect[PISr.ArtCode & ":" & PISr.Position] = PISr.Instock;
+		
 		resetloop(ISr);
 		ISr.Code = INr.Code;
 		ISr.Location = "1-KOC";
