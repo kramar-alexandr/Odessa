@@ -57,12 +57,12 @@ begin
 		end;*/
 		PISr.ArtCode = INr.Code;
 		PISr.Location = "1-KOC";
-		PISr.Position = "ŠŽ‘_2":
+		PISr.Position = "ŠŽ‘_2";
 		ReadFirstMain(PISr,3,true);
 		vect[PISr.ArtCode & ":" & PISr.Position] = PISr.Instock;
 		PISr.ArtCode = INr.Code;
 		PISr.Location = "1-KOC";
-		PISr.Position = "Ž‘’_3":
+		PISr.Position = "Ž‘’_3";
 		ReadFirstMain(PISr,3,true);
 		vect[PISr.ArtCode & ":" & PISr.Position] = PISr.Instock;
 		
