@@ -11,12 +11,12 @@ begin
 	array string 50 InArr;
 	integer i;
 	
-	StartReportNoHeaderJob("Несовпадения по складу 1-КОС");
+	StartReportNoHeaderJob("ЌесовпадениЯ по складу 1-ЉЋ‘");
 	startformat(15);
-	OutString(0,0,"Код",false);
+	OutString(0,0,"Љод",false);
 	OutString(200,0,"на складе",false);
-	OutString(300,0,"на КОС_2",false);
-	OutString(400,0,"на ОСТ_3",false);
+	OutString(300,0,"на ЉЋ‘_2",false);
+	OutString(400,0,"на Ћ‘’_3",false);
 	endformat;
 	i = 0;
 	TrHs = true;
@@ -34,9 +34,9 @@ begin
 			end;
 			if testf then begin
 				switch (PISr.Position) begin
-					case "КОС_2":
+					case "ЉЋ‘_2":
 						testf = true;
-					case "ОСТ_3":
+					case "Ћ‘’_3":
 						testf = true;
 					otherwise
 						testf = false;
@@ -75,21 +75,21 @@ begin
 	
 	for (i=0;i<InArr.length;i=i+1) begin
 		testf = false;
-		if (vect[InArr[i] & ":КОС_2"]<0) then begin
+		if (vect[InArr[i] & ":ЉЋ‘_2"]<0) then begin
 			testf = true;
 		end;
-		if (vect[InArr[i] & ":ОСТ_3"]<0) then begin
+		if (vect[InArr[i] & ":Ћ‘’_3"]<0) then begin
 			testf = true;
 		end;
-		if (vect[InArr[i] & ":КОС_2"] + vect[InArr[i] & ":ОСТ_3"]) != vect[InArr[i]] then begin
+		if (vect[InArr[i] & ":ЉЋ‘_2"] + vect[InArr[i] & ":Ћ‘’_3"]) != vect[InArr[i]] then begin
 			testf = true;
 		end;
 		if testf then begin
 			startformat(15);
 			OutString(0,0,InArr[i],false);
 			OutString(200,0,vect[InArr[i]],false);
-			OutString(300,0,vect[InArr[i] & ":КОС_2"],false);
-			OutString(400,0,vect[InArr[i] & ":ОСТ_3"],false);
+			OutString(300,0,vect[InArr[i] & ":ЉЋ‘_2"],false);
+			OutString(400,0,vect[InArr[i] & ":Ћ‘’_3"],false);
 			endformat;
 		end;
 	end;
