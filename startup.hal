@@ -306,8 +306,9 @@ begin
 	
 	Import("€мпорт Accss",INImportIClass,ImpAccss,modDBMain);
 	Import("€мпорт user",INImportIClass,ImpUser,modDBMain);
-	Import("€мпорт Item/Classification",INImportIClass,ImportNewItemsWithClassIn,modDBMain); //Edit***************************Sasha2,10:26 16.04.2015
-	Import("€мпорт Item/Classification",INImportIClass,ImportNewItemsWithClassIn,modIN); //Edit***************************Sasha2,10:26 16.04.2015
+	Import("€мпорт Item/Classification",INDIImportIClass,ImportNewItemsWithClassIn,modDBMain); //Edit***************************Sasha2,10:26 16.04.2015
+	Import("€мпорт Item/Classification",INDIImportIClass,ImportNewItemsWithClassIn,modIN); //Edit***************************Sasha2,10:26 16.04.2015
+	Import("€мпорт Item/Group",INITImportIClass,ImportNewItemsWithGroupIn,modIN); //Edit***************************Sasha2,18:43 06.01.2016
 
 	Import("€мпорт eMail/‘кидка",INImportIClass,ImportCUDiscountIn,modDBMain);
 	
