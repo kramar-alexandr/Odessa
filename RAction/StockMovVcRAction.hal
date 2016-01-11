@@ -19,7 +19,7 @@ external updating procedure UpdateTrans_Stock(record TRVc);
 //external function Integer IsUnOKAllowed_StockMovVc(record StockMovVc);
 external function Integer IsUnOKAllowed_StockMovVc(record StockMovVc,boolean);	//Edit----------------------Dima  02.11.2015
 external function Boolean AllowedToTakeFromThisLoc(record LocationVc);
-external function Integer CheckStockMovRowFromPosition(record StockMovVc,row StockMovVc,record LocationVc,record INVc,
+external function Integer CheckStockMovRowFromPosition(record StockMovVc,record StockMovVc,row StockMovVc,record LocationVc,record INVc,
                                               Integer,Boolean,var LongInt,var string,var integer,var string,boolean);
 external function Integer CheckSerialStatus(string,string,var string);
 external function Boolean CanOKStockRecord(var Integer);
@@ -1886,14 +1886,14 @@ BEGIN
       end;
     end;
     if (transsendf or (transsendf and UnOKedCheckSerialf)) then begin
-      errcode = CheckStockMovRowFromPosition(SMp,StockMovrw,LocFrRec,INr,i,true,error,errorstr,rownr,fieldstr,UnOKedCheckSerialf);  
+      errcode = CheckStockMovRowFromPosition(SMp,SM2p,StockMovrw,LocFrRec,INr,i,true,error,errorstr,rownr,fieldstr,UnOKedCheckSerialf);  
       if (errcode!=0) then begin 
         res = -1;
         goto LCheckStockMovRecord;
       end;
     end else begin
       if (transreceivef or (transreceivef and UnOKedCheckSerialf)) then begin
-        errcode = CheckStockMovRowFromPosition(SMp,StockMovrw,LocFrRec,INr,i,false,error,errorstr,rownr,fieldstr,UnOKedCheckSerialf);
+        errcode = CheckStockMovRowFromPosition(SMp,SM2p,StockMovrw,LocFrRec,INr,i,false,error,errorstr,rownr,fieldstr,UnOKedCheckSerialf);
         if (errcode!=0) then begin 
           res = -1;
           goto LCheckStockMovRecord;

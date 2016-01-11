@@ -438,7 +438,7 @@ LMakeTransFromStockMov:;
 END;
 
 global
-function Integer CheckStockMovRowFromPosition(record StockMovVc SMp,row StockMovVc StockMovrw,record LocationVc LocFrRec,record INVc INr,
+function Integer CheckStockMovRowFromPosition(record StockMovVc SMp,record StockMovVc SM2p,row StockMovVc StockMovrw,record LocationVc LocFrRec,record INVc INr,
                                               Integer rownr,Boolean sentquantf,var LongInt error,var string errorstr,var integer errorrownr,
                                               var string fieldstr,boolean UnOKedCheckSerialf)
 BEGIN
@@ -458,12 +458,14 @@ BEGIN
   end;
   if (LocFrRec.RequirePos!=0) then begin
     if (blank(frpos)) then begin
-      error = 1854;
+	 if (SM2p.OrdFlag==0) or (SM2p.SentOKFlag==0) then begin
+	  error = 1854;
       errorstr = frpos;
       errorrownr = -1;
       fieldstr = "FrPos";                 
       res = 1854; 
       goto LCheckStockMovRowFromPosition;
+	 end;
     end;      
     if (INr.ItemType==1) then begin
       if (frpos==LocFrRec.WHMDefPUPosCode) or (frpos==LocFrRec.WHMDefProdPosCode) then begin
