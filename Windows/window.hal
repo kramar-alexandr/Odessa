@@ -2328,7 +2328,7 @@ end;
 
 
 window ZebraPrinterTClass:1 //Edit***************************Sasha2,16:12 25.09.2014 {
- wtag("language","UKR"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+ wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
 begin
   real h,v,vs,f;
   WindowBegin("Настройка принтера Zebra",ZebraPrinterTClass,CGSbl,-);

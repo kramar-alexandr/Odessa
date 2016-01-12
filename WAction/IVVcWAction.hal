@@ -70,6 +70,7 @@ external procedure DisplayIVItem(record IVVc,Integer);
 remote procedure PastePDInInv(var record IVVc,string,Boolean);
 external function Boolean MakeFiscalReceipt(record IVVc);
 external function Boolean IVPrintReceipt(Integer,var record IVVc,var record IVVc,Integer,Boolean,Boolean,Integer,Integer); //Edit***************************Sasha2,16:59 17.08.2015
+external procedure IVVc_PastePosition(var record IVVc,string);	//Edit----------------------Dima  12.01.2016
 
 
 procedure ChangeIVSerialNr(Integer wnst,var record IVVc IVp)
@@ -1381,6 +1382,24 @@ begin
   return;
 end;
 
+
+
+function Boolean IVDClassPositionEFAfter(Integer wn,Boolean changedf)	//Edit----------------------Dima  11.01.2016
+begin  
+  record IVVc IVr;
+	integer i;
+
+  if (changedf) then begin  
+    DeselectWindow(wn,false);
+    GetWindowRecord(wn,IVr);
+		IVVc_PastePosition(IVr,WindEFstr(wn));
+    PutWindowRecord(wn,IVr);
+  end;  
+  IVDClassPositionEFAfter = true;
+  return;
+end;
+
+
 global
 function Boolean IVDClassAfterEditField(Integer wn,string fieldname,Integer fn, Integer rownr,Integer changed)
 BEGIN
@@ -1437,6 +1456,7 @@ BEGIN
 		case "LoyaltyCardNr": res = IVDClassLoyaltyCardNrEFAfter(wn,changed);
 		case "InvCountry": res = IVDClassInvCountryEFAfter(wn,changed!=0);
 		case "DelCountry": res = IVDClassDelCountryEFAfter(wn,changed!=0);
+		case "Position": res = IVDClassPositionEFAfter(wn,changed!=0);
 	  end;
   end else begin //Edit-------------------Vitalii 10:44 25.12.2015
 	res = true;

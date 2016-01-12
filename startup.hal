@@ -85,7 +85,7 @@ begin
   Setting("Собрать заказы для перемещения",CollectOrdersForStockMoveTClass,modSO);//Edit----------------------Dima  21.08.2015
   Setting("СМС",SMSstackLClass,modSO);  //Edit----------------------Dima  27.08.2015
   //Edit-------------------Vitalii 16:07 14.12.2015
-  Setting("История цен",PLHistLClass,modDI);
+  Setting("История цен",PLHistLClass,modDI);  
 
   
   //Report("Статистика НДС по аванс. отчетам",ExpVATRClass,ExpVATRn,0,modCL);
@@ -224,7 +224,7 @@ begin
    SString(31130,"Место не соответствует складу");   
    SString(31131,"Если аванс отсутствует, укажите значение 0");
    SString(31132,"На складе нет свободного товара в указанном количестве. ");
-   
+   SString(31133,"Не указано складское место");
    
  
  SString(31888,"КОС_2");//temporary

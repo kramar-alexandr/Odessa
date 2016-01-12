@@ -10,9 +10,16 @@ begin
 	record ItemStatusVc ItemStatusr;
 	record PLVc PLr;
 	integer rw,TotalQuantity,lmflag;
-	boolean continue,check;
+	boolean continue,check,TrHs;
 	string 100 searchStr,locmach;
 	string 20 keySort;
+	record  CashierDefBlock CashierDefb;
+	record	PosVc Posr;
+	record  PISVc PISr;
+	array string 30 positions;
+	integer stepPos,i;
+	
+	BlockLoad(CashierDefb);
 	
 	searchStr = RepSpec.f1;
 	locmach = RepSpec.f2;
@@ -70,6 +77,32 @@ begin
 	    OutString(7,0,"6-KV",false);
   end; //Edit***************************Sasha2,10:15 23.01.2015 }
 	EndFormat;
+	
+	if (CashierDefb.RequirePositionForPOS!=0) then begin			//Edit----------------------Dima  12.01.2016
+		switch (lmflag) begin
+			case 1:
+				While(LoopMain(Posr,1,true)) begin
+					if (Posr.Location == "3-RAY" or Posr.Location == "4-NIZ") then begin
+						positions[positions.length] = Posr.Code;
+					end;
+				end;
+			case 2:
+				Posr.Location = "6-KV";
+				TrHs = true;
+				While(LoopKey("Location",Posr,1,TrHs)) begin
+					if (Posr.Location != "6-KV") then begin TrHs = false; end;
+					if (TrHs) then begin
+						positions[positions.length] = Posr.Code;
+					end;
+				end;					
+		end;
+		stepPos = (470 - 410)/positions.length;
+		for(i=0;i<positions.length;i=i+1) begin
+			OutString(410+stepPos*i,0,positions[i],false);
+		end;
+		EndFormat;
+	end;
+	
 	Black_Divider(0,1);
 	continue = true;
 
@@ -102,25 +135,35 @@ begin
 			end;
 			OutString(5,0,INr.BarCode,false);
 			OutString(6,0,INr.AlternativeCode,false);
-			switch (lmflag) begin //Edit***************************Sasha2,10:22 23.01.2015 {
-			  case 1:
-			    ItemStatusr.Code = INr.Code;
-			    ItemStatusr.Location = "3-RAY";
-			    if (ReadFirstMain(ItemStatusr,2,true)) then begin			//поиск по Code, Location
-    				OutString(7,0,ItemStatusr.Instock,false);
-    			end;
-    			ItemStatusr.Code = INr.Code;
-    			ItemStatusr.Location = "4-NIZ";
-    			if (ReadFirstMain(ItemStatusr,2,true)) then begin			
-    				OutString(8,0,ItemStatusr.Instock,false);
-    			end;
-    		case 2:
-    		  ItemStatusr.Code = INr.Code;
-    		  ItemStatusr.Location = "6-KV";
-			    if (ReadFirstMain(ItemStatusr,2,true)) then begin			//поиск по Code, Location
-    				OutString(7,0,ItemStatusr.Instock,false);
-    			end;
-			end; //Edit***************************Sasha2,10:22 23.01.2015 }
+			if (CashierDefb.RequirePositionForPOS == 0) then begin
+				switch (lmflag) begin //Edit***************************Sasha2,10:22 23.01.2015 {
+				  case 1:
+				    ItemStatusr.Code = INr.Code;
+				    ItemStatusr.Location = "3-RAY";
+				    if (ReadFirstMain(ItemStatusr,2,true)) then begin			//поиск по Code, Location
+    					OutString(7,0,ItemStatusr.Instock,false);
+    				end;
+    				ItemStatusr.Code = INr.Code;
+    				ItemStatusr.Location = "4-NIZ";
+    				if (ReadFirstMain(ItemStatusr,2,true)) then begin			
+    					OutString(8,0,ItemStatusr.Instock,false);
+    				end;
+    			case 2:
+    			  ItemStatusr.Code = INr.Code;
+    			  ItemStatusr.Location = "6-KV";
+				    if (ReadFirstMain(ItemStatusr,2,true)) then begin			//поиск по Code, Location
+    					OutString(7,0,ItemStatusr.Instock,false);
+    				end;
+				end; //Edit***************************Sasha2,10:22 23.01.2015 }
+			end else begin
+				for(i=0;i<positions.length;i=i+1) begin
+					PISr.ArtCode = INr.Code;
+					PISr.Position = positions[i];
+					if (ReadFirstMain(PISr,2,true)) then begin
+						OutString(410+stepPos*i,0,PISr.Instock,false);
+					end;
+				end;
+			end;
 			EndFormat;	
 			TotalQuantity=TotalQuantity+1;
 		

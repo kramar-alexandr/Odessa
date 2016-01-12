@@ -597,12 +597,15 @@ begin
   record BrazilEInvTypeVc BEInvTyper;
   record EInvoiceBlock EIb;
   Integer daysrange;
+  record CashierDefBlock CashierDefb;
+  record SalesGroupVc SalesGroupr;
 
   BlockLoad(OTCheckr);
   BlockLoad(QTb);
   BlockLoad(CYb);
   BlockLoad(SNrb);
   BlockLoad(EIb);
+  BlockLoad(CashierDefb);
   
   if (IVp.InvType==kInvoiceTypeCredit or IVp.InvType==kInvoiceTypeCreditSpecialSales) then begin
     orgIVr.SerNr = IVp.CredInv;
@@ -833,7 +836,7 @@ LkInvoiceRowTypeNormal2:;
               res = -1;
               goto L99;
             end;
-          end;
+          end;      
         end;
         if (IVp.InvType==kInvoiceTypeCredit or IVp.InvType==kInvoiceTypeCreditSpecialSales) then begin
           if (IVp.RetNr>0) then begin
@@ -977,7 +980,15 @@ LkInvoiceRowTypeNormal2:;
             end;
           end;
           switch (INr.ItemType) begin
-            case kItemTypeStocked:           
+            case kItemTypeStocked:
+            	SalesGroupr.SGroupCode = IVp.SalesGroup;	//Edit----------------------Dima  12.01.2016
+            	if (ReadFirstMain(SalesGroupr,1,true)) then begin
+								if (SalesGroupr.SGroupCashier!=0 and CashierDefb.RequirePositionForPOS!=0 and blank(IVrw.PosCode)) then begin
+                    RecordCheckError(31133,"",i,"PosCode"); 
+                    res = -1;
+                    goto L99;			
+								end;
+							end;																		//Edit-- end  --------------------Dima  12.01.2016 	           
               if (ShouldInvoiceRowUpdateStock(IVp,IVrw)) then begin
                 if (Locationr.RequirePos!=0) then begin
                   if (IVrw.Quant>0) and (blank(IVrw.PosCode)) then begin

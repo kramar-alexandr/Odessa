@@ -4047,7 +4047,8 @@ if (HasTouchScreenLook==false) then begin
     EditField(h2,v+=vs,80,"План. время приб.",Normal,PlanArrTime,false,PasteCurTime);
     EditField(h2,v+=vs,80,"Трансп. комп.",Normal,FreightCode,false,FreightCompanySClass);
     CheckBox(h3,v=vm,0,"Обновить склад",UpdStockFlag);
-    EditField(h3,v+=2*vs,80,"НДС фрахта",Normal,FrVATCode,true,VATCodeSClass);
+    EditField(h3,v+=vs,80,"Место",Normal,Position,true,POSSClass);
+    EditField(h3,v+=vs,80,"НДС фрахта",Normal,FrVATCode,true,VATCodeSClass);
     EditField(h3,v+=vs,80,"Код транс. Интр.",Normal,IntrastatTransCode,true,IntrastatTransCodeSClass);
     EditField(h3,v+=vs,80,"Глоб. № трансп.",Normal,GlobalTransportNr,false,0);
     EditField(h3,v+=vs,80,"Глоб. дата трансп.",Normal,GlobalTransportDate,false,PasteCurDate);
@@ -5640,7 +5641,8 @@ email not working yet
 	SpecialMenu("Выгрузить таблицу в буфер обмена",'',18,"ExportToExcelORDsm"); // edit ----------Dima 26.11.2014, 23.01.2015
 	SpecialMenu("Отсортировать таблицу",'',20,"TableSortORDsm"); // edit ----------Dima 26.11.2014, 23.01.2015
 	SpecialMenu("Создать СМС с реквизитами",'',20,"MakeSMSORDsm");	//Edit----------------------Dima  26.06.2015
-	SpecialMenu("Просмотреть доступные товары",'',20,"GetAvailableItemsDsm");	//Edit----------------------Dima  26.06.2015
+	SpecialMenu("Просмотреть доступные товары",'',20,"GetAvailableItemsDsm");		//Edit----------------------Dima  26.06.2015
+	SpecialMenu("Отменить заказ на перемещение",'',20,"CancelStockMoveOrderDsm");	//Edit----------------------Dima  30.12.2015
   end;
   EndWindow;
 
@@ -10606,106 +10608,220 @@ begin
 end;
 
 
-window INrsRClass:1
+window SalesGroupDClass:1
   wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
 begin
-  real h,h2,h3,h4,v,vm,vs;
-  WindowBegin("Определите историю товаров",INrsRClass,CGRcW,RcType);
-  SetWRect(20,80,550,460);
-  v = 6; vs = 20; h = 160; h2 = 30; h3 = 180; h4 = 340;
-  PeriodField(h,v,"Период");
-  EditFieldTL(h,v+=vs,150,"Товар",M4UStr,Normal,50,f1,false,INSClass);
-  EditFieldTL(h,v+=vs,150,"Группа",M4UStr,Normal,5,f3,false,ITSClass);
-  if (HasItemClassification) then begin
-    EditFieldTL(h,v+=vs,150,"Классификация", M4UStr,Normal,60,f4,false,DISClass);
-    EditFieldTL(h,v+=vs,150,"Тип классификации",M4UStr,Normal,60,f5,false,CTypeSClass);
+  real h,v,vs;
+  WindowBegin("Группа продажи",SalesGroupDClass,CGview,-);
+  SetWRect(20,80,440,150);
+  UseView(SalesGroupVc);
+  vs=20;v=6;
+  EditField(h=50,v,70,"Код",Normal,SGroupCode,false,0);
+  EditField(h,v+=vs,-40,"Наим.",Normal,SGroupName,false,0);
+  CheckBox(h,v+=(vs+5),0,"Группа продаж кассы",SGroupCashier);		//Edit----------------------Dima  12.01.2016
+  EndWindow;
+end;
+
+window SalesGroupLClass:1
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  WindowBegin("Группы продажи",SalesGroupLClass,CGmlist,-);
+  SetWRect(20,80,400,298);
+  SpawnClass(SalesGroupDClass);
+  Sizeable(-1,-1,0,0);
+  UseView(SalesGroupVc);
+  RecordList(4,17,-21,-39);
+  RlColKey(4,4,"Группа",SGroupCode,false,SGroupCode);
+  RlColKey(150,150,"Наименование",SGroupName,false,SGroupName);
+  RlCol(-50,-50, "Для кассы",SGroupCashier,false);		//Edit----------------------Dima  12.01.2016
+  SearchField("Найти");
+  EndWindow;
+end;
+
+
+
+
+window LocationDClass:1
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  real h,h2,l,v,vm,vs;
+  Integer tilenr;
+
+  WindowBegin("Склад",LocationDClass,CGview,-);
+  SetWRect(64,80,570,520);
+  UseView(LocationVc);
+  v = 10; vs = 20; h = 120; h2 = 340; l = -60;
+  if (IsEnterprise) then begin
+    Tile(0,50+24,false,"",Code);
   end;
-  if (HasMultiLocations) then begin
-    EditFieldTL(h,v+=vs,150,"Склад",M4Code,Normal,21,f6,false,LocationSClass);
-    if (StandardHansa==false and IsEnterprise) then begin
-      EditFieldTL(h,v+=vs,150,"Группа складов",M4Code,Normal,10,f7,false,LocGrSClass);
-      EditFieldTL(h,v+=vs,150,"Классификация склада",M4List,Normal,200,f8,false,LocClSClass);
+  EditField(h,v,120,"Код",Normal,Code,false,0);
+  if (IsEnterprise and StandardHansa==false) then begin
+    EditField(h2,v,l,"Группа",Normal,Group,false,LocGrSClass);
+  end;
+  EditField(h,v+=vs,l,"Наимен.",Normal,Name,false,0);
+  if (IsEnterprise) then begin
+    tilenr = 1;
+    TileButton(tilenr,"Адрес"); tilenr = tilenr + 1;
+    if (StandardHansa==false) then begin
+      TileButton(tilenr,"Склад"); tilenr = tilenr + 1;
     end;
-  end;
-  if (HasDepartments) then begin
-    EditFieldTL(h,v+=vs,150,"Отдел",M4UStr,Normal,10,AccStr,false,DepSClass);
-  end;
-  if (HasModPO) then begin
-    EditFieldTL(h,v+=vs,150,"Основной поставщик",M4UStr,Normal,10,f2,false,VESClass);
-  end;
-  if (IsEnterprise) then begin
-    CheckBox(h2,v+=26,0,"Только складируемые товары",flags[11]);
-//  CheckBox(h2,v+=16,0,"Show Quantity 2",flags[12]);
-    CheckBox(h2,v+=16,0,"Показать остаток для товаров без истории",flags[13]);
-    CheckBox(h2,v+=16,0,"Включать будущие записи",flags[14]);
-  end;
-  if (HasMultiLocations) then begin
-    CheckBox(h2,v+=16,0,"По каждому складу",flags[15]);
-  end;
-  if (HasSerialNumbers) then begin
-    CheckBox(h2,v+=16,0,"Включ. детали сер. ном.",AccSpec);
-  end;
-  if (HasLocalization("ARG,MEX,USA") and IsStandardProduct==false) then begin
-    CheckBox(h2,v+=16,0,"Include Dispatch Number",flags[22]);
-  end;
-//  CheckBox(h2,v+=16,0,"Include History Before #Stocktaking#",flags[19]);
-  ButtonFrame(h2,vm=(v+=38),130,2,"Функция");
-  RadioButton(h2,v,0,0,"Сводный",flags[9]);
-  RadioButton(h2,v+=16,1,0,"Подробный",flags[9]);
-  if (IsEnterprise) then begin
-    ButtonFrame(h2,v+=40,130,2,"Сортировка по");
-    RadioButton(h2,v,0,0,"дате стоимости",flags[10]);
-    RadioButton(h2,v+=16,1,0,"дате операции",flags[10]);
-  end;
-  ButtonFrame(h3,v=vm,140,3,"Функция");
-  RadioButton(h3,v,0,0,"Количества",ArtMode);
-  if (HasVarieties) then begin
-    RadioButton(h3,v+=16,3,0,"Количества и варианты",ArtMode);
-  end;
-  RadioButton(h3,v+=16,1,0,"Количества и суммы",ArtMode); // 2 Has some code for it, don't know what....
-  EndFrame;
-  if (HasSecondQuantity) then begin
-    ButtonFrame(h4,v=vm,150,3,"Функция");//  CheckBox(20);
-    RadioButton(h4,v,0,0,"не показывать кол-во 2",flags[12]);
-    RadioButton(h4,v+=16,1,0,"показать кол-во 2",flags[12]);
-    RadioButton(h4,v+=16,2,0,"показать коэффициент",flags[12]);
-    ButtonFrame(h4,v=30,160,12,"Регистры");
+    tilenr = 1;
+    Tile(tilenr,350,false,tilenr,Addr0); tilenr = tilenr + 1;
+    EditField(h,v=6,l,"Склад",Normal,Addr0,false,0);
   end else begin
-    ButtonFrame(h4,v=vm,160,12,"Регистры");  
+    EditField(h,v+=vs,l,"Склад",Normal,Addr0,false,0);
   end;
-  if (HasModSO) then begin
-    CheckBox(h4,v,0,"Отгрузки",flags[2]); v = v + 16;
-  end;
-  CheckBox(h4,v,0,"Поступления",flags[3]); v = v + 16;
-  CheckBox(h4,v,0,"Счета-фактуры",flags[1]); v = v + 16;
-//  CheckBox(h4,v,0,"POS Invoices",flags[16]); v = v + 16;
-  if (HasModProd) then begin
+  EditField(h,v+=vs,l,"",Normal,Addr1,false,0);
+  EditField(h,v+=vs,l,"",Normal,Addr2,false,0);
+  EditField(h,v+=vs,l,"",Normal,Addr3,false,0);
+  EditField(h,v+=vs,l,"",Normal,Addr4,false,0);
+  EditField(h,v+=vs,l,"Контакт. лицо",Normal,Contact,false,0);
+  EditField(h,v+=vs,l,"Телефон",Normal,Phone,false,0);
+  EditField(h,v+=vs,l,"Факс",Normal,Fax,false,0);
+  EditField(h,v+=vs,l,"E-mail",Normal,Email,false,0);
+  if (IsEnterprise) then begin
     if (StandardHansa==false) then begin
-      CheckBox(h4,v,0,"Заказы на производство",flags[18]); v = v + 16;
+      EditField(h,v+=vs,l,"Классификация",Normal,Classification,false,LocClSClass);
     end;
-    CheckBox(h4,v,0,"Производства",flags[5]); v = v + 16;
+    EditField(h,v+=vs,100,"Ответственный",Normal,RespPerson,false,UserSClass);
+    EditField(h2,v,l,"Доступ резервир.",Normal,ReservLocAccess,false,ReservLocAccessSClass);
+  end;
+  if (HasModNL) then begin
+    EditField(h,v+=vs,100,"Счет склада",Normal,StockAcc,false,AccSClass);
+  end;
+  if (HasObjects) then begin
+    EditField(h2,v,l,"Объект",Normal,Objects,false,ObjSClass);
+  end;
+  if (IsEnterprise) then begin
+  //  EditField(h,v+=vs,100,"Price List",Normal,PriceList,false,PLDefSClass);//No Code
+    EditField(h,v+=vs,100,"Склад закупок",Normal,PurLoc,false,LocationSClass);
     if (StandardHansa==false) then begin
-      CheckBox(h4,v,0,"Операции производства",flags[20]); v = v + 16;
+      EditField(h2,v,l,"Отгр. на счет",Normal,ShipToAccount,false,0);
+      EditField(h,v+=vs,100,"Через склад",Normal,ThrouLocation,false,LocationSClass);
+    end;
+    CheckBox(h,vm=(v+=30),0,"Игнорировать хронологию",IgnoreChronology);
+    if (StandardHansa==false) then begin
+      CheckBox(h,v+=vs,0,"Требовать место",RequirePos);
+    end;
+    ButtonFrame(h2,v=vm+10,100,2,"Tип");
+    RadioButton(h2,v,0,0,"другое",Type);
+    RadioButton(h2,v+=16,1,0,"производство",Type);
+  end;
+  if (HasModWHM) then begin
+    Tile(tilenr,310,false,tilenr,WHMPalletArea); tilenr = tilenr + 1;
+    EditField(h=200,v=6,l=100,"Участок пустых паллет",Normal,WHMPalletArea,false,LocAreaSClass);
+    EditField(h,v+=vs,l,"Участок погрузки",Normal,WHMPickArea,false,LocAreaSClass);
+    EditField(h,v+=vs,l,"Место для поступлений",Normal,WHMDefPUPosCode,false,PosSClass);
+    EditField(h,v+=vs,l,"Место для производства",Normal,WHMDefProdPosCode,false,PosSClass);
+    EditField(h,v+=vs,l,"Место упаковочной машины",Normal,WHMWraperPosCode,false,PosSClass);
+    EditField(h,v+=vs,l,"Место передачи для погрузки",Normal,WHMDeliveryPosCode,false,PosSClass);//the same as WraperPosCode at ethe moment
+    EditField(h,v+=vs,l,"Место для кассы",Normal,DefaultCashierPosCode,false,PosSClass);			//Edit----------------------Dima  12.01.2016
+    EditField(h,v+=vs,l,"Участок доставки",Normal,WHMDeliveryArea,false,LocAreaSClass);
+    EditField(h,v+=vs,l,"Экспресс-счета",Normal,WHMExpressOrderClass,false,OrderClassSClass);
+    EditField(h,v+=vs,l,"Поставщик по умолчанию",Normal,WHMDefPUVECode,false,VESClass);
+    CheckBox(h,v+=24,0,"Требовать место",RequirePos);
+    CheckBox(h,v+=16,0,"Начинать с наиболее высокого места",WHMHighestPosCodeFirst);
+    ButtonFrame(h,v+=40,140,3,"Система погрузчика");
+    RadioButton(h,v,0,0,"Выкл.",WHMForkLiftSystem);
+    RadioButton(h,v+=16,1,0,"Вкл.",WHMForkLiftSystem);
+    RadioButton(h,v+=16,2,0,"Вкл., режим погрузки выкл.",WHMForkLiftSystem);
+  end;
+  EndWindow;
+end;
+
+
+
+
+
+window CashierDefTClass:1
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  real h,h2,v,vm,vs;
+  WindowBegin("Настройки кассового терминала",CashierDefTClass,CGSbl,CashierDefFileType);
+  SetWRect(64,80,700,500);
+  SetBlid(CashierDefBlock);
+  v = 6; vs = 20; h = 150; h2 = 300; vm=0;
+  EditField(h,v,70,"Клиент по умолчанию",Normal,DefCustCode,false,CUSClass);
+  if (HasModNL) then begin
+    EditField(h,v+=vs,70,"Счет бэк-офиса",Normal,CredAcc,false,AccSClass);
+    EditField(h,v+=vs,70,"Счет списания",Normal,WriteOffAcc,false,AccSClass);
+  end;
+  if (HasModRest) then begin
+    EditField(h,v+=vs,70,"Метод оплаты чаевых",Normal,TipPMCode,false,PMSClass);
+  end;
+  if (IsEnterprise) then begin
+    EditField(h,v+=vs,70,"Принтер",Normal,Printer,false,SetSClass);
+    if (StandardHansa==false) then begin
+      EditField(h,v+=vs,70,"Скидка для пенсионеров",Normal,DiscountItem,false,INSClass);
     end;
   end;
-  if (HasAdvancedStock) then begin
-    CheckBox(h4,v,0,"Возвраты товаров",flags[8]); v = v + 16;
-    CheckBox(h4,v,0,"Возвраты товаров поставщикам",flags[19]); v = v + 16;
+  if (HasModIN) then begin
+    if (IsEnterprise) then begin
+      ButtonFrame(h,v+=3*vs+2*16,370,1,"POS");
+      end else begin
+      if (HasModRest) then begin
+        ButtonFrame(h,v+=40,370,1,"POS");
+      end else begin
+        v = v + 20;
+      end;
+    end;
+      EditField(h,v,70,"Обновить интервал склада",Normal,UpdStockMaintTime,false,PasteCurTime);
+    CheckBox(h2,v,0,"Запустить функцию обновления склада",UpdStockMaint);
+ end;
+ if (HasModRest) then begin
+    ButtonFrame(h,v+=40,370,2,"Ресторан");
+    EditField(h,v,70,"Обновить интервал склада",Normal,RestUpdStockMaintTime,false,PasteCurTime);
+    CheckBox(h2,v,0,"Запустить функцию обновления склада",RestUpdStockMaint);
+    CheckBox(h,v+=18,0,"Записать списание склада",RestOKSD);
+//    CheckBox(h2,v,0,"Записать поступления на склад",OKPU);
   end;
-  CheckBox(h4,v,0,"Списания со склада",flags[6]); v = v + 16;
-  if (IsEnterprise or (HasLocalization("PRT") and HasMultiLocations)) then begin  
-    CheckBox(h4,v,0,"Перемещения товаров",flags[4]); v = v + 16;
+  if (IsEnterprise) then begin
+    EditField(h,v+=(vs+5),70,"Интервал снятия кассы",Normal,CashupMaintInterval,false,PasteCurTime);
+    CheckBox(h2,v,0,"Запустить функцию снятия кассы",CashupMaint);
   end;
-  if (HasAdvancedStock) then begin
-    CheckBox(h4,v,0,"Переоценки склада",flags[22]); v = v + 16;
+//  EditField(h,v+=vs,60,"POS No.",Normal,POSNr,false,0);
+  v = vm + 3;
+  if (HasModRest) then begin
+    CheckBox(h2,v,0,"Включать чаевые в снятии кассы",InclTipInCashup);
+    v = v + 16;
   end;
-  if (HasModRent) then begin
-    CheckBox(h4,v,0,"Складские перемещения",flags[17]); v = v + 16;
+  if (IsEnterprise) then begin
+    if (HasModSL) then begin
+      CheckBox(h2,v,0,"Вкл. суммы откр. счетов при снятии кассы",InclOpenInvCashup);
+      v = v + 16;
+    end;
   end;
-  if (HasModSVO) then begin
-    CheckBox(h4,v,0,"Таблица работ",flags[7]); v = v + 16;
+  if (IsEnterprise) then begin
+    if (StandardHansa==false) then begin
+      CheckBox(h2,v,0,"Регестр. продаж. нал. в секц. фиск. контр.",CashSalesToFiscalControlUnit);
+      v = v + 16;
+    end;
+    CheckBox(h2,v,0,"Разрешать несколько сессий на одной машине",MultipleSessionsPerLocalMachine);
+    CheckBox(h2,v+=16,0,"Запр. изменен. в утв.сч/ф кас.терм.на кл. с синхр.",NoChangesPOSOnLiveSyncClient);
   end;
-  CheckBox(h4,v,0,"Инвентаризация",flags[21]); v = v + 16;// Edit ************************** Monday, 11 January 2016 14:48:32
-  EndFrame;
+  if (IsEnterprise) then begin
+    CheckBox(h2,v+=16,0,"Require Return Reason",RequireReturnReason);
+    CheckBox(h2,v+=16,0,"Require Return Customer",RequireReturnCustomer);
+  end;
+  CheckBox(h2,v+=20,0,"Добавлять места для кассовых с/фактур",PutPositionForPOS);				//Edit----------------------Dima  12.01.2016
+  CheckBox(h2,v+=16,0,"Требовать место для кассовых с/фактур",RequirePositionForPOS);		//Edit----------------------Dima  12.01.2016
+  if (HasModNL) then begin
+    ButtonFrame(h2,v+=45,220,2,"Снятие кассы из меню Операции");
+    CheckBox(h2,v,0,"Начинать с предыдущего баланса касс. терминала",StartFromLastPOSBal);
+    if (HasModNL) then begin
+      CheckBox(h2,v+=16,0,"Печатать детализированные записи операций",PrintDetNLTrans);
+    end;
+    EndFrame;
+  end;
+  if (IsEnterprise) then begin
+    CheckBox(h2,v+=142,0,"Требовать открыть сессию",RequireOpenSession);
+    ButtonFrame(h2,vm=(v+=41),170,3,"Поля по умолч. на новый сч/ф");
+    RadioButton(h2,v,0,0,"По умолчанию",DefInvoiceField);
+    RadioButton(h2,v+=16,1,0,"Товар",DefInvoiceField);
+    if (HasSerialNumbers) then begin
+      RadioButton(h2,v+=16,2,0,"Серийный №",DefInvoiceField);
+    end;
+    EndFrame;
+  end;
   EndWindow;
 end;

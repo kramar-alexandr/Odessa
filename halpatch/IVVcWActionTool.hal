@@ -419,6 +419,9 @@ BEGIN
       IVrw.ArtCode = INr.Code;
     end;
   end;
+  if (nonblank(IVr.Position)) then begin			//Edit----------------------Dima  12.01.2016
+		IVrw.PosCode = IVr.Position;				
+	end;
   exportflag = IVr.ExportFlag;
   if (IVr.InvType==kInvoiceTypeCredit or IVr.InvType==kInvoiceTypeCreditSpecialSales) then begin
     exportflag = exportflag + AddPortugueseType;
@@ -1678,3 +1681,22 @@ LIVITDefaultRemote:;
   IVITDefaultRemote = lsubset;
   RETURN;
 END;
+
+
+
+global
+procedure IVVc_PastePosition(var record IVVc IVp,string oldPosition) 	//Edit----------------------Dima  12.01.2016
+begin
+	row IVVc IVrw;
+	integer i;
+
+	if (IVp.Position!=oldPosition or blank(oldPosition)) then begin
+		for(i=0;i<MatRowCnt(IVp);i=i+1) begin
+			MatRowGet(IVp,i,IVrw);
+			if (IVrw.stp==kInvoiceRowTypeNormal) then begin
+				IVrw.PosCode = IVp.Position;
+				MatRowPut(IVp,i,IVrw);
+			end;
+		end;
+	end;
+end;
