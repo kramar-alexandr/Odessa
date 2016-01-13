@@ -418,13 +418,13 @@ RecordNew(ISr);
 					soldall = soldall + sold0;
 					strRest = strRest + strRest0;
 					strRest = strRest0;// Edit ************************** Tuesday, 27 October 2015 17:30:30
-					gotval = gotval + gotval0;
+					gotval = gotval0;		//Edit----------------------Dima  13.01.2016
 					curRest = curRest + curRest0;
 					CurRest = curRest0;// Edit ************************** Tuesday, 27 October 2015 17:37:41
 					SDqty = SDqty + SDqty0;
 					SDqty = SDqty0;// Edit ************************** Tuesday, 27 October 2015 17:37:49
-					saleopt = saleopt + saleopt0;
-					saleroz = saleroz + saleroz0;
+					saleopt = saleopt0;
+					saleroz = saleroz0;
 				end;	
 			end else begin
 				GetISStatus(INr.Code,OrdQty,POQty,POUnOkQty,RepSpec.f2);		//Edit ------------------------------Dima.                склад - f2, не f1		
@@ -472,20 +472,11 @@ RecordNew(ISr);
 
 
   			for(i = 0; i < locationsBal.length; i = i+1) begin
-  //				if (NonBlank(LocBalValues[locationsBal[i]]))
-  				OutString(LocPos[i],0,LocBalValues[locationsBal[i]],false);
-  
+  				OutString(LocPos[i],0,LocBalValues[locationsBal[i]],false);  
   			end;
   			ClearVector(LocBalValues);
 				
-				//OrdQtyInt = 0;
-				//OrdQtyInt = OrdQty;
-  			//OutStringID(280,"DblOpenRepRn",OrdQtyInt,false,INr.Code);
-  			//outval(280,0,OrdQty,M4Val,false);
-				//restok = curRest + TRWH;
-				//restunok = curRest + TRWH;
-  			
-  			//OutVal(320,0,TRWH,M4Val,false);
+
   			POQty = POUnOkQty;
   			POUnOkQty = blankval;
   			nofindf = true;
