@@ -604,15 +604,23 @@ begin
     end else begin
       ItemHistItemHeader_PerLocation(RepSpec,INr.Code,INr.Name,INr.Unittext,fwdqty,fwdtotcp,fwdqty2,itemheaderf);
     end;
-    itemqin = itemqin + IHr.Qty;
-    itemq2in = itemq2in + IHr.Qty2;
+    if (IHr.FileName<>"StockTakeVc") then begin //Edit-------------------Vitalii 15:34 12.01.2016
+	  itemqin = itemqin + IHr.Qty;
+	  itemq2in = itemq2in + IHr.Qty2;
+	end;
     cp = IHr.TotCostPrice;    
     itemcpin = itemcpin + cp;
     if (RepSpec.flags[9]==1) then begin      
       switch (RepSpec.ArtMode) begin
-        case 0: bal = bal + IHr.Qty;
+        case 0:
+		  if (IHr.FileName<>"StockTakeVc") then begin //Edit-------------------Vitalii 15:34 12.01.2016
+		    bal = bal + IHr.Qty;
+		  end;
         case 1: bal = cp;
-        case 3: bal = bal + IHr.Qty;
+        case 3:
+		  if (IHr.FileName<>"StockTakeVc") then begin //Edit-------------------Vitalii 15:34 12.01.2016
+		    bal = bal + IHr.Qty;
+		  end;
       end;
       if (RepSpec.flags[15]!=0) then begin
         PrintItemHist_PerLocation(RepSpec,INr,IHr,MSb,false,bal);
@@ -844,6 +852,7 @@ procedure PrintItemHistoryRecord(record RcVc RepSpec,record ItemHistVc sumIHr,re
                               var val bal)
 begin
   switch (sumIHr.FileName) begin
+  
     case "Fut2ProdOrderInVc": 
       if (RepSpec.flags[14]!=0) then begin
         ItemHistList_In(RepSpec,sumIHr,INr,MSb,CAb,itemheaderf,fwdqty,fwdtotcp,fwdqty2,itemqin,itemcpin,itemq2in,bal);
@@ -943,7 +952,12 @@ begin
     case "WSVc": 
       if (RepSpec.flags[7]!=0) then begin
         ItemHistList_Out(RepSpec,sumIHr,INr,MSb,CAb,itemheaderf,fwdqty,fwdtotcp,fwdqty2,itemqout,itemcpout,itemq2out,bal);
-      end;      
+      end;
+	//Edit-------------------Vitalii 14:49 12.01.2016
+	case "StockTakeVc":
+      if (RepSpec.flags[23]!=0) then begin
+        ItemHistList_In(RepSpec,sumIHr,INr,MSb,CAb,itemheaderf,fwdqty,fwdtotcp,fwdqty2,itemqin,itemcpin,itemq2in,bal);
+      end; 
   end;         
   return;
 end;
@@ -1213,6 +1227,7 @@ begin
           case 1: if (IHr.TransDate>RepSpec.sEndDate) then begin foundIH = false; end;
         end;
         testf = true;
+
         if (nonblank(RepSpec.TransStr)) then begin
           if (ihkeys==3) then begin
             if (RepSpec.TransStr!=IHr.Location) then begin foundIH = false; end;
@@ -1235,7 +1250,12 @@ begin
               if (IHr.ItemType==kItemTypeStocked) and (IHr.StockAffectf==0) then begin testf = false; end;
             end;
           end else begin
-            if (IHr.ItemType!=kItemTypeStocked) or (IHr.StockAffectf==0) then begin testf = false; end;
+            if (IHr.ItemType!=kItemTypeStocked) or (IHr.StockAffectf==0) then begin
+				testf = false;
+				if (IHr.FileName=="StockTakeVc") and (RepSpec.flags[23]<>0) then begin
+					testf = true;
+				end;
+			end;
 /*            
 StartFormat(15);
  OutString(0,0,"jarek",false);
