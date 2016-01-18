@@ -102,6 +102,7 @@ begin
           end else begin
             if (HasMultiLocations) then begin
               OutString(300,0,USetStr(5010),false);
+			  OutString(350,0,USetStr(4998),false);
             end;
           end;
           if (RepSpec.flags[12]==1) then begin OutStringAdjustBiDi(170,0,USetStr(7593),true,M4Val,420); end;    
@@ -124,7 +125,8 @@ begin
             OutString(185,0,USetStr(9660)&"/"&USetStr(10476),false);           
           end;
           if (HasMultiLocations) then begin
-            OutString(260,0,USetStr(5010),false);      
+            OutString(250,0,USetStr(5010),false);     
+			OutString(290,0,USetStr(4998),false);
           end;
           OutStringAdjustBiDi(340,0,USetStr(5009),true,M4Val,350);        
           if (UserCanAction("ViewCostPrice",true)) then begin
@@ -161,7 +163,8 @@ begin
             OutString(0,0,USetStr(5007),false);
             OutString(60,0,USetStr(5006),false);          
             OutString(115,0,USetStr(3080),false);          
-            OutString(215,0,USetStr(9660)&"/"&USetStr(10476),false);               
+            OutString(215,0,USetStr(9660)&"/"&USetStr(10476),false);
+			OutString(300,0,USetStr(4998),false);
             OutString(480,0,USetStr(5009),true);
             EndFormat;
           case 1:
@@ -169,7 +172,8 @@ begin
             OutString(0,0,USetStr(5007),false);
             OutString(60,0,USetStr(5006),false);           
             OutString(140,0,USetStr(3080),false);          
-            OutString(200,0,USetStr(9660)&"/"&USetStr(10476),false);              
+            OutString(190,0,USetStr(9660)&"/"&USetStr(10476),false);              
+			OutString(250,0,USetStr(4998),false);
             OutString(300,0,USetStr(5009),true);
             OutString(380,0,USetStr(5013),true);
             OutString(480,0,USetStr(5015),true);
@@ -560,12 +564,13 @@ LPrintItemHistExcel:;
           OutDate(0,0,IHr.TransDate,false);
           OutString(60,0,USetStr(strid),false);       
           OutLongInt(115,dblstr,IHr.TransNr,false);    
-		  OutString(135,0,USetStr(31134) & (IHr.Row + 1),false);
+		  OutString(135,0,USetStr(31134) & (IHr.Row + 1),false); //Edit-------------------Vitalii 14:51 12.01.2016
           if (RepSpec.flags[21]==1) then begin  
             PrintCustName(IHr.FileName,IHr.TransNr,210);   
           end;
           if (HasMultiLocations) then begin
             OutString(300,0,IHr.Location,false);
+			OutString(350,0,IHr.Position,false);
           end;
           switch (RepSpec.flags[12]) begin
             case 1: OutVal(380,0,IHr.Qty2,M4UVal,true);
@@ -604,12 +609,13 @@ LPrintItemHistExcel:;
           OutDate(0,0,IHr.TransDate,false);
           OutString(60,0,USetStr(strid),false);                        
           OutLongIntOvst(115,dblstr,IHr.TransNr,false,IHr.Invalid);    
-		  OutString(135,0,USetStr(31134) & (IHr.Row + 1),false);
+		  OutString(135,0,USetStr(31134) & (IHr.Row + 1),false); //Edit-------------------Vitalii 14:51 12.01.2016
           if (RepSpec.flags[21]==1) then begin
             PrintCustName(IHr.FileName,IHr.TransNr,185);                   
           end;
           if (HasMultiLocations) then begin
-            OutString(260,0,IHr.Location,false);                         
+            OutString(250,0,IHr.Location,false);                         
+			OutString(290,0,IHr.Position,false);
           end;
           OutVal(340,0,IHr.Qty,M4UVal,true);                           
           if (outf) then begin
@@ -643,7 +649,7 @@ LPrintItemHistExcel:;
           OutDate(0,0,IHr.TransDate,false);
           OutString(60,0,USetStr(strid),false);                       
           OutLongInt(115,dblstr,IHr.TransNr,false);                    
-		  OutString(135,0,USetStr(31134) & (IHr.Row + 1),false);
+		  OutString(135,0,USetStr(31134) & (IHr.Row + 1),false); //Edit-------------------Vitalii 14:51 12.01.2016
           if (RepSpec.flags[21]==1) then begin  
             PrintCustName(IHr.FileName,IHr.TransNr,210);                    
           end;
@@ -684,7 +690,7 @@ LPrintItemHistExcel:;
           OutDate(0,0,IHr.TransDate,false);
           OutString(60,0,USetStr(strid),false);
           OutLongInt(115,dblstr,IHr.TransNr,false);
-		  OutString(135,0,USetStr(31134) & (IHr.Row + 1),false);
+		  OutString(135,0,USetStr(31134) & (IHr.Row + 1),false); //Edit-------------------Vitalii 14:51 12.01.2016
           if (RepSpec.flags[22]!=0) then begin
             PrintDispatchNumber(IHr.FileName,IHr.TransNr,IHr.Row,170);   
           end;
@@ -693,6 +699,7 @@ LPrintItemHistExcel:;
           end;
           if (HasMultiLocations) then begin
             OutString(300,0,IHr.Location,false);
+			OutString(350,0,IHr.Position,false);
           end;
           switch (RepSpec.flags[12]) begin
             case 1: OutValBiDi(380,0,IHr.Qty2,M4UVal,true,420);
@@ -712,17 +719,18 @@ LPrintItemHistExcel:;
           OutString(60,0,USetStr(strid),false);                        
           if (RepSpec.flags[22]!=0) then begin
             OutLongIntOvst(115,dblstr,IHr.TransNr,false,IHr.Invalid);    
-			OutString(135,0,USetStr(31134) & (IHr.Row + 1),false);
+			OutString(135,0,USetStr(31134) & (IHr.Row + 1),false); //Edit-------------------Vitalii 14:51 12.01.2016
             PrintDispatchNumber(IHr.FileName,IHr.TransNr,IHr.Row,150);   
           end else begin
             OutLongIntOvst(135,dblstr,IHr.TransNr,false,IHr.Invalid);    
-			OutString(155,0,USetStr(31134) & (IHr.Row + 1),false);
+			OutString(155,0,USetStr(31134) & (IHr.Row + 1),false); //Edit-------------------Vitalii 14:51 12.01.2016
           end;
           if (RepSpec.flags[21]==1) then begin
             PrintCustName(IHr.FileName,IHr.TransNr,185);                   
           end;
           if (HasMultiLocations) then begin
-            OutString(260,0,IHr.Location,false);                         
+            OutString(250,0,IHr.Location,false);                         
+			OutString(290,0,IHr.Position,false);
           end;
           OutValBiDi(340,0,IHr.Qty,M45Val,true,340);                 
           if (UserCanAction("ViewCostPrice",true)) then begin
@@ -739,7 +747,7 @@ LPrintItemHistExcel:;
           OutDate(0,0,IHr.TransDate,false);
           OutString(60,0,USetStr(strid),false);                       
           OutLongInt(115,dblstr,IHr.TransNr,false);                    
-		  OutString(135,0,USetStr(31134) & (IHr.Row + 1),false);
+		  OutString(135,0,USetStr(31134) & (IHr.Row + 1),false); //Edit-------------------Vitalii 14:51 12.01.2016
           if (RepSpec.flags[21]==1) then begin
             PrintCustName(IHr.FileName,IHr.TransNr,210);                    
           end;

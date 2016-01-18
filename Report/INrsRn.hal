@@ -351,6 +351,7 @@ begin
         dblstr = "DblPOVc";
       end;
     case "Fut3ORVc": strid = 5035; dblstr = "DblORVc";
+	case "StockTakeVc": strid = 5060; dblstr = "DblStockTakeVc"; //Edit-------------------Vitalii 11:54 18.01.2016
   end;
 
   switch (RepSpec.Media) begin
@@ -370,6 +371,7 @@ LPrintItemHist_PerLocationExcel:;
           if (RepSpec.flags[21]==1) then begin  
             PrintCustName(IHr.FileName,IHr.TransNr,210);    
           end;
+		  OutString(350,0,IHr.Position,false);
           OutVal(480,0,IHr.Qty,M4UVal,true);
         case 1:
           OutString(0,0,INr.Code,false);
@@ -381,7 +383,8 @@ LPrintItemHist_PerLocationExcel:;
           if (RepSpec.flags[21]==1) then begin     
             PrintCustName(IHr.FileName,IHr.TransNr,200);  
           end;      
-          OutVal(300,0,IHr.Qty,M4UVal,true);
+          OutString(290,0,IHr.Position,false);
+		  OutVal(300,0,IHr.Qty,M4UVal,true);
           if (outf) then begin
             OutVal(400,0,-Round(bal/IHr.Qty,SetRoundModeD(5)),M45Val,true);
             OutVal(480,0,-bal,M4Val,true);
@@ -423,7 +426,8 @@ LPrintItemHist_PerLocationExcel:;
           if (RepSpec.flags[21]==1) then begin  
             PrintCustName(IHr.FileName,IHr.TransNr,210);        
           end;
-          OutValBiDi(480,0,IHr.Qty,M4UVal,true,520);                
+          OutString(300,0,IHr.Position,false);
+		  OutValBiDi(480,0,IHr.Qty,M4UVal,true,520);                
         case 1:
           OutDate(0,0,IHr.TransDate,false);
           OutString(60,0,USetStr(strid),false);            
@@ -431,7 +435,8 @@ LPrintItemHist_PerLocationExcel:;
           if (RepSpec.flags[21]==1) then begin
             PrintCustName(IHr.FileName,IHr.TransNr,200);                  
           end;
-          OutValBiDi(300,0,IHr.Qty,M4UVal,true,340);
+          OutString(250,0,IHr.Position,false);
+		  OutValBiDi(300,0,IHr.Qty,M4UVal,true,340);
           if (outf) then begin
             OutValBiDi(400,0,-Round(bal/IHr.Qty,SetRoundModeD(5)),M45Val,true,440);
             OutValBiDi(480,0,-bal,M4Val,true,520);
