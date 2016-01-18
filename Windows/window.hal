@@ -350,6 +350,7 @@ begin
   EditFieldTL(h,v+=vs,150,"Товар",M4UStr,Normal,41,f1,false,INSClass);
   EditFieldTL(h,v+=vs,150,"Склады продаж",M4UStr,Normal,41,f2,false,LocationSClass);
   EditFieldTL(h,v+=vs,150,"Остатки на складах",M4UStr,Normal,41,f4,false,LocationSClass);
+  EditFieldTL(h,v+=vs,150,"Остатки на местах",M4UStr,Normal,41,f5,false,PosSClass);
   EditFieldTL(h,v+=vs,150,"Классификация",M4UStr,Normal,30,f3,false,DISClass);
 
   EndWindow;

@@ -1,4 +1,4 @@
-remote procedure LookupInHist(string, Date, Date, string,var val,var val,var val,var val,var val,var val,var val,var val,var val,var val,var val);
+external procedure LookupInHist(string, Date, Date, string,var val,var val,var val,var val,var val,var val,var val,var val,var val,var val,var val,var vector val,var vector val);
 external function Boolean SetInSet2(string,string);
 remote procedure CollectOrderRows(var record ORVc,Date,Date,string);
 remote procedure CollectPORows(var record POVc,Date,Date,string);
@@ -226,8 +226,16 @@ begin
   	OutString(0,0,tstr,false);
   	EndFormat;
   	HeaderClassifications(RepSpec.f3,tstr);
-  	OutString(0,0,tstr,false);
+  	OutString(0,0,tstr,false);  	
   	EndFormat;
+  	
+  	if (nonblank(RepSpec.f4)) then begin
+  			OutString(0,0,USetStr(31008) & ": " & RepSpec.f4,false); 
+  	end;
+  	if (nonblank(RepSpec.f5)) then begin
+				OutString(0,0,USetStr(31135) & ": " & RepSpec.f5,false); 
+  	end; 
+    	
   	EndFormat;
   	EndFormat;  
 	
@@ -243,10 +251,12 @@ BEGIN
   record ORVc ORr, OR2r;
   record POVc POr, PO2r;
   record ItemStatusVc ISr;
+  record PISVc PISr;
+  record POSVc POSr;
   row ORVc ORrw, OR2rw;
   row POVc POrw, PO2rw;
   Boolean TrHs,testf,loopORVc;
-  integer i,rwcnt;
+  integer i,j,rwcnt;
   array val sold;// Edit ************************** Monday, 19 October 2015 10:10:53
   val strRest,gotval,curRest,TRWH,restok,restunok;
   val soldall,sold0,strRest0,gotval0,curRest0,SDqty0,saleopt0,saleroz0;
@@ -259,8 +269,13 @@ BEGIN
   string 20 loc;
   Array string 20 locations;
   Array string 20 locationsBal;
-  Array Integer LocPos;
+  Array string 20 positions;
+  Array string 20 positionsBal;  
+  Array Integer LocPos;	//position of columns
+  Array Integer PosPos; //position of columns
   vector val LocBalValues;
+  vector val PosBalValues;
+ // vector string 20 LocationOfPosition;
   val step;
   string 255 VendorsListUnOK, VendorsListOK;
   
@@ -290,6 +305,19 @@ RecordNew(ISr);
   end;
 
 
+  pos = 0;
+  size2 =0;
+  ExtractObj(RepSpec.f5,pos,loc);
+  while(nonblank(loc))begin
+	  PosBalValues[loc] = i;		
+  	positionsBal[size2] = loc;
+  	POSr.Code = loc;
+  	ReadFirstMain(POSr,1,true);
+  	//LocationOfPosition[loc] = POSr.Location;
+  	size2 = size2 + 1;  	
+  	ExtractObj(RepSpec.f5,pos,loc);
+  end;
+
   
   StartReportJob("Отчет по товарам по классификации(поставщику)");
   rw=1;
@@ -303,6 +331,10 @@ RecordNew(ISr);
   	  Header(rw,USetStr(31008) & ": " & RepSpec.f4 ,1);
   	  rw = rw + 1;
   end;
+  if (nonblank(RepSpec.f5)) then begin
+  	  Header(rw,USetStr(31135) & ": " & RepSpec.f5 ,1);
+  	  rw = rw + 1;
+  end;  
   HeaderClassifications(RepSpec.f3,tstr);
   Header(rw,tstr,1);
   rw = rw + 1;
@@ -330,12 +362,19 @@ RecordNew(ISr);
    OutString(280,0,"Остаток",false);
    OutString(300,0,"К отгрузке клиентам",false);
 
-   step=(360-320)/locationsBal.length;
+   step=(360-320)/(locationsBal.length + positionsBal.length);
    startPos = 320;
+
    for(i=0; i < locationsBal.length; i=i+1) begin
-	LocPos[i] = startPos+step*i;
-   	OutString(LocPos[i],0,"Ост. " & locationsBal[i],false);	
+		LocPos[i] = startPos+step*i;
+   	OutString(LocPos[i],0,"Ост. " & locationsBal[i],false);
    end;	
+   
+   startPos = startPos+step*locationsBal.length;
+   for(i=0; i < positionsBal.length; i=i+1) begin
+		PosPos[i] = startPos+step*i;
+   	OutString(PosPos[i],0,"Ост.\(место\) " & positionsBal[i],false);	
+   end;	   
 
    OutString(360,0,"Заказ подпис.",false);
    OutString(370,0,"",false);				//VendorsListOK
@@ -413,7 +452,7 @@ RecordNew(ISr);
 					POQty = POQty + POQty0;
 					POUnOkQty = POUnOkQty + POUnOkQty0;
 	
-					LookupInHist(INr.Code, RepSpec.sStartDate, RepSpec.sEndDate,locations[i],sold0,strRest0,gotval0,curRest0,TRWH,retPU,SDqty0,stin,stout,saleopt0,saleroz0);
+					LookupInHist(INr.Code, RepSpec.sStartDate, RepSpec.sEndDate,locations[i],sold0,strRest0,gotval0,curRest0,TRWH,retPU,SDqty0,stin,stout,saleopt0,saleroz0,LocBalValues,PosBalValues);
 					sold[i] = sold[i] + sold0;
 					soldall = soldall + sold0;
 					strRest = strRest + strRest0;
@@ -428,11 +467,11 @@ RecordNew(ISr);
 				end;	
 			end else begin
 				GetISStatus(INr.Code,OrdQty,POQty,POUnOkQty,RepSpec.f2);		//Edit ------------------------------Dima.                склад - f2, не f1		
-				LookupInHist(INr.Code, RepSpec.sStartDate, RepSpec.sEndDate,RepSpec.f2,sold0,strRest,gotval,curRest,TRWH,retPU,SDqty,stin,stout,saleopt,saleroz);
+				LookupInHist(INr.Code, RepSpec.sStartDate, RepSpec.sEndDate,RepSpec.f2,sold0,strRest,gotval,curRest,TRWH,retPU,SDqty,stin,stout,saleopt,saleroz,LocBalValues,PosBalValues);
 				soldall = sold0;
   		end;
   		//Edit end-----------------------------------------------------
-  
+  /*
   		for(i = 0; i < locationsBal.length; i = i+1) begin
   			ISr.Code = INr.Code;
   			ISr.Location = locationsBal[i];
@@ -440,7 +479,15 @@ RecordNew(ISr);
   				LocBalValues[locationsBal[i]] = ISr.Instock;
   			end;
   		end;
-
+  		for(i = 0; i < positionsBal.length; i = i+1) begin
+  			PISr.ArtCode = INr.Code;
+  			PISr.Position = positionsBal[i];
+  			PISr.Location = LocationOfPosition[positionsBal[i]];
+  			if (ReadFirstMain(PISr,3,true)) then begin
+  				PosBalValues[positionsBal[i]] = PISr.Instock;
+  			end;
+  		end;  		
+*/
   		StartFormat(15);
   			OutString(20,0,INr.Code,true);
   			OutString(30,0,INr.Name,false);
@@ -470,11 +517,14 @@ RecordNew(ISr);
 				OutString(300,0,OrdQty,false);
 
 
-
   			for(i = 0; i < locationsBal.length; i = i+1) begin
   				OutString(LocPos[i],0,LocBalValues[locationsBal[i]],false);  
   			end;
+  			for(i = 0; i < positionsBal.length; i = i+1) begin
+  				OutString(PosPos[i],0,PosBalValues[positionsBal[i]],false);  
+  			end;  			
   			ClearVector(LocBalValues);
+  			ClearVector(PosBalValues);
 				
 
   			POQty = POUnOkQty;
