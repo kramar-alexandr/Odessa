@@ -463,12 +463,11 @@ begin
 				RemoveIHrecordsStockMov(SMr.ThrouLocation,SMr.ToLocation ,SMr.SerNr,i);
 				//UGLY CODE!!
 				//THE BUG EXISTS SOMEWHERE IN HANSA CODE
-				//IF SentQuant>Quant, HANSA PUT INCORRECT NUMBER INTO THE ISVC.ThrouLocation RECORD (after UnOk)
+				//IF SentQuant>Quant, HANSA PUT INCORRECT NUMBER INTO THE ISVc[ThrouLocation] RECORD (after UnOk)
 				//so we need fix the difference
 				UnOK_UpdateISfromSM(SMrw.ArtCode,SMr.ThrouLocation,SMrw.SentQuant-SMrw.Quant);
 				//end---UGLY CODE					
 			end;
-			UnOK_UpdateISfromSM(SMrw.ArtCode,SMr.ToLocation,SMrw.Quant);					//only for SMr.ToLocation. for other locations ISVc recalculates correctly
 		end else begin								//SentOk
 			RemoveIHrecordsStockMov(SMr.FrLocation,SMr.ThrouLocation ,SMr.SerNr,i);
 			UnOK_UpdateISreservedfromSM(SMrw.ArtCode,SMr.FrLocation,SMrw.OrdQuant,isReserv); 		//only when reserv
