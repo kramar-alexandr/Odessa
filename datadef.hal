@@ -4456,18 +4456,7 @@ RecordBegin(IPVc,-,"");
   KeySegment(PLCode);
   KeySegment(CustCode);
   EndRecord;
-  
-  RecordBegin(SalesGroupVc,-,"");
-  RecordField(SGroupCode,M4Code,5,0);
-  RecordField(SGroupName,M4Str,100,0);
-  RecordField(SGroupCashier,M4Mark,0,0);		//Edit----------------------Dima  12.01.2016
-  MainKeyBegin(SGroupCode,0);
-  KeySegment(SGroupCode);
-  KeyBegin(SGroupName);
-  KeySegment(SGroupName);
-  KeySegment(SGroupCode);
-  EndRecord;
-  
+
   
   RecordBegin(LocationVc,-,"location2");
   NewAutosyncRegister(kSyncDirectionToClient,true);
@@ -4560,7 +4549,7 @@ RecordBegin(IPVc,-,"");
   RecordField(RestUpdStockMaint,M4Int,0,0);
   RecordField(RestUpdStockMaintTime,M4Time,0,0);
   RecordField(RestOKSD,M4Int,0,0);
-	RecordField(RequirePositionForPOS,M4Mark,0,0);			//Edit----------------------Dima  12.01.2016
+	RecordField(RequirePositionForPOS,M4Mark,0,0);			//should be removed //Edit----------------------Dima  12.01.2016
 	RecordField(PutPositionForPOS,M4Mark,0,0);  				//Edit----------------------Dima  12.01.2016  
   EndBlock;  
   

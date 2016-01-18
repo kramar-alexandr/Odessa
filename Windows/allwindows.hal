@@ -10608,39 +10608,6 @@ begin
 end;
 
 
-window SalesGroupDClass:1
-  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
-begin
-  real h,v,vs;
-  WindowBegin("Группа продажи",SalesGroupDClass,CGview,-);
-  SetWRect(20,80,440,150);
-  UseView(SalesGroupVc);
-  vs=20;v=6;
-  EditField(h=50,v,70,"Код",Normal,SGroupCode,false,0);
-  EditField(h,v+=vs,-40,"Наим.",Normal,SGroupName,false,0);
-  CheckBox(h,v+=(vs+5),0,"Группа продаж кассы",SGroupCashier);		//Edit----------------------Dima  12.01.2016
-  EndWindow;
-end;
-
-window SalesGroupLClass:1
-  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
-begin
-  WindowBegin("Группы продажи",SalesGroupLClass,CGmlist,-);
-  SetWRect(20,80,400,298);
-  SpawnClass(SalesGroupDClass);
-  Sizeable(-1,-1,0,0);
-  UseView(SalesGroupVc);
-  RecordList(4,17,-21,-39);
-  RlColKey(4,4,"Группа",SGroupCode,false,SGroupCode);
-  RlColKey(150,150,"Наименование",SGroupName,false,SGroupName);
-  RlCol(-50,-50, "Для кассы",SGroupCashier,false);		//Edit----------------------Dima  12.01.2016
-  SearchField("Найти");
-  EndWindow;
-end;
-
-
-
-
 window LocationDClass:1
   wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
 begin
@@ -10803,8 +10770,8 @@ begin
     CheckBox(h2,v+=16,0,"Require Return Reason",RequireReturnReason);
     CheckBox(h2,v+=16,0,"Require Return Customer",RequireReturnCustomer);
   end;
-  CheckBox(h2,v+=20,0,"Добавлять места для кассовых с/фактур",PutPositionForPOS);				//Edit----------------------Dima  12.01.2016
-  CheckBox(h2,v+=16,0,"Требовать место для кассовых с/фактур",RequirePositionForPOS);		//Edit----------------------Dima  12.01.2016
+  CheckBox(h2,v+=20,0,"Добавлять места для с/фактур",PutPositionForPOS);				//Edit----------------------Dima  12.01.2016
+  //CheckBox(h2,v+=16,0,"Требовать место для кассовых с/фактур",RequirePositionForPOS);		//Edit----------------------Dima  12.01.2016
   if (HasModNL) then begin
     ButtonFrame(h2,v+=45,220,2,"Снятие кассы из меню Операции");
     CheckBox(h2,v,0,"Начинать с предыдущего баланса касс. терминала",StartFromLastPOSBal);
