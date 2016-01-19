@@ -96,6 +96,7 @@ begin
 	Export("Экспорт товаров в CSV опт",ExpItemsBarCodesOptEClass,ExpItemsBarCodeOptsEn,modSL);// Edit ************************** Thursday, 26 February 2015 18:04:57
 
   Report("Несовпадения по складу 1-КОС",TovTestRClass,TovTestRn,0,modDBMain);
+  Report("1-КОС с пустым местом",OneKocBlankPosRClass,OneKocBlankPosRn,0,modDBMain);
   
    SString(24193,"К оплате");
    

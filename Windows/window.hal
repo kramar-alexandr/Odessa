@@ -2409,3 +2409,15 @@ begin
   EndWindow;
 
 end;
+
+window OneKocBlankPosRClass:1
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  real h,v,vs;
+
+  WindowBegin("1-КОС с пустым местом",OneKocBlankPosRClass,CGRcW,RcType);
+  SetWRect(20,80,400,200);
+  h = 110; v = 15; vs = 20;
+  EndWindow;
+
+end;

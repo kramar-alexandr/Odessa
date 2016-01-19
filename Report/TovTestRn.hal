@@ -14,9 +14,9 @@ begin
 	StartReportNoHeaderJob("Несовпадения по складу 1-КОС");
 	startformat(15);
 	OutString(0,0,"Код",false);
-	OutString(200,0,"на складе",false);
-	OutString(300,0,"на КОС_2",false);
-	OutString(400,0,"на ОСТ_3",false);
+	OutString(140,0,"на складе",false);
+	OutString(210,0,"на КОС_2",false);
+	OutString(280,0,"на ОСТ_3",false);
 	endformat;
 	i = 0;
 	TrHs = true;
@@ -102,9 +102,9 @@ begin
 		if testf then begin
 			startformat(15);
 			OutString(0,0,InArr[i],false);
-			OutString(200,0,vect[InArr[i]],false);
-			OutString(300,0,vect[InArr[i] & ":КОС_2"],false);
-			OutString(400,0,vect[InArr[i] & ":ОСТ_3"],false);
+			OutString(140,0,vect[InArr[i]],false);
+			OutString(210,0,vect[InArr[i] & ":КОС_2"],false);
+			OutString(280,0,vect[InArr[i] & ":ОСТ_3"],false);
 			endformat;
 		end;
 	end;
@@ -113,3 +113,389 @@ begin
   
 end;
 
+global procedure OneKocBlankPosRn(record RcVc RepSpec)
+begin
+	record StockMovVc SMr;
+	record SHVc SHr;
+	row SHVc SHrw;
+	record SDVc SDr;
+	row SDVc SDrw;
+	record PUVc PUr;
+	row PUVc PUrw;
+	record RetVc Retr;
+	row RetVc Retrw;
+	integer i,rwcnt;
+	boolean blankPosf;
+	string 20 lastpos;
+	
+	StartReportNoHeaderJob("1-КОС с пустым местом");
+		Black_Divider(0,1);
+		startformat(15);
+			OutString(30,0,"Отгрузки       Отгрузки       Отгрузки       Отгрузки       Отгрузки       Отгрузки       Отгрузки       Отгрузки       Отгрузки",false);
+		endformat;
+		Black_Divider(0,1);
+		startformat(15);
+		endformat;
+		startformat(15);
+			OutString(0,0,"Код",false);
+			OutString(70,0,"Дата",false);
+			OutString(140,0,"со склада",false);
+			OutString(210,0,"с места",false);
+			OutString(280,0,"на склад",false);
+			OutString(350,0,"на место",false);
+		endformat;
+		
+		SHr.ShipOkDate = "06/12/15";
+		while loopkey("ShipOkDate",SHr,1,true) begin
+			blankPosf = false;
+			if (SHr.Location=="1-KOC") and (SHr.OKFlag<>0) then begin
+				rwcnt = matrowcnt(SHr);
+				for (i=0;i<rwcnt;i=i+1) begin
+					matrowget(SHr,i,SHrw);
+					if blank(SHrw.PosCode) then begin
+						blankPosf = true;
+					end;
+				end;
+				if blankPosf then begin
+					startformat(15);
+					OutString(0,"DblSHVc",SHr.SerNr,false);
+					OutString(70,0,"OK " & SHr.ShipOkDate,false);
+					OutString(140,0,SHr.Location,false);
+					OutString(210,0,"",false);
+					OutString(280,0,"",false);
+					OutString(350,0,"",false);
+					endformat;
+				end;
+			end;
+		end;
+		startformat(15);
+		endformat;
+		Black_Divider(0,1);
+		startformat(15);
+		endformat;
+		resetloop(SHr);
+		SHr.ShipOkDate = "06/12/15";
+		while loopbackkey("ShipOkDate",SHr,1,true) begin
+			blankPosf = false;
+			if (SHr.Location=="1-KOC") and (SHr.OKFlag<>0) then begin
+				rwcnt = matrowcnt(SHr);
+				for (i=0;i<rwcnt;i=i+1) begin
+					matrowget(SHr,i,SHrw);
+					if nonblank(SHrw.PosCode) then begin
+						blankPosf = true;
+						lastpos = SHrw.PosCode;
+					end;
+				end;
+				if blankPosf then begin
+					startformat(15);
+					OutString(0,"DblSHVc",SHr.SerNr,false);
+					OutString(70,0,"OK " & SHr.ShipOkDate,false);
+					OutString(140,0,SHr.Location,false);
+					OutString(210,0,lastpos,false);
+					OutString(280,0,"",false);
+					OutString(350,0,"",false);
+					endformat;
+				end;
+			end;
+		end;
+		
+		Black_Divider(0,1);
+		startformat(15);
+			OutString(30,0,"Поступления       Поступления       Поступления       Поступления       Поступления       Поступления       Поступления",false);
+		endformat;
+		Black_Divider(0,1);
+		startformat(15);
+		endformat;
+		startformat(15);
+			OutString(0,0,"Код",false);
+			OutString(70,0,"Дата",false);
+			OutString(140,0,"со склада",false);
+			OutString(210,0,"с места",false);
+			OutString(280,0,"на склад",false);
+			OutString(350,0,"на место",false);
+		endformat;
+		
+		PUr.TransDate = "06/12/15";
+		while loopkey("TransDate",PUr,1,true) begin
+			blankPosf = false;
+			if (PUr.Location=="1-KOC") and (PUr.OKFlag<>0) then begin
+				rwcnt = matrowcnt(PUr);
+				for (i=0;i<rwcnt;i=i+1) begin
+					matrowget(PUr,i,PUrw);
+					if blank(PUrw.ToPosCode) then begin
+						blankPosf = true;
+					end;
+				end;
+				if blankPosf then begin
+					startformat(15);
+					OutString(0,"DblPU",PUr.SerNr,false);
+					OutString(70,0,PUr.TransDate,false);
+					OutString(140,0,PUr.Location,false);
+					OutString(210,0,"",false);
+					OutString(280,0,"",false);
+					OutString(350,0,"",false);
+					endformat;
+				end;
+			end;
+		end;
+		startformat(15);
+		endformat;
+		Black_Divider(0,1);
+		startformat(15);
+		endformat;
+		resetloop(PUr);
+		PUr.TransDate = "06/12/15";
+		while loopbackkey("TransDate",PUr,1,true) begin
+			blankPosf = false;
+			if (PUr.Location=="1-KOC") and (PUr.OKFlag<>0) then begin
+				rwcnt = matrowcnt(PUr);
+				for (i=0;i<rwcnt;i=i+1) begin
+					matrowget(PUr,i,PUrw);
+					if nonblank(PUrw.ToPosCode) then begin
+						blankPosf = true;
+						lastpos = PUrw.ToPosCode;
+					end;
+				end;
+				if blankPosf then begin
+					startformat(15);
+					OutString(0,"DblPU",PUr.SerNr,false);
+					OutString(70,0,PUr.TransDate,false);
+					OutString(140,0,PUr.Location,false);
+					OutString(210,0,lastpos,false);
+					OutString(280,0,"",false);
+					OutString(350,0,"",false);
+					endformat;
+				end;
+			end;
+		end;
+		
+		Black_Divider(0,1);
+		startformat(15);
+			OutString(30,0,"Списания       Списания       Списания       Списания       Списания       Списания       Списания       Списания       Списания",false);
+		endformat;
+		Black_Divider(0,1);
+		startformat(15);
+		endformat;
+		startformat(15);
+			OutString(0,0,"Код",false);
+			OutString(70,0,"Дата",false);
+			OutString(140,0,"со склада",false);
+			OutString(210,0,"с места",false);
+			OutString(280,0,"на склад",false);
+			OutString(350,0,"на место",false);
+		endformat;
+		
+		SDr.TransDate = "06/12/15";
+		while loopkey("TransDate",SDr,1,true) begin
+			blankPosf = false;
+			if (SDr.Location=="1-KOC") and (SDr.OKFlag<>0) then begin
+				rwcnt = matrowcnt(SDr);
+				for (i=0;i<rwcnt;i=i+1) begin
+					matrowget(SDr,i,SDrw);
+					if blank(SDrw.PosCode) then begin
+						blankPosf = true;
+					end;
+				end;
+				if blankPosf then begin
+					startformat(15);
+					OutString(0,"DblSDVc",SDr.SerNr,false);
+					OutString(70,0,SDr.TransDate,false);
+					OutString(140,0,SDr.Location,false);
+					OutString(210,0,"",false);
+					OutString(280,0,"",false);
+					OutString(350,0,"",false);
+					endformat;
+				end;
+			end;
+		end;
+		startformat(15);
+		endformat;
+		Black_Divider(0,1);
+		startformat(15);
+		endformat;
+		resetloop(SDr);
+		SDr.TransDate = "06/12/15";
+		while loopbackkey("TransDate",SDr,1,true) begin
+			blankPosf = false;
+			if (SDr.Location=="1-KOC") and (SDr.OKFlag<>0) then begin
+				rwcnt = matrowcnt(SDr);
+				for (i=0;i<rwcnt;i=i+1) begin
+					matrowget(SDr,i,SDrw);
+					if nonblank(SDrw.PosCode) then begin
+						blankPosf = true;
+						lastpos = SDrw.PosCode;
+					end;
+				end;
+				if blankPosf then begin
+					startformat(15);
+					OutString(0,"DblSDVc",SDr.SerNr,false);
+					OutString(70,0,SDr.TransDate,false);
+					OutString(140,0,SDr.Location,false);
+					OutString(210,0,lastpos,false);
+					OutString(280,0,"",false);
+					OutString(350,0,"",false);
+					endformat;
+				end;
+			end;
+		end;
+		
+		Black_Divider(0,1);
+		startformat(15);
+			OutString(30,0,"Перемещения       Перемещения       Перемещения       Перемещения       Перемещения       Перемещения       Перемещения",false);
+		endformat;
+		Black_Divider(0,1);
+		startformat(15);
+		endformat;
+		startformat(15);
+			OutString(0,0,"Код",false);
+			OutString(70,0,"Дата",false);
+			OutString(140,0,"со склада",false);
+			OutString(210,0,"с места",false);
+			OutString(280,0,"на склад",false);
+			OutString(350,0,"на место",false);
+		endformat;
+		
+		SMr.SerNr = "10607";
+		while loopmain(SMr,1,true) begin
+			if (SMr.ToLocation=="1-KOC") and (SMr.OKFlag<>0) then begin
+				if blank(SMr.ToPos) then begin
+					startformat(15);
+					OutString(0,"DblStockMov",SMr.SerNr,false);
+					OutString(70,0,"пол " & SMr.TransDate,false);
+					OutString(140,0,"",false);
+					OutString(210,0,"",false);
+					OutString(280,0,SMr.ToLocation,false);
+					OutString(350,0,SMr.ToPos,false);
+					endformat;
+				end;
+			end;
+		end;
+		resetloop(SMr);
+		SMr.SerNr = "10607";
+		while loopmain(SMr,1,true) begin
+			if (SMr.FrLocation=="1-KOC") and (SMr.OKFlag<>0) then begin
+				if blank(SMr.FrPos) then begin
+					startformat(15);
+					OutString(0,"DblStockMov",SMr.SerNr,false);
+					OutString(70,0,"зак " & SMr.OrdTransDate,false);
+					OutString(140,0,SMr.FrLocation,false);
+					OutString(210,0,SMr.FrPos,false);
+					OutString(280,0,"",false);
+					OutString(350,0,"",false);
+					endformat;
+				end;
+			end;
+		end;
+		startformat(15);
+		endformat;
+		
+		Black_Divider(0,1);
+		startformat(15);
+		endformat;
+		resetloop(SMr);
+		SMr.SerNr = "10602";
+		while loopbackkey("SerNr",SMr,1,true) begin
+			if (SMr.ToLocation=="1-KOC") and (SMr.OKFlag<>0) then begin
+				if nonblank(SMr.ToPos) then begin
+					startformat(15);
+					OutString(0,"DblStockMov",SMr.SerNr,false);
+					OutString(70,0,"пол " & SMr.TransDate,false);
+					OutString(140,0,"",false);
+					OutString(210,0,"",false);
+					OutString(280,0,SMr.ToLocation,false);
+					OutString(350,0,SMr.ToPos,false);
+					endformat;
+				end;
+			end;
+		end;
+		resetloop(SMr);
+		SMr.SerNr = "10602";
+		while loopbackkey("SerNr",SMr,1,true) begin
+			if (SMr.FrLocation=="1-KOC") and (SMr.OKFlag<>0) then begin
+				if nonblank(SMr.FrPos) then begin
+					startformat(15);
+					OutString(0,"DblStockMov",SMr.SerNr,false);
+					OutString(70,0,"зак " & SMr.OrdTransDate,false);
+					OutString(140,0,SMr.FrLocation,false);
+					OutString(210,0,SMr.FrPos,false);
+					OutString(280,0,"",false);
+					OutString(350,0,"",false);
+					endformat;
+				end;
+			end;
+		end;
+		
+		startformat(15);
+		endformat;
+		
+		Black_Divider(0,1);
+		startformat(15);
+			OutString(30,0,"Возврат       Возврат       Возврат       Возврат       Возврат       Возврат       Возврат       Возврат       Возврат       Возврат",false);
+		endformat;
+		Black_Divider(0,1);
+		startformat(15);
+		endformat;
+		startformat(15);
+			OutString(0,0,"Код",false);
+			OutString(70,0,"Дата",false);
+			OutString(140,0,"со склада",false);
+			OutString(210,0,"с места",false);
+			OutString(280,0,"на склад",false);
+			OutString(350,0,"на место",false);
+		endformat;
+		
+		Retr.TransDate = "06/12/15";
+		while loopkey("TransDate",Retr,1,true) begin
+			blankPosf = false;
+			if (Retr.Location=="1-KOC") and (Retr.OKFlag<>0) then begin
+				rwcnt = matrowcnt(Retr);
+				for (i=0;i<rwcnt;i=i+1) begin
+					matrowget(Retr,i,Retrw);
+					if blank(Retrw.PosCode) then begin
+						blankPosf = true;
+					end;
+				end;
+				if blankPosf then begin
+					startformat(15);
+					OutString(0,"DblRetVc",Retr.SerNr,false);
+					OutString(70,0,Retr.TransDate,false);
+					OutString(140,0,"",false);
+					OutString(210,0,"",false);
+					OutString(280,0,Retr.Location,false);
+					OutString(350,0,"",false);
+					endformat;
+				end;
+			end;
+		end;
+		startformat(15);
+		endformat;
+		Black_Divider(0,1);
+		startformat(15);
+		endformat;
+		resetloop(Retr);
+		Retr.TransDate = "06/12/15";
+		while loopbackkey("TransDate",Retr,1,true) begin
+			blankPosf = false;
+			if (Retr.Location=="1-KOC") and (Retr.OKFlag<>0) then begin
+				rwcnt = matrowcnt(Retr);
+				for (i=0;i<rwcnt;i=i+1) begin
+					matrowget(Retr,i,Retrw);
+					if nonblank(Retrw.PosCode) then begin
+						blankPosf = true;
+						lastpos = Retrw.PosCode;
+					end;
+				end;
+				if blankPosf then begin
+					startformat(15);
+					OutString(0,"DblRetVc",Retr.SerNr,false);
+					OutString(70,0,Retr.TransDate,false);
+					OutString(140,0,"",false);
+					OutString(210,0,"",false);
+					OutString(280,0,Retr.Location,false);
+					OutString(350,0,lastpos,false);
+					endformat;
+				end;
+			end;
+		end;
+	EndJob;
+end;
