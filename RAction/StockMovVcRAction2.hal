@@ -732,7 +732,6 @@ BEGIN
   record ItemStatusVc ISr; //Edit***************************Sasha2,11:56 25.08.2015
   record PISVc PISr;
   string 30 position;
-  val instock;
 
   ihef = ItemHistExists("StockMovVc",StockMovr.SerNr);
   if ((StockMovr.SentOKFlag==0)) then begin
@@ -921,6 +920,8 @@ BEGIN
   integer rwcnt,i; //Edit***************************Sasha2,14:25 11.02.2015
   record ItemStatusVc ISr;
   record StockMovVc SMempty;
+  record PISVc PISr;
+  string 30 position;
   
   if (blankdate(StockMovr.RegDate)) then begin
     StockMovr.RegDate = CurrentDate;
@@ -967,33 +968,60 @@ BEGIN
 			MatRowPut(StockMovr,i,StockMovrw);
 		end;	
 		
-		MatRowGet(StockMovr,i,StockMovrw); //Edit***************************Sasha2,12:02 25.08.2015 {
+		MatRowGet(StockMovr,i,StockMovrw);    //Edit***************************Sasha2,11:54 25.08.2015 {
+		position = "";
+		position = StockMovrw.FrPosCode;
+		if (blank(position)) then begin position = StockMovr.FrPos; end;
 
-		if(nonblank(StockMovr.FrLocation))then begin
-			if(nonblank(StockMovrw.ArtCode)) then begin
-				ISr.Code = StockMovrw.ArtCode;
-				ISr.Location = StockMovr.FrLocation;
-				if(ReadFirstMain(ISr, 2, true))then begin
-					StockMovrw.FromQuant = ISr.Instock;
+		if(nonblank(StockMovrw.ArtCode)) then begin
+			if(nonblank(StockMovr.FrLocation))then begin	
+				if (blank(position)) then begin							
+					ISr.Code = StockMovrw.ArtCode;
+					ISr.Location = StockMovr.FrLocation;
+					if(ReadFirstMain(ISr, 2, true))then begin
+						StockMovrw.FromQuant = ISr.Instock;
+					end else begin
+						StockMovrw.FromQuant = 0;
+					end;
 				end else begin
-					StockMovrw.FromQuant = 0;
+					PISr.ArtCode = StockMovrw.ArtCode;		//Edit----------------------Dima  19.01.2016
+					PISr.Location = StockMovr.FrLocation;
+					PISr.Position = position;
+					if (ReadFirstMain(PISr,3,true)) then begin
+						StockMovrw.FromQuant = PISr.Instock;
+					end else begin
+						StockMovrw.FromQuant = 0;
+					end;
 				end;
-			end; 
-		end;
+			end;
 		
-		if(nonblank(StockMovr.ToLocation))then begin
-			if(nonblank(StockMovrw.ArtCode)) then begin
-				ISr.Code = StockMovrw.ArtCode;
-				ISr.Location = StockMovr.ToLocation;
-				if(ReadFirstMain(ISr, 2, true))then begin
-					StockMovrw.ToQuant = ISr.Instock;
+			position = "";
+			position = StockMovrw.ToPosCode;
+			if (blank(position)) then begin position = StockMovr.ToPos; end;
+				
+			if(nonblank(StockMovr.ToLocation))then begin
+				if (blank(position)) then begin
+					ISr.Code = StockMovrw.ArtCode;
+					ISr.Location = StockMovr.ToLocation;
+					if(ReadFirstMain(ISr, 2, true))then begin
+						StockMovrw.ToQuant = ISr.Instock;
+					end else begin
+						StockMovrw.ToQuant = 0;
+					end;
 				end else begin
-					StockMovrw.ToQuant = 0;
+					PISr.ArtCode = StockMovrw.ArtCode;
+					PISr.Location = StockMovr.ToLocation;
+					PISr.Position = position;				
+					if(ReadFirstMain(PISr, 3, true))then begin
+						StockMovrw.ToQuant = PISr.Instock;
+					end else begin
+						StockMovrw.ToQuant = 0;
+					end;
 				end;
-			end; 
-		end;
+			end;
 		
-		MatRowPut(StockMovr,i,StockMovrw); //Edit***************************Sasha2,12:02 25.08.2015 }
+		end;
+		MatRowPut(StockMovr,i,StockMovrw); //Edit***************************Sasha2,11:54 25.08.2015 }
 		
 		//StockMov2r doesn't exist during "Save" procedure
 		//So we create empty StockMov record to write difference (SM2r-SMr) to ORVc (logistics)
