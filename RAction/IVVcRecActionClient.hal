@@ -190,8 +190,20 @@ function LongInt IVVcRecordDefaultsClient(LongInt wn,var record IVVc IVr,record 
 begin
   LongInt res;
   Integer level;
+  record LocationVc Locr;
+  record CashierDefBlock CashDefRec;
+  
+  BlockLoad(CashDefRec);  
 
   res = IVDefaultsClient(IVr,IV2r,long3,long4);
+  
+  if (CashDefRec.PutPositionForPOS != 0) then begin
+  	Locr.Code = IVr.Location;				//Edit----------------------Dima  12.01.2016
+  	if (ReadFirstMain(Locr,1,true)) then begin
+			IVr.Position = Locr.DefaultCashierPosCode;
+		end;
+	end;   
+  
   if (TouchScreenLook) then begin
 //    NPTSIVCashDClassOnOpenWindowExecute(wn);
     level = StringToInt(GetWindowString(wn,"touchscreenwindowpage"));
