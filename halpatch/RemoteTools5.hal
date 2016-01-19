@@ -928,7 +928,7 @@ L10PasteOrdInShip:;
       SHrw.Source = ORrw.Source;
       SHrw.PosCode = ORrw.Position;
       if (SHp.Location == "1-KOC") then begin		//Latin liters	//Edit-----===============================-----------------Dima  07.12.2015
-				SHrw.PosCode = USetStr(31888); 						//ŠŽ‘-2	//Cyrillic liters
+				SHrw.PosCode = Locr.DefaultCashierPosCode;
 			end;    
       SHrw.DespatchRowTime = ORrw.DespatchRowTime;
       SHrw.SalesAcc = ORrw.SalesAcc;

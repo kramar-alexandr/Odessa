@@ -62,6 +62,7 @@ BEGIN
   string 10 curcode;
   val fr,to1,to2,br1,br2;
   record UserVc Userr;	//Edit by Victor 26.11.14
+  record LocationVc Locr;
   
   StockMovr.SerNr = -1;
   StockMovr.OrdTransDate = CurrentDate;
@@ -97,6 +98,10 @@ BEGIN
   if (ReadFirstMain(Userr,1,true)) then begin
 	  StockMovr.SalesGroup = Userr.SalesGroup;
 		StockMovr.FrLocation = Userr.Location;		//Edit-----------------Dima 02.02.2015
+		Locr.Code = Userr.Location;
+		if (ReadFirstMain(Locr,1,true)) then begin
+			StockMovr.FrPos = Locr.DefaultCashierPosCode;
+		end;
 	end;
 
   StockMovVcRecordDefaults = res; 
