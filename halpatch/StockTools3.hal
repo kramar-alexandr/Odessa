@@ -300,7 +300,10 @@ begin
     if (testf) then begin
       pins = t2;
     end;
-    UpdatePosition(StockMovrw.ArtCode,frlocation,frpos,t2,q2,pins);
+    //Error in PISVc record: incorrect positions for TRANSIT location//Edit----------------------Dima  19.01.2016
+    if (SMp.ThrouLocation != frlocation) then begin	//Edit----------------------Dima  19.01.2016
+    	UpdatePosition(StockMovrw.ArtCode,frlocation,frpos,t2,q2,pins);
+    end;	
   end;
   return;
 end;
@@ -333,7 +336,10 @@ begin
     if (blank(topos)) then begin
       topos = SMp.ToPos;
     end;
-    UpdatePosition(StockMovrw.ArtCode,tolocation,topos,t4,q2,blankv);
+    //Error in PISVc record: incorrect positions for TRANSIT location//Edit----------------------Dima  19.01.2016
+    if (sentquantf==false) then begin	//Edit----------------------Dima  19.01.2016
+    	UpdatePosition(StockMovrw.ArtCode,tolocation,topos,t4,q2,blankv);
+    end;	
   end;
   return;
 end;
