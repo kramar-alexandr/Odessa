@@ -718,6 +718,10 @@ BEGIN
 		res = true;		//Edit------------------FIX!!!--------------------Dima  01.10.2015
 	end;  
 	
+	if((IVr.SerNr==47543 or IVr.SerNr==47560 or IVr.SerNr==47564 or IVr.SerNr==47588 or IVr.SerNr==47951 or IVr.SerNr==47952 or IVr.SerNr==48138 or IVr.SerNr==48140) and (fieldname=="Price" or fieldname=="CurncyCode"))then begin
+		res = true;
+	end;
+	
 LIVDClassActiveEditField:;
      //Edit-------------------Vitalii 10:43 25.12.2015
 	 if (currentuser=="SAUNOK") then begin

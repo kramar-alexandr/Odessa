@@ -507,7 +507,7 @@ begin
 		//location = ImportField;
 		artcode = ImportField;
 		quant = ImportField;
-		if (pucnt<=1999) then begin	//заполнение таблицы данными
+		if (pucnt<=999) then begin	//заполнение таблицы данными
 			INr.Code = artcode;
 			If(readfirstmain(INr,1,true))then begin
 				logtext(0,artcode);
