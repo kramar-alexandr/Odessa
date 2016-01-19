@@ -10682,7 +10682,7 @@ begin
     EditField(h,v+=vs,l,"Место для производства",Normal,WHMDefProdPosCode,false,PosSClass);
     EditField(h,v+=vs,l,"Место упаковочной машины",Normal,WHMWraperPosCode,false,PosSClass);
     EditField(h,v+=vs,l,"Место передачи для погрузки",Normal,WHMDeliveryPosCode,false,PosSClass);//the same as WraperPosCode at ethe moment
-    EditField(h,v+=vs,l,"Место для кассы",Normal,DefaultCashierPosCode,false,PosSClass);			//Edit----------------------Dima  12.01.2016
+    EditField(h,v+=vs,l,"Место для c/ф и склада",Normal,DefaultCashierPosCode,false,PosSClass);			//Edit----------------------Dima  12.01.2016
     EditField(h,v+=vs,l,"Участок доставки",Normal,WHMDeliveryArea,false,LocAreaSClass);
     EditField(h,v+=vs,l,"Экспресс-счета",Normal,WHMExpressOrderClass,false,OrderClassSClass);
     EditField(h,v+=vs,l,"Поставщик по умолчанию",Normal,WHMDefPUVECode,false,VESClass);
