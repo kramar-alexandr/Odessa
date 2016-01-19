@@ -291,6 +291,36 @@ LEnd:;
   return;
 end;
 
+
+global procedure AddPositionsToRows(var record IVVc IVp)	//Edit----------------------Dima  19.01.2016
+begin
+  record CashierDefBlock CashierDefb;
+ 	record LocationVc Locr;
+ 	row IVVc IVrw;
+ 	integer i;
+
+  BlockLoad(CashierDefb);
+  
+  if (CashierDefb.PutPositionForPOS != 0 and blank(IVp.Position)) then begin
+  	if (nonblank(IVp.Location)) then begin  	
+  		Locr.Code = IVp.Location;				//Edit----------------------Dima  12.01.2016
+  		if (ReadFirstMain(Locr,1,true)) then begin
+				IVp.Position = Locr.DefaultCashierPosCode;
+			end;
+			for(i=0;i<MatRowCnt(IVp);i=i+1) begin
+				MatRowGet(IVp,i,IVrw);
+				if (IVrw.stp==kInvoiceRowTypeNormal and blank(IVrw.PosCode)) then begin
+					IVrw.PosCode = IVp.Position;
+					MatRowPut(IVp,i,IVrw);
+				end;
+			end;		
+		end;
+	end;  
+
+end;
+
+
+
 global
 updating function LongInt IVVcRecordCheck(record IVVc IVp,record IVVc IV2p,LongInt stat,LongInt long4)
 BEGIN
@@ -1550,6 +1580,9 @@ LkInvoiceTypeCredit:;
       end;
   end;
   end;
+  
+  AddPositionsToRows(IVp);//Edit----------------------Dima  19.01.2016
+  
   res = IVVcRecordCheckRows(IVp,IV2p,CUr,ORr,Ob,MSb,ARAccb,check,lightFlag,stat,cash);
   if (res!=0) then begin
     res = -1; 
