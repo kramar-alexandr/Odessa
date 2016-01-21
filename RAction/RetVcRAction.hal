@@ -75,6 +75,7 @@ external function Boolean Date2Test(string,Date,string,Integer);
 external function Boolean SerNrTestRetVc(LongInt,Date,var Boolean);
 external function LongInt GetCurUserLastNr(string);
 remote procedure MyCreateCreditPayment(record IVVc); //Edit***************************Sasha2,15:20 18.02.2015
+external updating procedure UnOk_RetVc(var record RetVc);//Edit----------------------Dima  21.01.2016
 
 function Integer ValidateBulkSerialNoRow(record SerNrTrackBlock SNrb,record RetVc Retr,row RetVc Retrw,Integer currow,var string gotofield,var Integer gotorow)
 begin
@@ -1353,9 +1354,42 @@ BEGIN
       end;
     end;
   end;
+  
+  if ((Retr.OKFlag==0) and (Ret2r.OKFlag!=0)) then begin
+  		UnOk_RetVc(Retr);
+  end;  
+  
   RetVcRecordUpdate = res;
   RETURN;
 END;
+
+
+//ORrw.Shipd1 and ORrw.Shipd2 don't update by themselves, so :
+global updating procedure SetBackShipQtyToORVc(record RetVc Retr)		//Edit----------------------Dima  21.01.2016
+begin
+	record ORVc ORr;
+	row ORVc ORrw;
+	row RetVc Retrw;
+	integer i,rwcnt;
+	
+	if (nonblank(Retr.OrdNr) and nonblank(Retr.SHNr)) then begin
+		ORr.SerNr = Retr.OrdNr;
+		if (ReadFirstMain(ORr,i,true)) then begin
+			rwcnt = MatRowCnt(Retr);
+			For(i=0;i<rwcnt;i=i+1) begin
+				MatRowGet(Retr,i,Retrw);
+				MatRowGet(ORr,Retrw.OrdRow,ORrw);
+				ORrw.Quant = ORrw.Quant + Retrw.Quant;
+				ORrw.Shipd1 = ORrw.Shipd1 + Retrw.Quant;
+				ORrw.Shipd2 = ORrw.Shipd2 + Retrw.Quant;
+				MatRowPut(ORr,Retrw.OrdRow,ORrw);
+			end;
+			RecordStore(ORr,true);
+		end;
+	end;
+  
+end;
+
 
 global
 updating procedure UnOKCustomerReturn(record RetVc Retr,record RetVc Ret2r,Boolean deltrf)
@@ -1371,6 +1405,7 @@ begin
   end;
   UpdateRecalcStockNeeded(1);
   StoreUnOKHistory("RetVc",Retr.SerNr,CurrentDate,CurrentTime,CurrentUser);    
+  SetBackShipQtyToORVc(Retr);//Edit----------------------Dima  21.01.2016
   if (deltrf) then begin
     DeleteTransaction(Retr.SerNr,RetYc);
   end;

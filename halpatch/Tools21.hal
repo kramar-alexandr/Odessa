@@ -4,6 +4,7 @@ external procedure GetFullCurncyRate (var string,Date,var val,var val,var val,va
 external function Integer PMCheckType(string,var string,var string);
 external function longint CheckUnOKStockMov(record StockMovVc, boolean);//Edit----------------------Dima  10.11.2015
 external function boolean CheckUnOkIVVc(record IVVc);//Edit----------------------Dima  30.11.2015
+external function longint CheckUnOkRetVc(record RetVc);//Edit----------------------Dima  21.01.2016
 
 global
 function Boolean CheckCurncy(string paymode,string curncy)
@@ -1038,25 +1039,23 @@ begin
   Integer res;
   record MainStockBlock MSb;
 
-  res = 0;
-  BlockLoad(MSb);
-  if (nonblankdate(MSb.StockCorectAfter)) then begin
-    if (Retp.TransDate<MSb.StockCorectAfter) then begin
-      res = 20884;
-      goto LIsUnOKAllowed_RetVc;
-    end;
-  end else begin
-    res = 20884;
-    goto LIsUnOKAllowed_RetVc;
-  end;
   if (nonblank(Retp.Hash)) then begin
     res = 20650;
     goto LIsUnOKAllowed_RetVc;
   end;
+
+  if (UserCanAction("UnOKAll",false)) then begin //allow unOk stock Documents //Edit----------------------Dima  21.01.2016
+		res = CheckUnOkRetVc(Retp);
+  end else begin
+    res = 20884;
+    goto LIsUnOKAllowed_RetVc;
+  end;
+  
 LIsUnOKAllowed_RetVc:;  
   IsUnOKAllowed_RetVc = res;
   return;
 end;
+
 
 global
 function Integer IsUnOKAllowed_RetPUVc(record RetPUVc RetPUp)
