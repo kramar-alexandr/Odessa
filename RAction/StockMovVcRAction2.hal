@@ -456,7 +456,7 @@ BEGIN
   end else begin
     quant = StockMovrw.Quant;
   end;
-  if (LocFrRec.RequirePos!=0) then begin
+  if (LocFrRec.RequirePos!=0 and currentuser!="SAUNOK") then begin// Edit ************************** Thursday, 21 January 2016 09:59:09
     if (blank(frpos)) then begin
 	 if (SM2p.OrdFlag==0) or (SM2p.SentOKFlag==0) then begin
 	  error = 1854;

@@ -74,7 +74,7 @@ BEGIN
   if (blank(topos)) then begin
     topos = SMp.ToPos;
   end;
-  if (LocToRec.RequirePos!=0) then begin
+  if (LocToRec.RequirePos!=0 and currentuser!="SAUNOK") then begin// Edit ************************** Thursday, 21 January 2016 09:57:08
     if (blank(topos)) then begin
       error = 1854;
       errorstr = topos;
@@ -315,7 +315,7 @@ BEGIN
           prev = prev + quant;
           //stockreservq is got from StockReservVc                    
           //curDocReserv  - from current document SM
-          if (ISr.Instock<(prev+stockreservq)) then begin
+          if (ISr.Instock<(prev+stockreservq) and currentuser!="SAUNOK") then begin// Edit ************************** Thursday, 21 January 2016 09:52:17
             if (sentquantf) then begin
               error = 1247;
               errorstr = "";
@@ -330,7 +330,7 @@ BEGIN
             res = 1247;
             goto LCheckStockMovRow;
           end;
-          if (SMp.MoveIncludingReserve==0) then begin		//Edit----------------------Dima  18.06.2015
+          if (SMp.MoveIncludingReserve==0 and currentuser!="SAUNOK") then begin		//Edit----------------------Dima  18.06.2015
           	stockreservq = stockreservq + ISr.RsrvQty - curDocReserv;		//Edit----------------------Dima  09.07.2015		
           	if (ISr.Instock<(prev+stockreservq)) then begin
           	  if (sentquantf) then begin
@@ -546,7 +546,7 @@ BEGIN		//Edit----------------------Dima  18.06.2015
             FindStockValueInclStockReserv(-1,StockMovrw.ArtCode,StockMovrw.SerialNr,frlocation,ISr,stockreservq);
           end;
           prev = prev + quant;
-          if (ISr.Instock<(prev+stockreservq)) then begin
+          if (ISr.Instock<(prev+stockreservq) and currentuser!="SAUNOK") then begin// Edit ************************** Thursday, 21 January 2016 09:52:34
               error = 1247;
               errorstr = "";
               errorrownr = rownr;
@@ -554,7 +554,7 @@ BEGIN		//Edit----------------------Dima  18.06.2015
  		          res = 1247;
  		          goto LCheckStockMovRowWhenOrdered;
           end;
-          if (SMp.MoveIncludingReserve==0) then begin
+          if (SMp.MoveIncludingReserve==0 and currentuser!="SAUNOK") then begin
           	stockreservq = stockreservq + ISr.RsrvQty-curDocReserv;		
           	if (ISr.Instock<(prev+stockreservq)) then begin
           	    error = 31070;

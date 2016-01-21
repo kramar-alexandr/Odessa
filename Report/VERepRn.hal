@@ -451,7 +451,9 @@ RecordNew(ISr);
 					OrdQty = OrdQty + OrdQty0;
 					POQty = POQty + POQty0;
 					POUnOkQty = POUnOkQty + POUnOkQty0;
-	
+					
+					ClearVector(LocBalValues);
+					ClearVector(PosBalValues);
 					LookupInHist(INr.Code, RepSpec.sStartDate, RepSpec.sEndDate,locations[i],sold0,strRest0,gotval0,curRest0,TRWH,retPU,SDqty0,stin,stout,saleopt0,saleroz0,LocBalValues,PosBalValues);
 					sold[i] = sold[i] + sold0;
 					soldall = soldall + sold0;
