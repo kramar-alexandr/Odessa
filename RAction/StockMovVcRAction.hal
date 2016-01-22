@@ -644,7 +644,16 @@ BEGIN
     if (stat==updatemode) then begin
       if (SM2p.SentOKFlag==1) then begin unoksent = true; end;
     end;
-  end;  
+  end; 
+  
+  if (SMp.OrdFlag==0 and (SMp.OKFlag!=0 or SMp.SentOKFlag!=0)) then begin //Edit***************************Sasha2,10:47 22.01.2016 {
+    error = 1854;
+    errorstr = ". \"" & USetStr(15102) & "\"";
+    rownr = -1;
+    fieldstr = "OrdFlag";          
+    res = -1; 
+    goto LCheckStockMovRecord;
+  end; //Edit***************************Sasha2,10:47 22.01.2016 }
 
 /* **********
   if (unokf) then begin
