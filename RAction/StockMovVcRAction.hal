@@ -483,6 +483,7 @@ END;
 
 
 
+
 //The function checks OrdQuant column. It is cut version of CheckStockMovRow
 function Integer CheckStockMovRowWhenOrdered(record StockMovVc SMp,row StockMovVc StockMovrw,record INVc INr,                                  
                                   record MainStockBlock MSb,record SerNrTrackBlock SNrb,Integer rownr,
@@ -500,8 +501,9 @@ BEGIN		//Edit----------------------Dima  18.06.2015
   string 255 objstr,errstr;
   Integer j;
   val quant;
-  record LocationVc ToLocr;
+  record LocationVc Locr;
   val serqty;
+  val instock;
   string 255 serialnr,errofield;
   
 
@@ -522,7 +524,9 @@ BEGIN		//Edit----------------------Dima  18.06.2015
       fieldstr = "OrdQuant";            
     	res = 1058;
     	goto LCheckStockMovRowWhenOrdered;
-  end;    
+  end; 
+  Locr.Code = SMp.FrLocation;
+  ReadFirstMain(Locr,1,true);   
 
 
   if (check!=0 and SMp.Reserved==0) then begin
@@ -535,8 +539,17 @@ BEGIN		//Edit----------------------Dima  18.06.2015
             if ((StockMovrw.ArtCode==StockMov2rw.ArtCode) and ((StockMovrw.SerialNr==StockMov2rw.SerialNr) and (SNrb.BulkSerialNos==0))) then begin
             	prev = prev + StockMov2rw.OrdQuant;
             end;
-          end; 
-          
+          end;
+          if (Locr.RequirePos!=0) then begin		//Edit----------------------Dima  22.01.2016
+          	PISr.ArtCode = StockMovrw.ArtCode;
+          	PISr.Position = SMp.FrPos;
+          	PISr.Location = Locr.Code;
+          	if (ReadFirstMain(PISr,3,true)) then begin 
+          		instock = PISr.Instock;
+          	end;
+          end else begin
+						instock = ISr.Instock;
+					end;          
                    
           if (SNrb.BulkSerialNos!=0) then begin
           	//stockreservq is reserv from special register (not ItemStatus)
@@ -546,12 +559,16 @@ BEGIN		//Edit----------------------Dima  18.06.2015
             FindStockValueInclStockReserv(-1,StockMovrw.ArtCode,StockMovrw.SerialNr,frlocation,ISr,stockreservq);
           end;
           prev = prev + quant;
-          if (ISr.Instock<(prev+stockreservq) and currentuser!="SAUNOK") then begin// Edit ************************** Thursday, 21 January 2016 09:52:34
-              error = 1247;
+          if (instock<(prev+stockreservq) and currentuser!="SAUNOK") then begin// Edit ************************** Thursday, 21 January 2016 09:52:34              
               errorstr = "";
               errorrownr = rownr;
               fieldstr = "OrdQuant";                  
  		          res = 1247;
+ 		          if (Locr.RequirePos==0) then begin
+ 		          	error = 1247; //More than in stock
+ 		          end else begin
+								error = 31136;//More than in position	
+							end;
  		          goto LCheckStockMovRowWhenOrdered;
           end;
           if (SMp.MoveIncludingReserve==0 and currentuser!="SAUNOK") then begin

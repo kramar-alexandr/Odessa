@@ -229,6 +229,7 @@ begin
    
    SString(31134," стр.");
    SString(31135,"Остатки на местах");
+   SString(31136,"Товара в таком количестве на месте нет");
  
   
   Maintenance("Экспорт склада CSV",ExportStockCSVClass,ExportStockCSVMn,modSY);
