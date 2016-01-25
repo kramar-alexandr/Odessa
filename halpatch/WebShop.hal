@@ -136,7 +136,18 @@ begin
 		IS3r.Code = INr.Code;
 		IS3r.Location = loc3;
 		if((readfirstmain(ISr,2,true) and (ISr.Instock-ISr.OrddOut)>0) or (readfirstmain(IS2r,2,true) and (IS2r.Instock-IS2r.OrddOut)>0) or (readfirstmain(IS3r,2,true) and (IS3r.Instock-IS3r.OrddOut)>0)) then begin dop_ostatok = dop_ostatok + 1; end;
-		realqty = realqty + ISr.Instock-ISr.OrddOut + IS2r.Instock-IS2r.OrddOut + IS3r.Instock-IS3r.OrddOut;
+		
+		if((ISr.Instock-ISr.OrddOut)>0)then begin
+			realqty = realqty +  ISr.Instock-ISr.OrddOut;
+		end;
+		if((IS2r.Instock-IS2r.OrddOut)>0)then begin
+			realqty = realqty +  IS2r.Instock-IS2r.OrddOut;
+		end;
+		if((IS3r.Instock-IS3r.OrddOut)>0)then begin
+			realqty = realqty +  IS3r.Instock-IS3r.OrddOut;
+		end;
+		
+		//realqty = realqty + ISr.Instock-ISr.OrddOut + IS2r.Instock-IS2r.OrddOut + IS3r.Instock-IS3r.OrddOut;
 		
 		ISr.Code = INr.Code;
 		ISr.Location = loc4;	
@@ -155,7 +166,15 @@ begin
 		IS2r.Location = loc5;
 		
 		if((readfirstmain(ISr,2,true) and (ISr.Instock-ISr.OrddOut)>0) or (readfirstmain(IS2r,2,true) and (IS2r.Instock-IS2r.OrddOut)>0)) then begin dop_ostatok = dop_ostatok + 2; end;
-		realqty = realqty + ISr.Instock-ISr.OrddOut + IS2r.Instock-IS2r.OrddOut;
+		
+		if((ISr.Instock-ISr.OrddOut)>0)then begin
+			realqty = realqty + ISr.Instock-ISr.OrddOut;
+		end;
+		if((IS2r.Instock-IS2r.OrddOut)>0)then begin
+			realqty = realqty + IS2r.Instock-IS2r.OrddOut;
+		end;
+		
+		//realqty = realqty + ISr.Instock-ISr.OrddOut + IS2r.Instock-IS2r.OrddOut;
 		loc5 = loc5t;
 		
 		if (dop_ostatok>0) then begin	

@@ -296,6 +296,7 @@ BEGIN
   record ItemStatusVc ISr;// Edit ************************** Monday, 23 June 2014 16:55:39
   val instock,inord,inthisord;// Edit ************************** Monday, 23 June 2014 17:04:06
 	record ORVc ORoldr;// Edit ************************** Monday, 23 June 2014 17:04:07
+	val remqty;
 	
   MatRowGet(ORr,rownr,ORrw);
   location = ORrw.Location;
@@ -329,8 +330,12 @@ BEGIN
   	end;
   end;
   //messagebox(0,"In Stock " & instock & "  in open orders " & inord & " in this order " & inthisord);
-  if(ORrw.Quant>instock-inord+inthisord)then begin
-  	messagebox(0,USetStr(31000) & " " & instock & " " & USetStr(31001) & " " & inord & " " & USetStr(31002) & " " & instock-inord+inthisord);
+  remqty = instock-inord+inthisord;
+  if(remqty<0)then begin
+  	remqty = 0;
+  end;
+  if(ORrw.Quant>remqty)then begin
+  	messagebox(0,USetStr(31000) & " " & instock & " " & USetStr(31001) & " " & inord & " " & USetStr(31002) & " " & remqty);
   end;
 	// Edit End ---------------------------------------------- Edit End
 	
