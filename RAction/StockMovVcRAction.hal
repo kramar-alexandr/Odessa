@@ -540,6 +540,16 @@ BEGIN		//Edit----------------------Dima  18.06.2015
             	prev = prev + StockMov2rw.OrdQuant;
             end;
           end;
+                
+                   
+          if (SNrb.BulkSerialNos!=0) then begin
+          	//stockreservq is reserv from special register (not ItemStatus)
+          	//curDocReserv is reserv from current document SM
+            FindStockValueInclStockReserv(-1,StockMovrw.ArtCode,"",frlocation,ISr,stockreservq);
+          end else begin
+            FindStockValueInclStockReserv(-1,StockMovrw.ArtCode,StockMovrw.SerialNr,frlocation,ISr,stockreservq);
+          end;
+          
           if (Locr.RequirePos!=0) then begin		//Edit----------------------Dima  22.01.2016
           	PISr.ArtCode = StockMovrw.ArtCode;
           	PISr.Position = SMp.FrPos;
@@ -549,15 +559,8 @@ BEGIN		//Edit----------------------Dima  18.06.2015
           	end;
           end else begin
 						instock = ISr.Instock;
-					end;          
-                   
-          if (SNrb.BulkSerialNos!=0) then begin
-          	//stockreservq is reserv from special register (not ItemStatus)
-          	//curDocReserv is reserv from current document SM
-            FindStockValueInclStockReserv(-1,StockMovrw.ArtCode,"",frlocation,ISr,stockreservq);
-          end else begin
-            FindStockValueInclStockReserv(-1,StockMovrw.ArtCode,StockMovrw.SerialNr,frlocation,ISr,stockreservq);
-          end;
+					end;    
+          
           prev = prev + quant;
           if (instock<(prev+stockreservq) and currentuser!="SAUNOK") then begin// Edit ************************** Thursday, 21 January 2016 09:52:34              
               errorstr = "";
