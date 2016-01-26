@@ -4253,11 +4253,11 @@ end else begin
     switch (LMb.POSButtonsPosition) begin
       case kPOSButtonsPositionLeft:
         CheckBox(50,-72,0,"",FiscalFlag); //Edit***************************Sasha2,13:44 14.07.2015
-        CheckBox(50,-150,0,"Разрешить продавать все товары",AllowSaleAllGoods);//Edit----------------------Dima  26.01.2016
+        CheckBox(50,-100,0,"Все товары",AllowSaleAllGoods);//Edit----------------------Dima  26.01.2016
         SoftEditField(110,-22,200,"Товар/Команда"  ,Normal ,"ivcashcommand",false,IN1SClass,M4Str,255);//Edit by Victor 29.10.14
       case kPOSButtonsPositionRight:
         CheckBox(-310,-72,0,"",FiscalFlag); //Edit***************************Sasha2,13:44 14.07.2015
-        CheckBox(-310,-150,0,"Разрешить продавать все товары",AllowSaleAllGoods);//Edit----------------------Dima  26.01.2016
+        CheckBox(-310,-100,0,"Все товары",AllowSaleAllGoods);//Edit----------------------Dima  26.01.2016
         SoftEditField(-260,-22,200,"Товар/Команда"  ,Normal ,"ivcashcommand",false,IN1SClass,M4Str,255);//Edit by Victor 29.10.14
     end;
     SoftEditField(2000,-22,200,""  ,Normal ,"ivcashcommandlastitemsernrf",false,0,M4Str,255);
