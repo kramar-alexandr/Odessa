@@ -1460,3 +1460,64 @@ begin
 		end;
 	end;  
 end;
+
+
+
+
+global updating function boolean CancelLogisticsOrderFromStocMove(var record  ORVc ORr, integer rownr)	//Edit----------------------Dima  25.01.2016
+begin
+	row ORVc ORrw;
+	record StockMovVc SMr,oldSMr;
+	row StockMovVc SMrw;
+	val processingQty,prevQty;
+	boolean TrHs,res;
+	integer i,rwcnt;
+	
+	MatRowGet(ORr,rownr,ORrw);
+	prevQty = ORrw.ProcessingQuant;
+	SMr.ToLocation = ORr.Location;
+	SMr.OKFlag = 0;
+	TrHs = true;
+	
+	While(LoopBackKey("ToLocOK",SMr,2,TrHs))  begin
+		if (SMr.ToLocation!=ORr.Location) then begin TrHs = false; end;
+		
+		if (TrHs) then begin
+			rwcnt = MatRowCnt(SMr);
+			for(i=0;i<rwcnt;i=i+1) begin
+				MatRowGet(SMr,i,SMrw);
+				if (SMrw.ORRowUID==ORrw.UID and SMrw.ArtCode==ORrw.ArtCode and SMrw.ORSerial==ORr.SerNr) then begin
+					RecordCopy(oldSMr,SMr);
+					processingQty = SMrw.OrderProcessing;
+					
+					SMrw.OrderProcessing = BlankVal;
+					SMrw.ORSerial = -1;
+					SMrw.ORRowUID = BlankVal;
+					MatRowPut(SMr,i,SMrw);
+					i = rwcnt;
+					
+					if (RecordStore(SMr,true)) then begin	
+						ORrw.ProcessingQuant = ORrw.ProcessingQuant - processingQty;
+						ORrw.OrderQuant = ORrw.OrderQuant - processingQty;
+						if (ORrw.ProcessingQuant==0) then begin TrHs = false; end;		//all stock movements were found
+						LogText(0,ORr.SerNr & ": cancel logistics order for " & ORrw.ArtCode & "   SMove #" & SMr.SerNr);
+					end;
+					
+				end;
+			end;
+		end;	
+	end;	
+	
+	if (prevQty!=ORrw.ProcessingQuant) then begin
+		MatRowPut(ORr,rownr,ORrw);
+	end; 
+	if (ORrw.ProcessingQuant==0) then begin
+		res = true;
+	end else begin
+		res = false;
+	end;	
+	 
+	CancelLogisticsOrderFromStocMove = res; 
+	return;
+end;
+

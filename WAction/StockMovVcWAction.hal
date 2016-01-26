@@ -769,6 +769,9 @@ BEGIN
   record StockMovVc StockMov2r;
   row StockMovVc StockMovrw;
   Integer orwcnt,rwcnt;
+  record LogisticsBlock Logisticsb;	//Edit----------------------Dima  25.01.2016
+  
+  BlockLoad(Logisticsb);  
  
   res = true;
   GetWindowRecord(wn,StockMovr);    
@@ -895,6 +898,15 @@ BEGIN
   end;
   
      //Edit-------------------Vitalii 10:43 25.12.2015
+     
+   if (res==true and Logisticsb.AllowChangeFields==0)  then begin		//Edit----------------------Dima  25.01.2016
+			switch (fieldname) begin
+				case "OrderProcessing" : res = false;
+				case "ORSerial" : res = false;
+				case "ORRowUID" : res = false;
+			end;
+	 end;     
+     
 	 if (currentuser=="SAUNOK") then begin
 		res = true;
 	 end;

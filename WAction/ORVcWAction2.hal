@@ -1228,6 +1228,9 @@ BEGIN
   row ORVc ORrw;
   record INVc INr;
   Integer nwn;
+  record LogisticsBlock Logisticsb;	//Edit----------------------Dima  25.01.2016
+  
+  BlockLoad(Logisticsb);
 
   nwn = FindWindow("SelectApproverWClass");
   if (nwn>0) then begin
@@ -1382,6 +1385,11 @@ BEGIN
       end;
     end;
   end;
+  
+  if (res == true and fieldname=="ProcessingQuant" and Logisticsb.AllowChangeFields==0) then begin
+  	res = false;
+  end;
+  
 LORDClassActiveEditField:;
   ORDClassActiveEditField = res;
   RETURN;

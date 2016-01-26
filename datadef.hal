@@ -4553,6 +4553,13 @@ RecordBegin(IPVc,-,"");
 	RecordField(PutPositionForPOS,M4Mark,0,0);  				//Edit----------------------Dima  12.01.2016  
   EndBlock;  
   
+  
+  
+  BlockBegin(LogisticsBlock,-,"LogisticsBlock");					//Edit----------------------Dima  25.01.2016
+  	RecordField(AllowChangeFields,M4Mark,0,0);
+  EndBlock;
+  
+  
 
 return;
 end;

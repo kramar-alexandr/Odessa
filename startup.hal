@@ -86,6 +86,7 @@ begin
   Setting("СМС",SMSstackLClass,modSO);  //Edit----------------------Dima  27.08.2015
   //Edit-------------------Vitalii 16:07 14.12.2015
   Setting("История цен",PLHistLClass,modDI);
+  Setting("Настройки логистики",LogisticsSettingsTClass,modSO);	//Edit----------------------Dima  25.01.2016
 
   
   //Report("Статистика НДС по аванс. отчетам",ExpVATRClass,ExpVATRn,0,modCL);

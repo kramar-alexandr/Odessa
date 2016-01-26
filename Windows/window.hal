@@ -2421,3 +2421,45 @@ begin
   EndWindow;
 
 end;
+
+
+window ConfirmCancelSMOrderIClass:1 		 //Edit----------------------Dima  30.12.2015
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+real h,v,vs;
+Integer i,mwn;
+record RcVc RepSpec;
+
+  WindowBegin("Отменить заказ на перемещение",ConfirmCancelSMOrderIClass,CGother,RcType);
+	DynamicWindow;
+  SetWRect(3,140,300,300);
+  UseView(RcVc);
+  Modality(2);
+  h=40;
+  
+  GetWindowRecord(CurWindow,RepSpec);
+  
+  //StaticText(h,10,"Связь будет разорвана",false);
+  StaticText(h,20,RepSpec.f1,false);
+  StaticText(h,40,RepSpec.f2,false);
+  
+	v=80;
+
+	HalPushButton(h,v,h+80,v+40,"ConfirmBreakReference","Ок");
+	HalPushButton(h+=150,v,h+80,v+40,"CancelBreakReference","Отменить");
+  EndWindow;
+end;
+
+
+window LogisticsSettingsTClass:1 //Edit----------------------Dima  25.01.2016
+ wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  real h,v,vs,f;
+  WindowBegin("Настройки логистики",LogisticsSettingsTClass,CGSbl,-);
+  SetBlid(LogisticsBlock);
+  SetWRect(74,80,480,150);
+
+  CheckBox(50,30,0,"Разрешать вручную изменять поля-ссылки для логистики",AllowChangeFields);
+
+  EndWindow;
+end;

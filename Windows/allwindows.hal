@@ -5107,8 +5107,12 @@ window ORDClass:2
   wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
 begin
   real h,h1,h2,h3,h4,t,v,vm,vs,h5,v1,v2,v3,flipnr,width;
-  string 255 label;
+  record LogisticsBlock Logisticsb;
+  string 255 label;  
+  integer editability;
+  
   WindowBegin("Счет клиенту",ORDClass,CGview,-);
+  BlockLoad(Logisticsb);//Edit----------------------Dima  25.01.2016
   SetWRect(20,80,900,460);
   Sizeable(-1,-1,0,0);
   UseView(ORVc);
@@ -5348,16 +5352,16 @@ begin
   if (StandardHansa==false) then begin
     MatCol(t,-145,"Место",0,Position,true,UsedPosSClass);
   end;
-  //MatCol(t,-90,"Источник",0,Source,true,SourceSClass);
-  MatColTL(t,-90,"ID",0,M4UVal,ViewOnly,0,UID,true,0);// Edit ************************** Wednesday, 23 December 2015 10:41:28
+  MatCol(t,-90,"Источник",0,Source,true,SourceSClass);
+  //MatColTL(t,-90,"ID",0,M4UVal,ViewOnly,0,UID,true,0);// Edit ************************** Wednesday, 23 December 2015 10:41:28
   MatCol(t=kInvoiceRowTypeStructuredItemComponent,144,"Описание",0,Spec,false,0);
   MatCol(t,-315,"Накладная",0,ShipNote,false,0);
   MatCol(t,-210,"Склад",0,Location,false,LocationSClass);
   if (StandardHansa==false) then begin
     MatCol(t,-145,"Место",0,Position,true,UsedPosSClass);
   end;
-  //MatCol(t,-90,"Источник",0,Source,true,SourceSClass);
-  MatColTL(t,-90,"ID",0,M4UVal,ViewOnly,0,UID,true,0);// Edit ************************** Wednesday, 23 December 2015 10:41:28
+  MatCol(t,-90,"Источник",0,Source,true,SourceSClass);
+ // MatColTL(t,-90,"ID",0,M4UVal,ViewOnly,0,UID,true,0);// Edit ************************** Wednesday, 23 December 2015 10:41:28
   if (StandardHansa==false) then begin
     Flip(flipnr); flipnr = flipnr + 1;
     MatCol(t=1,94,"Кол-во",0,Quant,true,0);
@@ -5414,10 +5418,19 @@ begin
   MatCol(t,94,"Описание",0,Spec,false,0);
   MatCol(t,-370,"Необходимо",0,NecessaryQuant,true,0);
   MatCol(t,-305,"Кол-во",0,Quant,true,0);
-  MatCol(t,-245,"Доступно",0,AvailableQuant,true,0);
-  MatCol(t,-185,"На складах",0,StockQuant,true,0);
-  MatCol(t,-120,"Заказано",0,OrderQuant,true,0);
-  MatColTL(t,-60,"В обработке",0,M4UVal,Normal,0,ProcessingQuant,true,0);
+  if (Logisticsb.AllowChangeFields!=0) then begin			//Edit----------------------Dima  25.01.2016
+  	editability = Normal;
+  end else begin	
+  	editability = ViewOnly;
+  end;
+  //MatCol(t,-245,"Доступно",0,AvailableQuant,true,0);
+  //MatCol(t,-185,"На складах",0,StockQuant,true,0);
+  //MatCol(t,-120,"Заказано",0,OrderQuant,true,0);
+  
+  MatColTL(t,-245,"Доступно",0,M4UVal,editability,0,AvailableQuant,true,0);
+  MatColTL(t,-185,"На складах",0,M4UVal,editability,0,StockQuant,true,0);
+  MatCol(t,-120,"Заказано",0,OrderQuant,true,0);  
+  MatColTL(t,-60,"В обработке",0,M4UVal,editability,0,ProcessingQuant,true,0);	//Edit----------------------Dima  25.01.2016
  // MatColTL(t,-50,"UID",0,M4UVal,ViewOnly,0,UID,true,0);
   InsertRowTest;
   DeleteRowTest;
@@ -6469,11 +6482,22 @@ begin
   real h,h1,h2,h3,h4,v,vm,vs;
   Integer tilenr,f,flipnr,t;
   integer sQuant,sSentQuant;
+  integer editability;
+  record LogisticsBlock Logisticsb;	//Edit----------------------Dima  25.01.2016
+  
+  BlockLoad(Logisticsb);
+  
+  if (Logisticsb.AllowChangeFields!=0) then begin
+		editability = Normal;
+	end else begin
+		editability = ViewOnly;
+	end;
 
   sSentQuant = 3;	//Edit----------------------Dima  23.02.2015
   sQuant = 2;//Выделение для поиска и вставки
 
   WindowBegin("Перемещение складированных товаров",StockMovDClass,CGview,-);
+  DynamicWindow;
   if (HasJewelleryInterface) then begin
     SetWRect(20,80,850,400);
   end else begin
@@ -6743,15 +6767,15 @@ t=1;    //Edit----------------------Dima  25.02.2015
 t=0;
     MatCol(t,32,"Товар",0,ArtCode,false,INSClass);
     MatCol(t,86,"Наименование",0,Spec,false,0);
-    MatCol(t,-230,"В обработке",0,OrderProcessing,false,0);
-    MatColTL(t,-130,"№ счета",0,M4Long,Normal,0,ORSerial,false,0);
-    //MatColTL(t,-90,"UID строки",0,-1,ViewOnly,0,ORRowUID,false,0);
+    MatColTL(t,-230,"В обработке",0,M4UVal,editability,0,OrderProcessing,false,0);
+    MatColTL(t,-130,"№ счета",0,M4Long,editability,0,ORSerial,false,0);
+    //MatColTL(t,-40,"UID",0,M4UVal,editability,0,ORRowUID,false,0);
 t=1;
     MatCol(t,32,"Товар",0,ArtCode,false,INSClass);
     MatCol(t,86,"Наименование",0,Spec,false,0);
-    MatCol(t,-230,"В обработке",0,OrderProcessing,false,0);
-    MatColTL(t,-130,"№ счета",0,M4Long,Normal,0,ORSerial,false,0);
-    MatColTL(t,-40,"UID",0,M4UVal,ViewOnly,0,ORRowUID,false,0);
+    MatColTL(t,-230,"В обработке",0,M4UVal,editability,0,OrderProcessing,false,0);
+    MatColTL(t,-130,"№ счета",0,M4Long,editability,0,ORSerial,false,0);
+    //MatColTL(t,-40,"UID",0,M4UVal,editability,0,ORRowUID,false,0);
 
   DeleteRowTest;
   EndMatrix;

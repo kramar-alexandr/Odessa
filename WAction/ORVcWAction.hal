@@ -72,6 +72,7 @@ remote procedure GetAvailableItems(var record ORVc);
 remote updating function longint AddSMStoStack(string, string, string,string,string,longint,string,date,time);//Edit----------------------Dima  28.08.2015
 remote updating function string 255  CheckAndSendSMS(longint);	//Edit----------------------Dima  28.08.2015
 remote function LongInt HoursDiffWithoutRestDays(Date,Time,Date,Time);
+remote updating function boolean CancelLogisticsOrderFromStocMove(var record  ORVc, integer);//Edit----------------------Dima  25.01.2016
 
 
 global //Edit***************************Sasha2,15:51 04.02.2015 {
@@ -2231,6 +2232,93 @@ begin
 
   return;
 end; //Edit***************************Sasha2,15:22 12.08.2015 }
+
+
+
+
+global procedure CancelStockMoveOrderDsm()	//Edit----------------------Dima  30.12.2015
+begin
+	record ORVc ORr;
+	row ORVc ORrw;
+	record RcVc RepSpec;
+	integer wn,nwn,rownr,rownrReal,rwmax;
+	string 200 message1,message2;
+	
+	SetLangMode(LangRussian,"RUS",0);
+
+  wn = CurWindow;
+  GetWindowRecord(wn,ORr);
+  
+  if (WindowState(wn)!=Rs_normal) then begin
+  	MessageBox(0,"Сохраните документ");
+  	goto LCancelStockMoveOrderDsm;
+  end;
+  
+  rownr = GetWindowCurRow(wn);
+  rownrReal = rownr + 1;
+  
+  if (rownr>=0) then begin
+		MatRowGet(ORr,rownr,ORrw);
+	end;  
+
+  if (rownr<0 or blank(ORrw.ArtCode) or ORrw.stp!= kInvoiceRowTypeNormal) then begin
+		MessageBox(0,"Выберите строку, для которой нужно отменить заказ на перемещение");
+	end else begin
+		message1 = "Для строки " & rownrReal & ", код товара " & ORrw.ArtCode & ",";
+		message2 = "будет отменен заказ на перемещение.";	
+ 		RepSpec.f1 = message1;
+ 		RepSpec.f2 = message2;
+ 		RepSpec.flags[1] = rownr;
+  	nwn = OpenWindow("ConfirmCancelSMOrderIClass",1,wn,"","",RepSpec);				
+	end;
+
+	LCancelStockMoveOrderDsm:;
+end;
+
+
+
+global procedure CancelBreakReference()		//Edit----------------------Dima  25.01.2016
+begin
+	integer wn;
+	
+	wn = CurWindow;
+	
+	if (GetWindowClass(wn)=="ConfirmCancelSMOrderIClass") then begin
+			CloseWindow(wn); 	
+	end;	  
+end;
+
+
+global updating procedure ConfirmBreakReference()	//Edit----------------------Dima  25.01.2016
+begin
+	integer wn,mwn;
+	record RcVc RepSpec;
+	record ORVc ORr;
+	boolean res;
+	
+	
+	wn = CurWindow;
+	GetWindowRecord(wn,RepSpec);	
+  mwn = MotherWindow(wn);
+  GetWindowRecord(mwn,ORr);
+  
+	
+	res = CancelLogisticsOrderFromStocMove(ORr,RepSpec.flags[1]);
+
+	PutWindowRecord(mwn,ORr);
+	WindowDoOK(mwn,0);
+	
+	CloseWindow(wn);
+	
+	if (res == true) then begin
+		MessageBox(0,"Заказ на перемещение был успешно отменен");
+	end 	else begin
+		MessageBox(0,"Не удалось полностью отменить заказ на перемещение");
+	end;
+		
+ 	LConfirmBreakReference:;
+end;
+
 
 
 global
