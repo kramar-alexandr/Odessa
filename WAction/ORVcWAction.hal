@@ -1446,29 +1446,22 @@ begin
 end;
 
 
-function Boolean ORDClassOrderQuantEFAfter(Integer wn,Integer fn,Integer rownr,Integer changedf)//Edit----------------------Dima  20.08.2015
+function Boolean ORDClassOrderQuantEFAfter(Integer wn,Integer fn,Integer rownr,Integer changedf)//Edit----------------------Dima  26.01.2016
 begin   
   record ORVc ORr,ORrBefore;
   row ORVc ORrw,ORrw0;
   val diff;
-/*
-doesn't work correct
+
   if (changedf!=0) then begin 
     GetWindowRecord(wn,ORr);
-    GetPrevWindowRecord(wn,ORrBefore);
     MatRowGet(ORr,rownr,ORrw);
-    MatRowGet(ORrBefore,rownr,ORrw0);    
+  
+    if (ORrw.OrderQuant < ORrw.ProcessingQuant) then begin
+    	MessageBox(31137,"");
+    end;	
     
-    MessageBox(0,ORrw0.OrderQuant & "  &  " & ORrw.OrderQuant);
-    
-  	diff = ORrw.OrderQuant - ORrw0.OrderQuant;
-		if ((ORrw.Quant-diff)>=0) then begin
-			ORrw.Quant = ORrw.Quant-diff;
-    end;
-    MatRowPut(ORr,rownr,ORrw);      
-    PutWindowRecord(wn,ORr);
   end;
- */ 
+
   ORDClassOrderQuantEFAfter = true;
   return;
 end;
@@ -2264,12 +2257,16 @@ begin
   if (rownr<0 or blank(ORrw.ArtCode) or ORrw.stp!= kInvoiceRowTypeNormal) then begin
 		MessageBox(0,"Выберите строку, для которой нужно отменить заказ на перемещение");
 	end else begin
-		message1 = "Для строки " & rownrReal & ", код товара " & ORrw.ArtCode & ",";
-		message2 = "будет отменен заказ на перемещение.";	
- 		RepSpec.f1 = message1;
- 		RepSpec.f2 = message2;
- 		RepSpec.flags[1] = rownr;
-  	nwn = OpenWindow("ConfirmCancelSMOrderIClass",1,wn,"","",RepSpec);				
+		if (ORrw.OrderQuant>0) then begin
+			message1 = "Для строки " & rownrReal & ", код товара " & ORrw.ArtCode & ",";
+			message2 = "будет отменен заказ на перемещение.";	
+ 			RepSpec.f1 = message1;
+ 			RepSpec.f2 = message2;
+ 			RepSpec.flags[1] = rownr;
+  		nwn = OpenWindow("ConfirmCancelSMOrderIClass",1,wn,"","",RepSpec);
+  	end else begin	
+  		MessageBox(0,"Для выбранной позиции не указан заказ на перемещение");
+  	end;				
 	end;
 
 	LCancelStockMoveOrderDsm:;

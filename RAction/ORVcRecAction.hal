@@ -1307,6 +1307,11 @@ begin
               goto LORVcRecordCheck;
             end;
         end;
+        if (ORrw.OrderQuant < ORrw.ProcessingQuant) then begin	//Edit----------------------Dima  26.01.2016
+              RecordCheckError(31137,chr(10) & chr(10) & USetStr(31138),i,"OrderQuant");      
+              res = -1;
+              goto LORVcRecordCheck;
+        end;
     end;
 LORVcRecordRowCheck:;
   end;

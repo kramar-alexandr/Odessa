@@ -1474,7 +1474,7 @@ begin
 	integer i,rwcnt;
 	
 	MatRowGet(ORr,rownr,ORrw);
-	prevQty = ORrw.ProcessingQuant;
+	//prevQty = ORrw.ProcessingQuant;
 	SMr.ToLocation = ORr.Location;
 	SMr.OKFlag = 0;
 	TrHs = true;
@@ -1508,9 +1508,12 @@ begin
 		end;	
 	end;	
 	
-	if (prevQty!=ORrw.ProcessingQuant) then begin
-		MatRowPut(ORr,rownr,ORrw);
-	end; 
+	if (ORrw.ProcessingQuant==0 and ORrw.OrderQuant!=0) then begin
+		ORrw.OrderQuant=0;
+	end;	
+
+	MatRowPut(ORr,rownr,ORrw);
+
 	if (ORrw.ProcessingQuant==0) then begin
 		res = true;
 	end else begin
