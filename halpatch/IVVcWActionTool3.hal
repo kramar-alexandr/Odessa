@@ -1432,6 +1432,10 @@ begin
   string 255 curitemname,vatcode,salesacc,tax2code,location,taxtemplatecode;
   Boolean calcprice,dummyf;
   row LocationAccBlock LAbrw;
+  record CashierDefBlock CashierDefb;//Edit----------------------Dima  26.01.2016
+  record LocationVc Locr;
+  
+  BlockLoad(CashierDefb);
   
   if (rownr<0) then begin
     rwcnt = MatRowCnt(IVr);
@@ -1445,6 +1449,14 @@ begin
       if (IVr.InvType==kInvoiceTypeCredit or IVr.InvType==kInvoiceTypeCreditSpecialSales) then begin
         exportflag = exportflag + AddPortugueseType;
       end;
+      
+      IVr.Position = "";										//Edit----------------------Dima  26.01.2016
+  		if (CashierDefb.PutPositionForPOS != 0) then begin
+  			Locr.Code = IVr.Location;				
+  			if (ReadFirstMain(Locr,1,true)) then begin
+					IVr.Position = Locr.DefaultCashierPosCode;
+				end;
+			end;       
 /*
       GetItemPriceDiscount3(IVrw.ArtCode,IVrw.Quant,INr,IVr.CurncyCode,
                             IVr.FrRate,IVr.ToRateB1,IVr.ToRateB2,IVr.BaseRate1,IVr.BaseRate2,
