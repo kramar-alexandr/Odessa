@@ -64,6 +64,8 @@ external function Boolean GetItemPriceDiscount3(string,val,var record INVc,strin
                                                 var val,var string,var val,var string,var val,var string,Integer,var Boolean,Date,Time,
                                                 string,Boolean,var Boolean,string,var string,var val,string,string,var string);
 external function Boolean INVc_AllowSales(record INVc,var LongInt);
+external function boolean ItemHasClassification(record INVc,string);	//Edit----------------------Dima  26.01.2016
+
 
 global
 function Integer VATCalcRule(string VATCode)
@@ -404,6 +406,7 @@ BEGIN
   string 60 sz,msk,mskrep;
   string 200 varsubset;
   record AccVc Accr;
+  record UserVc User;
 
   pritemf = true;
   MatRowGet(IVr,rownr,IVrw);  
@@ -574,6 +577,22 @@ done below
       IVDchsum(IVr,rownr);
     end;
   end;
+  
+  if (IVr.AllowSaleAllGoods==0) then begin				//Edit----------------------Dima  26.01.2016
+  	User.Code = CurrentUser;
+  	ReadFirstMain(User,1,true);
+  	if (nonblank(User.AllowSalesForType)) then begin
+			if (ItemHasClassification(INr,User.AllowSalesForType)==false) then begin
+				warning = USetStr(31139) & ":  " & IVrw.ArtCode;
+			end;
+		end;
+  	if (nonblank(User.DisallowSalesForType)) then begin
+			if (ItemHasClassification(INr,User.DisallowSalesForType)==true) then begin
+				warning = USetStr(31139) & ":  " & IVrw.ArtCode;
+			end;
+		end;	
+  end;	
+  
   sernrf = INr.SerNrf;
   AddItemWithholdingTaxesRows_IVVc(IVr,rownr,INr);
   AddMultiBuyDiscountItems_IVVc(IVr);

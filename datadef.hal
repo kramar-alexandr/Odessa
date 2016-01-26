@@ -1136,6 +1136,8 @@ RecordBegin(INVc,-,"artikel5");
   RecordField(ExpiryDate,M4Date,0,0);
   RecordField(SortCode,M4Str,10,0);
   RecordField(CardNumber,M4Str,60,0);//Edit----------------------Dima  02.07.2015
+  RecordField(AllowSalesForType,M4Str,60,0);
+  RecordField(DisallowSalesForType,M4Str,60,0);//Edit----------------------Dima  26.01.2016
   ArrayBegin(Math,-,1);
   ArrayField(Code,M4Code,5,0);
   ArrayField(PRCode,M4Code,20,PRVc);
@@ -2042,6 +2044,7 @@ RecordBegin(INVc,-,"artikel5");
   DefineIVVcRecordType_Header(1);
   RecordField(OptUAHRate,M4Rate,0,0);	//Edit----------------------Dima  30.07.2015  
   RecordField(Position,M4Str,50,0);		//Edit----------------------Dima  11.01.2016
+  RecordField(AllowSaleAllGoods,M4Mark,0,0);//Edit----------------------Dima  26.01.2016
   DefineIVVcRecordType_Array;
   MainKeyBegin(SerNr,1);
   StoreInBaseKey;

@@ -489,6 +489,27 @@ LLastCreditedRowQty:;
   return; 
 end;
 
+
+global function boolean ItemHasClassification(record INVc INr,string classification)	//Edit----------------------Dima  26.01.2016
+begin
+	boolean res;
+	integer pos;
+	string 30 class;
+	
+	res = false;
+  pos = 0;
+
+  ExtractObj(INr.DispGroups,pos,class);
+  while(nonblank(class))begin
+		if (classification==class) then begin res = true; end;
+  	ExtractObj(INr.DispGroups,pos,class);
+  end;	
+
+ItemHasClassification = res;
+return;
+end;
+
+
 function Integer ValidateBulkSerialNoRow(record SerNrTrackBlock SNrb,record IVVc IVr,row IVVc IVrw,Integer currow,var string gotofield,var Integer gotorow)
 begin
   Integer res;
@@ -1534,6 +1555,24 @@ not needed any more
                 end;                                        
               end;
             end;
+            
+            if (IVp.AllowSaleAllGoods==0) then begin				//Edit----------------------Dima  26.01.2016
+            	if (nonblank(User.AllowSalesForType)) then begin
+								if (ItemHasClassification(INr,User.AllowSalesForType)==false) then begin
+              		RecordCheckError(31139,":  " & IVrw.ArtCode,i,"ArtCode");      
+              		res = -1;
+              		goto L99;
+								end;
+							end;
+            	if (nonblank(User.DisallowSalesForType)) then begin
+								if (ItemHasClassification(INr,User.DisallowSalesForType)==true) then begin
+              		RecordCheckError(31139,":  " & IVrw.ArtCode,i,"ArtCode");      
+              		res = -1;
+              		goto L99;
+								end;
+							end;	
+            end;	
+            
       case kInvoiceRowTypeDownpayment:
         if (lightFlag==false) then begin
           testf = false;
