@@ -1,4 +1,5 @@
 external function LongInt DateDiff(Date,Date);
+external procedure ExtractObj(string,var Integer,var string);
 
 SetLangMode(LangRussian,"RUS",0);
 
@@ -6,17 +7,22 @@ global procedure  ReservStstConsolidRn(record RcVc RepSpec)
 begin
 record ORVc ORr;
 row ORVc ORrw;
+record StockMovVc SMr;
+row StockMovVc SMrw;
 record ItemStatusVc ISr;
 string 255 client,location;
 boolean TrHs,testf,TrHs1;
-integer i,mtrw,mtrw1,j;
+integer i,mtrw,mtrw1,j,posobj;
 record RetVc Retr;
 row RetVc Retrw;
 integer quant,pos,listCnt;
 array string 255 codesList,namesList;
 vector Boolean itemInListF;
 vector val reservInOr,rsrvQty,orddOut,instock;
+vector string 255 ORsernrs,SMsernrs;
 date fromdate;
+string 10 sernrstr;
+string 255 objstr;
 
   client="";
   listCnt = 0;
@@ -51,6 +57,7 @@ date fromdate;
     OutString(pos+=50,0,USetStr(2765),false); //Stock
   endformat;
   
+  //ORVc
   ORr.Reserved = 1;
   //ORr.OrdDate = fromdate;
   TrHs = true;
@@ -92,6 +99,52 @@ date fromdate;
           quant = ORrw.Quant - ORrw.Shipd2;
           if(quant>0)then begin
             reservInOr[ORrw.ArtCode] = reservInOr[ORrw.ArtCode] + quant;
+            ORsernrs[ORrw.ArtCode] = ORsernrs[ORrw.ArtCode] & ORr.SerNr & ",";
+          end;
+        end;
+      end; 
+    end;    
+  end;
+  
+  //StockMovvc
+  TrHs = true;
+  while(loopMain(SMr,1,TrHs)) begin
+    testf = true;
+    if(SMr.Reserved==0)then begin testf = false; end;
+    if(NonBlank(location) and location!=SMr.FrLocation)then begin testf = false; end;
+    if(SMr.SentOKFlag!=0 or SMr.OKFlag!=0)then begin testf = false; end;
+    
+    if(testf)then begin
+      mtrw = matrowcnt(SMr);
+      For(i=0;i<mtrw;i=i+1) begin
+        Matrowget(SMr,i,SMrw);
+        if (NonBlank(SMrw.ArtCode)) then begin
+          if (itemInListF[SMrw.ArtCode]==false) then begin
+            codesList[listCnt] = SMrw.ArtCode;
+            namesList[listCnt] = SMrw.Spec;
+            listCnt = listCnt + 1;
+            ISr.Code = SMrw.ArtCode;
+            if (blank(location)) then begin
+              ISr.Location = ";;;";
+            end else begin
+              ISr.Location = location;
+            end;
+            if (ReadFirstMain(ISr,2,true)) then begin
+              rsrvQty[SMrw.ArtCode] = ISr.RsrvQty;
+              orddOut[SMrw.ArtCode] = ISr.OrddOut;
+              instock[SMrw.ArtCode] = ISr.Instock;
+            end else begin
+              rsrvQty[SMrw.ArtCode] = -1;
+              orddOut[SMrw.ArtCode] = -1;
+              instock[SMrw.ArtCode] = -1;
+            end;
+            itemInListF[SMrw.ArtCode] = true;
+          end;
+          
+          quant = SMrw.OrdQuant;
+          if(quant>0)then begin
+            reservInOr[SMrw.ArtCode] = reservInOr[SMrw.ArtCode] + quant;
+            SMsernrs[SMrw.ArtCode] = SMsernrs[SMrw.ArtCode] & SMr.SerNr & ",";
           end;
         end;
       end; 
@@ -102,7 +155,7 @@ date fromdate;
     if (Blank(reservInOr[codesList[i]])) then begin
       reservInOr[codesList[i]] = 0;
     end;
-    if (reservInOr[codesList[i]]!=rsrvQty[codesList[i]]) then begin
+    if (reservInOr[codesList[i]]!=rsrvQty[codesList[i]] or rsrvQty[codesList[i]]>instock[codesList[i]]) then begin
       StartFormat(15)
         pos = 0;
         if (Blank(client)) then begin
@@ -117,15 +170,43 @@ date fromdate;
         OutString(pos+=50,0,instock[codesList[i]],false); //In Stock (Status)
         OutString(pos+=50,0,rsrvQty[codesList[i]],false); //In reserv (Status)
         OutString(pos+=50,0,orddOut[codesList[i]],false); //Ordered (Status)
-        
         if(blank(location))then begin
           OutString(pos+=50,0,USetStr(12727),false); //All
         end else begin
           OutString(pos+=50,0,location,false); //Stock
         end;
       endformat;
+      //LogText(0,"ORsernrs[codesList[i]]: " & ORsernrs[codesList[i]]);
+      //LogText(0,"SMsernrs[codesList[i]]: " & SMsernrs[codesList[i]]);
+      if (NonBlank(ORsernrs[codesList[i]])) then begin
+        objstr = ORsernrs[codesList[i]];
+        posobj = 0;
+        ExtractObj(objstr,posobj,sernrstr);
+        while (nonblank(sernrstr)) begin
+          StartFormat(15)
+            pos = 0;
+            OutString(pos+=40,0,"",false);
+            OutString(pos+=40,0,USetStr(5123),false);
+            OutString(pos+=40,"DblORVc",sernrstr,false);
+          endformat;
+          ExtractObj(objstr,posobj,sernrstr);
+        end;
+      end;
+      if (NonBlank(SMsernrs[codesList[i]])) then begin
+        objstr = SMsernrs[codesList[i]];
+        posobj = 0;
+        ExtractObj(objstr,posobj,sernrstr);
+        while (nonblank(sernrstr)) begin
+          StartFormat(15)
+            pos = 0;
+            OutString(pos+=40,0,"",false);
+            OutString(pos+=40,0,USetStr(13103),false);
+            OutString(pos+=40,"DblStockMovVc",sernrstr,false);
+          endformat;
+          ExtractObj(objstr,posobj,sernrstr);
+        end;
+      end;
     end;
-    
   end;
   
   endjob;
