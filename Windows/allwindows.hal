@@ -9740,8 +9740,9 @@ end;
   EditField(h,v+=vs,-20,"Спецификация",Normal,Spec,false,0);
   EditField(h,v+=vs,-20,"Комментарий",Normal,Comment,false,0);
   EditField(h,v+=vs,200,"Реквизиты",Normal,CardNumber,false,0);//Edit----------------------Dima  02.07.2015
-  EditField(h3,v+=vs,120,"Продавать товары только с классификацией",Normal,AllowSalesForType,false,DISClass);
+  EditField(h3,v+=vs+10,120,"Продавать товары только с классификацией",Normal,AllowSalesForType,false,DISClass);
   EditField(h3,v+=vs,120,"Запретить продавать товары с классификацией",Normal,DisallowSalesForType,false,DISClass);	//Edit----------------------Dima  26.01.2016
+  CheckBox(h,v+=vs,0,"Разрешить продавать все товары",AllowSaleAllItems);			//Edit----------------------Dima  27.01.2016
 //  EditField(h,v+=vs,65,"Expense A/C",Normal,CostAcc,false,AccSClass);
   Tile(tilenr,50,false,tilenr,PersAcc);  tilenr = tilenr + 1;
   EditField(h,vm=(v=6),65,"Счёт",Normal,PersAcc,false,AccSClass);

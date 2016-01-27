@@ -492,6 +492,29 @@ LIVDClassOKFlagButtonAction:;
   RETURN;
 END;
 
+
+
+global
+function Boolean IVDClassAllowSaleAllGoodsButtonAction(Integer wn,Integer value)	//Edit----------------------Dima  27.01.2016
+BEGIN
+  Boolean res;
+  record UserVc User;
+    
+  res = false;
+  
+  User.Code = CurrentUser;
+  if (ReadFirstMain(User,1,true)) then begin
+		if (User.AllowSaleAllItems!=0) then begin
+			res = true;
+		end;
+	end;
+
+LIVDClassAllowSaleAllGoodsButtonAction:;  
+  IVDClassAllowSaleAllGoodsButtonAction = res;
+  RETURN;
+END;
+
+
 global
 procedure CalculateIVVcPoints(var record IVVc IVr)
 begin 
