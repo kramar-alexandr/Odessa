@@ -1120,6 +1120,8 @@ begin
     keys = 1;
   end;
   foundIN = true;
+  
+  
   while (LoopKey(ckey,INr,keys,foundIN)) begin
     if (foundIN) then begin
       if (nonblank(toin)) then  begin
@@ -1239,7 +1241,11 @@ begin
           end else begin
             if (RepSpec.TransStr!=IHr.Location) then begin testf = false; end;
           end;
-        end; 
+        end;
+        
+        if (nonblank(RepSpec.f11)) then begin		//Edit----------------------Dima  27.01.2016
+					if (RepSpec.f11!=IHr.Position or RepSpec.TransStr!=IHr.Location) then begin testf=false; end;
+				end;         
         if (RepSpec.flags[14]!=0) then begin
           if (IHr.StockAffectf==0) then begin 
             if (Left(IHr.FileName,3)!="Fut") then begin
@@ -1462,9 +1468,19 @@ begin
   val SumQIn,SumQOut,SumQFwd,SumCPIn,SumCPOut,SumCPFwd,SumQ2;
   val bal;
   val LocSumQIn,LocSumQOut,LocSumQFwd,LocSumCPIn,LocSumCPOut,LocSumCPFwd,LocSumQ2;
+  record POSVc POSr;//Edit----------------------Dima  27.01.2016
 
   frloc = FirstInRange(RepSpec.f6,20);
   toloc = LastInRange(RepSpec.f6,20);
+  
+  if (nonblank(RepSpec.f11)) then begin				//Edit----------------------Dima  27.01.2016
+		POSr.Code = RepSpec.f11;
+		if (ReadFirstMain(POSr,1,true)) then begin
+			frloc = POSr.Location;		//filter "by position" includes filter "by location"
+			toloc = POSr.Location;
+		end;
+	end;  
+  
   BlockLoad(MSb);
   BlockLoad(CAb);
   ItemHistHeader(RepSpec);

@@ -261,6 +261,12 @@ BEGIN
     Header(rw,tstr,1);
     rw = rw + 1;
   end;
+  if (nonblank(RepSpec.f11)) then begin		//Edit----------------------Dima  27.01.2016
+    tstr = USetStr(4998);
+    tstr = tstr & ": " & RepSpec.f11;
+    Header(rw,tstr,1);
+    rw = rw + 1;
+  end;  
   if (RepSpec.flags[14]!=0) then begin
     Header(rw,USetStr(11692),1);
     rw = rw + 1;

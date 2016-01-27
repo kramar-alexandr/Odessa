@@ -3895,7 +3895,7 @@ if (HasTouchScreenLook==false) then begin
     EditField(h2,v+=vs,80,"План. время приб.",Normal,PlanArrTime,false,PasteCurTime);
     EditField(h2,v+=vs,80,"Трансп. комп.",Normal,FreightCode,false,FreightCompanySClass);
     CheckBox(h3,v=vm,0,"Обновить склад",UpdStockFlag);
-    CheckBox(h3,v+=vs,0,"Разр. продавать все товары",AllowSaleAllGoods);//Edit----------------------Dima  26.01.2016
+    CheckBox(h3,v+=vs,0,"Все товары",AllowSaleAllGoods);//Edit----------------------Dima  26.01.2016
     EditField(h3,v+=vs,80,"Место",Normal,Position,true,POSSClass);
     EditField(h3,v+=vs,80,"НДС фрахта",Normal,FrVATCode,true,VATCodeSClass);
    // EditField(h3,v+=vs,80,"Код транс. Интр.",Normal,IntrastatTransCode,true,IntrastatTransCodeSClass);
@@ -10713,6 +10713,7 @@ begin
       EditFieldTL(h,v+=vs,150,"Классификация склада",M4List,Normal,200,f8,false,LocClSClass);
     end;
   end;
+  EditFieldTL(h,v+=vs,150,"Место",M4Code,Normal,21,f11,false,PosSClass);	//Edit----------------------Dima  27.01.2016
   if (HasDepartments) then begin
     EditFieldTL(h,v+=vs,150,"Отдел",M4UStr,Normal,10,AccStr,false,DepSClass);
   end;
