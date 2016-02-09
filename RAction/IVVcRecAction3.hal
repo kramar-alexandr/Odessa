@@ -1265,14 +1265,16 @@ not needed any more
                       end;
                       if (blank(location)) then begin
                         location = MSb.MainStock;
-                      end;  
-                      if (nonblank(IVrw.PosCode)) then begin
-                        FindStockValueAtPosition(IVrw.ArtCode,location,IVrw.PosCode,PISr);
-                        if (prev>PISr.LeftQty) then begin
-                          RecordCheckError(1397,"",i,"PosCode");      
-                          res = -1;
-                          goto L99;
-                        end;
+                      end;
+                      if((stat==insertmode and IVp.OKFlag!=0) or (stat==updatemode and IVp.OKFlag!=0 and IV2p.OKFlag==0))then begin  // Edit ************************** Wednesday, 3 February 2016 16:09:46
+												if (nonblank(IVrw.PosCode)) then begin
+													FindStockValueAtPosition(IVrw.ArtCode,location,IVrw.PosCode,PISr);
+													if (prev>PISr.LeftQty) then begin
+														RecordCheckError(1397," " & IVrw.ArtCode,i,"PosCode");      
+														res = -1;
+														goto L99;
+													end;
+												end;
                       end;
                       if (IVp.SVONr==-1) then begin
                         if (SNrb.BulkSerialNos!=0) then begin
