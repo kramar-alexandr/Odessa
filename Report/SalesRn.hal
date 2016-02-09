@@ -1,5 +1,7 @@
 external function val MulRateToBase1(var string,val,val,val,val,val,val,roundmode); //Edit***************************Sasha2,9:40 17.02.2015
 external function val AbsoluteVal(val);
+external procedure ExtractObj(string,var Integer,var string);
+
 
 SetLangMode(LangRussian,"RUS",0);
 
@@ -60,7 +62,36 @@ begin
 	
 end;
 
-
+procedure PrintItemType(string artcode,integer coord)
+begin
+	record INVc INr;
+	record DIVc DIr;
+	integer pos,i;
+	string 40 txt,res;
+	
+	pos = 0;
+	txt = "";
+	res = "";
+	INr.Code = artcode;
+	if(readfirstmain(INr,1,true))then begin
+		ExtractObj(INr.DispGroups,pos,txt);
+		while (nonblank(txt)) begin
+			DIr.Code = txt;
+			if(readfirstmain(DIr,1,true))then begin
+				if(DIr.CType=="TYPE")then begin
+					res = DIr.Name;
+					goto lPrintItemType;
+				end;
+			end;
+			ExtractObj(INr.DispGroups,pos,txt);
+		end;
+	end;
+	
+	lPrintItemType:;
+	outstring(coord,0,res,false);
+	
+return;
+end;
 
 
 procedure PrintReportHeader(integer ReportType) //Edit----------------------Dima  25.06.2015
@@ -74,10 +105,12 @@ begin
 		OutString(40,0," № ",false);
 		OutString(60,0,"Склад",false);
 		OutString(90,0,"Код товара",false);
-		OutString(120,0,"Наименование",false);		
+		OutString(120,0,"Наименование",false);	
+		OutString(170,0,"Тип",false);		
 	end else begin			//Consolidated
 		OutString(20,0,"Код товара",false);
 		OutString(60,0,"Наименование",false);
+		OutString(170,0,"Тип",false);
 	end;
 	
 		OutString(270,0,"Кол-во",false);
@@ -343,6 +376,9 @@ time timeFrom, timeTo;
 							OutString(60,0,IVr.Location,false);
 							OutString(90,0,IVrw.ArtCode,false);
 							OutString(120,0,IVrw.Spec,false);
+							
+							PrintItemType(IVrw.ArtCode,170);
+							
 							OutString(270,0,IVrw.Quant,false);
 							OutVal(300,0,rowPrice,M45Val,false);
 							OutVal(310,0,rowSum,M45Val,false);
@@ -380,6 +416,7 @@ time timeFrom, timeTo;
 		for(k=0;k<length;k=k+1) begin
 			OutString(20,0,itemCodes[k],false);
 			OutString(60,0,items[itemCodes[k]],false);
+			PrintItemType(itemCodes[k],170);
 			OutString(270,0,qty[itemCodes[k]],false);
 			OutString(300,0,salesum[itemCodes[k]]/qty[itemCodes[k]],false);				//Price
 			OutString(310,0,salesum[itemCodes[k]],false);
