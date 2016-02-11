@@ -2463,3 +2463,17 @@ begin
 
   EndWindow;
 end;
+
+
+
+window ImportDefaultIClass:1	//Edit----------------------Dima  11.02.2016
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+real h,v,vs;
+Integer i;
+  WindowBegin("€мпорт",ImportDefaultIClass,CGIcW,-);
+  SetWRect(20,80,470,300);
+
+
+  EndWindow;
+end;

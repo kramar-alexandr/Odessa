@@ -3,17 +3,17 @@ event startup
 begin
 
 	SetLangMode(LangRussian,"RUS",0);
-	
+
 		//Module("Управление складом","",730,modWHM);
 	Module("Новая почта","",730,modNPost);
 	Register("Города","Города",NPCityVc,modNPost);
 	Register("Отделения","Отделения",NPWarehouseVc,modNPost);
 	Register("Стандартные коробки","Стандартные коробки",StandBoxesVc,modNPost);
-	
-	
+
+
 	Register("ARVc","ARVc",ARVc,modDBMain);//Edit----------------------Dima  22.12.2015
-  Register("APVc","APVc",APVc,modDBMain);	
- 
+  Register("APVc","APVc",APVc,modDBMain);
+
   Setting("Настройки WebShop",WebShopSettingsTClass,modSO); //Edit***************************Sasha2,10:22 14.07.2014
   Setting("Настройки экспорта склада CSV",ExportStockCSVTClass,modSY);
   Setting("Настройки моей регистрации",MyAccountTClass,modSL); //Edit***************************Sasha2,11:59 07.11.2014
@@ -22,19 +22,19 @@ begin
   Setting("Печать на фискальном принтере",FiscalPrintingTClass,modPOS);				//Edit----------------------Dima  10.06.2015
   Setting("Перепечатать чек",ReprintingFiscalReceiptTClass,modPOS);					//Edit----------------------Dima  07.07.2015
   Setting("Настройки Zebra",ZebraPrinterTClass,modIN); //Edit***************************Sasha2,16:35 25.09.2014
-  
+
   Report("Анализ поставщика",VEAnaRClass,VEAnaRn,0,modPO);
   Report("Отчет по товарам по классификации (поставщику)",VERepRClass,VERepRn,0,modPO); //Edit***************************Sasha2,14:08 31.07.2014
   Report("Отчет по заказанным товарам",ItemPUOrderReportRClass,ItemPUOrderReportRn,0,modPO); //Edit***************************Sasha2,14:08 31.07.2014
   Report("Отчет по оплатам кассовых сч/ф",POSPaymentsRClass,POSPaymentsRn,0,modSL); //Edit***************************Sasha2,16:40 17.11.2014
   Report("Отчет по продажам",SalesRClass,SalesRn,0,modSL); //Edit----------------------------------Dima  04.12.2014
   Report("Отчет по складам",LocationsRClass,LocationsRn,0,modIN); //Edit----------------------------------Dima  04.12.2014
-  
+
   Report("Отчет по складам",LocationsRClass,LocationsRn,0,modIN);
-  
+
   Report("Отчет по ценам",PricesRepRClass,PricesRepRn,0,modDI);
-	Report("Поиск товаров",ReportForINItemSearchRClass,INItemReportForSearchRn,0,modIN);//Edit----------------------------------Dima 
-	Report("Поиск среди товаров",ReportForItemSearchRClass,INItemReportForSearchRn,0,modIN);//Edit----------------------------------Dima 
+	Report("Поиск товаров",ReportForINItemSearchRClass,INItemReportForSearchRn,0,modIN);//Edit----------------------------------Dima
+	Report("Поиск среди товаров",ReportForItemSearchRClass,INItemReportForSearchRn,0,modIN);//Edit----------------------------------Dima
 	Report("Журнал суточных возмещений",DAJRClass,DAJRn,0,modCL);
   Report("Журнал авансовых отчетов",ExpJRClass,ExpRn,0,modCL);
   Report("Журнал  расчетов с ПЛ",PersPerRClass,PersPerRn,0,modCL);
@@ -47,7 +47,7 @@ begin
   Report("Резерв по счетам",ReservStatRClass,ReservStstRn,0,modSO);
   Report("Резерв по счетам (консолид.)",ReservStstConsolidRClass,ReservStstConsolidRn,0,modSO);
   Report("Дисбаланс статуса резерва",ReservISRClass,ReservISRn,0,modSO);
-  
+
   Setting("Авансовые отчеты",ExpLClass,modCL);
   Setting("Выплаты персоналу",PPLClass,modCL);
   //Setting("Путевые листы",WayListLClass,modCL);
@@ -56,7 +56,7 @@ begin
   Setting("Производство",ProdLClass,modIN);	//Edit----------------------Dima  31.03.2015
   //Setting("Стандартные коробки",StandBoxesLClass,modIN); //Edit***************************Sasha2,14:51 16.04.2015
   Setting("Пак-листы",PackListLClass,modNPost); //Edit***************************Sasha2,14:51 16.04.2015
-  
+
   //Setting("Города",NPCityLClass,modIN);	//Edit by Victor 02.04.15
   Setting("Описания грузов",NPDescripLClass,modNPost);	//Edit by Victor 02.04.15
   Setting("Тип груза",NPCargoTypeLClass,modNPost);	//Edit by Victor 02.04.15
@@ -68,16 +68,16 @@ begin
 	Setting("Виды плательщиков",NPTypesOfPayersLClass,modNPost);
 	Setting("Типы Контрагентов",NPCounterpartyTypesLClass,modNPost);
 	Setting("Формы оплаты",NPPaymentFormsLClass,modNPost);
-	Setting("Поддоны",NPTraysListLClass,modNPost);		
+	Setting("Поддоны",NPTraysListLClass,modNPost);
 	Setting("Временные интервалы",NPTimeIntervalsLClass,modNPost);
 	Setting("Технологии доставки",NPServiceTypesLClass,modNPost);
-	Setting("Плательщики обратной доставки",NPTypesOfPayersRedeliveryLClass,modNPost);	
+	Setting("Плательщики обратной доставки",NPTypesOfPayersRedeliveryLClass,modNPost);
 
 	Setting("Контрагенты",NPCounterpartyLClass,modNPost);
 	Setting("Контрагенты-отправители",NPCounterpartySenderLClass,modNPost);
-	Setting("Адреса контрагентов",NPAddressesLClass,modNPost);		
-  Setting("Настройки Новой почты",NPSettingsTClass,modNPost);  
-  
+	Setting("Адреса контрагентов",NPAddressesLClass,modNPost);
+  Setting("Настройки Новой почты",NPSettingsTClass,modNPost);
+
   Setting("Поля, задаваемые пользователем - Контакты",CUUserLabelTClass,modSO); //Edit by Victor 26.05.15
   Setting("Поля, задаваемые пользователем - Товары",INUserLabelTClass,modSL);// Edit ************************** Thursday, 26 February 2015 18:04:55
   Setting("Настройки отправки СМС",SMSSettingsTClass,modTC); 	//Edit----------------------Dima  25.06.2015
@@ -88,19 +88,19 @@ begin
   Setting("История цен",PLHistLClass,modDI);
   Setting("Настройки логистики",LogisticsSettingsTClass,modSO);	//Edit----------------------Dima  25.01.2016
 
-  
+
   //Report("Статистика НДС по аванс. отчетам",ExpVATRClass,ExpVATRn,0,modCL);
   //Report("Журнал путевых листов",WLJRClass,WLJRn,0,modCL);
-  
+
   Export("Экспорт статистики продаж",ExpSalesStatClass,ExpSalesStatEn,modSL);// Edit ************************** Thursday, 26 February 2015 18:04:57
   Export("Экспорт товаров в CSV розница",ExpItemsBarCodesEClass,ExpItemsBarCodesEn,modSL);// Edit ************************** Thursday, 26 February 2015 18:04:57
 	Export("Экспорт товаров в CSV опт",ExpItemsBarCodesOptEClass,ExpItemsBarCodeOptsEn,modSL);// Edit ************************** Thursday, 26 February 2015 18:04:57
 
   Report("Несовпадения по складу 1-КОС",TovTestRClass,TovTestRn,0,modDBMain);
   Report("1-КОС с пустым местом",OneKocBlankPosRClass,OneKocBlankPosRn,0,modDBMain);
-  
+
    SString(24193,"К оплате");
-   
+
    SString(31000,"На текущем складе:");
    SString(31001,"В открытых счетах клиена:");
    SString(31002,"Доступно:");
@@ -137,16 +137,16 @@ begin
 	 SString(31033,"ВСЕГО БЕЗ СКИДКИ");
 	 SString(31034,"Новый");
 	 SString(31035,"Обрабатывается");
-	 SString(31036,"В ожидании оплаты");	
+	 SString(31036,"В ожидании оплаты");
 	 SString(31037,"Завершён");
-	 SString(31038,"Отменён");	 
+	 SString(31038,"Отменён");
  	 SString(31039,"Закрыт");
- 	 SString(31040,"Существуют неутвержденные счет-фактуры: ");	 
-   SString(31041,"Кол-во товара не соответствует кол-ву в счет-фактуре");	 
-   SString(31042,"Существует строка с нулевой ценой");	
+ 	 SString(31040,"Существуют неутвержденные счет-фактуры: ");
+   SString(31041,"Кол-во товара не соответствует кол-ву в счет-фактуре");
+   SString(31042,"Существует строка с нулевой ценой");
    SString(31043,"Отсутствует имя контрагента");
-   SString(31044,"Отсутствует телефон контрагента");	
-   SString(31045,"Указанный город отсутствует в базе Новой почты");  	 
+   SString(31044,"Отсутствует телефон контрагента");
+   SString(31045,"Указанный город отсутствует в базе Новой почты");
 	 SString(31046,"Не выбран тип доставки");
 	 SString(31047,"Контрагент получателя не был создан. Проверьте корректность данных");
    SString(31048,"Не подтверждено получение предоплаты. ");
@@ -161,13 +161,13 @@ begin
    SString(31057,"Экспресс накладная не существует или не создана");
    SString(31058,"Укажите вес и объем");
    SString(31059,"Запись необходимо сохранить перед созданием/печатью ЭН");
-   SString(31060,"Страховочная стоимость не может быть меньше наложенного платежа"); 
+   SString(31060,"Страховочная стоимость не может быть меньше наложенного платежа");
    SString(31061,"ЭН напечатана. Нельзя вносить изменения");
    SString(31062,"У клиента отсутствует город!");
-   SString(31063,"Одержаний"); 
+   SString(31063,"Одержаний");
    SString(31064,"Подарочный сертификат");
    SString(31065,"Указанная, в настройках фискального принтера, папка недоступна");
-   SString(31066,"Використано подарунковий");     	 
+   SString(31066,"Використано подарунковий");
    SString(31067,"ЗНИЖКА");
    SString(31068,"ПС Номер ");
    SString(31069,"Залишок на картці ");
@@ -175,15 +175,15 @@ begin
    SString(31071,"Передплата");
    SString(31072,"сертифікат номер ");
    SString(31073,"Было отправлено: ");
-   
-   //SMS - Errors 
+
+   //SMS - Errors
    SString(31074,"Максимальная длина заголовка 11 символов");
    SString(31075,"Неправильный логин и/или пароль");
    SString(31076,"Неправильный формат XML");
    SString(31077,"Недостаточно средств для отправки СМС");
    SString(31078,"Неверный номер получателя");
    SString(31079,"Ошибка отправки СМС");
-   
+
    SString(31090,"ОТГРУЖЕНО");
    SString(31091,"Заказ ");
    SString(31092,"Номер декларации ");
@@ -191,14 +191,14 @@ begin
    SString(31094,"места");
    SString(31095,"мест");
    SString(31096,"SMS было отправлено");
-   
+
    SString(31097,"Было ли сделано вынесение денег по кассе и Z-Отчет?");
-   
+
    SString(31098,"Сохраните документ");
    SString(31099,"Отсутствует наименование склада");
    SString(31100,"Фискальный чек не будет напечатан для текущей счет-фактуры");
    SString(31101,"Автоотмена. ");
-   
+
 	 SString(31102,"Новый");
 	 SString(31103,"Открыт"); //раньше "в обработке"
 	 SString(31104,"Подтвержден");
@@ -207,40 +207,40 @@ begin
 	 SString(31107,"В сборке");
 	 SString(31108,"Собран");
 	 SString(31109,"Отправлен");
-	 SString(31110,"Доставлен");	
+	 SString(31110,"Доставлен");
 	 SString(31111,"Завершен");
 	 SString(31112,"Отменён. ");
  	 SString(31113,"В ожидании товаров");
-	 SString(31114,"Не достаточно товаров");	 
-	 
+	 SString(31114,"Не достаточно товаров");
+
 	 SString(31120,"Відправлено");
 	 SString(31121,"Прибув у відділення");
 	 SString(31122,"Кол-во заказанного товара превышает кол-во необходимого");
 	 SString(31123,"Превышение допустимого обрабатываемого кол-ва. Возможно документ редактируется одновременно. Счет № ");
 	 SString(31124,"Неверная сумма процентов");
 	 SString(31125,"Ошибка при сохранении документа \"Платеж клиента\" №");
-	 SString(31126,"Платеж не будет добавлен.");	 
+	 SString(31126,"Платеж не будет добавлен.");
 	 SString(31127,"Нельзя сохранять будущим числом");
    SString(31128,"Не получена предоплата для счета №");
    SString(31129,"Для текущего склада должно быть указано место");
-   SString(31130,"Место не соответствует складу");   
+   SString(31130,"Место не соответствует складу");
    SString(31131,"Если аванс отсутствует, укажите значение 0");
    SString(31132,"На складе нет свободного товара в указанном количестве. ");
    SString(31133,"Не указано складское место");
-   
+
    SString(31134," стр.");
    SString(31135,"Остатки на местах");
    SString(31136,"Товара в таком количестве на месте нет");
    SString(31137,"Товар в обработке. Нельзя уменьшить кол-во заказанного товара.");
    SString(31138,"Для отмены воспользуйтесь функцией \"Отменить заказ на перемещение\"");
    SString(31139,"Товар нельзя продавать на текущей кассе");
-    
-  
+
+
   Maintenance("Экспорт склада CSV",ExportStockCSVClass,ExportStockCSVMn,modSY);
   Maintenance("Экспорт CSV для мобильного",MyVClass,ExportAllItems,modSY);	//Edit----------------------Dima  24.03.2015
   Maintenance("FIXIHR",MyVClass,FixItemHistMn,modDBMain);	//Edit----------------------Dima  24.03.2015
 
-  
+
   Maintenance("Пересчитать значение объема в карточке товара",RecalcINVolumeClass,RecalcINVolumeMn,modDBMain);//Edit***************************Sasha2,13:50 24.06.2014
   Maintenance("Gigient to IN",MyVClass,FillINFromGigieneMn,modDBMain); //Edit***************************Sasha2,16:21 20.10.2014
   Maintenance("Удалить накопительные карточки",MyVClass,DelLoyaltyCardMn,modDBMain); //Edit***************************Sasha2,16:21 20.10.2014
@@ -253,11 +253,11 @@ begin
 	Maintenance("Создать карты лояльности клиентам \"WEB\"",MyVClass,CreateLoyaltyForWebClients,modDBMain);	//Edit***************************Sasha2,15:51 26.02.2015
 	Maintenance("Recalculate POVc.ActOkFlag",MyVClass,RecalculatePOVC_ActOkFlag_Mn,modDBMain);
 	Maintenance("Recalculate ORVc.CustomStatusFlagText",MyVClass,RecalculateORVC_CustomStatusFlagText_Mn,modDBMain);	//Edit----------------------Dima  24.03.2015
-	
+
 	Maintenance("Fix Prepayment",MyVClass,FixPrepaymentMn,modDBMain);	//Edit----------------------Dima  24.03.2015
-	
+
 	Maintenance("Заполнить товары поставщиков",MyVClass,UpdateinAllPIrMn,modDBMain);	//Edit----------------------Dima  24.03.2015
-	
+
 	Maintenance("Заменить таблицу скидок для категории",ChangeCUCategoryVClass,ChangeCUCategoryMn,modSL);	//Edit----------------------Dima  27.03.2015
 	Maintenance("Заполнить отсутствующие названия в регистре \"Цены\"",MyVClass,FillCommentsInPricesMn,modDI);	//Edit----------------------Dima  06.04.2015
 	Maintenance("Экспортировать регистр",ExportRegistersVClass,ExportRegsMn,modDBMain);
@@ -272,7 +272,7 @@ begin
 	Maintenance("Обновить список статусов документов",RequestNPVClass,NPgetDocumentStatusesMn,modNPost);//Edit by Victor 08.04.15
 	Maintenance("Обновить список форм собственности",RequestNPVClass,NPGetOwnershipFormRequestMn,modNPost);//Edit by Victor 08.04.15
 	Maintenance("Обновить отделения",RequestNPVClass,NPGetWarehouseMn,modNPost);//Edit by Victor 08.04.15
-	
+
 	Maintenance("Обновить типы контрагентов",RequestNPVClass,NPGetCounterpartyTypesRequestMn,modNPost);
 	Maintenance("Обновить список видов плательщиков",RequestNPVClass,NPGetTypesOfPayerRequestMn,modNPost);
 	Maintenance("Обновить типы плательщиков обратной доставки",RequestNPVClass,NPGetTypesOfPayersForRedeliveryMn,modNPost);
@@ -287,18 +287,19 @@ begin
 	//Maintenance("Add address for counterparty",RequestNPVClass,NPAddAddressForCounterpartyMn,modNPost);
 	Maintenance("Обновить регистры Новой почты",RequestNPVClass,RefreshAllInnerRegistersNP,modNPost);
 	Maintenance("Обновить статусы электронных накладных",RequestNPVClass,NPUpdateENstatusMn,modNPost);
-	
+
 	Maintenance("Установить группы продаж в регистр Платежи",MyVClass,SetSalesGroupToIPVcMn,modDBMain);	//Edit----------------------Dima  17.07.2015
 	Maintenance("Отменить статус синхронизации счетов клиентов старше 10 дней",CancelSyncFlORVcVClass,CancelSyncFlORVcMn,modDBMain);//Edit---------------Vitalii 11:25 28.07.2015
 	Maintenance("Пересохранить ORVc",MyVClass,ReSaveORVcMn,modDBMain);		//Edit----------------------Dima  28.08.2015
 	Maintenance("Разослать СМС из стека",MyVClass,SendSMSFromStack,modDBMain);		//Edit----------------------Dima  27.08.2015
 	Maintenance("Пересчитать ORVc.LastShipDate",MyVClass,UpdateLastShipDateMn,modDBMain);		//Edit----------------------Dima  31.08.2015
 	Maintenance("Установить новые статусы в Счетах клиентам",MyVClass,SetNewStatusesORVcMn,modDBMain);		//Edit----------------------Dima  23.09.2015
-	
+
 	Maintenance("FixRecordLink",MyVClass,FixRecordLinkMn,modDBMain);// Edit ************************** Tuesday, 22 December 2015 10:04:05
-	
+
 	Maintenance("FixPOSMn",MyVClass,FixPOSMn,modDBMain);// Edit ************************** Tuesday, 22 December 2015 10:04:05
-	Maintenance("RecalcARMn",MyVClass,RecalcARMn,modDBMain);// Edit ************************** Tuesday, 22 December 2015 10:04:05	
+	Maintenance("RecalcARMn",MyVClass,RecalcARMn,modDBMain);// Edit ************************** Tuesday, 22 December 2015 10:04:05
+	//Maintenance("Очистить регистр",MyVClass,CleanRegisterMn,modDBMain);//Edit----------------------Dima  11.02.2016
 
   Import("Импорт цен",PLImportIClass,PLImportIn,modDI); //Added********************Dima 20.11.2014
   Import("Импорт товаров",INImportIClass,INImportIn,modIN);//Added********************Dima 20.11.2014
@@ -310,7 +311,7 @@ begin
  	Import("Импорт классификаций товаров",INImportIClass,ImportVEClassIn,modDBMain);//Added********************Dima 20.11.2014
  	Import("Импорт цен",INImportIClass,ImportItemPricesIn,modDBMain);//Added********************Dima 20.11.2014
  	Import("Импорт начальной задолженности клиентов",InitialDebtIClass,InitialClientsDebtIn,modSL);//Added********************Dima 26.01.2015
-	
+
 	Import("Импорт Accss",INImportIClass,ImpAccss,modDBMain);
 	Import("Импорт user",INImportIClass,ImpUser,modDBMain);
 	Import("Импорт Item/Classification",INDIImportIClass,ImportNewItemsWithClassIn,modDBMain); //Edit***************************Sasha2,10:26 16.04.2015
@@ -318,15 +319,16 @@ begin
 	Import("Импорт Item/Group",INITImportIClass,ImportNewItemsWithGroupIn,modIN); //Edit***************************Sasha2,18:43 06.01.2016
 
 	Import("Импорт eMail/Скидка",INImportIClass,ImportCUDiscountIn,modDBMain);
-	
+
 	Import("Импорт email to cu",INImportIClass,UpdateCUEmailsIn,modDBMain);// Edit ************************** Tuesday, 26 May 2015 16:49:15
-	
+	Import("Восстановление истории цен из экспорта",ImportDefaultIClass,RestorePLHistIn,modDBMain);//Edit----------------------Dima  11.02.2016
+
 	Export("ExxportIN",CashInvCroEClass,ExpRegINEn,modDBMain);
-	
-	
+
+
 	Document("Наклейки штрихкодов из поступления 5*13" ,LabelItem9RClass,ItemLabForm9,MyLabelItemFClass,modIN); //Edit***************************Sasha2,12:08 23.10.2014
 	Document("Производство" ,ProdOrderRClass,ProdOrderForm,ProdOrderFClass,modIN);		//Edit----------------------Dima  24.04.2015
-   
+
   StrSetBegin(3); /* Try to keep them in alphabetical order */
   StrSetText(AllowAddingINtoRet,"Добавлять товары в возвраты");
   StrSetText(AllowAddingINtoRetPOSIV,"Добавлять товары в возвраты сч/ф кас. терминала");
@@ -347,7 +349,7 @@ begin
   StrSetText(AllowRestAccSerNrChange,"Change Bar Tab No.");
   StrSetText(AllowIVBranchIDChange,"Change Branch Code on Invoice");
   StrSetText(AllowQTBranchIDChange,"Change Branch Code on Quotation");
-  StrSetText(AllowJobBranchIDChange,"Change Branch Code on Reservation");  
+  StrSetText(AllowJobBranchIDChange,"Change Branch Code on Reservation");
   StrSetText(AllowORBranchIDChange,"Change Branch Code on Sales Order");
   StrSetText(UpdateCashEvent,"Изменение событий кассы");
   StrSetText(AllowCashierCountChange,"Изменение даты в остатках по кассе");
@@ -376,10 +378,10 @@ begin
   StrSetText(ChangingINType,"Change Item's Type");
   StrSetText(AllowINWeighedAvChange,"Изменение средневзвешенной цены в карточке товара");
   StrSetText(IssueOwnChk,"Изменение статуса собственного чека");
-  StrSetText(ReconciledChequeToEndorsed,"Change #Cheque# State from Reconciled to Endorsed");  
+  StrSetText(ReconciledChequeToEndorsed,"Change #Cheque# State from Reconciled to Endorsed");
   StrSetText(EndorsedReconciledChequeToEndorsed,"Change #Cheque# State from Endorsed and Reconciled to Endorsed");
-  StrSetText(ChangeRecordHeaderWhenPending,"Change Record Header when Approval Status is Pending");  
-  StrSetText(ChangeRecordMatrixWhenPending,"Change Record Matrix when Approval Status is Pending");  
+  StrSetText(ChangeRecordHeaderWhenPending,"Change Record Header when Approval Status is Pending");
+  StrSetText(ChangeRecordMatrixWhenPending,"Change Record Matrix when Approval Status is Pending");
   StrSetText(ChangeDateinResourcePlanner,"Change Dates in Resource Planner");
   StrSetText(AllowPasswdChanging,"Изменение пароля");
   StrSetText(ChangePrices,"Изменение цен");
@@ -389,7 +391,7 @@ begin
   StrSetText(ChangeReserved,"Изменение статуса Резервировать в счетах и перемещениях товара");
   StrSetText(ChangeDropShipOrders,"Change Sales Order with Drop Ship Type");
   StrSetText(AllowORSerNrChange,"Изменение номера счета клиенту");
-  StrSetText(AllowSalesmanChangeonContact,"Change #Salesman# on Contact");  
+  StrSetText(AllowSalesmanChangeonContact,"Change #Salesman# on Contact");
   StrSetText(AllowSalesmanChange,"Изменение продавца в утвержденных сч/ф");
   StrSetText(AllowSalesmanChangeOnPOS,"Изменение продавца на сч/ф кассового терминала");
   StrSetText(AmendLineChangePrice,"Изменение при редактировании линии");
@@ -400,8 +402,8 @@ begin
   StrSetText(ChangingUpdateStockFlag,"Изменение поля Обновить склад на сч/ф клиенту");
   StrSetText(PositionStatusChanging,"Изменение статуса места");
   StrSetText(AllowWSUpdateStockChange,"Изменение в таблицах работ - Обновление склада");
-  StrSetText(DiffHalcust,"Compare halcust & halpatch");  
-  StrSetText(CompletingServiceOrders,"Complete Service Orders");  
+  StrSetText(DiffHalcust,"Compare halcust & halpatch");
+  StrSetText(CompletingServiceOrders,"Complete Service Orders");
   StrSetText(InvToCO,"Контракт из сч/ф");
   StrSetText(RoyaltyRepToCO,"Контракт из роялти записей о продажи");
   StrSetText(VievAllSalesGroupDocuments,"Разрешить просмотр всех документов");	//Edit by Victor 02.12.14
@@ -417,7 +419,7 @@ begin
   StrSetText(DeleteSharedRecord,"Удаление записей из разделенных регистров");
   StrSetText(DeleteAnyRecord,"Удаление записей");
   StrSetText(ORToSH,"Отгрузка из счетов клиентам");
-  StrSetText(DisallowRetClose,"Disallow Changing 'No Credit Notes' on Returned Goods");  
+  StrSetText(DisallowRetClose,"Disallow Changing 'No Credit Notes' on Returned Goods");
   StrSetText(DisallowPRBudgetChangefornonPRMan,"Не разрешать изменение бюджета проекта всем, кроме руководителя проекта");
   StrSetText(DisallowPojectChangefornonPRMan,"Не разрешать изменение проекта всем, кроме руководителя проекта");
   StrSetText(DisallowPRScheduleChangefornonPRMan,"Не разрешать изменение графика проекта всем, кроме руководителя проекта");
@@ -445,7 +447,7 @@ begin
   StrSetText(DisallowWSFromSVO,"Не разрешать заказы на работу из заказа на обслуживание");
   StrSetText(ShowSerialNronPOSInvoices,"Отображать сер.№ на сч/ф кассвого терминала");
   StrSetText(AllowDispute,"Согласовывать сч/ф");
-  StrSetText(DownloadHalcust,"Download halcust & halpatch");  
+  StrSetText(DownloadHalcust,"Download halcust & halpatch");
   StrSetText(ORToDownPay,"Аванс из счета клиенту");
   StrSetText(XXGRToXXGR,"Копирование (Drag and Drop) определений баланса и прибылей/убытков");
   StrSetText(EditingCAEandCAEExpiry,"Editing CAE and CAE Expiry fields in Sales Invoices");
@@ -468,7 +470,7 @@ begin
   StrSetText(InvInvalid,"Аннулировать сч/ф поставщиков и клиентам");
   StrSetText(VIInvalid,"Аннулировать сч/ф поставщиков");
   StrSetText(IVInvalid,"Аннулировать сч/ф клиентам");
-  StrSetText(InstallHalcust,"Install Halcust & Halpatch");  
+  StrSetText(InstallHalcust,"Install Halcust & Halpatch");
   StrSetText(InvalidateInvoice,"Аннулировать сч/ф сенсорного экрана");
   StrSetText(COToInv,"Сч/ф из контракта");
   StrSetText(JobToInv,"Сч/ф из резервирования");
@@ -491,7 +493,7 @@ begin
   StrSetText(AllowNegOP,"Отрицательные значения на платеже поставщику");
   StrSetText(AllowNegIP,"Отрицательные значения на платеже клиента");
   StrSetText(AllowPOSIVNegQty,"Отрицательное количество в сч/ф кассового терминала");
-  StrSetText(AllowNegativePriceonIV,"Negative Unit Price on an SL Invoice");  
+  StrSetText(AllowNegativePriceonIV,"Negative Unit Price on an SL Invoice");
   StrSetText(SMToTrans,"Запись операций из симуляций");
   StrSetText(ActOK,"Утвержение активностей");
   StrSetText(AT2WrofOK,"Утверждение выбытия ОС");
@@ -539,7 +541,7 @@ begin
   StrSetText(AllowPOSOfflineChanging,"Pедактирование счетов-фактур кассового терминала оффлайн");
   StrSetText(IPToPrepIV,"Предоплата клиента в сч/ф");
   StrSetText(PrintToFiscPrnt,"Печать на фискальном принтере");
-  StrSetText(QTToPR,"Project from Quotation");  
+  StrSetText(QTToPR,"Project from Quotation");
   StrSetText(BUQTToTBBU,"Предложение по проекту в бюджет");
   StrSetText(VEIVToVI,"Сч/ф поставщика из электронного сч/ф поставщика");
   StrSetText(PUToVI,"Сч/ф поставщика из поступления");
@@ -563,7 +565,7 @@ begin
   StrSetText(JobShowAccount,"Резервирование - Показать состояние счета");
   StrSetText(JobShowGuestAccount,"Резервирование - Показать счёт гостя");
   StrSetText(JobGenPrepayment,"Резервирование - Сгенерировать предоплату");
-  StrSetText(AllowEditSHNewPost,"Разрешать редактировать посылку Новой почты");  
+  StrSetText(AllowEditSHNewPost,"Разрешать редактировать посылку Новой почты");
   StrSetText(AddItemsRsrtEvent,"Resort Event Add Item");
   StrSetText(RestaurantCustomerOnly,"Только клиент ресторана");
   StrSetText(PUToRetPU,"Возврат товаров из поступлений");
@@ -592,7 +594,7 @@ begin
   StrSetText(UnOKBud,"Снимать OK с бюджетов");
   StrSetText(UnOKDA,"Сниамть OK с суточных возмещений");
   StrSetText(UnOKCashCount,"Снимать OK со снятия кассы");
-  StrSetText(UnOKTravelLog,"UnOK TravelLogs");  
+  StrSetText(UnOKTravelLog,"UnOK TravelLogs");
   StrSetText(UnOKOR,"Снимать OK со счетов");
   StrSetText(UnOKPO,"Снимать OK с заказов поставщикам");
   StrSetText(UnOKRevBud,"Снимать OK с прогнозов");
@@ -609,10 +611,10 @@ begin
   StrSetText(AllowNPTSIVRowsVoid,"Отменять строки счета кас.терм., сенс. экран");
   StrSetText(AllowNoClockInOut,"Разрешить работу без активностей включения/выключения счет. врем.");
   //StrSetText(RequestSchedImport,"Request Scheduled Import");
-  StrSetText(RequestSchedMaint,"Request Scheduled Maintenance");  
-  StrSetText(ApproveSchedImport,"Approve Scheduled Import");  
-  StrSetText(ApproveSchedMaint,"Approve Scheduled Maintenance");  
+  StrSetText(RequestSchedMaint,"Request Scheduled Maintenance");
+  StrSetText(ApproveSchedImport,"Approve Scheduled Import");
+  StrSetText(ApproveSchedMaint,"Approve Scheduled Maintenance");
   EndStrSet;
-  
+
 	return;
 end;
