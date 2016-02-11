@@ -20,7 +20,7 @@ begin
   Val sumqty1,totqty1;// Edit ************************** Thursday, 5 February 2015 18:06:30
   val t;
   record MainStockBlock MainStockRec;
-  string 255 frin,toin;
+  string 255 frin,toin,posstr; //Edit***************************Sasha2,17:35 11.02.2016
   row StockMovVc SMrw;
   
   BlockLoad(MainStockRec);
@@ -215,6 +215,11 @@ begin
         testf = false;
       end;
     end;
+    
+    if (testf) then begin //Edit***************************Sasha2,17:33 11.02.2016 {
+      if (NonBlank(RepSpec.f5) and SMr.FrPos!=RepSpec.f5) then begin testf = false; end; //Edit***************************Sasha2,17:12 11.02.2016
+      if (NonBlank(RepSpec.f6) and SMr.ToPos!=RepSpec.f6) then begin testf = false; end;  //Edit***************************Sasha2,17:12 11.02.2016
+    end; //Edit***************************Sasha2,17:33 11.02.2016 }
 
     if (testf) then begin
       if (nonblank(RepSpec.f4)) then begin
@@ -235,9 +240,19 @@ begin
            OutLongInt(0,"DblStockMov",SMr.SerNr,false);
            OutDate(130,0,SMr.TransDate,false);
            OutDate(220,0,SMr.RegDate,false);
-           OutString(300,0,SMr.FrLocation,false);
+           if (NonBlank(RepSpec.f5)) then begin //Edit***************************Sasha2,17:37 11.02.2016 {
+             posstr = "(" & SMr.FrPos & ")";
+           end else begin
+             posstr = "";
+           end; //Edit***************************Sasha2,17:37 11.02.2016 }
+           OutString(300,0,SMr.FrLocation & posstr,false); //Edit***************************Sasha2,17:37 11.02.2016
            OutString(365,0,SMr.ThrouLocation,false);
-           OutString(430,0,SMr.ToLocation,false);
+           if (NonBlank(RepSpec.f6)) then begin //Edit***************************Sasha2,17:37 11.02.2016 {
+             posstr = "(" & SMr.ToPos & ")";
+           end else begin
+             posstr = "";
+           end; //Edit***************************Sasha2,17:37 11.02.2016 }
+           OutString(430,0,SMr.ToLocation & posstr,false); //Edit***************************Sasha2,17:37 11.02.2016
            EndFormat;
            StartFormat(15);
            OutString(0,0,SMr.Comment,false);

@@ -11085,3 +11085,48 @@ begin
   end;  
   EndWindow;
 end;
+
+window StockMovJRClass:1
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  real h,v,vm,vs;
+  WindowBegin("Определите журнал перемещения товаров",StockMovJRClass,CGRcW,RcType);
+  SetWRect(20,80,450,380);
+  vs = 20; h = 150; v = 6;
+  EditFieldTL(h,v,150,"Номер",   M4Str,Normal,30,f1,false,0);
+  PeriodField(h,v+=vs,"Период");
+  EditFieldTL(h,v+=vs,80,"Со склада",M4UStr,Normal,30,f2,false,LocationSClass);
+  EditFieldTL(h+150,v,80,"С места",M4UStr,Normal,30,f5,false,PosSClass); //Edit***************************Sasha2,16:40 11.02.2016
+  EditFieldTL(h,v+=vs,80,"На склад",M4UStr,Normal,30,f3,false,LocationSClass);
+  EditFieldTL(h+150,v,80,"На место",M4UStr,Normal,30,f6,false,PosSClass); //Edit***************************Sasha2,16:40 11.02.2016
+  if (StandardHansa==false) then begin
+    EditFieldTL(h,v+=vs,80,"Склад в пути",M4UStr,Normal,10,FirstAcc,false,LocationSClass);
+  end;
+  EditFieldTL(h,v+=vs,150,"Товар",M4UStr,Normal,41,f4,false,INSClass);
+  EditFieldTL(h,v+=vs,80,"Для производства", M4Long,Normal,0,long1,false,ProdSClass);
+  vm = v+40;
+  ButtonFrame(h=20,v = vm,123,2,"Функция");
+  RadioButton(h,v,0,0,"Сводный",ArtMode);
+  RadioButton(h,v+=16,1,0,"Подробный",ArtMode);
+  ButtonFrame(h+=138,v = vm,123,3,"Значения");
+  RadioButton(h,v,0,0,"Новая цена",flags[4]);
+  RadioButton(h,v+=16,1,0,"Старая цена",flags[4]);
+  RadioButton(h,v+=16,2,0,"Отпускная цена",flags[4]);
+  vm = v + 48;
+  ButtonFrame(h=20,v=vm,123,3,"Статус подтверждения");
+  RadioButton(h,v,1,0,"Только неподтвержд.",flags[1]);
+  RadioButton(h,v+=16,2,0,"Только подтвержд.",flags[1]);
+  RadioButton(h,v+=16,0,0,"Оба",flags[1]);
+  if (StandardHansa==false) then begin
+    ButtonFrame(h+=138,v=vm,123,3,"Статус отправки");
+    RadioButton(h,v,1,0,"Только неотправленные",flags[2]);
+    RadioButton(h,v+=16,2,0,"Только отправленные",flags[2]);
+    RadioButton(h,v+=16,0,0,"Оба",flags[2]);
+    ButtonFrame(h+=138,v=vm,123,3,"Статус получения");
+    RadioButton(h,v,1,0,"Только неполученные",flags[5]);
+    RadioButton(h,v+=16,2,0,"Только полученные",flags[5]);
+    RadioButton(h,v+=16,0,0,"Оба",flags[5]);
+    CheckBox(h=20,v+=32,0,"Все перемещения",flags[3]);//?
+  end;
+  EndWindow;
+end;
