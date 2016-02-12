@@ -10196,7 +10196,54 @@ begin
   EndWindow;
 end;
 
+window StockTakeLClass:1
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer,android,iPad,iPhone")
+begin
+  Integer icn;
 
+  icn = StringToInt(USetStr(912));
+
+  WindowBegin("Инвентаризации",StockTakeLClass,CGmlist,-);
+  SpawnClass(StockTakeDClass);
+  Sizeable(-1,-1,0,0);
+  UseView(StockTakeVc);
+  if (GUIType==kGuiAndroid) then begin
+    WindowTitleBar(6002,icn,6003,"Инвентаризации");
+    CloseOnCancel;
+    SetWRect(0,0,320,418);
+    RecordList(0,0,-1,-1);
+    RLCellKey(0,12,280,12,SerNr,false,kFontSizeMedium,patM4curpen,SerNr);
+    RlCell(60,12,200,12,TransDate,false,kFontSizeMedium,patM4curpen);
+    RlCell(230,12,320,12,Location,false,kFontSizeMedium,patM4curpen);
+    RLCell(0,56,280,56,Comment,false,kFontSizeSmall,patM4curpen);
+  end else begin
+    RecordList(4,17,-21,-39);
+    if (GUIType==kGuiiPhone) then begin
+      SetWRect(0,0,320,418);
+      CloseOnCancel;
+      iPhoneTopBar;
+      RlCellKey(10,6,90,19,SerNr,false,12,patM4black,SerNr);
+      RlCell(100,6,200,19,TransDate,false,12,patM4black);
+      RlCell(210,6,280,19,Location,false,12,patM4black);
+      RlCell(10,26,280,39,Comment,false,12,patM4black);
+    end else begin
+      SetWRect(10,80,509,298);
+      RlColKey(4,4,    "Номер",SerNr,false,SerNr);
+      RlColKey(79,79,  "OK",OKFlag,false,OKFlag);
+      RlColKey(121,121,"Дата операции",TransDate,false,TransDate);
+      if (HasMultiLocations) then begin
+        RlCol(200,200,"Склад",Location,false);
+        RlCol(260,260,"Место",Position,false); //Edit***************************Sasha2,11:26 12.02.2016
+        RlCol(320,320,"Комментарий",Comment,false); //270 //Edit***************************Sasha2,11:30 12.02.2016
+      end else begin
+        RlCol(191,191,"Комментарий",Comment,false);
+      end;
+    end;
+    SearchField("Найти");
+  end;
+//  SpecMenuItem("OK",'G',0);
+  EndWindow;
+end;
 
 window StockTakeDClass:5
   wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer,android,iPhone")
@@ -10245,6 +10292,7 @@ begin
     end;
     if (HasMultiLocations) then begin
       EditField(h,v+=vs,82,"Склад",Normal,Location,false,LocationSClass);
+      EditField(h+150,v,82,"Место",Normal,Position,false,PosSClass); //Edit***************************Sasha2,11:30 12.02.2016
     end;
     EnterSkip(Math);
   //  CheckBox(420,v=6,0,"Set #Stock# Levels to these Balances on this day",SetStockValue); // Still not working properly
