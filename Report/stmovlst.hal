@@ -240,14 +240,14 @@ begin
            OutLongInt(0,"DblStockMov",SMr.SerNr,false);
            OutDate(130,0,SMr.TransDate,false);
            OutDate(220,0,SMr.RegDate,false);
-           if (NonBlank(RepSpec.f5)) then begin //Edit***************************Sasha2,17:37 11.02.2016 {
+           if (NonBlank(SMr.FrPos)) then begin //Edit***************************Sasha2,17:37 11.02.2016 {
              posstr = "(" & SMr.FrPos & ")";
            end else begin
              posstr = "";
            end; //Edit***************************Sasha2,17:37 11.02.2016 }
            OutString(300,0,SMr.FrLocation & posstr,false); //Edit***************************Sasha2,17:37 11.02.2016
            OutString(365,0,SMr.ThrouLocation,false);
-           if (NonBlank(RepSpec.f6)) then begin //Edit***************************Sasha2,17:37 11.02.2016 {
+           if (NonBlank(SMr.ToPos)) then begin //Edit***************************Sasha2,17:37 11.02.2016 {
              posstr = "(" & SMr.ToPos & ")";
            end else begin
              posstr = "";
