@@ -766,6 +766,10 @@ begin
       res = false;
     end;
   end;
+  if (CurrentUser=="SA") then begin
+		res = true;
+	end;
+  
   IVDClassFiscalFlagButtonAction = res;
   return;
 end;
