@@ -519,6 +519,84 @@ begin
   return;
 end;
 
+
+
+procedure LocalMachineBlockDefinition()
+begin
+  RecordField(DefLocation,M4Code,10,LocationVc);
+  RecordField(DefPrinter,M4Str,60,0);
+  RecordField(WarnOnDelete,M4Int,0,0);
+  RecordField(NoToolTips,M4Int,0,0);
+  RecordField(OneBarTabWindow,M4Int,0,0);
+  RecordField(NoBackGround,M4Int,0,0);
+  RecordField(WideScrollBars,M4Int,0,0);
+  RecordField(TouchScreenLook,M4Int,0,0);
+  RecordField(DefExpCodepage,M4StrSet,-1,0);
+  RecordField(FiscalPrinter,M4Set,69,0);
+  RecordField(DefCustCode,M4Code,20,CUVc);
+  RecordField(DefRestDisp,M4Code,10,DIVc);
+  RecordField(entryFont,M4Str,200,0);
+  RecordField(reportFont,M4Str,200,0);
+  RecordField(reportFontSize,M4Int,0,0);
+  RecordField(MirrorWindow,M4Int,0,0);
+  RecordField(NoServerModeIdle,M4Int,0,0);
+  RecordField(UseDisplay,M4Int,0,0);
+  RecordField(LimitedProdEntry,M4Int,0,0);
+  RecordField(DefReturnLocation,M4Code,10,LocationVc);
+  RecordField(TerminalID,M4Str,60,0);
+  RecordField(CommPort,M4Str,100,0);
+  RecordField(BranchID,M4Code,20,CUVc);
+  RecordField(UserStr1,M4Str,255,0);
+  RecordField(UserStr2,M4Str,255,0);
+  RecordField(UserStr3,M4Str,255,0);
+  RecordField(UserStr4,M4Str,255,0);
+  RecordField(UserStr5,M4Str,255,0);
+  RecordField(ResLoc,M4Code,5,0);
+  RecordField(ResClass,M4UStr,200,0);
+  RecordField(ActTypePastePerClass,M4Int,0,0);
+  RecordField(SkypeInt,M4Int,0,0);
+  RecordField(ItemPasteSpecial,M4Int,0,0);
+  RecordField(PLCode,M4Code,5,0);
+  RecordField(SyncRecordforPOS,M4Int,0,0);
+  RecordField(SyncINClass,M4UStr,200,0);
+  RecordField(ShipToAccount,M4Str,20,0);
+  RecordField(POSButtonGroup,M4Code,5,0);
+  RecordField(IncrementalReceiptPrinting,M4Int,0,0);
+  RecordField(BackgroundMailSync,M4Int,0,0);
+  RecordField(LockSysEncoderNo,M4Str,5,0);
+  RecordField(POSButtonsPosition,M4Int,0,0);
+  RecordField(POSFontSize,M4Int,0,0);
+  RecordField(Supervisor,M4Code,20,UserVc);
+  RecordField(Bagger,M4Code,20,UserVc);
+  RecordField(DefaulBaggerSupervisor,M4Int,0,0);
+  RecordField(HideQty,M4Int,0,0);
+  RecordField(CCRequireAuthCode,M4Int,0,0);
+  RecordField(ShowBaggerSupervisor,M4Int,0,0);
+  RecordField(UseCustomerDisplay,M4Int,0,0);
+  RecordField(FiscalPrinterEJournalPath,M4Str,200,0);
+  RecordField(FiscalPrinterEJournalPath2,M4Str,200,0);
+  RecordField(MailboxPasteSpecial,M4Int,0,0);
+  RecordField(TableViewCode,M4Code,20,0);
+  RecordField(RestAccClass,M4Code,10,0);
+  RecordField(CustPSOnCall,M4Int,0,0);
+  RecordField(GMTOffset,M41Val,0,0);
+  RecordField(DontShowRateProductWindow,M4Int,0,0);
+  RecordField(ShowRateProductWindowDate,M4Date,0,0);
+  RecordField(TutorialWClassCnt,M4Int,0,0);
+  RecordField(SendFiscalInvoice,M4Int,0,0);
+  RecordField(AccClassPasteSpecial,M4Int,0,0);
+  RecordField(TouchScreenLook2,M4Int,0,0);
+  RecordField(TouchScreenLookPicture,M4Int,0,0);
+  RecordField(TabletScaleFactor,M4Val,0,0);
+  RecordField(KitchenOrdScrDep,M4List,200,0);
+  RecordField(KitchenRefreshInt,M4Time,0,0);
+  RecordField(ApprovalTypeActDClass,M4Int,0,0);
+//update POSServToOffLine_SaveLocalMachineSettings  
+  return;
+end;
+
+
+
 procedure SerialPortDeviceDefinition()
 begin
   RecordField(Code,M4Code,10,0);
@@ -4563,7 +4641,13 @@ RecordBegin(IPVc,-,"");
   	RecordField(AllowChangeFields,M4Mark,0,0);
   EndBlock;
   
-  
+
+  BlockBegin(LocalMachineBlock,LocalMachineType,"");
+  BlockForAllCompanies; // stored in client
+  RecordField(LocalMachineCode,M4Code,20,0);
+  LocalMachineBlockDefinition;
+  RecordField(NotPutFiscalFlag,M4Mark,0,0);		//Edit----------------------Dima  16.02.2016
+  EndBlock;  
 
 return;
 end;

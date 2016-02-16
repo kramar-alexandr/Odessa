@@ -11178,3 +11178,188 @@ begin
   end;
   EndWindow;
 end;
+
+
+
+window LocalMachineTClass:2
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  real h,h2,v,vm,vs;
+  string 255 label;
+  Integer tilenr;
+
+  WindowBegin("Настройки локальной машины",LocalMachineTClass,CGSbl,-);
+  SetWRect(64,80,700,580);
+  SetBlid(LocalMachineBlock);
+  vs = 20;
+  Tile(0,50,false,"",LocalMachineCode);
+  EditField(h=200,v=6,60,"Код",Normal,LocalMachineCode,false,LocalMachineSClass);
+  tilenr = 1;
+  TileButton(tilenr,"По умолч."); tilenr = tilenr + 1;
+  TileButton(tilenr,"Шрифты"); tilenr = tilenr + 1;
+  if (StandardHansa==false) then begin
+    if (HasHotelInterface) then begin // Hotel
+      TileButton(tilenr,"Отель"); tilenr = tilenr + 1;
+    end else begin
+      TileButton(tilenr,"Планир. Ресурсов"); tilenr = tilenr + 1;
+    end;
+  end;
+  TileButton(tilenr,"Интеграция"); tilenr = tilenr + 1;
+  TileButton(tilenr,"Польз."); tilenr = tilenr + 1;
+  TileButton(tilenr,"POS"); tilenr = tilenr + 1;
+  tilenr = 1;
+  Tile(tilenr,475,false,tilenr,DefLocation); tilenr = tilenr + 1;
+  v = 6;
+  EditField(h,v,60,"Склад по умолч.",Normal,DefLocation,false,LocationSClass);
+  EditField(h,v+=vs,60,"Склад возвратов по умолч.",Normal,DefReturnLocation,false,LocationSClass);
+  EditField(h,v+=vs,120,"Принтер по умолч.",Normal,DefPrinter,false,0);
+  EditFieldTL(h,v+=vs,180,"Кодировка экспорта по умолч.",M4StrSet,Normal,89,DefExpCodepage,false,StrSetSClass);
+  EditField(h,v+=vs,60,"Клиент по умолчанию",Normal,DefCustCode,false,CUSClass);
+  if (StandardHansa==false) then begin
+    EditField(h,v+=vs,60,"Класс.товаров для ресторана по умолч.",Normal,DefRestDisp,false,DISClass);
+  end;
+  EditField(h,v+=vs,100,"Подразделение",Normal,BranchID,false,ContactCUSClass);
+  EditField(h,v+=vs,100,"Принтер",Normal,FiscalPrinter,false,SetSClass);
+  if (StandardHansa==false) then begin
+    EditField(h,v+=vs,60,"GMT Offset",Normal,GMTOffset,false,0);           //!!PRODTRANSLATE
+  end;
+  ButtonFrame(h2=30,vm=(v+=40),153,4,"Список выбора товара");
+  RadioButton(h2,v,0,0,"системный по умолч.",ItemPasteSpecial);
+  RadioButton(h2,v+=16,1,0,"простой",ItemPasteSpecial);
+  RadioButton(h2,v+=16,2,0,"с классификациями",ItemPasteSpecial);
+  RadioButton(h2,v+=16,3,0,"без перелист.",ItemPasteSpecial);
+
+  ButtonFrame(h2=30,v+=40,153,4,"Список почт. ящиков");
+  RadioButton(h2,v,3,0,"Связи с контактами",MailboxPasteSpecial);
+  RadioButton(h2,v+=16,1,0,"Клиенты",MailboxPasteSpecial);
+  RadioButton(h2,v+=16,2,0,"Поставщики",MailboxPasteSpecial);
+  RadioButton(h2,v+=16,0,0,"Почт.ящ./Конференции",MailboxPasteSpecial);
+  ButtonFrame(h2=210,v=vm,143,3,"Список выбора счетов");
+  RadioButton(h2,v,0,0,"Системный по умолч.",AccClassPasteSpecial);
+  RadioButton(h2,v+=16,1,0,"Без классификации",AccClassPasteSpecial);
+  RadioButton(h2,v+=16,2,0,"С классификацией",AccClassPasteSpecial);
+  if (StandardHansa==false) then begin
+    ButtonFrame(h2,v+=56,153,3,"Указать тип деятельности");
+    RadioButton(h2,v,0,0,"Cистемный по умолч.",ActTypePastePerClass);
+    RadioButton(h2,v+=16,1,0,"Вид деят. по классу деят.",ActTypePastePerClass);
+    RadioButton(h2,v+=16,2,0,"Наиб. исп. типы деят.",ActTypePastePerClass);
+  end;
+
+  CheckBox(h=380,v=vm,0,"Подтверждать при удалении",WarnOnDelete);
+  CheckBox(h,v+=17,0,"Не выводить всплывающие подсказки",NoToolTips);
+  if (StandardHansa==false) then begin
+    CheckBox(h,v+=17,0,"Один активный счёт ресторана",OneBarTabWindow);
+  end;
+  CheckBox(h,v+=17,0,"Не использовать фон",NoBackGround);
+  CheckBox(h,v+=17,0,"Широкая полоса прокрутки",WideScrollBars);
+  CheckBox(h,v+=17,0,"Не включать режим сервера при бездействии",NoServerModeIdle);
+  if (StandardHansa==false) then begin
+    CheckBox(h,v+=17,0,"Фоновая синхр. e-mail",BackgroundMailSync);
+    CheckBox(h,v+=17,0,"Автом. показыв. справку по кл. при входящем звонке",CustPSOnCall);
+    CheckBox(h,v+=17,0,"Тип активности утверждения",ApprovalTypeActDClass);  
+  end;
+  Tile(tilenr,70,false,tilenr,entryFont); tilenr = tilenr + 1;
+  v = 6; h = 210;
+  EditField(h,v,-20,"Редакт. шрифт",Normal,entryFont,false,FontNameSClass);
+  EditField(h,v+=vs,-20,"Отч. шрифт",Normal,reportFont,false,FontNameSClass);
+  EditField(h,v+=vs,50,"Отч. размер шрифта",Normal,reportFontSize,false,0);
+  if (GuiType==kGuiiPhone) then begin
+    EditField(h,v+=vs,50,"Фактор маштаба устройства",Normal,TabletScaleFactor,false,0);
+  end;
+  v = 6;
+  if (StandardHansa==false) then begin
+    if (HasHotelInterface) then begin // Hotel
+      Tile(tilenr,100,false,tilenr,ResLoc); tilenr = tilenr + 1;
+      EditField(h,v,60,"Местопол. комнаты",Normal,ResLoc,false,ResLocSClass);
+      EditField(h,v+=vs,150,"Классиф. комнаты",Normal,ResClass,false,ResClasSClass);
+      EditField(h,v+=vs,60,"№ кодир. устр-ва замочной сис-мы ",Normal,LockSysEncoderNo,false,0);
+    end else begin
+      Tile(tilenr,50,false,tilenr,ResLoc); tilenr = tilenr + 1;
+      EditField(h,v,60,"Местопол. ресурса",Normal,ResLoc,false,ResLocSClass);
+      EditField(h,v+=vs,150,"Классиф. ресурса",Normal,ResClass,false,ResClasSClass);
+    end;
+  end;
+  Tile(tilenr,130,false,tilenr,SkypeInt); tilenr = tilenr + 1;
+  ButtonFrame(h,v=20,123,3,"Соединение со Skype");
+  RadioButton(h,v,1,0,"Да",SkypeInt);
+  RadioButton(h,v+=16,2,0,"Нет",SkypeInt);
+  RadioButton(h,v+=16,0,0,"Еще не решено",SkypeInt);
+
+  ButtonFrame(h,v+=48,200,1,"Connect to GSX");
+  EditField(h+100,v,80,"Ship-To Account",Normal,ShipToAccount,false,0);
+
+  if (StandardHansa==false) then begin
+    CheckBox(h,v+=30,0,"Синхрониз. товары и цены для счетов ресторана",SyncRecordforPOS);
+    EditField(h,v+=vs,-40,"Классиф.товаров для синхр.",Normal,SyncINClass,false,DISClass);
+  end;
+
+  Tile(tilenr,300,false,tilenr,UserStr1); tilenr = tilenr + 1;
+  label = UserDefined("LocalMachineSetVc","UserStr1");
+  if (nonblank(label)) then begin
+    EditField(h,v+=vs,-20,label,Normal,UserStr1,false,0);
+  end;
+  label = UserDefined("LocalMachineSetVc","UserStr2");
+  if (nonblank(label)) then begin
+    EditField(h,v+=vs,-20,label,Normal,UserStr2,false,0);
+  end;
+  label = UserDefined("LocalMachineSetVc","UserStr3");
+  if (nonblank(label)) then begin
+    EditField(h,v+=vs,-20,label,Normal,UserStr3,false,0);
+  end;
+  label = UserDefined("LocalMachineSetVc","UserStr4");
+  if (nonblank(label)) then begin
+    EditField(h,v+=vs,-20,label,Normal,UserStr4,false,0);
+  end;
+  label = UserDefined("LocalMachineSetVc","UserStr5");
+  if (nonblank(label)) then begin
+    EditField(h,v+=vs,-20,label,Normal,UserStr5,false,0);
+  end;
+  Tile(tilenr,450,false,tilenr,Supervisor); tilenr = tilenr + 1;
+  if (StandardHansa==false) then begin
+    EditField(h=220,v=6,60,"Контролер",Normal,Supervisor,false,UserSClass);
+    EditField(h,v+=20,60,"Упаковщик",Normal,Bagger,false,BaggerSClass);
+    EditField(h,v+=vs,60,"Прайс-лист",Normal,PLCode,false,PLDefSClass);
+  end else begin
+    EditField(h=220,v=6,60,"Прайс-лист",Normal,PLCode,false,PLDefSClass);
+  end;
+  if (IsEnterprise) then begin    
+  EditField(h,v+=vs,150,"Группа кнопок кас. терминала",Normal,POSButtonGroup,false,POSButtonGroupsSClass);
+  end;
+  if (StandardHansa==false) then begin
+    EditField(h,v+=20,150,"Путь к эл. журн. фиск. принт.",Normal,FiscalPrinterEJournalPath,false,0);
+    EditField(h,v+=20,150,"Путь к эл. журн. фиск. принт. 2",Normal,FiscalPrinterEJournalPath2,false,0);
+    EditField(h,v+=20,150,"Расп.столов",Normal,TableViewCode,false,TablesViewsSClass);
+    EditField(h,v+=20,150,"Вид счета ресторана",Normal,RestAccClass,false,RestAccClassSClass);
+  end;
+  EditField(h,v+=vs,100,"ID терминала",Normal,TerminalID,false,0);
+  if (HasModRest) then begin
+    EditFieldTL(h,v+=vs,-20,"Kitchen Order Screen Departments",M4Str,Normal,200,KitchenOrdScrDep,false,DepSClass);  
+    EditFieldTL(h,v+=vs,50,"Kitchen Order Screen Refresh Interval",M4Time,Normal,0,KitchenRefreshInt,false,PasteCurTime);    
+  end;
+  CheckBox(h,v+=20,0,"Интерфейс для сенсорного экрана",TouchScreenLook);
+//  CheckBox(h,v+=20,0,"iOS Vertical Touch Screen Interface",TouchScreenLook2);
+  CheckBox(h,v+=16,0,"Item Picture in POS Invoice (iOS)",TouchScreenLookPicture);
+  if (StandardHansa==false) then begin
+    CheckBox(h,v+=16,0,"Упаковщик и контролер по умолч. на сч/ф кас.терм.",DefaulBaggerSupervisor);
+    CheckBox(h,v+=16,0,"Показыв. упаковщ. на сч/ф кас.терм.",ShowBaggerSupervisor);
+  end;
+  CheckBox(h,v+=16,0,"Спрятать к-во на сч/ф кас.терм.",HideQty);
+  if (StandardHansa==false) then begin
+    CheckBox(h,v+=16,0,"Требовать код авторизац. для платеж. кредитн. картами",CCRequireAuthCode);
+  end;
+  CheckBox(h,v+=16,0,"Нарастающая печать чеков",IncrementalReceiptPrinting);
+  CheckBox(h,v+=16,0,"Использовать дисплей кассира",UseDisplay);
+  CheckBox(h,v+=16,0,"Использовать дисплей покупателя",UseCustomerDisplay);
+  CheckBox(h,v+=16,0,"Не ставить \"Печатать на фискальном принтере\" по-умолчанию",NotPutFiscalFlag);		//Edit----------------------Dima  16.02.2016
+  if (HasLocalization("HRV")) then begin
+    CheckBox(h,v+=16,0,"Send Fiscal Invoice (#S/L#)",SendFiscalInvoice);
+  end;
+  ButtonFrame(h,v+=40,100,2,"Размещение кнопок");
+  RadioButton(h,v,kPOSButtonsPositionLeft,0,"Слева",POSButtonsPosition);
+  RadioButton(h,v+=16,kPOSButtonsPositionRight,0,"Справа",POSButtonsPosition);
+  ButtonFrame(h,v+=40,100,3,"Размер шрифта");
+  RadioButton(h,v,0,0,"22",POSFontSize);
+  RadioButton(h,v+=16,1,0,"16",POSFontSize);
+  RadioButton(h,v+=16,2,0,"11",POSFontSize);
+  EndWindow;
+end;
