@@ -190,9 +190,6 @@ function LongInt IVVcRecordDefaultsClient(LongInt wn,var record IVVc IVr,record 
 begin
   LongInt res;
   Integer level;
-  record LocalMachineBlock LMb;
-  
-  BlockLoad(LMb);
 
   res = IVDefaultsClient(IVr,IV2r,long3,long4);  
   if (TouchScreenLook) then begin
@@ -203,9 +200,6 @@ begin
     //IVr.CurncyCode = "UAH";				//	*****	Edit by Victor 04.11.14
     ResetDisplayDsm;
 //    ReRunWindowDef(wn);  in IVDClassOnOpenWindow
-		if (LMb.NotPutFiscalFlag==0) then begin
-    	IVr.FiscalFlag = 1; //Edit***************************Sasha2,14:31 14.07.2015
-    end;	
     WindowFieldGotoForTouchScreen(wn,-1,"ivcashcommand",true);
   end;
   //IVr.CurncyCode = "UAH";				//	*****	Edit by Victor 04.11.14
