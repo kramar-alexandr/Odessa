@@ -32,6 +32,7 @@ external procedure CurValToOtherCur(Date,string,val,string,var val,roundmode);
 external function Boolean GetPMCurrency(string,var string);
 external procedure GetFullCurncyRate (var string,Date,var val,var val,var val,var val,var val);
 external procedure ServerToClientMessage(string);
+external function val AbsoluteVal(val);
 
 /*
 procedure GetIPVAT(record AccBlock ARAb,record IVVc IVp,var val payvp,var val vatvalp,var string vatcode,var string taxtemplatecode)
@@ -1323,18 +1324,19 @@ begin
 	record IVVc IVr,IV1r;
 	record SHVc SHr;
   row IPVc IPrw;
-	val orderedSum;
+	val orderedSum,allowableDebt,debt;
 	integer rwcnt,i;
 	Boolean TrHs;
 	longint serialNr;	
 
-	
+	allowableDebt = 10; // +\- 10 UAH is OK
 	rwcnt = MatRowCnt(IPr);
-	
+
 	for(i=0;i<rwcnt;i=i+1) begin
 		MatRowGet(IPr,i,IPrw);
 		if (nonblank(IPrw.InvoiceNr)) then begin
 			orderedSum = 0;
+			debt = 0;
 			TrHs = true;
 			IV1r.SerNr = IPrw.InvoiceNr;
 			ReadFirstMain(IV1r,1,true);
@@ -1345,7 +1347,10 @@ begin
 				if(IVr.OrderNr != serialNr) then begin TrHs = false; end;
 				ARr.InvoiceNr = IVr.SerNr;
 				if (ReadFirstMain(ARr,1,true)) then begin 
-					if (ARr.RVal>0) then begin TrHs = false; end;
+					if (AbsoluteVal(ARr.RVal)>allowableDebt) then begin TrHs = false; debt = ARr.RVal;
+					end else begin
+						debt = debt + ARr.RVal;
+					end;
 				end; //ARVc exist if only ARr.RVal>0 (invoice is open)
 				
 				if (TrHs) then begin
@@ -1353,12 +1358,12 @@ begin
 				end;
 			end;
 			ResetLoop(IVr);
-			
+
 			ORr.SerNr = serialNr;
 			if (ReadFirstMain(ORr,1,true)) then begin
 				SHr.OrderNr = ORr.SerNr;
 				if (ReadFirstKey("OrderKey",SHr,1,true)) then begin
-					if (ORr.Sum4 == orderedSum and SHr.OKFlag!=0) then begin
+					if (ORr.Sum4 == orderedSum and AbsoluteVal(debt)<10 and SHr.OKFlag!=0) then begin
 							RecordCopy(oldORr,ORr);
       				ORr.CustomStatusFlag = 9; //order is finished;
       				RecordUpdate(oldORr,ORr,true);

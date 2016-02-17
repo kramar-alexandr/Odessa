@@ -757,6 +757,7 @@ BEGIN
   if (IPr.OKFlag!=0) then begin
 //      ((IPr.ReceivedFlag==1) and (SupportTempBook(IPp,IPVc)))) then begin /* not needed I think */
     IPOK(IPr,IP2r,false);
+    SetORStatusFinished(IPr);	//Edit----------------------Dima  17.02.2016
   end;
   if (blank(IPr.OfficialSerNr)) then begin
     FindNextIPVcOfficialSerialNr(IPr);

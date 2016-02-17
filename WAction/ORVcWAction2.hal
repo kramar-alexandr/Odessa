@@ -400,7 +400,6 @@ BEGIN
         end;
         if (testf) then begin
           r = RecordAction_raPasteOrdInInv(IVr,ORr.SerNr,true,errcode);
-          MessageBox(0,"bbb");
           if (r==0) then begin
  							 // ORr.SerNr = ORr.SerNr;
  							  //if(readfirstmain(ORr,1,true))then begin	//Problems with window updating.//Edit----------------------Dima  10.12.2015
