@@ -300,6 +300,8 @@ begin
 	Maintenance("FixPOSMn",MyVClass,FixPOSMn,modDBMain);// Edit ************************** Tuesday, 22 December 2015 10:04:05
 	Maintenance("RecalcARMn",MyVClass,RecalcARMn,modDBMain);// Edit ************************** Tuesday, 22 December 2015 10:04:05
 	//Maintenance("Очистить регистр",MyVClass,CleanRegisterMn,modDBMain);//Edit----------------------Dima  11.02.2016
+	Maintenance("Пересчитать статус завершен",MyVClass,RecalculateORStatusFinishedMn,modDBMain);	//Edit----------------------Dima  18.02.2016
+	
 
   Import("Импорт цен",PLImportIClass,PLImportIn,modDI); //Added********************Dima 20.11.2014
   Import("Импорт товаров",INImportIClass,INImportIn,modIN);//Added********************Dima 20.11.2014

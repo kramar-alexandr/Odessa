@@ -1324,12 +1324,13 @@ begin
 	record IVVc IVr,IV1r;
 	record SHVc SHr;
   row IPVc IPrw;
-	val orderedSum,allowableDebt,debt;
+	val orderedSum,allowableDebt,allowableDebtUSD ,debt;
 	integer rwcnt,i;
 	Boolean TrHs;
 	longint serialNr;	
 
 	allowableDebt = 10; // +\- 10 UAH is OK
+	allowableDebtUSD = 1;
 	rwcnt = MatRowCnt(IPr);
 
 	for(i=0;i<rwcnt;i=i+1) begin
@@ -1345,31 +1346,37 @@ begin
 			IVr.OrderNr = serialNr;
 			While(LoopKey("OrderNr",IVr,1,TrHs)) begin
 				if(IVr.OrderNr != serialNr) then begin TrHs = false; end;
-				ARr.InvoiceNr = IVr.SerNr;
-				if (ReadFirstMain(ARr,1,true)) then begin 
-					if (AbsoluteVal(ARr.RVal)>allowableDebt) then begin TrHs = false; debt = ARr.RVal;
-					end else begin
-						debt = debt + ARr.RVal;
-					end;
-				end; //ARVc exist if only ARr.RVal>0 (invoice is open)
 				
 				if (TrHs) then begin
 					orderedSum = orderedSum + IVr.Sum4;
+					
+					ARr.InvoiceNr = IVr.SerNr;
+					if (ReadFirstMain(ARr,1,true)) then begin 
+						if (AbsoluteVal(ARr.RVal)>allowableDebt) then begin TrHs = false; debt = ARr.RVal;
+						end else begin
+							debt = debt + ARr.RVal;
+						end;
+					end; //ARVc exist if only ARr.RVal>0 (invoice is open)
+
 				end;
 			end;
 			ResetLoop(IVr);
+	
+			
 
-			ORr.SerNr = serialNr;
-			if (ReadFirstMain(ORr,1,true)) then begin
-				SHr.OrderNr = ORr.SerNr;
-				if (ReadFirstKey("OrderKey",SHr,1,true)) then begin
-					if (ORr.Sum4 == orderedSum and AbsoluteVal(debt)<10 and SHr.OKFlag!=0) then begin
-							RecordCopy(oldORr,ORr);
-      				ORr.CustomStatusFlag = 9; //order is finished;
-      				RecordUpdate(oldORr,ORr,true);
-					end;
-				end;	
-			end;		
+				ORr.SerNr = serialNr;
+				if (ReadFirstMain(ORr,1,true)) then begin
+					if ((ORr.CurncyCode == "USD" and debt<allowableDebtUSD) or (Left(ORr.CurncyCode,3)=="UAH" and AbsoluteVal(debt)<allowableDebt)) then begin
+						SHr.OrderNr = ORr.SerNr;					
+						if (ReadFirstKey("OrderKey",SHr,1,true)) then begin
+							if (ORr.Sum4 == orderedSum and  SHr.OKFlag!=0) then begin							
+								RecordCopy(oldORr,ORr);
+      					ORr.CustomStatusFlag = 9; //order is finished;
+      					RecordUpdate(oldORr,ORr,true);
+      				end;	
+						end;
+					end;	
+				end;		
 			
 		end;
 	
