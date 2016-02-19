@@ -2149,13 +2149,15 @@ begin
 	IVr.OrderNr = ORr.SerNr;
 	if (ORr.OrderClass=="WEB" and ORr.NPPaymentType == 0 and ORr.PrepaymentReceived == 1) then begin
 		if (ReadFirstKey("OrderNr",IVr,1,true)) then begin
-			RecordCopy(oldIVr,IVr);
-			IVr.OKFlag = 1;
-			IVr.InvDate = CurrentDate;
-			IVVc_PasteInvDate(IVr,LMb,err1,err2);
-			IVr.TransDate = CurrentDate;//Edit----------------------Dima 29.12.2015
-			if (RecordUpdate(oldIVr,IVr,true) != 0) then begin
-        //RecordCheckError(31128,IVr.SerNr,-1,"SerNr");
+			if (IVr.OKFlag == 0) then begin
+				RecordCopy(oldIVr,IVr);
+				IVr.OKFlag = 1;
+				IVr.InvDate = CurrentDate;
+				IVVc_PasteInvDate(IVr,LMb,err1,err2);
+				IVr.TransDate = CurrentDate;//Edit----------------------Dima 29.12.2015
+				if (RecordUpdate(oldIVr,IVr,true) != 0) then begin
+      	  //RecordCheckError(31128,IVr.SerNr,-1,"SerNr");
+      	end;
       end;
 		end;
 	end;
@@ -2309,6 +2311,10 @@ begin
   val bc1v;
   record SHVc SHr,oldSHr;
   
+  if (ORr.CustomStatusFlag == 2 and ORr.AutoCreation!=0) then begin //Edit----------------------Dima  17.12.2015
+  	MakeInvoiceAndShipmentForOR(ORr);
+  end;    
+  
   if (ORr.NPPaymentType == 0 and ORr.PrepaymentReceived == 1 and OR2r.PrepaymentReceived == 0) then begin
   	AcceptIVVcFromORVcweb(ORr);
   end;
@@ -2364,10 +2370,6 @@ begin
   	SendNoticeSMS(ORr);			//Edit----------------------Dima  31.08.2015
   end;  
   
-  
-  if (ORr.CustomStatusFlag == 2 and ORr.AutoCreation!=0) then begin //Edit----------------------Dima  17.12.2015
-  	MakeInvoiceAndShipmentForOR(ORr);
-  end;  
   
   
   ORVcRecordUpdateAfter = res; 
