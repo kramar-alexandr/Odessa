@@ -3592,6 +3592,9 @@ if (HasTouchScreenLook==false) then begin
   MatCol(t,-30,"",0,VATCode,false,VATCodeSClass);
   MatText(t=kInvoiceRowTypeGiftVoucherSold,32,"‘",true);
   MatCol(t,58,"",0,GCNr,false,GCSClass);
+  MatCol(t,158,"",0,PayMode,false,0);// Edit ************************** Thursday, 18 February 2016 12:10:52
+  MatCol(t,200,"",0,SalesAcc,false,0);// Edit ************************** Thursday, 18 February 2016 12:10:52
+
   MatCol(t,-416,"",0,Spec,false,0);
   MatCol(t,-84,"‘σμμΰ",0,Sum,true,0);
   MatCol(t,-24,"",0,VATCode,false,VATCodeSClass);

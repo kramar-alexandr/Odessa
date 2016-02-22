@@ -380,8 +380,8 @@ BEGIN
         IVrw.Sum = GCr.Amount;
         BlockLoad(DefCashRec);
         IVrw.Spec = GCr.Comment;
-        IVrw.PayMode = DefCashRec.DefGCSPayMode;
-        IVrw.VATCode = DefCashRec.DefGCSVATCode;          
+        //IVrw.PayMode = DefCashRec.DefGCSPayMode;// Edit ************************** Thursday, 18 February 2016 13:30:05
+        //IVrw.VATCode = DefCashRec.DefGCSVATCode;      
         if (GetPMRow(IVrw.PayMode,PMrw)) then begin end;
         IVrw.SalesAcc = PMrw.AccNr;
         MatRowPut(IVr,rownr,IVrw);  
