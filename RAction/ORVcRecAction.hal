@@ -2140,12 +2140,14 @@ return;
 end;
 
 
-global updating procedure AcceptIVVcFromORVcweb(record ORVc ORr)	//Edit----------------------Dima  23.11.2015
+global updating function boolean AcceptIVVcFromORVcweb(record ORVc ORr)	//Edit----------------------Dima  23.11.2015
 begin
 	record IVVc IVr,oldIVr;
   Integer err1,err2;
   record LocalMachineBlock LMb;
-	
+  boolean res;
+  
+	res = false;
 	IVr.OrderNr = ORr.SerNr;
 	if (ORr.OrderClass=="WEB" and ORr.NPPaymentType == 0 and ORr.PrepaymentReceived == 1) then begin
 		if (ReadFirstKey("OrderNr",IVr,1,true)) then begin
@@ -2159,9 +2161,12 @@ begin
       	  //RecordCheckError(31128,IVr.SerNr,-1,"SerNr");
       	end;
       end;
-		end;
+      res = true;
+    end;  
 	end;
-  
+
+AcceptIVVcFromORVcweb = res;
+return;  
 end;
 
 updating
@@ -2299,7 +2304,7 @@ begin
 	  ORr.ReservToDate = AddDay(CurrentDate,1);
 	end;  
 
-  
+ 
   ORVcRecordUpdate = res; 
   return;
 end;
@@ -2310,19 +2315,20 @@ begin
   LongInt res;
   val bc1v;
   record SHVc SHr,oldSHr;
+  boolean invoiceAccepted;
   
   if (ORr.CustomStatusFlag == 2 and ORr.AutoCreation!=0) then begin //Edit----------------------Dima  17.12.2015
   	MakeInvoiceAndShipmentForOR(ORr);
   end;    
   
-  if (ORr.NPPaymentType == 0 and ORr.PrepaymentReceived == 1 and OR2r.PrepaymentReceived == 0) then begin
-  	AcceptIVVcFromORVcweb(ORr);
+  if (ORr.NPPaymentType == 0 and ORr.PrepaymentReceived == 1 and OR2r.PrepaymentReceived == 0 ) then begin
+  	invoiceAccepted = AcceptIVVcFromORVcweb(ORr);		//if invoice isn't accepted, we will not add invoice to IPVc (AddPaymentToIPFromSH)
   end;
   
   if(ORr.DeliveryNewPost == 1)then begin		//Edit by Victor 02.06.15
 		SHr.OrderNr = ORr.SerNr;
 		if(ReadFirstKey("OrderKey",SHr, 1, true))then begin
-			if(ORr.NPPaymentType == 1 or (ORr.NPPaymentType == 0 and ORr.PrepaymentReceived == 1))then begin
+			if(ORr.NPPaymentType == 0 and ORr.PrepaymentReceived == 1 and invoiceAccepted)then begin
 				RecordCopy(oldSHr,SHr);
 				
 				//if SHr.Assembly == 1 already, RecordUpdate will not start,because nothing is changed

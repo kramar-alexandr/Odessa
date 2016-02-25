@@ -1827,6 +1827,27 @@ BEGIN
   RETURN;
 END;
 
+
+global
+function Boolean ORDClassPrepaymentReceivedButtonAction(Integer wn,Integer value)
+BEGIN
+  Boolean res;
+  record ORVc ORr;
+
+  res = true;
+	GetWindowRecord(wn,ORr);
+	if (ORr.InvFlag==0) then begin		//not invoiced
+		res = false;
+		MessageBox(31140,"");
+	end;
+	WindowState(wn)
+
+  ORDClassPrepaymentReceivedButtonAction = res;
+  RETURN;
+END;
+
+
+
 global
 function Boolean ORDClassOKFlagButtonAction(Integer wn,Integer value)
 BEGIN
