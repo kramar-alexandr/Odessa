@@ -11366,3 +11366,56 @@ begin
   RadioButton(h,v+=16,2,0,"11",POSFontSize);
   EndWindow;
 end;
+
+
+window CCPayTouchScreenDClass:1
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer,iPad")
+begin
+  real h,h2,v;
+  record LocalMachineBlock LMb;
+  record RahaxiBlock Rahaxib;
+  string 255 text;// Edit ************************** Thursday, 25 February 2016 14:54:09
+  record RcVc RepSpec;// Edit ************************** Thursday, 25 February 2016 14:54:09
+  integer wn;// Edit ************************** Thursday, 25 February 2016 14:54:08
+  WindowBegin("Платёж кредитной картой",CCPayTouchScreenDClass,CGother,RcType);
+//  Modality(kModalityGlobal);
+  UseView(RcVc);
+  SetWRect(80,200,800,440);
+  h = 210; h2 = 170; v=40;
+  if (GuiType==kGuiiPhone) then begin
+    h = 280; h2 = 240; v=60;
+  end;
+  if (GuiType==kGuiiPhone or GuiType==kGuiMetro) then begin
+    PopoverWindow;
+  end;
+  
+  wn = curwindow;
+  
+  getwindowrecord(wn,RepSpec);
+  
+  EditFieldTLX(10,v=6, -80,"",M4Str,ViewOnly,100,30,patM4black,f6,false,0);
+  EditFieldTLX(h,v+=40, 140,"Сумма",M4Val,Normal,0,30,patM4black,vals0,true,0);
+  /*BlockLoad(LMb);
+  if (LMb.CCRequireAuthCode!=0) then begin
+    EnterSkip(f1);
+    EditFieldTLX(h,v=v+40, 140,"Авторизации",M4Str,Normal,20,30,patM4black,f1,false,0);
+  end;*/
+  //EditFieldTLX(h,v=v+40, 100,"Валюта",M4Str,ViewOnly,5,30,patM4black,CurncyCode,false,0);
+  BlockLoad(Rahaxib);
+  v = v+70;
+
+  if (GuiType==kGuiiPhone) then begin
+    h = 160; h2 = 450;
+  end else begin
+    h=50; h2 = 370;
+  end;
+  if (GuiType==kGuiiPhone) then begin
+    ColourPushButton(h,v+=20,h+165,v+48,"CancelCCPayTouchScreenDClass","Отмена",20);
+    ColourPushButton(h+=180,v,h+165,v+48,"ProceedCCPayTouchScreenDClass","Продолжить",20);
+  end else begin
+    ColourPushButton(h,v+=20,h+165,v+48,"CancelCCPayTouchScreenDClass","Отмена<BR>F2",20);
+    ColourPushButton(h+=180,v,h+165,v+48,"ProceedCCPayTouchScreenDClass","Продолжить<BR>F1",20);
+    //ColourPushButton(h2,v=3,h2+70,v+50,"CashPayTouchScreenKeypad","Клавиатура<BR>F3",2);
+  end;
+  EndWindow;
+end;

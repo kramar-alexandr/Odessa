@@ -146,7 +146,7 @@ begin
 			cardSum = cardSum + AbsoluteVal(IVrw.Sum) * 100;
 		end;
 		
-		if (IVrw.stp==kInvoiceRowTypeGiftVoucherPayment or IVrw.PayMode=="GC") then begin //Edit***************************Sasha2,15:02 27.07.2015
+		if (IVrw.stp==kInvoiceRowTypeGiftVoucherPayment or (IVrw.PayMode=="GC" and IVrw.stp!=kInvoiceRowTypeGiftVoucherSold)) then begin //Edit***************************Sasha2,15:02 27.07.2015
 			if (IVrw.GCNr>0) then begin
 			  VoucherNumbers[VoucherNumbers.length] = IVrw.GCNr;
 			end else begin
