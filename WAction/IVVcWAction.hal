@@ -1405,7 +1405,7 @@ function Boolean IVDClassAfterEditField(Integer wn,string fieldname,Integer fn, 
 BEGIN
   Boolean res;
   
-  if (currentuser!="SAUNOK") then begin //Edit-------------------Vitalii 10:43 25.12.2015
+  //if (currentuser!="SAUNOK") then begin //Edit-------------------Vitalii 10:43 25.12.2015
 	  switch (fieldname) begin
 		case "ServiceDelDate": res = IVDClassServiceDelDateEFAfter(wn,changed);
 		case "PriceFactor": res = IVDClassPriceFactorEFAfter(wn,fn,rownr,changed);
@@ -1458,9 +1458,9 @@ BEGIN
 		case "DelCountry": res = IVDClassDelCountryEFAfter(wn,changed!=0);
 		case "Position": res = IVDClassPositionEFAfter(wn,changed!=0);
 	  end;
-  end else begin //Edit-------------------Vitalii 10:44 25.12.2015
-	res = true;
-  end;
+ // end else begin //Edit-------------------Vitalii 10:44 25.12.2015
+	//res = true;
+  //end;
   IVDClassAfterEditField = res;
   RETURN;
 END;
