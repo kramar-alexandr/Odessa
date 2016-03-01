@@ -314,19 +314,7 @@ BEGIN
             FindStockValueInclStockReserv(-1,StockMovrw.ArtCode,StockMovrw.SerialNr,frlocation,ISr,stockreservq);
           end;
           
-          
-          if (ToLocr.RequirePos!=0) then begin		//Edit----------------------Dima  22.01.2016
-          	PISr.ArtCode = StockMovrw.ArtCode;
-          	PISr.Position = SMp.FrPos;
-          	PISr.Location = ToLocr.Code;
-          	if (ReadFirstMain(PISr,3,true)) then begin 
-          		instock = PISr.Instock;
-          	end else begin
-							instock = 0;
-						end;
-          end else begin
-						instock = ISr.Instock;
-					end;           
+					instock = ISr.Instock;           
           
           
           prev = prev + quant;
