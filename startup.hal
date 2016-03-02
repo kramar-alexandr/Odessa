@@ -236,6 +236,8 @@ begin
    SString(31139,"Товар нельзя продавать на текущей кассе");
    SString(31140,"Создайте счет-фактуру");
    SString(31141,"Y_ВЫСТАВКА");
+   
+   SString(31145,"Дякуємо за покупку!!!");
 
 
   Maintenance("Экспорт склада CSV",ExportStockCSVClass,ExportStockCSVMn,modSY);
