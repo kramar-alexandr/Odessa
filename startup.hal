@@ -27,7 +27,8 @@ begin
   Report("Отчет по товарам по классификации (поставщику)",VERepRClass,VERepRn,0,modPO); //Edit***************************Sasha2,14:08 31.07.2014
   Report("Отчет по заказанным товарам",ItemPUOrderReportRClass,ItemPUOrderReportRn,0,modPO); //Edit***************************Sasha2,14:08 31.07.2014
   Report("Отчет по оплатам кассовых сч/ф",POSPaymentsRClass,POSPaymentsRn,0,modSL); //Edit***************************Sasha2,16:40 17.11.2014
-  Report("Отчет по продажам",SalesRClass,SalesRn,0,modSL); //Edit----------------------------------Dima  04.12.2014
+  Report("Отчет по продажам",SalesRClass,SalesRn,0,modSL); 
+  //Report("Отчет по продажам старый",SalesRClass,SalesRnOld,0,modSL);
   Report("Отчет по складам",LocationsRClass,LocationsRn,0,modIN); //Edit----------------------------------Dima  04.12.2014
 
   Report("Отчет по складам",LocationsRClass,LocationsRn,0,modIN);
@@ -87,6 +88,7 @@ begin
   //Edit-------------------Vitalii 16:07 14.12.2015
   Setting("История цен",PLHistLClass,modDI);
   Setting("Настройки логистики",LogisticsSettingsTClass,modSO);	//Edit----------------------Dima  25.01.2016
+  Setting("Вспомагательный регистр SalesData",SalesDataLClass,modDBMain);
 
 
   //Report("Статистика НДС по аванс. отчетам",ExpVATRClass,ExpVATRn,0,modCL);
@@ -305,6 +307,7 @@ begin
 	Maintenance("RecalcARMn",MyVClass,RecalcARMn,modDBMain);// Edit ************************** Tuesday, 22 December 2015 10:04:05
 	//Maintenance("Очистить регистр",MyVClass,CleanRegisterMn,modDBMain);//Edit----------------------Dima  11.02.2016
 	Maintenance("Пересчитать статус завершен",MyVClass,RecalculateORStatusFinishedMn,modDBMain);	//Edit----------------------Dima  18.02.2016
+	Maintenance("Пересчитать регистр SalesDataVc",MyVClass,RecalculateSalesDataVcMn,modDBMain);	//Edit----------------------Dima  10.03.2016
 	
 
   Import("Импорт цен",PLImportIClass,PLImportIn,modDI); //Added********************Dima 20.11.2014

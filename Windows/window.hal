@@ -2477,3 +2477,25 @@ Integer i;
 
   EndWindow;
 end;
+
+
+
+window SalesDataLClass:1		//Edit----------------------Dima  10.03.2016
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  WindowBegin("SalesData",SalesDataLClass,CGmlist,SHView);
+  SetWRect(20,80,750,298);
+  Sizeable(-1,-1,0,0);
+  UseView(SalesDataVc);
+  RecordList(4,17,-21,-39);
+  RlColKey(4,4,"InvNr",InvNr,false,InvNr);
+  RlCol(100,100,"RowNr",RowNr,false);
+  RlColKey(150,150,"ArtCode",ArtCode,false,CodeDate);
+  RlCol(240,240,"Name",Spec,false);
+  RlCol(400,400,"InvDate",InvDate,false);
+  RlCol(500,500,"Sum",Sum,false);
+  RlCol(570,570,"Cost",Cost,false);
+  RlCol(-70,-70,"Quant",Quant,false);
+  SearchField("Найти");
+  EndWindow;
+end;

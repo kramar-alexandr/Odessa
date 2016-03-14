@@ -98,6 +98,7 @@ external updating procedure RoyaltyIVRemoved(record IVVc);
 external function string 20 GetCustomOfficialSerNr; //Edit***************************Sasha2,16:54 28.01.2015
 external procedure Recalculate_CustomStatusFlagText(var record ORVc);	//Edit----------------------Dima  22.09.2015
 external updating procedure UnOk_IVVc(var record IVVc);//Edit----------------------Dima  30.11.2015
+external updating procedure UpdateSalesData(record IVVc);	//Edit----------------------Dima  10.03.2016
 
 procedure SetIVAcceptanceFlag(var record IVVc IVr,record IVVc prevIVr,LongInt stat)
 begin
@@ -245,6 +246,22 @@ begin
 END;
 
 
+updating procedure DeleteSalesData(record IVVc IVr)
+begin
+	boolean TrHs;
+	record SalesDataVc SalesData;
+	
+	SalesData.InvNr = IVr.SerNr;
+	TrHs = true;	
+	While(LoopMain(SalesData,1,TrHs)) begin
+		if (SalesData.InvNr!= IVr.SerNr) then begin TrHs=false; end;
+		if (TrHs) then begin
+      RecordDelete(SalesData);
+      StepBack(SalesData);
+		end;
+	end;	  
+end;
+
 
 global
 updating function LongInt IVVcRecordRemove(var record IVVc IVr,record IVVc IV2r,LongInt long3,LongInt long4)
@@ -281,6 +298,7 @@ BEGIN
     if (IVr.RoyaltyIVFlag!=0) then begin
       RoyaltyIVRemoved(IVr);
     end;
+    DeleteSalesData(IVr);		//Edit----------------------Dima  11.03.2016
   end;
 LIVVcRecordRemove:;
   IVVcRecordRemove = res; 
@@ -529,7 +547,9 @@ BEGIN
 				RecordStore(ORr,true);
 			end;    		
   	end;
-	end;  
+	end;
+	
+	UpdateSalesData(IVr);	//Edit----------------------Dima  10.03.2016  
   
 LIVVcRecordSaveAfter:;
   IVVcRecordSaveAfter = res; 
@@ -1157,6 +1177,9 @@ BEGIN
         CancelApprovalRequestActivities(kAcceptanceIV,"IVVc",IVr.SerNr,IVr.CustCode);
       end;
   end;
+  
+  UpdateSalesData(IVr);	//Edit----------------------Dima  10.03.2016
+  
 LIVVcRecordUpdateAfter:;
   IVVcRecordUpdateAfter = res; 
   RETURN;
