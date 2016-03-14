@@ -134,7 +134,9 @@ begin
 end;
 
 
-
+//отчет строится по вспомогательному регистру SalesDataVc
+//не следует использовать другие регистры! при необходимости расширить описание SalesDataVc в datadef.hal и функцию CreateSalesData
+//для большей скорости отчета лучше избегать фильтрации (testf), вместо этого использовать разнообразные ключи для разных видов запуска отчета: CodeDate,DateCode,LocationDateCode...
 
 global
 procedure  SalesRn(record RcVc RepSpec)
@@ -147,12 +149,9 @@ Boolean nonprinted;
 val cred;
 boolean viewcost,consolidatedReport;
 val rowPrice,rowSum,rowCostUnit,rwGPpercent,salaryPrice,salarySum,rentSal,rentSalPercent,rowsalary;
-
-
 val salesum,cost,rent,salary,rentsalary;
 longint qty;
-
-longint length,k,tick,tick2,tick3;
+longint tick,tick2,tick3;
 time timeFrom, timeTo;
 date startDate,endDate;
 string 20 keyloop,prevArtCode,currentCode;
@@ -192,10 +191,14 @@ string 20 keyloop,prevArtCode,currentCode;
 		Header(rw,"Продавец: " & RepSpec.f4,1);
 		rw=rw+1;
 	end;
-	if (NonBlank(RepSpec.f5)) then begin
+	if (NonBlank(RepSpec.f7)) then begin
 		Header(rw,"Классификация: " & RepSpec.f7,1);
 		rw=rw+1;
 	end;
+	if (RepSpec.f5 != "00:00:00"  or RepSpec.f6 != "23:59:59") then begin
+		Header(rw,"Время: " & RepSpec.f5 & "-" & RepSpec.f6 ,1);
+		rw=rw+1;
+	end;	
 
 	EndHeader;
 	
@@ -214,6 +217,12 @@ string 20 keyloop,prevArtCode,currentCode;
 		keyloop = "DateCode";
 	end;
 	loop = 2;
+		
+	if (NonBlank(RepSpec.f3)) then begin
+		keyloop = "Location" & keyloop;  //LocationDateCode or LocationCodeDate
+		loop = 3;
+		SalesData.Location = RepSpec.f3;
+	end;	
 
 	if (consolidatedReport) then begin
 		ReadFirstKey("CodeDate",prevSalesData,1,false);
@@ -277,6 +286,8 @@ string 20 keyloop,prevArtCode,currentCode;
 			
 
 		if (nonblank(RepSpec.f3) and (SalesData.Location!=RepSpec.f3)) then begin	testf=false;	end;
+		if (nonblank(RepSpec.f3) and Left(keyloop,8)=="Location" and (SalesData.Location!=RepSpec.f3)) then begin	testf=false; TrHs=false;	end;
+		
 		if (nonblank(RepSpec.f4) and (SalesData.SalesMan!=RepSpec.f4)) then begin	testf=false;	end;
 		if ((SalesData.TransTime<=timeFrom) or (SalesData.TransTime>=timeTo)) then begin	testf=false;	end;
 		if (nonblank(RepSpec.f2) and (SalesData.SalesGroup!=RepSpec.f2)) then begin	testf=false;	end;	
@@ -385,8 +396,8 @@ string 20 keyloop,prevArtCode,currentCode;
 	
 	
 	
-	//tick3 = GetCurTick;
-	//LogText(0,"loop  " & tick3-tick2);	
+	tick3 = GetCurTick;
+	LogText(0,"loop  " & tick3-tick2);	
 	
 	
 	StartFormat(15);
@@ -399,17 +410,17 @@ string 20 keyloop,prevArtCode,currentCode;
 	OutString(60,0,"",false);
 	OutString(90,0,"",false);
 	OutString(120,0,"Всего:",false);
-	OutVal(270,0,totalQty,M4Val,false);
+	OutString(270,0,totalQty,false);
 	OutString(300,0,"",false);
-	OutVal(300,0,totalSum,M4Val,false);
+	OutString(300,0,totalSum,false);
  if (UserCanAction("ViewCostPrice",true)) then begin
 		OutString(320,0,"",false);
-		OutVal(340,0,totalCost,M4Val,false);
-		OutVal(360,0,totalRent,M4Val,false);
+		OutString(340,0,totalCost,false);
+		OutString(360,0,totalRent,false);
 		OutString(380,0,totalRent/totalSalary*100,false);
 		OutString(400,0,"",false);
-		OutVal(420,0,totalSalary,M4Val,false);
-		OutVal(440,0,totalRentSalary,M4Val,false);
+		OutString(420,0,totalSalary,false);
+		OutString(440,0,totalRentSalary,false);
 		OutString(460,0,(totalSum - totalSalary)/totalSalary*100,false);
 	end;
 	OutString(480,0,"",false);		
@@ -417,8 +428,8 @@ string 20 keyloop,prevArtCode,currentCode;
 	
 
 
-	//tick2 = GetCurTick;
-	//LogText(0,"totals  " & tick2-tick3);	
+	tick2 = GetCurTick;
+	LogText(0,"totals  " & tick2-tick3);	
 		
 	
 	EndJob;

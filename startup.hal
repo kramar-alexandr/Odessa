@@ -27,8 +27,8 @@ begin
   Report("Отчет по товарам по классификации (поставщику)",VERepRClass,VERepRn,0,modPO); //Edit***************************Sasha2,14:08 31.07.2014
   Report("Отчет по заказанным товарам",ItemPUOrderReportRClass,ItemPUOrderReportRn,0,modPO); //Edit***************************Sasha2,14:08 31.07.2014
   Report("Отчет по оплатам кассовых сч/ф",POSPaymentsRClass,POSPaymentsRn,0,modSL); //Edit***************************Sasha2,16:40 17.11.2014
-  Report("Отчет по продажам",SalesRClass,SalesRn,0,modSL); 
-  //Report("Отчет по продажам старый",SalesRClass,SalesRnOld,0,modSL);
+  Report("Отчет по продажам",SalesRClass,SalesRn,0,modSL); //Edit----------------------Dima  14.03.2016
+  //Report("Отчет по продажам старый",SalesRClass,SalesRnOld,0,modSL);//Edit----------------------------------Dima  04.12.2014
   Report("Отчет по складам",LocationsRClass,LocationsRn,0,modIN); //Edit----------------------------------Dima  04.12.2014
 
   Report("Отчет по складам",LocationsRClass,LocationsRn,0,modIN);
