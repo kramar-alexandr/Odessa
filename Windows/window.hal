@@ -2477,3 +2477,17 @@ Integer i;
 
   EndWindow;
 end;
+
+
+
+
+window ImportOfRegisterIClass:1	// Edit ************************** Wednesday, 9 March 2016 13:53:49
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+real h,v,vs;
+Integer i;
+WindowBegin("€мпорт регистров",ImportOfRegisterIClass,CGIcW,RcType);
+  SetWRect(80,80,400,200);
+		 
+  EndWindow;  
+end;

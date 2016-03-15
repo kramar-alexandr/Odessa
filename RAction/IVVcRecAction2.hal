@@ -701,6 +701,8 @@ BEGIN
 
   if (IVr.SerNr==-99) then begin
     IVr.SerNr = NextSerNr("IVVc",IVr.TransDate,-1,false,IVr.LangCode);
+    
+    IVr.OKFlag = 0;// Edit ************************** Wednesday, 9 March 2016 13:32:48
   end;
   ReadIVFunctions(IVr);
   locIVr.SerNr = IVr.SerNr;

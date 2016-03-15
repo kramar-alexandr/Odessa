@@ -252,6 +252,9 @@ begin
 	Cur.Name = XmlGetAttribute(xmlMessage,"orders/order" & i,"name") & " " & XmlGetAttribute(xmlMessage,"orders/order" & i,"name2");
 	Cur.eMail = XmlGetAttribute(xmlMessage,"orders/order" & i,"email");
 	Cur.Phone = XmlGetAttribute(xmlMessage,"orders/order" & i,"phone");
+	if(left(Cur.Phone,2)=="38")then begin
+		Cur.Phone = right(Cur.Phone,len(Cur.Phone)-2);//mid(Cur.Phone,3,len(Cur.Phone)-3);// Edit ************************** Friday, 11 March 2016 14:12:16
+	end;
 	Cur.CustCat = "WEB";	//Edit--------------------Dima 08.01.2015
 	Cur.CUType = 1;
 	Cur.CurncyCode = "UAH_R";
@@ -591,3 +594,40 @@ LWebSyncConfirmed:;
 	end;
 return;
 end; //Edit***************************Sasha2,17:21 15.07.2014 }
+
+
+
+
+
+global procedure HTSPresenceLoginReply()
+begin
+
+	logtext(0,"dsfsdsfdghaslkdjhasdkljfhkslajd HTSPresenceLoginReply");
+
+return;
+end;
+
+global procedure HTSLookupAddressReply()
+begin
+
+	logtext(0,"dsfsdsfdghaslkdjhasdkljfhkslajd HTSLookupAddressReply");
+
+return;
+end;
+
+
+global procedure HTSLookupAddress()
+begin
+
+	logtext(0,"dsfsdsfdghaslkdjhasdkljfhkslajd HTSLookupAddress");
+
+return;
+end;
+
+global procedure HTSLookupAddressReply()
+begin
+
+	logtext(0,"dsfsdsfdghaslkdjhasdkljfhkslajd HTSLookupAddressReply");
+
+return;
+end;

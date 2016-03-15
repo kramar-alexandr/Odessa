@@ -1425,3 +1425,11 @@ begin
   return;
 end;
 
+global
+updating procedure ImportOfRegister(record RcVc RepSpec)// Edit ************************** Wednesday, 9 March 2016 13:54:32
+BEGIN
+string 100 tag;
+		tag = ImportField;
+    RegisterImport(tag);
+  RETURN;
+END;

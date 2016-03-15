@@ -47,7 +47,11 @@ begin
   Report("Резерв по счетам",ReservStatRClass,ReservStstRn,0,modSO);
   Report("Резерв по счетам (консолид.)",ReservStstConsolidRClass,ReservStstConsolidRn,0,modSO);
   Report("Дисбаланс статуса резерва",ReservISRClass,ReservISRn,0,modSO);
+	
+	
+	Import("Импорт регистров БЕЗ ПЕРЕЗАПИСИ",ImportOfRegisterIClass,ImportOfRegister,modDBMain);	//Edit----------------------Dima  27.05.2015
 
+	
   Setting("Авансовые отчеты",ExpLClass,modCL);
   Setting("Выплаты персоналу",PPLClass,modCL);
   //Setting("Путевые листы",WayListLClass,modCL);
