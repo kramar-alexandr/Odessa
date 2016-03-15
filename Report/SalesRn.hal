@@ -209,7 +209,7 @@ string 20 keyloop,prevArtCode,currentCode;
 
 	PrintReportHeader(RepSpec.ArtMode);
 	
-	//Настройки цикла,точек входа для чтения SalesData   --------
+	//Настройки ключей цикла,точек входа для максимально быстрого чтения SalesData   --------
 	
 	if (consolidatedReport) then begin
 		keyloop = "CodeDate";
@@ -218,34 +218,36 @@ string 20 keyloop,prevArtCode,currentCode;
 	end;
 	loop = 2;
 		
+
+	if (consolidatedReport) then begin	//оптимальная точка входа
+		ReadFirstKey("CodeDate",prevSalesData,1,false);
+		SalesData.ArtCode = prevSalesData.ArtCode;	
+	end;
+	
+	if (NonBlank(RepSpec.f1)) then begin//отчет по одному товару
+		SalesData.ArtCode = RepSpec.f1;
+		keyloop = "CodeDate";
+		loop = 2;
+	end;
+	
 	if (NonBlank(RepSpec.f3)) then begin
 		keyloop = "Location" & keyloop;  //LocationDateCode or LocationCodeDate
 		loop = 3;
 		SalesData.Location = RepSpec.f3;
-	end;	
-
-	if (consolidatedReport) then begin
-		ReadFirstKey("CodeDate",prevSalesData,1,false);
-		SalesData.ArtCode = prevSalesData.ArtCode;
-	end;
-	
-	if (NonBlank(RepSpec.f1)) then begin		//отчет по одному товару
-		SalesData.ArtCode = RepSpec.f1;
-		keyloop = "CodeDate";
-	end;
+	end;		
 	
 
 	TrHs=true;
 	SalesData.InvDate = startDate;
+
 	
 	//---------------------------------------------------------
 	
 	
 	While (LoopKey(keyloop,SalesData,loop,TrHs)) begin
 		testf=true;
-
+//LogText(0, SalesData.ArtCode  & "     " & SalesData.InvNr  & "     "  & SalesData.RowNr  & "     " & SalesData.InvDate);
 		if (consolidatedReport) then begin
-					if (SalesData.InvDate > endDate) then begin	testf=false; goto LNextStepLoop;	end;
 					
 					if (prevSalesData.ArtCode!=SalesData.ArtCode  and nonprinted)	then begin		//Печать данных сгруппированных по товару
 									StartFormat(15);
@@ -271,14 +273,22 @@ string 20 keyloop,prevArtCode,currentCode;
 									rent = 0;		salary = 0;				rentsalary = 0;							
 									
 									nonprinted = false;	
-					end;	
-					if (prevSalesData.ArtCode!=SalesData.ArtCode and SalesData.InvDate < startDate) then begin //Перепрыгиваем на нужную дату, пропускаем все записи до начала периода
+					end;										
+						
+					if (prevSalesData.ArtCode!=SalesData.ArtCode and SalesData.InvDate < startDate) then begin //Перепрыгиваем на нужную дату, пропускаем все записи до начала периода			
 							currentCode = SalesData.ArtCode;
 							ResetLoop(SalesData);
 							SalesData.InvDate = startDate;
 							SalesData.ArtCode = currentCode;
 							goto LNextStepLoop;
-					end;
+					end;					
+					if (SalesData.InvDate > endDate) then begin	//Перепрыгиваем на последнюю дату для этого товара
+							currentCode = SalesData.ArtCode;
+							ResetLoop(SalesData);
+							SalesData.InvDate = AddYear(CurrentDate,20);
+							SalesData.ArtCode = currentCode;										
+							goto LNextStepLoop;						
+					end;					
 		
 		end else begin
 					if (SalesData.InvDate > endDate) then begin	TrHs=false;	testf=false;	end;
@@ -396,8 +406,8 @@ string 20 keyloop,prevArtCode,currentCode;
 	
 	
 	
-	tick3 = GetCurTick;
-	LogText(0,"loop  " & tick3-tick2);	
+//	tick3 = GetCurTick;
+//	LogText(0,"loop  " & tick3-tick2);	
 	
 	
 	StartFormat(15);
@@ -428,8 +438,8 @@ string 20 keyloop,prevArtCode,currentCode;
 	
 
 
-	tick2 = GetCurTick;
-	LogText(0,"totals  " & tick2-tick3);	
+	//tick2 = GetCurTick;
+	//LogText(0,"totals  " & tick2-tick3);	
 		
 	
 	EndJob;
