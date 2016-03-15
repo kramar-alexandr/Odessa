@@ -98,6 +98,7 @@ external updating procedure RoyaltyIVRemoved(record IVVc);
 external function string 20 GetCustomOfficialSerNr; //Edit***************************Sasha2,16:54 28.01.2015
 external procedure Recalculate_CustomStatusFlagText(var record ORVc);	//Edit----------------------Dima  22.09.2015
 external updating procedure UnOk_IVVc(var record IVVc);//Edit----------------------Dima  30.11.2015
+external updating procedure UpdateSalesData(record IVVc);	//Edit----------------------Dima  10.03.2016
 
 procedure SetIVAcceptanceFlag(var record IVVc IVr,record IVVc prevIVr,LongInt stat)
 begin
@@ -245,6 +246,22 @@ begin
 END;
 
 
+updating procedure DeleteSalesData(record IVVc IVr)
+begin
+	boolean TrHs;
+	record SalesDataVc SalesData;
+	
+	SalesData.InvNr = IVr.SerNr;
+	TrHs = true;	
+	While(LoopMain(SalesData,1,TrHs)) begin
+		if (SalesData.InvNr!= IVr.SerNr) then begin TrHs=false; end;
+		if (TrHs) then begin
+      RecordDelete(SalesData);
+      StepBack(SalesData);
+		end;
+	end;	  
+end;
+
 
 global
 updating function LongInt IVVcRecordRemove(var record IVVc IVr,record IVVc IV2r,LongInt long3,LongInt long4)
@@ -281,6 +298,7 @@ BEGIN
     if (IVr.RoyaltyIVFlag!=0) then begin
       RoyaltyIVRemoved(IVr);
     end;
+    DeleteSalesData(IVr);		//Edit----------------------Dima  11.03.2016
   end;
 LIVVcRecordRemove:;
   IVVcRecordRemove = res; 
@@ -311,6 +329,31 @@ begin
   
   RETURN;
 END;
+
+
+procedure UpdateSalaryPrice(var record IVVc IVr)		//Edit----------------------Dima  15.03.2016
+begin
+record PLVc PLr;
+row IVVc IVrw;
+integer i;
+
+	if (IVr.OKFlag!=0) then begin
+		for(i=0;i<MatRowCnt(IVr);i=i+1) begin		
+			MatRowGet(IVr,i,IVrw);
+			if (IVrw.stp==kInvoiceRowTypeNormal  and nonblank(IVrw.ArtCode)) then begin
+				PLr.PLCode = "SALAR";
+				PLr.ArtCode = IVrw.ArtCode;
+				if (ReadFirstMain(PLr,2,true)) then begin
+					IVrw.SalaryPrice = PLr.ExVatPrice;
+					MatRowPut(IVr,i,IVrw);
+				end;
+			end;
+		end;
+	end;
+  
+end;
+
+
 
 global
 updating function LongInt IVVcRecordSave(var record IVVc IVr,record IVVc IV2r,LongInt stat,LongInt long4)
@@ -366,6 +409,7 @@ BEGIN
       if (EInvoiceWithPDFFileTest(IVr.CustCode,IVr.CurncyCode,EInvCUr)) then begin 
         CreateAndAttachPdfIV(IVr);
       end;
+      UpdateSalaryPrice(IVr);//Edit----------------------Dima  15.03.2016
     end;  
     RecalculetWeightVolumeIVVc(IVr,false);
   end;
@@ -529,7 +573,9 @@ BEGIN
 				RecordStore(ORr,true);
 			end;    		
   	end;
-	end;  
+	end;
+	
+	UpdateSalesData(IVr);	//Edit----------------------Dima  10.03.2016  
   
 LIVVcRecordSaveAfter:;
   IVVcRecordSaveAfter = res; 
@@ -812,6 +858,8 @@ LIVVcRecordImportAfter:;
   RETURN;
 END;
 
+
+
 global
 updating function LongInt IVVcRecordUpdate(var record IVVc IVr,record IVVc IV2r,LongInt stat,LongInt long4)
 BEGIN
@@ -872,6 +920,7 @@ BEGIN
       if (EInvoiceWithPDFFileTest(IVr.CustCode,IVr.CurncyCode,EInvCUr)) then begin 
         CreateAndAttachPdfIV(IVr);
       end;
+      UpdateSalaryPrice(IVr);//Edit----------------------Dima  15.03.2016
     end;
     RecalculetWeightVolumeIVVc(IVr,false);
   end;
@@ -1159,6 +1208,9 @@ BEGIN
         CancelApprovalRequestActivities(kAcceptanceIV,"IVVc",IVr.SerNr,IVr.CustCode);
       end;
   end;
+  
+  UpdateSalesData(IVr);	//Edit----------------------Dima  10.03.2016
+  
 LIVVcRecordUpdateAfter:;
   IVVcRecordUpdateAfter = res; 
   RETURN;

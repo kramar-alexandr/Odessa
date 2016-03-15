@@ -73,6 +73,10 @@ external updating function longint AddSMStoStack(string, string, string,string,s
 external function string 255 ParseSMStext(string, record ORVc);//Edit----------------------Dima  16.09.2015
 external procedure Recalculate_CustomStatusFlagText(var record ORVc);	//Edit----------------------Dima  22.09.2015
 external updating procedure UpdateORVcNewPostStatuses(record SHVc );//_*_*_*_**************************
+external updating procedure UpdateSalesDataFromSH(record SHVc);//Edit----------------------Dima  10.03.2016
+external updating procedure UpdateSalesData(record IVVc);	//Edit----------------------Dima  10.03.2016
+
+
 function Boolean StockMovOKedForSH(LongInt shnr,var LongInt stmovnr)
 begin
   Boolean res;
@@ -1848,11 +1852,20 @@ begin
 				ORr.CustomStatusFlag = 6;
 				Recalculate_CustomStatusFlagText(ORr);
 				RecordStore(ORr,true);
-		end;  
+		end;
+		
+		UpdateSalesDataFromSH(SHr); //Edit----------------------Dima  10.03.2016  
   end;
 
   if ((SHr.OKFlag==0) and (SH2r.OKFlag!=0)) then begin//unok
     UnOKDelivery(SHr,SH2r,true);
+    
+    //return costs back 
+    IVr.OrderNr = SHr.OrderNr;
+    if (ReadFirstKey("OrderNr",IVr,1,true)) then begin
+    	UpdateSalesData(IVr);	//Edit----------------------Dima  10.03.2016
+    end;	
+    
   end;
   if (nonblank(SHr.OfficialSerNr)) then begin
     if (SHr.OfficialSerNr!=SH2r.OfficialSerNr) then begin
@@ -1862,7 +1875,8 @@ begin
     if (nonblank(SH2r.OfficialSerNr)) then begin
       DeleteOffSerNr(SH2r.SerNr,"SHVc");
     end;
-  end;  
+  end; 
+   
   
   SHVcRecordUpdateAfter = res; 
   return;
@@ -1920,6 +1934,7 @@ global
 updating function LongInt SHVcRecordRemove(var record SHVc SHr,record SHVc SH2r,LongInt stat,LongInt long4)
 begin
   LongInt res;
+  record IVVc IVr;
 
   if (SHr.OrderNr!=-1) then begin
     if (UpdateOrderFromShip(SH2r,false,SHr,true,false)) then begin end;
@@ -1930,6 +1945,13 @@ begin
   if (SHr.OKFlag==0) then begin
     SHDeleteStockMovemnts(SHr.SerNr);
   end;
+  
+  //return costs back 
+  IVr.OrderNr = SHr.OrderNr;
+  if (ReadFirstKey("OrderNr",IVr,1,true)) then begin
+  	UpdateSalesData(IVr);	//Edit----------------------Dima  10.03.2016
+  end;  
+  
   SHVcRecordRemove = res; 
   return;
 end;

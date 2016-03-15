@@ -1,0 +1,275 @@
+external function val MulRateToBase1(var string,val,val,val,val,val,val,roundmode);
+external function val AbsoluteVal(val);
+external procedure ExtractObj(string,var Integer,var string);
+
+//Функция собирает данные для SalesDataVc из регистров IVVc,SHVc,PLVc, INvc
+//Расчет себестоимости - копия из старого отчета по продажам SalesRn
+//Основной документ - Сч/фактура, для нее вызывается функция. При изменении отгрузок запускается эта же функция, но для соответствующих сч/фактур.
+
+updating procedure CreateSalesData(record IVVc IVr)				//Edit----------------------Dima  10.03.2016
+begin
+  record SalesDataVc SalesData,oldSalesData;
+  row IVVc IVrw;
+  record INVc INr;
+  record DIVc DIr;
+  record PLVc PLr;
+	integer pos,i,cred,j,k,mtcnt,rownr;
+	string 40 txt;
+	val cost,unitcost,fr,to,sum;
+	boolean update,shipped,TrHs;
+	record SHVc SHp;
+  row SHVc SHrw;
+  array record SHVc SHarray;
+
+
+	cred = 1;
+	if(IVr.InvType==kInvoiceTypeCredit)then begin
+		cred = -1;
+	end;
+	
+	fr = IVr.FrRate;
+	to = IVr.ToRateB1;
+	if(fr==0 or to==0)then begin
+		fr = 1;
+		to = 1;
+	end;
+		
+	if (IVr.UpdStockFlag==0 or (IVr.UpdStockFlag!=0 and IVr.OrderNr>-1)) then begin
+	//чтобы не читать SHVc заново для каждой строки IVVc
+	//предвартельно заносим подходящие записи в массив
+			SHp.OrderNr = IVr.OrderNr;
+			TrHs = true;	
+			while (LoopKey("OrderKey",SHp,1,TrHs)) begin
+				if(SHp.OrderNr!=IVr.OrderNr)then begin TrHs = false; end;
+				if (TrHs and SHp.OKFlag==1) then begin
+					SHarray[SHarray.length] = SHp;
+				end;				
+			end;
+	end;	
+		
+
+  for(i=0;i<MatRowCnt(IVr);i=i+1) begin
+		MatRowGet(IVr,i,IVrw);
+		if (IVrw.stp==kInvoiceRowTypeNormal  and nonblank(IVrw.ArtCode)) then begin
+
+			SalesData.InvNr = IVr.SerNr;
+			SalesData.RowNr = i;
+			update = false;
+			if (ReadFirstMain(SalesData,2,true)) then begin
+				RecordCopy(oldSalesData,SalesData);
+				update = true;
+			end;
+						
+			
+			IVrw.Quant = IVrw.Quant*cred;
+			IVrw.FIFORowVal = IVrw.FIFORowVal*cred;
+			IVrw.Sum = IVrw.Sum * cred;
+				
+
+			SalesData.InvNr = IVr.SerNr;
+			SalesData.RowNr = i;
+			SalesData.ArtCode = IVrw.ArtCode;
+			SalesData.Spec = IVrw.Spec;
+			SalesData.InvDate = IVr.InvDate;
+			SalesData.TransDate = IVr.TransDate;
+			SalesData.TransTime = IVr.TransTime;
+			SalesData.Quant = IVrw.Quant;
+			SalesData.Price = IVrw.Price/fr*to;
+			SalesData.Sum = IVrw.Sum/fr*to;
+			SalesData.Location = IVr.Location;
+			SalesData.SalesGroup = IVr.SalesGroup;
+			SalesData.SalesMan = IVr.SalesMan;
+			SalesData.InvType = IVr.InvType;
+			SalesData.SerialNr = IVrw.SerialNr;
+
+			INr.Code = IVrw.ArtCode;
+			if (ReadFirstMain(INr,1,true)) then begin
+				SalesData.DispGroups = INr.DispGroups;
+
+				pos = 0;
+				txt = "";
+				ExtractObj(INr.DispGroups,pos,txt);
+				while (nonblank(txt)) begin
+					DIr.Code = txt;
+					if(readfirstmain(DIr,1,true))then begin
+						if(DIr.CType=="TYPE")then begin
+							SalesData.ItemType = DIr.Name;
+							goto Lbreaktype;
+						end;
+					end;
+					ExtractObj(INr.DispGroups,pos,txt);
+				end;
+				Lbreaktype:;
+			end;
+
+			//Зарплатная часть
+			if (IVrw.SalaryPrice>0) then begin
+				SalesData.SalaryPrice = IVrw.SalaryPrice*cred;
+			end else begin
+				PLr.PLCode = "SALAR";
+				PLr.ArtCode = IVrw.ArtCode;
+				if (ReadFirstMain(PLr,2,true)) then begin
+					SalesData.SalaryPrice = PLr.ExVatPrice*cred;
+				end;
+			end;
+
+			
+			
+			if (IVr.UpdStockFlag==0 or (IVr.UpdStockFlag!=0 and IVr.OrderNr>-1)) then begin
+					
+					for(k=0;k<SHarray.length;k=k+1) begin
+							SHp = SHarray[k];
+  						mtcnt = MatRowCnt(SHp);
+  						shipped = false;
+  						for (j=0;j<mtcnt;j=j+1) begin
+  							MatRowGet(SHp,j,SHrw);
+  							if (SHrw.ArtCode==IVrw.ArtCode and blank(IVrw.SerialNr)) then begin shipped = true; j = mtcnt;k=SHarray.length; end;
+  							if (SHrw.ArtCode==IVrw.ArtCode and nonblank(IVrw.SerialNr) and IVrw.SerialNr==SHrw.SerialNr) then begin shipped = true; j = mtcnt; k=SHarray.length; end;
+  						end;
+  						
+					end;					
+					sum = MulRateToBase1(IVr.CurncyCode,IVrw.Sum,IVr.FrRate,IVr.ToRateB1,IVr.ToRateB2,IVr.BaseRate1,IVr.BaseRate2,DefaultCurRoundOff);
+					if (shipped) then begin
+						if(AbsoluteVal(SHrw.FIFORowVal/SHrw.Ship)>SHrw.BBCostPrice)then begin
+							if(SHrw.FIFORowVal/SHrw.Ship/SHrw.BBCostPrice>1.5 or SHrw.FIFORowVal/SHrw.Ship/SHrw.BBCostPrice<-1.5)then begin
+								SHrw.FIFORowVal = SHrw.BBCostPrice*SHrw.Ship;// Edit ************************** Friday, 2 October 2015 17:11:02
+							end;
+						end;
+						if(AbsoluteVal(SHrw.FIFORowVal/SHrw.Ship)<SHrw.BBCostPrice)then begin
+							if(SHrw.FIFORowVal/SHrw.Ship/SHrw.BBCostPrice<0.5 or SHrw.FIFORowVal/SHrw.Ship/SHrw.BBCostPrice>-0.5)then begin
+								SHrw.FIFORowVal = SHrw.BBCostPrice*SHrw.Ship;// Edit ************************** Friday, 2 October 2015 17:11:02
+							end;
+						end;
+						if(SHrw.FIFORowVal==0 and SHrw.BBCostPrice>0)then begin
+							SHrw.FIFORowVal = SHrw.BBCostPrice*SHrw.Ship;
+						end;
+    			
+						cost = (SHrw.FIFORowVal/SHrw.Ship)*IVrw.Quant;
+						if (IVrw.Quant<0 or IVr.InvType==kInvoiceTypeCredit) then begin
+							if(cost>0)then begin
+								cost = -cost;	//Edit----------------------Dima  01.10.2015 (problems with return of goods)
+							end;
+						end;
+						unitcost = SHrw.FIFORowVal/SHrw.Ship*cred;					
+											
+					end else begin
+						cost = IVrw.BasePrice*IVrw.Quant;
+						unitcost = IVrw.BasePrice*cred;
+					end;
+					SalesData.rowGP = sum - cost;	
+			
+			end else begin
+			
+					if(AbsoluteVal(IVrw.FIFORowVal/IVrw.Quant*cred)>IVrw.BasePrice)then begin
+						if(IVrw.FIFORowVal/IVrw.Quant*cred/IVrw.BasePrice>1.6 or IVrw.FIFORowVal/IVrw.Quant*cred/IVrw.BasePrice<-1.6)then begin
+							IVrw.FIFORowVal = IVrw.BasePrice*IVrw.Quant;// Edit ************************** Friday, 2 October 2015 17:11:05
+						end;
+					end;
+					if(AbsoluteVal(IVrw.FIFORowVal/IVrw.Quant*cred)<IVrw.BasePrice)then begin
+						if(IVrw.FIFORowVal/IVrw.Quant*cred/IVrw.BasePrice<0.5 or IVrw.FIFORowVal/IVrw.Quant*cred/IVrw.BasePrice>-0.5)then begin
+							IVrw.FIFORowVal = IVrw.BasePrice*IVrw.Quant;// Edit ************************** Friday, 2 October 2015 17:11:05
+						end;
+					end;
+					if(IVrw.FIFORowVal==0 and IVrw.BasePrice>0)then begin
+						IVrw.FIFORowVal = IVrw.BasePrice*IVrw.Quant;
+					end;	      		
+					unitcost = IVrw.FIFORowVal/IVrw.Quant;
+					cost = IVrw.FIFORowVal*cred;
+					if (IVrw.Quant<0 or IVr.InvType==kInvoiceTypeCredit) then begin
+						if(cost>0)then begin
+							cost = -cost;	//Edit----------------------Dima  01.10.2015 (problems with return of goods)
+						end;
+					end;
+					SalesData.rowGP = (SalesData.Sum - cost)*cred;
+			end;
+
+			SalesData.Cost = cost;
+			SalesData.UnitCost = unitcost;					
+	
+			if (update) then begin
+				RecordUpdate(oldSalesData,SalesData,true);
+			end else begin
+				RecordStore(SalesData,true);
+			end;
+
+		end;
+	end;
+end;
+
+
+global updating procedure UpdateSalesData(record IVVc IVr)
+begin
+	record SalesDataVc SalesData;
+	boolean TrHs;
+
+	CreateSalesData(IVr);
+
+	//if invoice's rows were deleted
+	//we also delete them from SalesDataVc
+	SalesData.InvNr = IVr.SerNr;
+	SalesData.RowNr = MatRowCnt(IVr);
+	TrHs = true;
+	While(LoopMain(SalesData,2,TrHs)) begin
+		if (SalesData.InvNr!= IVr.SerNr) then begin TrHs=false; end;
+		if (TrHs) then begin
+      RecordDelete(SalesData);
+      StepBack(SalesData);
+		end;
+	end;
+
+end;
+
+
+
+
+
+global updating procedure UpdateSalesDataFromSH(record SHVc SHr)	//Edit----------------------Dima  11.03.2016
+begin
+  record SalesDataVc SalesData,oldSalesData;
+  record IVVc IVr;
+  row IVVc IVrw;
+  row SHVc SHrw;
+	integer i,j,cred,mtcnt,rownr;
+	val cost,unitcost,sum;
+	boolean shipped;
+	boolean TrHs;
+
+
+
+	
+	TrHs = true;
+	IVr.OrderNr = SHr.OrderNr;
+	While(LoopKey("OrderNr",IVr,1,TrHs)) begin
+		if (IVr.OrderNr!=SHr.OrderNr) then begin TrHs=false; end;
+		if (TrHs) then begin
+  		UpdateSalesData(IVr);
+		end;
+	end;	
+
+
+LUpdateSalesDataFromSH:;
+end;
+
+
+
+
+
+//Функция RecalculateSalesDataVcMn создает/обновляет регистр SalesDataVc (для отчета по продажам)
+//должна запускаться при изменении прейскуранта SALAR, классификаций товаров
+
+global updating procedure RecalculateSalesDataVcMn()		//Edit----------------------Dima  11.03.2016
+begin
+record IVVc IVr;
+record SHVc SHr;
+
+	while(LoopMain(IVr,1,true)) begin
+	
+		CreateSalesData(IVr);
+
+		if (mod(IVr.SerNr,1000)==0) then begin
+			LogText(0,"Recalculation... IVVc: " & IVr.SerNr);
+		end;
+	end;
+
+end;
+

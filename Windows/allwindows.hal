@@ -4396,11 +4396,15 @@ begin
       end;
       if (HasModIN) then begin
       	if(LMb.LocalMachineCode=="RR1" or LMb.LocalMachineCode=="RR2")then begin //Edit by Victor 21.01.15
-	        CalculatedColumn(-50,-50,"4-NIZ","IN1SClassInStockNIZ",true);// Edit ************************** Friday, 31 October 2014 11:43:05
+	        CalculatedColumn(-50,-50,"RAY+NIZ","IN1SClassInStockNIZ",true);// Edit ************************** Friday, 31 October 2014 11:43:05
 	      end else begin
 	      	if(LMb.LocalMachineCode=="KV1" or LMb.LocalMachineCode=="KV2")then begin //Edit by Victor 21.01.15
 		      	CalculatedColumn(-50,-50,"6-KV","IN1SClassInStockKV",true);//Edit by Victor 21.01.15
-		      end;
+		      end else begin
+	      		if(LMb.LocalMachineCode=="EXPO" )then begin //Edit by Victor 21.01.15
+		      		CalculatedColumn(-50,-50,USetStr(31141),"IN1SClassInStockEXPO",true);//Edit by Victor 21.01.15
+		      	end;	
+					end;
 	      end;
       end;
       SearchField("Найти");

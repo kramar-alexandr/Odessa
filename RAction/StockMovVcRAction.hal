@@ -213,6 +213,7 @@ BEGIN
   record ItemStatusVc ISr;
   record PISVc PISr;
   val w,h,d,m;
+  val instock;
   val prev,stockreservq;
   row StockMovVc StockMov2rw;
   Integer errcode;
@@ -312,10 +313,14 @@ BEGIN
           end else begin
             FindStockValueInclStockReserv(-1,StockMovrw.ArtCode,StockMovrw.SerialNr,frlocation,ISr,stockreservq);
           end;
+          
+					instock = ISr.Instock;           
+          
+          
           prev = prev + quant;
           //stockreservq is got from StockReservVc                    
           //curDocReserv  - from current document SM
-          if (ISr.Instock<(prev+stockreservq) and currentuser!="SAUNOK") then begin// Edit ************************** Thursday, 21 January 2016 09:52:17
+          if (instock<(prev+stockreservq) and currentuser!="SAUNOK") then begin// Edit ************************** Thursday, 21 January 2016 09:52:17
             if (sentquantf) then begin
               error = 1247;
               errorstr = "";
@@ -332,7 +337,7 @@ BEGIN
           end;
           if (SMp.MoveIncludingReserve==0 and currentuser!="SAUNOK") then begin		//Edit----------------------Dima  18.06.2015
           	stockreservq = stockreservq + ISr.RsrvQty - curDocReserv;		//Edit----------------------Dima  09.07.2015		
-          	if (ISr.Instock<(prev+stockreservq)) then begin
+          	if (instock<(prev+stockreservq)) then begin
           	  if (sentquantf) then begin
           	    error = 31070;
           	    errorstr = StockMovrw.ArtCode;
@@ -556,7 +561,9 @@ BEGIN		//Edit----------------------Dima  18.06.2015
           	PISr.Location = Locr.Code;
           	if (ReadFirstMain(PISr,3,true)) then begin 
           		instock = PISr.Instock;
-          	end;
+          	end else begin
+							instock = 0;
+						end;
           end else begin
 						instock = ISr.Instock;
 					end;    
@@ -576,7 +583,7 @@ BEGIN		//Edit----------------------Dima  18.06.2015
           end;
           if (SMp.MoveIncludingReserve==0 and currentuser!="SAUNOK") then begin
           	stockreservq = stockreservq + ISr.RsrvQty-curDocReserv;		
-          	if (ISr.Instock<(prev+stockreservq)) then begin
+          	if (instock<(prev+stockreservq)) then begin
           	    error = 31070;
           	    errorstr = StockMovrw.ArtCode;
           	    errorrownr = rownr;

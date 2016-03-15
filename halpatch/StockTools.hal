@@ -31,7 +31,7 @@ global function string 255 IN1SClassInStockNIZ(var record INVc INr)	// Edit by V
 begin
   transaction string 255 gLocation;
   
-  IN1SClassInStockNIZ = ItemInStock(INr,"4-NIZ");// Put stock!
+  IN1SClassInStockNIZ = ItemInStock(INr,"3-RAY");// Put stock!
   return;
 end;
 
@@ -42,6 +42,16 @@ begin
   IN1SClassInStockKV = ItemInStock(INr,"6-KV");
   return;
 end;
+
+
+global function string 255 IN1SClassInStockEXPO(var record INVc INr)	//Edit----------------------Dima  01.03.2016
+begin
+  transaction string 255 gLocation;
+  
+  IN1SClassInStockEXPO = ItemInStock(INr,USetStr(31141));
+  return;
+end;
+
 
 	// Edit End ---------------------------------------------- Edit End
 	
