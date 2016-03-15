@@ -103,10 +103,14 @@ begin
 			end;
 
 			//Зарплатная часть
-			PLr.PLCode = "SALAR";
-			PLr.ArtCode = IVrw.ArtCode;
-			if (ReadFirstMain(PLr,2,true)) then begin
-				SalesData.SalaryPrice = PLr.ExVatPrice*cred;
+			if (IVrw.SalaryPrice>0) then begin
+				SalesData.SalaryPrice = IVrw.SalaryPrice*cred;
+			end else begin
+				PLr.PLCode = "SALAR";
+				PLr.ArtCode = IVrw.ArtCode;
+				if (ReadFirstMain(PLr,2,true)) then begin
+					SalesData.SalaryPrice = PLr.ExVatPrice*cred;
+				end;
 			end;
 
 			
@@ -260,12 +264,10 @@ record SHVc SHr;
 
 	while(LoopMain(IVr,1,true)) begin
 	
-	//if (IVr.SerNr==48858) then begin
 		CreateSalesData(IVr);
-	//end;	
 
 		if (mod(IVr.SerNr,1000)==0) then begin
-			LogText(0,IVr.SerNr);
+			LogText(0,"Recalculation... IVVc: " & IVr.SerNr);
 		end;
 	end;
 

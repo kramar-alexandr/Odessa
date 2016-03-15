@@ -330,6 +330,31 @@ begin
   RETURN;
 END;
 
+
+procedure UpdateSalaryPrice(var record IVVc IVr)		//Edit----------------------Dima  15.03.2016
+begin
+record PLVc PLr;
+row IVVc IVrw;
+integer i;
+
+	if (IVr.OKFlag!=0) then begin
+		for(i=0;i<MatRowCnt(IVr);i=i+1) begin		
+			MatRowGet(IVr,i,IVrw);
+			if (IVrw.stp==kInvoiceRowTypeNormal  and nonblank(IVrw.ArtCode)) then begin
+				PLr.PLCode = "SALAR";
+				PLr.ArtCode = IVrw.ArtCode;
+				if (ReadFirstMain(PLr,2,true)) then begin
+					IVrw.SalaryPrice = PLr.ExVatPrice;
+					MatRowPut(IVr,i,IVrw);
+				end;
+			end;
+		end;
+	end;
+  
+end;
+
+
+
 global
 updating function LongInt IVVcRecordSave(var record IVVc IVr,record IVVc IV2r,LongInt stat,LongInt long4)
 BEGIN
@@ -384,6 +409,7 @@ BEGIN
       if (EInvoiceWithPDFFileTest(IVr.CustCode,IVr.CurncyCode,EInvCUr)) then begin 
         CreateAndAttachPdfIV(IVr);
       end;
+      UpdateSalaryPrice(IVr);//Edit----------------------Dima  15.03.2016
     end;  
     RecalculetWeightVolumeIVVc(IVr,false);
   end;
@@ -830,6 +856,8 @@ LIVVcRecordImportAfter:;
   RETURN;
 END;
 
+
+
 global
 updating function LongInt IVVcRecordUpdate(var record IVVc IVr,record IVVc IV2r,LongInt stat,LongInt long4)
 BEGIN
@@ -890,6 +918,7 @@ BEGIN
       if (EInvoiceWithPDFFileTest(IVr.CustCode,IVr.CurncyCode,EInvCUr)) then begin 
         CreateAndAttachPdfIV(IVr);
       end;
+      UpdateSalaryPrice(IVr);//Edit----------------------Dima  15.03.2016
     end;
     RecalculetWeightVolumeIVVc(IVr,false);
   end;

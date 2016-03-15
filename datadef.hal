@@ -331,6 +331,7 @@ begin
   ArrayField(MotherSecondarySerialNr,M4Str,30,0);
   ArrayField(MotherAlternateDeviceID,M4Str,30,0);
   ArrayField(UnitComment,M4Str,200,0);
+  ArrayField(SalaryPrice,M423Val,0,0);	//Edit----------------------Dima  15.03.2016
   EndArray;
   return;
 end; 
