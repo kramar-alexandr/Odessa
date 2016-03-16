@@ -782,6 +782,33 @@ Integer i;
 end;
 
 
+window SMImportIClass:1  // added ************ Dima, 19.11.2014
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+real h,v,vs;
+Integer i;
+  WindowBegin("Импорт перемещений на склад",SMImportIClass,CGIcW,-);
+  SetWRect(20,80,470,320);
+  i=1; //номер колонки
+  h=10;  v=15;
+  StaticText(h,v,"Формат импорта",false);
+  h=20;  v=40;
+  StaticText(h,v,"Список колонок:",false);
+  v=v+30; vs=25;
+  StaticText(h,v+=vs,i &". Код товара",false);
+	 StaticText(h+150,v,"Обязательное поле",false);
+	 i=i+1;
+  StaticText(h,v+=vs,i &". Количество",false);
+	 StaticText(h+150,v,"Обязательное поле",false);
+	 i=i+1;
+
+  h=10;
+  StaticText(h,v+=45,"Примечание:   Все столбцы разделены <Tab>",false);
+
+  EndWindow;
+end;
+
+
 
 window TableSearchAdditionIClass:1  // added ************ Dima, 12.01.2015
   wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
@@ -2480,6 +2507,10 @@ end;
 
 
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> origin/master
 
 window ImportOfRegisterIClass:1	// Edit ************************** Wednesday, 9 March 2016 13:53:49
   wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
@@ -2489,9 +2520,16 @@ Integer i;
 WindowBegin("Импорт регистров",ImportOfRegisterIClass,CGIcW,RcType);
   SetWRect(80,80,400,200);
 		 
+<<<<<<< HEAD
   EndWindow; 
 end;  
    
+=======
+  EndWindow;
+
+end;    
+
+>>>>>>> origin/master
 window SalesDataLClass:1		//Edit----------------------Dima  10.03.2016
   wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
 begin
@@ -2510,4 +2548,8 @@ begin
   RlCol(-70,-70,"Quant",Quant,false);
   SearchField("Найти");
   EndWindow;
+<<<<<<< HEAD
+=======
+
+>>>>>>> origin/master
 end;
