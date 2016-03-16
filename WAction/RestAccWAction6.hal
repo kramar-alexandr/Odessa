@@ -914,10 +914,15 @@ begin
   Error = OutComPort(1,s & chr(10)); s =""; L2 ="";
   
   PrintLongLine;
-  s = USetStr(31009);
-  Error = OutComPort(1,s & chr(10)); s =""; //Edit -----------------Dima  09.01.2015
-  s = USetStr(31006);
-  Error = OutComPort(1,s & chr(10)); s ="";
+  if (LMr.Code!="EXPO") then begin
+  	s = USetStr(31009);
+  	Error = OutComPort(1,s & chr(10)); s =""; //Edit -----------------Dima  09.01.2015
+  	s = USetStr(31006);
+  	Error = OutComPort(1,s & chr(10)); s ="";
+  end else begin
+  	s = USetStr(31145);
+  	Error = OutComPort(1,s & chr(10)); s ="";
+	end;
   
   loop = 6;
   while (loop>0) begin
