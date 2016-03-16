@@ -631,3 +631,15 @@ begin
 
 return;
 end;
+
+
+
+
+global webpublic Procedure HTSRegisterPresence() //Edit***************************Sasha2,17:21 15.07.2014 {
+begin
+	
+	logtext(0,"HTSRegisterPresence HTSRegisterPresence HTSRegisterPresence");
+	weboutstring("0");
+
+return;
+end;
