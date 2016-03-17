@@ -597,7 +597,7 @@ end; //Edit***************************Sasha2,17:21 15.07.2014 }
 
 
 
-
+/*
 
 global procedure HTSPresenceLoginReply()
 begin
@@ -624,6 +624,7 @@ begin
 return;
 end;
 
+
 global procedure HTSLookupAddressReply()
 begin
 
@@ -642,4 +643,4 @@ begin
 	weboutstring("0");
 
 return;
-end;
+end;*/
