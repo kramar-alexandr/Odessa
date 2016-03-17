@@ -2501,16 +2501,10 @@ Integer i;
   WindowBegin("€мпорт",ImportDefaultIClass,CGIcW,-);
   SetWRect(20,80,470,300);
 
-
   EndWindow;
 end;
 
 
-
-<<<<<<< HEAD
-=======
-
->>>>>>> origin/master
 
 window ImportOfRegisterIClass:1	// Edit ************************** Wednesday, 9 March 2016 13:53:49
   wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
@@ -2520,16 +2514,11 @@ Integer i;
 WindowBegin("€мпорт регистров",ImportOfRegisterIClass,CGIcW,RcType);
   SetWRect(80,80,400,200);
 		 
-<<<<<<< HEAD
   EndWindow; 
 end;  
    
-=======
-  EndWindow;
 
-end;    
 
->>>>>>> origin/master
 window SalesDataLClass:1		//Edit----------------------Dima  10.03.2016
   wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
 begin
@@ -2548,8 +2537,4 @@ begin
   RlCol(-70,-70,"Quant",Quant,false);
   SearchField("Ќайти");
   EndWindow;
-<<<<<<< HEAD
-=======
-
->>>>>>> origin/master
 end;
