@@ -6,3 +6,69 @@ BEGIN
 	
 	RETURN;
 END;
+
+global
+updating function LongInt PLHistVcRecordImport(var record PLHistVc PLHistr,record PLHistVc PLHist2r,LongInt stat,LongInt long4)
+BEGIN
+	LongInt res;
+	
+	logtext(0,"PLHistVcRecordImport " & PLHistr.PLCode & " " & PLHistr.ArtCode & " " & PLHistr.CustCode);
+	PLHistVcRecordImport = res;
+	
+	RETURN;
+END;
+
+
+procedure ReadImportTagPriceHistoryRecord(record PLHistVc PLHistr)
+begin
+  string 255 tstr;
+  row PLHistVc PLHistrw;
+  integer rwcnt;
+  
+  RecordNew(PLHistr);
+  PLHistr.PLCode = ImportField;
+  PLHistr.ArtCode = ImportField;
+  PLHistr.CustCode = ImportField;
+  
+  logtext(0,"ReadImportTagPriceHistoryRecord " & PLHistr.PLCode & " " & PLHistr.ArtCode & " " & PLHistr.CustCode);
+  
+  rwcnt = 0;
+  
+  while (NextImportLine(false)) begin
+    ClearRow(PLHistr,PLHistrw,1);
+    PLHistrw.ChDate = StringToDate(ImportField);
+    PLHistrw.ChTime = StringToTime(ImportField);
+    PLHistrw.UserCode = ImportField;
+    PLHistrw.Price = StringToVal(ImportField,M423Val);
+    PLHistrw.StatusStr = ImportField;
+    MatRowPut(PLHistr,rwcnt,PLHistrw);
+    rwcnt = rwcnt + 1;
+  end;
+  
+  return;
+end;
+
+global
+updating procedure ReadImportTagPriceHistory(string thetag)
+begin
+  record PLHistVc PLHistr;
+  
+  while (NextImportLine(false)) begin
+    ReadImportTagPriceHistoryRecord(PLHistr);
+    RecordImportStore(PLHistr,false);
+  end;
+  
+  return;
+end;
+
+global
+function string 120 ReadRecordIdStrPriceHistory(Integer compnr,string thetag)
+begin
+  record PLHistVc PLHistr;
+  
+  PLHistr.ArtCode = ImportField;
+  PLHistr.PLCode = ImportField;
+  PLHistr.CustCode = ImportField;
+  ReadRecordIdStrPriceHistory = BuildRecordIdStr(PLHistr,compnr);
+  return;
+end;
