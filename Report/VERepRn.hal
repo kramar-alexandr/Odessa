@@ -382,21 +382,6 @@ RecordNew(ISr);
    OutString(370,0,"",false); 			//VendorsListUnOK
    OutString(440,0,"Остаток с заказом",false);
    
-   
-   //OutString(100,0,"Нач. остаток",false);
-   //OutString(125,0,"Получено",false);
-   //OutString(145,0,"Возврат поставщику",false);
-   //OutString(180,0,"Продано",false);
-   //OutString(200,0,"Списано",false);
-   //OutString(220,0,"Вн. приход",false);
-   //OutString(240,0,"Вн. расход",false);
-   //OutString(260,0,"Остаток",false);
-   //OutString(280,0,"К отгрузке клиентам",false); 
-   //OutString(320,0,"Товар в дороге",false);  
-   //OutString(360,0,"Долг под.",false);
-   //OutString(380,0,"Долг по не под.",false);
-   //OutString(420,0,"Остаток (подтв.)",false);
-   //OutString(450,0,"Остаток (не подтв.)",false);
        
   EndFormat;
   Gray_Divider(0,1);
@@ -493,23 +478,10 @@ RecordNew(ISr);
   		StartFormat(15);
   			OutString(20,0,INr.Code,true);
   			OutString(30,0,INr.Name,false);
-  			//LookupInHist(INr.Code, RepSpec.sStartDate, RepSpec.sEndDate,RepSpec.f2,sold,strRest,gotval,curRest,TRWH,retPU,SDqty,stin,stout,saleopt,saleroz);    //Edit Dima
- /* 			OutVal(140,0,-sold,M4Val,false);
-  			OutVal(165,0,-saleopt,M4Val,false);
-  			OutVal(190,0,-saleroz,M4Val,false);
-  			OutVal(220,0,strRest,M4Val,false);
-				OutVal(240,0,gotval,M4Val,false);
-				OutVal(260,0,-(retPU+SDqty),M4Val,false);
-				OutVal(280,0,curRest,M4Val,false);
-				OutVal(300,0,OrdQty,M4Val,false);
-	*/	//Edit----------------------Dima  13.02.2015
 				OutString(140,0,-soldall,false);
-
 				For(i=0;i<size;i=i+1) begin
 					OutString(140,0,-sold[i],false);
 				end;
-
-  			
   			OutString(165,0,-saleopt,false);
   			OutString(190,0,-saleroz,false);
   			OutString(220,0,strRest,false);
