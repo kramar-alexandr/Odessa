@@ -6,7 +6,7 @@ BEGIN
 	
 	RETURN;
 END;
-
+/*
 global
 updating function LongInt PLHistVcRecordImport(var record PLHistVc PLHistr,record PLHistVc PLHist2r,LongInt stat,LongInt long4)
 BEGIN
@@ -16,7 +16,7 @@ BEGIN
 	PLHistVcRecordImport = res;
 	
 	RETURN;
-END;
+END;*/
 /*
 
 procedure ReadImportTagPriceHistoryRecord(record PLHistVc PLHistr)
