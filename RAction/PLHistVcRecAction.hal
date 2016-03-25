@@ -17,7 +17,7 @@ BEGIN
 	
 	RETURN;
 END;
-
+/*
 
 procedure ReadImportTagPriceHistoryRecord(record PLHistVc PLHistr)
 begin
@@ -49,6 +49,25 @@ begin
 end;
 
 global
+updating procedure ReadImportTagPLHistVcRecord(record PLHistVc PLHistr)
+begin
+	
+	ReadImportTagPriceHistoryRecord(PLHistr);
+	
+return;
+end;
+
+global
+updating procedure ReadImportTagPLHistRecord(record PLHistVc PLHistr)
+begin
+	
+	ReadImportTagPriceHistoryRecord(PLHistr);
+	
+return;
+end;
+
+
+global
 updating procedure ReadImportTagPriceHistory(string thetag)
 begin
   record PLHistVc PLHistr;
@@ -62,6 +81,44 @@ begin
 end;
 
 global
+updating procedure ReadImportTagPLHistVc(string thetag)
+begin
+	
+	ReadImportTagPriceHistory(thetag);
+	
+return;
+end;
+
+global
+updating procedure ReadImportTagPLHist(string thetag)
+begin
+	
+	ReadImportTagPriceHistory(thetag);
+	
+return;
+end;
+
+global
+updating procedure ReadImportTagRHistVc(string thetag)
+begin
+	
+	ReadImportTagPriceHistory(thetag);
+	
+return;
+end;
+
+global
+updating procedure ReadImportTagRHist(string thetag)
+begin
+	
+	ReadImportTagPriceHistory(thetag);
+	
+return;
+end;
+
+
+
+global
 function string 120 ReadRecordIdStrPriceHistory(Integer compnr,string thetag)
 begin
   record PLHistVc PLHistr;
@@ -71,4 +128,4 @@ begin
   PLHistr.CustCode = ImportField;
   ReadRecordIdStrPriceHistory = BuildRecordIdStr(PLHistr,compnr);
   return;
-end;
+end;*/
