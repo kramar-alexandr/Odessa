@@ -471,7 +471,7 @@ begin
   string 200 getParam,host,page,webaddr,path;
   area basestring;
   xml xdata;
-  string 255 xpath, city, cityRU;
+  string 255 xpath, city, cityRU,errors;
   longint i;
   record NPCityVc NPCityr;
   record NPSettingsBlock NPSettingsb;
@@ -503,6 +503,13 @@ begin
 		xdata = ParseXMLArea(replyarea);
 
 		i = 0;  
+		
+		NPParseErrors(xdata,errors);
+		if (nonblank(errors)) then begin
+			LogText(0," Error:" & errors);
+			goto LNPGetCytiesRequestMn;
+		end;
+		
 		
 		if(CountRecords("NPCityVc") > 0) then begin
 			NPCityr.City = "";
@@ -608,7 +615,7 @@ begin
   string 200 getParam,host,page,webaddr,path;
   area basestring;
   xml xdata;
-  string 255 xpath, descr, descrRU;
+  string 255 xpath, descr, descrRU,errors;
   longint i;
   record NPDescripVc NPDr;
   record NPSettingsBlock NPSettingsb;
@@ -637,6 +644,12 @@ begin
     
    //addfiletoarea("1XML.txt",replyarea,false); 
   xdata = ParseXMLArea(replyarea);
+  
+	NPParseErrors(xdata,errors);
+	if (nonblank(errors)) then begin
+		LogText(0," Error:" & errors);
+		goto LNPGetDescriptionRequestMn;
+	end;  
     
   i = 0;  
   if(CountRecords("NPDescripVc") > 0) then begin
@@ -1002,7 +1015,7 @@ begin
   area basestring;
   xml xdata;
   string 60 cityRef, cityName,number;
-  string 255 xpath, descr, descrRU;
+  string 255 xpath, descr, descrRU,errors;
   longint i;
   integer repeat;
   record NPWarehouseVc NPWr;
@@ -1022,6 +1035,9 @@ begin
   //cityRef = "ru"; //ua ru en 
   
   //LogText(0,CountRecords("NPWarehouseVc") & "   before");
+  
+
+  
   
 	if(CountRecords("NPWarehouseVc") > 0) then begin
 		NPWr.CityRef = "";
@@ -1051,6 +1067,12 @@ begin
 			  if (GetAreaLength(replyarea)==0) then begin	notSynchronize = true; LogText(0,cityName); goto L2222; 	end;
 		
 				xdata = ParseXMLArea(replyarea);
+				
+				NPParseErrors(xdata,errors);
+				if (nonblank(errors)) then begin
+					LogText(0,"Error " & errors);
+					goto LNPGetWarehouseMn;
+				end;				
 				i = 0;
 				
 //				NPWr.Description = "";

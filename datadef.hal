@@ -4272,6 +4272,7 @@ RecordBegin(IPVc,-,"");
 	RecordField(DefRedeliveryCargoType,M4Str,100,0);
 	RecordField(DefPaymentForm,M4Str,100,0);
 	RecordField(DefCargoDescription,M4Str,200,0);
+	RecordField(APIkeyDueDate,M4Date,0,0);
 	EndBlock; 
 	
 	//should be removed
@@ -4522,7 +4523,7 @@ RecordBegin(IPVc,-,"");
   EndBlock; //Edit***************************Sasha2,11:36 15.07.2015 }  
   
   //Edit-------------------Vitalii 14:02 14.12.2015
-  RecordBegin(PLHistVc,-,"PriceHistory");
+  RecordBegin(PLHistVc,-,"");
   RecordField(PLCode,M4Code,5,PLVc);
   RecordField(ArtCode,M4Code,20,INVc);
   RecordField(CustCode,M4Code,20,CUVc);

@@ -244,6 +244,10 @@ begin
    SString(31141,"Y_ВЫСТАВКА");
    
    SString(31145,"Дякуємо за покупку!!!");
+   SString(31146,"Срок действия API-ключа Новой почты истекает через ");
+   SString(31147,"день");
+   SString(31148,"дня");
+   SString(31149,"дней");   
 
 
   Maintenance("Экспорт склада CSV",ExportStockCSVClass,ExportStockCSVMn,modSY);
@@ -309,7 +313,7 @@ begin
 
 	Maintenance("FixPOSMn",MyVClass,FixPOSMn,modDBMain);// Edit ************************** Tuesday, 22 December 2015 10:04:05
 	Maintenance("RecalcARMn",MyVClass,RecalcARMn,modDBMain);// Edit ************************** Tuesday, 22 December 2015 10:04:05
-	//Maintenance("Очистить регистр",MyVClass,CleanRegisterMn,modDBMain);//Edit----------------------Dima  11.02.2016
+	Maintenance("Очистить регистр",MyVClass,CleanRegisterMn,modDBMain);//Edit----------------------Dima  11.02.2016
 	Maintenance("Пересчитать статус завершен",MyVClass,RecalculateORStatusFinishedMn,modDBMain);	//Edit----------------------Dima  18.02.2016
 	Maintenance("Пересчитать регистр SalesDataVc",MyVClass,RecalculateSalesDataVcMn,modDBMain);	//Edit----------------------Dima  10.03.2016
 	

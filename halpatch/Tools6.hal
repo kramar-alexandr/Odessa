@@ -517,4 +517,13 @@ END;
 
 
 	// Edit End ---------------------------------------------- Edit End
-	
+
+
+
+global function string 50 CurrentUserOnServer()		//Edit----------------------Dima  25.03.2016
+begin
+
+	CurrentUserOnServer = currentuser;
+
+return;
+end;	

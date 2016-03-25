@@ -1983,7 +1983,8 @@ begin
   SetBlid(NPSettingsBlock);
   SetWRect(64,80,550,300);
   v=6;vs = 20; h = 80; h2 = 130;
-  EditField(h,v+=vs,200,"API key",Normal,APIkey,false,0);
+  EditField(h,v+=vs,200,"API-ключ",Normal,APIkey,false,0);
+  EditField(h2,v+=vs,150,"Срок API-ключа",Normal,APIkeyDueDate,false,PasteCurDate);
   EditField(h2,v+=vs,200,"Отправитель(ссылка)",Normal,DefSenderRef,false,NPCounterpartySenderSClass);
   EditField(h,v+=vs,200,"Отправитель",Normal,DefSenderDescription,false,0);
   EditField(h2,v+=vs,200,"Город(ссылка)",Normal,DefSenderCityRef,false,0);
