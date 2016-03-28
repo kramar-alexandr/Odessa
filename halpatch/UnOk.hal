@@ -275,7 +275,7 @@ LogText(0,"RemoveIHrecordsStockMov");
   While(LoopKey("FNTransNr",IHr,3,TrHs)) begin	
   	testf = true;
   	if(IHr.TransNr!=SerialNr) then begin TrHs=false; testf=false; end;
-  	if(IHr.Location!=fromLoc) then begin testf=false; end;
+  	if(IHr.Location!=fromLoc or IHr.Qty>0) then begin testf=false; end; //record "from" always < 0
   	
   	if (testf) then begin
   			IH2r.SerNr = IHr.Source;
@@ -306,7 +306,7 @@ LogText(0,"RemoveIHrecordsStockMov");
   While(LoopKey("FNTransNr",IHr,3,TrHs)) begin	
   	testf = true;
   	if(IHr.TransNr!=SerialNr) then begin TrHs=false; end;
-  	if(IHr.Location!=toLoc or IHr.Qty<0) then begin testf=false; end;
+  	if(IHr.Location!=toLoc or IHr.Qty<0) then begin testf=false; end; //record "from" always > 0
   	
   	if (testf) then begin
   	
