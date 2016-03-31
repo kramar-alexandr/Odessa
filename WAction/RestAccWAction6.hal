@@ -785,8 +785,27 @@ begin
   Error = OutComPort(1,s & chr(10)); s ="";
   s = LMr.CompName;
   Error = OutComPort(1,s & chr(10)); s ="";
-  s = LMr.Addr0 & " " & LMr.Tel;
-  Error = OutComPort(1,s & chr(10)); s ="";
+  if (NonBlank(LMr.Addr0)) then begin
+    s = LMr.Addr0 & " " & LMr.Tel;
+    Error = OutComPort(1,s & chr(10)); s ="";  
+  end;
+  if (NonBlank(LMr.Addr1)) then begin
+    s = LMr.Addr1;
+    Error = OutComPort(1,s & chr(10)); s ="";  
+  end;
+  if (NonBlank(LMr.Addr2)) then begin
+    s = LMr.Addr2;
+    Error = OutComPort(1,s & chr(10)); s ="";  
+  end;
+  if (NonBlank(LMr.Addr3)) then begin
+    s = LMr.Addr3;
+    Error = OutComPort(1,s & chr(10)); s ="";  
+  end;
+  if (NonBlank(LMr.Addr4)) then begin
+    s = LMr.Addr4;
+    Error = OutComPort(1,s & chr(10)); s ="";  
+  end;
+  
   //GetUserName(IVp.SalesMan,pername);						//Edit------------------------Dima 09.11.2015
   //Error = OutComPort(1,USetStr(11044) & " " & pername & chr(10)); s = "";
   Error = OutComPort(1,s & chr(10)); s =""; //empty line
