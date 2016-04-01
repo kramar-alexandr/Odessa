@@ -652,7 +652,7 @@ begin
   record DefCashBlock DCb;
   row PMBlock PMrw;
   val paidsum;// Edit ************************** Friday, 1 April 2016 14:29:45
-  integer rwcnt2,i;
+  integer rwcnt2,i;// Edit ************************** Friday, 1 April 2016 14:31:47
 
   wn = CurWindow;
   DeselectWindow(wn,true);
