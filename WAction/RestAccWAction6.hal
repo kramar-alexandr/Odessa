@@ -1025,8 +1025,7 @@ begin
   Boolean res;
   Boolean custopendrawerf,reOpenPortDspl; //Edit***************************Sasha2,12:37 14.11.2014
   integer comportDSPL;	//Edit----------------------Dima  26.02.2015
-  
-  
+    
   res = true;
   custopendrawerf = true;
   BlockLoad(LMb);
