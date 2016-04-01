@@ -452,6 +452,10 @@ begin
 							paidSum = paidSum + IVrw.Sum;				
 						end; 
 						
+						if (IVrw.stp==kInvoiceRowTypeGiftVoucherPayment)then begin
+							paidSum = paidSum + IVrw.Sum;				
+						end;
+						
 						if (IVrw.stp==kInvoiceRowTypeCreditCardPayment)then begin
 							paidSum = paidSum + IVrw.Sum;							
 						end; 
@@ -647,6 +651,8 @@ begin
   Boolean found;
   record DefCashBlock DCb;
   row PMBlock PMrw;
+  val paidsum;// Edit ************************** Friday, 1 April 2016 14:29:45
+  integer rwcnt2,i;
 
   wn = CurWindow;
   DeselectWindow(wn,true);
@@ -789,6 +795,28 @@ begin
           GetWindowRecord(mwn,IVr);
           IVDClass_RefreshStringList(mwn,IVr);
           SetPOSWindowDisplay_PaymentRow(IVrw.Spec,IVr.RetValue);
+          
+          rwcnt2 = matrowcnt(IVr);	//Begin Edit by Victor 12.11.14
+          for (i=0;i<rwcnt2;i=i+1) begin
+						MatRowGet(IVr,i,IVrw);
+						if (IVrw.stp==kInvoiceRowTypeCashPayment)then begin
+							paidSum = paidSum + IVrw.Sum;				
+						end; 
+						
+						if (IVrw.stp==kInvoiceRowTypeGiftVoucherPayment)then begin
+							paidSum = paidSum + IVrw.Sum;				
+						end;
+						
+						if (IVrw.stp==kInvoiceRowTypeCreditCardPayment)then begin
+							paidSum = paidSum + IVrw.Sum;							
+						end; 
+					end;
+          if(paidSum >= IVr.Sum4)then begin
+	        	Logtext(0,"IVFinishAndPrint() bu button 'GC pay'");
+	        	//SelectWindow(mwn);
+						IVFinishAndPrint;
+					end;   		// End Edit by Victor 12.11.14
+          
         case "IVCashVc":
           GetWindowRecord(mwn,IVCashr);
           IVCashDClass_RefreshStringList(mwn,IVCashr);
