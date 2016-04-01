@@ -1454,6 +1454,10 @@ begin
 							paidSum = paidSum + IVrw.Sum;				
 						end; 
 						
+						if (IVrw.stp==kInvoiceRowTypeGiftVoucherPayment)then begin
+							paidSum = paidSum + IVrw.Sum;				
+						end; 
+						
 						if (IVrw.stp==kInvoiceRowTypeCreditCardPayment)then begin
 							paidSum = paidSum + IVrw.Sum;							
 						end; 
