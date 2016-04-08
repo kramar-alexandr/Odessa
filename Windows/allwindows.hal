@@ -2931,7 +2931,7 @@ begin
   EditField(h,v+=vs,-240,"Объекты",Normal,Objects,false,ObjSClass);
   if (HasItemClassification) then begin
     EditField(h,v+=vs,-240,"Классификация",Normal,DispGroups,false,DISClass);
-    EditField(h,v+=vs,-240,"Классификация WEB1",Normal,WebDispGroups,false,DISClass); //Edit***************************Sasha2,16:30 04.11.2015
+    EditField(h,v+=vs,-240,"Классификация WEB",Normal,WebDispGroups,false,DISClass); //Edit***************************Sasha2,16:30 04.11.2015
   end;
   if (StandardHansa==false) then begin
     ButtonFrame(h1,v=24,120,4,"Тип товара");

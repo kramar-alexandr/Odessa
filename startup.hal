@@ -316,6 +316,7 @@ begin
 	Maintenance("Очистить регистр",MyVClass,CleanRegisterMn,modDBMain);//Edit----------------------Dima  11.02.2016
 	Maintenance("Пересчитать статус завершен",MyVClass,RecalculateORStatusFinishedMn,modDBMain);	//Edit----------------------Dima  18.02.2016
 	Maintenance("Пересчитать регистр SalesDataVc",MyVClass,RecalculateSalesDataVcMn,modDBMain);	//Edit----------------------Dima  10.03.2016
+	Maintenance("WEB-классификации записать отдельно в карте товара",MyVClass,TransferDispsToWebDispsMn,modDBMain); //Edit***************************Sasha2,13:28 08.04.2016
 	
 
   Import("Импорт цен",PLImportIClass,PLImportIn,modDI); //Added********************Dima 20.11.2014
