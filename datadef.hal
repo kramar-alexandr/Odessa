@@ -512,6 +512,7 @@ begin
   RecordField(AddUnitCoef4,M4UVal,0,0);//Edit***************************Sasha2,15:27 23.06.2014
   RecordField(AddUnittext5,M4Str,60,0);//Edit***************************Sasha2,15:27 23.06.2014
   RecordField(AddUnitCoef5,M4UVal,0,0);//Edit***************************Sasha2,15:27 23.06.2014
+  RecordField(WebDispGroups,M4UStr,255,DIVc); //Edit***************************Sasha2,11:58 08.04.2016
   RecordField(Math2,M4TextField,0,0);
   ArrayBegin(Math,-,1);
   ArrayField(LangCode,M4Code,5,0);
