@@ -2870,7 +2870,7 @@ begin
   string 255 label;
 
   WindowBegin("Товар",INDClass,CGview,-);
-  SetWRect(20,80,800,400);
+  SetWRect(20,70,800,600);
   Sizeable(-1,-1,-1,0);
   DynamicWindow;
   UseView(INVc);
