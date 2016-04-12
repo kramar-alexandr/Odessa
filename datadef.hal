@@ -4684,6 +4684,7 @@ RecordBegin(IPVc,-,"");
   RecordField(PayedByGift,M423Val,0,0);
   RecordField(Komitent,M4UStr,100,0);
   RecordField(Rate,M45Val,0,0);  
+  RecordField(CurncyCode,M4Str,10,0);  
   MainKeyBegin(InvNr,0);
   KeySegment(InvNr);
   KeySegment(RowNr);

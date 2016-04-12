@@ -1,13 +1,43 @@
 external function val AbsoluteVal(val);
 external procedure ExtractObj(string,var Integer,var string);
+external procedure CurValToOtherCur(Date,string,val,string,var val,roundmode);
+external procedure GetBaseCurncy(Integer,var string);
 
 
 SetLangMode(LangRussian,"RUS",0);
 
 
-procedure PrintReportHeader(array integer tab)
+global function string 100 GetLocationOfPosition(string posCode)
 begin
+record PosVc Posr;
+string 50 location;
 
+	location = "";
+	Posr.Code = posCode;
+	if (ReadFirstMain(Posr,1,true)) then begin
+		location = Posr.Location;
+	end;
+	GetLocationOfPosition = location;
+return;
+end;
+
+procedure PrintReportHeader(array integer tab, string locations, string positions)
+begin
+	string 50 locName;
+
+	if (nonblank(locations)) then begin
+		locName = locations;
+	end;	
+	if (nonblank(positions)) then begin
+		locName = positions;
+	end;
+	if (blank(locName)) then begin
+		locName = "Все склады";
+	end;
+
+	locName = " (" & locName & ")";
+
+	StartFormat(15);
 		OutString(tab[0],0,"Дата",false);
 		OutString(tab[1],0,"Сч/ф",false);
 		OutString(tab[2],0,"Склад",false);
@@ -20,10 +50,10 @@ begin
 		OutString(tab[9],0,"Себес-ть за ед.",false);
 		OutString(tab[10],0,"Себес-ть продажи",false);
 		OutString(tab[11],0,"Сумма продажи",false);
-		OutString(tab[12],0,"Остаток на начало",false);
-		OutString(tab[13],0,"Остаток на конец",false);
-		OutString(tab[14],0,"Перемещение на склад",false);
-		OutString(tab[15],0,"Перемещение со склада",false);
+		OutString(tab[12],0,"Остаток на начало" & locName,false);
+		OutString(tab[13],0,"Остаток на конец" & locName,false);
+		OutString(tab[14],0,"Перемещение на склад" & locName,false);
+		OutString(tab[15],0,"Перемещение со склада" & locName,false);
 		OutString(tab[16],0,"FIKS",false);
 		OutString(tab[17],0,"Комитент",false);
 		OutString(tab[18],0,"TYPE",false);
@@ -31,6 +61,7 @@ begin
 		OutString(tab[20],0,"Оплачено наличными",false);
 		OutString(tab[21],0,"Оплачено кр. картой",false);
 		OutString(tab[22],0,"Оплачено сертификатом",false);
+	EndFormat;	
 		
 end;
 
@@ -68,7 +99,7 @@ end;
 
 
 
-procedure GetStockBalanceOnPeriod(record SalesDataVc SalesData,string locations,string positions,date startperiod, date endperiod, var val balanceBeforePeriod, var val balanceAfterPeriod)
+procedure GetStockBalanceOnPeriod(record SalesDataVc SalesData,string locations,string positions,date startperiod, date endperiod, var val balanceBeforePeriod, var val balanceAfterPeriod,var val stockIn,var val stockOut)
 begin
 record ItemHistVc IHr;
 record ItemStatusVc ISr;
@@ -76,13 +107,15 @@ record PISVc PISr;
 val currentBalance,historybalance;
 string 50 keyloop;
 integer loop;
-boolean testf,TrHs;
-
+boolean testf,TrHs,balanceAfterFound;
+longint count;
 
 	currentBalance = 0;
 	historybalance = 0;
 	balanceBeforePeriod = 0;
 	balanceAfterPeriod = 0;
+	stockIn = 0;
+	stockOut = 0;
 	keyloop = "ArtCode";
 	loop = 2;
 	
@@ -114,24 +147,108 @@ boolean testf,TrHs;
 	
 	
 	IHr.ArtCode = SalesData.ArtCode;
-	IHr.TransDate = CurrentDate;
+	IHr.TransDate = AddYear(CurrentDate,10);
 	TrHs = true;
+	balanceAfterFound = false;
 	
 	While(LoopBackKey(keyloop,IHr,loop,TrHs)) begin
 		testf = true;
-		if (IHr.TransDate<=endperiod) then begin balanceAfterPeriod = currentBalance - historybalance; end;
+		if (IHr.TransDate<=endperiod and !balanceAfterFound) then begin balanceAfterPeriod = currentBalance - historybalance; balanceAfterFound = true; end;
 		
 		if(IHr.TransDate<startperiod) then begin TrHs=false; testf=false; end;
-		if (nonblank(positions) and (IHr.Position!=positions)) then begin testf = false; end;
+		if (IHr.ArtCode!=SalesData.ArtCode) then begin TrHs=false; testf=false; end;
 		if (nonblank(locations) and IHr.Location!=locations) then begin testf=false; TrHs=false; end;		
+		if (nonblank(positions) and (IHr.Position!=positions)) then begin testf = false; end;		
 		if (testf and  IHr.StockAffectf!=0) then begin
 			historybalance = historybalance +  IHr.Qty;
+			
+			if (IHr.FileName=="StockMovVc" and IHr.TransDate<=endperiod) then begin
+				if (IHr.Qty>0) then begin 
+					stockIn = stockIn + IHr.Qty;
+				end else begin
+					stockOut = stockOut - IHr.Qty;
+				end;					 
+			end;	
+					
 		end;
 	end;	
 	balanceBeforePeriod = currentBalance - historybalance;
-  
+//LogText(0,currentBalance & "      before "  & balanceBeforePeriod & "   after  " & balanceAfterPeriod & "   hist  " & historybalance);
 end;
 
+
+procedure CollectStockMovements(string locations, string positions,date startperiod, date endperiod,var vector val StockIn, var vector val StockOut)
+begin
+record StockMovVc SMr;
+row StockMovVc SMrw;
+string 50 keyloop;
+integer loop,i;
+boolean TrHs,testf;
+longint count;
+
+	if (blank(locations)) then begin  //quantity In == quantity Out
+		keyloop = "OKFlagTransDate";
+		loop = 2;
+		SMr.OKFlag = 1;
+		SMr.TransDate = startperiod;
+		
+		TrHs = true;
+		While(LoopKey(keyloop,SMr,loop,TrHs)) begin
+			if (SMr.TransDate>endperiod) then begin TrHs = false; end;
+			if (TrHs) then begin
+				for(i=0;i<MatRowCnt(SMr);i=i+1) begin
+					MatRowGet(SMr,i,SMrw);
+					StockIn[SMrw.ArtCode] = StockIn[SMrw.ArtCode] + SMrw.Quant;
+					StockOut[SMrw.ArtCode] = StockOut[SMrw.ArtCode] + SMrw.Quant;							
+				end;
+			end;  	
+		end;
+		ResetLoop(SMr);		
+	end; 
+	
+	if (nonblank(locations)) then begin
+		keyloop = "FrLocOK";
+		loop = 3;
+		SMr.FrLocation = locations;	
+		SMr.OKFlag = 1;
+		SMr.TransDate = startperiod;			
+	
+		TrHs = true;
+		While(LoopKey(keyloop,SMr,loop,TrHs)) begin
+  		testf = true;
+  		if (SMr.TransDate>endperiod) then begin TrHs = false; testf = false; end;
+  		if (SMr.FrLocation!=locations) then begin TrHs = false; testf = false; end;
+  		if (nonblank(positions) and SMr.FrPos!=positions) then begin testf = false; end;
+  		if (testf) then begin 
+				for(i=0;i<MatRowCnt(SMr);i=i+1) begin
+					MatRowGet(SMr,i,SMrw);
+					StockOut[SMrw.ArtCode] = StockOut[SMrw.ArtCode] + SMrw.Quant;
+				end;  		
+  		end;  		
+		end;
+		ResetLoop(SMr);
+		
+		keyloop = "ToLocOK";
+		SMr.ToLocation = locations;	
+		SMr.OKFlag = 1;
+		SMr.TransDate = startperiod;			
+		
+		TrHs = true;
+		While(LoopKey(keyloop,SMr,loop,TrHs)) begin
+  		testf = true;
+  		if (SMr.TransDate>endperiod) then begin TrHs = false; testf = false; end;
+  		if (SMr.ToLocation!=locations) then begin TrHs = false; testf = false; end;
+  		if (nonblank(positions) and SMr.ToPos!=positions) then begin testf = false; end;
+  		if (testf) then begin 
+				for(i=0;i<MatRowCnt(SMr);i=i+1) begin
+					MatRowGet(SMr,i,SMrw);
+					StockIn[SMrw.ArtCode] = StockIn[SMrw.ArtCode] + SMrw.Quant;
+				end;  		
+  		end;  		
+		end;
+	end;
+	 
+end;
 
 
 procedure GetStockMovTurnOver(record SalesDataVc SalesData,string locations, string positions,date startperiod, date endperiod,var val qtyIn, var val qtyOut)
@@ -141,7 +258,7 @@ row StockMovVc SMrw;
 string 50 keyloop;
 integer loop,i;
 boolean TrHs,testf;
-
+longint count;
 	qtyIn = 0;
 	qtyOut = 0;
 
@@ -159,14 +276,14 @@ boolean TrHs,testf;
 					MatRowGet(SMr,i,SMrw);
 					if (SMrw.ArtCode==SalesData.ArtCode) then begin
 							qtyIn = qtyIn + SMrw.Quant;
-							qtyOut = qtyOut + SMrw.Quant;
+							qtyOut = qtyOut + SMrw.Quant;							
 					end;
 				end;
 			end;  	
 		end;
 		ResetLoop(SMr);		
 	end;
-	
+	//LogText(0,"SM rows  : " & count);
 	
 	if (nonblank(locations)) then begin
 		keyloop = "FrLocOK";
@@ -220,6 +337,9 @@ boolean TrHs,testf;
 end;
 
 
+
+
+
 //Отчет основан на отчете по продажам, читается регистр SalesDataVc
 //все цифры выводятся в UAH
 global
@@ -227,7 +347,7 @@ procedure  CommissionRn(record RcVc RepSpec)
 begin
 record SalesDataVc SalesData;
 date startDate,endDate;
-string 20 keyloop;
+string 20 keyloop,baseCurncy;
 array integer tab;
 boolean TrHs,testf;
 Integer rw,rwcnt,i,loop;
@@ -235,14 +355,26 @@ string 200 locations,positions;
 val rate;
 val balanceAfterPeriod,balanceBeforePeriod,stockIn,stockOut;
 string 100 brand,type;
-
+longint tick1,tick2,s1,s2,s3;
+vector val balanceBefore,balanceAfter,ToStock,FromStock;
+vector boolean checkItem;
+array string 50 combarr;
 
 	startDate = RepSpec.sStartDate;
 	endDate = RepSpec.sEndDate;
 	locations = RepSpec.f1;
 	positions = RepSpec.f2;
 	
+	if (nonblank(positions) and blank(locations)) then begin
+		locations = GetLocationOfPosition(positions);
+	end;
+	
+	GetBaseCurncy(1,baseCurncy);
+	
+
 	//check correctness...
+	
+	
 	
 
 	StartReportJob("Отчет по продажам");
@@ -263,13 +395,12 @@ string 100 brand,type;
 	tab[16] = 460;	tab[17] = 460;	tab[18] = 460;	tab[19] = 460;
 	tab[20] = 460;	tab[21] = 460;	tab[22] = 460;	tab[23] = 460;
 	
-	PrintReportHeader(tab);
+	PrintReportHeader(tab,locations,positions);
 	
 	
 	keyloop = "DateCode";
 	loop = 2;
 		
-	
 
 	TrHs=true;
 	SalesData.InvDate = startDate;	
@@ -280,12 +411,30 @@ string 100 brand,type;
 		if (nonblank(positions) and SetInSet(SalesData.Position,positions)==false) then begin testf=false; end;
 		if (SalesData.InvDate>endDate) then begin TrHs=false; testf=false; end;
 		
-		if (testf) then begin
-				rate = SalesData.Rate; //IVr.FrRate*IVr.ToRateB1
-				GetClassifications(SalesData.DispGroups,brand,type);
-				GetStockBalanceOnPeriod(SalesData,locations,positions,startDate,endDate,balanceBeforePeriod,balanceAfterPeriod);
-				GetStockMovTurnOver(SalesData,locations,positions,startDate,endDate,stockIn,stockOut)
+		if (testf) then begin	
 				
+				GetClassifications(SalesData.DispGroups,brand,type);			
+				
+				if (checkItem[SalesData.ArtCode]==false) then begin
+				
+					//tick1 = GetCurTick;
+					GetStockBalanceOnPeriod(SalesData,locations,positions,startDate,endDate,balanceBeforePeriod,balanceAfterPeriod,stockIn,stockOut);
+					//tick2 = GetCurTick;
+					//s2=s2+(tick2-tick1);
+					
+					//tick1 = GetCurTick;
+					checkItem[SalesData.ArtCode] = true;
+					balanceBefore[SalesData.ArtCode] = balanceBeforePeriod;
+					balanceAfter[SalesData.ArtCode] = balanceAfterPeriod;
+					ToStock[SalesData.ArtCode] = stockIn;
+					FromStock[SalesData.ArtCode] = stockOut;
+					//tick2 = GetCurTick;
+					//s3=s3+(tick2-tick1);					
+				end;	
+				
+				rate = 1;
+				CurValToOtherCur(SalesData.TransDate,baseCurncy,1,"UAH",rate,DefaultCurRoundOff);
+			
 				StartFormat(15);
 					OutString(tab[0],0,SalesData.InvDate,false);
 					OutString(tab[1],0,SalesData.InvNr,false);
@@ -299,10 +448,13 @@ string 100 brand,type;
 					OutString(tab[9],0,SalesData.UnitCost * rate,false);
 					OutString(tab[10],0,SalesData.Cost * rate,false);
 					OutString(tab[11],0,SalesData.Sum * rate,false);
-					OutString(tab[12],0,balanceBeforePeriod,false);
-					OutString(tab[13],0,balanceAfterPeriod,false);
-					OutString(tab[13],0,stockIn,false);
-					OutString(tab[13],0,stockOut,false);
+					//tick1 = GetCurTick;
+					OutString(tab[12],0,balanceBefore[SalesData.ArtCode],false);
+					OutString(tab[13],0,balanceAfter[SalesData.ArtCode],false);
+					OutString(tab[14],0,ToStock[SalesData.ArtCode],false);
+					OutString(tab[15],0,FromStock[SalesData.ArtCode],false);	
+				//tick2 = GetCurTick;
+				//s3=s3+(tick2-tick1);									
 					if (SalesData.ItemGroup=="FIKS") then begin
 						OutString(tab[16],0,"да",false);
 					end else 	begin
@@ -311,24 +463,21 @@ string 100 brand,type;
 					OutString(tab[17],0,SalesData.Komitent,false);
 					OutString(tab[18],0,type,false);
 					OutString(tab[19],0,brand,false);			
-					OutString(tab[20],0,SalesData.PayedByCash,false);//?? cur=cur
+					OutString(tab[20],0,SalesData.PayedByCash,false);
 					OutString(tab[21],0,SalesData.PayedByCCard,false);
-					OutString(tab[22],0,SalesData.PayedByGift,false);
-					
-					
-				
+					OutString(tab[22],0,SalesData.PayedByGift,false);		
 					
 				EndFormat;	
 		end;	
 	end;
 	
 	
-	
-	
+	//LogText(0,"classifications  " & s1);
+	//LogText(0,"history  " & s2);
+	//LogText(0,"vectors  " & s3);
 	
 	
 	
 	EndJob;
-
 
 end;

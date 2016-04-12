@@ -37,6 +37,24 @@ begin
 	end;
 	
 	komitentStart = StringToDate("01/04/2016"); //записи с комитентом  должны начинатьсЯ с первого апрелЯ
+	
+	
+	for(i=0;i<MatRowCnt(IVr);i=i+1) begin
+		MatRowGet(IVr,i,IVrw);
+		switch (IVrw.stp) begin
+			case kInvoiceRowTypeCashPayment:
+				paycash = paycash + IVrw.Sum;
+			case kInvoiceRowTypeCreditCardPayment:
+				payccard = payccard + IVrw.Sum;
+			case kInvoiceRowTypeGiftVoucherPayment:
+				paygift = paygift + IVrw.Sum;
+		end;	
+	end;	
+	
+	if (paycash>0) then begin	//учитываем возможную сдачу
+		paycash = IVr.Sum4 - payccard - paygift;
+	end;		
+	
 		
 	if (IVr.UpdStockFlag==0 or (IVr.UpdStockFlag!=0 and IVr.OrderNr>-1)) then begin
 	//чтобы не читать SHVc заново длЯ каждой строки IVVc
@@ -51,24 +69,6 @@ begin
 			end;
 	end;	
 		
-	for(i=0;i<MatRowCnt(IVr);i=i+1) begin
-		switch (IVrw.stp) begin
-			case kInvoiceRowTypeCashPayment:
-				paycash = paycash + IVrw.Sum;
-			case kInvoiceRowTypeCreditCardPayment:
-				payccard = payccard + IVrw.Sum;
-			case kInvoiceRowTypeGiftVoucherPayment:
-				paygift = paygift + IVrw.Sum;
-		end;	
-	end;
-	
-	if (paycash>0) then begin	//учитываем возможную сдачу
-		paycash = IVr.Sum4 - payccard - paygift;
-	end;
-	
-	SalesData.PayedByCash = paycash;
-	SalesData.PayedByCCard = payccard;
-	SalesData.PayedByGift = paygift;
 
 
   for(i=0;i<MatRowCnt(IVr);i=i+1) begin
@@ -81,8 +81,9 @@ begin
 			if (ReadFirstMain(SalesData,2,true)) then begin
 				RecordCopy(oldSalesData,SalesData);
 				update = true;
-			end;
-						
+			end else begin
+				RecordNew(SalesData);
+			end;						
 			
 			IVrw.Quant = IVrw.Quant*cred;
 			IVrw.FIFORowVal = IVrw.FIFORowVal*cred;
@@ -106,6 +107,10 @@ begin
 			SalesData.InvType = IVr.InvType;
 			SalesData.SerialNr = IVrw.SerialNr;
 			SalesData.Rate = fr*to;
+			SalesData.PayedByCash = paycash*IVrw.Sum/IVr.Sum4;
+			SalesData.PayedByCCard = payccard*IVrw.Sum/IVr.Sum4;
+			SalesData.PayedByGift = paygift*IVrw.Sum/IVr.Sum4;
+			SalesData.CurncyCode = IVr.CurncyCode;			
 
 			INr.Code = IVrw.ArtCode;
 			if (ReadFirstMain(INr,1,true)) then begin
@@ -147,7 +152,7 @@ begin
 			end;
 
 			
-			
+			//ђасчет себестоимости - -------------------------------
 			if (IVr.UpdStockFlag==0 or (IVr.UpdStockFlag!=0 and IVr.OrderNr>-1)) then begin
 					
 					for(k=0;k<SHarray.length;k=k+1) begin
@@ -218,6 +223,7 @@ begin
 
 			SalesData.Cost = cost;
 			SalesData.UnitCost = unitcost;					
+			//-------------- -  ---------------------- ---------------
 	
 			if (update) then begin
 				RecordUpdate(oldSalesData,SalesData,true);
@@ -294,6 +300,8 @@ global updating procedure RecalculateSalesDataVcMn()		//Edit--------------------
 begin
 record IVVc IVr;
 record SHVc SHr;
+LongInt counter;
+//IVr.SerNr = 64000;
 
 	while(LoopMain(IVr,1,true)) begin
 	
@@ -302,7 +310,11 @@ record SHVc SHr;
 		if (mod(IVr.SerNr,2000)==0) then begin
 			LogText(0,"Recalculation... IVVc: " & IVr.SerNr);
 		end;
+		
+		//counter = counter +1;
+		//if (counter>500) then begin goto LLLLA; end;
+		
 	end;
-
+LLLLA:;
 end;
 
