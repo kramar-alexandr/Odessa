@@ -1,0 +1,334 @@
+external function val AbsoluteVal(val);
+external procedure ExtractObj(string,var Integer,var string);
+
+
+SetLangMode(LangRussian,"RUS",0);
+
+
+procedure PrintReportHeader(array integer tab)
+begin
+
+		OutString(tab[0],0,"Дата",false);
+		OutString(tab[1],0,"Сч/ф",false);
+		OutString(tab[2],0,"Склад",false);
+		OutString(tab[3],0,"Место",false);
+		OutString(tab[4],0,"Код товара",false);
+		OutString(tab[5],0,"Наименование",false);
+		OutString(tab[6],0,"Кол-во",false);
+		OutString(tab[7],0,"Цена розн.",false);
+		OutString(tab[8],0,"Цена продажи",false);
+		OutString(tab[9],0,"Себес-ть за ед.",false);
+		OutString(tab[10],0,"Себес-ть продажи",false);
+		OutString(tab[11],0,"Сумма продажи",false);
+		OutString(tab[12],0,"Остаток на начало",false);
+		OutString(tab[13],0,"Остаток на конец",false);
+		OutString(tab[14],0,"Перемещение на склад",false);
+		OutString(tab[15],0,"Перемещение со склада",false);
+		OutString(tab[16],0,"FIKS",false);
+		OutString(tab[17],0,"Комитент",false);
+		OutString(tab[18],0,"TYPE",false);
+		OutString(tab[19],0,"BRAND",false);
+		OutString(tab[20],0,"Оплачено наличными",false);
+		OutString(tab[21],0,"Оплачено кр. картой",false);
+		OutString(tab[22],0,"Оплачено сертификатом",false);
+		
+end;
+
+
+
+procedure GetClassifications(string classifications, var string brandname, var string typename)
+begin
+	record DIVc DIr;
+	string 100 class;
+	integer pos;
+  
+  brandname = "";
+  typename = "";
+  
+  	pos = 0;  
+  	class = "";  
+  	ExtractObj(classifications,pos,class);
+  	while(nonblank(class)) begin
+  	  DIr.Code = class;
+  	  readfirstmain(DIr,1,true);
+  	  if(DIr.CType=="TYPE")then begin
+  	    typename = DIr.Name;
+  	  end;
+  	  if(DIr.CType=="BRND_UKR" or DIr.CType=="BRND_WORD")then begin
+  	    brandname = DIr.Name;
+  	  end;
+  	  if (nonblank(brandname) and nonblank(typename)) then begin
+				goto LGetClassifications;
+			end;
+  	  ExtractObj(classifications,pos,class);
+  	end; 
+
+  LGetClassifications:; 
+end;
+
+
+
+procedure GetStockBalanceOnPeriod(record SalesDataVc SalesData,string locations,string positions,date startperiod, date endperiod, var val balanceBeforePeriod, var val balanceAfterPeriod)
+begin
+record ItemHistVc IHr;
+record ItemStatusVc ISr;
+record PISVc PISr;
+val currentBalance,historybalance;
+string 50 keyloop;
+integer loop;
+boolean testf,TrHs;
+
+
+	currentBalance = 0;
+	historybalance = 0;
+	balanceBeforePeriod = 0;
+	balanceAfterPeriod = 0;
+	keyloop = "ArtCode";
+	loop = 2;
+	
+
+	if (blank(positions)) then begin
+		ISr.Code = SalesData.ArtCode;
+		if (nonblank(locations)) then begin
+			ISr.Location = locations;
+		end else begin	
+			ISr.Location = ";;;";
+		end;
+		if (ReadFirstMain(ISr,2,true)) then begin
+			currentBalance = ISr.Instock;
+		end;
+	end else begin
+		PISr.ArtCode = SalesData.ArtCode;
+		PISr.Location = locations;
+		PISr.Position = positions;
+		if (ReadFirstMain(PISr,3,true)) then begin
+			currentBalance = PISr.Instock;
+		end;
+	end;
+	
+	if (nonblank(locations)) then begin
+		IHr.Location = locations;
+		keyloop = "ArtCodeLoc";
+		loop = 3;		
+	end;
+	
+	
+	IHr.ArtCode = SalesData.ArtCode;
+	IHr.TransDate = CurrentDate;
+	TrHs = true;
+	
+	While(LoopBackKey(keyloop,IHr,loop,TrHs)) begin
+		testf = true;
+		if (IHr.TransDate<=endperiod) then begin balanceAfterPeriod = currentBalance - historybalance; end;
+		
+		if(IHr.TransDate<startperiod) then begin TrHs=false; testf=false; end;
+		if (nonblank(positions) and (IHr.Position!=positions)) then begin testf = false; end;
+		if (nonblank(locations) and IHr.Location!=locations) then begin testf=false; TrHs=false; end;		
+		if (testf and  IHr.StockAffectf!=0) then begin
+			historybalance = historybalance +  IHr.Qty;
+		end;
+	end;	
+	balanceBeforePeriod = currentBalance - historybalance;
+  
+end;
+
+
+
+procedure GetStockMovTurnOver(record SalesDataVc SalesData,string locations, string positions,date startperiod, date endperiod,var val qtyIn, var val qtyOut)
+begin
+record StockMovVc SMr;
+row StockMovVc SMrw;
+string 50 keyloop;
+integer loop,i;
+boolean TrHs,testf;
+
+	qtyIn = 0;
+	qtyOut = 0;
+
+	if (blank(locations)) then begin
+		keyloop = "OKFlagTransDate";
+		loop = 2;
+		SMr.OKFlag = 1;
+		SMr.TransDate = startperiod;
+		
+		TrHs = true;
+		While(LoopKey(keyloop,SMr,loop,TrHs)) begin
+			if (SMr.TransDate>endperiod) then begin TrHs = false; end;
+			if (TrHs) then begin
+				for(i=0;i<MatRowCnt(SMr);i=i+1) begin
+					MatRowGet(SMr,i,SMrw);
+					if (SMrw.ArtCode==SalesData.ArtCode) then begin
+							qtyIn = qtyIn + SMrw.Quant;
+							qtyOut = qtyOut + SMrw.Quant;
+					end;
+				end;
+			end;  	
+		end;
+		ResetLoop(SMr);		
+	end;
+	
+	
+	if (nonblank(locations)) then begin
+		keyloop = "FrLocOK";
+		loop = 3;
+		SMr.FrLocation = locations;	
+		SMr.OKFlag = 1;
+		SMr.TransDate = startperiod;		
+	
+	
+		TrHs = true;
+		While(LoopKey(keyloop,SMr,loop,TrHs)) begin
+  		testf = true;
+  		if (SMr.TransDate>endperiod) then begin TrHs = false; testf = false; end;
+  		if (SMr.FrLocation!=locations) then begin TrHs = false; testf = false; end;
+  		if (nonblank(positions) and SMr.FrPos!=positions) then begin testf = false; end;
+  		if (testf) then begin 
+				for(i=0;i<MatRowCnt(SMr);i=i+1) begin
+					MatRowGet(SMr,i,SMrw);
+					if (SMrw.ArtCode==SalesData.ArtCode) then begin
+							qtyIn = qtyIn + SMrw.Quant;
+					end;
+				end;  		
+  		end;  		
+		end;
+		ResetLoop(SMr);
+		
+		keyloop = "ToLocOK";
+		SMr.ToLocation = locations;	
+		SMr.OKFlag = 1;
+		SMr.TransDate = startperiod;			
+		
+		TrHs = true;
+		While(LoopKey(keyloop,SMr,loop,TrHs)) begin
+  		testf = true;
+  		if (SMr.TransDate>endperiod) then begin TrHs = false; testf = false; end;
+  		if (SMr.ToLocation!=locations) then begin TrHs = false; testf = false; end;
+  		if (nonblank(positions) and SMr.ToPos!=positions) then begin testf = false; end;
+  		if (testf) then begin 
+				for(i=0;i<MatRowCnt(SMr);i=i+1) begin
+					MatRowGet(SMr,i,SMrw);
+					if (SMrw.ArtCode==SalesData.ArtCode) then begin
+							qtyOut = qtyOut + SMrw.Quant;
+					end;
+				end;  		
+  		end;  		
+		end;
+		
+	
+	end;		
+	
+end;
+
+
+//Отчет основан на отчете по продажам, читается регистр SalesDataVc
+//все цифры выводятся в UAH
+global
+procedure  CommissionRn(record RcVc RepSpec)
+begin
+record SalesDataVc SalesData;
+date startDate,endDate;
+string 20 keyloop;
+array integer tab;
+boolean TrHs,testf;
+Integer rw,rwcnt,i,loop;
+string 200 locations,positions;
+val rate;
+val balanceAfterPeriod,balanceBeforePeriod,stockIn,stockOut;
+string 100 brand,type;
+
+
+	startDate = RepSpec.sStartDate;
+	endDate = RepSpec.sEndDate;
+	locations = RepSpec.f1;
+	positions = RepSpec.f2;
+	
+	//check correctness...
+	
+
+	StartReportJob("Отчет по продажам");
+	rw=1;
+	Header(rw,"Период с " & startDate & "  по  " & endDate,1);
+	rw=rw+1;
+	if (NonBlank(locations)) then begin
+		Header(rw,"Склад: " & locations,1);
+		rw=rw+1;
+	end;
+
+	EndHeader;
+	
+	tab[0] = 0;			tab[1] = 20;		tab[2] = 50;		tab[3] = 70;
+	tab[4] = 90;		tab[5] = 140;		tab[6] = 230;		tab[7] = 260;
+	tab[8] = 310;		tab[9] = 340;		tab[10] = 370;	tab[11] = 400;
+	tab[12] = 430;	tab[13] = 460;	tab[14] = 460;	tab[15] = 460;
+	tab[16] = 460;	tab[17] = 460;	tab[18] = 460;	tab[19] = 460;
+	tab[20] = 460;	tab[21] = 460;	tab[22] = 460;	tab[23] = 460;
+	
+	PrintReportHeader(tab);
+	
+	
+	keyloop = "DateCode";
+	loop = 2;
+		
+	
+
+	TrHs=true;
+	SalesData.InvDate = startDate;	
+	
+	While (LoopKey(keyloop,SalesData,loop,TrHs)) begin
+		testf = true;
+		if (nonblank(locations) and SetInSet(SalesData.Location,locations)==false) then begin testf=false; end;
+		if (nonblank(positions) and SetInSet(SalesData.Position,positions)==false) then begin testf=false; end;
+		if (SalesData.InvDate>endDate) then begin TrHs=false; testf=false; end;
+		
+		if (testf) then begin
+				rate = SalesData.Rate; //IVr.FrRate*IVr.ToRateB1
+				GetClassifications(SalesData.DispGroups,brand,type);
+				GetStockBalanceOnPeriod(SalesData,locations,positions,startDate,endDate,balanceBeforePeriod,balanceAfterPeriod);
+				GetStockMovTurnOver(SalesData,locations,positions,startDate,endDate,stockIn,stockOut)
+				
+				StartFormat(15);
+					OutString(tab[0],0,SalesData.InvDate,false);
+					OutString(tab[1],0,SalesData.InvNr,false);
+					OutString(tab[2],0,SalesData.Location,false);
+					OutString(tab[3],0,SalesData.Position,false);
+					OutString(tab[4],0,SalesData.ArtCode,false);
+					OutString(tab[5],0,SalesData.Spec,false);
+					OutString(tab[6],0,SalesData.Quant,false);
+					OutString(tab[7],0,SalesData.Price * rate,false);
+					OutString(tab[8],0,SalesData.Sum * rate/SalesData.Quant,false);
+					OutString(tab[9],0,SalesData.UnitCost * rate,false);
+					OutString(tab[10],0,SalesData.Cost * rate,false);
+					OutString(tab[11],0,SalesData.Sum * rate,false);
+					OutString(tab[12],0,balanceBeforePeriod,false);
+					OutString(tab[13],0,balanceAfterPeriod,false);
+					OutString(tab[13],0,stockIn,false);
+					OutString(tab[13],0,stockOut,false);
+					if (SalesData.ItemGroup=="FIKS") then begin
+						OutString(tab[16],0,"да",false);
+					end else 	begin
+						OutString(tab[16],0,"нет",false);		
+					end;		
+					OutString(tab[17],0,SalesData.Komitent,false);
+					OutString(tab[18],0,type,false);
+					OutString(tab[19],0,brand,false);			
+					OutString(tab[20],0,SalesData.PayedByCash,false);//?? cur=cur
+					OutString(tab[21],0,SalesData.PayedByCCard,false);
+					OutString(tab[22],0,SalesData.PayedByGift,false);
+					
+					
+				
+					
+				EndFormat;	
+		end;	
+	end;
+	
+	
+	
+	
+	
+	
+	
+	EndJob;
+
+
+end;

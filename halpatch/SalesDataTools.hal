@@ -4,7 +4,7 @@ external procedure ExtractObj(string,var Integer,var string);
 
 //Функция собирает данные для SalesDataVc из регистров IVVc,SHVc,PLVc, INvc
 //Расчет себестоимости - копия из старого отчета по продажам SalesRn
-//Основной документ - Сч/фактура, для нее вызывается функция. При изменении отгрузок запускается эта же функция, но для соответствующих сч/фактур.
+//Основной документ - Сч/фактура, при её пересчете вызывается эта функция. При изменении отгрузок запускается эта же функция, но для соответствующих сч/фактур.
 
 updating procedure CreateSalesData(record IVVc IVr)				//Edit----------------------Dima  10.03.2016
 begin
@@ -16,9 +16,11 @@ begin
 	integer pos,i,cred,j,k,mtcnt,rownr;
 	string 40 txt;
 	val cost,unitcost,fr,to,sum;
+	val paycash,payccard,paygift;
 	boolean update,shipped,TrHs;
 	record SHVc SHp;
   row SHVc SHrw;
+  date komitentStart; 
   array record SHVc SHarray;
 
 
@@ -33,6 +35,8 @@ begin
 		fr = 1;
 		to = 1;
 	end;
+	
+	komitentStart = StringToDate("01/04/2016"); //записи с комитентом  должны начинаться с первого апреля
 		
 	if (IVr.UpdStockFlag==0 or (IVr.UpdStockFlag!=0 and IVr.OrderNr>-1)) then begin
 	//чтобы не читать SHVc заново для каждой строки IVVc
@@ -47,6 +51,25 @@ begin
 			end;
 	end;	
 		
+	for(i=0;i<MatRowCnt(IVr);i=i+1) begin
+		switch (IVrw.stp) begin
+			case kInvoiceRowTypeCashPayment:
+				paycash = paycash + IVrw.Sum;
+			case kInvoiceRowTypeCreditCardPayment:
+				payccard = payccard + IVrw.Sum;
+			case kInvoiceRowTypeGiftVoucherPayment:
+				paygift = paygift + IVrw.Sum;
+		end;	
+	end;
+	
+	if (paycash>0) then begin	//учитываем возможную сдачу
+		paycash = IVr.Sum4 - payccard - paygift;
+	end;
+	
+	SalesData.PayedByCash = paycash;
+	SalesData.PayedByCCard = payccard;
+	SalesData.PayedByGift = paygift;
+
 
   for(i=0;i<MatRowCnt(IVr);i=i+1) begin
 		MatRowGet(IVr,i,IVrw);
@@ -77,14 +100,17 @@ begin
 			SalesData.Price = IVrw.Price/fr*to;
 			SalesData.Sum = IVrw.Sum/fr*to;
 			SalesData.Location = IVr.Location;
+			SalesData.Position = IVr.Position;
 			SalesData.SalesGroup = IVr.SalesGroup;
 			SalesData.SalesMan = IVr.SalesMan;
 			SalesData.InvType = IVr.InvType;
 			SalesData.SerialNr = IVrw.SerialNr;
+			SalesData.Rate = fr*to;
 
 			INr.Code = IVrw.ArtCode;
 			if (ReadFirstMain(INr,1,true)) then begin
 				SalesData.DispGroups = INr.DispGroups;
+				SalesData.ItemGroup = INr.Group;
 
 				pos = 0;
 				txt = "";
@@ -94,9 +120,16 @@ begin
 					if(readfirstmain(DIr,1,true))then begin
 						if(DIr.CType=="TYPE")then begin
 							SalesData.ItemType = DIr.Name;
-							goto Lbreaktype;
 						end;
 					end;
+					if(readfirstmain(DIr,1,true))then begin
+						if(DIr.CType=="KOMITENT")then begin
+							if (IVr.TransDate>=komitentStart) then begin
+								SalesData.Komitent = DIr.Name;
+								//LogText(0,SalesData.InvNr & "   " & SalesData.Komitent);
+							end;	
+						end;
+					end;					
 					ExtractObj(INr.DispGroups,pos,txt);
 				end;
 				Lbreaktype:;
@@ -266,7 +299,7 @@ record SHVc SHr;
 	
 		CreateSalesData(IVr);
 
-		if (mod(IVr.SerNr,1000)==0) then begin
+		if (mod(IVr.SerNr,2000)==0) then begin
 			LogText(0,"Recalculation... IVVc: " & IVr.SerNr);
 		end;
 	end;

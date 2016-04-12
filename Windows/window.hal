@@ -2539,3 +2539,20 @@ begin
   SearchField("Найти");
   EndWindow;
 end;
+
+
+window CommissionRClass:1		//Edit----------------------Dima  08.04.2016
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  real vs,h,v;
+  WindowBegin("Отчет для комисии",CommissionRClass,CGRcW,RcType);
+  SetWRect(20,80,400,320);
+  vs = 20; h = 120;
+
+	PeriodField(h,v=6,"Период");
+  EditFieldTL(h,v+=vs,120,"Склад",M4UStr,Normal,41,f1,false,LocationSClass);
+  EditFieldTL(h,v+=vs,120,"Место",M4UStr,Normal,41,f2,false,PosSClass);
+
+  EndWindow;
+end;
+
