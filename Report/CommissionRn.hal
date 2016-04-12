@@ -85,7 +85,7 @@ begin
   	  if(DIr.CType=="TYPE")then begin
   	    typename = DIr.Name;
   	  end;
-  	  if(DIr.CType=="BRND_UKR" or DIr.CType=="BRND_WORD")then begin
+  	  if(DIr.CType=="BRND_UKR" or DIr.CType=="BRND_WORLD")then begin
   	    brandname = DIr.Name;
   	  end;
   	  if (nonblank(brandname) and nonblank(typename)) then begin
@@ -432,8 +432,9 @@ array string 50 combarr;
 					//s3=s3+(tick2-tick1);					
 				end;	
 				
-				rate = 1;
-				CurValToOtherCur(SalesData.TransDate,baseCurncy,1,"UAH",rate,DefaultCurRoundOff);
+				//rate = 1;
+				rate = SalesData.Rate;
+				//CurValToOtherCur(SalesData.TransDate,baseCurncy,1,"UAH_R",rate,DefaultCurRoundOff);
 			
 				StartFormat(15);
 					OutString(tab[0],0,SalesData.InvDate,false);
