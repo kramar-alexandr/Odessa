@@ -591,9 +591,9 @@ BEGIN
   end;
   
   
-  if(ClientMode and (currentuser=="KV_1" or currentuser=="KV_2" or currentuser=="RAY_1" or currentuser=="RAY_2") and currenttime>stringtotime("18:00:00"))then begin
-  	messagebox(31097,"");
-  end;
+  //if(ClientMode and (currentuser=="KV_1" or currentuser=="KV_2" or currentuser=="RAY_1" or currentuser=="RAY_2") and currenttime>stringtotime("18:00:00"))then begin
+  //	messagebox(31097,"");
+  //end;
   
   OnLogout = true;
   RETURN;  
