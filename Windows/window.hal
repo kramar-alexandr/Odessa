@@ -1030,6 +1030,20 @@ window RequestNPVClass:1 //Edit by Victor 20.03.15
   EndWindow;
 end;
 
+window WarehouseRequestNPVClass:1 //Edit by Victor 20.03.15
+ wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+ begin
+  real h,v,vs;
+
+  WindowBegin("Запрос на НП",WarehouseRequestNPVClass,CGMnt,RcType);
+
+		SetWRect(20,80,380,180);
+		EditField(120,10, 100,"Город",Normal,f1,false,NPCitySClass);
+		StaticText(30,75,"Натисніть запуск",false);
+
+  EndWindow;
+end;
+
 
 
 

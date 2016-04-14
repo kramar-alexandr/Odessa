@@ -156,7 +156,316 @@ time timeFrom, timeTo;
 date startDate,endDate;
 string 20 keyloop,prevArtCode,currentCode;
 
+		
+	qty = 0;
+	
+	//tick2 = GetCurTick;
+	LogText(0,"start report " & 0);
 
+	timeFrom = StringToTime(RepSpec.f5);
+	timeTo = StringToTime(RepSpec.f6);
+	startDate = RepSpec.sStartDate;
+	endDate = RepSpec.sEndDate;
+	
+	consolidatedReport = RepSpec.ArtMode;
+	viewcost = UserCanAction("ViewCostPrice",true);
+	
+	
+	StartReportJob("Отчет по продажам");
+	rw=1;
+	Header(rw,"Период с " & startDate & "  по  " & endDate,1);
+	rw=rw+1;
+	if (NonBlank(RepSpec.f1)) then begin
+		Header(rw,"Код товара: " & RepSpec.f1,1);
+		rw=rw+1;
+	end;
+	if (NonBlank(RepSpec.f3)) then begin
+		Header(rw,"Склад: " & RepSpec.f3,1);
+		rw=rw+1;
+	end;
+	if (NonBlank(RepSpec.f2)) then begin
+		Header(rw,"Группа продаж: " & RepSpec.f2,1);
+		rw=rw+1;
+	end;
+	if (NonBlank(RepSpec.f4)) then begin
+		Header(rw,"Продавец: " & RepSpec.f4,1);
+		rw=rw+1;
+	end;
+	if (NonBlank(RepSpec.f7)) then begin
+		Header(rw,"Классификация: " & RepSpec.f7,1);
+		rw=rw+1;
+	end;
+	if (RepSpec.f5 != "00:00:00"  or RepSpec.f6 != "23:59:59") then begin
+		Header(rw,"Время: " & RepSpec.f5 & "-" & RepSpec.f6 ,1);
+		rw=rw+1;
+	end;	
+
+	EndHeader;
+	
+  if (RepSpec.Media == mtExcel) then begin	
+  	OutHeaderToExcel(RepSpec);
+  end;
+  
+
+	PrintReportHeader(RepSpec.ArtMode);
+	
+	//Настройки ключей цикла,точек входа для максимально быстрого чтения SalesData   --------
+	
+	if (consolidatedReport) then begin
+		keyloop = "CodeDate";
+	end else begin
+		keyloop = "DateCode";
+	end;
+	loop = 2;
+		
+
+	if (consolidatedReport) then begin	//оптимальная точка входа
+		ReadFirstKey("CodeDate",prevSalesData,1,false);
+		SalesData.ArtCode = prevSalesData.ArtCode;	
+	end;
+	
+	if (NonBlank(RepSpec.f1)) then begin//отчет по одному товару
+		SalesData.ArtCode = RepSpec.f1;
+		keyloop = "CodeDate";
+		loop = 2;
+	end;
+	
+	if (NonBlank(RepSpec.f3)) then begin
+		keyloop = "Location" & keyloop;  //LocationDateCode or LocationCodeDate
+		loop = 3;
+		SalesData.Location = RepSpec.f3;
+	end;		
+	
+
+	TrHs=true;
+	SalesData.InvDate = startDate;
+
+	
+	//---------------------------------------------------------
+	
+	
+	While (LoopKey(keyloop,SalesData,loop,TrHs)) begin
+		testf=true;
+//LogText(0, SalesData.ArtCode  & "     " & SalesData.InvNr  & "     "  & SalesData.RowNr  & "     " & SalesData.InvDate);
+		if (consolidatedReport) then begin
+					
+					if (prevSalesData.ArtCode!=SalesData.ArtCode  and nonprinted)	then begin		//Печать данных сгруппированных по товару
+									StartFormat(15);
+									OutString(20,0,prevSalesData.ArtCode,false);
+									OutString(60,0,prevSalesData.Spec,false);				
+									OutString(170,0,prevSalesData.ItemType,false);
+									OutString(270,0,qty,false);
+									OutVal(300,0,salesum/qty,M4Val,false);						//Price
+									OutVal(310,0,salesum,M4Val,false);
+									if (viewcost) then begin
+										OutVal(320,0,cost/qty,M4Val,false);						
+										OutVal(340,0,cost,M4Val,false);
+										OutVal(360,0,rent,M4Val,false);
+										OutVal(380,0,rent*100/cost,M4Val,false);				//profit %
+										OutVal(400,0,prevSalesData.SalaryPrice,M4Val,false);
+										OutVal(420,0,salarySum,M4Val,false);	
+										OutVal(440,0,rentsalary,M4Val,false);
+										OutVal(460,0,rentsalary*100/prevSalesData.SalaryPrice/qty,M4Val,false);		//rent, salary %	
+									end;																									
+									EndFormat;
+									
+									qty = 0;		salesum = 0;			cost = 0;
+									rent = 0;		salary = 0;				rentsalary = 0;							
+									
+									nonprinted = false;	
+					end;										
+						
+					if (prevSalesData.ArtCode!=SalesData.ArtCode and SalesData.InvDate < startDate) then begin //Перепрыгиваем на нужную дату, пропускаем все записи до начала периода			
+							currentCode = SalesData.ArtCode;
+							ResetLoop(SalesData);
+							SalesData.InvDate = startDate;
+							SalesData.ArtCode = currentCode;
+							goto LNextStepLoop;
+					end;					
+					if (SalesData.InvDate > endDate) then begin	//Перепрыгиваем на последнюю дату для этого товара
+							currentCode = SalesData.ArtCode;
+							ResetLoop(SalesData);
+							SalesData.InvDate = AddYear(CurrentDate,20);
+							SalesData.ArtCode = currentCode;										
+							goto LNextStepLoop;						
+					end;					
+		
+		end else begin
+					if (SalesData.InvDate > endDate) then begin	TrHs=false;	testf=false;	end;
+		end;					
+			
+
+		if (nonblank(RepSpec.f3) and (SalesData.Location!=RepSpec.f3)) then begin	testf=false;	end;
+		if (nonblank(RepSpec.f3) and Left(keyloop,8)=="Location" and (SalesData.Location!=RepSpec.f3)) then begin	testf=false; TrHs=false;	end;
+		
+		if (nonblank(RepSpec.f4) and (SalesData.SalesMan!=RepSpec.f4)) then begin	testf=false;	end;
+		if ((SalesData.TransTime<=timeFrom) or (SalesData.TransTime>=timeTo)) then begin	testf=false;	end;
+		if (nonblank(RepSpec.f2) and (SalesData.SalesGroup!=RepSpec.f2)) then begin	testf=false;	end;	
+		if (nonblank(RepSpec.f1) and (SalesData.ArtCode!=RepSpec.f1)) then begin	testf=false;	end;
+		if (nonblank(RepSpec.f7) and testf) then begin
+					if(!setinset(RepSpec.f7,SalesData.DispGroups))then begin
+						testf = false;
+					end;		
+		end; 	
+	
+		
+		if(testf)then begin
+		
+					cred = 1;		
+					if(SalesData.InvType==kInvoiceTypeCredit)then begin
+						cred = -1;			
+					end;
+																			
+					totalQty = totalQty + SalesData.Quant;
+					totalSum = totalSum + SalesData.Sum;
+
+					if (viewcost) then begin
+						
+						rwGPpercent = AbsoluteVal(SalesData.rowGP*100/SalesData.Cost);
+						totalCost = totalCost + SalesData.Cost;
+						totalRent = totalRent + SalesData.rowGP;				
+
+						salaryPrice = SalesData.SalaryPrice;
+						salarySum = salaryPrice*SalesData.Quant/cred;
+						rentSal = SalesData.Sum - salarySum;						
+						rentSalPercent = rentSal*100/salarySum;		//(IVrw.Sum/fr*to - PLr.ExVatPrice*IVrw.Quant)/(PLr.ExVatPrice*IVrw.Quant)*100
+						totalSalary = totalSalary + salarySum;
+						totalRentSalary = totalRentSalary + rentSal;			
+
+					end;
+					if (consolidatedReport == false) then begin			//Detailed report
+							StartFormat(15);
+							OutString(0,0,SalesData.InvDate,false);
+							OutString(20,0,SalesData.TransTime,false);
+							OutString(40,0,SalesData.InvNr,false);
+							OutString(60,0,SalesData.Location,false);
+							OutString(90,0,SalesData.ArtCode,false);
+							OutString(120,0,SalesData.Spec,false);
+							
+							OutString(170,0,SalesData.ItemType,false);
+							
+							OutString(270,0,SalesData.Quant,false);
+							OutVal(300,0,SalesData.Price,M45Val,false);
+							OutVal(310,0,SalesData.Sum,M45Val,false);
+							if (viewcost) then begin
+								OutVal(320,0,SalesData.UnitCost,M4Val,false);
+								OutVal(340,0,SalesData.Cost,M4Val,false);
+								OutVal(360,0,SalesData.rowGP,M4Val,false);
+								OutVal(380,0,rwGPpercent,M4Val,false);
+								OutVal(400,0,salaryPrice,M4Val,false);
+								OutVal(420,0,salarySum,M4Val,false);	
+								OutVal(440,0,rentSal,M4Val,false);
+								OutVal(460,0,rentSalPercent,M4Val,false);
+							end;
+							OutString(480,0,SalesData.SalesMan,false);																											
+							EndFormat;					
+					end else begin	
+							//Суммируем данные для консолидированного отчета
+							qty = qty + SalesData.Quant;
+							salesum = salesum + SalesData.Sum;
+							cost = cost + SalesData.Cost;
+							rent = rent + SalesData.rowGP;
+							salary = salary + salarySum;
+							rentsalary = rentsalary + rentSal;
+							nonprinted = true;
+									  
+					end;					
+
+		end;
+		prevArtCode = SalesData.ArtCode;
+		prevSalesData = SalesData;
+		LNextStepLoop:;
+		
+		if (NonBlank(RepSpec.f1) and SalesData.ArtCode!=RepSpec.f1) then begin TrHs = false; end;
+		//if (GetLoopPosition(SalesData)>600) then begin TrHs = false; end;
+	end;
+	
+	
+	//Выводим сумму по последнему товару в регистре (если нужно). (Копия блока вывода в начале цикла)
+	if (nonprinted) then begin
+							StartFormat(15);
+							OutString(20,0,prevSalesData.ArtCode,false);
+							OutString(60,0,prevSalesData.Spec,false);				
+							OutString(170,0,prevSalesData.ItemType,false);
+							OutString(270,0,qty,false);
+							OutVal(300,0,salesum/qty,M4Val,false);						//Price
+							OutVal(310,0,salesum,M4Val,false);
+							if (viewcost) then begin
+								OutVal(320,0,cost/qty,M4Val,false);						//Cost per one
+								OutVal(340,0,cost,M4Val,false);
+								OutVal(360,0,rent,M4Val,false);
+								OutVal(380,0,rent*100/cost,M4Val,false);				//profit %
+								OutVal(400,0,prevSalesData.SalaryPrice,M4Val,false);
+								OutVal(420,0,salarySum,M4Val,false);	
+								OutVal(440,0,rentsalary,M4Val,false);
+								OutVal(460,0,rentsalary*100/prevSalesData.SalaryPrice/qty,M4Val,false);		//rent, salary %	
+							end;																									
+							EndFormat;
+	end;	
+	
+	
+	
+	
+//	tick3 = GetCurTick;
+//	LogText(0,"loop  " & tick3-tick2);	
+	
+	
+	StartFormat(15);
+	if (RepSpec.ArtMode==0) then begin
+		OutString(0,0,"",false);
+		OutString(40,0,"",false);
+		OutString(60,0,"",false);
+		OutString(60,0,"",false);
+	end;
+	OutString(60,0,"",false);
+	OutString(90,0,"",false);
+	OutString(120,0,"Всего:",false);
+	OutString(270,0,totalQty,false);
+	OutString(300,0,"",false);
+	OutString(300,0,totalSum,false);
+ if (UserCanAction("ViewCostPrice",true)) then begin
+		OutString(320,0,"",false);
+		OutString(340,0,totalCost,false);
+		OutString(360,0,totalRent,false);
+		OutString(380,0,totalRent/totalSalary*100,false);
+		OutString(400,0,"",false);
+		OutString(420,0,totalSalary,false);
+		OutString(440,0,totalRentSalary,false);
+		OutString(460,0,(totalSum - totalSalary)/totalSalary*100,false);
+	end;
+	OutString(480,0,"",false);		
+	EndFormat;	
+	
+
+
+	//tick2 = GetCurTick;
+	//LogText(0,"totals  " & tick2-tick3);	
+		
+	
+	EndJob;
+
+end;
+
+
+global
+procedure  Sales1Rn(record RcVc RepSpec)
+begin
+record SalesDataVc SalesData,prevSalesData;
+boolean TrHs,testf;
+Integer rw,rwcnt,i,loop;
+val totalQty,totalSum,totalRent,totalCost,totalSalary,totalRentSalary;
+Boolean nonprinted; 
+val cred;
+boolean viewcost,consolidatedReport;
+val rowPrice,rowSum,rowCostUnit,rwGPpercent,salaryPrice,salarySum,rentSal,rentSalPercent,rowsalary;
+val salesum,cost,rent,salary,rentsalary;
+longint qty;
+longint tick,tick2,tick3;
+time timeFrom, timeTo;
+date startDate,endDate;
+string 20 keyloop,prevArtCode,currentCode;
+
+		
 	qty = 0;
 	
 	//tick2 = GetCurTick;
@@ -445,9 +754,6 @@ string 20 keyloop,prevArtCode,currentCode;
 	EndJob;
 
 end;
-
-
-
 
 
 

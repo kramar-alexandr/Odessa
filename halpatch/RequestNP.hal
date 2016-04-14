@@ -489,10 +489,10 @@ begin
 
 	//messagebox(0,"In");
 
-  if(MySendRawWebRequest(host,"443",true,"POST",page & getParam,"text/xml","",false,mainRequest,replyarea,10))then begin  //WORK! 
+  if(MySendRawWebRequest(host,"443",true,"POST",page & getParam,"text/xml","",false,mainRequest,replyarea,20))then begin  //WORK! 
     //messagebox(0,"Connection on!");
     logtext(0,"Hansa World::New Post: Cyties updating");
-    //writeareatofile(replyarea,"1getStatusReplyCyties.txt",0);
+    writeareatofile(replyarea,"1getStatusReplyCyties.txt",0);
 
     
     GetXMLArea(replyarea);
@@ -1022,6 +1022,7 @@ begin
   record NPCityVc NPCr;
   record NPSettingsBlock NPSettingsb;
   Boolean notSynchronize;
+  boolean testf;
   //register will not synchronize if any error occures (incorrect XML file, not  response,...)
   
 	BlockLoad(NPSettingsb);  
@@ -1038,95 +1039,97 @@ begin
   
 
   
-  
-	if(CountRecords("NPWarehouseVc") > 0) then begin
-		NPWr.CityRef = "";
-		while (LoopMain(NPWr,1,true)) begin
-			NPWr.synchFlag = 0;
-			if (RecordStore(NPWr,true)) then begin		end;
+		if(blank(RepSpec.f1))then begin
+			if(CountRecords("NPWarehouseVc") > 0) then begin
+				NPWr.CityRef = "";
+				while (LoopMain(NPWr,1,true)) begin
+					NPWr.synchFlag = 0;
+					if (RecordStore(NPWr,true)) then begin		end;
+				end;
+			end;   
 		end;
-	end;   
   
   
   	NPCr.City = "";
-		while (LoopMain(NPCr,1,true)) begin
-			cityRef = NPCr.Ref;
-			cityName = NPCr.City;
-			SetAreaZeroSize(mainRequest);
-			CreateWarehouseRequest(host, page, NPSettingsb.APIkey, "Address","getWarehouses", cityRef, mainRequest); 
+  	
+  	if(nonblank(RepSpec.f1))then begin
+  		NPCr.City = firstinrange(RepSpec.f1,20);
+  	end;
+  	TrHs = true;
+		while (LoopMain(NPCr,1,TrHs)) begin
+			testf = true;
+			if(NPCr.City>lastinrange(RepSpec.f1,20) and nonblank(RepSpec.f1))then begin TrHs = false; testf = false; end;
+			if(NPCr.City<firstinrange(RepSpec.f1,20) and nonblank(RepSpec.f1))then begin testf = false; end;
 			
-			LsendRequestAgainGet1: ;
-			if(MySendRawWebRequest(host,"443",true,"POST",page & getParam,"text/xml","",false,mainRequest,replyarea,10))then begin 
-				logtext(0,"Hansa World: GetWarehouses - " & cityName);
-					//writeareatofile(replyarea,"1warehouses.txt",0);
-
-		
-				GetXMLArea(replyarea);
-	
-				
-			  if (GetAreaLength(replyarea)==0) then begin	notSynchronize = true; LogText(0,cityName); goto L2222; 	end;
-		
-				xdata = ParseXMLArea(replyarea);
-				
-				NPParseErrors(xdata,errors);
-				if (nonblank(errors)) then begin
-					LogText(0,"Error " & errors);
-					goto LNPGetWarehouseMn;
-				end;				
-				i = 0;
-				
-//				NPWr.Description = "";
-				while(XmlNodeExists(xdata,"root/data/item[" & i & "]/Description")) begin
-					RecordNew(NPWr);
-					descr = XmlGet(xdata,"root/data/item[" & i & "]/Description");
-						NPWr.Description = descr;
-						number = XmlGet(xdata,"root/data/item[" & i & "]/Number");	//Edit----------------------Dima  29.04.2015
-						if (nonblank(number)) then begin 
-							NPWr.Number = StringToInt(number);
-						end; 
-						NPWr.Ref = XmlGet(xdata,"root/data/item[" & i & "]/Ref"); 
-						NPWr.DescriptionRu = XmlGet(xdata,"root/data/item[" & i & "]/DescriptionRu"); 
-						NPWr.TypeOfWarehouse = XmlGet(xdata,"root/data/item[" & i & "]/TypeOfWarehouse"); 
-						NPWr.CityRef = cityRef; 
-						NPWr.Longitude = XmlGet(xdata,"root/data/item[" & i & "]/Longitude"); 
-						NPWr.Latitude = XmlGet(xdata,"root/data/item[" & i & "]/Latitude"); 
-						NPWr.City = cityName;
-						NPWr.synchFlag = 1;
-						if (RecordStore(NPWr,true)) then begin		end;
-		
-					i = i + 1;
-				end;
-		
+			
+			if(TrHs and testf)then begin
+				cityRef = NPCr.Ref;
+				cityName = NPCr.City;
+				SetAreaZeroSize(mainRequest);
+				CreateWarehouseRequest(host, page, NPSettingsb.APIkey, "Address","getWarehouses", cityRef, mainRequest); 
+			
+				LsendRequestAgainGet1: ;
+				if(MySendRawWebRequest(host,"443",true,"POST",page & getParam,"text/xml","",false,mainRequest,replyarea,10))then begin 
+					logtext(0,"Hansa World: GetWarehouses - " & cityName);
+					GetXMLArea(replyarea);
+					if (GetAreaLength(replyarea)==0) then begin	notSynchronize = true; LogText(0,cityName); goto L2222; 	end;
+					xdata = ParseXMLArea(replyarea);
+					NPParseErrors(xdata,errors);
+					if (nonblank(errors)) then begin
+						LogText(0,"Error " & errors);
+						goto LNPGetWarehouseMn;
+					end;				
+					i = 0;
+					while(XmlNodeExists(xdata,"root/data/item[" & i & "]/Description")) begin
+						RecordNew(NPWr);
+						descr = XmlGet(xdata,"root/data/item[" & i & "]/Description");
+							NPWr.Description = descr;
+							number = XmlGet(xdata,"root/data/item[" & i & "]/Number");	//Edit----------------------Dima  29.04.2015
+							if (nonblank(number)) then begin 
+								NPWr.Number = StringToInt(number);
+							end; 
+							NPWr.Ref = XmlGet(xdata,"root/data/item[" & i & "]/Ref"); 
+							NPWr.DescriptionRu = XmlGet(xdata,"root/data/item[" & i & "]/DescriptionRu"); 
+							NPWr.TypeOfWarehouse = XmlGet(xdata,"root/data/item[" & i & "]/TypeOfWarehouse"); 
+							NPWr.CityRef = cityRef; 
+							NPWr.Longitude = XmlGet(xdata,"root/data/item[" & i & "]/Longitude"); 
+							NPWr.Latitude = XmlGet(xdata,"root/data/item[" & i & "]/Latitude"); 
+							NPWr.City = cityName;
+							NPWr.synchFlag = 1;
+							if (RecordStore(NPWr,true)) then begin		end;
+						i = i + 1;
+					end;
 				end else begin
-				repeat = repeat + 1;
-				if(repeat < 3) then begin
-					millisleep(100);
-					goto LsendRequestAgainGet1;
+					repeat = repeat + 1;
+					if(repeat < 3) then begin
+						millisleep(100);
+						goto LsendRequestAgainGet1;
+					end;
+					if (repeat>=3) then begin notSynchronize = true;LogText(0,cityName);	  end;
+					repeat = 0;
+					logtext(0,"Hansa World: No Connection to api.novaposhta.ua. There is no "  & cityName);
 				end;
-				if (repeat>=3) then begin notSynchronize = true;LogText(0,cityName);	  end;
-				repeat = 0;
-				
-				logtext(0,"Hansa World: No Connection to api.novaposhta.ua. There is no "  & cityName);
 			end;
 		end;
 		
-		if (notSynchronize==false) then begin
-			TrHs = true;
-			Resetloop(NPWr);
-			NPWr.synchFlag = 0;
-			i = 0;
-			while (LoopKey("synchFlag",NPWr,1,TrHs)) begin
-				if (NPWr.synchFlag!=0) then begin TrHs = false; end;
-				if (TrHs) then begin
-					RecordDelete(NPWr);
-					StepBack(NPWr);
-					i=i+1;
+		if(blank(RepSpec.f1))then begin
+			if (notSynchronize==false) then begin
+				TrHs = true;
+				Resetloop(NPWr);
+				NPWr.synchFlag = 0;
+				i = 0;
+				while (LoopKey("synchFlag",NPWr,1,TrHs)) begin
+					if (NPWr.synchFlag!=0) then begin TrHs = false; end;
+					if (TrHs) then begin
+						RecordDelete(NPWr);
+						StepBack(NPWr);
+						i=i+1;
+					end;
 				end;
+				LogText(0,"deleted " & i);
 			end;
-			LogText(0,"deleted " & i);
 		end;
 		
-		//LogText(0,CountRecords("NPWarehouseVc") & "   after");		
 		L2222:;
  	LNPGetWarehouseMn:;
   return;
