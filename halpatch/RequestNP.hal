@@ -1080,7 +1080,7 @@ begin
 					NPParseErrors(xdata,errors);
 					if (nonblank(errors)) then begin
 						LogText(0,"Error " & errors);
-						goto LNPGetWarehouseMn;
+						goto L2222;// Edit ************************** Friday, 15 April 2016 09:42:41
 					end;				
 					i = 0;
 					while(XmlNodeExists(xdata,"root/data/item[" & i & "]/Description")) begin
@@ -1111,7 +1111,9 @@ begin
 					if (repeat>=3) then begin notSynchronize = true;LogText(0,cityName);	  end;
 					repeat = 0;
 					logtext(0,"Hansa World: No Connection to api.novaposhta.ua. There is no "  & cityName);
-				end;
+				end;				
+L2222:;// Edit ************************** Friday, 15 April 2016 09:42:41
+
 			end;
 		end;
 		
@@ -1133,8 +1135,7 @@ begin
 			end;
 		end;
 		
-		L2222:;
- 	LNPGetWarehouseMn:;
+LNPGetWarehouseMn:;
   return;
 end;
 
