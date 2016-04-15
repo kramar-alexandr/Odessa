@@ -986,6 +986,8 @@ begin
 
 	addtexttoarea("POST " & aPage & " HTTP/1.1" & chr(13) & chr(10),aRequest);
  	addtexttoarea("host: " & aWeb & chr(13) & chr(10),aRequest);
+ 	addtexttoarea("Connection: keep-alive" & aWeb & chr(13) & chr(10),aRequest);
+ 	addtexttoarea("Content-Type: application/xml" & aWeb & chr(13) & chr(10),aRequest);
  	AddTextToArea("" & chr(13) & chr(10),aRequest);
  	//messagebox(0, urlencode("https://" & aWeb));
  	AddTextToArea("<?xml version=""1.0"" encoding=""UTF-8""?>" & chr(13),aRequest);
@@ -1067,10 +1069,11 @@ begin
 				cityName = NPCr.City;
 				SetAreaZeroSize(mainRequest);
 				CreateWarehouseRequest(host, page, NPSettingsb.APIkey, "Address","getWarehouses", cityRef, mainRequest); 
-			
+				writeareatofile(mainRequest,"1getWarehousesRequest.txt",0);
 				LsendRequestAgainGet1: ;
-				if(MySendRawWebRequest(host,"443",true,"POST",page & getParam,"text/xml","",false,mainRequest,replyarea,10))then begin 
+				if(MySendRawWebRequest(host,"443",true,"POST",page & getParam,"text/xml","",false,mainRequest,replyarea,20))then begin 
 					logtext(0,"Hansa World: GetWarehouses - " & cityName);
+					writeareatofile(replyarea,"1getWarehousesReply.txt",0);
 					GetXMLArea(replyarea);
 					if (GetAreaLength(replyarea)==0) then begin	notSynchronize = true; LogText(0,cityName); goto L2222; 	end;
 					xdata = ParseXMLArea(replyarea);
