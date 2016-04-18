@@ -314,6 +314,7 @@ BEGIN
 	val totcost;
 	array integer totqty;// Edit ************************** Wednesday, 21 October 2015 16:26:04
 	val subTotalRelVal,totRelVal;
+	boolean testblankperc;
 	
   rowno = -1;
   extracom = "";
@@ -879,58 +880,70 @@ BEGIN
 	//Thursday, 23 April 2015 11:09:44
 	
 	
-	
-	
-		// checking for  percent's sum (should be 100%)
-		For(i=rwcnt-1;i>=0;i=i-1) begin
-			matrowget(Prodp,i,Prodrw);
-			if(Prodrw.OutQty!=0) then begin
-				subTotalRelVal = subTotalRelVal + Prodrw.RelVal;
-			end else begin
-				if (subTotalRelVal!=100) then begin
-					fieldnam = "RelVal";
-					rowno = i;
-					res = 31124; 
-					goto LProdVcRecordCheck;								
-				end;
-				subTotalRelVal = 0;
-			end;
-		end;	
-	
-	
+		testblankperc = false;
 		rwcnt = matrowcnt(Prodp);
 		For(i=0;i<rwcnt;i=i+1) begin
 			matrowget(Prodp,i,Prodrw);
-			if(Prodrw.InQty!=0 and nonblank(Prodrw.Item))then begin
-				incost[ci] = Prodrw.ItemCost*Prodrw.InQty;
-				inrow[ci] = i;
-				totcost = totcost + Prodrw.ItemCost*Prodrw.InQty;
-				ci = ci+1;
+			if(Prodrw.RelVal!=0)then begin
+				testblankperc = true;
 			end;
 		end; 
 		
-		ci = 0;
-		For(i=0;i<rwcnt;i=i+1) begin
-			matrowget(Prodp,i,Prodrw);
-			if(nonblank(Prodrw.Item))then begin
-				totqty[ci] = totqty[ci] + Prodrw.OutQty;
-			end;
-			if(Prodrw.InQty!=0 and nonblank(Prodrw.Item) and i!=inrow[ci])then begin
-				ci = ci+1;
-			end;
-		end; 
 		
-		ci = 0;
-		For(i=0;i<rwcnt;i=i+1) begin
-			matrowget(Prodp,i,Prodrw);
-			if(Prodrw.OutQty!=0 and nonblank(Prodrw.Item))then begin
-				Prodrw.ItemCost = incost[ci]*Prodrw.RelVal/100/Prodrw.OutQty;
-				matrowput(Prodp,i,Prodrw);
-			end;
-			if(Prodrw.InQty!=0 and nonblank(Prodrw.Item) and i!=inrow[ci])then begin
-				ci = ci+1;
-			end;
-		end; 		
+		if(testblankperc)then begin
+			// checking for  percent's sum (should be 100%)
+			For(i=rwcnt-1;i>=0;i=i-1) begin
+				matrowget(Prodp,i,Prodrw);
+				if(Prodrw.OutQty!=0) then begin
+					subTotalRelVal = subTotalRelVal + Prodrw.RelVal;
+					logtext(0,"subTotalRelVal " & subTotalRelVal);
+				end else begin
+					if (subTotalRelVal!=100) then begin
+						logtext(0,"Prodrw.OutQty " & subTotalRelVal);
+						fieldnam = "RelVal";
+						rowno = i;
+						res = 31124; 
+						goto LProdVcRecordCheck;								
+					end;
+					subTotalRelVal = 0;
+				end;
+			end;	
+	
+	
+			rwcnt = matrowcnt(Prodp);
+			For(i=0;i<rwcnt;i=i+1) begin
+				matrowget(Prodp,i,Prodrw);
+				if(Prodrw.InQty!=0 and nonblank(Prodrw.Item))then begin
+					incost[ci] = Prodrw.ItemCost*Prodrw.InQty;
+					inrow[ci] = i;
+					totcost = totcost + Prodrw.ItemCost*Prodrw.InQty;
+					ci = ci+1;
+				end;
+			end; 
+		
+			ci = 0;
+			For(i=0;i<rwcnt;i=i+1) begin
+				matrowget(Prodp,i,Prodrw);
+				if(nonblank(Prodrw.Item))then begin
+					totqty[ci] = totqty[ci] + Prodrw.OutQty;
+				end;
+				if(Prodrw.InQty!=0 and nonblank(Prodrw.Item) and i!=inrow[ci])then begin
+					ci = ci+1;
+				end;
+			end; 
+		
+			ci = 0;
+			For(i=0;i<rwcnt;i=i+1) begin
+				matrowget(Prodp,i,Prodrw);
+				if(Prodrw.OutQty!=0 and nonblank(Prodrw.Item))then begin
+					Prodrw.ItemCost = incost[ci]*Prodrw.RelVal/100/Prodrw.OutQty;
+					matrowput(Prodp,i,Prodrw);
+				end;
+				if(Prodrw.InQty!=0 and nonblank(Prodrw.Item) and i!=inrow[ci])then begin
+					ci = ci+1;
+				end;
+			end; 		
+		end;
 
 	// Edit End ---------------------------------------------- Edit End	
 	

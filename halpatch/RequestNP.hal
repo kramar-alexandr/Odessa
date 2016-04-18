@@ -32,12 +32,14 @@ begin
   res = 0;
   
   alen = GetAreaLength(a);
+  logtext(0,alen);
   if(alen>0)then begin  
 		for(i=0;i<alen;i=i+1)begin
 			str = GetStringFromArea(a,i,1);
 			if(str==(chr(60)))then begin
 				res = GetAreaFromArea(a,i,alen-i,out);	
 				str = GetStringFromArea(out,0,13);		
+				logtext(0,"str2 " & GetAreaLength(out)-50 & " " & GetStringFromArea(out,GetAreaLength(out)-50,50));
 				str2 = GetStringFromArea(out,GetAreaLength(out)-50,50);
 				str2 = StripCharacter(str2,chr(0));
 				str2 = StripCharacter(str2,chr(10));				
@@ -440,6 +442,8 @@ begin
 
 	addtexttoarea("POST " & aPage & " HTTP/1.1" & chr(13) & chr(10),aRequest);
  	addtexttoarea("host: " & aWeb & chr(13) & chr(10),aRequest);
+ 	addtexttoarea("Connection: keep-alive" & chr(13) & chr(10),aRequest);
+ 	addtexttoarea("Content-Type: application/xml" & chr(13) & chr(10),aRequest);
  	AddTextToArea("" & chr(13) & chr(10),aRequest);
  	//messagebox(0, urlencode("https://" & aWeb));
  	AddTextToArea("<?xml version=""1.0"" encoding=""UTF-8""?>" & chr(13),aRequest);
@@ -453,9 +457,9 @@ begin
   AddTextToArea("</file>" & chr(13),aRequest);
   
 	AddTextToArea("" & chr(13) & chr(10),aRequest);
-	AddTextToArea("" & chr(13) & chr(10),aRequest);
-	AddTextToArea("" & chr(13) & chr(10),aRequest);
-	AddTextToArea("" & chr(13) & chr(10),aRequest);
+	//AddTextToArea("" & chr(13) & chr(10),aRequest);
+	//AddTextToArea("" & chr(13) & chr(10),aRequest);
+	//AddTextToArea("" & chr(13) & chr(10),aRequest);
 	
 	//writeareatofile(aRequest,"1addresRequest.txt",0);
   
@@ -486,12 +490,16 @@ begin
   page = "/v2.0/xml/";
    
 	CreateAddressRequest(host, page, NPSettingsb.APIkey, "Address","getCities", "", mainRequest); //get status
-
+	
+	
+	
 	//messagebox(0,"In");
-
+	
+	writeareatofile(mainRequest,"mainRequest.txt",0);
+	
   if(MySendRawWebRequest(host,"443",true,"POST",page & getParam,"text/xml","",false,mainRequest,replyarea,20))then begin  //WORK! 
     //messagebox(0,"Connection on!");
-    logtext(0,"Hansa World::New Post: Cyties updating");
+    logtext(0,"Hansa World::New Post: Cyties updating " & getarealength(replyarea));
     writeareatofile(replyarea,"1getStatusReplyCyties.txt",0);
 
     
