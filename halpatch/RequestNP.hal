@@ -32,14 +32,14 @@ begin
   res = 0;
   
   alen = GetAreaLength(a);
-  logtext(0,alen);
+  //logtext(0,alen);
   if(alen>0)then begin  
 		for(i=0;i<alen;i=i+1)begin
 			str = GetStringFromArea(a,i,1);
 			if(str==(chr(60)))then begin
 				res = GetAreaFromArea(a,i,alen-i,out);	
 				str = GetStringFromArea(out,0,13);		
-				logtext(0,"str2 " & GetAreaLength(out)-50 & " " & GetStringFromArea(out,GetAreaLength(out)-50,50));
+				//logtext(0,"str2 " & GetAreaLength(out)-50 & " " & GetStringFromArea(out,GetAreaLength(out)-50,50));
 				str2 = GetStringFromArea(out,GetAreaLength(out)-50,50);
 				str2 = StripCharacter(str2,chr(0));
 				str2 = StripCharacter(str2,chr(10));				
@@ -499,7 +499,7 @@ begin
 	
   if(MySendRawWebRequest(host,"443",true,"POST",page & getParam,"text/xml","",false,mainRequest,replyarea,20))then begin  //WORK! 
     //messagebox(0,"Connection on!");
-    logtext(0,"Hansa World::New Post: Cyties updating " & getarealength(replyarea));
+    //logtext(0,"Hansa World::New Post: Cyties updating " & getarealength(replyarea));
     writeareatofile(replyarea,"1getStatusReplyCyties.txt",0);
 
     
@@ -1083,7 +1083,7 @@ begin
 					logtext(0,"Hansa World: GetWarehouses - " & cityName);
 					writeareatofile(replyarea,"1getWarehousesReply.txt",0);
 					GetXMLArea(replyarea);
-					if (GetAreaLength(replyarea)==0) then begin	notSynchronize = true; LogText(0,cityName); goto L2222; 	end;
+					if (GetAreaLength(replyarea)==0) then begin	notSynchronize = true;  LogText(0,cityName);  goto L2222; 	end;
 					xdata = ParseXMLArea(replyarea);
 					NPParseErrors(xdata,errors);
 					if (nonblank(errors)) then begin
@@ -2304,7 +2304,7 @@ begin
 				RecordCopy(oldNPCr,NPCr);
 				//SetAreaZeroSize(mainRequest);
 
-				LogText(0,counterpartyRef);
+				//LogText(0,counterpartyRef);
   			properties = "<Ref>" & counterpartyRef & "</Ref>"; 
 				CreateDescriptRequestWithMethod(host, page, apiKey, "Counterparty","getCounterpartyContactPersons", properties, mainRequest);
   						
@@ -2361,7 +2361,7 @@ begin
 				RecordCopy(oldNPCSr,NPCSr);
 				//SetAreaZeroSize(mainRequest);
 
-				LogText(0,counterpartyRef);
+				//LogText(0,counterpartyRef);
   			properties = "<Ref>" & counterpartyRef & "</Ref>"; 
 				CreateDescriptRequestWithMethod(host, page, apiKey, "Counterparty","getCounterpartyContactPersons", properties, mainRequest);
   			
