@@ -126,7 +126,7 @@ begin
 		OutString(4,0,PUrw.UnitCode,false);
 		OutString(5,0,PUrw.Spec,false);
 		OutString(6,0,PUrw.UPrice,false);
-		OutString(7,0,PUrw.CostPrice,false);
+		OutVal(7,0,PUrw.CostPrice,M4Val,false);//Edit----------------------Dima  26.04.2016
 		OutString(8,0,PUrw.Sum,false);
 		EndFormat;	
 	end;		
@@ -190,9 +190,13 @@ begin
 		OutString(4,0,StockMovrw.SentQuant,false);
 		OutString(5,0,StockMovrw.Quant,false);
 		OutString(6,0,StockMovrw.Spec,false);
-		OutString(7,0,StockMovrw.OldPrice,false);
+		//OutString(7,0,StockMovrw.OldPrice,false);
+		OutVal(7,0,StockMovrw.OldPrice,M4Val,false);
 		OutString(8,0,StockMovrw.ExtraSCost,false);
-		OutString(9,0,StockMovrw.NewPrice,false);
+		//OutString(9,0,StockMovrw.NewPrice,false);
+		OutVal(9,0,StockMovrw.NewPrice,M4Val,false);		
+		
+
 
 		EndFormat;	
 	end;		

@@ -322,6 +322,19 @@ LUpdateMarkPUDsm: ;
 END;
 
 
+//Edit----------------------Dima  26.04.2016
+//Refactoring is needed in future!
+//All ExportToExcelXXDsm functions should be replaced with one function
+//windows type would be  define by GetWindowClass(wn) function
+//
+//
+// function ExportToExcel()
+//		wn = CurWindow
+//		switch(GetWindowClass(wn)) begin		
+//			case "PUDClass"
+//					....
+//		end;
+
 global  // added -------------------Dima  27.11.2014
 procedure ExportToExcelPUDsm()
 begin
