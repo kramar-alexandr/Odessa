@@ -2570,3 +2570,46 @@ begin
   EndWindow;
 end;
 
+window ICImportIClass:1
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+real h,v,vs;
+Integer i;
+  WindowBegin("Импорт - Закрыть товары",ICImportIClass,CGIcW,-);	
+  SetWRect(20,80,470,300);
+  i=1; //номер колонки
+  h=10;  v=15;
+  StaticText(h,v,"Формат импорта",false);
+  h=20;  v=40;
+  StaticText(h,v,"Список колонок:",false);
+  v=v+30; vs=25;
+  StaticText(h,v, 	i & ". Код товара",false);
+	 StaticText(h+100,v,"Обязательное поле",false);
+	 i=i+1;
+  
+  StaticText(h,v+=40,"Примечание:   Все столбцы разделены <Tab>",false);
+
+  EndWindow;
+end;
+
+window IOImportIClass:1
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+real h,v,vs;
+Integer i;
+  WindowBegin("Импорт - Открыть товары",IOImportIClass,CGIcW,-);	
+  SetWRect(20,80,470,300);
+  i=1; //номер колонки
+  h=10;  v=15;
+  StaticText(h,v,"Формат импорта",false);
+  h=20;  v=40;
+  StaticText(h,v,"Список колонок:",false);
+  v=v+30; vs=25;
+  StaticText(h,v, 	i & ". Код товара",false);
+	 StaticText(h+100,v,"Обязательное поле",false);
+	 i=i+1;
+  
+  StaticText(h,v+=40,"Примечание:   Все столбцы разделены <Tab>",false);
+
+  EndWindow;
+end;

@@ -338,6 +338,8 @@ begin
 	Import("Импорт Item/Classification",INDIImportIClass,ImportNewItemsWithClassIn,modDBMain); //Edit***************************Sasha2,10:26 16.04.2015
 	Import("Импорт Item/Classification",INDIImportIClass,ImportNewItemsWithClassIn,modIN); //Edit***************************Sasha2,10:26 16.04.2015
 	Import("Импорт Item/Group",INITImportIClass,ImportNewItemsWithGroupIn,modIN); //Edit***************************Sasha2,18:43 06.01.2016
+  Import("Импорт - Закрыть товары",ICImportIClass,ImportCloseItemsIn,modIN);
+  Import("Импорт - Открыть товары",IOImportIClass,ImportOpenItemsIn,modIN);
 
 	Import("Импорт eMail/Скидка",INImportIClass,ImportCUDiscountIn,modDBMain);
 
