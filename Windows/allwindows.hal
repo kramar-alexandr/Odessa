@@ -4392,9 +4392,9 @@ begin
       end else begin
         RlCol(-120,-120,"Цена",UPrice1,true);
       end;
-      if (HasModIN) then begin
+      /*if (HasModIN) then begin
         CalculatedColumn(-100,-100,"На складе","IN1SClassInStock",true);
-      end;
+      end;*/
       if (HasModIN) then begin
       	if(LMb.LocalMachineCode=="RR1" or LMb.LocalMachineCode=="RR2")then begin //Edit by Victor 21.01.15
 	        CalculatedColumn(-50,-50,"RAY+NIZ","IN1SClassInStockNIZ",true);// Edit ************************** Friday, 31 October 2014 11:43:05
