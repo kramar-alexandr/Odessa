@@ -332,6 +332,7 @@ begin
   ArrayField(MotherAlternateDeviceID,M4Str,30,0);
   ArrayField(UnitComment,M4Str,200,0);
   ArrayField(SalaryPrice,M423Val,0,0);	//Edit----------------------Dima  15.03.2016
+  ArrayField(CommisionPrice,M423Val,0,0);	//Edit----------------------Dima  27.04.2016
   EndArray;
   return;
 end; 
@@ -4685,6 +4686,7 @@ RecordBegin(IPVc,-,"");
   RecordField(Komitent,M4UStr,100,0);
   RecordField(Rate,M45Val,0,0);  
   RecordField(CurncyCode,M4Str,10,0);  
+  RecordField(CommisionPrice,M423Val,0,0);
   MainKeyBegin(InvNr,0);
   KeySegment(InvNr);
   KeySegment(RowNr);

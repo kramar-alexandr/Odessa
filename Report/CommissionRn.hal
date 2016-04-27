@@ -47,6 +47,7 @@ begin
 		OutString(tab[6],0,"Кол-во",false);
 		OutString(tab[7],0,"Цена розн.",false);
 		OutString(tab[8],0,"Цена продажи",false);
+		OutString(tab[24],0,"Цена комиссии",false);
 		OutString(tab[9],0,"Себес-ть за ед.",false);
 		OutString(tab[10],0,"Себес-ть продажи",false);
 		OutString(tab[11],0,"Сумма продажи",false);
@@ -177,164 +178,7 @@ longint count;
 end;
 
 
-procedure CollectStockMovements(string locations, string positions,date startperiod, date endperiod,var vector val StockIn, var vector val StockOut)
-begin
-record StockMovVc SMr;
-row StockMovVc SMrw;
-string 50 keyloop;
-integer loop,i;
-boolean TrHs,testf;
-longint count;
 
-	if (blank(locations)) then begin  //quantity In == quantity Out
-		keyloop = "OKFlagTransDate";
-		loop = 2;
-		SMr.OKFlag = 1;
-		SMr.TransDate = startperiod;
-		
-		TrHs = true;
-		While(LoopKey(keyloop,SMr,loop,TrHs)) begin
-			if (SMr.TransDate>endperiod) then begin TrHs = false; end;
-			if (TrHs) then begin
-				for(i=0;i<MatRowCnt(SMr);i=i+1) begin
-					MatRowGet(SMr,i,SMrw);
-					StockIn[SMrw.ArtCode] = StockIn[SMrw.ArtCode] + SMrw.Quant;
-					StockOut[SMrw.ArtCode] = StockOut[SMrw.ArtCode] + SMrw.Quant;							
-				end;
-			end;  	
-		end;
-		ResetLoop(SMr);		
-	end; 
-	
-	if (nonblank(locations)) then begin
-		keyloop = "FrLocOK";
-		loop = 3;
-		SMr.FrLocation = locations;	
-		SMr.OKFlag = 1;
-		SMr.TransDate = startperiod;			
-	
-		TrHs = true;
-		While(LoopKey(keyloop,SMr,loop,TrHs)) begin
-  		testf = true;
-  		if (SMr.TransDate>endperiod) then begin TrHs = false; testf = false; end;
-  		if (SMr.FrLocation!=locations) then begin TrHs = false; testf = false; end;
-  		if (nonblank(positions) and SMr.FrPos!=positions) then begin testf = false; end;
-  		if (testf) then begin 
-				for(i=0;i<MatRowCnt(SMr);i=i+1) begin
-					MatRowGet(SMr,i,SMrw);
-					StockOut[SMrw.ArtCode] = StockOut[SMrw.ArtCode] + SMrw.Quant;
-				end;  		
-  		end;  		
-		end;
-		ResetLoop(SMr);
-		
-		keyloop = "ToLocOK";
-		SMr.ToLocation = locations;	
-		SMr.OKFlag = 1;
-		SMr.TransDate = startperiod;			
-		
-		TrHs = true;
-		While(LoopKey(keyloop,SMr,loop,TrHs)) begin
-  		testf = true;
-  		if (SMr.TransDate>endperiod) then begin TrHs = false; testf = false; end;
-  		if (SMr.ToLocation!=locations) then begin TrHs = false; testf = false; end;
-  		if (nonblank(positions) and SMr.ToPos!=positions) then begin testf = false; end;
-  		if (testf) then begin 
-				for(i=0;i<MatRowCnt(SMr);i=i+1) begin
-					MatRowGet(SMr,i,SMrw);
-					StockIn[SMrw.ArtCode] = StockIn[SMrw.ArtCode] + SMrw.Quant;
-				end;  		
-  		end;  		
-		end;
-	end;
-	 
-end;
-
-
-procedure GetStockMovTurnOver(record SalesDataVc SalesData,string locations, string positions,date startperiod, date endperiod,var val qtyIn, var val qtyOut)
-begin
-record StockMovVc SMr;
-row StockMovVc SMrw;
-string 50 keyloop;
-integer loop,i;
-boolean TrHs,testf;
-longint count;
-	qtyIn = 0;
-	qtyOut = 0;
-
-	if (blank(locations)) then begin
-		keyloop = "OKFlagTransDate";
-		loop = 2;
-		SMr.OKFlag = 1;
-		SMr.TransDate = startperiod;
-		
-		TrHs = true;
-		While(LoopKey(keyloop,SMr,loop,TrHs)) begin
-			if (SMr.TransDate>endperiod) then begin TrHs = false; end;
-			if (TrHs) then begin
-				for(i=0;i<MatRowCnt(SMr);i=i+1) begin
-					MatRowGet(SMr,i,SMrw);
-					if (SMrw.ArtCode==SalesData.ArtCode) then begin
-							qtyIn = qtyIn + SMrw.Quant;
-							qtyOut = qtyOut + SMrw.Quant;							
-					end;
-				end;
-			end;  	
-		end;
-		ResetLoop(SMr);		
-	end;
-	//LogText(0,"SM rows  : " & count);
-	
-	if (nonblank(locations)) then begin
-		keyloop = "FrLocOK";
-		loop = 3;
-		SMr.FrLocation = locations;	
-		SMr.OKFlag = 1;
-		SMr.TransDate = startperiod;		
-	
-	
-		TrHs = true;
-		While(LoopKey(keyloop,SMr,loop,TrHs)) begin
-  		testf = true;
-  		if (SMr.TransDate>endperiod) then begin TrHs = false; testf = false; end;
-  		if (SMr.FrLocation!=locations) then begin TrHs = false; testf = false; end;
-  		if (nonblank(positions) and SMr.FrPos!=positions) then begin testf = false; end;
-  		if (testf) then begin 
-				for(i=0;i<MatRowCnt(SMr);i=i+1) begin
-					MatRowGet(SMr,i,SMrw);
-					if (SMrw.ArtCode==SalesData.ArtCode) then begin
-							qtyIn = qtyIn + SMrw.Quant;
-					end;
-				end;  		
-  		end;  		
-		end;
-		ResetLoop(SMr);
-		
-		keyloop = "ToLocOK";
-		SMr.ToLocation = locations;	
-		SMr.OKFlag = 1;
-		SMr.TransDate = startperiod;			
-		
-		TrHs = true;
-		While(LoopKey(keyloop,SMr,loop,TrHs)) begin
-  		testf = true;
-  		if (SMr.TransDate>endperiod) then begin TrHs = false; testf = false; end;
-  		if (SMr.ToLocation!=locations) then begin TrHs = false; testf = false; end;
-  		if (nonblank(positions) and SMr.ToPos!=positions) then begin testf = false; end;
-  		if (testf) then begin 
-				for(i=0;i<MatRowCnt(SMr);i=i+1) begin
-					MatRowGet(SMr,i,SMrw);
-					if (SMrw.ArtCode==SalesData.ArtCode) then begin
-							qtyOut = qtyOut + SMrw.Quant;
-					end;
-				end;  		
-  		end;  		
-		end;
-		
-	
-	end;		
-	
-end;
 
 
 
@@ -394,6 +238,7 @@ array string 50 combarr;
 	tab[12] = 430;	tab[13] = 460;	tab[14] = 460;	tab[15] = 460;
 	tab[16] = 460;	tab[17] = 460;	tab[18] = 460;	tab[19] = 460;
 	tab[20] = 460;	tab[21] = 460;	tab[22] = 460;	tab[23] = 460;
+	tab[24] = 310;
 	
 	PrintReportHeader(tab,locations,positions);
 	
@@ -446,6 +291,7 @@ array string 50 combarr;
 					OutString(tab[6],0,SalesData.Quant,false);
 					OutString(tab[7],0,SalesData.Price * rate,false);
 					OutString(tab[8],0,SalesData.Sum * rate/SalesData.Quant,false);
+					OutString(tab[24],0,SalesData.CommisionPrice,false);
 					OutString(tab[9],0,SalesData.UnitCost * rate,false);
 					OutString(tab[10],0,SalesData.Cost * rate,false);
 					OutString(tab[11],0,SalesData.Sum * rate,false);

@@ -150,6 +150,19 @@ begin
 					SalesData.SalaryPrice = PLr.ExVatPrice*cred;
 				end;
 			end;
+			
+			//Коммисия
+			if (IVr.TransDate>=komitentStart) then begin
+				if (IVrw.CommisionPrice>0) then begin
+					SalesData.CommisionPrice = IVrw.CommisionPrice*cred;
+				end else begin
+					PLr.PLCode = "KOMPR";
+					PLr.ArtCode = IVrw.ArtCode;
+					if (ReadFirstMain(PLr,2,true)) then begin
+						SalesData.CommisionPrice = PLr.ExVatPrice*cred;
+					end;
+				end;
+			end;			
 
 			
 			//Расчет себестоимости - -------------------------------
@@ -301,7 +314,6 @@ begin
 record IVVc IVr;
 record SHVc SHr;
 LongInt counter;
-//IVr.SerNr = 64000;
 
 	while(LoopMain(IVr,1,true)) begin
 	
@@ -317,4 +329,30 @@ LongInt counter;
 	end;
 LLLLA:;
 end;
+
+
+
+/*
+ //RecalculateSalesDataVcMn (Sort by date )
+global updating procedure RecalculateSalesDataVcMn()		//Edit----------------------Dima  11.03.2016
+begin
+record IVVc IVr;
+record SHVc SHr;
+LongInt counter;
+
+
+	IVr.TransDate = StringToDate("01/04/2016");
+	
+	while(LoopKey("TransDate",IVr,1,true)) begin
+	
+		CreateSalesData(IVr);
+
+		if (mod(IVr.SerNr,1000)==0) then begin
+			LogText(0,"Recalculation... IVVc: " & IVr.SerNr);
+		end;
+		
+	end;
+end;
+*/
+
 

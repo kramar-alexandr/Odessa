@@ -336,6 +336,7 @@ begin
 record PLVc PLr;
 row IVVc IVrw;
 integer i;
+boolean paste;
 
 	if (IVr.OKFlag!=0) then begin
 		for(i=0;i<MatRowCnt(IVr);i=i+1) begin		
@@ -345,8 +346,15 @@ integer i;
 				PLr.ArtCode = IVrw.ArtCode;
 				if (ReadFirstMain(PLr,2,true)) then begin
 					IVrw.SalaryPrice = PLr.ExVatPrice;
-					MatRowPut(IVr,i,IVrw);
+					paste = true;
 				end;
+				PLr.PLCode = "KOMPR";
+				PLr.ArtCode = IVrw.ArtCode;
+				if (ReadFirstMain(PLr,2,true)) then begin
+					IVrw.SalaryPrice = PLr.ExVatPrice;
+					paste = true;
+				end;
+				if (paste) then begin MatRowPut(IVr,i,IVrw); end;				
 			end;
 		end;
 	end;
