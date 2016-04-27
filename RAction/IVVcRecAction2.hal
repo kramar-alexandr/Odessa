@@ -351,7 +351,7 @@ boolean paste;
 				PLr.PLCode = "KOMPR";
 				PLr.ArtCode = IVrw.ArtCode;
 				if (ReadFirstMain(PLr,2,true)) then begin
-					IVrw.SalaryPrice = PLr.ExVatPrice;
+					IVrw.CommisionPrice = PLr.ExVatPrice;
 					paste = true;
 				end;
 				if (paste) then begin MatRowPut(IVr,i,IVrw); end;				
