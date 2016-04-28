@@ -37,7 +37,7 @@ begin
 		to = 1;
 	end;
 	
-	komitentStart = StringToDate("01/04/2016"); //записи с комитентом  должны начинаться с первого апреля
+	komitentStart = StringToDate("26/04/2016"); //записи с комитентом  должны начинаться с первого апреля
 	
 	
 	for(i=0;i<MatRowCnt(IVr);i=i+1) begin
@@ -311,7 +311,6 @@ end;
 
 //Функция RecalculateSalesDataVcMn создает/обновляет регистр SalesDataVc (для отчета по продажам)
 //должна запускаться при изменении прейскуранта SALAR, классификаций товаров
-/*
 global updating procedure RecalculateSalesDataVcMn()		//Edit----------------------Dima  11.03.2016
 begin
 record IVVc IVr;
@@ -332,6 +331,33 @@ LongInt counter;
 	end;
 LLLLA:;
 end;
+
+
+
+
+
+
+/*
+
+ //RecalculateSalesDataVcMn (Sort by date )
+global updating procedure RecalculateSalesDataVcMn()		//Edit----------------------Dima  11.03.2016
+begin
+record IVVc IVr;
+record SHVc SHr;
+LongInt counter;
+
+
+	IVr.TransDate = StringToDate("26/04/2016");
+	
+	while(LoopKey("TransDate",IVr,1,true)) begin
+	
+		CreateSalesData(IVr);
+
+		if (mod(IVr.SerNr,1000)==0) then begin
+			LogText(0,"Recalculation... IVVc: " & IVr.SerNr);
+		end;
+		
+	end;
+end;
+
 */
-
-
