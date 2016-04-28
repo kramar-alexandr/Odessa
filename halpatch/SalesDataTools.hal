@@ -2,6 +2,7 @@ external function val MulRateToBase1(var string,val,val,val,val,val,val,roundmod
 external function val AbsoluteVal(val);
 external procedure ExtractObj(string,var Integer,var string);
 
+
 //Функция собирает данные для SalesDataVc из регистров IVVc,SHVc,PLVc, INvc
 //Расчет себестоимости - копия из старого отчета по продажам SalesRn
 //Основной документ - Сч/фактура, при её пересчете вызывается эта функция. При изменении отгрузок запускается эта же функция, но для соответствующих сч/фактур.
@@ -36,7 +37,7 @@ begin
 		to = 1;
 	end;
 	
-	komitentStart = StringToDate("26/04/2016"); //записи с комитентом  должны начинаться с первого апреля
+	komitentStart = StringToDate("01/04/2016"); //записи с комитентом  должны начинаться с первого апреля
 	
 	
 	for(i=0;i<MatRowCnt(IVr);i=i+1) begin
@@ -332,29 +333,5 @@ LongInt counter;
 LLLLA:;
 end;
 */
-
-
-
- //RecalculateSalesDataVcMn (Sort by date )
-global updating procedure RecalculateSalesDataVcMn()		//Edit----------------------Dima  11.03.2016
-begin
-record IVVc IVr;
-record SHVc SHr;
-LongInt counter;
-
-
-	IVr.TransDate = StringToDate("26/04/2016");
-	
-	while(LoopKey("TransDate",IVr,1,true)) begin
-	
-		CreateSalesData(IVr);
-
-		if (mod(IVr.SerNr,1000)==0) then begin
-			LogText(0,"Recalculation... IVVc: " & IVr.SerNr);
-		end;
-		
-	end;
-end;
-
 
 
