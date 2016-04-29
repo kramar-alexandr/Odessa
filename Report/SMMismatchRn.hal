@@ -1,0 +1,85 @@
+external procedure LookupInHist(string, Date, Date, string,var val,var val,var val,var val,var val,var val,var val,var val,var val,var val,var val,var vector val,var vector val);
+external function Boolean SetInSet2(string,string);
+remote procedure CollectOrderRows(var record ORVc,Date,Date,string);
+remote procedure CollectPORows(var record POVc,Date,Date,string);
+remote procedure GetISStatus(string,var val,var val,var val,string);
+external procedure ExtractObj(string,var Integer,var string);
+
+SetLangMode(LangRussian,"RUS",0);
+
+
+
+global procedure SMMismatchRn(record RcVc RepSpec)
+begin
+	record StockMovVc StockMovr;
+	row StockMovVc StockMovrw;
+	record ItemHistVc IHr;
+	integer pos;
+	boolean TrHs;
+	val totQty;
+	string 30 curcode;
+	
+	startreportnoheaderjob("Отчет несовпадений по количеству в перемещении");
+    
+    StockMovr.SerNr = RepSpec.long1;
+    ReadFirstMain(StockMovr,1,true);
+		
+		startformat(15);
+			pos = 0;
+			OutString(pos,0,"Код",false); 
+   		OutString(pos+=100,0,"Количество",false);
+   		OutString(pos+=100,0,"Остат.кол-во",false);
+   		OutString(pos+=100,0,"Склад",false);
+   		OutString(pos+=100,0,"HistSerNr",false);
+		endformat;
+		
+		IHr.FileName = "StockMovVc";
+		IHr.TransNr = StockMovr.SerNr;
+		TrHs = true;
+		while (loopkey("FNTransNr",IHr,2,TrHs)) begin
+			if(IHr.FileName!="StockMovVc" or IHr.TransNr!=StockMovr.SerNr)then begin TrHs = false; end;
+			if(TrHs)then begin
+			  if (blank(curcode)) then begin
+			    curcode = IHr.ArtCode;
+			  end;
+			  if (curcode!=IHr.ArtCode) then begin
+			    Gray_Divider(0,1);
+			    startformat(15);
+      			pos = 0;
+      			OutString(pos,0,"",false); 
+         		OutString(pos+=100,0,"",false);
+         		OutString(pos+=50,0,totQty,false);
+         		OutString(pos+=150,0,"",false);
+         		OutString(pos+=100,0,"",false);
+      		endformat;
+      		startformat(15);
+      		endformat;
+      		curcode = IHr.ArtCode;
+      		totQty = 0;
+			  end;
+			  startformat(15);
+    			pos = 0;
+    			OutString(pos,0,IHr.ArtCode,false); 
+       		OutString(pos+=100,0,IHr.Qty,false);
+       		OutString(pos+=100,0,IHr.RemQty,false);
+       		OutString(pos+=100,0,IHr.Location,false);
+       		OutString(pos+=100,"DblItemHistVc",IHr.SerNr,false);
+    		endformat;
+    		totQty = totQty + IHr.Qty;
+			end;
+		end;
+		Gray_Divider(0,1);
+    startformat(15);
+			pos = 0;
+			OutString(pos,0,"",false); 
+   		OutString(pos+=100,0,"",false);
+   		OutString(pos+=50,0,totQty,false);
+   		OutString(pos+=150,0,"",false);
+   		OutString(pos+=100,0,"",false);
+		endformat;
+		startformat(15);
+		endformat;
+				
+	endjob;
+return;
+end;

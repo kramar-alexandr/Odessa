@@ -6763,6 +6763,9 @@ t=1;
   SpecialMenu("Распечатать EAN13 этикетки 5*13",'',1,"PrintLabelEANDsm");
 	SpecialMenu("Отсортировать таблицу по коду",'',20,"TableSortStockMov_ByCodeDsm"); 	//Edit----------------------Dima  11.02.2015
 	SpecialMenu("Отсортировать таблицу по наименованию",'',20,"TableSortStockMov_ByNameDsm"); 	//Edit----------------------Dima  11.02.2015
+	if (CurrentUser=="SA" or CurrentUser=="SA1") then begin
+	  SpecialMenu("Отчет несовпадений по количеству в перемещении",'',20,"StockMovMismatchDsm"); //Edit***************************Sasha2,10:28 29.04.2016
+	end;
   EndWindow;
 end;
 

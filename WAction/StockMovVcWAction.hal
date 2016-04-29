@@ -34,6 +34,7 @@ external procedure DisplayStrArray(array string);
 remote function string 20 FindCustRouteByLocation(string,string,string);
 remote procedure HandlePrintEAN13StockMov(record StockMovVc,var array record PUVc,var array integer); //Edit***************************Sasha2,16:15 26.01.2015
 remote procedure CollectOrdersForStockMove(var record StockMovVc, record RcVc);//Edit----------------------Dima  14.08.2015
+remote procedure SMMismatchRn(record RcVc); //Edit***************************Sasha2,10:25 29.04.2016
 
 global
 procedure CalcNewPrice(val oldprice,string extra,var val newprice)
@@ -1431,3 +1432,34 @@ BEGIN
   CollectOrdersForStockMoveTClassOnOpenWindow = true;
   RETURN;
 END;
+
+global //Edit***************************Sasha2,10:24 29.04.2016 {
+procedure StockMovMismatchDsm()
+BEGIN
+  Integer wn;
+  record StockMovVc StockMovr;
+  record RcVc RepSpec;
+
+  wn = CurWindow;
+  GetWindowRecord(wn,StockMovr);
+  RecordNew(RepSpec);
+  RepSpec.long1 = StockMovr.SerNr;
+  SMMismatchRn(RepSpec);
+  return;
+end; //Edit***************************Sasha2,10:24 29.04.2016 }
+
+global //Edit***************************Sasha2,10:52 29.04.2016 {
+procedure DblItemHistVc(string dblstr,string l,Integer currepwn)
+begin
+   Integer wn;
+   record ItemHistVc ItemHistr;
+   string 255 tstr;
+   
+   ItemHistr.SerNr = dblstr;
+   if (ReadFirstMain(ItemHistr,1,true)) then begin
+     wn = OpenWindow("ItemHistDClass",1,0,"","",ItemHistr);
+   end;   
+   return;
+   
+   return;
+end; //Edit***************************Sasha2,10:52 29.04.2016 }
