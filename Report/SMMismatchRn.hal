@@ -47,7 +47,7 @@ begin
 			    startformat(15);
       			pos = 0;
       			OutString(pos,0,"",false); 
-         		OutString(pos+=100,0,"",false);
+         		OutString(pos+=100,0,"‘умм.кол-во",false);
          		OutString(pos+=50,0,totQty,false);
          		OutString(pos+=150,0,"",false);
          		OutString(pos+=100,0,"",false);
@@ -72,7 +72,7 @@ begin
     startformat(15);
 			pos = 0;
 			OutString(pos,0,"",false); 
-   		OutString(pos+=100,0,"",false);
+   		OutString(pos+=100,0,"‘умм.кол-во",false);
    		OutString(pos+=50,0,totQty,false);
    		OutString(pos+=150,0,"",false);
    		OutString(pos+=100,0,"",false);
