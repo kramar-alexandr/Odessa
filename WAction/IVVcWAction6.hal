@@ -256,6 +256,11 @@ begin
     end;
   end;
 LIVDClassDeleteRowTest:;  
+
+	if (currentuser=="SAUNOK") then begin// Edit ************************** Wednesday, 4 May 2016 15:57:24
+		res = true;
+	end;
+
   IVDClassDeleteRowTest = res;
   return;
 end;
