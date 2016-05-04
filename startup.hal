@@ -250,7 +250,8 @@ begin
    SString(31146,"Срок действия API-ключа Новой почты истекает через ");
    SString(31147,"день");
    SString(31148,"дня");
-   SString(31149,"дней");   
+   SString(31149,"дней");
+   SString(31150,"Сертификат");   
 
 
   Maintenance("Экспорт склада CSV",ExportStockCSVClass,ExportStockCSVMn,modSY);

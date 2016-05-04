@@ -4687,6 +4687,7 @@ RecordBegin(IPVc,-,"");
   RecordField(Rate,M45Val,0,0);  
   RecordField(CurncyCode,M4Str,10,0);  
   RecordField(CommisionPrice,M423Val,0,0);
+  RecordField(stp,M4Int,0,0);
   MainKeyBegin(InvNr,0);
   KeySegment(InvNr);
   KeySegment(RowNr);

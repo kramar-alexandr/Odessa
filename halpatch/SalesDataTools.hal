@@ -74,7 +74,7 @@ begin
 
   for(i=0;i<MatRowCnt(IVr);i=i+1) begin
 		MatRowGet(IVr,i,IVrw);
-		if (IVrw.stp==kInvoiceRowTypeNormal  and nonblank(IVrw.ArtCode)) then begin
+		if ((IVrw.stp==kInvoiceRowTypeNormal and nonblank(IVrw.ArtCode)) or IVrw.stp==kInvoiceRowTypeGiftVoucherSold  ) then begin
 
 			SalesData.InvNr = IVr.SerNr;
 			SalesData.RowNr = i;
@@ -93,12 +93,10 @@ begin
 
 			SalesData.InvNr = IVr.SerNr;
 			SalesData.RowNr = i;
-			SalesData.ArtCode = IVrw.ArtCode;
-			SalesData.Spec = IVrw.Spec;
+			SalesData.stp = IVrw.stp;
 			SalesData.InvDate = IVr.InvDate;
 			SalesData.TransDate = IVr.TransDate;
 			SalesData.TransTime = IVr.TransTime;
-			SalesData.Quant = IVrw.Quant;
 			SalesData.Price = IVrw.Price/fr*to;
 			SalesData.Sum = IVrw.Sum/fr*to;
 			SalesData.Location = IVr.Location;
@@ -111,7 +109,19 @@ begin
 			SalesData.PayedByCash = paycash*IVrw.Sum/IVr.Sum4;
 			SalesData.PayedByCCard = payccard*IVrw.Sum/IVr.Sum4;
 			SalesData.PayedByGift = paygift*IVrw.Sum/IVr.Sum4;
-			SalesData.CurncyCode = IVr.CurncyCode;			
+			SalesData.CurncyCode = IVr.CurncyCode;
+			
+			switch(IVrw.stp) begin 
+				case kInvoiceRowTypeNormal:
+					SalesData.ArtCode = IVrw.ArtCode;
+					SalesData.Spec = IVrw.Spec;
+					SalesData.Quant = IVrw.Quant;
+				case kInvoiceRowTypeGiftVoucherSold:
+					SalesData.ArtCode = USetStr(31150);
+					SalesData.Spec = USetStr(31024) & " # " & IVrw.GCNr & ". " & IVrw.Spec;
+					SalesData.Quant = 1;
+					SalesData.Price = AbsoluteVal(SalesData.Sum);
+			end;						
 
 			INr.Code = IVrw.ArtCode;
 			if (ReadFirstMain(INr,1,true)) then begin
@@ -337,8 +347,8 @@ end;
 
 
 
-/*
 
+/*
  //RecalculateSalesDataVcMn (Sort by date )
 global updating procedure RecalculateSalesDataVcMn()		//Edit----------------------Dima  11.03.2016
 begin
@@ -347,7 +357,7 @@ record SHVc SHr;
 LongInt counter;
 
 
-	IVr.TransDate = StringToDate("26/04/2016");
+	IVr.TransDate = StringToDate("01/04/2016");
 	
 	while(LoopKey("TransDate",IVr,1,true)) begin
 	
@@ -359,5 +369,4 @@ LongInt counter;
 		
 	end;
 end;
-
 */

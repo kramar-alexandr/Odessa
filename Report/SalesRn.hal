@@ -306,8 +306,8 @@ string 20 keyloop,prevArtCode,currentCode;
 					if(!setinset(RepSpec.f7,SalesData.DispGroups))then begin
 						testf = false;
 					end;		
-		end; 	
-	
+		end;
+		if (SalesData.stp!=kInvoiceRowTypeNormal) then begin testf=false; end;		//Edit----------------------Dima  04.05.2016	
 		
 		if(testf)then begin
 		
