@@ -4526,6 +4526,7 @@ RecordBegin(IPVc,-,"");
   
   //Edit-------------------Vitalii 14:02 14.12.2015
   RecordBegin(PLHistVc,-,"");
+  ImpExpLevel(0);
   RecordField(PLCode,M4Code,5,PLVc);
   RecordField(ArtCode,M4Code,20,INVc);
   RecordField(CustCode,M4Code,20,CUVc);
