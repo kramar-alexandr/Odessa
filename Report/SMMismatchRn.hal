@@ -16,7 +16,7 @@ begin
 	record ItemHistVc IHr;
 	integer pos;
 	boolean TrHs;
-	val totQty;
+	val totQty,allTotQty;
 	string 30 curcode;
 	
 	startreportnoheaderjob("Отчет несовпадений по количеству в перемещении");
@@ -66,6 +66,7 @@ begin
        		OutString(pos+=100,"DblItemHistVc",IHr.SerNr,false);
     		endformat;
     		totQty = totQty + IHr.Qty;
+    		allTotQty = allTotQty + IHr.Qty;
 			end;
 		end;
 		Gray_Divider(0,1);
@@ -74,6 +75,17 @@ begin
 			OutString(pos,0,"",false); 
    		OutString(pos+=100,0,"Сумм.кол-во",false);
    		OutString(pos+=50,0,totQty,false);
+   		OutString(pos+=150,0,"",false);
+   		OutString(pos+=100,0,"",false);
+		endformat;
+		startformat(15);
+		endformat;
+		Black_Divider(0,1);
+    startformat(15);
+			pos = 0;
+			OutString(pos,0,"",false); 
+   		OutString(pos+=100,0,"Общее кол-во",false);
+   		OutString(pos+=50,0,allTotQty,false);
    		OutString(pos+=150,0,"",false);
    		OutString(pos+=100,0,"",false);
 		endformat;

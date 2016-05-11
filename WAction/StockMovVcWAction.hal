@@ -1443,7 +1443,6 @@ BEGIN
   wn = CurWindow;
   GetWindowRecord(wn,StockMovr);
   RecordNew(RepSpec);
-  RepSpec.repname = "SMMismatchRn";
   RepSpec.long1 = StockMovr.SerNr;
   SMMismatchRn(RepSpec);
   return;
