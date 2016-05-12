@@ -40,6 +40,25 @@ record RcVc RepSpec;
 END;
 
 
+global
+procedure ExpRegPLHistEn()
+BEGIN
+	record PLHistVc PLHr;
+	
+	PLHr.ArtCode = "2780515";
+	PLHr.PLCode = "RRP";
+	while(loopmain(PLHr,2,true))begin
+		logtext(0,PLHr.ArtCode & " " & PLHr.PLCode);
+		
+		exportrecord(PLHr);
+		NewLine;
+	end;
+	
+	
+	
+  RETURN;
+END;
+
 global webpublic procedure WebExport()
 begin
 

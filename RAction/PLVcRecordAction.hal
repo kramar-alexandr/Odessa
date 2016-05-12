@@ -182,8 +182,11 @@ BEGIN
 		PLHrw.UserCode = CurrentUser;
 		PLHrw.Price = PLr.ExVatPrice;
 		PLHrw.StatusStr = stat;
-		MatRowPut(PLHr,cnt,PLHrw);
-		RecordStore(PLHr,true);
+		
+			MatRowPut(PLHr,cnt,PLHrw);
+		If(nonblank(PLHr.PLCode) and nonblank(PLHr.ArtCode))then begin	
+			RecordStore(PLHr,true);
+		end;
 	end;
 	RETURN;
 END;
