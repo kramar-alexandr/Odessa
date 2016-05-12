@@ -15,7 +15,7 @@ begin
   record DIVc DIr;
   record PLVc PLr;
 	integer pos,i,cred,j,k,mtcnt,rownr;
-	string 40 txt;
+	string 40 txt,separator;
 	val cost,unitcost,fr,to,sum;
 	val paycash,payccard,paygift;
 	boolean update,shipped,TrHs;
@@ -38,7 +38,7 @@ begin
 	end;
 	
 	komitentStart = StringToDate("26/04/2016"); //записи с комитентом  должны начинаться с первого апреля
-	
+	separator = "^";
 	
 	for(i=0;i<MatRowCnt(IVr);i=i+1) begin
 		MatRowGet(IVr,i,IVrw);
@@ -135,7 +135,7 @@ begin
 					DIr.Code = txt;
 					if(readfirstmain(DIr,1,true))then begin
 						if(DIr.CType=="TYPE")then begin
-							SalesData.ItemType = DIr.Name;
+							SalesData.ItemType = DIr.Code & separator & DIr.Name;
 						end;
 					end;
 					if(readfirstmain(DIr,1,true))then begin
@@ -347,26 +347,35 @@ end;
 
 
 
-
 /*
+
  //RecalculateSalesDataVcMn (Sort by date )
 global updating procedure RecalculateSalesDataVcMn()		//Edit----------------------Dima  11.03.2016
 begin
 record IVVc IVr;
 record SHVc SHr;
 LongInt counter;
+boolean TrHs;
+date reportdate;
 
 
-	IVr.TransDate = StringToDate("01/04/2016");
+	IVr.TransDate = StringToDate("27/12/2015");
+	//reportdate = StringToDate("28/11/2015");
+	TrHs = true;
 	
-	while(LoopKey("TransDate",IVr,1,true)) begin
-	
-		CreateSalesData(IVr);
-
-		if (mod(IVr.SerNr,1000)==0) then begin
-			LogText(0,"Recalculation... IVVc: " & IVr.SerNr);
-		end;
+	while(LoopKey("TransDate",IVr,1,TrHs)) begin
+		//if (IVr.TransDate>reportdate) then begin TrHs = false; end;
+		
+		if (TrHs) then begin
+		
+			CreateSalesData(IVr);
+  	
+			if (mod(IVr.SerNr,1000)==0) then begin
+				LogText(0,"Recalculation... IVVc: " & IVr.SerNr);
+			end;
+		end;	
 		
 	end;
 end;
+
 */
