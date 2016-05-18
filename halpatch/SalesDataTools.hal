@@ -346,25 +346,27 @@ end;
 
 
 
-
-/*
-
- //RecalculateSalesDataVcMn (Sort by date )
-global updating procedure RecalculateSalesDataVcMn()		//Edit----------------------Dima  11.03.2016
+//Функция RecalculateSalesDataVcMn создает/обновляет регистр SalesDataVc (для отчета по продажам)
+//должна запускаться при изменении прейскуранта SALAR, классификаций товаров
+global updating procedure RecalculateSalesDataMn(record RcVc RepSpec)		//Edit----------------------Dima  11.03.2016
 begin
 record IVVc IVr;
 record SHVc SHr;
 LongInt counter;
 boolean TrHs;
-date reportdate;
+date fromDate,toDate;
+
+	fromDate = RepSpec.sStartDate;
+	toDate = RepSpec.sEndDate;	
 
 
-	IVr.TransDate = StringToDate("27/12/2015");
-	//reportdate = StringToDate("28/11/2015");
+	//IVr.TransDate = StringToDate("27/12/2015");
+	IVr.TransDate = fromDate;
+
 	TrHs = true;
 	
 	while(LoopKey("TransDate",IVr,1,TrHs)) begin
-		//if (IVr.TransDate>reportdate) then begin TrHs = false; end;
+		if (IVr.TransDate>toDate) then begin TrHs = false; end;
 		
 		if (TrHs) then begin
 		
@@ -378,4 +380,102 @@ date reportdate;
 	end;
 end;
 
-*/
+
+
+
+//--------------------  Обновить классификации  в SalesData -------------------------
+//обрезанная версия CreateSalesData
+
+updating procedure UpdateDispGroupsSalesData(record IVVc IVr)				//Edit----------------------Dima  10.03.2016
+begin
+  record SalesDataVc SalesData,oldSalesData;
+  row IVVc IVrw;
+  record INVc INr;
+  record DIVc DIr;
+  record PLVc PLr;
+	integer pos,i,cred,j,k,mtcnt,rownr;
+	string 40 txt,separator;
+	val cost,unitcost,fr,to,sum;
+	val paycash,payccard,paygift;
+	boolean update,shipped,TrHs;
+  date komitentStart; 
+
+	
+	komitentStart = StringToDate("26/04/2016"); //записи с комитентом  должны начинаться с первого апреля
+	separator = "^";
+	
+
+  for(i=0;i<MatRowCnt(IVr);i=i+1) begin
+		MatRowGet(IVr,i,IVrw);
+		if ((IVrw.stp==kInvoiceRowTypeNormal and nonblank(IVrw.ArtCode)) or IVrw.stp==kInvoiceRowTypeGiftVoucherSold  ) then begin
+
+			SalesData.InvNr = IVr.SerNr;
+			SalesData.RowNr = i;
+			update = false;
+			if (ReadFirstMain(SalesData,2,true)) then begin
+				RecordCopy(oldSalesData,SalesData);
+				update = true;
+
+				INr.Code = IVrw.ArtCode;
+				if (ReadFirstMain(INr,1,true)) then begin
+					SalesData.DispGroups = INr.DispGroups;
+					SalesData.ItemGroup = INr.Group;
+      	
+					pos = 0;
+					txt = "";
+					ExtractObj(INr.DispGroups,pos,txt);
+					while (nonblank(txt)) begin
+						DIr.Code = txt;
+						if(readfirstmain(DIr,1,true))then begin
+							if(DIr.CType=="TYPE")then begin
+								SalesData.ItemType = DIr.Code & separator & DIr.Name;
+							end;
+						end;
+						if(readfirstmain(DIr,1,true))then begin
+							if(DIr.CType=="KOMITENT")then begin
+								if (IVr.TransDate>=komitentStart) then begin
+									SalesData.Komitent = DIr.Name;
+									//LogText(0,SalesData.InvNr & "   " & SalesData.Komitent);
+								end;	
+							end;
+						end;					
+						ExtractObj(INr.DispGroups,pos,txt);
+					end;
+				end;				
+				
+				
+				RecordUpdate(oldSalesData,SalesData,true);
+				
+			end;						
+			
+		end;
+	end;
+end;
+
+
+global updating procedure UpdateDispGroupsSalesDataMn(record RcVc RepSpec)		//Edit----------------------Dima  11.03.2016
+begin
+record IVVc IVr;
+record SHVc SHr;
+LongInt counter;
+boolean TrHs;
+date fromDate,toDate;
+
+	fromDate = RepSpec.sStartDate;
+	toDate = RepSpec.sEndDate;	
+
+	IVr.TransDate = fromDate;
+	TrHs = true;
+	
+	while(LoopKey("TransDate",IVr,1,TrHs)) begin
+		if (IVr.TransDate>toDate) then begin TrHs = false; end;
+		
+		if (TrHs) then begin		
+			UpdateDispGroupsSalesData(IVr);  	
+			if (mod(IVr.SerNr,1000)==0) then begin
+				LogText(0,"Recalculation... IVVc: " & IVr.SerNr);
+			end;
+		end;	
+		
+	end;
+end;

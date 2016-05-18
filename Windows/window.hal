@@ -2613,3 +2613,30 @@ Integer i;
 
   EndWindow;
 end;
+
+
+
+window  RecalculateSalesDataVClass:1 //Edit----------------------Dima  18.05.2016
+ wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+ begin
+WindowBegin("Пересчитать SalesData",RecalculateSalesDataVClass,CGMnt,RcType);
+  SetWRect(20,180,360,420);
+  Sizeable(-1,-1,0,0);
+  PeriodField(100,6,"Период");
+  StaticText(50,60,"Для всех счет-фактур, в заданом периоде,",false);
+  StaticText(50,75,"будет пересчитан технический регистр SalesDataVc",false);
+  EndWindow;
+end;
+
+
+window  UpdateSalesDataVClass:1 //Edit----------------------Dima  18.05.2016
+ wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+ begin
+WindowBegin("Пересчитать SalesData",RecalculateSalesDataVClass,CGMnt,RcType);
+  SetWRect(20,180,360,420);
+  Sizeable(-1,-1,0,0);
+  PeriodField(100,6,"Период");
+  StaticText(50,60,"Для всех счет-фактур, в заданом периоде,",false);
+  StaticText(50,75,"будет пересчитаны классификации в SalesDataVc",false);
+  EndWindow;
+end;
