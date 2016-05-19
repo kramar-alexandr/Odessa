@@ -696,6 +696,11 @@ BEGIN
       res = false;
     end;
   end;  
+  
+  if(currentuser=="SA")then begin// Edit ************************** Tuesday, 17 May 2016 11:46:16
+  	res = true;
+  end;
+  
   PODClassClosedButtonAction = res;
   RETURN;
 END;
