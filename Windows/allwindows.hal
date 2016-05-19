@@ -11427,3 +11427,497 @@ begin
   end;
   EndWindow;
 end;
+
+//Edit-------------------Vitalii 14:29 19.05.2016
+window CUDClass:14
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  real h,h1,h2,h3,h4,h5,l,v,vm,vs;
+  string 255 label;
+  record CUVc CUr;
+  Integer wn,tilenr;
+
+  WindowBegin("Контакт",CUDClass,CGview,-);
+  DynamicWindow;
+  SetWRect(20,80,750,441);
+  Sizeable(-1,-1,0,0);
+  UseView(CUVc);
+  FormName(PrintCUD);
+
+  wn = CurWindow;
+  if (wn>0) then begin
+    if (GetWindowClass(wn)=="CUDClass") then begin
+      GetWindowRecord(wn,CUr);
+    end;
+  end;
+
+  if (HasLocalization("GBR,EST")) then begin
+    ActiveFieldOnNew("Code"); // dont change, otherwise automatic address lookup helper window wont show automatically //wns
+                              // this should not be based on localization, but rather on if the
+                              // address lookup is enabled, erik
+  end else begin
+    ActiveFieldOnNew("Name");
+  end;
+  if (HasMetroTestFeatures or GUIType!=kGUIMetro) then begin
+    CommunicateButton;
+  end;
+  if (HasJewelleryInterface) then begin
+    Tile(0,155,false,"",Code);
+  end else begin
+    if (TestEnablerFile("EnMarketplace")) then begin  
+      Tile(0,135,false,"",Code);  
+    end else begin
+    Tile(0,95,false,"",Code);
+    end;
+  end;
+  v = 6; h = 130; l=223; vs = 20; h1=410; h2 = 350; h3 = 430; h4 = 580; h5 = 460;
+  EditField(h,v ,   95,"Код",Normal,Code,false,TSerSClass);
+  EditField(h1,v,50,"Категория клиента",Normal,CustCat,false,CCatSClass);
+  EditField(h,v+=vs,95,"Сокращенно",Normal,SearchKey,false,0);
+  EditField(h1,v,50,"Категория постав-ка",Normal,VECat,false,VGSClass);
+  if (HasJewelleryInterface) then begin
+    EditField(h,v+=vs,95,"Обращение 1",Normal,Salutation1,false,0);
+    EditField(h1,v,50,"КПП",Normal,ANACode,false,0);
+    EditField(h,v+=vs,h1-h+50,"Обращение 2",Normal,Salutation2,false,0);
+    EditField(h,v+=vs,h1-h+50,"Обращение 3",Normal,Salutation3,false,0);
+    EditField(h,v+=vs,h1-h+50,"Наименование",Normal,Name,false,0);
+  end else begin
+    EditField(h,v+=vs,h1-h+50,"Наименов.",Normal,Name,false,0);
+  end;
+  if (TestEnablerFile("EnMarketplace")) then begin  
+    EditField(h,v+=vs,150,"Пользователь MP",Normal,MarketUserName,false,0);  
+    EditField(h1+210,v,100,"Тип платежа",Normal,BillingTypePreference,false,SetSClass);  
+    EditField(h,v+=vs,115,"Адресс удаленной копии БД.",Normal,RemoteBackupsAddress,false,0);  
+    EditField(h1,v,50,"Порт удаленной копии БД",Normal,RemoteBackupsPort,false,0);  
+    EditField(h1+210,v,100,"Пароль удаленной копии БД",Normal,RemoteBackupsPassword,false,0);  
+  end;
+  CheckBox(h1+80,v=6,0,"Клиент",CUType);
+  CheckBox(h1+80,v+=16,0,"Поставщик",VEType);
+  if (HasModHotel) then begin
+    CheckBox(h1+80,v+=16,0,"Гость",GuestType);
+  end;
+  if (HasJewelleryInterface) then begin
+    CheckBox(h1+80,v+=16,0,"Не вкл. в рассылку",NoLetterPosting);
+    CheckBox(h1+80,v+=16,0,"Не вкл. в элект.рассылку",NoMailPosting);
+    EditField(h1+120,v+=20,100,"Продавец",Normal,SalesMan,false,UserSClass);
+  end;
+  v=6;
+  if (HasModHRM) then begin
+    CheckBox(h1+180,v,0,"Сотрудник",EmployeeType); v = v + 16;
+  end;
+  if (StandardHansa==false) then begin
+    CheckBox(h1+180,v,0,"Дилер",DealerType);  
+  end;
+//  HalPushButton(h1+170,v=10,h1+170+100,v+20,"CreditInfoCUDsm","Credit Info");
+//  HalPushButton(h1+170,v=10,h1+170+100,v+20,"UpdCustomerAddressCUDsm","Update Address");
+    tilenr = 1;
+  TileButton(tilenr,"Контакт"); tilenr = tilenr + 1;
+  TileButton(tilenr,"Доставка"); tilenr = tilenr + 1;
+  TileButton(tilenr,"Условия"); tilenr = tilenr + 1;
+  TileButton(tilenr,"Ценообразование"); tilenr = tilenr + 1;
+  TileButton(tilenr,"Компания"); tilenr = tilenr + 1;
+  TileButton(tilenr,"Счета"); tilenr = tilenr + 1;
+  if (StandardHansa==false) then begin
+    TileButton(tilenr,"Web"); tilenr = tilenr + 1;
+  end;
+  TileButton(tilenr,"Комментарии"); tilenr = tilenr + 1;
+  if (HasModHotel) then begin
+    TileButton(tilenr,"Гость"); tilenr = tilenr + 1;
+  end;
+  if (StandardHansa==false) then begin
+    if (GuiType==kGuiMetro) then begin//UGLY
+      TileButton(tilenr,"Другое"); tilenr = tilenr + 1;
+    end else begin
+      TileButton(tilenr,"Польз.поля"); tilenr = tilenr + 1;
+    end;
+  end;
+  TileButton(tilenr,"Заметки"); tilenr = tilenr + 1;   
+  if (CUr.CUType!=0 and HasCharts) then begin
+    TileButton(tilenr,"BI"); tilenr = tilenr + 1;
+  end;
+  tilenr = 1;
+  Tile(tilenr,290,true,tilenr,InvAddr0); tilenr = tilenr + 1;
+  v=6;
+  HalPushButton(h+120,v,h+120+100,v+20,"UpdCustomerAddressCUDsm","Обновить адрес");
+  v=v+5;
+  StaticText(h,v+13,"Юридический адрес",false);
+  label = UserDefined("CUVc","InvAddr0");
+  if blank(label) then begin
+    label = "Адрес магазина 1";
+  end;
+  EditField(h,v+=vs,-20,label,Normal,InvAddr0,false,0);
+  label = UserDefined("CUVc","InvAddr1");
+  if blank(label) then begin
+    label = "Адрес магазина 2";
+  end;
+  EditField(h,v+=vs,-20,label,Normal,InvAddr1,false,0);
+  label = UserDefined("CUVc","InvAddr2");
+  if blank(label) then begin
+    label = "Адрес магазина 3";
+  end;
+  EditField(h,v+=vs,-20,label,Normal,InvAddr2,false,0);
+  label = UserDefined("CUVc","InvAddr3");
+  if blank(label) then begin
+    label = "Адрес магазина 4";
+  end;
+  EditField(h,v+=vs,-20,label,Normal,InvAddr3,false,0);
+  label = UserDefined("CUVc","InvAddr4");
+  if blank(label) then begin
+    label = "Адрес магазина 5";
+  end;
+  EditField(h,v+=vs,-20,label,Normal,InvAddr4,false,0);
+  EditField(h,v+=vs,50,"Страна",Normal,CountryCode,false,CountrySClass);
+      EditField(h1,v,-20,"Отдел",Normal,Department,false,0);
+  EditField(h,v+=vs,50,"Область",Normal,Region,false,RegionSClass);
+      EditField(h1,v,-20,"Факс",Normal,Fax,false,0);
+  EditField(h,v+=vs,150,"Город",Normal,Ethnicity,false,0);
+      EditField(h1,v,-20,"Имя в Skype",Normal,SkypeName,false,0);
+  EditField(h,v+=vs,150,"Мобильный телефон",Normal,Phone,false,0);
+      EditField(h1,v,-20,"SIP",Normal,SIPCode,false,0);
+  EditField(h,v+=vs,150,"Доп. телефон",Normal,AltPhone,false,0);
+      EditField(h1,v,-20,"Префикс",Normal,Extension,false,0);
+  EditField(h,v+=vs,150,"E-mail",Normal,eMail,false,0);
+  EditField(h,v+=vs,150,"Контактное лицо, имя",Normal,Person,false,ContactSClass);
+  EditField(h,v+=vs,150,"Конт. лицо, телефон",Normal,Mobile,false,ContactSClass);
+  EditField(h,v+=vs,150,"WWW-адрес",Normal,wwwAddr,false,0);
+  EditField(h1,v,-20,"Классификация",Normal,Classification,false,CClassSClass);
+  EditField(h,v+=vs,150,"Дата внесения изм.",Normal,DateChanged,false,0);
+  if (HasLocalization("BRA")) then begin 
+    EditField(h2-159,v,214,"",ViewOnly,InvCountryName,false,0);
+    v = v + vs;
+  end;  
+  
+  if (HasLocalization("CHN")) then begin
+    EditField(h,v+=vs,150,"QQ Account Number",Normal,QQName,false,0);
+    EditField(h1,v,-20,"Weibo Account Number",Normal,WeiboName,false,0);
+  end;
+  RecordList2(10,v+=40,-30,-39,"ContactRelVc");
+  RlColKey(4,4,"Код",ContactCode,false,ActCustContactCode);
+  RlCol(55,55,"Наим.",ContactTitle,false);
+  RlColKey(105,105,"Имя",ContactName,false,ActCustContactName);
+  RlCol(235,235,"Телефон",ContactPhone,false);
+  RlCol(335,335,"Мобильный",ContactMobile,false);
+  RlCol(435,435,"Должность",JobTitle,false);
+  RlCol(535,535,"E-mail",ContacteMail,false);
+//  RlCol(-1,-1,"",Invalid,true);
+  Tile(tilenr,240,false,tilenr,DelAddr0); tilenr = tilenr + 1;
+  v=6;
+  if (HasLocalization("GBR,LVA,EST,SWE")) then begin
+    HalPushButton(h+120,v,h+120+100,v+20,"UpdDeliveryAddressCUDsm","Обновить адрес");
+  end;
+  v=v+12;
+  StaticText(h,v+13,"Фактический адрес",false);
+  label = UserDefined("CUVc","DelAddr0");
+  EditField(h,v+=vs,-20,label,Normal,DelAddr0,false,0);
+  label = UserDefined("CUVc","DelAddr1");
+  EditField(h,v+=vs,-20,label,Normal,DelAddr1,false,0);
+  label = UserDefined("CUVc","DelAddr2");
+  EditField(h,v+=vs,-20,label,Normal,DelAddr2,false,0);
+  label = UserDefined("CUVc","DelAddr3");
+  EditField(h,v+=vs,-20,label,Normal,DelAddr3,false,0);
+  label = UserDefined("CUVc","DelAddr4");
+  EditField(h,v+=vs,-20,label,Normal,DelAddr4,false,0);
+  EditField(h,v+=vs,50,"Страна",Normal,DelCountry,false,CountrySClass);
+  if (HasLocalization("BRA")) then begin 
+    EditField(h2-159,v,203,"",ViewOnly,DelCountryName,false,0);
+    v = v + vs;
+  end;    
+  EditField(h2+50,v,-20,"Комментарий к счету",Normal,OrderComment,false,0);
+  EditField(h,v+=vs,120,"№ фрахта",Normal,FreightNr,false,0);
+  EditField(h2+50,v,70,"Регион",Normal,Region,false,RegionSClass);
+  EditField(h,vm=(v+=vs),120,"Условие отгр. (кл.)",Normal,ShipDeal,false,ShipDealSClass);
+  EditField(h2+50,v,70,"Условие отгр. (пост.)",Normal,VEShipDeal,false,ShipDealSClass);
+  EditField(h,v+=vs,120,"Способ отгр. (кл.)",Normal,ShipMode,false,DMSClass);
+  EditField(h2+50,v,70,"Способ отгр. (пост.)",Normal,VEShipMode,false,DMSClass);
+  EditField(h,v+=vs,120,"Маршрут",Normal,Sorting,false,DelRouteSClass);
+/* these fields were used for securities trading, this module doesnt exist in hansa anymore */
+/* Two of these fields are used in Russia and Ukraine */
+//  EditField(h,vm=(v+=vs),120,"Securities Acc.",Normal,SecAccount,false,0);
+//  EditField(h,v+=vs,120,"Bank Account",Normal,BankAccount,false,0);//xx
+//  EditField(h,v+=vs,120,"Account Operator",Normal,AccOperator,false,BankSClass);//xx
+//##  EditField(h,v+=vs ,70, "Com. Matrix",Normal,ComCode,false,ComSClass);
+  ButtonFrame(h5+30,v=vm,150,2,"Дата отгрузки на основе");
+  RadioButton(h5+30,v,0,0,"текущей",DeliveryBasedOn);
+  RadioButton(h5+30,v+=16,1,0,"запланированной",DeliveryBasedOn);
+  Tile(tilenr,190,false,tilenr,PayDeal); tilenr = tilenr + 1;
+  EditField(h,v=6,25,"Условие опл. (кл.)",Normal,PayDeal,false,PDSClass);
+  EditField(h,v+=vs,80,"Лимит кредита (кл.)",Normal,CreditLimit,true,0);
+  EditField(h,v+=vs,80,"Лимит кред.(кл.) в дн.",Normal,CreditLimitDays,false,0);
+  EditField(h,v+=vs,80,"Наш № у клиента",Normal,TheirCode,false,0);
+  EditField(h,v+=vs,80,"Получатель",Normal,InvoiceToCode,false,CUSClass);
+  EditField(h,v+=vs,80,"КПП",Normal,ANACode,false,0);
+  EditField(h,v+=vs,80,"Ставка пени",Normal,IntRate,false,0);
+  EditField(h,v+=vs,80,"Дата создания",ViewOnly,DateCreated,false,0);
+  EditField(h,v+=vs,80,"Основной партнер",Normal,MainPartner,false,CUSClass);
+  EditField(h2,v=6,25,"Условие опл. (пост.)",Normal,VEPayDeal,false,PDSClass);
+  EditField(h2,v+=vs,80,"Лимит кред. (пост.)",Normal,VECreditLimit,true,0);
+  EditField(h2,v+=vs,80,"Лимит кр.(пост.) в дн.",Normal,VECreditLimitDays,false,0);
+  EditField(h2,v+=vs,80,"Наш № у пост-ка",Normal,VECustID,false,0);
+  EditField(h2,v+=vs,80,"Получатель",Normal,VEInvoiceToCode,false,VESClass);
+  EditField(h2,v+=vs,80,"Факторинг",Normal,VEFactoring,false,VESClass);
+  EditField(h2,v+=vs,80,"Мин. сумма заказа",Normal,MinOrdSum,false,0);
+  EditField(h2,v+=vs,80,"Ссылка",Normal,RefStr,false,0);
+  EditField(h2,v+=vs,80,"Послед. изменение",Normal,DateChanged,false,0);
+  CheckBox(h5,v=12,0,"Закрыт",blockedFlag);
+  CheckBox(h5,v+=16,0,"Отложен",OnHoldFlag);
+  CheckBox(h5,v+=16,0,"Напоминания",RemndrFlag);
+//  CheckBox(h5,v+=16,0,"Collection",ColectionFlag);
+  CheckBox(h5,v+=16,0,"Пеня",InterestFlag);
+  CheckBox(h5,v+=16,0,"Счет аванса",OnAccount);
+  if (StandardHansa==false) then begin
+  	CheckBox(h5,v+=16,0,"Без факторинга",NoFactoringFlag);
+  	CheckBox(h5,v+=16,0,"Без доп.налога",NoTax1);
+  	CheckBox(h5,v+=16,0,"Только гр. фактур.",GroupInv);
+  	CheckBox(h5,v+=16,0,"Счет себе",SelfBilling);
+  	CheckBox(h4,v=12,0,"Клиент EGO",EGOFlag);
+  	CheckBox(h4,v+=16,0,"Клиент EDI",EDIFlag);
+  	CheckBox(h4,v+=16,0,"Доступ к БД",AllowLogin);
+//  CheckBox(h4,v+=16,0,"Allow FTP Access",FTPLogin);
+  	CheckBox(h4,v+=16,0,"Только фискальные сч/ф",FiscalFlag);
+  	CheckBox(h4,v+=16,0,"Не вкл. в рассылку",NoLetterPosting);
+  end else begin
+    CheckBox(h4,v=12,0,"Не вкл. в рассылку",NoLetterPosting);
+  end;
+  CheckBox(h4,v+=16,0,"Не вкл. в электр. рас-ку",NoMailPosting);
+  CheckBox(h4,v+=16,0,"Не вкл.нал.на окр.среду",NoRepa);
+  if (StandardHansa==false) then begin
+    CheckBox(h4,v+=16,0,"Без регион. сборов",NoTax2);
+  end;
+  if (HasLocalization("SWE")) then begin
+    CheckBox(h4,v+=16,0,"F-Tax",FTax);
+  end;
+  Tile(tilenr,110,false,tilenr,PLCode); tilenr = tilenr + 1;
+  EditField(h,v=6,  80,"Валюта (кл.)",Normal,CurncyCode,false,CurncyCodeSClass);
+  EditField(h,v+=vs ,80, "Прейскурант",Normal,PLCode,false,PLDefSClass);
+  EditField(h,v+=vs ,80, "Таблица скидок",Normal,RebCode,false,RebSClass);
+  if (HasSalesman) then begin
+    EditField(h,v+=vs,80,"Продавец",Normal,SalesMan,false,UserSClass);
+  end;
+  EditField(h,v+=vs,80,"Товары по умолч.",Normal,CompItemCode,false,CompItemSClass);
+  EditField(h2,v=6,80,"Валюта (пост.)",Normal,VECurncyCode,false,CurncyCodeSClass);
+  EditField(h2,v+=2*vs ,80, "Таблица скидок",Normal,VERebCode,false,RebSClass);
+  if (StandardHansa==false) then begin
+    EditField(h2,v+=vs,80,"Группа продаж",Normal,SalesGroup,false,SalesGroupSClass);
+  end;
+  ButtonFrame(h5,v=24,150,3,"Цена основана на");
+  RadioButton(h5,v,0,0,"на дату счета",PriceBasedOn);
+  RadioButton(h5,v+=16,1,0,"на дату заплан. отгрузки",PriceBasedOn);
+  RadioButton(h5,v+=16,2,0,"на дату отправки",PriceBasedOn);
+  Tile(tilenr,180,false,tilenr,Comment); tilenr = tilenr + 1;
+  EditField(h,v=6,-20,"Комментарий",Normal,Comment,false,0);
+  EditField(h,v+=vs,-20,"Предупр. (кл.)",Normal,WarnText1,false,0);
+  EditField(h,v+=vs,-20,"Предупр. (пост.)",Normal,VEWarnText1,false,0);
+  EditField(h,v+=vs,120,"ИНН",Normal,VATNr,false,0);
+  EditField(h2-20,v,120,"ОКПО",Normal,RegNr1,false,0);
+  ButtonFrame(h5+30,v+18,143,1,"Тип");
+  RadioButton(h5+30,v+18,0,0,"Компания",CustType);
+  RadioButton(h5+110,v+18,1,0,"Персона",CustType);
+  v = v + vs;
+  if (HasLocalization("HRV,SVN")) then begin 
+    EditField(h,v,120,"Юрид. документы",Normal,LegalForm,false,CULegalFormSClass); 
+  end;
+  EditField(h2-20,v,120,"Рег. номер",Normal,RegNr2,false,RegDefSClass);
+  EditField(h,v+=vs,120,"Дата пров. НДС",Normal,VATNrCheckDate,false,PasteCurDate);
+  EditField(h2-20,v,120,"ГНР",Normal,RecipientGLN,false,0);
+  EditField(h,v+=vs,20,"Код НДС (кл.)",Normal,VATCode,false,VATCodeSClass);
+  if (HasTaxMatrix) then begin
+  	EditField(h+125,v,50,"Шабл. нал.(прод.)",Normal,TaxTemplateCode,false,TaxTemplateSClass);
+  end;
+  HalPushButton(h2-20,v,h2-20+100,v+20,"UpdCustomerAddressCUDsm","Обновить адрес");
+  EditField(h,v+=vs,20,"Код НДС покупки",Normal,VEVATCode,false,VATCodeSClass);
+  if (HasTaxMatrix) then begin
+    EditField(h+125,v,50,"Шабл. нал.(пок.) ",Normal,VETaxTemplateCode,false,TaxTemplateSClass);
+  end;
+  EditField(h,v+=vs,50,"Язык",Normal,LangCode,false,LangSClass);
+  if (HasLocalization("BRA")) then begin
+    ButtonFrame(h+125,v+=20,143,3,"Условия налогообложения");   
+    RadioButton(h+125,v,0,0,"Местное",TaxCondition);   
+    RadioButton(h+125,v+=16,1,0,"Многостороннее Соглашение",TaxCondition);   
+    RadioButton(h+125,v+=16,2,0,"Неподготовленное",TaxCondition);   
+  end;  
+  if (HasLocalization("BRA")) then begin  
+    EditField(h,v+=vs,120,"SUFRAMA Reg. No.",Normal,SuframaRegNr,false,0);
+  end;
+//  EditField(h,v+=vs,120,"Channel",Normal,WebServiceChannel,false,SetSClass);
+  v = 130;
+  v = VATZoneButtonsLabelsRUS(h5+30,v,150,16);
+  Tile(tilenr,130,false,tilenr,AccAP); tilenr = tilenr + 1;
+  EditField(h,v=6,80,"Счет кредиторов",Normal,AccAP,false,AccSClass);
+  EditField(h,v+=vs,80,"Контрольный счет",Normal,AccCost,false,AccSClass);
+  EditField(h,v+=vs,80,"Счет аванса",Normal,OnAccAccAP,false,AccSClass);
+  EditField(h,v+=vs,120,"Объекты (кл.)",Normal,Objects,false,ObjSClass);
+  EditField(h,v+=vs,120,"Объекты (пост.)",Normal,VEObjects,false,ObjSClass);  
+  EditField(h,v+=vs,50,"Код платежа",Normal,PaymentCode,false,PaymentCodeSClass);
+  if (HasLocalization("HUN")) then begin  
+  ButtonFrame(h,v+=40,150,3,"Записыать НДС по оплате (кл.)");  
+  RadioButton(h,v,0,0,"Основное",IPBookVAT);  
+  RadioButton(h,v+=16,1,0,"Записывать НДС",IPBookVAT);  
+  RadioButton(h,v+=16,2,0,"Не записывать НДС",IPBookVAT);  
+  end;
+  EditField(h1,v=6,200,"IBAN код",Normal,IBANCode,false,0);  
+  EditField(h1,v+=vs,-20,"Оператор счета",Normal,AccOperator,false,BankSClass);  
+  EditField(h1,v+=vs,-20,"Р/с",Normal,BankAccount,false,0);  
+  EditField(h1,v+=vs,-20,"Р/с 2",Normal,Bank,false,0);  
+  EditField(h1,v+=vs,80,"Код сорт-ки",Normal,SortCode,false,0);
+  if (HasWithholdingTax) then begin
+  	EditField(h1,v+=vs,120,"Способы плат. удерж.",Normal,WithPayMode,false,PMSClass);
+  end;
+  if (HasLocalization("HUN")) then begin  
+  ButtonFrame(h1,v+=40,150,3,"Записывать НДС по оплате (пост)");  
+  RadioButton(h1,v,0,0,"Основное",OPBookVAT);  
+  RadioButton(h1,v+=16,1,0,"Записывать НДС",OPBookVAT);  
+  RadioButton(h1,v+=16,2,0,"На записывать",OPBookVAT);  
+  end;  
+  if (StandardHansa==false) then begin
+  	Tile(tilenr,70,false,tilenr,WebConf); tilenr = tilenr + 1;
+  	EditField(h,vm=(v=6),120,"Web-конференция",Normal,WebConf,true,0);
+  	EditField(h1,v,150,"Главная классиф-ция",Normal,MainDispGroup,false,WebNGProductCatSClass);
+  	EditField(h,v+=vs,120,"Первая страница Web",Normal,WebStartPage,false,0);
+  	EditField(h1,v,150,"Отображать в WEB",Normal,WebDisplays,false,WebDisplaySClass);
+  	EditField(h,v+=vs,120,"Код доставки",Normal,FreightCode,false,WebFreightSClass);
+  end;
+  Tile(tilenr,170,false,tilenr,Comment0); tilenr = tilenr + 1;
+  EditField(h,v=6,-20,"Комментарий",Normal,Comment0,false,0);
+  EditField(h,v+=vs,-20,"",Normal,Comment1,false,0);
+  EditField(h,v+=vs,-20,"",Normal,Comment2,false,0);
+  EditField(h,v+=vs,-20,"Должность",Normal,Title,false,CourtesyTitlesSClass);
+  EditField(h,v+=vs,-20,"Служ. обязанность",Normal,JobDesc,false,JobTitleSClass);
+  EditField(h,v+=vs,-20,"Обращение 1",Normal,Salutation1,false,0);
+  EditField(h,v+=vs,-20,"Обращение 2",Normal,Salutation2,false,0);
+  EditField(h,v+=vs,-20,"Обращение 3",Normal,Salutation3,false,0);
+  if (HasModHotel) then begin
+    Tile(tilenr,250,false,tilenr,DocType); tilenr = tilenr + 1;
+    EditField(h,v=6,100,"Тип документа",Normal,DocType,false,CUDocTypeSClass);
+    EditField(h2,v,-20,"Номер паспорта",Normal,PassportNr,false,0);
+//  EditFieldTL(h,vm=(v+=20),100,"Nationality",M4StrSet,Normal,423,Nationality,false,StrSetSClass);
+  	EditField(h,vm=(v+=20),100,"Гражданство",Normal,Nationality,false,CountrySClass);
+    EditField(h,v+=20,100,"Дата рождения",Normal,BirthDate,false,PasteCurDate);
+  	EditField(h,v+=20,100,"Место рождения",Normal,BirthPlace,false,0);
+    EditField(h,v+=20,100,"Страна рождения",Normal,BirthCountry,false,CountrySClass);
+  	EditField(h,v+=20,100,"Профессия",Normal,Profesion,false,0);
+  	EditField(h,v+=20,100,"Газета",Normal,Newspaper,false,NewspaperSClass);
+  	EditField(h,v+=20,100,"Пароль",Normal,Passphrase,false,0);
+  	EditField(h,v+=vs,100,"Тур оператор",Normal,TourOperator,false,CUSClass);
+  	EditField(h,v+=vs,100,"Агент",Normal,Agent,false,CUSClass);
+  	EditField(h,v+=vs,100,"Вид оплаты",Normal,DefGuestPayMode,false,PMSClass);
+  	EditField(h,v+=vs,100,"Источник заказа",Normal,BookOrigin,false,BookOrgSClass);
+  	EditField(h,v+=vs,300,"Отметки о диете",Normal,DietRemarks,false,0);
+  	EditField(h,v+=vs,300,"Отметки о треб.",Normal,RequirementRemarks,false,0);
+
+  	ButtonFrame(h2,v=vm+20,100,2,"Пол");
+  	RadioButton(h2,v,0,0,"Мужской",Gender);
+  	RadioButton(h2,v+=17,1,0,"Женский",Gender);
+
+  	CheckBox(h2+130,v=vm+20,0,"Курит",Smoking);
+  	CheckBox(h2+130,v+=17,0,"В черном списке",Blacklist);
+
+  	ButtonFrame(h2,vm=(v+=40),100,4,"Семейное положение");
+	RadioButton(h2,v,0,0,"Не женат",MarStatus);
+  	RadioButton(h2,v+=17,1,0,"Замужем",MarStatus);
+  	RadioButton(h2,v+=17,2,0,"В разводе",MarStatus);
+  	RadioButton(h2,v+=17,3,0,"Вдовa/-ец",MarStatus);
+
+  	ButtonFrame(h2=h2+130,v=vm,100,3,"Возраст");
+  	RadioButton(h2,v,1,0,"Ребенок",AgeStatus);
+  	RadioButton(h2,v+=17,0,0,"Взрослый",AgeStatus);
+  	RadioButton(h2,v+=17,2,0,"Пенсионер",AgeStatus);
+  end;
+
+  if (StandardHansa==false) then begin
+    Tile(tilenr,270,false,tilenr,UserStr1); tilenr = tilenr + 1;
+    v=6;h=180;
+    label = UserDefined("CUVc","UserStr1");
+    if (nonblank(label)) then begin
+      EditField(h,v,-20,label,Normal,UserStr1,false,0);
+    end;
+    label = UserDefined("CUVc","UserStr2");
+    if (nonblank(label)) then begin
+      EditField(h,v+=vs,-20,label,Normal,UserStr2,false,0);
+    end;
+    label = UserDefined("CUVc","UserStr3");
+    if (nonblank(label)) then begin
+      EditField(h,v+=vs,-20,label,Normal,UserStr3,false,0);
+    end;
+    label = UserDefined("CUVc","UserStr4");
+    if (nonblank(label)) then begin
+      EditField(h,v+=vs,-20,label,Normal,UserStr4,false,0);
+    end;
+    label = UserDefined("CUVc","UserStr5");
+    if (nonblank(label)) then begin
+      EditField(h,v+=vs,-20,label,Normal,UserStr5,false,0);
+    end;
+    label = UserDefined("CUVc","UserVal1");
+    if (nonblank(label)) then begin
+      EditField(h,v+=vs,-20,label,Normal,UserVal1,false,0);
+    end;
+    label = UserDefined("CUVc","UserVal2");
+    if (nonblank(label)) then begin
+      EditField(h,v+=vs,-20,label,Normal,UserVal2,false,0);
+    end;
+    label = UserDefined("CUVc","UserVal3");
+    if (nonblank(label)) then begin
+      EditField(h,v+=vs,-20,label,Normal,UserVal3,false,0);
+    end;
+    label = UserDefined("CUVc","UserDate1");
+    if (nonblank(label)) then begin
+      EditField(h,v+=vs,80,label,Normal,UserDate1,false,PasteCurDate);
+    end;
+    label = UserDefined("CUVc","UserDate2");
+    if (nonblank(label)) then begin
+      EditField(h,v+=vs,80,label,Normal,UserDate2,false,PasteCurDate);
+    end;
+    label = UserDefined("CUVc","UserDate3");
+    if (nonblank(label)) then begin
+      EditField(h,v+=vs,80,label,Normal,UserDate3,false,PasteCurDate);
+    end;
+
+    EditField(h,v+=vs,-20,"Адресная книга",Normal,AddressBooks,false,0);
+  end;
+
+  Tile(tilenr,500,false,tilenr,Math2); tilenr = tilenr + 1;
+  StaticText(50,v=20,"Записки",true);   
+  TextField(60,v-5,-20,370,Math2,0);
+  if (CUr.CUType!=0 and HasCharts) then begin
+    Tile(tilenr,400,false,tilenr,-); tilenr = tilenr + 1;
+    ChartArea(10,6,-10,390,"$CUDCLass_BIChart");
+  end;
+
+  if (GuiType==kGuiMetro) then begin // Temporarily disabled on Windows 8
+    if (UserCanReport("CustPSRn","",true)) then begin
+      SpecialMenu("Справка по клиенту",'e',0,"CUStatusCUDsm");
+    end;
+    if (UserCanReport("VEPSRn","",true)) then begin
+      SpecialMenu("Статус поставщика",'u',4,"VEStatusVEDsm");
+    end;
+    SpecialMenu("Связать существующий контакт",' ',1,"AddContactCUDsm");
+    SpecialMenu("Создать новый контакт",' ',1,"NewContactCUDsm");
+    SpecialMenu("Создать деятельность",'c',2,"NewActCUDsm");
+  end else begin
+  if (UserCanReport("CustPSRn","",true)) then begin
+    SpecialMenu("Справка по клиенту",'e',0,"CUStatusCUDsm");
+  end;
+  SpecialMenu("Связать существующий контакт",' ',1,"AddContactCUDsm");
+  SpecialMenu("Создать новый контакт",' ',1,"NewContactCUDsm");
+  SpecialMenu("Удалить связанный контакт",' ',1,"DelContactCUDsm");
+  SpecialMenu("Изменить данные связанного контакта",' ',1,"EditContactCUDsm");
+  SpecialMenu("Создать деятельность",'c',2,"NewActCUDsm");
+  SpecialMenu("Создать письмо с паролем",' ',3,"RandomPassMailCUDsm");
+  if (StandardHansa==false) then begin
+    SpecialMenu("Создать e-mail",'m',5,"NewMailCUDsm");
+  end;
+  if (TestEnablerFile("EnLiveHM") or TestEnablerFile("EnTestHM") or TestEnablerFile("EnDevHM")) then begin    
+    SpecialMenu("Создать лид",' ',6,"CreateLeadCUDsm");   
+  end;
+  if (UserCanReport("VEPSRn","",true)) then begin
+    SpecialMenu("Статус поставщика",'u',4,"VEStatusVEDsm");
+  end;
+  SpecialMenu("Обновить контактные лица",' ',6,"UpdContactAddrCUDsm");
+  if (GuiType==kGuiCocoa) then begin
+    SpecialMenu("Копировать в адресную книгу",' ',7,"CopyToLocalAddressBookDsm");
+  end;
+  if (GuiType==kGuiiPhone) then begin
+    SpecialMenu("Поменять пароль",' ',1,"ChangePasswdCUDsm");
+  end;
+  end;
+  EndWindow;
+end;
