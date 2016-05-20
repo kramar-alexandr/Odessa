@@ -4543,6 +4543,21 @@ RecordBegin(IPVc,-,"");
   KeySegment(PLCode);
   KeySegment(CustCode);
   EndRecord;
+  
+  RecordBegin(RLinkVc,RLinkView,"");
+  ImpExpLevel(0);
+  RegisterForAllCompanies(false);
+  RecordField(FromRecidStr,M4RLink,200,0);
+  RecordField(ToRecidStr,M4RLink,200,0);
+  RecordField(Comment,M4Str,200,0);
+  RecordField(DepType,M4Int,0,0);
+  MainKeyBegin(MainKey,0);
+  KeySegment(FromRecidStr);
+  KeySegment(ToRecidStr);
+  KeyBegin(ToRecKey);
+  KeySegment(ToRecidStr);
+  KeySegment(FromRecidStr);
+  EndRecord;
 
   
   RecordBegin(LocationVc,-,"location2");
