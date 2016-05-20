@@ -4716,6 +4716,21 @@ RecordBegin(IPVc,-,"");
   KeySegment(RowNr);     
    	
   EndRecord;
+  
+  RecordBegin(CityVc,-,"");
+  RecordField(Code,M4Code,20,0);
+  RecordField(Name,M4Str,100,0);
+  RecordField(NameENG,M4Str,100,0);
+  RecordField(PhoneCode,M4Str,10,0);
+  MainKeyBegin(Code,0);
+  KeySegment(Code);
+  KeyBegin(Name);
+  KeySegment(Name);
+  KeySegment(Code);
+  KeyBegin(NameENG);
+  KeySegment(NameENG);
+  KeySegment(Code);
+  EndRecord;
    
 
 return;

@@ -11543,45 +11543,48 @@ begin
   StaticText(h,v+13,"Юридический адрес",false);
   label = UserDefined("CUVc","InvAddr0");
   if blank(label) then begin
-    label = "Адрес магазина 1";
+    label = "Адрес 1";
   end;
   EditField(h,v+=vs,-20,label,Normal,InvAddr0,false,0);
   label = UserDefined("CUVc","InvAddr1");
   if blank(label) then begin
-    label = "Адрес магазина 2";
+    label = "Адрес 2";
   end;
   EditField(h,v+=vs,-20,label,Normal,InvAddr1,false,0);
   label = UserDefined("CUVc","InvAddr2");
   if blank(label) then begin
-    label = "Адрес магазина 3";
+    label = "Адрес 3";
   end;
   EditField(h,v+=vs,-20,label,Normal,InvAddr2,false,0);
   label = UserDefined("CUVc","InvAddr3");
   if blank(label) then begin
-    label = "Адрес магазина 4";
+    label = "Адрес 4";
   end;
   EditField(h,v+=vs,-20,label,Normal,InvAddr3,false,0);
   label = UserDefined("CUVc","InvAddr4");
   if blank(label) then begin
-    label = "Адрес магазина 5";
+    label = "Адрес 5";
   end;
   EditField(h,v+=vs,-20,label,Normal,InvAddr4,false,0);
   EditField(h,v+=vs,50,"Страна",Normal,CountryCode,false,CountrySClass);
       EditField(h1,v,-20,"Отдел",Normal,Department,false,0);
   EditField(h,v+=vs,50,"Область",Normal,Region,false,RegionSClass);
       EditField(h1,v,-20,"Факс",Normal,Fax,false,0);
-  EditField(h,v+=vs,150,"Город",Normal,Ethnicity,false,0);
+  EditField(h,v+=vs,150,"Город",Normal,Ethnicity,false,CitySClass);
       EditField(h1,v,-20,"Имя в Skype",Normal,SkypeName,false,0);
   EditField(h,v+=vs,150,"Мобильный телефон",Normal,Phone,false,0);
       EditField(h1,v,-20,"SIP",Normal,SIPCode,false,0);
   EditField(h,v+=vs,150,"Доп. телефон",Normal,AltPhone,false,0);
       EditField(h1,v,-20,"Префикс",Normal,Extension,false,0);
   EditField(h,v+=vs,150,"E-mail",Normal,eMail,false,0);
+      EditField(h1,v,-20,"Комментарий",Normal,Comment0,false,0);
   EditField(h,v+=vs,150,"Контактное лицо, имя",Normal,Person,false,ContactSClass);
+      EditField(h1,v,-20,"",Normal,Comment1,false,0);
   EditField(h,v+=vs,150,"Конт. лицо, телефон",Normal,Mobile,false,ContactSClass);
+      EditField(h1,v,-20,"",Normal,Comment2,false,0);
   EditField(h,v+=vs,150,"WWW-адрес",Normal,wwwAddr,false,0);
-  EditField(h1,v,-20,"Классификация",Normal,Classification,false,CClassSClass);
   EditField(h,v+=vs,150,"Дата внесения изм.",Normal,DateChanged,false,0);
+      EditField(h1,v,-20,"Классификация",Normal,Classification,false,CClassSClass);
   if (HasLocalization("BRA")) then begin 
     EditField(h2-159,v,214,"",ViewOnly,InvCountryName,false,0);
     v = v + vs;
@@ -11776,7 +11779,7 @@ begin
   	EditField(h1,v,150,"Отображать в WEB",Normal,WebDisplays,false,WebDisplaySClass);
   	EditField(h,v+=vs,120,"Код доставки",Normal,FreightCode,false,WebFreightSClass);
   end;
-  Tile(tilenr,170,false,tilenr,Comment0); tilenr = tilenr + 1;
+  Tile(tilenr,170,false,tilenr,Title); tilenr = tilenr + 1;
   EditField(h,v=6,-20,"Комментарий",Normal,Comment0,false,0);
   EditField(h,v+=vs,-20,"",Normal,Comment1,false,0);
   EditField(h,v+=vs,-20,"",Normal,Comment2,false,0);
@@ -11919,5 +11922,49 @@ begin
     SpecialMenu("Поменять пароль",' ',1,"ChangePasswdCUDsm");
   end;
   end;
+  EndWindow;
+end;
+
+window CityDClass:1
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  real h,v;
+  WindowBegin("Город",CityDClass,CGview,-);
+  SetWRect(64,80,509,200);
+  UseView(CityVc);
+  EditField(h=115,v=6,150,"Код",St_i,Code,false,0);
+  EditField(h,v+=20,-40,"Название",Normal,Name,false,0);
+  EditField(h,v+=20,-40,"Название ENG",Normal,NameENG,false,0);
+  EditField(h,v+=20,-40,"Код города(тел)",Normal,PhoneCode,false,0);
+  EndWindow;
+end;
+
+window CityLClass:1
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  WindowBegin("Город",CityLClass,CGmlist,-);
+  SpawnClass(CityDClass);
+  SetWRect(64,80,500,298);
+  Sizeable(-1,-1,0,0);
+  UseView(CityVc);
+  RecordList(4,17,-21,-39);
+  RlColKey(4,1,    "Код",Code,false,Code);
+  RlColKey(120,120,"Название",Name,false,Name);
+  SearchField("Найти");
+  EndWindow;
+end;
+
+window CitySClass:1
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  WindowBegin("Выберите город",CitySClass,CGslist,-);
+  SpawnClass(CityDClass);
+  SetWRect(220,80,500,298);
+  Sizeable(-1,-1,0,0);
+  UseView(CityVc);
+  RecordList(4,17,-21,-39);
+  RlColKey(4,1,    "Код",Code,false,Code);
+  RlColKey(120,120,"Название",Name,false,Name);
+  SearchField("Найти");
   EndWindow;
 end;
