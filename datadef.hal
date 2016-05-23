@@ -4544,22 +4544,6 @@ RecordBegin(IPVc,-,"");
   KeySegment(CustCode);
   EndRecord;
   
-  RecordBegin(RLinkVc,RLinkView,"");
-  ImpExpLevel(0);
-  RegisterForAllCompanies(false);
-  RecordField(FromRecidStr,M4RLink,200,0);
-  RecordField(ToRecidStr,M4RLink,200,0);
-  RecordField(Comment,M4Str,200,0);
-  RecordField(DepType,M4Int,0,0);
-  MainKeyBegin(MainKey,0);
-  KeySegment(FromRecidStr);
-  KeySegment(ToRecidStr);
-  KeyBegin(ToRecKey);
-  KeySegment(ToRecidStr);
-  KeySegment(FromRecidStr);
-  EndRecord;
-
-  
   RecordBegin(LocationVc,-,"location2");
   NewAutosyncRegister(kSyncDirectionToClient,true);
   RecordField(Code,M4Code,10,0);
@@ -4747,6 +4731,35 @@ RecordBegin(IPVc,-,"");
   KeySegment(Code);
   EndRecord;
    
+  /*RecordBegin(RLinkVc,RLinkView,"");
+  RegisterForAllCompanies(false);
+  ImpExpLevel(0);
+  RecordField(FromRecidStr,M4RLink,200,0);
+  RecordField(ToRecidStr,M4RLink,200,0);
+  RecordField(Comment,M4Str,200,0);
+  RecordField(DepType,M4Int,0,0);
+  MainKeyBegin(MainKey,0);
+  KeySegment(FromRecidStr);
+  KeySegment(ToRecidStr);
+  KeyBegin(ToRecKey);
+  KeySegment(ToRecidStr);
+  KeySegment(FromRecidStr);
+  EndRecord;
+  
+  RecordBegin(RGinkVc,RLinkView,"");
+  RegisterForAllCompanies(false);
+  ImpExpLevel(0);
+  RecordField(FromRecidStr,M4RLink,200,0);
+  RecordField(ToRecidStr,M4RLink,200,0);
+  RecordField(Comment,M4Str,200,0);
+  RecordField(DepType,M4Int,0,0);
+  MainKeyBegin(MainKey,0);
+  KeySegment(FromRecidStr);
+  KeySegment(ToRecidStr);
+  KeyBegin(ToRecKey);
+  KeySegment(ToRecidStr);
+  KeySegment(FromRecidStr);
+  EndRecord;*/
 
 return;
 end;

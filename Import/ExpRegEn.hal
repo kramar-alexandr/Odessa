@@ -43,15 +43,23 @@ END;
 global
 procedure ExpRegPLHistEn()
 BEGIN
-	record PLHistVc PLHr;
+	record RLinkVc PLHr;
+	boolean TrHs;
 	
-	PLHr.ArtCode = "2780515";
-	PLHr.PLCode = "RRP";
-	while(loopmain(PLHr,2,true))begin
-		logtext(0,PLHr.ArtCode & " " & PLHr.PLCode);
-		
+	TrHs = true;
+	
+//	PLHr.ArtCode = "2780515";
+//	PLHr.PLCode = "RRP";
+
+//SetLoopPosition(PLHr,51665);
+	while(loopmain(PLHr,1,TrHs))begin
+		logtext(0,GetLoopPosition(PLHr));
 		exportrecord(PLHr);
 		NewLine;
+		if(GetLoopPosition(PLHr)==51664)then begin
+			SetLoopPosition(PLHr,51666);
+		end;	
+		
 	end;
 	
 	

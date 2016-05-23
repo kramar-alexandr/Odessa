@@ -349,7 +349,7 @@ begin
 	Import("Восстановление истории цен из экспорта",ImportDefaultIClass,RestorePLHistIn,modDBMain);//Edit----------------------Dima  11.02.2016
 
 	Export("ExxportIN",CashInvCroEClass,ExpRegINEn,modDBMain);
-	Export("ExxportPLHist",CashInvCroEClass,ExpRegPLHistEn,modDBMain);
+	Export("ExxportPLHist",UILogEClass,ExpRegPLHistEn,modDBMain);
 
 	Document("Наклейки штрихкодов из поступления 5*13" ,LabelItem9RClass,ItemLabForm9,MyLabelItemFClass,modIN); //Edit***************************Sasha2,12:08 23.10.2014
 	Document("Производство" ,ProdOrderRClass,ProdOrderForm,ProdOrderFClass,modIN);		//Edit----------------------Dima  24.04.2015
