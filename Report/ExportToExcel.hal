@@ -35,9 +35,10 @@ begin
 	OutString(4,0,"Ед.",false);
 	OutString(5,0,"Наименование",false);
 	OutString(6,0,"Альтернативный код",false);
-	OutString(7,0,"Цена",false);
-	OutString(8,0,"%",false);
-	OutString(9,0,"Сумма",false);
+	OutString(7,0,"Штрихкод",false);
+	OutString(8,0,"Цена",false);
+	OutString(9,0,"%",false);
+	OutString(10,0,"Сумма",false);
 	OutString(12,0,"Объем",false);
 	OutString(13,0,"Вес",false);
 	OutString(14,0,"В ящике",false);
@@ -55,9 +56,10 @@ begin
 		OutString(4,0,POrw.UnitCode,false);
 		OutString(5,0,POrw.Spec,false);
 		OutString(6,0,POrw.AlternativeCode,false);
-		OutString(7,0,POrw.Price,false);
-		OutString(8,0,POrw.vRebate,false);
-		OutString(9,0,POrw.Sum,false);
+		OutString(7,0,POrw.BarCode,false);
+		OutString(8,0,POrw.Price,false);
+		OutString(9,0,POrw.vRebate,false);
+		OutString(10,0,POrw.Sum,false);
 		OutVal(12,0,POrw.Volume,M45Val,false);	//Edit by Victor 30.01.15
 		OutVal(13,0,POrw.Weight,M45Val,false);	//Edit by Victor 30.01.15
 		OutString(14,0,POrw.QtyBox,false);
