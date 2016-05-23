@@ -952,7 +952,7 @@ RecordBegin(INVc,-,"artikel5");
   ArrayField(QtyBox,M45Val,0,0);	//Edit by Victor 30.01.15
   ArrayField(QtyPack,M45Val,0,0);	//Edit by Victor 30.01.15
   ArrayField(PrintQuant,M4UVal,0,0);//Edit----------------------Dima  23.05.2016
-  ArrayField(BarCode,M4Str,20,0);		//Edit----------------------Dima  23.05.2016  
+  ArrayField(BarCode,M4Str,20,0);		//Edit----------------------Dima  23.05.2016 
   EndArray;
   MainKeyBegin(SerNr,1);
   StoreInBaseKey;
@@ -4720,12 +4720,12 @@ RecordBegin(IPVc,-,"");
   
   RecordBegin(CityVc,-,"");
   RecordField(Name,M4Str,100,0);
-  RecordField(NameRU,M4Str,100,0);
+  RecordField(NameUKR,M4Str,100,0);
   RecordField(PhoneCode,M4Str,10,0);
   MainKeyBegin(Name,0);
   KeySegment(Name);
-  KeyBegin(NameRU);
-  KeySegment(NameRU);
+  KeyBegin(NameUKR);
+  KeySegment(NameUKR);
   KeySegment(Name);
   EndRecord;
    

@@ -11550,27 +11550,33 @@ begin
   if blank(label) then begin
     label = "Адрес 1";
   end;
-  EditField(h,v+=vs,-20,label,Normal,InvAddr0,false,0);
+  
+  EditField(h,v+=vs,-100,label,Normal,InvAddr0,false,0);
+  ButtonFrame(-80,v,60,2,"Тип");
+  	RadioButton(-80,v,0,0,"Магазин",AgeStatus);
+  	RadioButton(-80,v+17,1,0,"Рынок",AgeStatus);
+
   label = UserDefined("CUVc","InvAddr1");
   if blank(label) then begin
     label = "Адрес 2";
   end;
-  EditField(h,v+=vs,-20,label,Normal,InvAddr1,false,0);
+  EditField(h,v+=vs,-100,label,Normal,InvAddr1,false,0);
   label = UserDefined("CUVc","InvAddr2");
   if blank(label) then begin
     label = "Адрес 3";
   end;
-  EditField(h,v+=vs,-20,label,Normal,InvAddr2,false,0);
+  EditField(h,v+=vs,-100,label,Normal,InvAddr2,false,0);
   label = UserDefined("CUVc","InvAddr3");
   if blank(label) then begin
     label = "Адрес 4";
   end;
-  EditField(h,v+=vs,-20,label,Normal,InvAddr3,false,0);
+  EditField(h,v+=vs,-100,label,Normal,InvAddr3,false,0);
   label = UserDefined("CUVc","InvAddr4");
   if blank(label) then begin
     label = "Адрес 5";
   end;
-  EditField(h,v+=vs,-20,label,Normal,InvAddr4,false,0);
+  EditField(h,v+=vs,-100,label,Normal,InvAddr4,false,0);
+  
   EditField(h,v+=vs,50,"Страна",Normal,CountryCode,false,CountrySClass);
       EditField(h1,v,-20,"Отдел",Normal,Department,false,0);
   EditField(h,v+=vs,50,"Область",Normal,Region,false,CountryRegionSClass);//Edit-------------------Vitalii 12:38 23.05.2016
@@ -11825,10 +11831,11 @@ begin
   	RadioButton(h2,v+=17,2,0,"В разводе",MarStatus);
   	RadioButton(h2,v+=17,3,0,"Вдовa/-ец",MarStatus);
 
-  	ButtonFrame(h2=h2+130,v=vm,100,3,"Возраст");
+  	//Edit-------------------Vitalii 18:15 23.05.2016
+    /*ButtonFrame(h2=h2+130,v=vm,100,3,"Возраст");
   	RadioButton(h2,v,1,0,"Ребенок",AgeStatus);
   	RadioButton(h2,v+=17,0,0,"Взрослый",AgeStatus);
-  	RadioButton(h2,v+=17,2,0,"Пенсионер",AgeStatus);
+  	RadioButton(h2,v+=17,2,0,"Пенсионер",AgeStatus);*/
   end;
 
   if (StandardHansa==false) then begin
@@ -11938,7 +11945,7 @@ begin
   SetWRect(64,80,509,200);
   UseView(CityVc);
   EditField(h=115,v=6,150,"Название",Normal,Name,false,0);
-  EditField(h,v+=20,-40,"Название RUS",Normal,NameRU,false,0);
+  EditField(h,v+=20,-40,"Название UKR",Normal,NameUKR,false,0);
   EditField(h,v+=20,-40,"Код города(тел)",Normal,PhoneCode,false,0);
   EndWindow;
 end;
@@ -11953,7 +11960,7 @@ begin
   UseView(CityVc);
   RecordList(4,17,-21,-39);
   RlColKey(4,1,"Название",Name,false,Name);
-  RlColKey(120,120,"Название RUS",NameRU,false,NameRU);
+  RlColKey(120,120,"Название UKR",NameUKR,false,NameUKR);
   SearchField("Найти");
   EndWindow;
 end;
@@ -11968,7 +11975,7 @@ begin
   UseView(CityVc);
   RecordList(4,17,-21,-39);
   RlColKey(4,1,"Название",Name,false,Name);
-  RlColKey(120,120,"Название RUS",NameRU,false,NameRU);
+  RlColKey(120,120,"Название UKR",NameUKR,false,NameUKR);
   SearchField("Найти");
   EndWindow;
 end;
