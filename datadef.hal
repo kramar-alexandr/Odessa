@@ -951,6 +951,8 @@ RecordBegin(INVc,-,"artikel5");
   ArrayField(AlternativeCode,M4Str,40,0); //Edit***************************Sasha2,12:31 06.11.2014
   ArrayField(QtyBox,M45Val,0,0);	//Edit by Victor 30.01.15
   ArrayField(QtyPack,M45Val,0,0);	//Edit by Victor 30.01.15
+  ArrayField(PrintQuant,M4UVal,0,0);//Edit----------------------Dima  23.05.2016
+  ArrayField(BarCode,M4Str,20,0);		//Edit----------------------Dima  23.05.2016  
   EndArray;
   MainKeyBegin(SerNr,1);
   StoreInBaseKey;

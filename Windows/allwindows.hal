@@ -2561,14 +2561,17 @@ begin
   end;
   if (HasObjects) then begin
     Flip(flipnr); flipnr = flipnr + 1;
-    MatCol(1,164,"Наименование",0,Spec,false,0);
+    MatCol(1,155,"Наименование",0,Spec,false,0);
     if (IsEnterprise) then begin
-      MatCol(1,-310,"Счет опр.",0,CostAcc,false,AccSClass);
+      MatCol(1,-360,"Счет опр.",0,CostAcc,false,AccSClass);
     end;
-    MatCol(1,-240,"Объекты",0,Objects,false,ObjSClass);
+    //MatCol(1,-270,"Объекты",0,Objects,false,ObjSClass);       
+    MatCol(1,-300,"Штрихкод",0,BarCode,false,0); 						//Edit----------------------Dima  23.05.2016
+    MatCol(1,-200,"Кол.печати",0,PrintQuant,false,0); 			//Edit----------------------Dima  23.05.2016 
+    
     if (IsEnterprise) then begin
-      MatCol(1,-170,"Товар пост.",0,VEArtCode,false,PISClass);
-      MatColTL(1,-100,"Ед.пост.",0,M4Code,ViewOnly,5,VEUnit,false,UnitSCLass);//MatCol(1);
+      MatCol(1,-140,"Товар пост.",0,VEArtCode,false,PISClass);
+      MatColTL(1,-90,"Ед.пост.",0,M4Code,ViewOnly,5,VEUnit,false,UnitSCLass);//MatCol(1);
       MatCol(1,-50,"Кол. пост.",0,VEQuant,true,0);
     end;
   end;
@@ -2858,6 +2861,7 @@ begin
   end;
     SpecialMenu("Выгрузить таблицу в буфер обмена",'',1,"ExportToExcelPODsm"); // edit ----------Dima 26.11.2014
 		SpecialMenu("Обновить вес и объем в карточках",'',1,"UpdateINVcWeightVolume_PODsm");	//Edit----------------------Dima  04.02.2015
+		SpecialMenu("Присвоить товарам штрихкоды",'',14,"SetEAN13PODsm"); 	//Edit----------------------Dima  23.05.2016
   end;
   EndWindow;
 end;

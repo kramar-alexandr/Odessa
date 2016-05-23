@@ -46,6 +46,7 @@ external function Boolean PODClassCustomsCostEFAfter(Integer,Integer,Integer,Int
 external function Boolean PODchrsum(record POVc,Integer);
 external function Boolean UserCanChangePendingRecord(Integer);
 remote procedure POVc_PastVolumeWeight(var record POVc,Integer);// Edit ************************** Wednesday, July 9, 2014 at 11:45:42
+remote procedure HandleSetEAN13PO(var record POVc); //Edit----------------------Dima  23.05.2016
 
 
 global
@@ -2181,3 +2182,18 @@ begin
 
 end;
 
+
+
+global 
+updating procedure SetEAN13PODsm()
+begin 
+	integer wn;
+	record POVc POr;
+
+	wn = CurWindow;
+	GetWindowRecord(wn,POr);
+	HandleSetEAN13PO(POr);
+	PutWindowrecord(wn,POr);
+
+	return;
+end;

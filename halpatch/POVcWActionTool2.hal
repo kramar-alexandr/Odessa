@@ -1281,6 +1281,7 @@ begin
     POrw.VEQuant = t;    
     POrw.Objects = FindINObjects(INr.Objects,INr.Group);
     POrw.PalletNr = CalcPalletsNr(POrw.Quant,POrw.ArtCode);
+    POrw.BarCode = INr.BarCode;
     PackRowFieldMatrix(POrw,"TaxMatrix",TMr);
     MatRowPut(POp,rownr,POrw);
     if (pifound) then begin
