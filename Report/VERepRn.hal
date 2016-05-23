@@ -345,8 +345,9 @@ RecordNew(ISr);
   end;
 
   StartFormat(15);
-   OutString(20,0,"Код",false);
-   OutString(30,0,"Наименование",false);
+   OutString(0,0,"Код",false);
+   OutString(30,0,"Альт.код",false);
+   OutString(60,0,"Наименование",false);
    OutString(140,0,"Продано",false);
    if(size>0)then begin
 		 For(i=0;i<size;i=i+1) begin
@@ -477,7 +478,9 @@ RecordNew(ISr);
 */
   		StartFormat(15);
   			OutString(20,0,INr.Code,true);
-  			OutString(30,0,INr.Name,false);
+  			OutString(30,0,INr.AlternativeCode,false);
+  			OutString(60,0,INr.Name,false);
+  			
 				OutString(140,0,-soldall,false);
 				For(i=0;i<size;i=i+1) begin
 					OutString(140,0,-sold[i],false);
