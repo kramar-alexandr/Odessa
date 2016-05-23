@@ -31,9 +31,10 @@ SetLangMode(LangRussian,"RUS",0);
 global updating procedure CustTimeTableAction()
 begin
   record RcVc RepSpec;
-  time t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,curt,curtnew;
+  time t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,curt,curtnew;
   string 5 hr,mn;
   integer minute;
+  string 50 backupfile,month,year,day;
 
     t1 = StringToTime("8:00");
     t2 = StringToTime("10:00");
@@ -45,8 +46,10 @@ begin
     t8 = StringToTime("22:00");
     t9 = StringToTime("00:00");
     
+    
     t10 = StringToTime("3:00");//Nowa poshta
 
+		t11 = StringToTime("1:00");//TextBackupToBackupServer
     
     curt = CurrentTime; 
     hr = GetHour(curt);
@@ -69,6 +72,23 @@ begin
     	LogText(0,"CustTimeTableAction at planned time: " & curtnew);
     	RefreshAllInnerRegistersNP;
     end;    
+    
+    if (curtnew==t11) then begin
+    	LogText(0,"TextBackupToBackupServer" & curtnew);
+    	backupfile = "";
+    	year = right(2,getyear(currentdate));
+    	month = getmonth(currentdate);
+    	if (len(month)==1) then begin
+				month = "0" & month;
+			end;
+			day = getmonth(currentdate);
+    	if (len(day)==1) then begin
+				day = "0" & day;
+			end;
+    	
+    	backupfile = "TB" & year & month & day & ".TXT";
+    	RunProgram("./ftptransfer.sh","u89212 IzPMg0l408IXkf7D / Backup/" & backupfile);
+    end;
     
 		if (Mod(minute,5)==0) then begin		//Edit----------------------Dima  28.08.2015
 			SendSMSFromStack;
