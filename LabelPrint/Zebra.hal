@@ -10,6 +10,8 @@ begin
   row PUVc PUrw,newPUrw;
   record StockMovVc SMr;
   row StockMovVc SMrw;
+  record POVc POr;
+  row POVc POrw;
   integer wn,i,mtrw,lenth,h,k,int;
   boolean testf;
   string 20 s1,s2,s3,s4,s5;
@@ -57,12 +59,26 @@ begin
   		     matrowput(newPUr,k,newPUrw);
   		     k=k+1;
   		  end;
-  		end;				
+  		end;
+  	case "POVc":
+			GetWindowRecord(wn,POr);
+  		mtrw = MatRowCnt(POr);
+  		for (i=0;i<mtrw;i=i+1) begin
+  		  MatRowGet(POr,i,POrw);
+  		  if (nonblank(POrw.ArtCode) and (POrw.PrintQuant>0)) then begin
+  		     matrowget(newPUr,k,newPUrw);
+  		     newPUrw.ArtCode = POrw.ArtCode;
+  		     newPUrw.BarCode = POrw.BarCode;
+  		     newPUrw.PrintQuant = POrw.PrintQuant;
+  		     GetPartsOfString(POrw.Spec,24,parts);
+  		     newPUrw.Spec = parts[0];
+  		     newPUrw.POReconComment = parts[1];
+  		     newPUrw.VIReconComment = parts[2];  		        
+  		     matrowput(newPUr,k,newPUrw);
+  		     k=k+1;
+  		  end;
+  		end;			
 	end;
-
-   
-
-
   
   if(k>0)then begin
     

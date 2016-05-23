@@ -2863,6 +2863,7 @@ begin
 		SpecialMenu("Обновить вес и объем в карточках",'',1,"UpdateINVcWeightVolume_PODsm");	//Edit----------------------Dima  04.02.2015
 		SpecialMenu("Присвоить товарам штрихкоды",'',14,"SetEAN13PODsm"); 	//Edit----------------------Dima  23.05.2016
   end;
+  SpecialMenu("Распечатать EAN13 этикетки 5*13",'',1,"PrintLabelEANDsm");
   EndWindow;
 end;
 

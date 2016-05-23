@@ -47,7 +47,28 @@ external function Boolean PODchrsum(record POVc,Integer);
 external function Boolean UserCanChangePendingRecord(Integer);
 remote procedure POVc_PastVolumeWeight(var record POVc,Integer);// Edit ************************** Wednesday, July 9, 2014 at 11:45:42
 remote procedure HandleSetEAN13PO(var record POVc); //Edit----------------------Dima  23.05.2016
+remote procedure HandlePrintEAN13PO(record POVc,var array record PUVc,var array integer); //Edit***************************Sasha2,15:08 23.05.2016
 
+global //Edit***************************Sasha2,12:00 22.01.2015 {
+procedure PrintEAN13PODsm()
+begin 
+	integer wn;
+	record POVc POr;
+	array record PUVc PU2r;
+	array integer rownr;
+  boolean previewf;
+
+	wn = CurWindow;
+	GetWindowRecord(wn,POr);
+	HandlePrintEAN13PO(POr,PU2r,rownr);
+	previewf = false;
+	if (rownr[0]>0) then begin
+		PrintDocument(PU2r[0],"ItemLabForm9",previewf);
+	end;
+	//PutWindowrecord(wn,POr);
+
+	return;
+end; //Edit***************************Sasha2,12:00 22.01.2015 }
 
 global
 updating procedure DropSHFromPODsm()

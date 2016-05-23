@@ -61,6 +61,7 @@ external procedure PrintEAN13StockMovDsm();
 external procedure Zebra_Printing(record RcVc);
 external function Boolean PUVcRowEFActiveCheck(string,Integer,Integer,Integer);
 external function Boolean PUVcEFActiveTest(Integer,Integer,record PUVc);
+external procedure PrintEAN13PODsm();
 
 function val UnitCalcQty(string Unittext,val UnitXval,val UnitYval,val UnitZval,val defqty)
 BEGIN
@@ -1252,7 +1253,18 @@ begin
 				RepSpec.flags[2] = mwn;
 				RepSpec.f1 = "PUVc";
 				Zebra_Printing(RepSpec);
-			end;					
+			end;
+		case "PODClass":
+			CloseWindow(wn);
+			SelectWindow(mwn);
+			if (RepSpec.flags[1]==0) then begin
+				PrintEAN13PODsm;
+			end;
+			if (RepSpec.flags[1]==1) then begin
+				RepSpec.flags[2] = mwn;
+				RepSpec.f1 = "POVc";
+				Zebra_Printing(RepSpec);
+			end;				
 	end;	
 
 end;
