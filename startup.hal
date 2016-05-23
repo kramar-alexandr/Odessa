@@ -13,6 +13,8 @@ begin
 
 	Register("ARVc","ARVc",ARVc,modDBMain);//Edit----------------------Dima  22.12.2015
   Register("APVc","APVc",APVc,modDBMain);
+  
+  Register("Города","Города",CityVc,modSL);
 
   Setting("Настройки WebShop",WebShopSettingsTClass,modSO); //Edit***************************Sasha2,10:22 14.07.2014
   Setting("Настройки экспорта склада CSV",ExportStockCSVTClass,modSY);
@@ -323,6 +325,7 @@ begin
 	Maintenance("Пересчитать классификации в SalesDataVc",UpdateSalesDataVClass,UpdateDispGroupsSalesDataMn,modDBMain);	//Edit----------------------Dima  18.05.2016
 	Maintenance("WEB-классификации записать отдельно в карте товара",MyVClass,TransferDispsToWebDispsMn,modDBMain); //Edit***************************Sasha2,13:28 08.04.2016
 	
+  Maintenance("CityVcFromNPCityVcVClass",CityVcFromNPCityVcVClass,CityVcFromNPCityVcMn,modDBMain);//Edit-------------------Vitalii 11:27 23.05.2016
 
   Import("Импорт цен",PLImportIClass,PLImportIn,modDI); //Added********************Dima 20.11.2014
   Import("Импорт товаров",INImportIClass,INImportIn,modIN);//Added********************Dima 20.11.2014

@@ -2640,3 +2640,14 @@ WindowBegin("Пересчитать SalesData",RecalculateSalesDataVClass,CGMnt,RcType);
   StaticText(50,75,"будет пересчитаны классификации в SalesDataVc",false);
   EndWindow;
 end;
+
+window CityVcFromNPCityVcVClass:1
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  real h,h2,h3,v,vs;
+  WindowBegin("CityVcFromNPCityVc",CityVcFromNPCityVcVClass,CGMnt,RcType);
+  SetWRect(64,80,700,570);
+  v = 6; vs = 20; h = 150; h2 = 250; h3 = 390;
+
+  EndWindow;
+end;

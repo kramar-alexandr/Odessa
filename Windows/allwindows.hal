@@ -11568,7 +11568,7 @@ begin
   EditField(h,v+=vs,-20,label,Normal,InvAddr4,false,0);
   EditField(h,v+=vs,50,"Страна",Normal,CountryCode,false,CountrySClass);
       EditField(h1,v,-20,"Отдел",Normal,Department,false,0);
-  EditField(h,v+=vs,50,"Область",Normal,Region,false,RegionSClass);
+  EditField(h,v+=vs,50,"Область",Normal,Region,false,CountryRegionSClass);//Edit-------------------Vitalii 12:38 23.05.2016
       EditField(h1,v,-20,"Факс",Normal,Fax,false,0);
   EditField(h,v+=vs,150,"Город",Normal,Ethnicity,false,CitySClass);
       EditField(h1,v,-20,"Имя в Skype",Normal,SkypeName,false,0);
@@ -11627,7 +11627,7 @@ begin
   end;    
   EditField(h2+50,v,-20,"Комментарий к счету",Normal,OrderComment,false,0);
   EditField(h,v+=vs,120,"№ фрахта",Normal,FreightNr,false,0);
-  EditField(h2+50,v,70,"Регион",Normal,Region,false,RegionSClass);
+  EditField(h2+50,v,70,"Регион",Normal,Region,false,CountryRegionSClass);//Edit-------------------Vitalii 12:38 23.05.2016
   EditField(h,vm=(v+=vs),120,"Условие отгр. (кл.)",Normal,ShipDeal,false,ShipDealSClass);
   EditField(h2+50,v,70,"Условие отгр. (пост.)",Normal,VEShipDeal,false,ShipDealSClass);
   EditField(h,v+=vs,120,"Способ отгр. (кл.)",Normal,ShipMode,false,DMSClass);
@@ -11932,9 +11932,8 @@ begin
   WindowBegin("Город",CityDClass,CGview,-);
   SetWRect(64,80,509,200);
   UseView(CityVc);
-  EditField(h=115,v=6,150,"Код",St_i,Code,false,0);
-  EditField(h,v+=20,-40,"Название",Normal,Name,false,0);
-  EditField(h,v+=20,-40,"Название ENG",Normal,NameENG,false,0);
+  EditField(h=115,v=6,150,"Название",Normal,Name,false,0);
+  EditField(h,v+=20,-40,"Название RUS",Normal,NameRU,false,0);
   EditField(h,v+=20,-40,"Код города(тел)",Normal,PhoneCode,false,0);
   EndWindow;
 end;
@@ -11948,8 +11947,8 @@ begin
   Sizeable(-1,-1,0,0);
   UseView(CityVc);
   RecordList(4,17,-21,-39);
-  RlColKey(4,1,    "Код",Code,false,Code);
-  RlColKey(120,120,"Название",Name,false,Name);
+  RlColKey(4,1,"Название",Name,false,Name);
+  RlColKey(120,120,"Название RUS",NameRU,false,NameRU);
   SearchField("Найти");
   EndWindow;
 end;
@@ -11963,8 +11962,8 @@ begin
   Sizeable(-1,-1,0,0);
   UseView(CityVc);
   RecordList(4,17,-21,-39);
-  RlColKey(4,1,    "Код",Code,false,Code);
-  RlColKey(120,120,"Название",Name,false,Name);
+  RlColKey(4,1,"Название",Name,false,Name);
+  RlColKey(120,120,"Название RUS",NameRU,false,NameRU);
   SearchField("Найти");
   EndWindow;
 end;

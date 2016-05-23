@@ -4717,18 +4717,14 @@ RecordBegin(IPVc,-,"");
   EndRecord;
   
   RecordBegin(CityVc,-,"");
-  RecordField(Code,M4Code,20,0);
   RecordField(Name,M4Str,100,0);
-  RecordField(NameENG,M4Str,100,0);
+  RecordField(NameRU,M4Str,100,0);
   RecordField(PhoneCode,M4Str,10,0);
-  MainKeyBegin(Code,0);
-  KeySegment(Code);
-  KeyBegin(Name);
+  MainKeyBegin(Name,0);
   KeySegment(Name);
-  KeySegment(Code);
-  KeyBegin(NameENG);
-  KeySegment(NameENG);
-  KeySegment(Code);
+  KeyBegin(NameRU);
+  KeySegment(NameRU);
+  KeySegment(Name);
   EndRecord;
    
   /*RecordBegin(RLinkVc,RLinkView,"");
