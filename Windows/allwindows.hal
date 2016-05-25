@@ -11575,14 +11575,9 @@ begin
   if blank(label) then begin
     label = "Адрес 5";
   end;
-<<<<<<< HEAD
-  EditField(h,v+=vs,-20,label,Normal,InvAddr4,false,0);
-  EditField(h,v+=vs,150,"Страна",Normal,CountryCode,false,CountrySClass);
-=======
   EditField(h,v+=vs,-100,label,Normal,InvAddr4,false,0);
   
-  EditField(h,v+=vs,50,"Страна",Normal,CountryCode,false,CountrySClass);
->>>>>>> origin/master
+  EditField(h,v+=vs,150,"Страна",Normal,CountryCode,false,CountrySClass);
       EditField(h1,v,-20,"Отдел",Normal,Department,false,0);
   EditField(h,v+=vs,150,"Область",Normal,Region,false,CountryRegionSClass);//Edit-------------------Vitalii 12:38 23.05.2016
       EditField(h1,v,-20,"Факс",Normal,Fax,false,0);
