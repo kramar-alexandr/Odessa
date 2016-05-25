@@ -2651,3 +2651,29 @@ begin
 
   EndWindow;
 end;
+
+
+window ChangeClassificationNameIClass:1	//Edit***************************Sasha2,14:57 25.05.2016 {
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+real h,v,vs;
+Integer i;
+  WindowBegin("Изменение наименованиай класс-ций",ChangeClassificationNameIClass,CGIcW,-);
+  SetWRect(20,80,470,300);
+  i=1; //номер колонки
+  h=10;  v=15;
+  StaticText(h,v,"Формат импорта",false);
+  h=20;  v=40;
+  StaticText(h,v,"Список колонок:",false);
+  v=v+30; vs=25;
+  StaticText(h,v, 	i & ". Код классификации",false);
+	 StaticText(h+250,v,"Обязательное поле",false);
+	 i=i+1;
+  StaticText(h,v+=vs,i & ". Новое название классификации",false);
+	 StaticText(h+250,v,"Обязательное поле",false);
+	 i=i+1;
+
+  StaticText(h,v+=40,"Примечание:   Все столбцы разделены <Tab>",false);
+
+  EndWindow;
+end; //Edit***************************Sasha2,14:57 25.05.2016 }
