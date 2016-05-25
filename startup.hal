@@ -14,7 +14,7 @@ begin
 	Register("ARVc","ARVc",ARVc,modDBMain);//Edit----------------------Dima  22.12.2015
   Register("APVc","APVc",APVc,modDBMain);
   
-  Register("Города","Города",CityVc,modSL);
+  Register("Города Клиентов","Города Клиентов",CityVc,modSL);
 
   Setting("Настройки WebShop",WebShopSettingsTClass,modSO); //Edit***************************Sasha2,10:22 14.07.2014
   Setting("Настройки экспорта склада CSV",ExportStockCSVTClass,modSY);

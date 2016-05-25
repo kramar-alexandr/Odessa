@@ -4729,6 +4729,40 @@ RecordBegin(IPVc,-,"");
   KeySegment(Name);
   EndRecord;
    
+   
+  /* RecordBegin(RHistVc,RHistView,"");
+  RegisterForAllCompanies(false);
+  ImpExpLevel(0);
+  RecordField(SerNr,M4Long,0,0,);
+  RecordField(TransDate,M4Date,0,0);
+  RecordField(TransTime,M4Time,0,0);
+  RecordField(User,M4Code,10,UserVc);
+  RecordField(accode,M4Int,0,0);
+  RecordField(RecidStr,M4RLink,200,0);
+  RecordField(Math,M4Blob,0,0);
+  MainKeyBegin(MainKey,0);
+  KeySegment(SerNr);
+  KeyBegin(RecidStr);
+  KeySegment(RecidStr);
+  KeySegment(SerNr);
+  EndRecord;
+  
+  RecordBegin(RGistVc,RHistView,"");
+  RegisterForAllCompanies(false);
+  RecordField(SerNr,M4Long,0,0,);
+  RecordField(TransDate,M4Date,0,0);
+  RecordField(TransTime,M4Time,0,0);
+  RecordField(User,M4Code,10,UserVc);
+  RecordField(accode,M4Int,0,0);
+  RecordField(RecidStr,M4RLink,200,0);
+  RecordField(Math,M4Blob,0,0);
+  MainKeyBegin(MainKey,0);
+  KeySegment(SerNr);
+  KeyBegin(RecidStr);
+  KeySegment(RecidStr);
+  KeySegment(SerNr);
+  EndRecord;*/
+   
   /*RecordBegin(RLinkVc,RLinkView,"");
   RegisterForAllCompanies(false);
   ImpExpLevel(0);

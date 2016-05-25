@@ -43,7 +43,7 @@ END;
 global
 procedure ExpRegPLHistEn()
 BEGIN
-	record RLinkVc PLHr;
+	record RHistVc PLHr;
 	boolean TrHs;
 	
 	TrHs = true;
@@ -52,13 +52,14 @@ BEGIN
 //	PLHr.PLCode = "RRP";
 
 //SetLoopPosition(PLHr,51665);
-	while(loopmain(PLHr,1,TrHs))begin
+	PLHr.SerNr = 9999999;
+	while(loopbackkey("MainKey",PLHr,1,TrHs))begin
 		logtext(0,GetLoopPosition(PLHr));
 		exportrecord(PLHr);
 		NewLine;
-		if(GetLoopPosition(PLHr)==51664)then begin
+		/*if(GetLoopPosition(PLHr)==51664)then begin
 			SetLoopPosition(PLHr,51666);
-		end;	
+		end;	*/
 		
 	end;
 	
