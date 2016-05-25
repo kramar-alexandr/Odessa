@@ -920,7 +920,7 @@ LCustomerWithNameExists:;
 end;
 
 global //Edit***************************Sasha2,12:04 07.11.2014 {
-function Boolean CustomerWithPhoneExists(string cucode,string Phone)
+function Boolean CustomerWithPhoneExists(string cucode,string Phone,string CustCat)
 begin
   Boolean res;
   record CUVc CUr;
@@ -935,8 +935,10 @@ begin
       if (CUr.Phone!=Phone) then begin TrHs = false; end;
       if (TrHs) then begin
         if ((blank(cucode)) or (cucode<>CUr.Code)) then begin
-          res = true; 
-          goto LCustomerWithPhoneExists;
+          if (CUr.CustCat==CustCat) then begin
+            res = true; 
+            goto LCustomerWithPhoneExists;
+          end;
         end;
       end;
     end;
@@ -947,7 +949,7 @@ LCustomerWithPhoneExists:;
 end; //Edit***************************Sasha2,12:04 07.11.2014 }
 
 global
-function Boolean CustomerWithEmailExists(string cucode,string eMail)
+function Boolean CustomerWithEmailExists(string cucode,string eMail,string CustCat)
 begin
   Boolean res;
   record CUVc CUr;
@@ -962,8 +964,10 @@ begin
       if (CUr.eMail!=eMail) then begin TrHs = false; end;
       if (TrHs) then begin
         if ((blank(cucode)) or (cucode<>CUr.Code)) then begin
-          res = true; 
-          goto LCustomerWithEmailExists;
+          if (CUr.CustCat==CustCat) then begin
+            res = true;
+            goto LCustomerWithEmailExists;
+          end;
         end;
       end;
     end;
@@ -1673,14 +1677,14 @@ BEGIN
     end;
   end;
   if nonblank(CUr.eMail) then begin
-    if (CustomerWithEmailExists(CUr.Code,CUr.eMail)) then begin
+    if (CustomerWithEmailExists(CUr.Code,CUr.eMail,CUr.CustCat)) then begin
       RecordCheckError(20766,tstr,-1,"eMail"); 
       res = -1; 
       goto LCUVcRecordCheck;
     end;
   end;
   if nonblank(CUr.Phone) then begin //Edit***************************Sasha2,12:02 07.11.2014
-    if (CustomerWithPhoneExists(CUr.Code,CUr.Phone)) then begin
+    if (CustomerWithPhoneExists(CUr.Code,CUr.Phone,CUr.CustCat)) then begin
       RecordCheckError(31003,tstr,-1,"Phone"); 
       res = -1; 
       goto LCUVcRecordCheck;

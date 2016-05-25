@@ -11518,7 +11518,9 @@ begin
     tilenr = 1;
   TileButton(tilenr,"Контакт"); tilenr = tilenr + 1;
   TileButton(tilenr,"Доставка"); tilenr = tilenr + 1;
-  TileButton(tilenr,"Условия"); tilenr = tilenr + 1;
+  if (UserCanAction("AllowConditTileCU",true)) then begin
+    TileButton(tilenr,"Условия"); tilenr = tilenr + 1;
+  end;
   TileButton(tilenr,"Ценообразование"); tilenr = tilenr + 1;
   TileButton(tilenr,"Компания"); tilenr = tilenr + 1;
   TileButton(tilenr,"Счета"); tilenr = tilenr + 1;
@@ -11577,9 +11579,9 @@ begin
   end;
   EditField(h,v+=vs,-100,label,Normal,InvAddr4,false,0);
   
-  EditField(h,v+=vs,150,"Страна",Normal,CountryCode,false,CountrySClass);
+  EditField(h,v+=vs,50,"Страна",Normal,CountryCode,false,CountrySClass);
       EditField(h1,v,-20,"Отдел",Normal,Department,false,0);
-  EditField(h,v+=vs,150,"Область",Normal,Region,false,CountryRegionSClass);//Edit-------------------Vitalii 12:38 23.05.2016
+  EditField(h,v+=vs,50,"Область",Normal,Region,false,CountryRegionSClass);//Edit-------------------Vitalii 12:38 23.05.2016
       EditField(h1,v,-20,"Факс",Normal,Fax,false,0);
   EditField(h,v+=vs,150,"Город",Normal,Ethnicity,false,CitySClass);
       EditField(h1,v,-20,"Имя в Skype",Normal,SkypeName,false,0);
@@ -11653,52 +11655,54 @@ begin
   ButtonFrame(h5+30,v=vm,150,2,"Дата отгрузки на основе");
   RadioButton(h5+30,v,0,0,"текущей",DeliveryBasedOn);
   RadioButton(h5+30,v+=16,1,0,"запланированной",DeliveryBasedOn);
-  Tile(tilenr,190,false,tilenr,PayDeal); tilenr = tilenr + 1;
-  EditField(h,v=6,25,"Условие опл. (кл.)",Normal,PayDeal,false,PDSClass);
-  EditField(h,v+=vs,80,"Лимит кредита (кл.)",Normal,CreditLimit,true,0);
-  EditField(h,v+=vs,80,"Лимит кред.(кл.) в дн.",Normal,CreditLimitDays,false,0);
-  EditField(h,v+=vs,80,"Наш № у клиента",Normal,TheirCode,false,0);
-  EditField(h,v+=vs,80,"Получатель",Normal,InvoiceToCode,false,CUSClass);
-  EditField(h,v+=vs,80,"КПП",Normal,ANACode,false,0);
-  EditField(h,v+=vs,80,"Ставка пени",Normal,IntRate,false,0);
-  EditField(h,v+=vs,80,"Дата создания",ViewOnly,DateCreated,false,0);
-  EditField(h,v+=vs,80,"Основной партнер",Normal,MainPartner,false,CUSClass);
-  EditField(h2,v=6,25,"Условие опл. (пост.)",Normal,VEPayDeal,false,PDSClass);
-  EditField(h2,v+=vs,80,"Лимит кред. (пост.)",Normal,VECreditLimit,true,0);
-  EditField(h2,v+=vs,80,"Лимит кр.(пост.) в дн.",Normal,VECreditLimitDays,false,0);
-  EditField(h2,v+=vs,80,"Наш № у пост-ка",Normal,VECustID,false,0);
-  EditField(h2,v+=vs,80,"Получатель",Normal,VEInvoiceToCode,false,VESClass);
-  EditField(h2,v+=vs,80,"Факторинг",Normal,VEFactoring,false,VESClass);
-  EditField(h2,v+=vs,80,"Мин. сумма заказа",Normal,MinOrdSum,false,0);
-  EditField(h2,v+=vs,80,"Ссылка",Normal,RefStr,false,0);
-  EditField(h2,v+=vs,80,"Послед. изменение",Normal,DateChanged,false,0);
-  CheckBox(h5,v=12,0,"Закрыт",blockedFlag);
-  CheckBox(h5,v+=16,0,"Отложен",OnHoldFlag);
-  CheckBox(h5,v+=16,0,"Напоминания",RemndrFlag);
-//  CheckBox(h5,v+=16,0,"Collection",ColectionFlag);
-  CheckBox(h5,v+=16,0,"Пеня",InterestFlag);
-  CheckBox(h5,v+=16,0,"Счет аванса",OnAccount);
-  if (StandardHansa==false) then begin
-  	CheckBox(h5,v+=16,0,"Без факторинга",NoFactoringFlag);
-  	CheckBox(h5,v+=16,0,"Без доп.налога",NoTax1);
-  	CheckBox(h5,v+=16,0,"Только гр. фактур.",GroupInv);
-  	CheckBox(h5,v+=16,0,"Счет себе",SelfBilling);
-  	CheckBox(h4,v=12,0,"Клиент EGO",EGOFlag);
-  	CheckBox(h4,v+=16,0,"Клиент EDI",EDIFlag);
-  	CheckBox(h4,v+=16,0,"Доступ к БД",AllowLogin);
-//  CheckBox(h4,v+=16,0,"Allow FTP Access",FTPLogin);
-  	CheckBox(h4,v+=16,0,"Только фискальные сч/ф",FiscalFlag);
-  	CheckBox(h4,v+=16,0,"Не вкл. в рассылку",NoLetterPosting);
-  end else begin
-    CheckBox(h4,v=12,0,"Не вкл. в рассылку",NoLetterPosting);
-  end;
-  CheckBox(h4,v+=16,0,"Не вкл. в электр. рас-ку",NoMailPosting);
-  CheckBox(h4,v+=16,0,"Не вкл.нал.на окр.среду",NoRepa);
-  if (StandardHansa==false) then begin
-    CheckBox(h4,v+=16,0,"Без регион. сборов",NoTax2);
-  end;
-  if (HasLocalization("SWE")) then begin
-    CheckBox(h4,v+=16,0,"F-Tax",FTax);
+  if (UserCanAction("AllowConditTileCU",true)) then begin
+    Tile(tilenr,190,false,tilenr,PayDeal); tilenr = tilenr + 1;
+    EditField(h,v=6,25,"Условие опл. (кл.)",Normal,PayDeal,false,PDSClass);
+    EditField(h,v+=vs,80,"Лимит кредита (кл.)",Normal,CreditLimit,true,0);
+    EditField(h,v+=vs,80,"Лимит кред.(кл.) в дн.",Normal,CreditLimitDays,false,0);
+    EditField(h,v+=vs,80,"Наш № у клиента",Normal,TheirCode,false,0);
+    EditField(h,v+=vs,80,"Получатель",Normal,InvoiceToCode,false,CUSClass);
+    EditField(h,v+=vs,80,"КПП",Normal,ANACode,false,0);
+    EditField(h,v+=vs,80,"Ставка пени",Normal,IntRate,false,0);
+    EditField(h,v+=vs,80,"Дата создания",ViewOnly,DateCreated,false,0);
+    EditField(h,v+=vs,80,"Основной партнер",Normal,MainPartner,false,CUSClass);
+    EditField(h2,v=6,25,"Условие опл. (пост.)",Normal,VEPayDeal,false,PDSClass);
+    EditField(h2,v+=vs,80,"Лимит кред. (пост.)",Normal,VECreditLimit,true,0);
+    EditField(h2,v+=vs,80,"Лимит кр.(пост.) в дн.",Normal,VECreditLimitDays,false,0);
+    EditField(h2,v+=vs,80,"Наш № у пост-ка",Normal,VECustID,false,0);
+    EditField(h2,v+=vs,80,"Получатель",Normal,VEInvoiceToCode,false,VESClass);
+    EditField(h2,v+=vs,80,"Факторинг",Normal,VEFactoring,false,VESClass);
+    EditField(h2,v+=vs,80,"Мин. сумма заказа",Normal,MinOrdSum,false,0);
+    EditField(h2,v+=vs,80,"Ссылка",Normal,RefStr,false,0);
+    EditField(h2,v+=vs,80,"Послед. изменение",Normal,DateChanged,false,0);
+    CheckBox(h5,v=12,0,"Закрыт",blockedFlag);
+    CheckBox(h5,v+=16,0,"Отложен",OnHoldFlag);
+    CheckBox(h5,v+=16,0,"Напоминания",RemndrFlag);
+  //  CheckBox(h5,v+=16,0,"Collection",ColectionFlag);
+    CheckBox(h5,v+=16,0,"Пеня",InterestFlag);
+    CheckBox(h5,v+=16,0,"Счет аванса",OnAccount);
+    if (StandardHansa==false) then begin
+      CheckBox(h5,v+=16,0,"Без факторинга",NoFactoringFlag);
+      CheckBox(h5,v+=16,0,"Без доп.налога",NoTax1);
+      CheckBox(h5,v+=16,0,"Только гр. фактур.",GroupInv);
+      CheckBox(h5,v+=16,0,"Счет себе",SelfBilling);
+      CheckBox(h4,v=12,0,"Клиент EGO",EGOFlag);
+      CheckBox(h4,v+=16,0,"Клиент EDI",EDIFlag);
+      CheckBox(h4,v+=16,0,"Доступ к БД",AllowLogin);
+  //  CheckBox(h4,v+=16,0,"Allow FTP Access",FTPLogin);
+      CheckBox(h4,v+=16,0,"Только фискальные сч/ф",FiscalFlag);
+      CheckBox(h4,v+=16,0,"Не вкл. в рассылку",NoLetterPosting);
+    end else begin
+      CheckBox(h4,v=12,0,"Не вкл. в рассылку",NoLetterPosting);
+    end;
+    CheckBox(h4,v+=16,0,"Не вкл. в электр. рас-ку",NoMailPosting);
+    CheckBox(h4,v+=16,0,"Не вкл.нал.на окр.среду",NoRepa);
+    if (StandardHansa==false) then begin
+      CheckBox(h4,v+=16,0,"Без регион. сборов",NoTax2);
+    end;
+    if (HasLocalization("SWE")) then begin
+      CheckBox(h4,v+=16,0,"F-Tax",FTax);
+    end;
   end;
   Tile(tilenr,110,false,tilenr,PLCode); tilenr = tilenr + 1;
   EditField(h,v=6,  80,"Валюта (кл.)",Normal,CurncyCode,false,CurncyCodeSClass);

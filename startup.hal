@@ -643,6 +643,7 @@ begin
   StrSetText(RequestSchedMaint,"Request Scheduled Maintenance");
   StrSetText(ApproveSchedImport,"Approve Scheduled Import");
   StrSetText(ApproveSchedMaint,"Approve Scheduled Maintenance");
+  StrSetText(AllowConditTileCU,"Доступ к вкладке " & chr(34) & "Условия" & chr(34) & " в карточке контакта");
   EndStrSet;
 
 	return;
