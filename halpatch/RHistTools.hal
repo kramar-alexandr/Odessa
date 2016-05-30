@@ -1,0 +1,188 @@
+/*
+*		Работа с восстановлением истории изменения регистров (RHistVc):
+*	Экспорт и импорт осуществляются с помощью функций	RhistvcExportMn,RhistvcImportMn
+* Структура экспортируемого файла:
+*	- одно поле longint(4 byte) - размер записи RHistVc
+*	- RHistVc 
+* - 2 поля longint(по 4 byte), в первом - номер байта с которого начинается бинарный объект регистра типа M4Blob,
+*		во втором - его размер.
+* - бинарный объект регистра (переменный размер)
+* - СR LF - пустая строка (2 byte)
+*
+*		При больших размерах RHistVc функция может упасть, Hansa кидает ошибку "не могу выделить память"
+*		Поэтому, следует останавливать цикл после одного записанного файла, перезапускать сервер и запускать функцию
+*		с новыми точками входа и номером файла (fileCode). Простой перезапуск функции не очищает память.
+* _______________________________________________
+*/
+
+global
+procedure RhistvcExportMn()		//Edit----------------------Dima  30.05.2016
+BEGIN
+	record RHistVc RHistr;
+	boolean TrHs;
+  string 50 fileName;
+  integer fileCode;
+  longint bytePos;
+  longint blobAreaSize,rhistAreaSize;
+  integer longSize;
+  area recordArea,blobArea,fileArea;
+  integer count;
+
+  LogText(0,"Total records  " & CountRecords("RHistVc"));
+  
+  longSize = 4; 	//size of longint in bytes;
+	bytePos = 0;		//position of current byte in file
+	fileName = "RHistExportData";
+	
+	fileCode = 34; //number of file  (0.txt,1.txt,2.txt..)
+  RHistr.SerNr = 2326089;
+  count = 0;
+  
+  TrHs = true;
+  while (LoopMain(RHistr,1,TrHs)) begin
+  	SetAreaZeroSize(recordArea);	
+  	SetAreaZeroSize(blobArea);	
+    AddRecordToArea(RHistr,"RHistVc",recordArea);
+    rhistAreaSize = GetAreaLength(recordArea);    
+    
+    
+    GetRecordBlob(RHistr,"Math",blobArea);
+    blobAreaSize = GetAreaLength(blobArea); 
+    
+    AddLongToArea(rhistAreaSize,fileArea);
+    AddAreaToArea(recordArea,fileArea);
+    
+    bytePos = bytePos + rhistAreaSize + 3*longSize;
+       
+    AddLongToArea(bytePos,fileArea);
+    AddLongToArea(blobAreaSize,fileArea);
+    AddAreaToArea(blobArea,fileArea);    
+    AddTextToArea(chr(13) & chr(10),fileArea);
+    
+   // LogText(0,RHistr.SerNr &  "    __     " & bytePos & " - " & blobAreaSize);
+    
+    bytePos = bytePos + blobAreaSize + 2;
+
+		// just info message
+		if (Mod(RHistr.SerNr,50000)==0) then begin
+			LogText(0,"RHistVc # " & RHistr.SerNr & "  was exported");
+			LogText(0,GetAreaLength(fileArea) & " area");
+		end;		
+    
+    //stop writing at ~40Mb
+    if (bytePos>40000000) then begin
+    		LogText(0,GetAreaLength(fileArea) & " area before writing");
+				WriteAreaToFile(fileArea,"RHistData/" & fileName & fileCode & ".txt",0);
+				LogText(0,"File  " & fileName & fileCode & ".txt  was written" );
+				fileCode = fileCode + 1;
+				//TrHs = false;
+				SetAreaZeroSize(fileArea);	
+				bytePos = 0;
+				count = count + 1;
+				if (count>6) then begin
+					TrHs = false;
+				end;
+				LogText(0,"last record hist  " & RHistr.SerNr);
+		end;     
+  end; 
+  
+  if (bytePos<=40000000 and bytePos>0) then begin
+  	WriteAreaToFile(fileArea,"RHistData/" & fileName & fileCode & ".txt",0);
+  	LogText(0,"File  " & fileName & fileCode & ".txt  was written" );
+  	LogText(0,"last record hist  " & RHistr.SerNr);
+	end;
+
+  RETURN;
+END;
+
+
+
+
+
+global updating procedure RhistvcImportMn()		//Edit----------------------Dima  30.05.2016
+begin
+	record RcVc RepSpec;
+	record RHistVc RHistr,RH;
+	boolean TrHs;
+  string 200 tstr;
+  longint bytePos,count,blobByteStart;
+  longint blobAreaSize,fileAreaSize,rhistAreaSize;
+  integer longSize,rhistSize;
+  integer fileNumber,i;
+  area recordArea,blobArea,fileArea;
+  string 200 folderName,fileName,fullName;
+
+  longSize = 4; 	//size of longint in bytes;
+	rhistSize = 67;	//size of RHistVc in bytes;
+	bytePos = 0; 
+	folderName = "RHistData/";
+	fileName = "RHistExportData";
+
+	
+	if (DirExists(folderName)) then begin
+		fileNumber = CountFilesInDir(folderName);
+		LogText(0,fileNumber & " files in " & folderName);
+	end;	
+  
+  for(i=0;i<fileNumber;i=i+1) begin
+  	fullName = folderName & fileName & i & ".txt";
+  	LogText(0,fullName & "  imported..");
+  	DBHold;
+		if (FileExists(fullName)) then begin
+			SetAreaZeroSize(fileArea);
+			bytePos = 0;
+			AddFileToArea(fullName,fileArea,false);
+			fileAreaSize = GetAreaLength(fileArea);
+			LogText(0,"total size " & fileAreaSize);
+			
+			While(bytePos<fileAreaSize) begin
+				SetAreaZeroSize(recordArea);
+				SetAreaZeroSize(blobArea);
+				
+				rhistAreaSize = GetLongFromArea(fileArea,bytePos);
+				
+				GetAreaFromArea(fileArea,bytePos+1+longSize,rhistAreaSize,recordArea);
+				GetRecordFromArea(RH,"RHistVc",0,recordArea);
+				
+				bytePos = bytePos + longSize + rhistAreaSize;
+				
+				blobByteStart = GetLongFromArea(fileArea,bytePos);
+				blobAreaSize = GetLongFromArea(fileArea,bytePos+longSize);
+				
+				//LogText(0,RH.SerNr & "    " & blobByteStart & "  _  " & blobAreaSize);
+				
+				GetAreaFromArea(fileArea,blobByteStart,blobAreaSize,blobArea);
+				SetRecordBlob(RH,"Math",blobArea);
+				RecordStore(RH,true);
+
+				
+				bytePos = bytePos + 2*longSize + blobAreaSize + 2;
+				if (Mod(RH.SerNr,20000)==0) then begin
+					LogText(0,RH.SerNr & "    imported... ");
+				end;
+			end;	
+			//LogText(0,count & "   records in file.  bytePos " & bytePos);
+		end;
+		DBFlush;
+	
+	end; 
+  
+end;
+
+
+
+global updating procedure RhistvcCleanMn()
+begin
+	record RHistVc RH;
+	boolean TrHs;
+	
+	TrHs = true;
+	while(loopmain(RH,1,TrHs))begin
+		if (TrHs) then begin
+			RecordDelete(RH);
+    		StepBack(RH);
+		end;
+	end;
+
+end;
+

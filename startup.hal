@@ -106,6 +106,7 @@ begin
   Export("Экспорт статистики продаж",ExpSalesStatClass,ExpSalesStatEn,modSL);// Edit ************************** Thursday, 26 February 2015 18:04:57
   Export("Экспорт товаров в CSV розница",ExpItemsBarCodesEClass,ExpItemsBarCodesEn,modSL);// Edit ************************** Thursday, 26 February 2015 18:04:57
 	Export("Экспорт товаров в CSV опт",ExpItemsBarCodesOptEClass,ExpItemsBarCodeOptsEn,modSL);// Edit ************************** Thursday, 26 February 2015 18:04:57
+	//Export("Export RHist",ExpItemsBarCodesOptEClass,RhistvcExportEn,modDBMain);
 
   Report("Несовпадения по складу 1-КОС",TovTestRClass,TovTestRn,0,modDBMain);
   Report("1-КОС с пустым местом",OneKocBlankPosRClass,OneKocBlankPosRn,0,modDBMain);
@@ -326,6 +327,9 @@ begin
 	Maintenance("WEB-классификации записать отдельно в карте товара",MyVClass,TransferDispsToWebDispsMn,modDBMain); //Edit***************************Sasha2,13:28 08.04.2016
 	
   Maintenance("CityVcFromNPCityVcVClass",CityVcFromNPCityVcVClass,CityVcFromNPCityVcMn,modDBMain);//Edit-------------------Vitalii 11:27 23.05.2016
+  Maintenance("Export RHist",MyVClass,RhistvcExportMn,modDBMain);	//Edit----------------------Dima  30.05.2016
+  Maintenance("Import RHist",MyVClass,RhistvcImportMn,modDBMain);	//Edit----------------------Dima  30.05.2016
+  //Maintenance("Delete RHist",MyVClass,RhistvcCleanMn,modDBMain);
 
   Import("Импорт цен",PLImportIClass,PLImportIn,modDI); //Added********************Dima 20.11.2014
   Import("Импорт товаров",INImportIClass,INImportIn,modIN);//Added********************Dima 20.11.2014
