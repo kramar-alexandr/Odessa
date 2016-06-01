@@ -177,7 +177,7 @@ begin
 		if(!readfirstmain(PLr,2,true))then begin
 			testf = false;
 		end else begin
-			if (PLr.ExVatPrice < 2500) then begin		
+			if (PLr.ExVatPrice < 1000) then begin		
 				loc5 = "";
 			end;
 		end;
