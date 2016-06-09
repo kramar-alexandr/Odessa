@@ -28,6 +28,33 @@ SetLangMode(LangRussian,"RUS",0);
 // Error8: some artcode warning 
 // Error9: order not found
 
+global
+procedure SenBackuptoFTP()
+begin
+string 50 backupfile,month,year,day;
+
+
+	LogText(0,"TextBackupToBackupServer");
+	backupfile = "";
+	year = right(getyear(currentdate),2);
+	month = getmonth(currentdate);
+	if (len(month)==1) then begin
+		month = "0" & month;
+	end;
+	day = getmonth(currentdate);
+	if (len(day)==1) then begin
+		day = "0" & day;
+	end;
+	
+	backupfile = "TB" & year & month & day & ".TXT";
+	
+	logtext(0,"u89212.your-backup.de 21 u89212 IzPMg0l408IXkf7D / Backup/" & backupfile);
+ 	RunProgram("Backup/ftptransfer.sh","u89212.your-backup.de 21 u89212 IzPMg0l408IXkf7D / Backup/" & backupfile);
+
+return;
+end;
+
+
 global updating procedure CustTimeTableAction()
 begin
   record RcVc RepSpec;
@@ -74,20 +101,7 @@ begin
     end;    
     
     if (curtnew==t11) then begin
-    	LogText(0,"TextBackupToBackupServer" & curtnew);
-    	backupfile = "";
-    	year = right(2,getyear(currentdate));
-    	month = getmonth(currentdate);
-    	if (len(month)==1) then begin
-				month = "0" & month;
-			end;
-			day = getmonth(currentdate);
-    	if (len(day)==1) then begin
-				day = "0" & day;
-			end;
-    	
-    	backupfile = "TB" & year & month & day & ".TXT";
-    	RunProgram("./ftptransfer.sh","u89212 IzPMg0l408IXkf7D / Backup/" & backupfile);
+    	SenBackuptoFTP;
     end;
     
 		if (Mod(minute,5)==0) then begin		//Edit----------------------Dima  28.08.2015
@@ -114,6 +128,7 @@ begin
 	boolean testf;
 	integer inStock,dop_ostatok,pos;
 	integer realqty;
+	boolean r1f,r2f,r3f;
 	
 	BlockLoad(ExportStockCSVb);
 	
@@ -155,7 +170,24 @@ begin
 		IS2r.Location = loc2;
 		IS3r.Code = INr.Code;
 		IS3r.Location = loc3;
-		if((readfirstmain(ISr,2,true) and (ISr.Instock-ISr.OrddOut)>0) or (readfirstmain(IS2r,2,true) and (IS2r.Instock-IS2r.OrddOut)>0) or (readfirstmain(IS3r,2,true) and (IS3r.Instock-IS3r.OrddOut)>0)) then begin dop_ostatok = dop_ostatok + 1; end;
+		
+		
+		
+		r1f = readfirstmain(ISr,2,true);
+		r2f = readfirstmain(IS2r,2,true);
+		r3f = readfirstmain(IS3r,2,true);
+		
+		if(ISr.OrddOut<0)then begin
+			ISr.OrddOut = 0;
+		end;
+		if(IS2r.OrddOut<0)then begin
+			IS2r.OrddOut = 0;
+		end;
+		if(IS3r.OrddOut<0)then begin
+			IS3r.OrddOut = 0;
+		end;
+		
+		if((r1f and (ISr.Instock-ISr.OrddOut)>0) or (r2f and (IS2r.Instock-IS2r.OrddOut)>0) or (r3f and (IS3r.Instock-IS3r.OrddOut)>0)) then begin dop_ostatok = dop_ostatok + 1; end;
 		
 		if((ISr.Instock-ISr.OrddOut)>0)then begin
 			realqty = realqty +  ISr.Instock-ISr.OrddOut;
@@ -185,7 +217,17 @@ begin
 		IS2r.Code = INr.Code;
 		IS2r.Location = loc5;
 		
-		if((readfirstmain(ISr,2,true) and (ISr.Instock-ISr.OrddOut)>0) or (readfirstmain(IS2r,2,true) and (IS2r.Instock-IS2r.OrddOut)>0)) then begin dop_ostatok = dop_ostatok + 2; end;
+		r1f = readfirstmain(ISr,2,true);
+		r2f = readfirstmain(IS2r,2,true);
+		
+		if(ISr.OrddOut<0)then begin
+			ISr.OrddOut = 0;
+		end;
+		if(IS2r.OrddOut<0)then begin
+			IS2r.OrddOut = 0;
+		end;
+		
+		if((r1f and (ISr.Instock-ISr.OrddOut)>0) or (r2f and (IS2r.Instock-IS2r.OrddOut)>0)) then begin dop_ostatok = dop_ostatok + 2; end;
 		
 		if((ISr.Instock-ISr.OrddOut)>0)then begin
 			realqty = realqty + ISr.Instock-ISr.OrddOut;

@@ -34,12 +34,17 @@ BEGIN
 	bytePos = 0;		//position of current byte in file
 	fileName = "RHistExportData";
 	
-	fileCode = 34; //number of file  (0.txt,1.txt,2.txt..)
-  RHistr.SerNr = 2326089;
+	fileCode = 0; //number of file  (0.txt,1.txt,2.txt..)
+  RHistr.SerNr = 0;
   count = 0;
   
   TrHs = true;
+  SetAreaZeroSize(fileArea);
+  RHistr.SerNr=1981208;
   while (LoopMain(RHistr,1,TrHs)) begin
+  	if(RHistr.SerNr>=1981224)then begin
+  		TrHs = false;
+  	end;
   	SetAreaZeroSize(recordArea);	
   	SetAreaZeroSize(blobArea);	
     AddRecordToArea(RHistr,"RHistVc",recordArea);
@@ -49,49 +54,61 @@ BEGIN
     GetRecordBlob(RHistr,"Math",blobArea);
     blobAreaSize = GetAreaLength(blobArea); 
     
-    AddLongToArea(rhistAreaSize,fileArea);
-    AddAreaToArea(recordArea,fileArea);
+    if(blobAreaSize>0)then begin
     
-    bytePos = bytePos + rhistAreaSize + 3*longSize;
-       
-    AddLongToArea(bytePos,fileArea);
-    AddLongToArea(blobAreaSize,fileArea);
-    AddAreaToArea(blobArea,fileArea);    
-    AddTextToArea(chr(13) & chr(10),fileArea);
-    
-   // LogText(0,RHistr.SerNr &  "    __     " & bytePos & " - " & blobAreaSize);
-    
-    bytePos = bytePos + blobAreaSize + 2;
+			AddLongToArea(rhistAreaSize,fileArea);
+			AddAreaToArea(recordArea,fileArea);
+		
+			bytePos = bytePos + rhistAreaSize + 3*longSize;
+			 
+			AddLongToArea(bytePos,fileArea);
+			AddLongToArea(blobAreaSize,fileArea);
+			AddAreaToArea(blobArea,fileArea);    
+			AddTextToArea(chr(13) & chr(10),fileArea);
+		
+		 // LogText(0,RHistr.SerNr &  "    __     " & bytePos & " - " & blobAreaSize);
+		
+			bytePos = bytePos + blobAreaSize + 2;
 
-		// just info message
+			// just info message
+				
+		
+		
+		
+			//stop writing at ~40Mb
+			if (bytePos>500) then begin
+					LogText(0,GetAreaLength(fileArea) & " area before writing");
+					createfile("RHistData/" & fileName & fileCode & ".txt");
+					closefile;
+					WriteAreaToFile(fileArea,"RHistData/" & fileName & fileCode & ".txt",0);
+					LogText(0,"File  " & fileName & fileCode & ".txt  was written" );
+					fileCode = fileCode + 1;
+					//TrHs = false;
+					SetAreaZeroSize(fileArea);	
+					bytePos = 0;
+					/*count = count + 1;
+					if (count>6) then begin
+						TrHs = false;
+					end;*/
+					LogText(0,"last record hist  " & RHistr.SerNr);
+			end;  
+		
+		end;
 		if (Mod(RHistr.SerNr,50000)==0) then begin
 			LogText(0,"RHistVc # " & RHistr.SerNr & "  was exported");
 			LogText(0,GetAreaLength(fileArea) & " area");
-		end;		
-    
-    //stop writing at ~40Mb
-    if (bytePos>40000000) then begin
-    		LogText(0,GetAreaLength(fileArea) & " area before writing");
-				WriteAreaToFile(fileArea,"RHistData/" & fileName & fileCode & ".txt",0);
-				LogText(0,"File  " & fileName & fileCode & ".txt  was written" );
-				fileCode = fileCode + 1;
-				//TrHs = false;
-				SetAreaZeroSize(fileArea);	
-				bytePos = 0;
-				count = count + 1;
-				if (count>6) then begin
-					TrHs = false;
-				end;
-				LogText(0,"last record hist  " & RHistr.SerNr);
-		end;     
+		end;	
   end; 
   
-  if (bytePos<=40000000 and bytePos>0) then begin
+  if (bytePos<=500 and bytePos>0) then begin
   	WriteAreaToFile(fileArea,"RHistData/" & fileName & fileCode & ".txt",0);
   	LogText(0,"File  " & fileName & fileCode & ".txt  was written" );
   	LogText(0,"last record hist  " & RHistr.SerNr);
 	end;
-
+	
+	logtext(0,"FINISH");
+	
+	
   RETURN;
 END;
 
@@ -123,7 +140,7 @@ begin
 		fileNumber = CountFilesInDir(folderName);
 		LogText(0,fileNumber & " files in " & folderName);
 	end;	
-  
+  fileNumber = 200;
   for(i=0;i<fileNumber;i=i+1) begin
   	fullName = folderName & fileName & i & ".txt";
   	LogText(0,fullName & "  imported..");

@@ -41,10 +41,63 @@ END;
 
 
 global
-procedure ExpRegPLHistEn()
+updating procedure ExpRegPLHistEn()
 BEGIN
 	record RHistVc PLHr;
+	record ItemHistVc RHr;
+	record ItemStatusVc ISr;
+	record IVVc IVr;
+	record INVc INr;
+	record ORVc ORr;
+	record SalesDataVc SDr;
+	record RLinkVc RLr;
+	record OffSerNrIVVc OFr;
+	
 	boolean TrHs;
+	
+	
+	
+	while(loopmain(RHr,1,true))begin
+		recorddelete(RHr);
+		stepback(RHr);
+	end;
+	
+	while(loopmain(ISr,1,true))begin
+		recorddelete(ISr);
+		stepback(ISr);
+	end;
+	
+	while(loopmain(IVr,1,true))begin
+		recorddelete(IVr);
+		stepback(IVr);
+	end;
+	
+	while(loopmain(SDr,1,true))begin
+		recorddelete(SDr);
+		stepback(SDr);
+	end;
+	
+	while(loopmain(SDr,1,true))begin
+		recorddelete(SDr);
+		stepback(SDr);
+	end;
+	
+	while(loopmain(ORr,1,true))begin
+		recorddelete(ORr);
+		stepback(ORr);
+	end;
+	
+	while(loopmain(INr,1,true))begin
+		recorddelete(INr);
+		stepback(INr);
+	end;
+	
+	while(loopmain(OFr,1,true))begin
+		recorddelete(OFr);
+		stepback(OFr);
+	end;
+	
+	
 	
 	TrHs = true;
 	
@@ -52,11 +105,14 @@ BEGIN
 //	PLHr.PLCode = "RRP";
 
 //SetLoopPosition(PLHr,51665);
-	PLHr.SerNr = 9999999;
-	while(loopbackkey("MainKey",PLHr,1,TrHs))begin
-		logtext(0,GetLoopPosition(PLHr));
-		exportrecord(PLHr);
-		NewLine;
+	//PLHr.SerNr = 9999999;
+	while(loopmain(PLHr,1,TrHs))begin
+		logtext(0,GetLoopPosition(PLHr) & " " & PLHr.SerNr);
+		recorddelete(PLHr);
+		stepback(PLHr);
+		
+		/*exportrecord(PLHr);
+		NewLine;*/
 		/*if(GetLoopPosition(PLHr)==51664)then begin
 			SetLoopPosition(PLHr,51666);
 		end;	*/
