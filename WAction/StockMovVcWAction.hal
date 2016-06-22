@@ -792,6 +792,9 @@ BEGIN
   switch (fieldname) begin
     case "PrintQuant": res = true; //Edit***************************Sasha2,12:14 11.02.2015
     case "SerNr": 
+    	if(StockMovr.SerNr>0)then begin
+    		res = false;// Edit ************************** Thursday, 16 June 2016 13:14:25
+    	end;
       if (wnst==Rs_update) then begin
         if (StockMovr.SentOKFlag!=0) then begin res = false; end;
         if (StockMovr.OKFlag!=0) then begin res = false; end;

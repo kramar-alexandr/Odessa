@@ -123,8 +123,8 @@ begin
 	area importar;
 //	area ftpRoutine;
   string 200 tstr;
-	string 10 location,loc1,loc2,loc3,loc4,loc5,qty,price;
-	string 10 loc1t,loc2t,loc3t,loc4t,loc5t;
+	string 10 location,loc1,loc2,loc3,loc4,loc5,loc6,qty,price;
+	string 10 loc1t,loc2t,loc3t,loc4t,loc5t,loc6t;
 	boolean testf;
 	integer inStock,dop_ostatok,pos;
 	integer realqty;
@@ -151,6 +151,8 @@ begin
       							loc3t = location;
       case "1-KOC": loc4 = location;
       							loc4t = location;
+      case "5-REZERV": loc6 = location;
+      							loc6t = location;
       case "6-KV": 	loc5 = location;
 										loc5t = location;
     end;
@@ -214,11 +216,17 @@ begin
 			end;
 		end;
 		
+		
+		
 		IS2r.Code = INr.Code;
 		IS2r.Location = loc5;
 		
+		IS3r.Code = INr.Code;
+		IS3r.Location = loc6;
+		
 		r1f = readfirstmain(ISr,2,true);
 		r2f = readfirstmain(IS2r,2,true);
+		r3f = readfirstmain(IS3r,2,true);
 		
 		if(ISr.OrddOut<0)then begin
 			ISr.OrddOut = 0;
@@ -226,14 +234,20 @@ begin
 		if(IS2r.OrddOut<0)then begin
 			IS2r.OrddOut = 0;
 		end;
+		if(IS3r.OrddOut<0)then begin
+			IS3r.OrddOut = 0;
+		end;
 		
-		if((r1f and (ISr.Instock-ISr.OrddOut)>0) or (r2f and (IS2r.Instock-IS2r.OrddOut)>0)) then begin dop_ostatok = dop_ostatok + 2; end;
+		if((r1f and (ISr.Instock-ISr.OrddOut)>0) or (r2f and (IS2r.Instock-IS2r.OrddOut)>0) or (r3f and (IS3r.Instock-IS3r.OrddOut)>0)) then begin dop_ostatok = dop_ostatok + 2; end;
 		
 		if((ISr.Instock-ISr.OrddOut)>0)then begin
 			realqty = realqty + ISr.Instock-ISr.OrddOut;
 		end;
 		if((IS2r.Instock-IS2r.OrddOut)>0)then begin
 			realqty = realqty + IS2r.Instock-IS2r.OrddOut;
+		end;
+		if((IS3r.Instock-IS3r.OrddOut)>0)then begin
+			realqty = realqty + IS3r.Instock-IS3r.OrddOut;
 		end;
 		
 		//realqty = realqty + ISr.Instock-ISr.OrddOut + IS2r.Instock-IS2r.OrddOut;
