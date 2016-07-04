@@ -4757,6 +4757,34 @@ RecordBegin(IPVc,-,"");
   KeySegment(ToRecidStr);
   KeySegment(FromRecidStr);
   EndRecord;*/
+  
+  RecordBegin(DIVc,-,"DIVc2");
+  NewAutosyncRegister(kSyncDirectionToClient,true);
+  RecordField(Code,M4Code,10,0);
+  RecordField(Name,M4Str,60,0);
+  RecordField(DispGroups,M4UStr,200,DIVc);
+  RecordField(CType,M4Code,10,0);
+  RecordField(colnr,M4Set,46,0);
+  RecordField(LongName,M4Str,60,0);// Edit ************************** Monday, 4 July 2016 14:53:16
+  MainKeyBegin(Code,0);
+  KeySegment(Code);
+  KeyBegin(Name);
+  KeySegment(Name);
+  KeySegment(Code);
+  SubsetKeyBegin2(DICode);
+  StoreInBaseKey;
+  AppendListFieldToKeyName(DispGroups);
+  KeySegment(Code);
+  SubsetKeyBegin2(DIName);
+  StoreInBaseKey;
+  AppendListFieldToKeyName(DispGroups);
+  KeySegment(Name);
+  KeySegment(Code);
+  KeyBegin(CType);
+  KeySegment(CType);
+  KeySegment(Code);
+  EndRecord;
+  
 
 return;
 end;

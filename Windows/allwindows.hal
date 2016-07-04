@@ -11983,3 +11983,23 @@ begin
   SearchField("Найти");
   EndWindow;
 end;
+
+window DIDClass:1
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  real h1,h2,v,vs;
+  WindowBegin("Классификация товара",DIDClass,CGview,DIView);
+  SetWRect(64,80,540,200);
+//  Sizeable(-1,-1,0,0);
+  UseView(DIVc);
+  vs = 20; h1 = 100; h2 = 260;
+  EditField(h1,v=6,40,"Код",Normal,Code,false,0);
+  EditField(h1,v+=vs,200,"Наименование",Normal,Name,false,0);
+  EditField(h1,v+=vs,200,"Длинное Наим.",Normal,LongName,false,0);
+  if (HasAdvancedCRM) then begin
+    EditField(h1,v+=vs,50,"Тип",Normal,CType,false,CTypeSClass);
+    EditField(h1,v+=vs,200,"Классификация",Normal,DispGroups,false,DISClass);
+    EditField(h1,v+=vs,100,"Цвет",Normal,colnr,false,SetSClass);
+  end;
+  EndWindow;
+end;

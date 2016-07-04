@@ -84,7 +84,7 @@ begin
   	  DIr.Code = class;
   	  readfirstmain(DIr,1,true);
   	  if(DIr.CType=="TYPE")then begin
-  	    typename = DIr.Name;
+  	    typename = DIr.LongName;
   	  end;
   	  if(DIr.CType=="BRND_UKR" or DIr.CType=="BRND_WORLD")then begin
   	    brandname = DIr.Name;
