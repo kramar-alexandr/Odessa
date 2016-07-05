@@ -274,7 +274,7 @@ separator = "^";
 									StartFormat(15);
 									OutString(20,0,prevSalesData.ArtCode,false);
 									OutString(60,0,prevSalesData.Spec,false);
-									itemType = getPartOfString(prevSalesData.ItemType,1,separator);		//Extract Code of (Code^Name);				
+									itemType = getPartOfString(prevSalesData.ItemType,2,separator);		//Extract Code of (Code^Name);				
 									OutString(170,0,itemType,false);
 									OutString(270,0,qty,false);
 									OutVal(300,0,salesum/qty,M4Val,false);						//Price
@@ -364,7 +364,7 @@ separator = "^";
 							OutString(90,0,SalesData.ArtCode,false);
 							OutString(120,0,SalesData.Spec,false);
 							
-							itemType = getPartOfString(SalesData.ItemType,1,separator);		//Extract Code of (Code^Name);
+							itemType = getPartOfString(SalesData.ItemType,2,separator);		//Extract Code of (Code^Name);
 							OutString(170,0,itemType,false);
 							
 							OutString(270,0,SalesData.Quant,false);
@@ -409,7 +409,7 @@ separator = "^";
 							StartFormat(15);
 							OutString(20,0,prevSalesData.ArtCode,false);
 							OutString(60,0,prevSalesData.Spec,false);				
-							itemType = getPartOfString(prevSalesData.ItemType,1,separator);		//Extract Code of (Code^Name);				
+							itemType = getPartOfString(prevSalesData.ItemType,2,separator);		//Extract Code of (Code^Name);				
 							OutString(170,0,itemType,false);
 							OutString(270,0,qty,false);
 							OutVal(300,0,salesum/qty,M4Val,false);						//Price
