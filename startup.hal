@@ -104,6 +104,10 @@ begin
   //Report("Журнал путевых листов",WLJRClass,WLJRn,0,modCL);
 
   Export("Экспорт статистики продаж",ExpSalesStatClass,ExpSalesStatEn,modSL);// Edit ************************** Thursday, 26 February 2015 18:04:57
+  
+  Export("Экспорт контактов",ExpContactsEClass,ExpContactsEn,modSL);// Edit ************************** Thursday, 26 February 2015 18:04:57
+  
+  
   Export("Экспорт товаров в CSV розница",ExpItemsBarCodesEClass,ExpItemsBarCodesEn,modSL);// Edit ************************** Thursday, 26 February 2015 18:04:57
 	Export("Экспорт товаров в CSV опт",ExpItemsBarCodesOptEClass,ExpItemsBarCodeOptsEn,modSL);// Edit ************************** Thursday, 26 February 2015 18:04:57
 	//Export("Export RHist",ExpItemsBarCodesOptEClass,RhistvcExportEn,modDBMain);

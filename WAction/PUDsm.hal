@@ -500,3 +500,59 @@ begin
   RunReport(RepSpec,0);
   return;
 end;
+
+global
+function Boolean UserHasLimitedAccess(var string person,var string salesgroup)
+BEGIN
+  Boolean res;
+  record UserVc Userr;
+  
+  person = "";
+  salesgroup = "";
+  res = false;
+  Userr.Code = CurrentUser;
+  if (ReadFirstMain(Userr,1,true)) then begin
+    switch (Userr.limitedAccess) begin
+      case kLimitedAccessUserOnly:
+        person = Userr.Code;
+        res = true; 
+      case kLimitedAccessGroupOnly:
+        salesgroup = Userr.SalesGroup;
+        if (blank(salesgroup)) then begin
+          person = Userr.Code;
+        end;
+        res = true; 
+    end;    
+  end;
+  UserHasLimitedAccess = res;
+  RETURN;
+END;
+
+global
+procedure ORJRClassReportDefaults(Integer wn)
+BEGIN
+  record RcVc RepSpec;
+  
+  DeselectWindow(wn,false);
+  GetWindowRecord(wn,RepSpec);
+  ReportDefaults(RepSpec,"ORJRClass");  
+  RepSpec.flags[0] = 1;
+  if (Left(BuildProductCode,8)=="Standard" or (Left(BuildProductCode,6)=="WeHave")) then begin
+    RepSpec.flags[1] = 1;
+  end;
+  RepSpec.flags[2] = 1;
+  RepSpec.flags[3] = 1;
+  RepSpec.flags[4] = 1;
+  RepSpec.flags[6] = 1;
+  RepSpec.flags[7] = 1;
+  
+  RepSpec.flags[13] = 1;// Edit ************************** Tuesday, 12 July 2016 15:33:47
+  RepSpec.flags[1] = 1;// Edit ************************** Tuesday, 12 July 2016 15:34:05
+  
+  RepSpec.flags[12] = 0;
+  if (UserHasLimitedAccess(RepSpec.AccStr,RepSpec.f3)) then begin
+  end;
+  PutWindowRecord(wn,RepSpec);
+  SelectWindow(wn);
+  RETURN;
+END;

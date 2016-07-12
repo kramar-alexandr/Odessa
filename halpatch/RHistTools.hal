@@ -27,9 +27,11 @@ BEGIN
   integer longSize;
   area recordArea,blobArea,fileArea;
   integer count;
+  longint reccount;
 
   LogText(0,"Total records  " & CountRecords("RHistVc"));
   
+  reccount = 0;
   longSize = 4; 	//size of longint in bytes;
 	bytePos = 0;		//position of current byte in file
 	fileName = "RHistExportData";
@@ -40,11 +42,12 @@ BEGIN
   
   TrHs = true;
   SetAreaZeroSize(fileArea);
-  RHistr.SerNr=1981208;
+  //RHistr.SerNr=1981208;
   while (LoopMain(RHistr,1,TrHs)) begin
-  	if(RHistr.SerNr>=1981224)then begin
+  	/*if(RHistr.SerNr>=1981224)then begin
   		TrHs = false;
-  	end;
+  	end;*/
+  	
   	SetAreaZeroSize(recordArea);	
   	SetAreaZeroSize(blobArea);	
     AddRecordToArea(RHistr,"RHistVc",recordArea);
@@ -54,7 +57,8 @@ BEGIN
     GetRecordBlob(RHistr,"Math",blobArea);
     blobAreaSize = GetAreaLength(blobArea); 
     
-    if(blobAreaSize>0)then begin
+    if(blobAreaSize>0 and RHistr.SerNr!=1981219)then begin
+    	reccount = reccount + 1;
     
 			AddLongToArea(rhistAreaSize,fileArea);
 			AddAreaToArea(recordArea,fileArea);
@@ -65,23 +69,16 @@ BEGIN
 			AddLongToArea(blobAreaSize,fileArea);
 			AddAreaToArea(blobArea,fileArea);    
 			AddTextToArea(chr(13) & chr(10),fileArea);
-		
-		 // LogText(0,RHistr.SerNr &  "    __     " & bytePos & " - " & blobAreaSize);
-		
+				
 			bytePos = bytePos + blobAreaSize + 2;
 
-			// just info message
-				
-		
-		
-		
-			//stop writing at ~40Mb
-			if (bytePos>500) then begin
+			if (bytePos>50000000) then begin
 					LogText(0,GetAreaLength(fileArea) & " area before writing");
-					createfile("RHistData/" & fileName & fileCode & ".txt");
+					createfile("RHistData/new/" & fileName & fileCode & ".txt");
 					closefile;
-					WriteAreaToFile(fileArea,"RHistData/" & fileName & fileCode & ".txt",0);
+					WriteAreaToFile(fileArea,"RHistData/new" & fileName & fileCode & ".txt",0);
 					LogText(0,"File  " & fileName & fileCode & ".txt  was written" );
+					LogText(0,"reccount  " & reccount);
 					fileCode = fileCode + 1;
 					//TrHs = false;
 					SetAreaZeroSize(fileArea);	
@@ -100,13 +97,13 @@ BEGIN
 		end;	
   end; 
   
-  if (bytePos<=500 and bytePos>0) then begin
-  	WriteAreaToFile(fileArea,"RHistData/" & fileName & fileCode & ".txt",0);
+  if (bytePos<=50000000 and bytePos>0) then begin
+  	WriteAreaToFile(fileArea,"RHistData/new" & fileName & fileCode & ".txt",0);
   	LogText(0,"File  " & fileName & fileCode & ".txt  was written" );
   	LogText(0,"last record hist  " & RHistr.SerNr);
 	end;
 	
-	logtext(0,"FINISH");
+	logtext(0,"FINISH reccount " & reccount);
 	
 	
   RETURN;
@@ -128,19 +125,28 @@ begin
   integer fileNumber,i;
   area recordArea,blobArea,fileArea;
   string 200 folderName,fileName,fullName;
+  longint newsernr;
 
   longSize = 4; 	//size of longint in bytes;
 	rhistSize = 67;	//size of RHistVc in bytes;
 	bytePos = 0; 
-	folderName = "RHistData/";
+	folderName = "RHistData/old/";
 	fileName = "RHistExportData";
-
+	
+	newsernr = 1;
+	
+	/*RHistr.SerNr = 99999999;
+	while(loopbackkey("MainKey",RHistr,1,true))begin
+		recordcopy(RH,RHistr);
+		RHistr.SerNr = RHistr.SerNr + 616102;
+		recordupdate(RH,RHistr,true);
+	end;*/
 	
 	if (DirExists(folderName)) then begin
 		fileNumber = CountFilesInDir(folderName);
 		LogText(0,fileNumber & " files in " & folderName);
 	end;	
-  fileNumber = 200;
+  fileNumber = 59;
   for(i=0;i<fileNumber;i=i+1) begin
   	fullName = folderName & fileName & i & ".txt";
   	LogText(0,fullName & "  imported..");
@@ -170,19 +176,67 @@ begin
 				
 				GetAreaFromArea(fileArea,blobByteStart,blobAreaSize,blobArea);
 				SetRecordBlob(RH,"Math",blobArea);
+				RH.SerNr = newsernr;
 				RecordStore(RH,true);
-
+				newsernr = newsernr + 1;
 				
 				bytePos = bytePos + 2*longSize + blobAreaSize + 2;
-				if (Mod(RH.SerNr,20000)==0) then begin
-					LogText(0,RH.SerNr & "    imported... ");
+				if (Mod(newsernr,20000)==0) then begin
+					LogText(0,newsernr & "    imported... ");
 				end;
 			end;	
-			//LogText(0,count & "   records in file.  bytePos " & bytePos);
+		end;
+		DBFlush;
+	end; 
+  
+  LogText(0,newsernr & "    imported old...END ");
+  
+  
+  folderName = "RHistData/new/";
+	fileName = "RHistExportData";
+	
+	if (DirExists(folderName)) then begin
+		fileNumber = CountFilesInDir(folderName);
+		LogText(0,fileNumber & " files in " & folderName);
+	end;	
+  fileNumber = 59;
+  for(i=0;i<fileNumber;i=i+1) begin
+  	fullName = folderName & fileName & i & ".txt";
+  	LogText(0,fullName & "  imported..");
+  	DBHold;
+		if (FileExists(fullName)) then begin
+			SetAreaZeroSize(fileArea);
+			bytePos = 0;
+			AddFileToArea(fullName,fileArea,false);
+			fileAreaSize = GetAreaLength(fileArea);
+			LogText(0,"total size " & fileAreaSize);
+			
+			While(bytePos<fileAreaSize) begin
+				SetAreaZeroSize(recordArea);
+				SetAreaZeroSize(blobArea);
+				
+				rhistAreaSize = GetLongFromArea(fileArea,bytePos);
+				GetAreaFromArea(fileArea,bytePos+1+longSize,rhistAreaSize,recordArea);
+				GetRecordFromArea(RH,"RHistVc",0,recordArea);
+				bytePos = bytePos + longSize + rhistAreaSize;
+				blobByteStart = GetLongFromArea(fileArea,bytePos);
+				blobAreaSize = GetLongFromArea(fileArea,bytePos+longSize);
+				GetAreaFromArea(fileArea,blobByteStart,blobAreaSize,blobArea);
+				SetRecordBlob(RH,"Math",blobArea);
+				RH.SerNr = newsernr;
+				RecordStore(RH,true);
+				newsernr = newsernr + 1;
+				bytePos = bytePos + 2*longSize + blobAreaSize + 2;
+				if (Mod(newsernr,20000)==0) then begin
+					LogText(0,newsernr & "    imported... ");
+				end;
+			end;	
 		end;
 		DBFlush;
 	
 	end; 
+  
+  LogText(0,newsernr & "    imported new...END ");
   
 end;
 

@@ -306,7 +306,7 @@ begin
 				end;
 			
 				StartFormat(15);			
-				OutString(0,0,INr.Code,false);
+				OutString(0,"DblINVc",INr.Code,false);
 				OutString(2,0,INr.DispGroups,false);
 				OutString(3,0,INr.Name,false);
 				OutString(5,0,INr.BarCode & "," & Barcoder.Barcode,false);
@@ -345,7 +345,7 @@ begin
 			end;
 		
 			StartFormat(15);			
-			OutString(0,0,INr.Code,false);
+			OutString(0,"DblINVc",INr.Code,false);
 			OutString(2,0,INr.DispGroups,false);
 			OutString(3,0,INr.Name,false);
 			OutString(5,0,INr.BarCode,false);

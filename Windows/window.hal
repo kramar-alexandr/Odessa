@@ -978,6 +978,17 @@ begin
   EndWindow;
 end;
 
+window ExpContactsEClass:1
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+	real h,h2,h3,h4,v,v1,vm,vs,v2,temp;
+  WindowBegin("Ћпределите экспорт контактов",ExpContactsEClass,CGEcW,RcType);
+		SetWRect(20,80,400,470);
+		h = 100;
+
+  EndWindow;
+end;
+
 window ExpItemsBarCodesEClass:1
   wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
 begin

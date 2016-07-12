@@ -11517,6 +11517,7 @@ begin
 //  HalPushButton(h1+170,v=10,h1+170+100,v+20,"UpdCustomerAddressCUDsm","Update Address");
     tilenr = 1;
   TileButton(tilenr,"Контакт"); tilenr = tilenr + 1;
+  TileButton(tilenr,"Сотрудник"); tilenr = tilenr + 1;// Edit ************************** Tuesday, 5 July 2016 10:02:26
   TileButton(tilenr,"Доставка"); tilenr = tilenr + 1;
   if (UserCanAction("AllowConditTileCU",true)) then begin
     TileButton(tilenr,"Условия"); tilenr = tilenr + 1;
@@ -11533,15 +11534,15 @@ begin
   end;
   if (StandardHansa==false) then begin
     if (GuiType==kGuiMetro) then begin//UGLY
-      TileButton(tilenr,"Другое"); tilenr = tilenr + 1;
+      //TileButton(tilenr,"Другое"); tilenr = tilenr + 1;// Edit ************************** Tuesday, 5 July 2016 10:01:00
     end else begin
-      TileButton(tilenr,"Польз.поля"); tilenr = tilenr + 1;
+      //TileButton(tilenr,"Польз.поля"); tilenr = tilenr + 1;// Edit ************************** Tuesday, 5 July 2016 10:00:45
     end;
   end;
   TileButton(tilenr,"Заметки"); tilenr = tilenr + 1;   
-  if (CUr.CUType!=0 and HasCharts) then begin
+  /*if (CUr.CUType!=0 and HasCharts) then begin// Edit ************************** Tuesday, 5 July 2016 10:00:00
     TileButton(tilenr,"BI"); tilenr = tilenr + 1;
-  end;
+  end;*/
   tilenr = 1;
   Tile(tilenr,290,true,tilenr,InvAddr0); tilenr = tilenr + 1;
   v=6;
@@ -11616,6 +11617,42 @@ begin
   RlCol(435,435,"Должность",JobTitle,false);
   RlCol(535,535,"E-mail",ContacteMail,false);
 //  RlCol(-1,-1,"",Invalid,true);
+
+	Tile(tilenr,240,false,tilenr,DelAddr0); tilenr = tilenr + 1;// Edit ************************** Tuesday, 5 July 2016 10:03:57
+  v=6;
+  
+  EditField(h,v,120,"Дата рождения",Normal,BirthDate,false,PasteCurDate);
+  EditField(h,v+=20,120,"Номер паспорта",Normal,PassportNr,false,0);
+  EditField(h,v+=vs,120,"ИНН",Normal,VATNr,false,0);
+	EditField(h,v+=vs,120,"E-mail",Normal,eMail,false,0);
+	EditField(h,v+=vs,120,"Мобильный телефон",Normal,Phone,false,0);
+	EditField(h,v+=vs,120,"Доп. телефон",Normal,AltPhone,false,0);
+	EditField(h,v+=vs,-20,"Адрес прописки",Normal,InvAddr0,false,0);
+	EditField(h,v+=vs,-20,"Адрес прописки",Normal,InvAddr1,false,0);
+	EditField(h,v+=vs,-20,"Адрес прописки",Normal,InvAddr2,false,0);
+	
+	EditField(h,v+=vs,-20,"Адрес прожив.",Normal,DelAddr0,false,0);
+	EditField(h,v+=vs,-20,"Адрес прожив.",Normal,DelAddr1,false,0);
+	EditField(h,v+=vs,-20,"Адрес прожив.",Normal,DelAddr2,false,0);
+	
+	ButtonFrame(h3,vm=(v+=40),100,4,"Семейное положение");
+	RadioButton(h3,v,0,0,"Не женат",MarStatus);
+	RadioButton(h3,v+=17,1,0,"Замужем",MarStatus);
+	RadioButton(h3,v+=17,2,0,"В разводе",MarStatus);
+	RadioButton(h3,v+=17,3,0,"Вдовa/-ец",MarStatus);
+	
+	v=v-vs*2;
+	EditField(h,v+=vs,250,"ФИО супруга",Normal,Person,false,ContactSClass);
+	EditField(h,v+=vs,120,"Телефон супруга",Normal,Mobile,false,ContactSClass);
+	
+	EditField(h,v+=vs,-20,"Дети 1",Normal,Salutation1,false,0);
+  EditField(h,v+=vs,-20,"Дети 2",Normal,Salutation2,false,0);
+  EditField(h,v+=vs,-20,"Дети 3",Normal,Salutation3,false,0);
+  
+  EditField(h,v+=vs,80,"Дата трудоустройства",Normal,DateCreated,false,PasteCurDate);
+  EditField(h2,v,80,"Послед. изменение",Normal,DateChanged,false,PasteCurDate);
+	EditField(h,v+=vs,120,"Дата увольнения",Normal,VATNrCheckDate,false,PasteCurDate);
+	
   Tile(tilenr,240,false,tilenr,DelAddr0); tilenr = tilenr + 1;
   v=6;
   if (HasLocalization("GBR,LVA,EST,SWE")) then begin
@@ -11841,7 +11878,7 @@ begin
   	RadioButton(h2,v+=17,0,0,"Взрослый",AgeStatus);
   	RadioButton(h2,v+=17,2,0,"Пенсионер",AgeStatus);*/
   end;
-
+	/*// Edit ************************** Tuesday, 5 July 2016 10:01:41
   if (StandardHansa==false) then begin
     Tile(tilenr,270,false,tilenr,UserStr1); tilenr = tilenr + 1;
     v=6;h=180;
@@ -11892,14 +11929,14 @@ begin
 
     EditField(h,v+=vs,-20,"Адресная книга",Normal,AddressBooks,false,0);
   end;
-
+*/
   Tile(tilenr,500,false,tilenr,Math2); tilenr = tilenr + 1;
   StaticText(50,v=20,"Записки",true);   
   TextField(60,v-5,-20,370,Math2,0);
-  if (CUr.CUType!=0 and HasCharts) then begin
+  /*if (CUr.CUType!=0 and HasCharts) then begin// Edit ************************** Tuesday, 5 July 2016 09:59:41
     Tile(tilenr,400,false,tilenr,-); tilenr = tilenr + 1;
     ChartArea(10,6,-10,390,"$CUDCLass_BIChart");
-  end;
+  end;*/
 
   if (GuiType==kGuiMetro) then begin // Temporarily disabled on Windows 8
     if (UserCanReport("CustPSRn","",true)) then begin
@@ -12003,3 +12040,102 @@ begin
   end;
   EndWindow;
 end;
+
+
+window PurOrdJRClass:1
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  real h,v,vm,vs;
+  WindowBegin("Определите журнал заказов поставщикам",PurOrdJRClass,CGRcW,RcType);
+  SetWRect(20,80,450,270);
+  v= 6; vs = 20; h = 150;
+  PeriodField(h,v,"Период");
+  EditFieldTL(h,v+=vs, 150,"Заказ поставщику",   M4Str,Normal,30,f1,false,0);
+  EditFieldTL(h,v+=vs ,150,"Поставщик",M4UStr,Normal,50,f2,false,VESClass);
+  if (HasContactClassification) then begin
+    EditFieldTL(h,v+=20 ,150,"Классификация",M4UStr,Normal,60,f4,false,CClassSClass);
+    EditFieldTL(h,v+=20 ,70,"Вид классификации",M4UStr,Normal,30,f5,false,CTypeSClass);
+  end;
+  if (IsEnterprise) then begin
+    EditFieldTL(h,v+=vs ,150,"Тип",M4UStr,Normal,5,FirstAcc,false,POrderClassSClass);
+  end;
+  if (HasMultiLocations) then begin
+    EditFieldTL(h,v+=vs, 100,"Склад",M4UStr,Normal,10,f3,false,LocationSClass);
+  end;
+  EditField(h,v+=vs,200,"Поиск",Normal,f6,false,0);// Edit ************************** Tuesday, 12 July 2016 15:32:03
+  
+  
+  ButtonFrame(h,vm=(v+=41),123,2,"Функция");
+  RadioButton(h,v,0,0,"Сводный",ArtMode);
+  RadioButton(h,v+=16,1,0,"Подробный",ArtMode);
+  EndWindow;
+end;
+
+window ORJRClass:1
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  real h,v,vm,vs;
+  WindowBegin("Определите журнал счетов клиентам",ORJRClass,CGRcW,RcType);
+  SetWRect(20,80,515,410);
+  v= 6; vs = 20; h=160;
+  EditFieldTL(h,v, 150,"Номер счета",   M4Str,Normal,30,f1,false,0);
+  PeriodField(h,v+=vs,"Период");
+  EditFieldTL(h,v+=vs ,150,"Клиенты",M4UStr,Normal,20,f2,false,CUSClass);
+  if (HasSalesman) then begin
+    EditFieldTL(h,v+=vs ,100,"Продавец",M4UStr,Normal,10,AccStr,false,UserSClass);
+    if (StandardHansa==false) then begin
+      EditFieldTL(h,v+=vs ,50,"Группа продажи",M4UStr,Normal,10,f3,false,SalesGroupSClass);
+    end;
+  end;
+  if (IsEnterprise) then begin
+    EditFieldTL(h,v+=vs, 150,"Вид счёта",   M4UStr,Normal,11,ObjStr,false,OrderClassSClass);
+  end;
+  EditFieldTL(h,v+=vs, 150,"Товар",   M4UStr,Normal,20,LastAcc,false,INSClass);
+  if (HasMultiLocations) then begin
+    EditFieldTL(h,v+=vs, 150,"Склад",M4UStr,Normal,10,f4,false,LocationSClass);
+  end;
+  EditField(h,v+=vs,200,"Поиск",Normal,f6,false,0);// Edit ************************** Tuesday, 12 July 2016 15:31:55
+  if (IsEnterprise) then begin
+    CheckBox(h,v+=20,0,"Только зарезервированные",flags[8]);
+  end;
+  if (HasTREO) then begin
+    CheckBox(h,v+=16,0,"Показ. TREO инф.",flags[10]);
+  end;
+  ButtonFrame(h=30,vm=(v+=41),123,3,"Функция");
+  RadioButton(h,v,0,0,"Сводный",ArtMode);
+  RadioButton(h,v+=16,1,0,"Подробный",ArtMode);
+  RadioButton(h,v+=16,2,0,"Без НДС",ArtMode);
+  ButtonFrame(h+=143,v = vm,143,6,"Статус");
+  if (HasModSL) then begin
+    CheckBox(h,v,0,"Сч/ф не отгруженные",flags[4]); v = v + 16;
+  end;
+  if (HasModSL and HasModIN) then begin
+    CheckBox(h,v,0,"Сч/ф частично отгруж.",flags[13]); v = v + 16;
+  end;
+  if (HasModSL) then begin
+    CheckBox(h,v,0,"Не отфактурир.",flags[1]); v = v + 16;
+  end;
+  if (HasModIN) then begin
+    CheckBox(h,v,0,"Частично отгруж.",flags[2]); v = v + 16;
+  end;
+  CheckBox(h,v,0,"Завершено",flags[3]); v = v + 16;
+  if (HasModSL and HasModIN) then begin
+    CheckBox(h,v,0,"Отгруж. не отфактур.",flags[9]); v = v + 16;
+  end;
+  EndFrame;
+  ButtonFrame(h+=163, v = vm,130,2,"Сортировать по");
+  RadioButton(h,v,0,0,"№ счета",flags[5]);
+  RadioButton(h,v+=16,1,0,"Клиентам",flags[5]);
+  ButtonFrame(h,v+=40,130,3,"Включать");
+  RadioButton(h,v,0,0,"Не закрытые",flags[12]);
+  RadioButton(h,v+=16,1,0,"Все",flags[12]);
+  RadioButton(h,v+=16,2,0,"Только закрытые",flags[12]);
+/*## code comenmted out in hal file as well
+  ButtonFrame(h+=148, v = vm,123,2,"Выводить");
+  CheckBox(h,v,0,"P_rinted",flags[6]);
+  CheckBox(h,v+=16,0,"No_t Printed",flags[7]);
+*/
+  //CheckBox(h,v+=32,0,"Show Reserved Orders only",flags[8]);
+  EndWindow;
+end;
+
