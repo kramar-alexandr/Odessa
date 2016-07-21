@@ -9,6 +9,7 @@ external procedure HTDetailLevel(integer, var string);
 external procedure HTPrintedf(integer, integer, var string);
 external procedure HTCusts(string, string, var string);
 external procedure HTSaleMan(string, var string); 
+external procedure ExtractObj(string,var Integer,var string);// Edit ************************** Wednesday, 13 July 2016 09:57:55
 
 procedure HTOrdStatus2(Integer invnotd, Integer finished,Integer pardelv,Integer noti,Integer delnotinv, var string res)
 begin
@@ -188,6 +189,7 @@ begin
   boolean foundf;// Edit ************************** Tuesday, 12 July 2016 15:54:12
   string 50 closelocation;
   record UserVc USr;
+  integer pos;
   
   USr.Code = currentuser;
   if(readfirstmain(USr,1,true))then begin
@@ -359,7 +361,16 @@ begin
 
 		
 		if (nonblank(RepSpec.f6) and (!StringInText(RepSpec.f6,Letr))) then begin// Edit ************************** Tuesday, 12 July 2016 15:52:23
-			 testf = false;
+			 foundf = false;
+			 pos = 0;
+			 ExtractObj(RepSpec.f6,pos,tstr);
+			 if(tstr!=RepSpec.f6)then begin
+			 		foundf = true;
+					While(nonblank(tstr)) begin
+						foundf = foundf and StringInText(tstr,Letr);
+						ExtractObj(RepSpec.f6,pos,tstr);
+					end; 
+				end;
 		end;
     
     
@@ -508,6 +519,7 @@ L30:;
           if (RepSpec.flags[10]==1) then begin
             StartFormat(15);
             OutString(0,"DblORVc",ORr.SerNr,false);
+            OutString(40,0,ORr.OrderClass,false);// Edit ************************** Wednesday, 13 July 2016 09:51:26
             OutDate(90,0,ORr.OrdDate,true);
             OutString(100,0,ORr.Addr0,false);
             if (ORr.TREONr>0) then begin
@@ -524,8 +536,11 @@ L30:;
           end else begin
             StartFormat(15);
             OutString(0,"DblORVc",ORr.SerNr,false);
+            OutString(40,0,ORr.OrderClass,false);// Edit ************************** Wednesday, 13 July 2016 09:51:25
             OutDate(120,0,ORr.OrdDate,true);
             OutString(140,0,ORr.Addr0,false);
+            OutString(220,0,ORr.Comment,false);// Edit ************************** Wednesday, 13 July 2016 09:49:06
+            OutString(390,0,ORr.CustomStatusFlagText,false);// Edit ************************** Wednesday, 13 July 2016 09:49:06
             if (HasMultiCurrency) then begin
               OutVal(440,0,iv,M4Val,true);
               OutString(445,0,ORr.CurncyCode,false);

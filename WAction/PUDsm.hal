@@ -545,6 +545,7 @@ BEGIN
   RepSpec.flags[4] = 1;
   RepSpec.flags[6] = 1;
   RepSpec.flags[7] = 1;
+  RepSpec.flags[9] = 1;
   
   RepSpec.flags[13] = 1;// Edit ************************** Tuesday, 12 July 2016 15:33:47
   RepSpec.flags[1] = 1;// Edit ************************** Tuesday, 12 July 2016 15:34:05

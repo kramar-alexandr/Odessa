@@ -334,7 +334,7 @@ begin
   Maintenance("CityVcFromNPCityVcVClass",CityVcFromNPCityVcVClass,CityVcFromNPCityVcMn,modDBMain);//Edit-------------------Vitalii 11:27 23.05.2016
   Maintenance("Export RHist",MyVClass,RhistvcExportMn,modDBMain);	//Edit----------------------Dima  30.05.2016
   Maintenance("Import RHist",MyVClass,RhistvcImportMn,modDBMain);	//Edit----------------------Dima  30.05.2016
-  Maintenance("Delete RHist",MyVClass,ExpRegPLHistEn,modDBMain);
+  Maintenance("Delete RHist",MyVClass,RhistvcCleanMn,modDBMain);
 
   Import("€мпорт цен",PLImportIClass,PLImportIn,modDI); //Added********************Dima 20.11.2014
   Import("€мпорт товаров",INImportIClass,INImportIn,modIN);//Added********************Dima 20.11.2014

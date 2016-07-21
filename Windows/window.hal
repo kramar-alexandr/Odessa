@@ -409,10 +409,12 @@ begin
   SetWRect(20,80,400,200);
   h = 70; vs = 20; v = 6;
   EditFieldTL(h,v,290,"Поиск",M4UStr,Normal,41,f1,false,IN1SClass);
-  v=50;
-  ButtonFrame(h-38,v,320,2,"Сортировать отчет по");
+  StaticText(h,v+30,"Гибкий поиск через запятую XXX,YYY,ZZZ",false);
+  v=80;
+  ButtonFrame(h-38,v,320,3,"Сортировать отчет по");
   RadioButton(h+200,v,0,0,"Коду товара",ArtMode);
-  RadioButton(h+200,v+20,1,0,"Названию",ArtMode);
+  RadioButton(h+200,v+=20,1,0,"Названию",ArtMode);
+  RadioButton(h+200,v+=20,2,0,"Штрих-коду",ArtMode);
 
   EndWindow;
 
@@ -428,11 +430,13 @@ begin
   SetWRect(20,80,400,200);
   h = 120; vs = 20; v = 6;
   EditFieldTL(h,v,200,"Поиск",M4UStr,Normal,41,f1,false,INSClass);
-	EditFieldTL(h,v+20,200,"Остатки на складах",M4UStr,Normal,41,f2,false,LocationSClass);
-  v=80;h=70;
-  ButtonFrame(h-38,v,320,2,"Сортировать отчет по");
+  StaticText(h,v+=30,"Гибкий поиск через запятую XXX,YYY,ZZZ",false);
+	EditFieldTL(h,v+=20,200,"Остатки на складах",M4UStr,Normal,41,f2,false,LocationSClass);
+  v=80+30;h=70;
+  ButtonFrame(h-38,v,320,3,"Сортировать отчет по");
   RadioButton(h+200,v,0,0,"Коду товара",ArtMode);
-  RadioButton(h+200,v+20,1,0,"Названию",ArtMode);
+  RadioButton(h+200,v+=20,1,0,"Названию",ArtMode);
+  RadioButton(h+200,v+=20,2,0,"Штрих-коду",ArtMode);
 
   EndWindow;
 
@@ -2688,3 +2692,51 @@ Integer i;
 
   EndWindow;
 end; //Edit***************************Sasha2,14:57 25.05.2016 }
+
+
+window ORJRClass:1
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  real h,v,vm,vs;
+  WindowBegin("Определите журнал счетов клиентам",ORJRClass,CGRcW,RcType);
+  SetWRect(20,80,515,410);
+  v= 6; vs = 20; h=160;
+  EditFieldTL(h,v, 150,"Номер счета",   M4Str,Normal,30,f1,false,0);
+  PeriodField(h,v+=vs,"Период");
+  EditFieldTL(h,v+=vs ,150,"Клиенты",M4UStr,Normal,20,f2,false,CUSClass);
+	EditFieldTL(h,v+=vs ,100,"Продавец",M4UStr,Normal,10,AccStr,false,UserSClass);
+	EditFieldTL(h,v+=vs ,50,"Группа продажи",M4UStr,Normal,10,f3,false,SalesGroupSClass);
+  EditFieldTL(h,v+=vs, 150,"Вид счёта",   M4UStr,Normal,11,ObjStr,false,OrderClassSClass);
+  EditFieldTL(h,v+=vs, 150,"Товар",   M4UStr,Normal,20,LastAcc,false,INSClass);
+  EditFieldTL(h,v+=vs, 150,"Склад",M4UStr,Normal,10,f4,false,LocationSClass);
+  EditField(h,v+=vs,200,"Поиск",Normal,f6,false,0);// Edit ************************** Tuesday, 12 July 2016 15:31:55
+  StaticText(h,v+=30,"Гибкий поиск через запятую XXX,YYY,ZZZ",false);
+  CheckBox(h,v+=20,0,"Только зарезервированные",flags[8]);
+
+  ButtonFrame(h=30,vm=(v+=41),123,3,"Функция");
+  RadioButton(h,v,0,0,"Сводный",ArtMode);
+  RadioButton(h,v+=16,1,0,"Подробный",ArtMode);
+  RadioButton(h,v+=16,2,0,"Без НДС",ArtMode);
+  ButtonFrame(h+=143,v = vm,143,6,"Статус");
+  CheckBox(h,v,0,"Сч/ф не отгруженные",flags[4]); v = v + 16;
+  CheckBox(h,v,0,"Сч/ф частично отгруж.",flags[13]); v = v + 16;
+  CheckBox(h,v,0,"Не отфактурир.",flags[1]); v = v + 16;
+  CheckBox(h,v,0,"Частично отгруж.",flags[2]); v = v + 16;
+  CheckBox(h,v,0,"Завершено",flags[3]); v = v + 16;
+  CheckBox(h,v,0,"Отгруж. не отфактур.",flags[9]); v = v + 16;
+  EndFrame;
+  ButtonFrame(h+=163, v = vm,130,2,"Сортировать по");
+  RadioButton(h,v,0,0,"№ счета",flags[5]);
+  RadioButton(h,v+=16,1,0,"Клиентам",flags[5]);
+  ButtonFrame(h,v+=40,130,3,"Включать");
+  RadioButton(h,v,0,0,"Не закрытые",flags[12]);
+  RadioButton(h,v+=16,1,0,"Все",flags[12]);
+  RadioButton(h,v+=16,2,0,"Только закрытые",flags[12]);
+/*## code comenmted out in hal file as well
+  ButtonFrame(h+=148, v = vm,123,2,"Выводить");
+  CheckBox(h,v,0,"P_rinted",flags[6]);
+  CheckBox(h,v+=16,0,"No_t Printed",flags[7]);
+*/
+  //CheckBox(h,v+=32,0,"Show Reserved Orders only",flags[8]);
+  EndWindow;
+end;

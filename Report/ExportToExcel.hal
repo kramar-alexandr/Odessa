@@ -243,6 +243,8 @@ begin
 	OutString(6,0,"Цена",false);
 	OutString(7,0,"Скидка,%",false);
 	OutString(8,0,"Сумма",false);
+	OutString(8,0,"Рекомендованная розница",false);// Edit ************************** Wednesday, 13 July 2016 11:26:32
+
 	EndFormat;
 	Black_Divider(0,1);
 
@@ -256,6 +258,8 @@ begin
 		OutString(6,0,ORrw.Price,false);
 		OutString(7,0,ORrw.vRebate,false);
 		OutString(8,0,ORrw.Sum,false);
+		OutString(8,0,ORrw.RRPPrice,false);// Edit ************************** Wednesday, 13 July 2016 11:26:25
+
 		EndFormat;	
 	end;		
 	EndJob;

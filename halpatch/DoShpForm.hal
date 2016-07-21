@@ -426,6 +426,8 @@ BEGIN
       	OUTFORMFIELD("F_MYSUMWITHDEB",ORrw.Sum);
       end;
            
+      OUTFORMFIELD("MYF_RRPPRice",ORrw.RRPPrice);// Edit ************************** Wednesday, 13 July 2016 11:23:46     
+      
       if (FIELDINFORM("F_MYPRICEWITHDEB")) then begin	//Edit by Victor 09.01.15
       	pricewithdeb = ORrw.Sum / ORrw.Quant;
       	OUTFORMFIELD("F_MYPRICEWITHDEB",pricewithdeb);

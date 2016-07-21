@@ -410,6 +410,7 @@ begin
   string 20 char, nextChar;
   integer nameLen;
   boolean ifBegin;
+  record PLVc PLr;
 
   res = 0;
   insertmode = 1;//Rs_insert
@@ -975,6 +976,16 @@ begin
   end;
   for (i=0;i<rwcnt;i=i+1) begin
     MatRowGet(ORr,i,ORrw);
+    
+    if(nonblank(ORrw.ArtCode) and ORrw.RRPPrice==0)then begin
+    	PLr.ArtCode = ORrw.ArtCode;
+    	PLr.PLCode = "RRP";
+    	if(readfirstmain(PLr,2,true))then begin
+    		ORrw.RRPPrice = PLr.ExVatPrice;
+    		MatRowPut(ORr,i,ORrw);
+    	end;
+    	
+    end;
     switch (ORrw.stp) begin
       case 1:
         if (nonblank(ORrw.Spec) and blank(ORrw.ArtCode) and blank(ORrw.Quant)) then begin

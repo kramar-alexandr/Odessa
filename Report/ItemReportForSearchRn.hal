@@ -219,6 +219,8 @@ begin
 	integer i,pos,startPos;
 	record LocationVc Locr;
 	record BarcodeVc Barcoder;
+	record LetVc Letr;// Edit ************************** Tuesday, 12 July 2016 15:52:10
+  string 50 tstr;
 
 	searchStr = RepSpec.f1;
 	BlockLoad(LMb); //Edit***************************Sasha2,10:14 23.01.2015
@@ -228,6 +230,9 @@ begin
 	end;
 	if (RepSpec.ArtMode == 1) then begin
 	keySort = "Name";
+	end;
+	if (RepSpec.ArtMode == 2) then begin
+	keySort = "BarCode";
 	end;
 
 	StartReportJob("Поиск товаров");
@@ -239,6 +244,9 @@ begin
 	end;
 	if (keysort=="Name") then begin
 	Header(rw,"Сортировка по  названию товара",1);
+	end;
+	if (keysort=="BarCode") then begin
+	Header(rw,"Сортировка по  штрих-коду товара",1);
 	end;
 	Header(rw+1,"Cклад:  " & RepSpec.f2,1);	
 	EndHeader;
@@ -330,9 +338,31 @@ begin
 	While (LoopKey(keySort,INr,1,continue)) begin
 		check=true;
 		
-		if (not (FindSubString(searchStr,INr.Code)  or FindSubString(searchStr,INr.Name) or 	FindSubString(searchStr,INr.DispGroups) or  FindSubString(searchStr,INr.BarCode)or  FindSubString(searchStr,INr.AlternativeCode))) then begin
+		RecordClear(Letr);
+		AddToText(INr.Code & ";",Letr);
+		AddToText(INr.Name & ";",Letr);
+		AddToText(INr.DispGroups & ";",Letr);
+		AddToText(INr.BarCode & ";",Letr);
+		AddToText(INr.AlternativeCode & ";",Letr);
+
+		
+		/*if (not (FindSubString(searchStr,INr.Code)  or FindSubString(searchStr,INr.Name) or 	FindSubString(searchStr,INr.DispGroups) or  FindSubString(searchStr,INr.BarCode)or  FindSubString(searchStr,INr.AlternativeCode))) then begin
 					check = false;
+		end;*/
+		
+		if (nonblank(searchStr) and (!StringInText(searchStr,Letr))) then begin// Edit ************************** Tuesday, 12 July 2016 15:52:23
+			 check = false;
+			 pos = 0;
+			 ExtractObj(searchStr,pos,tstr);
+			 if(tstr!=searchStr)then begin
+					check = true;
+					While(nonblank(tstr)) begin
+						check = check and StringInText(tstr,Letr);
+						ExtractObj(searchStr,pos,tstr);
+					end; 
+				end;
 		end;
+		
 	
 		if (check) then begin
 

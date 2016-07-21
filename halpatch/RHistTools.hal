@@ -76,7 +76,7 @@ BEGIN
 					LogText(0,GetAreaLength(fileArea) & " area before writing");
 					createfile("RHistData/new/" & fileName & fileCode & ".txt");
 					closefile;
-					WriteAreaToFile(fileArea,"RHistData/new" & fileName & fileCode & ".txt",0);
+					WriteAreaToFile(fileArea,"RHistData/new/" & fileName & fileCode & ".txt",0);
 					LogText(0,"File  " & fileName & fileCode & ".txt  was written" );
 					LogText(0,"reccount  " & reccount);
 					fileCode = fileCode + 1;
@@ -98,7 +98,7 @@ BEGIN
   end; 
   
   if (bytePos<=50000000 and bytePos>0) then begin
-  	WriteAreaToFile(fileArea,"RHistData/new" & fileName & fileCode & ".txt",0);
+  	WriteAreaToFile(fileArea,"RHistData/new/" & fileName & fileCode & ".txt",0);
   	LogText(0,"File  " & fileName & fileCode & ".txt  was written" );
   	LogText(0,"last record hist  " & RHistr.SerNr);
 	end;

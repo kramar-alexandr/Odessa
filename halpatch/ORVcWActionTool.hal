@@ -111,6 +111,7 @@ BEGIN
   Time blankt;
   string 60 sz,msk,mskrep;
   string 200 varsubset;
+  record PLVc PLr;// Edit ************************** Wednesday, 13 July 2016 11:01:50
 
   chsum = false;
   chrqty = false;
@@ -140,6 +141,13 @@ BEGIN
     if (NonBlank(CurrentUser) and !INVc_AllowSales(INr,ErrorCode)) then begin //Edit***************************Sasha2,16:22 14.07.2014
       warning = USetStr(ErrorCode);
     end;
+    
+    PLr.PLCode = "RRP";
+    PLr.ArtCode = ORRw.ArtCode;
+    if(readfirstmain(PLr,2,true))then begin
+    	ORRw.RRPPrice = PLr.ExVatPrice;
+    end;
+    
     ORrw.OrderType = ORr.OrderType;
     ORrw.Price = price;
     ORrw.Spec = curitemname;

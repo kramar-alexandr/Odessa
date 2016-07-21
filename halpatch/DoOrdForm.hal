@@ -361,6 +361,8 @@ LkInvoiceRowTypeNormal:;
       PrintValue("F_CONVERSIONVAL2",INr.Conversion2,M4UVal,LangNrr,SysFormatRec,false);
       
       
+      OUTFORMFIELD("MYF_RRPPRice",ORrw.RRPPrice);// Edit ************************** Wednesday, 13 July 2016 11:23:46     
+      
       OUTFORMFIELD("F_SOURCE",ORrw.Source);      
       OUTFORMFIELD("F_KOSTPRIS",ORrw.BasePrice);      
       OUTFORMFIELD("F_ROWWIDTH",ORrw.UnitXval);

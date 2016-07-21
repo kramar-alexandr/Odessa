@@ -4,6 +4,7 @@ external function roundmode DefaultRoundMode();
 external procedure CutDecimals(val, var string);
 external procedure HT2Per(Date, Date , var string);
 external procedure GetCurRateText(var string,val,val,val);
+external procedure ExtractObj(string,var Integer,var string);// Edit ************************** Wednesday, 13 July 2016 09:57:55
 
 global
 procedure StockMovJRn(record RcVc RepSpec)
@@ -22,6 +23,8 @@ begin
   record MainStockBlock MainStockRec;
   string 255 frin,toin,posstr; //Edit***************************Sasha2,17:35 11.02.2016
   row StockMovVc SMrw;
+  record LetVc Letr;// Edit ************************** Tuesday, 12 July 2016 15:52:10
+  integer pos;
   
   BlockLoad(MainStockRec);
   afr = FirstInRange(RepSpec.f1,50);
@@ -193,6 +196,39 @@ begin
       if (SMr.ProdSerNr<>RepSpec.long1) then begin
         testf = false;
       end;
+    end;
+    
+    if(testf)then begin
+			RecordClear(Letr);
+			AddToText(SMr.SerNr & ";",Letr);
+			AddToText(SMr.Reason & ";",Letr);
+			AddToText(SMr.OrdTransDate & ";",Letr);
+			AddToText(SMr.SentTransDate & ";",Letr);
+			AddToText(SMr.TransDate & ";",Letr);
+			AddToText(SMr.FrLocation & ";",Letr);
+			AddToText(SMr.ThrouLocation & ";",Letr);
+			AddToText(SMr.ToLocation & ";",Letr);
+			AddToText(SMr.FrPos & ";",Letr);
+			AddToText(SMr.ToPos & ";",Letr);
+			AddToText(SMr.StockMovType & ";",Letr);
+			AddToText(SMr.SalesGroup & ";",Letr);
+			AddToText(SMr.Objects & ";",Letr);
+			AddToText(SMr.Comment & ";",Letr);
+			AddToText(SMr.OfficialSerNr & ";",Letr);
+		
+		
+			if (nonblank(RepSpec.f7) and (!StringInText(RepSpec.f7,Letr))) then begin// Edit ************************** Tuesday, 12 July 2016 15:52:23
+				 testf = false;
+				 pos = 0;
+				 ExtractObj(RepSpec.f7,pos,tstr);
+				 if(tstr!=RepSpec.f7)then begin
+						testf = true;
+						While(nonblank(tstr)) begin
+							testf = testf and StringInText(tstr,Letr);
+							ExtractObj(RepSpec.f7,pos,tstr);
+						end; 
+					end;
+			end;
     end;
 
     if (testf) then begin

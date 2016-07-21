@@ -1318,6 +1318,8 @@ BEGIN
       if (UserCanAction("ChangePrices",true)==false) then begin res = false; end;
     case "Price":
       if (UserCanAction("ChangeUnitPrices",true)==false) then begin res = false; end;
+    case "RRPPrice":
+      if (UserCanAction("ViewCostPrice",true)==false) then begin res = false; end;// Edit ************************** Wednesday, 13 July 2016 14:03:16
     case "vRebate":
       if (UserCanAction("ChangeUnitPrices",true)==false) then begin res = false; end;
     case "Sum":

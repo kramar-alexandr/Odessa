@@ -9,6 +9,7 @@ external procedure HTCustClassType(string,var string);
 external function Boolean SetInSet2(string,string);
 external procedure ClassTypef(string,string,var Boolean);
 external function Boolean FindStringInString(string,string);// Edit ************************** Tuesday, 12 July 2016 11:11:00
+external procedure ExtractObj(string,var Integer,var string);// Edit ************************** Wednesday, 13 July 2016 09:57:55
 
 
 
@@ -96,6 +97,7 @@ begin
   array string 20 acur;
   Integer curcnt;
   record LetVc Letr;// Edit ************************** Tuesday, 12 July 2016 15:52:10
+  integer pos;
 
 
   rw = 1;
@@ -163,27 +165,7 @@ begin
     end;
     if (TrHs) then begin
       testf = true;
-   // Edit Start ---------------------------------------------- Edit Start
-	//Tuesday, 12 July 2016 15:52:33
-	   
-      RecordClear(Letr);
-      AddToText(POr.Comment & ";",Letr);
-      AddToText(POr.Location & ";",Letr);
-      AddToText(POr.Addr1 & ";",Letr);
-      AddToText(POr.Addr0 & ";",Letr);
-      AddToText(POr.VECode & ";",Letr);
-      AddToText(POr.VECode & ";",Letr);
-			AddToText(POr.TransDate & ";",Letr);
-			AddToText(POr.SalesMan & ";",Letr);
-			AddToText(POr.POClass & ";",Letr);
-			AddToText(POr.VEContact & ";",Letr);
-			
-      if (nonblank(RepSpec.f6) and (!StringInText(RepSpec.f6,Letr))) then begin// Edit ************************** Tuesday, 12 July 2016 15:52:23
-         testf = false;
-      end;
-      
-	// Edit End ---------------------------------------------- Edit End
-	
+   
       if (nonblank(RepSpec.f2) and (RepSpec.f2<>POr.VECode)) then begin
          testf = false;
       end;
@@ -194,6 +176,41 @@ begin
         testf = false; 
       end;
       if (DateInRange(POr.TransDate,RepSpec.sStartDate,RepSpec.sEndDate)==false) then begin testf = false; end;
+      
+      
+      if(testf)then begin
+				// Edit Start ---------------------------------------------- Edit Start
+		//Tuesday, 12 July 2016 15:52:33
+		 
+				RecordClear(Letr);
+				AddToText(POr.Comment & ";",Letr);
+				AddToText(POr.Location & ";",Letr);
+				AddToText(POr.Addr1 & ";",Letr);
+				AddToText(POr.Addr0 & ";",Letr);
+				AddToText(POr.VECode & ";",Letr);
+				AddToText(POr.VECode & ";",Letr);
+				AddToText(POr.TransDate & ";",Letr);
+				AddToText(POr.SalesMan & ";",Letr);
+				AddToText(POr.POClass & ";",Letr);
+				AddToText(POr.VEContact & ";",Letr);
+			
+				if (nonblank(RepSpec.f6) and (!StringInText(RepSpec.f6,Letr))) then begin// Edit ************************** Tuesday, 12 July 2016 15:52:23
+					 testf = false;
+					 pos = 0;
+					 ExtractObj(RepSpec.f6,pos,tstr);
+					 if(tstr!=RepSpec.f6)then begin
+							testf = true;
+							While(nonblank(tstr)) begin
+								testf = testf and StringInText(tstr,Letr);
+								ExtractObj(RepSpec.f6,pos,tstr);
+							end; 
+						end;
+				end;
+			
+		// Edit End ---------------------------------------------- Edit End
+	
+      end;
+      
       if (testf) then begin
         VEr.Code = POr.VECode;
         if ReadFirstMain(VEr,1,true) then begin
