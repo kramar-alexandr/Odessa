@@ -73,7 +73,7 @@ remote updating function longint AddSMStoStack(string, string, string,string,str
 remote updating function string 255  CheckAndSendSMS(longint);	//Edit----------------------Dima  28.08.2015
 remote function LongInt HoursDiffWithoutRestDays(Date,Time,Date,Time);
 remote updating function boolean CancelLogisticsOrderFromStocMove(var record  ORVc, integer);//Edit----------------------Dima  25.01.2016
-
+remote procedure CalcCustBalrem(var record ORVc);
 
 global //Edit***************************Sasha2,15:51 04.02.2015 {
 function Integer ORLClassRowColor(record ORVc ORr)
@@ -2624,3 +2624,20 @@ begin
 	OpenORLClassGeneralWithSubset(USetStr(31111));
 end;
 
+global procedure CalcCustBalDsm()// Edit ************************** Friday, 22 July 2016 10:43:05
+begin
+	record ORvc ORr;
+	integer wn;
+	val balp;
+	
+	wn = curwindow;
+	if(WindowState(wn)==0)then begin
+		getwindowrecord(wn,ORr);
+		CalcCustBalrem(ORr);
+		putwindowrecord(wn,ORr);
+	end else begin
+		beep;
+	end;
+	
+return;
+end;

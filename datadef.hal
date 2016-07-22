@@ -1700,6 +1700,10 @@ RecordBegin(INVc,-,"artikel5");
 	RecordField(WaitingForItemsDate,M4Date,0,0);
 	RecordField(WaitingForItemsTime,M4Time,0,0);
 	RecordField(Group_Status,M4Str,0,40);
+	RecordField(DebtUpdateDate,M4Date,0,0);// Edit ************************** Friday, 22 July 2016 10:33:20
+	RecordField(DebtUpdateTime,M4Time,0,0);
+	RecordField(DebtCurSum,M4Val,0,0);
+	
   ArrayBegin(Math,-,1);
   ArrayField(stp,M4Int,0,0);
   ArrayField(ArtCode,M4Code,20,INVc);

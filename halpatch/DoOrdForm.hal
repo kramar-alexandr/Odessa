@@ -991,6 +991,16 @@ BEGIN
 		t = ORr.OptUAHRate;
 		OUTFORMFIELD("F_UAHRATE",t);
 	end;
+	
+	if (FIELDINFORM("F_MYBALANCEFIX")) then begin	//Edit-------------------Dima  27.01.2015
+		t = ORr.DebtCurSum;
+		OUTFORMFIELD("F_MYBALANCEFIX",t);
+	end;
+
+	if (FIELDINFORM("F_MYSUMWITHBALANCEFIX")) then begin	//Edit-------------------Dima  27.01.2015
+		t = ORr.Sum4 + ORr.DebtCurSum;
+		OUTFORMFIELD("F_MYSUMWITHBALANCEFIX",t);
+	end;
 
 
   if (blank(ORr.ShipAddr0)) then begin

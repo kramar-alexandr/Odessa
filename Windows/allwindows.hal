@@ -5067,6 +5067,7 @@ begin
     EditField(410,v3,100,"НДС",ViewOnly ,Sum3,true,0);
   end;
   EditField(410,v2,100,"База",ViewOnly,BaseSum4,true,0);
+  EditField(410,v2+16,100,"Текущий долг",ViewOnly,DebtCurSum,true,0);
   EditField(-150,v3,100,"Подытог",ViewOnly ,Sum1,true,0);
   EditField(-150,v2,100,"ИТОГО",ViewOnly ,Sum4,true,0);
   EditField(-150,v1,100,"ИТОГО в базовой валюте",ViewOnly ,BaseSum4,true,0);//Edit----------------------Dima 29.01.2015
@@ -5523,6 +5524,8 @@ email not working yet
 	SpecialMenu("Создать СМС с реквизитами",'',20,"MakeSMSORDsm");	//Edit----------------------Dima  26.06.2015
 	SpecialMenu("Просмотреть доступные товары",'',20,"GetAvailableItemsDsm");		//Edit----------------------Dima  26.06.2015
 	SpecialMenu("Отменить заказ на перемещение",'',20,"CancelStockMoveOrderDsm");	//Edit----------------------Dima  30.12.2015
+	
+	SpecialMenu("Обновить задолженность клиента",'',20,"CalcCustBalDsm");	// Edit ************************** Friday, 22 July 2016 10:42:12
   end;
   EndWindow;
 
