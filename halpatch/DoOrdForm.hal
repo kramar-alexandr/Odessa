@@ -994,12 +994,12 @@ BEGIN
 	
 	if (FIELDINFORM("F_MYBALANCEFIX")) then begin	//Edit-------------------Dima  27.01.2015
 		t = ORr.DebtCurSum;
-		OUTFORMFIELD("F_MYBALANCEFIX",t);
+		PrintValue("F_MYBALANCEFIX",t,M4Val,LangNrr,SysFormatRec,false);
 	end;
 
 	if (FIELDINFORM("F_MYSUMWITHBALANCEFIX")) then begin	//Edit-------------------Dima  27.01.2015
 		t = ORr.Sum4 + ORr.DebtCurSum;
-		OUTFORMFIELD("F_MYSUMWITHBALANCEFIX",t);
+		PrintValue("F_MYSUMWITHBALANCEFIX",t,M4Val,LangNrr,SysFormatRec,false);
 	end;
 
 

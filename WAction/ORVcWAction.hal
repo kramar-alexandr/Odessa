@@ -2198,9 +2198,10 @@ begin
   	end;
 
 	end;
-  
   if (testf) then begin
+  	recordnew(RepSpec);
     SetupCustPS2Rn(CUr.Code,RepSpec);
+    RepSpec.JobDf = 1;
     RunReport(RepSpec,0);
   end;
   return;

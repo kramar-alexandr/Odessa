@@ -994,19 +994,19 @@ begin
 
 	addtexttoarea("POST " & aPage & " HTTP/1.1" & chr(13) & chr(10),aRequest);
  	addtexttoarea("host: " & aWeb & chr(13) & chr(10),aRequest);
- 	addtexttoarea("Connection: keep-alive" & aWeb & chr(13) & chr(10),aRequest);
- 	addtexttoarea("Content-Type: application/xml" & aWeb & chr(13) & chr(10),aRequest);
+ 	addtexttoarea("Connection: keep-alive" & chr(13) & chr(10),aRequest);
+ 	addtexttoarea("Content-Type: application/xml" & chr(13) & chr(10),aRequest);
  	AddTextToArea("" & chr(13) & chr(10),aRequest);
  	//messagebox(0, urlencode("https://" & aWeb));
- 	AddTextToArea("<?xml version=""1.0"" encoding=""UTF-8""?>" & chr(13),aRequest);
-  AddTextToArea("<file>"& chr(13),aRequest);
-  AddTextToArea("   <apiKey>" & ConvertXml(aKey) & "</apiKey>" & chr(13),aRequest);
-  AddTextToArea("   <modelName>" & ConvertXml(aModel) & "</modelName>" & chr(13),aRequest);
-  AddTextToArea("   <calledMethod>" & ConvertXml(aMethod) & "</calledMethod>" & chr(13),aRequest);
-  AddTextToArea("			<methodProperties>"& chr(13),aRequest);
-  AddTextToArea("   		<CityRef>" & ConvertXml(aParam) & "</CityRef>" & chr(13),aRequest);
-  AddTextToArea("			</methodProperties>"& chr(13),aRequest);
-  AddTextToArea("</file>" & chr(13),aRequest);
+ 	AddTextToArea("<?xml version=""1.0"" encoding=""UTF-8""?>" & chr(13) & chr(10),aRequest);
+  AddTextToArea("<root>"& chr(13) & chr(10),aRequest);
+  AddTextToArea("   <apiKey>" & ConvertXml(aKey) & "</apiKey>" & chr(13) & chr(10),aRequest);
+  AddTextToArea("   <modelName>" & ConvertXml(aModel) & "</modelName>" & chr(13) & chr(10),aRequest);
+  AddTextToArea("   <calledMethod>" & ConvertXml(aMethod) & "</calledMethod>" & chr(13) & chr(10),aRequest);
+  AddTextToArea("			<methodProperties>"& chr(13) & chr(10),aRequest);
+  AddTextToArea("   		<CityRef>" & ConvertXml(aParam) & "</CityRef>" & chr(13) & chr(10),aRequest);
+  AddTextToArea("			</methodProperties>"& chr(13) & chr(10),aRequest);
+  AddTextToArea("</root>" & chr(13) & chr(10),aRequest);
   
 	AddTextToArea("" & chr(13) & chr(10),aRequest);
 	AddTextToArea("" & chr(13) & chr(10),aRequest);
@@ -1032,7 +1032,8 @@ begin
   record NPCityVc NPCr;
   record NPSettingsBlock NPSettingsb;
   Boolean notSynchronize;
-  boolean testf;
+  boolean testf,ssl;
+  string 20 port;
   //register will not synchronize if any error occures (incorrect XML file, not  response,...)
   
 	BlockLoad(NPSettingsb);  
@@ -1043,6 +1044,8 @@ begin
   repeat = 0;
   host = "api.novaposhta.ua";
   page = "/v2.0/xml/";
+  port = "443";
+  ssl = true;
   //cityRef = "ru"; //ua ru en 
   
   //LogText(0,CountRecords("NPWarehouseVc") & "   before");
@@ -1075,11 +1078,14 @@ begin
 			if(TrHs and testf)then begin
 				cityRef = NPCr.Ref;
 				cityName = NPCr.City;
+				
+				LsendRequestAgainGet1:;
 				SetAreaZeroSize(mainRequest);
+						
 				CreateWarehouseRequest(host, page, NPSettingsb.APIkey, "Address","getWarehouses", cityRef, mainRequest); 
-				writeareatofile(mainRequest,"1getWarehousesRequest.txt",0);
-				LsendRequestAgainGet1: ;
-				if(MySendRawWebRequest(host,"443",true,"POST",page & getParam,"text/xml","",false,mainRequest,replyarea,5))then begin 
+				writeareatofile(mainRequest,"2getWarehousesRequest.txt",0);		
+				
+				if(MySendRawWebRequest(host,port,ssl,"POST",page & getParam,"text/xml","",false,mainRequest,replyarea,5))then begin 
 					logtext(0,"Hansa World: GetWarehouses - " & cityName);
 					writeareatofile(replyarea,"1getWarehousesReply.txt",0);
 					GetXMLArea(replyarea);
@@ -1114,6 +1120,13 @@ begin
 					repeat = repeat + 1;
 					if(repeat < 3) then begin
 						millisleep(100);
+						
+						if(repeat==2)then begin
+							host = "api.novaposhta.ua";
+							page = "/v2.0/xml/AddressGeneral/getWarehouses";
+							ssl = false;
+							port = "80";
+						end;
 						goto LsendRequestAgainGet1;
 					end;
 					if (repeat>=3) then begin notSynchronize = true;LogText(0,cityName);	  end;
