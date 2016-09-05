@@ -11565,6 +11565,7 @@ begin
   ButtonFrame(-80,v,60,2,"Тип");
   	RadioButton(-80,v,0,0,"Магазин",AgeStatus);
   	RadioButton(-80,v+17,1,0,"Рынок",AgeStatus);
+    RadioButton(-80,v+34,2,0,"Оба",AgeStatus);//Edit-------------------Vitalii 10:29 05.09.2016
 
   label = UserDefined("CUVc","InvAddr1");
   if blank(label) then begin
