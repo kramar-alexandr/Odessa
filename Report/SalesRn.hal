@@ -132,6 +132,9 @@ begin
 	
 		OutString(270,0,"Кол-во",false);
 		OutString(300,0,"Цена",false);
+    if (ReportType==0) then begin//Edit-------------------Vitalii 13:47 05.09.2016
+      OutString(305,0,"Цена продажи",false);
+    end;
 		OutString(310,0,"Сумма",false);
 		OutString(320,0,"Себес-ть за ед.",false);
 		OutString(340,0,"Себестоимость",false);
@@ -369,6 +372,7 @@ separator = "^";
 							
 							OutString(270,0,SalesData.Quant,false);
 							OutVal(300,0,SalesData.Price,M45Val,false);
+              OutVal(305,0,SalesData.Sum/SalesData.Quant,M45Val,false);//Edit-------------------Vitalii 13:48 05.09.2016
 							OutVal(310,0,SalesData.Sum,M45Val,false);
 							if (viewcost) then begin
 								OutVal(320,0,SalesData.UnitCost,M4Val,false);

@@ -8650,7 +8650,7 @@ begin
   vs = 20;
   EditFieldTL(h=110,v=6,80,"Условия оплаты",M4Code,Normal,10,FirstAcc,false,PDSClass);
   EditFieldTL(h,v+=vs,-20,"Номер счета кл.",M4Str,Normal,100,f1,false,0);
-  EditFieldTL(h,v+=vs,-20,"Ответсвенный",M4Str,Normal,100,f2,false,0);
+  EditFieldTL(h,v+=vs,-20,"Ответственный",M4Str,Normal,100,f2,false,0);
   EditFieldTL(h,v+=vs,-20,"Конт.лицо",M4Str,Normal,100,f3,false,0);
   EditFieldTL(h,v+=vs,-20,"Офиц. серийн. номер",M4Str,Normal,100,f4,false,LegalInvNrSClass);
   EditFieldTL(h,v+=vs,80,"Склад",M4Code,Normal,10,LastAcc,false,LocationSClass);
@@ -11589,7 +11589,7 @@ begin
   EditField(h,v+=vs,-100,label,Normal,InvAddr4,false,0);
   
   EditField(h,v+=vs,50,"Страна",Normal,CountryCode,false,CountrySClass);
-      EditField(h1,v,-20,"Отдел",Normal,Department,false,0);
+      EditField(h1,v,-20,"Ответственный менеджер",Normal,Department,false,UserSClass);//Edit-------------------Vitalii 11:12 05.09.2016
   EditField(h,v+=vs,50,"Область",Normal,Region,false,CountryRegionSClass);//Edit-------------------Vitalii 12:38 23.05.2016
       EditField(h1,v,-20,"Факс",Normal,Fax,false,0);
   EditField(h,v+=vs,150,"Город",Normal,Ethnicity,false,CitySClass);
