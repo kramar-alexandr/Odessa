@@ -1191,6 +1191,7 @@ record CUVc CUr;
   
 
 	StartFormat(15);
+		OutString(0,0,"Код",false);
 		OutString(0,0,"ФИО",false);
 		OutString(20,0,"Страна",false);
 		OutString(40,0,"Область",false);
@@ -1216,7 +1217,6 @@ record CUVc CUr;
 	TrHs=true;
 	SalesData.InvDate = startDate;	
 	
-	logtext(0,"loop begin");
 	
 	While (LoopKey(keyloop,SalesData,loop,TrHs)) begin
 		testf=true;					
@@ -1227,6 +1227,8 @@ record CUVc CUr;
 						testf = false;
 					end;		
 		end;
+		if(SalesData.InvDate>endDate)then begin testf=false; TrHs=false; end;
+		
 		if (SalesData.stp!=kInvoiceRowTypeNormal) then begin testf=false; end;		//Edit----------------------Dima  04.05.2016	
 		
 		if(testf)then begin
@@ -1234,13 +1236,12 @@ record CUVc CUr;
 			//salesum = salesum + SalesData.Sum;
 		end;
 	end;
-	logtext(0,"loop end");
 	
-	logtext(0,"loop CU begin");
 	CUr.Name = "";
 	while(loopkey("Name",CUr,1,true))begin
 		if(Turnover[CUr.Code]!=0)then begin
 			StartFormat(15);
+				OutString(0,0,CUr.Code,false);
 				OutString(0,0,CUr.Name,false);
 				OutString(20,0,CUr.CountryCode,false);
 				OutString(40,0,CUr.Region,false);
@@ -1267,7 +1268,6 @@ record CUVc CUr;
 			EndFormat;
 		end;
 	end;
-	logtext(0,"loop CU end;");
 
 	EndJob;
 
