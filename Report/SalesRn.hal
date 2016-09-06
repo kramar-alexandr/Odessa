@@ -1137,3 +1137,138 @@ time timeFrom, timeTo;
 end;
 
 
+global
+procedure  SalesByCustRn(record RcVc RepSpec)
+begin
+record SalesDataVc SalesData,prevSalesData;
+boolean TrHs,testf;
+Integer rw,rwcnt,i,loop;
+val totalQty,totalSum,totalRent,totalCost,totalSalary,totalRentSalary;
+Boolean nonprinted; 
+val cred;
+boolean viewcost,consolidatedReport;
+val rowPrice,rowSum,rowCostUnit,rwGPpercent,salaryPrice,salarySum,rentSal,rentSalPercent,rowsalary;
+val salesum,cost,rent,salary,rentsalary;
+longint qty;
+longint tick,tick2,tick3;
+time timeFrom, timeTo;
+date startDate,endDate;
+string 200 itemType;
+string 20 keyloop,prevArtCode,currentCode,separator;
+vector val Turnover;
+record CUVc CUr;
+
+	separator = "^";
+
+	qty = 0;
+	timeFrom = StringToTime(RepSpec.f5);
+	timeTo = StringToTime(RepSpec.f6);
+	startDate = RepSpec.sStartDate;
+	endDate = RepSpec.sEndDate;
+	
+	consolidatedReport = true;
+	viewcost = UserCanAction("ViewCostPrice",true);
+	
+	StartReportJob("Отчет Продаж по регионам");
+	rw=1;
+	Header(rw,"Период с " & startDate & "  по  " & endDate,1);
+	rw=rw+1;
+	if (NonBlank(RepSpec.f1)) then begin
+		Header(rw,"Код товара: " & RepSpec.f1,1);
+		rw=rw+1;
+	end;
+	if (NonBlank(RepSpec.f7)) then begin
+		Header(rw,"Классификация: " & RepSpec.f7,1);
+		rw=rw+1;
+	end;
+
+
+	EndHeader;
+	
+  if (RepSpec.Media == mtExcel) then begin	
+  	OutHeaderToExcel(RepSpec);
+  end;
+  
+
+	StartFormat(15);
+		OutString(0,0,"ФИО",false);
+		OutString(20,0,"Страна",false);
+		OutString(40,0,"Область",false);
+		OutString(60,0,"Город",false);
+		OutString(90,0,"Магазин",false);
+		OutString(120,0,"Рынок",false);	
+		OutString(170,0,"Интернет магазин",false);		
+		OutString(20,0,"Оборот за период",false);
+		OutString(60,0,"Категория",false);
+		OutString(170,0,"Персональный менеджер",false);
+		OutString(270,0,"Дата внесения изменений",false);
+	EndFormat;
+	
+	keyloop = "DateCode";
+	loop = 1;
+		
+	if (NonBlank(RepSpec.f1)) then begin//отчет по одному товару
+		SalesData.ArtCode = RepSpec.f1;
+		keyloop = "CodeDate";
+		loop = 2;
+	end;
+
+	TrHs=true;
+	SalesData.InvDate = startDate;	
+	
+	logtext(0,"loop begin");
+	
+	While (LoopKey(keyloop,SalesData,loop,TrHs)) begin
+		testf=true;					
+
+		if (nonblank(RepSpec.f1) and (SalesData.ArtCode!=RepSpec.f1)) then begin	testf=false; TrHs=false;	end;
+		if (nonblank(RepSpec.f7) and testf) then begin
+					if(!setinset(RepSpec.f7,SalesData.DispGroups))then begin
+						testf = false;
+					end;		
+		end;
+		if (SalesData.stp!=kInvoiceRowTypeNormal) then begin testf=false; end;		//Edit----------------------Dima  04.05.2016	
+		
+		if(testf)then begin
+			Turnover[SalesData.CustCode] = Turnover[SalesData.CustCode] + SalesData.Sum;
+			//salesum = salesum + SalesData.Sum;
+		end;
+	end;
+	logtext(0,"loop end");
+	
+	logtext(0,"loop CU begin");
+	CUr.Name = "";
+	while(loopkey("Name",CUr,1,true))begin
+		if(Turnover[CUr.Code]!=0)then begin
+			StartFormat(15);
+				OutString(0,0,CUr.Name,false);
+				OutString(20,0,CUr.CountryCode,false);
+				OutString(40,0,CUr.Region,false);
+				OutString(60,0,CUr.Ethnicity,false);
+				if(CUr.AgeStatus==0 or CUr.AgeStatus==2)then begin
+					OutString(90,0,"Да",false);
+				end else begin
+					OutString(90,0,"Нет",false);
+				end;
+				if(CUr.AgeStatus==1 or CUr.AgeStatus==2)then begin
+					OutString(90,0,"Да",false);
+				end else begin
+					OutString(90,0,"Нет",false);
+				end;
+				if(nonblank(CUr.wwwAddr))then begin
+					OutString(90,0,"Да",false);
+				end else begin
+					OutString(90,0,"Нет",false);
+				end;
+				OutString(20,0,Turnover[CUr.Code],false);
+				OutString(60,0,CUr.RebCode,false);
+				OutString(170,0,CUr.Department,false);
+				OutString(270,0,CUr.DateChanged,false);
+			EndFormat;
+		end;
+	end;
+	logtext(0,"loop CU end;");
+
+	EndJob;
+
+end;

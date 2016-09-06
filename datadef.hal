@@ -4695,6 +4695,7 @@ RecordBegin(IPVc,-,"");
   RecordField(CurncyCode,M4Str,10,0);  
   RecordField(CommisionPrice,M423Val,0,0);
   RecordField(stp,M4Int,0,0);
+  RecordField(CustCode,M4Code,50,0);// Edit ************************** Tuesday, 6 September 2016 09:23:30
   MainKeyBegin(InvNr,0);
   KeySegment(InvNr);
   KeySegment(RowNr);

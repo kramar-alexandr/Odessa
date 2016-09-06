@@ -110,6 +110,7 @@ begin
 			SalesData.PayedByCCard = payccard*IVrw.Sum/IVr.Sum4;
 			SalesData.PayedByGift = paygift*IVrw.Sum/IVr.Sum4;
 			SalesData.CurncyCode = IVr.CurncyCode;
+			SalesData.CustCode = IVr.CustCode;// Edit ************************** Tuesday, 6 September 2016 09:26:45
 			
 			switch(IVrw.stp) begin 
 				case kInvoiceRowTypeNormal:
@@ -478,4 +479,32 @@ date fromDate,toDate;
 		end;	
 		
 	end;
+end;
+
+
+global updating procedure AddCustCodeToSalesDataMn()
+begin
+	record SalesDataVc SalesData;
+	record IVVc IVr;
+	
+	logtext(0,"AddCustCodeToSalesDataMn start");
+	while(loopmain(SalesData,1,true))begin
+		if(SalesData.InvNr!=IVr.SerNr)then begin
+			IVr.SerNr = SalesData.InvNr;
+			if(readfirstmain(IVr,1,true))then begin
+				if(SalesData.CustCode!=IVr.CustCode and nonblank(IVr.CustCode))then begin
+					SalesData.CustCode = IVr.CustCode;
+					recordStore(SalesData,true);
+				end;
+			end;
+		end else begin
+			if(SalesData.CustCode!=IVr.CustCode and nonblank(IVr.CustCode))then begin
+				SalesData.CustCode = IVr.CustCode;
+				recordStore(SalesData,true);
+			end;
+		end;
+	end;
+	logtext(0,"AddCustCodeToSalesDataMn end");
+
+return;
 end;

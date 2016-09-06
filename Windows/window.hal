@@ -666,6 +666,23 @@ begin
 
 end;
 
+window SalesByCustRClass:1  // added ************ Dima, 04.12.2014
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  real h,v,vs;
+
+  WindowBegin("Отчет по продажам",SalesByCustRClass,CGRcW,RcType);
+  SetWRect(20,80,400,200);
+  UseView(RcVc);
+  h = 100; vs = 20; v = 6;
+
+  PeriodField(h,v+=vs,"Период");
+  EditFieldTL(h,v+=vs,150,"Товар",M4UStr,Normal,41,f1,false,INSClass);
+  EditFieldTL(h,v+=vs,150,"Классификация",M4UStr,Normal,41,f7,false,DISClass);// Edit ************************** Thursday, 3 September 2015 16:59:45
+  EndWindow;
+
+end;
+
 window LocationsRClass:1  // added ************ Dima, 04.12.2014
   wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
 begin

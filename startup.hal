@@ -30,6 +30,9 @@ begin
   Report("Отчет по заказанным товарам",ItemPUOrderReportRClass,ItemPUOrderReportRn,0,modPO); //Edit***************************Sasha2,14:08 31.07.2014
   Report("Отчет по оплатам кассовых сч/ф",POSPaymentsRClass,POSPaymentsRn,0,modSL); //Edit***************************Sasha2,16:40 17.11.2014
   Report("Отчет по продажам",SalesRClass,SalesRn,0,modSL); //Edit----------------------Dima  14.03.2016
+  
+  Report("Продажи по регионам",SalesByCustRClass,SalesByCustRn,0,modSL); // Edit ************************** Tuesday, 6 September 2016 12:59:35
+
 	//Report("Отчет по продажам1",SalesRClass,Sales1Rn,0,modSL); //Edit----------------------Dima  14.03.2016
 
   //Report("Отчет по продажам старый",SalesRClass,SalesRnOld,0,modSL);//Edit----------------------------------Dima  04.12.2014
@@ -317,6 +320,9 @@ begin
 	Maintenance("Установить группы продаж в регистр Платежи",MyVClass,SetSalesGroupToIPVcMn,modDBMain);	//Edit----------------------Dima  17.07.2015
 	Maintenance("Отменить статус синхронизации счетов клиентов старше 10 дней",CancelSyncFlORVcVClass,CancelSyncFlORVcMn,modDBMain);//Edit---------------Vitalii 11:25 28.07.2015
 	Maintenance("Пересохранить ORVc",MyVClass,ReSaveORVcMn,modDBMain);		//Edit----------------------Dima  28.08.2015
+	
+	Maintenance("Добавить CustCode в SalesData",MyVClass,AddCustCodeToSalesDataMn,modDBMain);	// Edit ************************** Tuesday, 6 September 2016 13:02:28
+	
 	Maintenance("Разослать СМС из стека",MyVClass,SendSMSFromStack,modDBMain);		//Edit----------------------Dima  27.08.2015
 	Maintenance("Пересчитать ORVc.LastShipDate",MyVClass,UpdateLastShipDateMn,modDBMain);		//Edit----------------------Dima  31.08.2015
 	Maintenance("Установить новые статусы в Счетах клиентам",MyVClass,SetNewStatusesORVcMn,modDBMain);		//Edit----------------------Dima  23.09.2015
