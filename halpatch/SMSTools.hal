@@ -140,19 +140,23 @@ begin
   if(MySendRawWebRequest(host,"80",false,"POST",page ,"text/xml","",false,mainRequest,replyarea,5))then begin 
     writeareatofile(replyarea,"SMSReply.txt",0);
     GetXMLArea_check(replyarea,"</RESPONSE>");
-		xdata = ParseXMLArea(replyarea);
+    if(GetAreaLength(replyarea)>0)then begin
+			xdata = ParseXMLArea(replyarea);
 
-		response = XmlGet(xdata,"RESPONSE/status");
-		CheckEPochtaResponse(response);
+			response = XmlGet(xdata,"RESPONSE/status");
+			CheckEPochtaResponse(response);
 		
-		if (writeLog) then begin 
-			LogText(0,"SMS was sent.  TEXT: " & SMSr.Text);
-		end;		 
+			//if (writeLog) then begin 
+				LogText(0,"SMS was sent.  TEXT: " & SMSr.Text);
+			//end;	
+		end else begin
+			logtext(0,"Hansa World: No Connection to Epochta");
+			response = "Hansa World: No Connection to Epochta";
+			SMSr.ReSend = 1;
+		end;	 
 		   
   end else begin
- 		logtext(0,"Hansa World: No Connection to Epochta");
- 		response = "Hansa World: No Connection to Epochta";
- 		SMSr.ReSend = 1;
+ 		
   end;
   
   SMSr.Phone = correctPhone;

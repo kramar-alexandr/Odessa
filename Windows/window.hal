@@ -679,6 +679,7 @@ begin
   PeriodField(h,v+=vs,"Период");
   EditFieldTL(h,v+=vs,150,"Товар",M4UStr,Normal,41,f1,false,INSClass);
   EditFieldTL(h,v+=vs,150,"Классификация",M4UStr,Normal,41,f7,false,DISClass);// Edit ************************** Thursday, 3 September 2015 16:59:45
+  EditFieldTL(h,v+=vs,150,"Категория кл.",M4UStr,Normal,41,f6,false,CCatSClass);// Edit ************************** Thursday, 3 September 2015 16:59:45
   EndWindow;
 
 end;
