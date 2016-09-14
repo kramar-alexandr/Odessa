@@ -1,0 +1,172 @@
+external procedure ExtractObjWithSeparator(string,string,Boolean,var Integer,var string);
+external function roundmode SetRoundModeD(Integer);
+external function Boolean LoggedInTest();
+external function string 255 ChangeCaseStr(string,integer);
+
+
+webpublic
+global procedure WebSalesBILogIn()
+begin
+  Time checkTime;
+  array string 5 checkTimeStr;
+  string 255 sentMD5,checkMD5,link;
+  integer deltaMin,i,cti;
+  boolean isLogedIn;
+  
+  deltaMin = 2;
+  sentMD5 = WebGetArg("param");
+  link = WebGetArg("link");
+  checkTime = CurrentTime;
+  cti = 0;
+  checkTimeStr[cti] = GetHour(checkTime) & ":" & GetMinute(checkTime);
+  cti = cti + 1;
+  for (i=1;i<deltaMin;i=i+1) begin
+    checkTimeStr[cti] = GetHour(checkTime) & ":" & (GetMinute(checkTime) + i);
+    cti = cti + 1;
+    checkTimeStr[cti] = GetHour(checkTime) & ":" & (GetMinute(checkTime) - i);
+    cti = cti + 1;
+  end;
+  isLogedIn = LoggedInTest();
+  for (i=0;i<checkTimeStr.length;i=i+1) begin
+    checkMD5 = MD5String(checkTimeStr[i]);
+    if (sentMD5==checkMD5) then begin
+      isLogedIn = true;
+      i = checkTimeStr.length;
+    end;
+  end;
+  if isLogedIn then begin
+    WebOutString(MD5String(GetHour(checkTime) & ":" & GetMinute(checkTime)));
+  end;
+  return;
+end;
+
+webpublic
+global procedure WebSalesBI()
+begin
+	record DIVc DIr;
+  record SalesDataVc SDr;
+  record INVc INr;
+	boolean TrHs;
+	vector string 100 vClass,vName;
+	string 100 type,brand,tstr;
+	integer pos;
+	vector val vSum,vBrandSum;
+	array string 50 aTags;
+  vector boolean vTagExist,vBarndInArr;
+	integer i,mtrw,b,cti;
+  string 5 nl,tab;
+  array string 50 aBrand,aBrandTmp;
+  
+  Date mydate;
+  Time checkTime;
+  array string 5 checkTimeStr;
+  string 255 sentMD5,checkMD5;
+  integer deltaMin;
+  boolean isLogedIn;
+
+	mydate = StringToDate("01/01/2016");
+  deltaMin = 2;
+  sentMD5 = WebGetArg("param");
+  checkTime = CurrentTime;
+  cti = 0;
+  checkTimeStr[cti] = GetHour(checkTime) & ":" & GetMinute(checkTime);
+  cti = cti + 1;
+  for (i=1;i<deltaMin;i=i+1) begin
+    checkTimeStr[cti] = GetHour(checkTime) & ":" & (GetMinute(checkTime) + i);
+    cti = cti + 1;
+    checkTimeStr[cti] = GetHour(checkTime) & ":" & (GetMinute(checkTime) - i);
+    cti = cti + 1;
+  end;
+  isLogedIn = false;
+  for (i=0;i<checkTimeStr.length;i=i+1) begin
+    checkMD5 = MD5String(checkTimeStr[i]);
+    if (sentMD5==checkMD5) then begin
+      isLogedIn = true;
+      i = checkTimeStr.length;
+    end;
+  end;
+  if isLogedIn then begin
+  
+    //nl = "<br>";
+    //tab = " | ";
+    nl = chr(13) & chr(10);
+    tab = ",";
+    WebOutString("Brand" & tab & "Type" & tab & "Sum" & nl);
+    resetloop(DIr);
+    while(loopmain(DIr,1,true))begin
+      vClass[DIr.Code] = DIr.CType;
+      vName[DIr.Code] = DIr.Name;
+    end;
+    
+    resetloop(SDr);
+    TrHs = true;
+    SDr.InvDate = StringToDate("01/" & GetMonth(mydate) & "/" & GetYear(mydate));
+    while(loopkey("DateCode",SDr,1,TrHs))begin
+      if (SDr.InvDate>StringToDate(DaysInMonth(GetYear(mydate), GetMonth(mydate)) & GetMonth(mydate) & "/" & GetYear(mydate))) then begin TrHs = false; end;
+      if (TrHs) then begin
+        if (SDr.Sum>=0) then begin
+          INr.Code = SDr.ArtCode;
+          readfirstmain(INr,1,true);
+          type = "UNKNOWN";
+          brand = "UNKNOWN";
+          tstr = "";
+          pos = 0;
+          ExtractObjWithSeparator(",",INr.DispGroups,true,pos,tstr);
+          while(nonblank(tstr))begin
+            if(nonblank(tstr))then begin
+              if(vClass[tstr]=="TYPE")then begin
+                type = vName[tstr];
+              end;
+              if(left(vClass[tstr],4)=="BRND")then begin
+                brand = vName[tstr];
+                if !vBarndInArr[brand] then begin
+                  aBrand[b] = brand;
+                  vBarndInArr[brand] = true;
+                  b = b + 1;
+                end;
+              end;
+            end;
+            ExtractObjWithSeparator(",",INr.DispGroups,true,pos,tstr);
+          end;
+          vSum[brand & ";" & type] = vSum[brand & ";" & type] + SDr.Sum;
+          vBrandSum[brand] = vBrandSum[brand] + SDr.Sum;
+        end;
+      end;
+    end;
+    GetVectorTags(vSum,aTags);
+    for (i=0;i<aTags.length;i=i+1) begin
+      vTagExist[aTags[i]] = true;
+    end;
+    
+    for (b=0;b<aBrand.length-1;b=b+1) begin
+      for (i=0;i<aBrand.length-1;i=i+1) begin
+        if (vBrandSum[aBrand[i]] < vBrandSum[aBrand[i+1]]) then begin
+          tstr = aBrand[i+1];
+          aBrand[i+1] = aBrand[i];
+          aBrand[i] = tstr;
+        end;
+      end;
+    end;
+    for (i=0;i<aBrand.length;i=i+1) begin
+      aBrandTmp[i] = aBrand[i];
+      vBarndInArr[aBrand[i]] = false;
+    end;
+    ClearArray(aBrand);
+    for (i=0;i<10;i=i+1) begin
+      aBrand[i] = aBrandTmp[i];
+      vBarndInArr[aBrand[i]] = true;
+    end;
+    for (i=0;i<aTags.length;i=i+1) begin
+      pos = 0;
+      ExtractObjWithSeparator(";",aTags[i],true,pos,brand);
+      ExtractObjWithSeparator(";",aTags[i],true,pos,type);
+      if vBarndInArr[brand] then begin
+        tstr = brand;
+      end else begin
+        tstr = "Other";
+      end;
+      WebOutString(tstr & tab & type & tab & vSum[aTags[i]] & nl);
+    end;
+  end;
+  return;
+end;

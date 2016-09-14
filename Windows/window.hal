@@ -2758,3 +2758,16 @@ begin
   //CheckBox(h,v+=32,0,"Show Reserved Orders only",flags[8]);
   EndWindow;
 end;
+
+window MyBIRClass:1 //Edit-------------------Vitalii 11:33 14.09.2016
+  wtag("language","UKR"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer") 
+begin
+  real h,v,vs;
+  
+  WindowBegin("Статистика продажів",MyBIRClass,CGother,-);  
+  SetWRect(20,80,400,250);
+  UseView(RcVc);
+  HalPushButton(h=50,20,h+110,40,"MyBIRun","Run");
+  
+  EndWindow;
+end;

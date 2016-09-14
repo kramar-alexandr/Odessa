@@ -1,0 +1,19 @@
+global
+procedure MyBIRun()
+begin
+  string 255 url;
+  integer compnr;
+  record ProgramStatusBlock PSb;
+	record CompaniesBlock Cb;
+	row CompaniesBlock Cbrw;
+
+	blockload(PSb);
+	blockload(Cb);
+
+	compnr = currentcompany;
+	matrowget(Cb,compnr-1,Cbrw);
+	url = "http://" & Cbrw.TCPIP & ":" & PSb.httpPort & "/SaleStat.html?param=" & MD5String(GetHour(CurrentTime) & ":" & GetMinute(CurrentTime));
+  OpenWebBrowser(url);
+
+	return;
+end;
