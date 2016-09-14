@@ -11591,7 +11591,7 @@ begin
   EditField(h,v+=vs,50,"Страна",Normal,CountryCode,false,CountrySClass);
       EditField(h1,v,-20,"Ответственный менеджер",Normal,Department,false,UserSClass);//Edit-------------------Vitalii 11:12 05.09.2016
   EditField(h,v+=vs,50,"Область",Normal,Region,false,CountryRegionSClass);//Edit-------------------Vitalii 12:38 23.05.2016
-      EditField(h1,v,-20,"Факс",Normal,Fax,false,0);
+      EditField(h1,v,-20,"Дата рождения",Normal,BirthDate,false,PasteCurDate);//Edit-------------------Vitalii 17:37 14.09.2016
   EditField(h,v+=vs,150,"Город",Normal,Ethnicity,false,CitySClass);
       EditField(h1,v,-20,"Имя в Skype",Normal,SkypeName,false,0);
   EditField(h,v+=vs,150,"Мобильный телефон",Normal,Phone,false,0);
@@ -11629,7 +11629,7 @@ begin
 	Tile(tilenr,240,false,tilenr,DelAddr0); tilenr = tilenr + 1;// Edit ************************** Tuesday, 5 July 2016 10:03:57
   v=6;
   
-  EditField(h,v,120,"Дата рождения",Normal,BirthDate,false,PasteCurDate);
+  EditField(h,v,120,"Факс",Normal,Fax,false,0);//Edit-------------------Vitalii 17:37 14.09.2016
   EditField(h,v+=20,120,"Номер паспорта",Normal,PassportNr,false,0);
   EditField(h,v+=vs,120,"ИНН",Normal,VATNr,false,0);
 	EditField(h,v+=vs,120,"E-mail",Normal,eMail,false,0);
