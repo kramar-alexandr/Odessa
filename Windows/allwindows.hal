@@ -6977,7 +6977,7 @@ begin
   WindowBegin("Контакт",CUNPTDSClass,CGview,-);
   Modality(kModalityGlobal);
   DynamicWindow;
-  SetWRect(20,80,680,441);
+  SetWRect(20,80,680,461);
   Sizeable(-1,-1,0,0);
   UseView(CUVc);
   v = 6; h = 130; l=223; vs = 20; h1=410; h2 = 340; h3 = 430; h4 = 580; h5 = 460;
@@ -6986,6 +6986,7 @@ begin
   EditField(h,v+=vs,h1-h+50,"Наименов.",Normal,Name,false,0);
 	EditField(h,v+=vs,h1-h+50,"Телефон",Normal,Phone,false,0);
 	EditField(h,v+=vs,h1-h+50,"e-Mail",Normal,eMail,false,0);
+	EditField(h,v+=vs,h1-h+50,"Дата рождения",Normal,BirthDate,false,PasteCurDate);
 
 /*
   HalPushButton(h+120,v+=20,h+120+100,v+20,"UpdCustomerAddressCUDsm","Update Address");
