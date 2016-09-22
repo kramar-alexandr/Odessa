@@ -644,7 +644,10 @@ string 20 keyloop,prevArtCode,currentCode;
 						testf = false;
 					end;		
 		end; 	
-	
+		
+		if(nonblank(RepSpec.f8) and SalesData.CustCode!=RepSpec.f8)then begin
+			testf = false;// Edit ************************** Thursday, 22 September 2016 13:32:29
+		end;
 		
 		if(testf)then begin
 		
