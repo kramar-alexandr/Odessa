@@ -23,243 +23,247 @@ begin
   row SHVc SHrw;
   date komitentStart; 
   array record SHVc SHarray;
+	
+	if(IVr.OKFlag==0)then begin
 
-
-	cred = 1;
-	if(IVr.InvType==kInvoiceTypeCredit)then begin
-		cred = -1;
-	end;
+		cred = 1;
+		if(IVr.InvType==kInvoiceTypeCredit)then begin
+			cred = -1;
+		end;
 	
-	fr = IVr.FrRate;
-	to = IVr.ToRateB1;
-	if(fr==0 or to==0)then begin
-		fr = 1;
-		to = 1;
-	end;
+		fr = IVr.FrRate;
+		to = IVr.ToRateB1;
+		if(fr==0 or to==0)then begin
+			fr = 1;
+			to = 1;
+		end;
 	
-	komitentStart = StringToDate("26/04/2016"); //записи с комитентом  должны начинаться с первого апреля
-	separator = "^";
+		komitentStart = StringToDate("26/04/2016"); //записи с комитентом  должны начинаться с первого апреля
+		separator = "^";
 	
-	for(i=0;i<MatRowCnt(IVr);i=i+1) begin
-		MatRowGet(IVr,i,IVrw);
-		switch (IVrw.stp) begin
-			case kInvoiceRowTypeCashPayment:
-				paycash = paycash + IVrw.Sum;
-			case kInvoiceRowTypeCreditCardPayment:
-				payccard = payccard + IVrw.Sum;
-			case kInvoiceRowTypeGiftVoucherPayment:
-				paygift = paygift + IVrw.Sum;
+		for(i=0;i<MatRowCnt(IVr);i=i+1) begin
+			MatRowGet(IVr,i,IVrw);
+			switch (IVrw.stp) begin
+				case kInvoiceRowTypeCashPayment:
+					paycash = paycash + IVrw.Sum;
+				case kInvoiceRowTypeCreditCardPayment:
+					payccard = payccard + IVrw.Sum;
+				case kInvoiceRowTypeGiftVoucherPayment:
+					paygift = paygift + IVrw.Sum;
+			end;	
 		end;	
-	end;	
 	
-	if (paycash>0) then begin	//учитываем возможную сдачу
-		paycash = IVr.Sum4 - payccard - paygift;
-	end;		
+		if (paycash>0) then begin	//учитываем возможную сдачу
+			paycash = IVr.Sum4 - payccard - paygift;
+		end;		
 	
 		
-	if (IVr.UpdStockFlag==0 or (IVr.UpdStockFlag!=0 and IVr.OrderNr>-1)) then begin
-	//чтобы не читать SHVc заново для каждой строки IVVc
-	//предвартельно заносим подходящие записи в массив
-			SHp.OrderNr = IVr.OrderNr;
-			TrHs = true;	
-			while (LoopKey("OrderKey",SHp,1,TrHs)) begin
-				if(SHp.OrderNr!=IVr.OrderNr)then begin TrHs = false; end;
-				if (TrHs and SHp.OKFlag==1) then begin
-					SHarray[SHarray.length] = SHp;
-				end;				
-			end;
-	end;	
+		if (IVr.UpdStockFlag==0 or (IVr.UpdStockFlag!=0 and IVr.OrderNr>-1)) then begin
+		//чтобы не читать SHVc заново для каждой строки IVVc
+		//предвартельно заносим подходящие записи в массив
+				SHp.OrderNr = IVr.OrderNr;
+				TrHs = true;	
+				while (LoopKey("OrderKey",SHp,1,TrHs)) begin
+					if(SHp.OrderNr!=IVr.OrderNr)then begin TrHs = false; end;
+					if (TrHs and SHp.OKFlag==1) then begin
+						SHarray[SHarray.length] = SHp;
+					end;				
+				end;
+		end;	
 		
 
 
-  for(i=0;i<MatRowCnt(IVr);i=i+1) begin
-		MatRowGet(IVr,i,IVrw);
-		if ((IVrw.stp==kInvoiceRowTypeNormal and nonblank(IVrw.ArtCode)) or IVrw.stp==kInvoiceRowTypeGiftVoucherSold  ) then begin
+		for(i=0;i<MatRowCnt(IVr);i=i+1) begin
+			MatRowGet(IVr,i,IVrw);
+			if ((IVrw.stp==kInvoiceRowTypeNormal and nonblank(IVrw.ArtCode)) or IVrw.stp==kInvoiceRowTypeGiftVoucherSold  ) then begin
 
-			SalesData.InvNr = IVr.SerNr;
-			SalesData.RowNr = i;
-			update = false;
-			if (ReadFirstMain(SalesData,2,true)) then begin
-				RecordCopy(oldSalesData,SalesData);
-				update = true;
-			end else begin
-				RecordNew(SalesData);
-			end;						
+				SalesData.InvNr = IVr.SerNr;
+				SalesData.RowNr = i;
+				update = false;
+				if (ReadFirstMain(SalesData,2,true)) then begin
+					RecordCopy(oldSalesData,SalesData);
+					update = true;
+				end else begin
+					RecordNew(SalesData);
+				end;						
 			
-			IVrw.Quant = IVrw.Quant*cred;
-			IVrw.FIFORowVal = IVrw.FIFORowVal*cred;
-			IVrw.Sum = IVrw.Sum * cred;
+				IVrw.Quant = IVrw.Quant*cred;
+				IVrw.FIFORowVal = IVrw.FIFORowVal*cred;
+				IVrw.Sum = IVrw.Sum * cred;
 				
 
-			SalesData.InvNr = IVr.SerNr;
-			SalesData.RowNr = i;
-			SalesData.stp = IVrw.stp;
-			SalesData.InvDate = IVr.InvDate;
-			SalesData.TransDate = IVr.TransDate;
-			SalesData.TransTime = IVr.TransTime;
-			SalesData.Price = IVrw.Price/fr*to;
-			SalesData.Sum = IVrw.Sum/fr*to;
-			SalesData.Location = IVr.Location;
-			SalesData.Position = IVr.Position;
-			SalesData.SalesGroup = IVr.SalesGroup;
-			SalesData.SalesMan = IVr.SalesMan;
-			SalesData.InvType = IVr.InvType;
-			SalesData.SerialNr = IVrw.SerialNr;
-			SalesData.Rate = fr*to;
-			SalesData.PayedByCash = paycash*IVrw.Sum/IVr.Sum4;
-			SalesData.PayedByCCard = payccard*IVrw.Sum/IVr.Sum4;
-			SalesData.PayedByGift = paygift*IVrw.Sum/IVr.Sum4;
-			SalesData.CurncyCode = IVr.CurncyCode;
-			SalesData.CustCode = IVr.CustCode;// Edit ************************** Tuesday, 6 September 2016 09:26:45
+				SalesData.InvNr = IVr.SerNr;
+				SalesData.RowNr = i;
+				SalesData.stp = IVrw.stp;
+				SalesData.InvDate = IVr.InvDate;
+				SalesData.TransDate = IVr.TransDate;
+				SalesData.TransTime = IVr.TransTime;
+				SalesData.Price = IVrw.Price/fr*to;
+				SalesData.Sum = IVrw.Sum/fr*to;
+				SalesData.Location = IVr.Location;
+				SalesData.Position = IVr.Position;
+				SalesData.SalesGroup = IVr.SalesGroup;
+				SalesData.SalesMan = IVr.SalesMan;
+				SalesData.InvType = IVr.InvType;
+				SalesData.SerialNr = IVrw.SerialNr;
+				SalesData.Rate = fr*to;
+				SalesData.PayedByCash = paycash*IVrw.Sum/IVr.Sum4;
+				SalesData.PayedByCCard = payccard*IVrw.Sum/IVr.Sum4;
+				SalesData.PayedByGift = paygift*IVrw.Sum/IVr.Sum4;
+				SalesData.CurncyCode = IVr.CurncyCode;
+				SalesData.CustCode = IVr.CustCode;// Edit ************************** Tuesday, 6 September 2016 09:26:45
 			
-			switch(IVrw.stp) begin 
-				case kInvoiceRowTypeNormal:
-					SalesData.ArtCode = IVrw.ArtCode;
-					SalesData.Spec = IVrw.Spec;
-					SalesData.Quant = IVrw.Quant;
-				case kInvoiceRowTypeGiftVoucherSold:
-					SalesData.ArtCode = USetStr(31150);
-					SalesData.Spec = USetStr(31024) & " # " & IVrw.GCNr & ". " & IVrw.Spec;
-					SalesData.Quant = 1;
-					SalesData.Price = AbsoluteVal(SalesData.Sum);
-			end;						
+				switch(IVrw.stp) begin 
+					case kInvoiceRowTypeNormal:
+						SalesData.ArtCode = IVrw.ArtCode;
+						SalesData.Spec = IVrw.Spec;
+						SalesData.Quant = IVrw.Quant;
+					case kInvoiceRowTypeGiftVoucherSold:
+						SalesData.ArtCode = USetStr(31150);
+						SalesData.Spec = USetStr(31024) & " # " & IVrw.GCNr & ". " & IVrw.Spec;
+						SalesData.Quant = 1;
+						SalesData.Price = AbsoluteVal(SalesData.Sum);
+				end;						
 
-			INr.Code = IVrw.ArtCode;
-			if (ReadFirstMain(INr,1,true)) then begin
-				SalesData.DispGroups = INr.DispGroups;
-				SalesData.ItemGroup = INr.Group;
+				INr.Code = IVrw.ArtCode;
+				if (ReadFirstMain(INr,1,true)) then begin
+					SalesData.DispGroups = INr.DispGroups;
+					SalesData.ItemGroup = INr.Group;
 
-				pos = 0;
-				txt = "";
-				ExtractObj(INr.DispGroups,pos,txt);
-				while (nonblank(txt)) begin
-					DIr.Code = txt;
-					if(readfirstmain(DIr,1,true))then begin
-						if(DIr.CType=="TYPE")then begin
-							SalesData.ItemType = DIr.Code & separator & DIr.Name;
-						end;
-					end;
-					if(readfirstmain(DIr,1,true))then begin
-						if(DIr.CType=="KOMITENT")then begin
-							if (IVr.TransDate>=komitentStart) then begin
-								SalesData.Komitent = DIr.Name;
-								//LogText(0,SalesData.InvNr & "   " & SalesData.Komitent);
-							end;	
-						end;
-					end;					
+					pos = 0;
+					txt = "";
 					ExtractObj(INr.DispGroups,pos,txt);
+					while (nonblank(txt)) begin
+						DIr.Code = txt;
+						if(readfirstmain(DIr,1,true))then begin
+							if(DIr.CType=="TYPE")then begin
+								SalesData.ItemType = DIr.Code & separator & DIr.Name;
+							end;
+						end;
+						if(readfirstmain(DIr,1,true))then begin
+							if(DIr.CType=="KOMITENT")then begin
+								if (IVr.TransDate>=komitentStart) then begin
+									SalesData.Komitent = DIr.Name;
+									//LogText(0,SalesData.InvNr & "   " & SalesData.Komitent);
+								end;	
+							end;
+						end;					
+						ExtractObj(INr.DispGroups,pos,txt);
+					end;
+					Lbreaktype:;
 				end;
-				Lbreaktype:;
-			end;
 
-			//Зарплатная часть
+				//Зарплатная часть
 			
-			if (IVr.TransDate>=komitentStart) then begin
-			if (false) then begin
-				SalesData.SalaryPrice = IVrw.SalaryPrice*cred;
-			end else begin
-				PLr.PLCode = "SALAR";
-				PLr.ArtCode = IVrw.ArtCode;
-				if (ReadFirstMain(PLr,2,true)) then begin
-					SalesData.SalaryPrice = PLr.ExVatPrice*cred;
-				end;
-			end;
-			
-			//Коммисия
-			
+				if (IVr.TransDate>=komitentStart) then begin
 				if (false) then begin
-					SalesData.CommisionPrice = IVrw.CommisionPrice*cred;
+					SalesData.SalaryPrice = IVrw.SalaryPrice*cred;
 				end else begin
-					PLr.PLCode = "KOMPR";
+					PLr.PLCode = "SALAR";
 					PLr.ArtCode = IVrw.ArtCode;
 					if (ReadFirstMain(PLr,2,true)) then begin
-						SalesData.CommisionPrice = PLr.ExVatPrice*cred;
+						SalesData.SalaryPrice = PLr.ExVatPrice*cred;
 					end;
 				end;
-			end;			
+			
+				//Коммисия
+			
+					if (false) then begin
+						SalesData.CommisionPrice = IVrw.CommisionPrice*cred;
+					end else begin
+						PLr.PLCode = "KOMPR";
+						PLr.ArtCode = IVrw.ArtCode;
+						if (ReadFirstMain(PLr,2,true)) then begin
+							SalesData.CommisionPrice = PLr.ExVatPrice*cred;
+						end;
+					end;
+				end;			
 
 			
-			//Расчет себестоимости - -------------------------------
-			if (IVr.UpdStockFlag==0 or (IVr.UpdStockFlag!=0 and IVr.OrderNr>-1)) then begin
+				//Расчет себестоимости - -------------------------------
+				if (IVr.UpdStockFlag==0 or (IVr.UpdStockFlag!=0 and IVr.OrderNr>-1)) then begin
 					
-					for(k=0;k<SHarray.length;k=k+1) begin
-							SHp = SHarray[k];
-  						mtcnt = MatRowCnt(SHp);
-  						shipped = false;
-  						for (j=0;j<mtcnt;j=j+1) begin
-  							MatRowGet(SHp,j,SHrw);
-  							if (SHrw.ArtCode==IVrw.ArtCode and blank(IVrw.SerialNr)) then begin shipped = true; j = mtcnt;k=SHarray.length; end;
-  							if (SHrw.ArtCode==IVrw.ArtCode and nonblank(IVrw.SerialNr) and IVrw.SerialNr==SHrw.SerialNr) then begin shipped = true; j = mtcnt; k=SHarray.length; end;
-  						end;
-  						
-					end;					
-					sum = MulRateToBase1(IVr.CurncyCode,IVrw.Sum,IVr.FrRate,IVr.ToRateB1,IVr.ToRateB2,IVr.BaseRate1,IVr.BaseRate2,DefaultCurRoundOff);
-					if (shipped) then begin
-						if(AbsoluteVal(SHrw.FIFORowVal/SHrw.Ship)>SHrw.BBCostPrice)then begin
-							if(SHrw.FIFORowVal/SHrw.Ship/SHrw.BBCostPrice>1.5 or SHrw.FIFORowVal/SHrw.Ship/SHrw.BBCostPrice<-1.5)then begin
-								SHrw.FIFORowVal = SHrw.BBCostPrice*SHrw.Ship;// Edit ************************** Friday, 2 October 2015 17:11:02
+						for(k=0;k<SHarray.length;k=k+1) begin
+								SHp = SHarray[k];
+								mtcnt = MatRowCnt(SHp);
+								shipped = false;
+								for (j=0;j<mtcnt;j=j+1) begin
+									MatRowGet(SHp,j,SHrw);
+									if (SHrw.ArtCode==IVrw.ArtCode and blank(IVrw.SerialNr)) then begin shipped = true; j = mtcnt;k=SHarray.length; end;
+									if (SHrw.ArtCode==IVrw.ArtCode and nonblank(IVrw.SerialNr) and IVrw.SerialNr==SHrw.SerialNr) then begin shipped = true; j = mtcnt; k=SHarray.length; end;
+								end;
+							
+						end;					
+						sum = MulRateToBase1(IVr.CurncyCode,IVrw.Sum,IVr.FrRate,IVr.ToRateB1,IVr.ToRateB2,IVr.BaseRate1,IVr.BaseRate2,DefaultCurRoundOff);
+						if (shipped) then begin
+							if(AbsoluteVal(SHrw.FIFORowVal/SHrw.Ship)>SHrw.BBCostPrice)then begin
+								if(SHrw.FIFORowVal/SHrw.Ship/SHrw.BBCostPrice>1.5 or SHrw.FIFORowVal/SHrw.Ship/SHrw.BBCostPrice<-1.5)then begin
+									SHrw.FIFORowVal = SHrw.BBCostPrice*SHrw.Ship;// Edit ************************** Friday, 2 October 2015 17:11:02
+								end;
+							end;
+							if(AbsoluteVal(SHrw.FIFORowVal/SHrw.Ship)<SHrw.BBCostPrice)then begin
+								if(SHrw.FIFORowVal/SHrw.Ship/SHrw.BBCostPrice<0.5 or SHrw.FIFORowVal/SHrw.Ship/SHrw.BBCostPrice>-0.5)then begin
+									SHrw.FIFORowVal = SHrw.BBCostPrice*SHrw.Ship;// Edit ************************** Friday, 2 October 2015 17:11:02
+								end;
+							end;
+							if(SHrw.FIFORowVal==0 and SHrw.BBCostPrice>0)then begin
+								SHrw.FIFORowVal = SHrw.BBCostPrice*SHrw.Ship;
+							end;
+					
+							cost = (SHrw.FIFORowVal/SHrw.Ship)*IVrw.Quant;
+							if (IVrw.Quant<0 or IVr.InvType==kInvoiceTypeCredit) then begin
+								if(cost>0)then begin
+									cost = -cost;	//Edit----------------------Dima  01.10.2015 (problems with return of goods)
+								end;
+							end;
+							unitcost = SHrw.FIFORowVal/SHrw.Ship*cred;					
+											
+						end else begin
+							cost = IVrw.BasePrice*IVrw.Quant;
+							unitcost = IVrw.BasePrice*cred;
+						end;
+						SalesData.rowGP = sum - cost;	
+			
+				end else begin
+			
+						if(AbsoluteVal(IVrw.FIFORowVal/IVrw.Quant*cred)>IVrw.BasePrice)then begin
+							if(IVrw.FIFORowVal/IVrw.Quant*cred/IVrw.BasePrice>1.6 or IVrw.FIFORowVal/IVrw.Quant*cred/IVrw.BasePrice<-1.6)then begin
+								IVrw.FIFORowVal = IVrw.BasePrice*IVrw.Quant;// Edit ************************** Friday, 2 October 2015 17:11:05
 							end;
 						end;
-						if(AbsoluteVal(SHrw.FIFORowVal/SHrw.Ship)<SHrw.BBCostPrice)then begin
-							if(SHrw.FIFORowVal/SHrw.Ship/SHrw.BBCostPrice<0.5 or SHrw.FIFORowVal/SHrw.Ship/SHrw.BBCostPrice>-0.5)then begin
-								SHrw.FIFORowVal = SHrw.BBCostPrice*SHrw.Ship;// Edit ************************** Friday, 2 October 2015 17:11:02
+						if(AbsoluteVal(IVrw.FIFORowVal/IVrw.Quant*cred)<IVrw.BasePrice)then begin
+							if(IVrw.FIFORowVal/IVrw.Quant*cred/IVrw.BasePrice<0.5 or IVrw.FIFORowVal/IVrw.Quant*cred/IVrw.BasePrice>-0.5)then begin
+								IVrw.FIFORowVal = IVrw.BasePrice*IVrw.Quant;// Edit ************************** Friday, 2 October 2015 17:11:05
 							end;
 						end;
-						if(SHrw.FIFORowVal==0 and SHrw.BBCostPrice>0)then begin
-							SHrw.FIFORowVal = SHrw.BBCostPrice*SHrw.Ship;
-						end;
-    			
-						cost = (SHrw.FIFORowVal/SHrw.Ship)*IVrw.Quant;
+						if(IVrw.FIFORowVal==0 and IVrw.BasePrice>0)then begin
+							IVrw.FIFORowVal = IVrw.BasePrice*IVrw.Quant;
+						end;	      		
+						unitcost = IVrw.FIFORowVal/IVrw.Quant;
+						cost = IVrw.FIFORowVal*cred;
 						if (IVrw.Quant<0 or IVr.InvType==kInvoiceTypeCredit) then begin
 							if(cost>0)then begin
 								cost = -cost;	//Edit----------------------Dima  01.10.2015 (problems with return of goods)
 							end;
 						end;
-						unitcost = SHrw.FIFORowVal/SHrw.Ship*cred;					
-											
-					end else begin
-						cost = IVrw.BasePrice*IVrw.Quant;
-						unitcost = IVrw.BasePrice*cred;
-					end;
-					SalesData.rowGP = sum - cost;	
-			
-			end else begin
-			
-					if(AbsoluteVal(IVrw.FIFORowVal/IVrw.Quant*cred)>IVrw.BasePrice)then begin
-						if(IVrw.FIFORowVal/IVrw.Quant*cred/IVrw.BasePrice>1.6 or IVrw.FIFORowVal/IVrw.Quant*cred/IVrw.BasePrice<-1.6)then begin
-							IVrw.FIFORowVal = IVrw.BasePrice*IVrw.Quant;// Edit ************************** Friday, 2 October 2015 17:11:05
-						end;
-					end;
-					if(AbsoluteVal(IVrw.FIFORowVal/IVrw.Quant*cred)<IVrw.BasePrice)then begin
-						if(IVrw.FIFORowVal/IVrw.Quant*cred/IVrw.BasePrice<0.5 or IVrw.FIFORowVal/IVrw.Quant*cred/IVrw.BasePrice>-0.5)then begin
-							IVrw.FIFORowVal = IVrw.BasePrice*IVrw.Quant;// Edit ************************** Friday, 2 October 2015 17:11:05
-						end;
-					end;
-					if(IVrw.FIFORowVal==0 and IVrw.BasePrice>0)then begin
-						IVrw.FIFORowVal = IVrw.BasePrice*IVrw.Quant;
-					end;	      		
-					unitcost = IVrw.FIFORowVal/IVrw.Quant;
-					cost = IVrw.FIFORowVal*cred;
-					if (IVrw.Quant<0 or IVr.InvType==kInvoiceTypeCredit) then begin
-						if(cost>0)then begin
-							cost = -cost;	//Edit----------------------Dima  01.10.2015 (problems with return of goods)
-						end;
-					end;
-					SalesData.rowGP = (SalesData.Sum - cost)*cred;
-			end;
+						SalesData.rowGP = (SalesData.Sum - cost)*cred;
+				end;
 
-			SalesData.Cost = cost;
-			SalesData.UnitCost = unitcost;					
-			//-------------- -  ---------------------- ---------------
+				SalesData.Cost = cost;
+				SalesData.UnitCost = unitcost;					
+				//-------------- -  ---------------------- ---------------
 	
-			if (update) then begin
-				RecordUpdate(oldSalesData,SalesData,true);
-			end else begin
-				RecordStore(SalesData,true);
-			end;
+				if (update) then begin
+					RecordUpdate(oldSalesData,SalesData,true);
+				end else begin
+					RecordStore(SalesData,true);
+				end;
 
+			end;
 		end;
-	end;
+	
+ 	end;
+ 	return;
 end;
 
 
@@ -267,12 +271,24 @@ global updating procedure UpdateSalesData(record IVVc IVr)
 begin
 	record SalesDataVc SalesData;
 	boolean TrHs;
-
+	
+	SalesData.InvNr = IVr.SerNr;
+	//SalesData.RowNr = MatRowCnt(IVr);
+	TrHs = true;
+	While(LoopMain(SalesData,1,TrHs)) begin
+		if (SalesData.InvNr!= IVr.SerNr) then begin TrHs=false; end;
+		if (TrHs) then begin
+      RecordDelete(SalesData);
+      StepBack(SalesData);
+		end;
+	end;
+	
 	CreateSalesData(IVr);
+
 
 	//if invoice's rows were deleted
 	//we also delete them from SalesDataVc
-	SalesData.InvNr = IVr.SerNr;
+	/*SalesData.InvNr = IVr.SerNr;
 	SalesData.RowNr = MatRowCnt(IVr);
 	TrHs = true;
 	While(LoopMain(SalesData,2,TrHs)) begin
@@ -281,7 +297,7 @@ begin
       RecordDelete(SalesData);
       StepBack(SalesData);
 		end;
-	end;
+	end;*/
 
 end;
 
@@ -505,6 +521,43 @@ begin
 		end;
 	end;
 	logtext(0,"AddCustCodeToSalesDataMn end");
+
+return;
+end;
+
+
+global updating procedure FixSalesDataStpMn()
+begin
+	record SalesDataVc SalesData;
+	record IVVc IVr;
+	row IVVc IVrw;
+	
+	logtext(0,"FixSalesDataStpMn start");
+	while(loopmain(SalesData,1,true))begin
+		if(SalesData.InvNr!=IVr.SerNr)then begin
+			IVr.SerNr = SalesData.InvNr;
+			if(readfirstmain(IVr,1,true))then begin
+				if(SalesData.RowNr<matrowcnt(IVr))then begin
+					matrowget(IVr,SalesData.RowNr,IVrw);
+					if(SalesData.stp!=IVrw.stp and SalesData.ArtCode!=IVrw.ArtCode)then begin
+						recorddelete(SalesData);
+						stepback(SalesData);
+						logtext(0,SalesData.InvNr & "  " & SalesData.RowNr);
+					end;
+				end;
+			end;
+		end else begin
+			if(SalesData.RowNr<matrowcnt(IVr))then begin
+				matrowget(IVr,SalesData.RowNr,IVrw);
+				if(SalesData.stp!=IVrw.stp and SalesData.ArtCode!=IVrw.ArtCode)then begin
+					recorddelete(SalesData);
+					stepback(SalesData);
+					logtext(0,SalesData.InvNr & "  " & SalesData.RowNr);
+				end;
+			end;
+		end;
+	end;
+	logtext(0,"FixSalesDataStpMn end");
 
 return;
 end;

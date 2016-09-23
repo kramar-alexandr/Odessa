@@ -323,6 +323,8 @@ begin
 	Maintenance("Пересохранить ORVc",MyVClass,ReSaveORVcMn,modDBMain);		//Edit----------------------Dima  28.08.2015
 	
 	Maintenance("Добавить CustCode в SalesData",MyVClass,AddCustCodeToSalesDataMn,modDBMain);	// Edit ************************** Tuesday, 6 September 2016 13:02:28
+	Maintenance("Fix stp SalesData",MyVClass,FixSalesDataStpMn,modDBMain);	// Edit ************************** Tuesday, 6 September 2016 13:02:28
+
 	
 	Maintenance("Разослать СМС из стека",MyVClass,SendSMSFromStack,modDBMain);		//Edit----------------------Dima  27.08.2015
 	Maintenance("Пересчитать ORVc.LastShipDate",MyVClass,UpdateLastShipDateMn,modDBMain);		//Edit----------------------Dima  31.08.2015

@@ -332,6 +332,11 @@ separator = "^";
 						testf = false;
 					end;		
 		end;
+		
+		if(nonblank(RepSpec.f8) and SalesData.CustCode!=RepSpec.f8)then begin
+			testf = false;// Edit ************************** Thursday, 22 September 2016 13:32:29
+		end;// Edit ************************** Thursday, 22 September 2016 14:04:55
+		
 		if (SalesData.stp!=kInvoiceRowTypeNormal) then begin testf=false; end;		//Edit----------------------Dima  04.05.2016	
 		
 		if(testf)then begin
@@ -449,6 +454,7 @@ separator = "^";
 	OutString(90,0,"",false);
 	OutString(120,0,"Всего:",false);
 	OutString(270,0,totalQty,false);
+	OutString(300,0,"",false);
 	OutString(300,0,"",false);
 	OutString(300,0,totalSum,false);
  if (UserCanAction("ViewCostPrice",true)) then begin
@@ -1160,6 +1166,7 @@ string 200 itemType;
 string 20 keyloop,prevArtCode,currentCode,separator;
 vector val Turnover;
 record CUVc CUr;
+longint previnv,prevrow;
 
 	separator = "^";
 
@@ -1223,7 +1230,11 @@ record CUVc CUr;
 	
 	While (LoopKey(keyloop,SalesData,loop,TrHs)) begin
 		testf=true;					
-
+		
+		if(nonblank(RepSpec.f8) and RepSpec.f8!=SalesData.CustCode)then begin
+			testf = false;
+		end;
+		
 		if (nonblank(RepSpec.f1) and (SalesData.ArtCode!=RepSpec.f1)) then begin	testf=false; TrHs=false;	end;
 		if (nonblank(RepSpec.f7) and testf) then begin
 					if(!setinset(RepSpec.f7,SalesData.DispGroups))then begin
@@ -1232,17 +1243,48 @@ record CUVc CUr;
 		end;
 		if(SalesData.InvDate>endDate)then begin testf=false; TrHs=false; end;
 		
+		if(previnv==SalesData.InvNr and prevrow==SalesData.RowNr)then begin
+			testf = false;
+		end;
+		previnv=SalesData.InvNr;
+		prevrow=SalesData.RowNr;
+		
 		if (SalesData.stp!=kInvoiceRowTypeNormal) then begin testf=false; end;		//Edit----------------------Dima  04.05.2016	
 		
-		if(testf)then begin
+		if(testf)then begin			
 			Turnover[SalesData.CustCode] = Turnover[SalesData.CustCode] + SalesData.Sum;
+			/*if(currentuser=="SA")then begin
+				StartFormat(15);
+					OutString(0,0,SalesData.CustCode,false);
+					OutString(50,0,SalesData.ArtCode,false);
+					OutString(100,0,SalesData.InvNr,false);
+					OutString(120,0,SalesData.RowNr,false);
+					OutString(140,0,SalesData.stp,false);
+					OutString(160,0,SalesData.Sum,false);
+					
+					OutString(180,0,previnv,false);
+					OutString(200,0,prevrow,false);
+					
+				endformat;
+			end;*/
 			//salesum = salesum + SalesData.Sum;
 		end;
 	end;
 	
 	CUr.Name = "";
-	while(loopkey("Name",CUr,1,true))begin
+	keyloop = "Name";
+	if(nonblank(RepSpec.f8))then begin
+		CUr.Code = RepSpec.f8;
+		keyloop = "Code";
+	end;
+	TrHs = true;
+	while(loopkey(keyloop,CUr,1,TrHs))begin
 		testf = true;
+		
+		if(nonblank(RepSpec.f8) and RepSpec.f8!=CUr.Code)then begin
+			TrHs = false;
+			testf = false;
+		end;
 		
 		if(nonblank(RepSpec.f6) and RepSpec.f6!=CUr.CustCat)then begin
 			testf = false;
