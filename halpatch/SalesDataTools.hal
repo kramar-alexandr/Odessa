@@ -24,7 +24,7 @@ begin
   date komitentStart; 
   array record SHVc SHarray;
 	
-	if(IVr.OKFlag==0)then begin
+	if(IVr.OKFlag==1)then begin
 
 		cred = 1;
 		if(IVr.InvType==kInvoiceTypeCredit)then begin
@@ -338,20 +338,31 @@ end;
 
 //Функция RecalculateSalesDataVcMn создает/обновляет регистр SalesDataVc (для отчета по продажам)
 //должна запускаться при изменении прейскуранта SALAR, классификаций товаров
-global updating procedure RecalculateSalesDataVcMn()		//Edit----------------------Dima  11.03.2016
+global updating procedure RecalculateSalesDataVcMn(record RcVc RepSpec)		//Edit----------------------Dima  11.03.2016
 begin
 record IVVc IVr;
 record SHVc SHr;
 LongInt counter;
+date fromDate,toDate;
+boolean TrHs;
 
-	while(LoopMain(IVr,1,true)) begin
+	fromDate = RepSpec.sStartDate;
+	toDate = RepSpec.sEndDate;	
 	
-		CreateSalesData(IVr);
-
-		if (mod(IVr.SerNr,2000)==0) then begin
-			LogText(0,"Recalculation... IVVc: " & IVr.SerNr);
+	IVr.InvDate = fromDate;
+	TrHs = true;
+	while(LoopKey("InvDate",IVr,1,TrHs)) begin
+		if(IVr.InvDate>toDate)then begin
+			TrHs = false;
 		end;
 		
+		if(TrHs)then begin
+			CreateSalesData(IVr);
+
+			if (mod(IVr.SerNr,2000)==0) then begin
+				LogText(0,"Recalculation... IVVc: " & IVr.SerNr);
+			end;
+		end;
 		//counter = counter +1;
 		//if (counter>500) then begin goto LLLLA; end;
 		
