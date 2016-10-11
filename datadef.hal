@@ -1222,6 +1222,7 @@ RecordBegin(INVc,-,"artikel5");
   RecordField(AllowSalesForType,M4Str,60,0);
   RecordField(DisallowSalesForType,M4Str,60,0);//Edit----------------------Dima  26.01.2016
   RecordField(AllowSaleAllItems,M4Mark,0,0); //Edit----------------------Dima  27.01.2016 
+  RecordField(SalesReportLocation,M4Str,200,0);// Edit ************************** Monday, 3 October 2016 14:16:26
   ArrayBegin(Math,-,1);
   ArrayField(Code,M4Code,5,0);
   ArrayField(PRCode,M4Code,20,PRVc);

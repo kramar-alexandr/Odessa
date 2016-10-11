@@ -435,7 +435,7 @@ begin
 
   for(i=0;i<MatRowCnt(IVr);i=i+1) begin
 		MatRowGet(IVr,i,IVrw);
-		if ((IVrw.stp==kInvoiceRowTypeNormal and nonblank(IVrw.ArtCode)) or IVrw.stp==kInvoiceRowTypeGiftVoucherSold  ) then begin
+		if ((IVrw.stp==kInvoiceRowTypeNormal and nonblank(IVrw.ArtCode))) then begin
 
 			SalesData.InvNr = IVr.SerNr;
 			SalesData.RowNr = i;
@@ -459,14 +459,14 @@ begin
 								SalesData.ItemType = DIr.Code & separator & DIr.Name;
 							end;
 						end;
-						if(readfirstmain(DIr,1,true))then begin
+						/*if(readfirstmain(DIr,1,true))then begin
 							if(DIr.CType=="KOMITENT")then begin
 								if (IVr.TransDate>=komitentStart) then begin
 									SalesData.Komitent = DIr.Name;
 									//LogText(0,SalesData.InvNr & "   " & SalesData.Komitent);
 								end;	
 							end;
-						end;					
+						end;*/				
 						ExtractObj(INr.DispGroups,pos,txt);
 					end;
 				end;				

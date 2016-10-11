@@ -9766,6 +9766,8 @@ end;
   EditField(h3,v+=vs,120,"Запретить продавать товары с классификацией",Normal,DisallowSalesForType,false,DISClass);	//Edit----------------------Dima  26.01.2016
   CheckBox(h,v+=vs,0,"Разрешить продавать все товары",AllowSaleAllItems);			//Edit----------------------Dima  27.01.2016
 //  EditField(h,v+=vs,65,"Expense A/C",Normal,CostAcc,false,AccSClass);
+  EditField(h3,v+=vs,120,"Склад отчета по продажам",Normal,SalesReportLocation,false,LocationSClass);// Edit ************************** Monday, 3 October 2016 14:17:20
+
   Tile(tilenr,50,false,tilenr,PersAcc);  tilenr = tilenr + 1;
   EditField(h,vm=(v=6),65,"Счёт",Normal,PersAcc,false,AccSClass);
   EditField(h3,v,120,"Объект",Normal,PersObjx,false,ObjSClass);
@@ -11645,8 +11647,8 @@ begin
 	EditField(h,v+=vs,-20,"Адрес прожив.",Normal,DelAddr2,false,0);
 	
 	ButtonFrame(h3,vm=(v+=40),100,4,"Семейное положение");
-	RadioButton(h3,v,0,0,"Не женат",MarStatus);
-	RadioButton(h3,v+=17,1,0,"Замужем",MarStatus);
+	RadioButton(h3,v,0,0,"Холост",MarStatus);
+	RadioButton(h3,v+=17,1,0,"Женат/Замужем",MarStatus);
 	RadioButton(h3,v+=17,2,0,"В разводе",MarStatus);
 	RadioButton(h3,v+=17,3,0,"Вдовa/-ец",MarStatus);
 	
@@ -11876,8 +11878,8 @@ begin
   	CheckBox(h2+130,v+=17,0,"В черном списке",Blacklist);
 
   	ButtonFrame(h2,vm=(v+=40),100,4,"Семейное положение");
-	RadioButton(h2,v,0,0,"Не женат",MarStatus);
-  	RadioButton(h2,v+=17,1,0,"Замужем",MarStatus);
+	RadioButton(h2,v,0,0,"Холост",MarStatus);
+  	RadioButton(h2,v+=17,1,0,"Женат/Замужем",MarStatus);
   	RadioButton(h2,v+=17,2,0,"В разводе",MarStatus);
   	RadioButton(h2,v+=17,3,0,"Вдовa/-ец",MarStatus);
 

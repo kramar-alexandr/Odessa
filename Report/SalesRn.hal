@@ -176,6 +176,7 @@ time timeFrom, timeTo;
 date startDate,endDate;
 string 200 itemType;
 string 20 keyloop,prevArtCode,currentCode,separator;
+record UserVc User;
 
 separator = "^";
 
@@ -194,6 +195,11 @@ separator = "^";
 	consolidatedReport = RepSpec.ArtMode;
 	viewcost = UserCanAction("ViewCostPrice",true);
 	
+	User.Code = currentuser;
+	readfirstmain(User,1,true);
+	if(nonblank(User.SalesReportLocation))then begin
+		RepSpec.f3 = User.SalesReportLocation;
+	end;
 	
 	StartReportJob("Отчет по продажам");
 	rw=1;
@@ -498,6 +504,7 @@ longint tick,tick2,tick3;
 time timeFrom, timeTo;
 date startDate,endDate;
 string 20 keyloop,prevArtCode,currentCode;
+record UserVc User;
 
 		
 	qty = 0;
@@ -513,6 +520,12 @@ string 20 keyloop,prevArtCode,currentCode;
 	consolidatedReport = RepSpec.ArtMode;
 	viewcost = UserCanAction("ViewCostPrice",true);
 	
+	
+	User.Code = currentuser;
+	readfirstmain(User,1,true);
+	if(nonblank(User.SalesReportLocation))then begin
+		RepSpec.f3 = User.SalesReportLocation;
+	end;
 	
 	StartReportJob("Отчет по продажам");
 	rw=1;
@@ -824,6 +837,7 @@ vector string 70 items;
 vector longint qty;
 longint length,k,tick,tick2,tick3;
 time timeFrom, timeTo;
+record UserVc User;
 
 
 	//tick = GetCurTick;
@@ -851,6 +865,11 @@ time timeFrom, timeTo;
 	//tick2 = GetCurTick;
 	//LogText(0,"get prices  " & tick2-tick);
 		
+	User.Code = currentuser;
+	readfirstmain(User,1,true);
+	if(nonblank(User.SalesReportLocation))then begin
+		RepSpec.f3 = User.SalesReportLocation;
+	end;
 	
 	StartReportJob("Отчет по продажам");
 	rw=1;
@@ -1167,6 +1186,7 @@ string 20 keyloop,prevArtCode,currentCode,separator;
 vector val Turnover;
 record CUVc CUr;
 longint previnv,prevrow;
+record UserVc User;
 
 	separator = "^";
 
@@ -1178,6 +1198,12 @@ longint previnv,prevrow;
 	
 	consolidatedReport = true;
 	viewcost = UserCanAction("ViewCostPrice",true);
+	
+	User.Code = currentuser;
+	readfirstmain(User,1,true);
+	if(nonblank(User.SalesReportLocation))then begin
+		RepSpec.f3 = User.SalesReportLocation;
+	end;
 	
 	StartReportJob("Отчет Продаж по регионам");
 	rw=1;
@@ -1234,7 +1260,8 @@ longint previnv,prevrow;
 		if(nonblank(RepSpec.f8) and RepSpec.f8!=SalesData.CustCode)then begin
 			testf = false;
 		end;
-		
+		if (nonblank(RepSpec.f3) and (SalesData.Location!=RepSpec.f3)) then begin	testf=false;	end;
+
 		if (nonblank(RepSpec.f1) and (SalesData.ArtCode!=RepSpec.f1)) then begin	testf=false; TrHs=false;	end;
 		if (nonblank(RepSpec.f7) and testf) then begin
 					if(!setinset(RepSpec.f7,SalesData.DispGroups))then begin

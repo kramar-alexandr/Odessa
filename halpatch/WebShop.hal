@@ -360,7 +360,11 @@ begin
 	string 255 CCode;
 	
 	Cur.Code = XmlGetAttribute(xmlMessage,"orders/order" & i,"clientid");
+	if(blank(Cur.Code))then begin
+		Cur.Code = "000";
+	end;
 	CCode = Cur.Code;
+	
 	loopName = 1;
 	while (ReadFirstMain(Cur,1,true)) begin
 		loopName = loopName + 1;
@@ -628,7 +632,7 @@ begin
 		end;
 	end else begin
 		logtext(0,"WebordConnectFrom DISALLOW****************************************" & IPaddr);
-	end;;
+	end;
 return;
 end;
 

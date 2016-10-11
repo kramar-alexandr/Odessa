@@ -338,6 +338,8 @@ begin
 	Maintenance("Пересчитать статус завершен",MyVClass,RecalculateORStatusFinishedMn,modDBMain);	//Edit----------------------Dima  18.02.2016
 	Maintenance("Пересчитать регистр SalesDataVc",RecalculateSalesDataVClass,RecalculateSalesDataVcMn,modDBMain);	//Edit----------------------Dima  10.03.2016
 	Maintenance("Пересчитать классификации в SalesDataVc",UpdateSalesDataVClass,UpdateDispGroupsSalesDataMn,modDBMain);	//Edit----------------------Dima  18.05.2016
+	Maintenance("Пересчитать классификации в Отчете по продажам",UpdateSalesDataVClass,UpdateDispGroupsSalesDataMn,modIN);// Edit ************************** Tuesday, 11 October 2016 09:49:26
+
 	Maintenance("WEB-классификации записать отдельно в карте товара",MyVClass,TransferDispsToWebDispsMn,modDBMain); //Edit***************************Sasha2,13:28 08.04.2016
 	
   Maintenance("CityVcFromNPCityVcVClass",CityVcFromNPCityVcVClass,CityVcFromNPCityVcMn,modDBMain);//Edit-------------------Vitalii 11:27 23.05.2016
