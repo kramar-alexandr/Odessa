@@ -737,8 +737,33 @@ BEGIN
 	checklimitflocal = checklimitf;
 	if(usercanaction("IgnoreSHCreditLimit",false))then begin
 		checklimitflocal = false;
+		if (CreditLimitRec.SHSave==1) and (ORr.Sum4>ORr.DownPaySent)then begin
+      CUr.Code = ORr.CustCode;
+      if (GetCustAndBal(CUr,limit,bal,CreditLimitRec.Base,CreditLimitRec.OwnCheques,CreditLimitRec.ThirdCheques,CreditLimitRec.IOUCheques,CreditLimitRec.ThirdIOUCheques,CreditLimitRec.ORSaveWarn,limitdaysf)) then begin
+      end;
+      if (CreditLimitRec.ORSaveWarn!=0) then begin
+        PrepaidOrdOrderExists(ORr.SerNr,prepaid);
+        if (ORr.OSFlag!=1) then begin 
+          bal = bal + ORr.Sum4;
+        end;
+        bal = bal - prepaid;
+      end;
+      if (blank(limit)==false) then begin 
+        if (limitdaysf) then begin
+          res = 22260;
+          messagebox(res,"");
+          goto LPasteOrdInShipLimitMes;
+        end;
+        if (bal>limit) then begin
+          res = 1164;
+          messagebox(res,"");
+          goto LPasteOrdInShipLimitMes;
+        end;
+      end;
+    end;
 	end;
-
+	
+LPasteOrdInShipLimitMes:
 	
 	// Edit End ---------------------------------------------- Edit End
 	
