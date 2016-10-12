@@ -702,6 +702,7 @@ BEGIN
   record SerNrTrackBlock SNrb;
   record OrdSettBlock OSb;
   record NPSettingsBlock NPSettingsb;
+  boolean checklimitflocal;// Edit ************************** Wednesday, 12 October 2016 11:05:28
   
 	BlockLoad(NPSettingsb);  
   
@@ -730,8 +731,18 @@ BEGIN
   if (ORr.OrderType!=kOrderTypeNormal) then begin 
     goto LPasteOrdInShip;
   end;
-*/  
-  if (checklimitf) then begin
+*/
+// Edit Start ---------------------------------------------- Edit Start
+	//Wednesday, 12 October 2016 10:49:59
+	checklimitflocal = checklimitf;
+	if(usercanaction("IgnoreSHCreditLimit",false))then begin
+		checklimitflocal = false;
+	end;
+
+	
+	// Edit End ---------------------------------------------- Edit End
+	
+  if (checklimitflocal) then begin// Edit ************************** Wednesday, 12 October 2016 11:05:48
     if (CreditLimitRec.SHSave==1) and (ORr.Sum4>ORr.DownPaySent)then begin
       CUr.Code = ORr.CustCode;
       if (GetCustAndBal(CUr,limit,bal,CreditLimitRec.Base,CreditLimitRec.OwnCheques,CreditLimitRec.ThirdCheques,CreditLimitRec.IOUCheques,CreditLimitRec.ThirdIOUCheques,CreditLimitRec.ORSaveWarn,limitdaysf)) then begin
