@@ -868,7 +868,11 @@ LPasteOrdInShipLimitMes:
   	SHp.NPBackDeliveryPayer = NPSettingsb.DefRedeliveryPayer;
   	SHp.NPCargoType = NPSettingsb.DefCargoType;
   	SHp.NPCargoDescription = NPSettingsb.DefCargoDescription;
-  	SHp.NPPayer = NPSettingsb.DefPayer;
+  	if(nonblank(ORr.NPPayer))then begin// Edit ************************** Monday, 17 October 2016 15:00:08
+  		SHp.NPPayer = ORr.NPPayer;
+  	end else begin
+			SHp.NPPayer = NPSettingsb.DefPayer;
+  	end;
   	SHp.NPPaymentMethod = NPSettingsb.DefPaymentForm;
 		NP_PasteSender(SHp); 
 		NP_PasteSenderWarehouseDesc(SHp);

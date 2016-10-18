@@ -3,6 +3,7 @@ remote function Boolean IVCashVc_PasteCustCode(var record IVCashVc,string,string
 remote updating function Boolean AddContactCUDsmRemote(record CUVc,string);
 external procedure SetupCustPS2Rn(string,record RcVc);
 external function Integer GetInternetEnablerCountry();
+external procedure NextM4Number(string,var string);// Edit ************************** Tuesday, 18 October 2016 14:17:18
 
 global
 procedure OpenAddressLookupHelper(Integer wn)
@@ -325,4 +326,19 @@ begin
   end;
   CUDClassOpenRecord = res;
   return;
+end;
+
+
+global procedure TestNextLsm()
+begin
+	record CUVc CUr;
+	string 40 itemnr;
+	
+	CUr.Code = "G99999";
+	readlastmain(CUr,1,false);
+	
+	NextM4Number(CUr.Code,itemnr);
+	messagebox(0,CUr.Code & " " & itemnr);
+	
+return;
 end;

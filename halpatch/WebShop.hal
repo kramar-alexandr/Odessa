@@ -15,6 +15,7 @@ external function Boolean FindSubString(string,string);	//Edit------------------
 external updating procedure CheckWaitingTimeForGoods();
 external procedure CurValToOtherCur(Date,string,val,string,var val,roundmode);
 external function roundmode SetRoundModeD(Integer);
+external procedure NextM4Number(string,var string);// Edit ************************** Tuesday, 18 October 2016 14:17:18
 
 
 SetLangMode(LangRussian,"RUS",0);
@@ -357,11 +358,24 @@ end;
 updating Procedure CreateCUFromXML(var record CUVc Cur,xml xmlMessage,integer i,var string errors)
 begin
 	integer loopName;
-	string 255 CCode;
+	string 255 CCode,newcode;
 	
 	Cur.Code = XmlGetAttribute(xmlMessage,"orders/order" & i,"clientid");
 	if(blank(Cur.Code))then begin
-		Cur.Code = "000";
+	
+		CUr.Code = "G00000";
+		if(!readfirstmain(CUr,1,true))then begin
+			CUr.Code = "G00000";
+			Logtext(0,"Create GUEST Customer  CODE!!!!    " & CUr.Code);
+		end else begin
+			CUr.Code = "G99999";
+			readlastmain(CUr,1,false);
+			newcode = "";
+			NextM4Number(CUr.Code,newcode);
+			CUr.Code = newcode;
+			Logtext(0,"Create GUEST Customer  CODE!!!!    " & CUr.Code);
+		end;
+		//Cur.Code = "000";
 	end;
 	CCode = Cur.Code;
 	
@@ -752,52 +766,154 @@ LWebSyncConfirmed:;
 return;
 end; //Edit***************************Sasha2,17:21 15.07.2014 }
 
-
-
-/*
-
-global procedure HTSPresenceLoginReply()
+webpublic global updating
+procedure WebGetINImageBarCode()
 begin
-
-	logtext(0,"dsfsdsfdghaslkdjhasdkljfhkslajd HTSPresenceLoginReply");
-
-return;
-end;
-
-global procedure HTSLookupAddressReply()
-begin
-
-	logtext(0,"dsfsdsfdghaslkdjhasdkljfhkslajd HTSLookupAddressReply");
-
-return;
-end;
-
-
-global procedure HTSLookupAddress()
-begin
-
-	logtext(0,"dsfsdsfdghaslkdjhasdkljfhkslajd HTSLookupAddress");
-
-return;
-end;
-
-
-global procedure HTSLookupAddressReply()
-begin
-
-	logtext(0,"dsfsdsfdghaslkdjhasdkljfhkslajd HTSLookupAddressReply");
-
-return;
-end;
-
-
-
-
-global webpublic Procedure HTSRegisterPresence() //Edit***************************Sasha2,17:21 15.07.2014 {
-begin
+  LongInt ser;
+  record Attach2Vc Attachr;
+  string 100 imname,curcomp,nimname;
+  string 255 filename;
+	record CompaniesBlock Compb;
+	row CompaniesBlock Comprw;
+	integer ccomp;
+	record INVc INr;
+	string 40 instock,loc;
+	string 100 item,itemcode;
+	record ItemStatusVc ISr;
+	record SHVc SHr;
+	row SHVc SHrw;
+	integer i,mtrw;
+  
+  item = WebGetArg("item");
+  
+  INr.Code = item;
+  if(readfirstmain(INr,1,true))then begin
+  	itemcode = INr.Code;
+  end else begin
+  	INr.BarCode = item;
+  	if(readfirstkey("BarCode",INr,1,true))then begin
+  		itemcode = INr.Code;
+  	end else begin
+  		INr.AlternativeCode = item;
+  		if(readfirstkey("AlternativeCode",INr,1,true))then begin
+  			itemcode = INr.Code;
+			end;
+  	end;
+  end;
 	
-	logtext(0,"HTSRegisterPresence HTSRegisterPresence HTSRegisterPresence");
-	weboutstring("0");
+	SHr.SerNr = 39788;
+  readfirstmain(SHr,1,true);
+  
+  mtrw = matrowcnt(SHr);
+	 For(i=0;i<mtrw;i=i+1) begin
+ 		matrowget(SHr,i,SHrw);
+ 		if(SHrw.ArtCode==itemcode)then begin
+ 			SHrw.Ship = SHrw.Ship + 1;
+ 			matrowput(SHr,i,SHrw);
+ 			//recordstore(SHr,true);
+ 		end;
+	 end;
+  
+  weboutstring("<style type=\"text/css\">");
+  weboutstring(" TABLE {");
+  weboutstring("  width: 300px; ");/* Ширина таблицы */
+  weboutstring("  border: 1px solid black; ");/* Рамка вокруг таблицы */
+  weboutstring(" }");
+  weboutstring(" TD, TH {");
+  weboutstring("  text-align: left; ");/* Выравнивание по центру */
+  weboutstring("  padding: 3px; ");/* Поля вокруг текста */
+  weboutstring(" }");
+  weboutstring(" TH {");
+  weboutstring("  color: white; ");/* Цвет текста */
+  weboutstring("  background: #daa520;  "); /* Цвет фона */
+  weboutstring(" }");
+  weboutstring(" TD {");
+  weboutstring("  border-left: 1px dashed black; ");/* Линия слева от ячейки */
+  weboutstring(" }");
+  weboutstring(" .even { ");/* Стиль для четных колонок */
+  weboutstring("  background: #dcdcdc;  ");/* Цвет фона */
+  weboutstring(" }"); 
+  weboutstring(" .lc { ");/* Стиль для первой колонки */
+  weboutstring("  text-align: left; ");/* Выравнивание по левому краю */
+  weboutstring("  border: none; ");/* Нет лишних линий */
+  weboutstring(" }");
+  weboutstring("</style>");
+  
+  weboutstring("<p>");
+  
+ weboutstring(" <table style=\"width:100%\" border=1>");
+  weboutstring("  <tr>");
+  weboutstring("    <th style=\"width:10%\"></th>");
+ weboutstring("    <th style=\"width:70%\">Отгрузка № " & Shr.SerNr & "</th>");
+weboutstring("    <th style=\"width:10%\"></th>");
+ weboutstring("    <th style=\"width:10%\"></th>");
+ weboutstring("  </tr>");
+ 
+ weboutstring("  <tr>");
+ weboutstring("    <th style=\"width:10%\">Code</th>");
+ weboutstring("    <th style=\"width:70%\">Name</th> ");
+ weboutstring("    <th style=\"width:10%\">Order</th>");
+ weboutstring("    <th style=\"width:10%\">Scan</th>");
+ weboutstring("  </tr>");
+ 
+ mtrw = matrowcnt(SHr);
+ For(i=0;i<mtrw;i=i+1) begin
+ 	matrowget(SHr,i,SHrw);
+	 weboutstring("  <tr>");
+	 
+	 if(SHrw.Ordered>SHrw.Ship)then begin
+	 weboutstring("    <td style=\"width:10%\">" & SHrw.ArtCode & "</td>");
+	 weboutstring("    <td style=\"width:70%\">" & SHrw.Spec & "</td> ");
+	 weboutstring("    <td style=\"width:10%\">" & SHrw.Ordered & "</td>");
+	 weboutstring("    <td style=\"width:10%\">" & SHrw.Ship & "</td>");
+	 end;
+	 
+	 weboutstring("  </tr>");
+	end; 
+
+  
+weboutstring(" </table>");
+			weboutstring("</p>");
+  return;
+end;
+
+
+
+webpublic global
+updating procedure WebInvent()
+begin
+record LocationVc Locr;
+integer curc;
+	
+weboutstring("<!DOCTYPE html>");
+weboutstring("<html>");
+weboutstring("<body>");
+
+weboutstring("<input autofocus type=\"text\" id=\"numb\">");
+
+weboutstring("<p id=\"demo\"></p>");
+
+weboutstring("<script>");
+
+weboutstring("document.getElementById('numb').onkeypress = function(e){");
+weboutstring("    var x, text,loc;");
+weboutstring("		var xhr = new XMLHttpRequest();");
+
+weboutstring("    x = document.getElementById(\"numb\").value;");
+weboutstring("    if (!e) e = window.event;");
+weboutstring("    if (e.keyCode == '13'){");
+weboutstring("    xhr.open(\"GET\",'WebGetINImageBarCode.hal?item=' + x, false);");
+weboutstring("    xhr.send();");
+weboutstring("    document.getElementById(\"demo\").innerHTML = xhr.responseText;");
+weboutstring("      this.value = \"\";");
+weboutstring("      return false;");
+weboutstring("    }");
+weboutstring("  };");
+
+weboutstring("</script>");
+
+weboutstring("</body>");
+weboutstring("</html> ");
 
 return;
-end;*/
+end;

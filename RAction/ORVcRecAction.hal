@@ -2582,7 +2582,10 @@ begin
   val fr,to1,to2,br1,br2;
   string 10 curcode;
   record MainStockBlock MSb;
-
+  record NPSettingsBlock NPSettingsb;// Edit ************************** Monday, 17 October 2016 15:04:04
+	
+	
+	BlockLoad(NPSettingsb);// Edit ************************** Monday, 17 October 2016 15:04:14
   BlockLoad(OSr);
   BlockLoad(ARAccRec);
   BlockLoad(MSb);
@@ -2642,6 +2645,9 @@ begin
   ORr.OfficialSerNr = "";
   ORr.OfficialSerNrSerie = "";
   ORr.Advance = 0;
+  
+  ORr.NPPayer = NPSettingsb.DefPayer;// Edit ************************** Monday, 17 October 2016 15:03:50
+  
   ORVcRecordDefaults = res;  
   return;
 end;
