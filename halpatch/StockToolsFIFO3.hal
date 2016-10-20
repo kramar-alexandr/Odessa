@@ -961,7 +961,7 @@ begin
 LStoreItemHistory_Out:;
 	// Edit Start ---------------------------------------------- Edit Start
 	//Saturday, 3 October 2015 11:10:11
-	if(ISMAINTENANCE)then begin
+	/*if(ISMAINTENANCE)then begin
 		if(filename=="StockMovVc")then begin
 			if(outcost!=0)then begin
 				SMr.SerNr = transnr;
@@ -1015,7 +1015,7 @@ LStoreItemHistory_Out:;
 				end;
 			end;
 		end;
-	end;
+	end;*/
 	// Edit End ---------------------------------------------- Edit End
 	
   return;
