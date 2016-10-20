@@ -39,22 +39,19 @@ begin
   Randomize;
   INr.Code = "1665147";
   readfirstmain(INr,1,true);
-  WebOutString(INr.Code & delim & INr.Name & delim & Random(0,10) & delim & 0);
+  WebOutString(INr.Code & delim & INr.Name & delim & Random(1,10) & delim & 0);
   INr.Code = "3065022";
   readfirstmain(INr,1,true);
-  WebOutString(nl & INr.Code & delim & INr.Name & delim & Random(0,10) & delim & 0);
+  WebOutString(nl & INr.Code & delim & INr.Name & delim & Random(1,10) & delim & 0);
   INr.Code = "1665401";
   readfirstmain(INr,1,true);
-  WebOutString(nl & INr.Code & delim & INr.Name & delim & Random(0,10) & delim & 0);
-  INr.Code = "1665402";
-  readfirstmain(INr,1,true);
-  WebOutString(nl & INr.Code & delim & INr.Name & delim & Random(0,10) & delim & 0);
+  WebOutString(nl & INr.Code & delim & INr.Name & delim & Random(1,10) & delim & 0);
   INr.Code = "1665301";
   readfirstmain(INr,1,true);
-  WebOutString(nl & INr.Code & delim & INr.Name & delim & Random(0,10) & delim & 0);
+  WebOutString(nl & INr.Code & delim & INr.Name & delim & Random(1,10) & delim & 0);
   INr.Code = "1665376";
   readfirstmain(INr,1,true);
-  WebOutString(nl & INr.Code & delim & INr.Name & delim & Random(0,10) & delim & 0);
+  WebOutString(nl & INr.Code & delim & INr.Name & delim & Random(1,10) & delim & 0);
   return;
 end;
 
