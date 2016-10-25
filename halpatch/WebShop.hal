@@ -63,6 +63,7 @@ global updating procedure CustTimeTableAction()
 begin
   record RcVc RepSpec;
   time t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,curt,curtnew;
+  
   string 5 hr,mn;
   integer minute;
   string 50 backupfile,month,year,day;
@@ -94,7 +95,8 @@ begin
     end;
     curtnew = StringToTime(hr & ":" & mn);
 
-    if (curtnew==t1 or curtnew==t2 or curtnew==t3 or curtnew==t4 or curtnew==t5 or curtnew==t6 or curtnew==t7 or curtnew==t8 or curtnew==t9) then begin
+    //if (curtnew==t1 or curtnew==t2 or curtnew==t3 or curtnew==t4 or curtnew==t5 or curtnew==t6 or curtnew==t7 or curtnew==t8 or curtnew==t9) then begin
+    if(curtnew>=StringToTime("8:00") and curtnew.minute==0)then begin
     	LogText(0,"CustTimeTableAction at planned time: " & curtnew);
     	ExportStockCSVMn(RepSpec);
     	ExportAllItems(RepSpec);
@@ -474,7 +476,10 @@ begin
 						updateflag = false;
 					end;
 					ORr.OrdDate = CurrentDate;
-					Cur.eMail = XmlGetAttribute(xmlPost,"orders/order" & i,"email");
+					CUr.eMail = XmlGetAttribute(xmlPost,"orders/order" & i,"email");
+					if(blank(CUr.eMail))then begin
+						CUr.eMail = "UnknownEMail";
+					end;
 			
 					rebgroup = XmlGetAttribute(xmlPost,"orders/order" & i,"group_id");
 			
