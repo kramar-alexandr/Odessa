@@ -413,6 +413,7 @@ begin
 	Cur.VATCode = "0%";
 	Cur.OnAccount = 1;		//Edit----------------------Dima  11.02.2015
 	Cur.SelfBilling = 1;	//Edit----------------------Dima  11.02.2015
+	CUr.DateCreated = currentdate;
 	if (!recordStore(Cur,true)) then begin
 		if (Blank(errors)) then begin errors = "Error2"; end else begin errors = errors & ",Error2"; end;
 		logtext(0,"CUVc create error: " & Cur.Name);
