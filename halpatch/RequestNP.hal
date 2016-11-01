@@ -2689,14 +2689,19 @@ begin
   vector string 50 statuses;
   string 200 docNumber,status;
   integer steps;
+  integer repeat;
+	boolean testf,ssl;
+  string 20 port;
 
-  
+  repeat = 0;
 	BlockLoad(NPSettingsb); 
   if (blank(NPSettingsb.APIkey)) then begin
   	goto LNPUpdateENstatusMn;
   end;	 
   host = "api.novaposhta.ua";
   page = "/v2.0/xml/";
+  port = "443";
+  ssl = true;
   i = 0;
   TrHs = true;
   
@@ -2712,12 +2717,14 @@ begin
 	steps = documents.length / 10;
 	
 	for(k=0;k<=steps;k=k+1) begin
-	
+		
 		ArrayFromArray(documents,tempArray,k*10,(k+1)*10-1);
+		LsendRequestAgainGet2:;
+
   	SetAreaZeroSize(mainRequest);
 		CreateDescriptRequestDocumentTrackig(host, page, NPSettingsb.APIkey, tempArray, mainRequest); 
   	
-  	if(MySendRawWebRequest(host,"443",true,"POST",page & getParam,"text/xml","",false,mainRequest,replyarea,5)) then begin  
+  	if(MySendRawWebRequest(host,port,ssl,"POST",page & getParam,"text/xml","",false,mainRequest,replyarea,5)) then begin  
   	  writeareatofile(replyarea,"1statusesReply.txt",0);
   	  
   	  GetXMLArea(replyarea);
@@ -2745,8 +2752,22 @@ begin
 				i = i + 1;
 			end;
 			
-  	  end else begin
- 			logtext(0,"Hansa World: No Connection to api.novaposhta.ua");
+		end else begin
+			repeat = repeat + 1;
+			if(repeat < 3) then begin
+				millisleep(100);
+				
+				if(repeat==2)then begin
+					host = "api.novaposhta.ua";
+					page = "/v2.0/xml/";
+					ssl = false;
+					port = "80";
+				end;
+				Logtext(0,"Reply request NPUpdateENstatusMn " & repeat);
+				goto LsendRequestAgainGet2;
+			end;
+			repeat = 0;					
+			logtext(0,"Hansa World: No Connection to api.novaposhta.ua");
   	end;
   
   end;

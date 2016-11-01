@@ -16,7 +16,7 @@ external updating procedure CheckWaitingTimeForGoods();
 external procedure CurValToOtherCur(Date,string,val,string,var val,roundmode);
 external function roundmode SetRoundModeD(Integer);
 external procedure NextM4Number(string,var string);// Edit ************************** Tuesday, 18 October 2016 14:17:18
-
+external procedure NPUpdateENstatusMn(record RcVc);
 
 SetLangMode(LangRussian,"RUS",0);
 
@@ -100,6 +100,7 @@ begin
     	LogText(0,"CustTimeTableAction at planned time: " & curtnew);
     	ExportStockCSVMn(RepSpec);
     	ExportAllItems(RepSpec);
+    	NPUpdateENstatusMn(RepSpec);// Edit ************************** Wednesday, 26 October 2016 17:21:47
     end;
     if (curtnew==t10) then begin
     	LogText(0,"CustTimeTableAction at planned time: " & curtnew);

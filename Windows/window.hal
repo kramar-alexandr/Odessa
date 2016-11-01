@@ -929,10 +929,10 @@ begin
 end;
 
 window NewINRClass:2
-  wtag("language","UKR"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
 begin
   real h,h2,h3,h4,v,v1,vm,vs,v2,temp;
-  WindowBegin("Визначте звіт по складу (модифікований)",NewINRClass,CGRcW,RcType);
+  WindowBegin("Определите отчет по складу (модиф.)",NewINRClass,CGRcW,RcType);
   h = 160; v = 6; vs = 20; h2 = 30; h3 = 180; h4 = 330;
 
   if (IsEnterprise) then begin
@@ -958,17 +958,7 @@ begin
 
   EditFieldTL(h,v+=vs,100,"Место",M4Code,Normal,30,f6,false,PosSClass);
 
-  /*
-  if (HasDepartments) then begin
-  EditFieldTL(h,v+=vs,150,"Відділ",M4UStr,Normal,10,AccStr,false,DepSClass);
-  end;
-  if (HasModPO) then begin
-  EditFieldTL(h,v+=vs,150,"Постачальник",M4UStr,Normal,20,LastAcc,false,VESClass);
-  end;*/
-  //EditFieldTL(h,v+=vs,80,"Дата",M4Date,Normal,0,d1,false,PasteCurDate);
-  //CheckBox(temp,v+=vs,0,"Показ. сер. номер",flags[10]); v = v + 16;
-
-  CheckBox(h,v+=1.5*vs,0,"Вкл. закритий товар",flags[18]); v = v + 16;
+  CheckBox(h,v+=1.5*vs,0,"Вкл. закрытый товар",flags[18]); v = v + 16;
 
   if (HasMultiCurrency) then begin
     v = v + 45; v1 = v;

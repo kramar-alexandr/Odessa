@@ -467,7 +467,7 @@ separator = "^";
 		OutString(320,0,"",false);
 		OutString(340,0,totalCost,false);
 		OutString(360,0,totalRent,false);
-		OutString(380,0,totalRent/totalSalary*100,false);
+		OutString(380,0,totalRent/totalCost*100,false);
 		OutString(400,0,"",false);
 		OutString(420,0,totalSalary,false);
 		OutString(440,0,totalRentSalary,false);
