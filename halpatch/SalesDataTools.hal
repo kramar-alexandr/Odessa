@@ -112,7 +112,8 @@ begin
 				SalesData.PayedByGift = paygift*IVrw.Sum/IVr.Sum4;
 				SalesData.CurncyCode = IVr.CurncyCode;
 				SalesData.CustCode = IVr.CustCode;// Edit ************************** Tuesday, 6 September 2016 09:26:45
-			
+				SalesData.CustCat = IVr.CustCat;// Edit ************************** Tuesday, 6 September 2016 09:26:45
+
 				switch(IVrw.stp) begin 
 					case kInvoiceRowTypeNormal:
 						SalesData.ArtCode = IVrw.ArtCode;
@@ -571,4 +572,24 @@ begin
 	logtext(0,"FixSalesDataStpMn end");
 
 return;
+end;
+
+
+global updating procedure FillCustCatToSalesDataMn()
+begin
+	record CUVc CUr;
+	vector string 20 custcat;
+	record SalesDataVc SalesData;
+	
+	while(loopmain(CUr,1,true))begin
+		custcat[CUr.Code] = CUr.CustCat;
+	end;
+	
+	while(loopmain(SalesData,1,true))begin
+		SalesData.CustCat = custcat[SalesData.CustCode];
+		recordstore(SalesData,true);
+	end;
+	
+	
+return
 end;

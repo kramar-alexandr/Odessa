@@ -293,10 +293,17 @@ separator = "^";
 										OutVal(340,0,cost,M4Val,false);
 										OutVal(360,0,rent,M4Val,false);
 										OutVal(380,0,rent*100/cost,M4Val,false);				//profit %
+										//OutVal(400,0,prevSalesData.SalaryPrice,M4Val,false);
+										//OutVal(420,0,salarySum,M4Val,false);	
 										OutVal(400,0,prevSalesData.SalaryPrice,M4Val,false);
-										OutVal(420,0,salarySum,M4Val,false);	
+										OutVal(420,0,salary,M4Val,false);
+										
 										OutVal(440,0,rentsalary,M4Val,false);
 										OutVal(460,0,rentsalary*100/prevSalesData.SalaryPrice/qty,M4Val,false);		//rent, salary %	
+									end;
+									OutString(480,0,prevSalesData.SalesMan,false);	
+									if(currentuser=="SA")then begin
+										OutString(60,0,prevSalesData.CustCode,false);		
 									end;																									
 									EndFormat;
 									
@@ -342,6 +349,9 @@ separator = "^";
 		if(nonblank(RepSpec.f8) and SalesData.CustCode!=RepSpec.f8)then begin
 			testf = false;// Edit ************************** Thursday, 22 September 2016 13:32:29
 		end;// Edit ************************** Thursday, 22 September 2016 14:04:55
+		
+		if (nonblank(RepSpec.f9) and (SalesData.CustCat!=RepSpec.f9)) then begin	testf=false;	end;
+		logtext(0,SalesData.CustCat);
 		
 		if (SalesData.stp!=kInvoiceRowTypeNormal) then begin testf=false; end;		//Edit----------------------Dima  04.05.2016	
 		
@@ -395,7 +405,10 @@ separator = "^";
 								OutVal(440,0,rentSal,M4Val,false);
 								OutVal(460,0,rentSalPercent,M4Val,false);
 							end;
-							OutString(480,0,SalesData.SalesMan,false);																											
+							OutString(480,0,SalesData.SalesMan,false);	
+							if(currentuser=="SA")then begin
+								OutString(60,0,SalesData.CustCode,false);		
+							end;																										
 							EndFormat;					
 					end else begin	
 							//Суммируем данные для консолидированного отчета
@@ -438,7 +451,11 @@ separator = "^";
 								OutVal(420,0,salarySum,M4Val,false);	
 								OutVal(440,0,rentsalary,M4Val,false);
 								OutVal(460,0,rentsalary*100/prevSalesData.SalaryPrice/qty,M4Val,false);		//rent, salary %	
-							end;																									
+							end;	
+							OutString(480,0,prevSalesData.SalesMan,false);	
+							if(currentuser=="SA")then begin
+								OutString(60,0,prevSalesData.CustCode,false);		
+							end;																								
 							EndFormat;
 	end;	
 	
@@ -1243,11 +1260,21 @@ record UserVc User;
 	
 	keyloop = "DateCode";
 	loop = 1;
-		
+	
+	if (NonBlank(RepSpec.f3)) then begin//отчет по одному товару
+		SalesData.Location = RepSpec.f3;
+		keyloop = "LocationDateCode";
+		loop = 2;
+	end;
+	
 	if (NonBlank(RepSpec.f1)) then begin//отчет по одному товару
 		SalesData.ArtCode = RepSpec.f1;
 		keyloop = "CodeDate";
 		loop = 2;
+		if(NonBlank(RepSpec.f3))then begin
+			keyloop = "LocationCodeDate";
+			loop = 3;
+		end;
 	end;
 
 	TrHs=true;
@@ -1260,13 +1287,21 @@ record UserVc User;
 		if(nonblank(RepSpec.f8) and RepSpec.f8!=SalesData.CustCode)then begin
 			testf = false;
 		end;
-		if (nonblank(RepSpec.f3) and (SalesData.Location!=RepSpec.f3)) then begin	testf=false;	end;
+		if(nonblank(RepSpec.f3) and RepSpec.f3!=SalesData.Location)then begin
+			testf = false;
+			if(keyloop=="LocationDateCode" or keyloop=="LocationCodeDate")then begin
+				TrHs = false;
+			end;
+		end;
 
 		if (nonblank(RepSpec.f1) and (SalesData.ArtCode!=RepSpec.f1)) then begin	testf=false; TrHs=false;	end;
 		if (nonblank(RepSpec.f7) and testf) then begin
 					if(!setinset(RepSpec.f7,SalesData.DispGroups))then begin
 						testf = false;
 					end;		
+		end;
+		if(nonblank(RepSpec.f6) and RepSpec.f6!=SalesData.CustCat)then begin
+			testf = false;
 		end;
 		if(SalesData.InvDate>endDate)then begin testf=false; TrHs=false; end;
 		

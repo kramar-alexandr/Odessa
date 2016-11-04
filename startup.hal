@@ -273,6 +273,8 @@ begin
   Maintenance("FixIHCostSM",MyVClass,FixIHCostSM,modDBMain);  //Edit**********Dima, 28.01.2014
   
   Maintenance("FixSomeCostSM",MyVClass,FixSomeIHCostSM,modDBMain);  //Edit**********Dima, 28.01.2014
+	
+	Maintenance("SalesData fill CustCat",MyVClass,FillCustCatToSalesDataMn,modDBMain);  //Edit**********Dima, 28.01.2014
 
 		
   Maintenance("Пересчитать значение объема в карточке товара",RecalcINVolumeClass,RecalcINVolumeMn,modDBMain);//Edit***************************Sasha2,13:50 24.06.2014
