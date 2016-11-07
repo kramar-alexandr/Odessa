@@ -99,7 +99,9 @@ begin
     if(curtnew>=StringToTime("8:00") and curtnew.minute==0)then begin
     	LogText(0,"CustTimeTableAction at planned time: " & curtnew);
     	ExportStockCSVMn(RepSpec);
-    	ExportAllItems(RepSpec);
+    	if(hr=="8" or hr=="12" or hr=="16" or hr=="20")then begin
+				ExportAllItems(RepSpec);
+    	end;
     	//NPUpdateENstatusMn(RepSpec);// Edit ************************** Wednesday, 26 October 2016 17:21:47
     end;
     if (curtnew==t10) then begin

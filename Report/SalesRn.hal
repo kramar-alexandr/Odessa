@@ -301,7 +301,7 @@ separator = "^";
 										OutVal(440,0,rentsalary,M4Val,false);
 										OutVal(460,0,rentsalary*100/prevSalesData.SalaryPrice/qty,M4Val,false);		//rent, salary %	
 									end;
-									OutString(480,0,prevSalesData.SalesMan,false);	
+									//OutString(480,0,prevSalesData.SalesMan,false);	
 									if(currentuser=="SA")then begin
 										OutString(60,0,prevSalesData.CustCode,false);		
 									end;																									
@@ -452,7 +452,7 @@ separator = "^";
 								OutVal(440,0,rentsalary,M4Val,false);
 								OutVal(460,0,rentsalary*100/prevSalesData.SalaryPrice/qty,M4Val,false);		//rent, salary %	
 							end;	
-							OutString(480,0,prevSalesData.SalesMan,false);	
+							//OutString(480,0,prevSalesData.SalesMan,false);	
 							if(currentuser=="SA")then begin
 								OutString(60,0,prevSalesData.CustCode,false);		
 							end;																								
