@@ -402,12 +402,16 @@ begin
 			Cur.Code = UpperCase(CCode);
 		end;
 	end;
+	Cur.CountryCode = XmlGetAttribute(xmlMessage,"orders/order" & i,"country");
+	Cur.Ethnicity = XmlGetAttribute(xmlMessage,"orders/order" & i,"city");
+	Cur.InvAddr0 = XmlGetAttribute(xmlMessage,"orders/order" & i,"address");
 	Cur.Name = XmlGetAttribute(xmlMessage,"orders/order" & i,"name") & " " & XmlGetAttribute(xmlMessage,"orders/order" & i,"name2");
 	Cur.eMail = XmlGetAttribute(xmlMessage,"orders/order" & i,"email");
 	Cur.Phone = XmlGetAttribute(xmlMessage,"orders/order" & i,"phone");
 	if(left(Cur.Phone,2)=="38")then begin
 		Cur.Phone = right(Cur.Phone,len(Cur.Phone)-2);//mid(Cur.Phone,3,len(Cur.Phone)-3);// Edit ************************** Friday, 11 March 2016 14:12:16
 	end;
+	Cur.PayDeal = "3";
 	Cur.CustCat = "WEB";	//Edit--------------------Dima 08.01.2015
 	Cur.CUType = 1;
 	Cur.CurncyCode = "UAH_R";
