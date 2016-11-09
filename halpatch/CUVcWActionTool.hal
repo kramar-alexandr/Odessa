@@ -1,0 +1,65 @@
+external procedure GetCountryName(string,string,var string);
+external procedure CalcVATBaseVAT(record SMVc,Integer,Integer,Integer,var val,var val);
+external procedure CalcSum(val,val,val,val,var val,Integer);
+external procedure AddVATBase(var record SMVc,string,val,val,Integer,Integer,Integer);
+external procedure SetupVATBase(var record SMVc,var Integer);
+external procedure SetSalesMan(var string,string);
+external function Boolean GetPD(var record PDVc);
+external function LongInt DateDiff(Date,Date);
+external function val MulRateToBase1(var string,val,val,val,val,val,val,roundmode);
+external procedure GetOnAccBalance(record RcVc,string,string,Boolean,Integer,var val,var val,var val,var val,var val,var val,var val,record SMVc,
+                   Array string,Array val,var Integer);
+external function Boolean GetNextCustNr(var string);
+external function Boolean PasteRegDef(string,string,var string,var string,var string,var string);
+external function string 255 AddStr(string,string,string);
+external function string 255 RemoveSetFromSet(string,string);
+
+global
+procedure CUVc_PasteCountryCode(var record CUVc CUr,string OldCountry)
+begin
+  record CountryVc Countryr;
+  record CUUserLabelBlock CUUserLb;
+
+  if (CUr.CountryCode!=OldCountry) then begin
+    Countryr.Code = OldCountry;
+    if (ReadFirstMain(Countryr,1,true)) then begin
+      CUr.Objects = RemoveSetFromSet(Countryr.Objects,CUr.Objects);
+    end;
+    
+    /*if (nonblank(CUr.CountryCode)) then begin 
+      GetCountryName(CUr.CountryCode,CUr.LangCode,CUr.InvCountryName);
+    end else begin
+      CUr.InvCountryName = "";
+    end;*/
+    Countryr.Code = CUr.CountryCode;
+    if (ReadFirstMain(Countryr,1,true)) then begin
+      if blank(CUr.FreightCode) then begin
+        CUr.FreightCode = Countryr.FreightCode;
+      end;
+      if blank(CUr.PLCode) then begin
+        CUr.PLCode = Countryr.PLCode;
+      end;
+      if blank(CUr.RebCode) then begin
+        CUr.RebCode = Countryr.RebCode;
+      end;
+      if (!SetInSet(Countryr.Objects,CUr.Objects)) then begin
+        CUr.Objects = AddStr(CUr.Objects,Countryr.Objects,",");
+      end;
+      //CUr.ExportFlag = Countryr.ExportFlag;
+      BlockLoad(CUUserLb);
+      /*switch (CUUserLb.CountryAddrLine) begin
+        case kCountryAddrLineUserAddr0:
+          CUr.InvAddr0 = Countryr.Comment;
+        case kCountryAddrLineUserAddr1:
+          CUr.InvAddr1 = Countryr.Comment;
+        case kCountryAddrLineUserAddr2:
+          CUr.InvAddr2 = Countryr.Comment;
+        case kCountryAddrLineUserAddr3:
+          CUr.InvAddr3 = Countryr.Comment;
+        case kCountryAddrLineUserAddr4:
+          CUr.InvAddr4 = Countryr.Comment;
+      end;*/
+    end;
+  end;
+  return;
+end;
