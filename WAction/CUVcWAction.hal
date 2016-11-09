@@ -793,10 +793,14 @@ BEGIN
       if (UserCanAction("ViewCostPrice",true)==false) then begin
         res = false;
       end;
-    case "PayDeal": // Edit ************************** Wednesday, 9 November 2016 11:19:28
+    case "RebCode": // Edit ************************** Wednesday, 9 November 2016 11:19:28
       if (UserCanAction("ViewCostPrice",true)==false) then begin
         res = false;
       end;
+    /*case "PayDeal": // Edit ************************** Wednesday, 9 November 2016 11:19:28
+      if (UserCanAction("ViewCostPrice",true)==false) then begin
+        res = false;
+      end;*/
     case "VEPayDeal": // Edit ************************** Wednesday, 9 November 2016 11:19:28
       if (UserCanAction("ViewCostPrice",true)==false) then begin
         res = false;

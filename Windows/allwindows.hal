@@ -11662,7 +11662,7 @@ begin
   EditField(h,v+=vs,-20,"Дети 2",Normal,Salutation2,false,0);
   EditField(h,v+=vs,-20,"Дети 3",Normal,Salutation3,false,0);
   
-  EditField(h,v+=vs,80,"Дата трудоустройства",Normal,DateCreated,false,PasteCurDate);
+  EditField(h,v+=vs,80,"Дата начала работы",Normal,DateCreated,false,PasteCurDate);
   EditField(h2,v,80,"Послед. изменение",Normal,DateChanged,false,PasteCurDate);
 	EditField(h,v+=vs,120,"Дата увольнения",Normal,VATNrCheckDate,false,PasteCurDate);
 	
