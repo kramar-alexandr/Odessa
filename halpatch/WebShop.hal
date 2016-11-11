@@ -17,6 +17,7 @@ external procedure CurValToOtherCur(Date,string,val,string,var val,roundmode);
 external function roundmode SetRoundModeD(Integer);
 external procedure NextM4Number(string,var string);// Edit ************************** Tuesday, 18 October 2016 14:17:18
 external procedure NPUpdateENstatusMn(record RcVc);
+external function boolean MySendRawWebRequest(string, string, boolean, string, string, string, string, boolean, area, var area, integer);
 
 SetLangMode(LangRussian,"RUS",0);
 
@@ -942,5 +943,65 @@ weboutstring("</script>");
 weboutstring("</body>");
 weboutstring("</html> ");
 
+return;
+end;
+
+
+global webpublic procedure WebMySendAsyncWEbRequest()
+begin
+	string 50 host,port,path;
+	area a_req,replyarea;
+	integer i;
+		
+		/*addtexttoarea("<x:Envelope xmlns:x=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:urn=\"urn:Magento\">" & chr(13) & chr(10),a_req);
+		addtexttoarea("<x:Header/>" & chr(13) & chr(10),a_req);
+		addtexttoarea("<x:Body>" & chr(13) & chr(10),a_req);
+		addtexttoarea("<urn:login>" & chr(13) & chr(10),a_req);
+		addtexttoarea("<urn:username>hansa</urn:username>" & chr(13) & chr(10),a_req);
+		addtexttoarea("<urn:apiKey>HansaTest9989</urn:apiKey>" & chr(13) & chr(10),a_req);
+		addtexttoarea("</urn:login>" & chr(13) & chr(10),a_req);
+		addtexttoarea("</x:Body>" & chr(13) & chr(10),a_req);
+		addtexttoarea("</x:Envelope>" & chr(13) & chr(10),a_req);*/
+		//addtexttoarea("order:  1" & chr(13) & chr(10),a_req);
+		//addtexttoarea(chr(13) & chr(10),a_req);
+		
+		addtexttoarea("<x:Envelope xmlns:x=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:urn=\"urn:Magento\">" & chr(13) & chr(10),a_req);
+		addtexttoarea("<x:Header/>" & chr(13) & chr(10),a_req);
+			addtexttoarea("<x:Body>" & chr(13) & chr(10),a_req);
+				addtexttoarea("<urn:salesOrderAddComment>" & chr(13) & chr(10),a_req);
+					addtexttoarea("<urn:sessionId>602de5d914dbbd31f85adffbf3f99428</urn:sessionId>" & chr(13) & chr(10),a_req);
+					addtexttoarea("<urn:orderIncrementId>161109005</urn:orderIncrementId>" & chr(13) & chr(10),a_req);
+					addtexttoarea("<urn:status>pending</urn:status>" & chr(13) & chr(10),a_req);
+				addtexttoarea("</urn:salesOrderAddComment>" & chr(13) & chr(10),a_req);
+			addtexttoarea("</x:Body>" & chr(13) & chr(10),a_req);
+		addtexttoarea("</x:Envelope>" & chr(13) & chr(10),a_req);
+		
+		host = "www.rybray.com.ua";
+		path = "/index.php/api/v2_soap";
+		port = "80";
+		
+		For(i=0;i<10;i=i+1) begin
+			logtext(0,"SendAsyncWEbRequest " & currenttime);
+			//MySendRawWebRequest(host,port,false,"POST",path,"application/xml","",false,a_req,replyarea,20);
+			writeareatofile(replyarea,"1.txt",1);
+			logtext(0,"WebMySendAsyncWEbRequest reply	 " & currenttime & "  " & getarealength(replyarea));
+			SendAsyncWebRequest(host,port,port,false,"POST",path,"text/xml","",a_req,"SetupCloudNodeAtServerReply1",20);
+		end; 
+
+
+	  //SendAsyncWebRequest(host,port,"",false,"GET",path,"text/xml; charset=""utf-8""",false,a_req,"SetupCloudNodeAtServerReply",30);
+		//MySendRawWebRequest(host,port,"",false,"POST",page,"",false,mainRequest,replyarea,5)
+	
+return;
+end;
+
+
+global procedure SetupCloudNodeAtServerReply1(Area a_reply,Area a_replyheader,boolean timeout)
+begin
+	
+	writeareatofile(a_reply,"1.txt",1);
+	writeareatofile(a_replyheader,"2.txt",1);
+	logtext(0,"SetupCloudNodeAtServerReply1	 " & currenttime & "  " & getarealength(a_reply));
+	
 return;
 end;

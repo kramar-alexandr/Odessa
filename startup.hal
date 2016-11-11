@@ -276,7 +276,10 @@ begin
 	
 	Maintenance("SalesData fill CustCat",MyVClass,FillCustCatToSalesDataMn,modDBMain);  //Edit**********Dima, 28.01.2014
 
-		
+	
+	Maintenance("SEND SOAP",MyVClass,WebMySendAsyncWEbRequest,modDBMain);  //Edit**********Dima, 28.01.2014
+
+	
   Maintenance("Пересчитать значение объема в карточке товара",RecalcINVolumeClass,RecalcINVolumeMn,modDBMain);//Edit***************************Sasha2,13:50 24.06.2014
   Maintenance("Gigient to IN",MyVClass,FillINFromGigieneMn,modDBMain); //Edit***************************Sasha2,16:21 20.10.2014
   Maintenance("Удалить накопительные карточки",MyVClass,DelLoyaltyCardMn,modDBMain); //Edit***************************Sasha2,16:21 20.10.2014
