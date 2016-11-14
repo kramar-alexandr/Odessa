@@ -95,6 +95,7 @@ external updating function Integer RecordAction_raPasteOrdInShip(var record SHVc
 external function LongInt HoursDiffWithoutRestDays(Date,Time,Date,Time);
 external procedure IVVc_PasteInvDate(var record IVVc,record LocalMachineBlock,var Integer,var Integer);//Edit----------------------Dima  06.01.2016
 external procedure CalcCustBalrem(var record ORVc);
+external procedure SOAPUpdateStatus(string,string);
 
 procedure SetORAcceptanceFlag(var record ORVc ORr,record ORVc prevORr,LongInt stat)
 begin
@@ -2332,11 +2333,56 @@ begin
   val bc1v;
   record SHVc SHr,oldSHr;
   boolean invoiceAccepted;
+  string 50 oldstatus,newstatus;
   
   if (ORr.CustomStatusFlag == 2 and ORr.AutoCreation!=0) then begin //Edit----------------------Dima  17.12.2015
   	MakeInvoiceAndShipmentForOR(ORr);
   end;    
+  // Edit Start ---------------------------------------------- Edit Start
+	//Monday, 14 November 2016 15:05:50
+	
+  if(ORr.CustomStatusFlag!=OR2r.CustomStatusFlag)then begin
+  	switch(OR2r.CustomStatusFlag)begin
+  		case 0:oldstatus = "pending";//Новый
+  		case 1:oldstatus = "processing";//Открыт
+  		case 2:oldstatus = "approved";//Подтвержден
+  		case 3:oldstatus = "nocall";//Не дозвонились
+  		case 4:oldstatus = "changed";//Заказ изменен
+  		case 5:oldstatus = "vsborke";//В сборке
+  		case 6:oldstatus = "sobran";//Собран
+  		case 7:oldstatus = "otpravlen";//Отправлен
+  		case 8:oldstatus = "dostavlen";//Доставлен
+  		case 9:oldstatus = "complete";//Завершен
+  		case 10:oldstatus = "canceled";//Отменен
+  		case 11:oldstatus = "pending_payment";//В ожидании опл.
+  		case 12:oldstatus = "pending_stock";//В ожидании товаров
+  		case 13:oldstatus = "no_stock";//Не достаточно тов-в
+  	end;
+  	switch(ORr.CustomStatusFlag)begin
+  		case 0:newstatus = "pending";//Новый
+  		case 1:newstatus = "processing";//Открыт
+  		case 2:newstatus = "approved";//Подтвержден
+  		case 3:newstatus = "nocall";//Не дозвонились
+  		case 4:newstatus = "changed";//Заказ изменен
+  		case 5:newstatus = "vsborke";//В сборке
+  		case 6:newstatus = "sobran";//Собран
+  		case 7:newstatus = "otpravlen";//Отправлен
+  		case 8:newstatus = "dostavlen";//Доставлен
+  		case 9:newstatus = "complete";//Завершен
+  		case 10:newstatus = "canceled";//Отменен
+  		case 11:newstatus = "pending_payment";//В ожидании опл.
+  		case 12:newstatus = "pending_stock";//В ожидании товаров
+  		case 13:newstatus = "no_stock";//Не достаточно тов-в
+  	end;
+  	if(oldstatus!=newstatus and nonblank(newstatus))then begin
+  		if(ORr.OrderClass=="WEB" and nonblank(ORr.CustOrdNr))then begin
+  			SOAPUpdateStatus(ORr.CustOrdNr,newstatus);
+  		end;
+  	end;
+  end;
   
+	// Edit End ---------------------------------------------- Edit End
+	
   if (ORr.NPPaymentType == 0 and ORr.PrepaymentReceived == 1 and OR2r.PrepaymentReceived == 0 ) then begin
   	invoiceAccepted = AcceptIVVcFromORVcweb(ORr);		//if invoice isn't accepted, we will not add invoice to IPVc (AddPaymentToIPFromSH)
   end;

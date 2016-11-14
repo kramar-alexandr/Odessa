@@ -5527,6 +5527,7 @@ email not working yet
 	SpecialMenu("Отменить заказ на перемещение",'',20,"CancelStockMoveOrderDsm");	//Edit----------------------Dima  30.12.2015
 	
 	SpecialMenu("Обновить задолженность клиента",'',20,"CalcCustBalDsm");	// Edit ************************** Friday, 22 July 2016 10:42:12
+	SpecialMenu("Послать статус в Magento",'',20,"UpdateMagontoStatDsm");	// Edit ************************** Monday, 14 November 2016 15:13:12
   end;
   EndWindow;
 

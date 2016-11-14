@@ -2915,3 +2915,25 @@ begin
   end;
   EndWindow;
 end;
+
+window SoapTClass:1// Edit ************************** Monday, 14 November 2016 10:19:27
+ wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  real h,v,vs,f;
+  WindowBegin("Ќастройки синхронизации с Magento",SoapTClass,CGSbl,-);
+  SetBlid(SoapBlock);
+  SetWRect(74,80,380,150);
+	
+	v=20;
+	h=100;
+  CheckBox(h,v=20,0,"ssl",Ssl);
+  EditField(h,v+=20,150,"Host",Normal,Host,false,0);// Edit ************************** Monday, 14 November 2016 10:21:52
+  EditField(h,v+=20,150,"Port",Normal,Port,false,0);// Edit ************************** Monday, 14 November 2016 10:21:52
+  EditField(h,v+=20,150,"Path",Normal,Path,false,0);// Edit ************************** Monday, 14 November 2016 10:21:52
+  EditField(h,v+=20,150,"Login",Normal,Login,false,0);// Edit ************************** Monday, 14 November 2016 10:21:52
+  EditField(h,v+=20,150,"Password",Normal,Password,false,0);// Edit ************************** Monday, 14 November 2016 10:21:52
+  EditField(h,v+=20,150,"Session",ViewOnly,Session,false,0);// Edit ************************** Monday, 14 November 2016 10:21:52
+  EditField(h,v+=20,150,"LastSesDate",ViewOnly,LastSesDate,false,0);// Edit ************************** Monday, 14 November 2016 10:21:52
+  EditField(h,v+=20,150,"LastSesTime",ViewOnly,LastSesTime,false,0);// Edit ************************** Monday, 14 November 2016 10:21:52
+  EndWindow;
+end;

@@ -4794,6 +4794,17 @@ RecordBegin(IPVc,-,"");
   KeySegment(Code);
   EndRecord;
   
+  BlockBegin(SoapBlock,-,"");					//Edit----------------------Dima  25.01.2016
+  	RecordField(Host,M4Str,200,0);
+  	RecordField(Path,M4Str,200,0);
+  	RecordField(Port,M4Str,200,0);
+  	RecordField(Ssl,M4Int,0,0);
+  	RecordField(Login,M4Str,200,0);
+  	RecordField(Password,M4Str,200,0);
+  	RecordField(Session,M4Str,200,0);
+  	RecordField(LastSesDate,M4Date,0,0);
+  	RecordField(LastSesTime,M4Time,0,0);
+  EndBlock;
 
 return;
 end;

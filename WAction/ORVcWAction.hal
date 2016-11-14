@@ -74,6 +74,8 @@ remote updating function string 255  CheckAndSendSMS(longint);	//Edit-----------
 remote function LongInt HoursDiffWithoutRestDays(Date,Time,Date,Time);
 remote updating function boolean CancelLogisticsOrderFromStocMove(var record  ORVc, integer);//Edit----------------------Dima  25.01.2016
 remote procedure CalcCustBalrem(var record ORVc);
+remote procedure SOAPUpdateStatus(string,string);
+
 
 global //Edit***************************Sasha2,15:51 04.02.2015 {
 function Integer ORLClassRowColor(record ORVc ORr)
@@ -2640,5 +2642,48 @@ begin
 		beep;
 	end;
 	
+return;
+end;
+
+
+global procedure UpdateMagontoStatDsm()
+begin
+	integer wn;
+	record ORVc ORr;
+	string 100 newstatus;
+	integer normalstate;
+	
+	wn = curwindow;
+	normalstate = 0;
+	if(windowstate(wn)==normalstate)then begin
+		getwindowrecord(wn,ORr);
+		switch(ORr.CustomStatusFlag)begin
+			case 0:newstatus = "pending";//Новый
+			case 1:newstatus = "processing";//Открыт
+			case 2:newstatus = "approved";//Подтвержден
+			case 3:newstatus = "nocall";//Не дозвонились
+			case 4:newstatus = "changed";//Заказ изменен
+			case 5:newstatus = "vsborke";//В сборке
+			case 6:newstatus = "sobran";//Собран
+			case 7:newstatus = "otpravlen";//Отправлен
+			case 8:newstatus = "dostavlen";//Доставлен
+			case 9:newstatus = "complete";//Завершен
+			case 10:newstatus = "canceled";//Отменен
+			case 11:newstatus = "pending_payment";//В ожидании опл.
+			case 12:newstatus = "pending_stock";//В ожидании товаров
+			case 13:newstatus = "no_stock";//Не достаточно тов-в
+		end;
+		if(nonblank(newstatus))then begin
+			if(ORr.OrderClass=="WEB" and nonblank(ORr.CustOrdNr))then begin
+				SOAPUpdateStatus(ORr.CustOrdNr,newstatus);
+			end else begin
+				Beep;
+			end;
+		end;
+	end else begin
+		Beep;
+	end;
+  
+
 return;
 end;

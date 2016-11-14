@@ -81,3 +81,129 @@ begin
   
   return;
 end;
+
+
+global procedure SOAPLogin()
+begin
+	record SoapBlock Soap;
+	string 50 host,port,path;
+	area a_req,replyarea;
+	integer i;	
+		
+		blockload(Soap);
+		
+		addtexttoarea("<x:Envelope xmlns:x=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:urn=\"urn:Magento\">" & chr(13) & chr(10),a_req);
+		addtexttoarea("<x:Header/>" & chr(13) & chr(10),a_req);
+		addtexttoarea("<x:Body>" & chr(13) & chr(10),a_req);
+		addtexttoarea("<urn:login>" & chr(13) & chr(10),a_req);
+		addtexttoarea("<urn:username>" & Soap.Login & "</urn:username>" & chr(13) & chr(10),a_req);
+		addtexttoarea("<urn:apiKey>" & Soap.Password & "</urn:apiKey>" & chr(13) & chr(10),a_req);
+		addtexttoarea("</urn:login>" & chr(13) & chr(10),a_req);
+		addtexttoarea("</x:Body>" & chr(13) & chr(10),a_req);
+		addtexttoarea("</x:Envelope>" & chr(13) & chr(10),a_req);
+				
+		logtext(0,"SOAPLogin " & currenttime & "  " & getarealength(replyarea));
+		SendAsyncWebRequest(Soap.Host,Soap.Port,Soap.Port,Soap.Ssl==1,"POST",Soap.Path,"text/xml","",a_req,"SOAPloginReply",20);
+
+
+	
+return;
+end;
+
+
+global updating procedure SOAPloginReply(Area a_reply,Area a_replyheader,boolean timeout)
+begin
+	xml sopaxml;
+	string 200 session;
+	boolean check;
+	record SoapBlock Soap;
+	
+	if(getarealength(a_reply)>0)then begin	
+		check = getstringfromarea(a_reply,0,18)=="<?xml version=\"1.0";
+		if(check)then begin
+			sopaxml = ParseXMLArea(a_reply);
+			//logtext(0,xmlget(sopaxml,"SOAP-ENV:Envelope/SOAP-ENV:Body/ns1:loginResponse/loginReturn"));
+			session = xmlget(sopaxml,"SOAP-ENV:Envelope/SOAP-ENV:Body/ns1:loginResponse/loginReturn");
+			if(nonblank(session))then begin
+				logtext(0,"SOAP session " & session);
+				blockload(Soap);
+					Soap.Session = session;
+					Soap.LastSesDate = currentdate;
+					Soap.LastSesTime = currenttime;
+				blockstore(Soap);
+			end else begin
+				logtext(0,"error session");
+			end;
+		end else begin
+			logtext(0,"error check " & getstringfromarea(a_reply,0,18));
+		end;
+	end else begin
+		logtext(0,"Error length");
+	end;
+	
+return;
+end;
+
+global procedure SOAPUpdateStatus(string ordnr, string status)
+begin
+	record SoapBlock Soap;
+	string 50 host,port,path;
+	area a_req,replyarea;
+	integer i;	
+		
+		blockload(Soap);
+		
+		addtexttoarea("<x:Envelope xmlns:x=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:urn=\"urn:Magento\">" & chr(13) & chr(10),a_req);
+		addtexttoarea("<x:Header/>" & chr(13) & chr(10),a_req);
+			addtexttoarea("<x:Body>" & chr(13) & chr(10),a_req);
+				addtexttoarea("<urn:salesOrderAddComment>" & chr(13) & chr(10),a_req);
+					addtexttoarea("<urn:sessionId>" & Soap.Session & "</urn:sessionId>" & chr(13) & chr(10),a_req);
+					addtexttoarea("<urn:orderIncrementId>" & ordnr & "</urn:orderIncrementId>" & chr(13) & chr(10),a_req);
+					addtexttoarea("<urn:status>" & status & "</urn:status>" & chr(13) & chr(10),a_req);
+				addtexttoarea("</urn:salesOrderAddComment>" & chr(13) & chr(10),a_req);
+			addtexttoarea("</x:Body>" & chr(13) & chr(10),a_req);
+		addtexttoarea("</x:Envelope>" & chr(13) & chr(10),a_req);
+				
+		logtext(0,"SOAPUpdateStatus " & currenttime & "  " & getarealength(replyarea));
+		SendAsyncWebRequest(Soap.Host,Soap.Port,Soap.Port,Soap.Ssl==1,"POST",Soap.Path,"text/xml","",a_req,"SOAPUpdateStatusReply",20);
+
+
+	
+return;
+end;
+
+
+global updating procedure SOAPUpdateStatusReply(Area a_reply,Area a_replyheader,boolean timeout)
+begin
+	xml sopaxml;
+	string 200 session;
+	boolean check;
+	record SoapBlock Soap;
+	
+	writeareatofile(a_reply,"MagentaStatusReply.txt",1);
+	
+	/*if(getarealength(a_reply)>0)then begin	
+		check = getstringfromarea(a_reply,0,18)=="<?xml version=\"1.0";
+		if(check)then begin
+			sopaxml = ParseXMLArea(a_reply);
+			//logtext(0,xmlget(sopaxml,"SOAP-ENV:Envelope/SOAP-ENV:Body/ns1:loginResponse/loginReturn"));
+			session = xmlget(sopaxml,"SOAP-ENV:Envelope/SOAP-ENV:Body/ns1:loginResponse/loginReturn");
+			if(nonblank(session))then begin
+				logtext(0,"SOAP session " & session);
+				blockload(Soap);
+					Soap.Session = session;
+					Soap.LastSesDate = currentdate;
+					Soap.LastSesTime = currenttime;
+				blockstore(Soap);
+			end else begin
+				logtext(0,"error session");
+			end;
+		end else begin
+			logtext(0,"error check " & getstringfromarea(a_reply,0,18));
+		end;
+	end else begin
+		logtext(0,"Error length");
+	end;*/
+	
+return;
+end;

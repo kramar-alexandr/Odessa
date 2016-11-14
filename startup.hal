@@ -102,7 +102,8 @@ begin
   Setting("История цен",PLHistLClass,modDI);
   Setting("Настройки логистики",LogisticsSettingsTClass,modSO);	//Edit----------------------Dima  25.01.2016
   Setting("Вспомагательный регистр SalesData",SalesDataLClass,modDBMain);
-
+	
+	Setting("Настройки синхронизации с Magento",SoapTClass,modSO);// Edit ************************** Monday, 14 November 2016 10:17:45
 
   //Report("Статистика НДС по аванс. отчетам",ExpVATRClass,ExpVATRn,0,modCL);
   //Report("Журнал путевых листов",WLJRClass,WLJRn,0,modCL);
@@ -277,7 +278,7 @@ begin
 	Maintenance("SalesData fill CustCat",MyVClass,FillCustCatToSalesDataMn,modDBMain);  //Edit**********Dima, 28.01.2014
 
 	
-	Maintenance("SEND SOAP",MyVClass,WebMySendAsyncWEbRequest,modDBMain);  //Edit**********Dima, 28.01.2014
+	Maintenance("SEND SOAP",MyVClass,SOAPLogin,modDBMain);  //Edit**********Dima, 28.01.2014
 
 	
   Maintenance("Пересчитать значение объема в карточке товара",RecalcINVolumeClass,RecalcINVolumeMn,modDBMain);//Edit***************************Sasha2,13:50 24.06.2014
