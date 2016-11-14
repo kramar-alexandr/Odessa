@@ -2336,7 +2336,9 @@ begin
   string 50 oldstatus,newstatus;
   
   if (ORr.CustomStatusFlag == 2 and ORr.AutoCreation!=0) then begin //Edit----------------------Dima  17.12.2015
-  	MakeInvoiceAndShipmentForOR(ORr);
+  	ORr.SalesMan = currentuser;//Edit-------------------Vitalii 17:12 14.11.2016
+    recordstore(ORr,true);
+    MakeInvoiceAndShipmentForOR(ORr);
   end;    
   // Edit Start ---------------------------------------------- Edit Start
 	//Monday, 14 November 2016 15:05:50
