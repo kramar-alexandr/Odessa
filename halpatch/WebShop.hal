@@ -98,7 +98,7 @@ begin
     curtnew = StringToTime(hr & ":" & mn);
 
     //if (curtnew==t1 or curtnew==t2 or curtnew==t3 or curtnew==t4 or curtnew==t5 or curtnew==t6 or curtnew==t7 or curtnew==t8 or curtnew==t9) then begin
-    if(right(curtnew.minute,1)=="5" or right(curtnew.minute,1)=="0")then begin
+    if(right(curtnew.minute,1)=="0")then begin
     	LogText(0,"SOAPLogin at planned time: " & curtnew);
     	SOAPLogin;
     end;
@@ -987,11 +987,11 @@ begin
 		port = "80";
 		
 		For(i=0;i<10;i=i+1) begin
-			logtext(0,"SendAsyncWEbRequest " & currenttime);
+			//logtext(0,"SendAsyncWEbRequest " & currenttime);
 			//MySendRawWebRequest(host,port,false,"POST",path,"application/xml","",false,a_req,replyarea,20);
-			writeareatofile(replyarea,"1.txt",1);
-			logtext(0,"WebMySendAsyncWEbRequest reply	 " & currenttime & "  " & getarealength(replyarea));
-			SendAsyncWebRequest(host,port,port,false,"POST",path,"text/xml","",a_req,"SetupCloudNodeAtServerReply1",20);
+			//writeareatofile(replyarea,"1.txt",1);
+			//logtext(0,"WebMySendAsyncWEbRequest reply	 " & currenttime & "  " & getarealength(replyarea));
+			//SendAsyncWebRequest(host,port,port,false,"POST",path,"text/xml","",a_req,"SetupCloudNodeAtServerReply1",20);
 		end; 
 
 
@@ -1011,4 +1011,3 @@ begin
 	
 return;
 end;
-

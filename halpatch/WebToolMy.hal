@@ -182,28 +182,5 @@ begin
 	
 	writeareatofile(a_reply,"MagentaStatusReply.txt",1);
 	
-	/*if(getarealength(a_reply)>0)then begin	
-		check = getstringfromarea(a_reply,0,18)=="<?xml version=\"1.0";
-		if(check)then begin
-			sopaxml = ParseXMLArea(a_reply);
-			//logtext(0,xmlget(sopaxml,"SOAP-ENV:Envelope/SOAP-ENV:Body/ns1:loginResponse/loginReturn"));
-			session = xmlget(sopaxml,"SOAP-ENV:Envelope/SOAP-ENV:Body/ns1:loginResponse/loginReturn");
-			if(nonblank(session))then begin
-				logtext(0,"SOAP session " & session);
-				blockload(Soap);
-					Soap.Session = session;
-					Soap.LastSesDate = currentdate;
-					Soap.LastSesTime = currenttime;
-				blockstore(Soap);
-			end else begin
-				logtext(0,"error session");
-			end;
-		end else begin
-			logtext(0,"error check " & getstringfromarea(a_reply,0,18));
-		end;
-	end else begin
-		logtext(0,"Error length");
-	end;*/
-	
 return;
 end;
