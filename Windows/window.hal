@@ -2937,3 +2937,76 @@ begin
   EditField(h,v+=20,150,"LastSesTime",ViewOnly,LastSesTime,false,0);// Edit ************************** Monday, 14 November 2016 10:21:52
   EndWindow;
 end;
+
+window RebateVoucherDClass:1		//Edit----------------------Dima  27.08.2015
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+	real h,h2,h3,v,vs;
+  WindowBegin("Ваучер с процентной скидкой",RebateVoucherDClass,CGview,-);
+  UseView(RebateVoucherVc);
+  SetWRect(20,100,680,300);
+  h=90; h2 = 300; h3 = 500; v = 10; vs = 20;
+
+  EditField(h,v,100,"No.",Normal,SerNr,false,0);
+  EditField(h2,v,100,"Клиент",Normal,CustCode,false,CUSClass);
+  CheckBox(h3,v,0,"Подтвержден",OKFlag);
+  EditField(h,v+=vs,100,"Выпущен",Normal,TransDate,false,0);
+  EditField(h2,v,100,"Скидка",Normal,RebCode,false,RebSClass);
+  CheckBox(h3,v,0,"Использован",UsedFlag);
+  EditField(h,v+=vs,100,"Номер ваучера",Normal,VoucherSerNr,false,0);
+  EditField(h2,v,50,"Год выпуска",ViewOnly,ReleasedAtYear,false,0);
+  v = v + vs;
+  EditField(h,v+=vs,100,"Действует с",Normal,IsValidFromDate,false,0);
+  EditField(h2,v,100,"Действует до",Normal,IsValidToDate,false,0);
+  v = v + vs;
+  EditField(h,v+=vs,100,"№ сч/ф",Normal,IVNr,false,0);
+
+  EndWindow;
+end;
+
+window RebateVoucherLClass:1 //Edit***************************Sasha2,17:03 23.11.2016
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  WindowBegin("Ваучеры с процентной скидкой",RebateVoucherLClass,CGmlist,-);
+  SpawnClass(RebateVoucherDClass);
+  SetWRect(20,80,800,500);
+  Sizeable(-1,-1,0,0);
+  UseView(RebateVoucherVc);
+  RecordList(4,17,-21,-39);
+  RlColKey(4,4,"SerNr",SerNr,false,SerNr);
+  RlColKey(70,70,"Клиент",CustCode,false,CustCode);
+  RlColKey(230,230,"Номер ваучера",VoucherSerNr,false,VoucherSerNr);
+  RlCol(310,310,"Выпущен",TransDate,false);
+  RlCol(380,380,"Действует с",IsValidFromDate,false);
+  RlCol(450,450,"Действует до",IsValidToDate,false);
+  RlCol(-210,-210,"Сч/ф",IVNr,false);
+  RlCol(-120,-120,"Подтв.",OKFlag,false);
+	RlCol(-80,-80,"Использован",UsedFlag,false);
+
+  SearchField("Найти");
+  EndWindow;
+end;
+
+window RebateVoucherTClass:1 //Edit***************************Sasha2,17:27 23.11.2016
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  real h,v,vs;
+  WindowBegin("Настройки ваучеров с процентной скидкой",SMSSettingsTClass,CGSbl,-);
+  SetBlid(RebateVoucherBlock);
+  SetWRect(64,80,500,300);
+  v=6;vs = 20; h = 300;
+  EditField(h,v,50,"Таблица скидок",Normal,RebCode,false,RebSClass);
+  EditField(h,v+=vs,30,"Действителен до дня рожд.(дней)",Normal,ValidDaysBeforeBirthDay,false,0);
+  EditField(h,v+=vs,30,"Действителен после дня рожд.(дней)",Normal,ValidDaysAfterBirthDay,false,0);
+  EditField(h,v+=vs,30,"Инф-вать про ваучер до дня рожд.за (дней)",Normal,ValidDaysBeforeBirthDay,false,0);
+  EditField(h,v+=vs,80,"Инф-вать про ваучер в (время)",Normal,SendSMSBeforeBirthDayAtTime,false,0);
+  v=v+2*vs;
+  h = 50;
+  statictext(h,v+=10,"Текст для СМС",false);
+  EditField(h,v+=vs,300,"Текст",Normal,SMSText1,false,0);
+  EditField(h,v+=vs,300,"Текст",Normal,SMSText2,false,0);
+  EditField(h,v+=vs,300,"Текст",Normal,SMSText3,false,0);
+  EditField(h,v+=vs,300,"Текст",Normal,SMSText4,false,0);
+  EndWindow;
+end;
+
