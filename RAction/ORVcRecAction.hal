@@ -95,7 +95,36 @@ external updating function Integer RecordAction_raPasteOrdInShip(var record SHVc
 external function LongInt HoursDiffWithoutRestDays(Date,Time,Date,Time);
 external procedure IVVc_PasteInvDate(var record IVVc,record LocalMachineBlock,var Integer,var Integer);//Edit----------------------Dima  06.01.2016
 external procedure CalcCustBalrem(var record ORVc);
-external procedure SOAPUpdateStatus(string,string);
+external procedure SOAPUpdateStatus(string,string);// Edit ************************** Friday, 18 November 2016 09:42:09
+
+global procedure SetNewORCustomStatusFlagOnWeb(record ORVc ORr)
+begin
+	string 50 newstatus;
+	
+	switch(ORr.CustomStatusFlag)begin
+		case 0:newstatus = "pending";//Новый
+		case 1:newstatus = "processing";//Открыт
+		case 2:newstatus = "approved";//Подтвержден
+		case 3:newstatus = "nocall";//Не дозвонились
+		case 4:newstatus = "changed";//Заказ изменен
+		case 5:newstatus = "vsborke";//В сборке
+		case 6:newstatus = "sobran";//Собран
+		case 7:newstatus = "otpravlen";//Отправлен
+		case 8:newstatus = "dostavlen";//Доставлен
+		case 9:newstatus = "complete";//Завершен
+		case 10:newstatus = "canceled";//Отменен
+		case 11:newstatus = "pending_payment";//В ожидании опл.
+		case 12:newstatus = "pending_stock";//В ожидании товаров
+		case 13:newstatus = "no_stock";//Не достаточно тов-в
+	end;
+	if(nonblank(newstatus))then begin
+		if(ORr.OrderClass=="WEB" and nonblank(ORr.CustOrdNr))then begin
+			SOAPUpdateStatus(ORr.CustOrdNr,newstatus);
+		end;
+	end;
+	
+return;
+end;
 
 procedure SetORAcceptanceFlag(var record ORVc ORr,record ORVc prevORr,LongInt stat)
 begin
@@ -2062,6 +2091,7 @@ begin
 						end;
 						Recalculate_CustomStatusFlagText(ORr);													
 						RecordStore(ORr,true);
+						SetNewORCustomStatusFlagOnWeb(ORr);// Edit ************************** Friday, 18 November 2016 09:52:07
 				end;
 		end;		
 	end;
@@ -2589,6 +2619,7 @@ begin
   
      
   Recalculate_CustomStatusFlagText(ORr);
+  SetNewORCustomStatusFlagOnWeb(ORr);
   
   if (ORr.OrderClass == "RETAI" and ORr.Reserved!=0) then begin		//Edit----------------------Dima  18.12.2015
 	  ORr.ReservToDate = AddDay(CurrentDate,1);

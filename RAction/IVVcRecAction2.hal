@@ -99,6 +99,7 @@ external function string 20 GetCustomOfficialSerNr; //Edit**********************
 external procedure Recalculate_CustomStatusFlagText(var record ORVc);	//Edit----------------------Dima  22.09.2015
 external updating procedure UnOk_IVVc(var record IVVc);//Edit----------------------Dima  30.11.2015
 external updating procedure UpdateSalesData(record IVVc);	//Edit----------------------Dima  10.03.2016
+external procedure SetNewORCustomStatusFlagOnWeb(record ORVc);// Edit ************************** Friday, 18 November 2016 09:45:15
 
 procedure SetIVAcceptanceFlag(var record IVVc IVr,record IVVc prevIVr,LongInt stat)
 begin
@@ -579,6 +580,7 @@ BEGIN
   			end;
 				Recalculate_CustomStatusFlagText(ORr);
 				RecordStore(ORr,true);
+				SetNewORCustomStatusFlagOnWeb(ORr);// Edit ************************** Friday, 18 November 2016 09:50:52
 			end;    		
   	end;
 	end;
@@ -1050,6 +1052,7 @@ BEGIN
 							ORr.CustomStatusFlag = 5;
 							Recalculate_CustomStatusFlagText(ORr);
 							RecordStore(ORr,true);
+							SetNewORCustomStatusFlagOnWeb(ORr);
 					end;
 				end;
 			end;

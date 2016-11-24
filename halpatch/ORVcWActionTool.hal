@@ -62,6 +62,7 @@ external updating function boolean NPCreateCounterparty(record NPCounterpartyVc)
 external updating procedure GetRecipientContactPerson(string ,string );	//Edit----------------------Dima  05.05.2015
 external function val HoursDifference(Date,Time,Date,Time);			//Edit----------------------Dima  14.12.2015
 external procedure Recalculate_CustomStatusFlagText(var record ORVc);		//Edit----------------------Dima  15.12.2015
+external procedure SetNewORCustomStatusFlagOnWeb(record ORVc);// Edit ************************** Friday, 18 November 2016 09:45:15
 
 
 
@@ -1464,6 +1465,7 @@ begin
 						ORr.CustomStatusFlag = 13;
 						Recalculate_CustomStatusFlagText(ORr);
 						RecordStore(ORr,true);
+						SetNewORCustomStatusFlagOnWeb(ORr);// Edit ************************** Friday, 18 November 2016 09:45:45
 			end;
 		end;
 	end;  

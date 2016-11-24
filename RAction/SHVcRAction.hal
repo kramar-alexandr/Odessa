@@ -75,6 +75,7 @@ external procedure Recalculate_CustomStatusFlagText(var record ORVc);	//Edit----
 external updating procedure UpdateORVcNewPostStatuses(record SHVc );//_*_*_*_**************************
 external updating procedure UpdateSalesDataFromSH(record SHVc);//Edit----------------------Dima  10.03.2016
 external updating procedure UpdateSalesData(record IVVc);	//Edit----------------------Dima  10.03.2016
+external procedure SetNewORCustomStatusFlagOnWeb(record ORVc);// Edit ************************** Friday, 18 November 2016 09:45:15
 
 
 function Boolean StockMovOKedForSH(LongInt shnr,var LongInt stmovnr)
@@ -1629,6 +1630,7 @@ begin
 			end;
 			Recalculate_CustomStatusFlagText(ORr);
 			RecordStore(ORr,true);
+			SetNewORCustomStatusFlagOnWeb(ORr);
 		end;	
 	end;	
 
@@ -1645,6 +1647,7 @@ begin
 					ORr.CustomStatusFlag = 6;
 					Recalculate_CustomStatusFlagText(ORr);
 					RecordStore(ORr,true);
+					SetNewORCustomStatusFlagOnWeb(ORr);
 		end;	
 		
   end;
@@ -1851,6 +1854,7 @@ begin
 		if(ReadFirstMain(ORr,1,true)) then begin
 				ORr.CustomStatusFlag = 6;
 				Recalculate_CustomStatusFlagText(ORr);
+				SetNewORCustomStatusFlagOnWeb(ORr);
 				RecordStore(ORr,true);
 		end;
 		
