@@ -1,0 +1,145 @@
+external function roundmode SetRoundModeD(Integer);
+external procedure CurValToOtherCur(Date,string,val,string,var val,roundmode);
+
+
+global
+updating function LongInt RebateVoucherVcRecordCheck(record RebateVoucherVc RebateVoucherr,record RebateVoucherVc RebateVoucher2r,LongInt stat,LongInt check)
+begin
+  LongInt res;
+  Integer insertmode,updatemode;
+  record RebateVoucherVc RebateVoucher3r;
+  Boolean TrHs;
+
+  res = 0;
+  insertmode = 1;//Rs_insert
+  updatemode = 2;//Rs_update  
+  
+  if (BlankDate(RebateVoucherr.TransDate)) then begin
+    RebateVoucherr.TransDate = CurrentDate;
+  end;
+  if (Blank(RebateVoucherr.ReleasedAtYear)) then begin
+    RebateVoucherr.ReleasedAtYear = GetYear(CurrentDate);
+  end;
+  
+  RebateVoucher3r.CustCode = RebateVoucherr.CustCode;
+  RebateVoucher3r.ReleasedAtYear = RebateVoucherr.ReleasedAtYear;
+  if (ReadFirstKey("CustCode",RebateVoucher3r,2,true)) then begin
+    if(check==1) then begin
+      RecordCheckError(1709,"",-1,"ReleasedAtYear");      
+    end;
+    res = 1709; 
+    goto LRebateVoucherVcRecordCheck; 
+  end;
+  
+  if (blank(RebateVoucherr.CustCode)) then begin
+    if(check==1) then begin
+      RecordCheckError(1854,"",-1,"CustCode");      
+    end;
+    res = 1854; 
+    goto LRebateVoucherVcRecordCheck; 
+  end;
+  
+  if (blank(RebateVoucherr.RebCode)) then begin
+    if(check==1) then begin
+      RecordCheckError(1854,"",-1,"RebCode");      
+    end;
+    res = 1854; 
+    goto LRebateVoucherVcRecordCheck; 
+  end;
+  
+  if (blank(RebateVoucherr.IsValidFromDate)) then begin
+    if(check==1) then begin
+      RecordCheckError(1854,"",-1,"IsValidFromDate");      
+    end;
+    res = 1854; 
+    goto LRebateVoucherVcRecordCheck; 
+  end;
+  
+  if (blank(RebateVoucherr.IsValidToDate)) then begin
+    if(check==1) then begin
+      RecordCheckError(1854,"",-1,"IsValidToDate");      
+    end;
+    res = 1854; 
+    goto LRebateVoucherVcRecordCheck; 
+  end;
+  
+  if (blank(RebateVoucherr.VoucherSerNr)) then begin
+    if(check==1) then begin
+      RecordCheckError(1854,"",-1,"VoucherSerNr");      
+    end;
+    res = 1854; 
+    goto LRebateVoucherVcRecordCheck; 
+  end;
+  
+  if (NonBlank(RebateVoucherr.VoucherSerNr)) then begin
+    RebateVoucher3r.VoucherSerNr = RebateVoucherr.VoucherSerNr;
+    TrHs = true;
+    while (LoopKey("VoucherSerNr",RebateVoucher3r,1,TrHs)) begin
+      if (RebateVoucher3r.VoucherSerNr!=RebateVoucherr.VoucherSerNr) then begin TrHs = false; end;
+      if (TrHs and RebateVoucher3r.SerNr!=RebateVoucherr.SerNr) then begin
+        if(check==1) then begin
+          RecordCheckError(1709,"",-1,"VoucherSerNr");      
+        end;
+        res = 1709; 
+        goto LRebateVoucherVcRecordCheck; 
+      end;
+    end;
+    if (len(RebateVoucherr.VoucherSerNr)!=6) then begin
+      if(check==1) then begin
+        RecordCheckError(2246,"",-1,"VoucherSerNr");      
+      end;
+      res = 2246; 
+      goto LRebateVoucherVcRecordCheck; 
+    end;   
+  end;
+  
+  if (RebateVoucherr.SerNr<=0) then begin
+    RebateVoucherr.SerNr = NextSerNr("RebateVoucherVc",RebateVoucherr.TransDate,-1,false,"");
+  end;
+  
+LRebateVoucherVcRecordCheck:;
+  
+  RebateVoucherVcRecordCheck = res;
+  return;
+end;
+
+global
+function LongInt RebateVoucherVcRecordDefaults(var record RebateVoucherVc RebateVoucherr,record RebateVoucherVc RebateVoucher2r,LongInt stat,LongInt long4)
+BEGIN
+  LongInt res;
+  
+  RebateVoucherr.SerNr = -1;
+  RebateVoucherr.TransDate = CurrentDate;
+  if (SingleUserMode) then begin
+    RebateVoucherr.SerNr = NextSerNr("RebateVoucherVc",RebateVoucherr.TransDate,-1,false,"");
+  end;
+  RebateVoucherr.ReleasedAtYear = BlankVal;
+  RebateVoucherr.OKFlag = 0;
+  RebateVoucherr.UsedFlag = 0;
+
+  RebateVoucherVcRecordDefaults = res; 
+  RETURN;
+END;
+
+global
+function LongInt RebateVoucherVcRecordDuplicate(var record RebateVoucherVc RebateVoucherr,record RebateVoucherVc RebateVoucher2r,LongInt stat,LongInt long4)
+BEGIN
+  LongInt res;
+  date blankd;
+  
+  RebateVoucherr.SerNr = -1;
+  RebateVoucherr.TransDate = CurrentDate;
+  if (SingleUserMode) then begin
+    RebateVoucherr.SerNr = NextSerNr("RebateVoucherVc",RebateVoucherr.TransDate,-1,false,"");
+  end;
+  RebateVoucherr.IsValidFromDate = blankd;
+  RebateVoucherr.IsValidToDate = blankd;
+  RebateVoucherr.VoucherSerNr = -1;
+  RebateVoucherr.IVNr = -1;
+  RebateVoucherr.ReleasedAtYear = BlankVal;
+  RebateVoucherr.OKFlag = 0;
+  RebateVoucherr.UsedFlag = 0;
+
+  RebateVoucherVcRecordDuplicate = res; 
+  RETURN;
+END;

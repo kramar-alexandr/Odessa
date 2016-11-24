@@ -4805,6 +4805,42 @@ RecordBegin(IPVc,-,"");
   	RecordField(LastSesDate,M4Date,0,0);
   	RecordField(LastSesTime,M4Time,0,0);
   EndBlock;
+  
+  RecordBegin(RebateVoucherVc,-,"RebateVoucherVc"); //Edit***************************Sasha2,15:58 23.11.2016 {
+  RecordField(SerNr,M4Long,0,0);
+  RecordField(CustCode,M4Code,20,0);
+  RecordField(RebCode,M4Code,20,0);
+  RecordField(VoucherSerNr,M4Long,0,0);
+  RecordField(TransDate,M4Date,0,0);
+  RecordField(IsValidFromDate,M4Date,0,0);
+  RecordField(IsValidToDate,M4Date,0,0);
+  RecordField(IVNr,M4Long,0,0);
+  RecordField(OKFlag,M4Mark,0,0);
+  RecordField(UsedFlag,M4Mark,0,0);
+  RecordField(ReleasedAtYear,M4Int,0,0);
+
+  MainKeyBegin(SerNr,0);
+  KeySegment(SerNr);
+  KeyBegin(CustCode);
+  KeySegment(CustCode);
+  KeySegment(ReleasedAtYear);
+  KeySegment(SerNr);
+  KeyBegin(VoucherSerNr);
+  KeySegment(VoucherSerNr);
+  KeySegment(SerNr);
+  EndRecord; //Edit***************************Sasha2,15:59 23.11.2016 }
+  
+  BlockBegin(RebateVoucherBlock,-,""); //Edit***************************Sasha2,14:55 23.11.2016
+  	RecordField(SMSText1,M4Str,225,0);
+  	RecordField(SMSText2,M4Str,225,0);
+  	RecordField(SMSText3,M4Str,225,0);
+  	RecordField(SMSText4,M4Str,225,0);
+  	RecordField(ValidDaysBeforeBirthDay,M4Int,0,0);
+  	RecordField(ValidDaysAfterBirthDay,M4Int,0,0);
+  	RecordField(RebCode,M4Code,20,0);
+  	RecordField(SendSMSBeforeBirthDayDays,M4Int,0,0);
+  	RecordField(SendSMSBeforeBirthDayAtTime,M4Time,0,0);
+  EndBlock;
 
 return;
 end;
