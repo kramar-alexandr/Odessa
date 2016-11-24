@@ -9,13 +9,12 @@ global procedure WebSalesBILogIn()
 begin
   Time checkTime;
   array string 5 checkTimeStr;
-  string 255 sentMD5,checkMD5,link;
+  string 255 sentMD5,checkMD5;
   integer deltaMin,i,cti;
   boolean isLogedIn;
   
   deltaMin = 2;
   sentMD5 = WebGetArg("param");
-  link = WebGetArg("link");
   checkTime = CurrentTime;
   cti = 0;
   checkTimeStr[cti] = GetHour(checkTime) & ":" & GetMinute(checkTime);

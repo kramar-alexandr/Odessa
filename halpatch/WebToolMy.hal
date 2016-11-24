@@ -1,3 +1,7 @@
+external function Boolean LoggedInTest();
+external procedure ExtractObjWithSeparator(string,string,Boolean,var Integer,var string);
+external function string 255 StrReplace(string,string,string);
+
 webpublic
 global procedure WebLoadSHVc()
 begin
@@ -5,23 +9,87 @@ begin
   row SHVc SHrw;
   integer i,mtrw,tmp1,tmp2;
   string 5 nl,delim;
+  string 255 param;
   
-  //nl = "<br>";
-  //delim = " | ";
-  nl = chr(13) & chr(10);
-  delim = ",";
-  SHr.SerNr = "25879";
-  readfirstmain(SHr,1,true);
-  mtrw = matrowcnt(SHr);
-  for (i=0;i<mtrw;i=i+1) begin
-    MatRowGet(SHr,i,SHrw);
-      tmp1 = SHrw.Ordered;
-      tmp2 = SHrw.Ship;
-    if (i==0) then begin
-      WebOutString(SHrw.ArtCode & delim & SHrw.Spec & delim & tmp1 & delim & tmp2);
+  if (LoggedInTest()) then begin
+    //nl = "<br>";
+    //delim = " | ";
+    nl = chr(13) & chr(10);
+    delim = ",";
+    //SHr.SerNr = "25879";
+    param = WebGetArg("param");
+    if nonblank (param) then begin
+      SHr.SerNr = param;
+      if readfirstmain(SHr,1,true) then begin
+        if (SHr.OKFlag==0) then begin
+          WebOutString(SHr.CustCode & " - " & SHr.Addr0);
+          mtrw = matrowcnt(SHr);
+          for (i=0;i<mtrw;i=i+1) begin
+            MatRowGet(SHr,i,SHrw);
+            tmp1 = SHrw.Ordered;
+            tmp2 = SHrw.Ship;
+            if nonblank(tmp1) and tmp1!=0 then begin
+              WebOutString(nl & i & delim & SHrw.ArtCode & delim & SHrw.Spec & delim & tmp1 & delim & tmp2);
+            end;
+          end;
+        end else begin
+          WebOutString("oked");
+        end;
+      end else begin
+        WebOutString("noindb");
+      end;
     end else begin
-      WebOutString(nl & SHrw.ArtCode & delim & SHrw.Spec & delim & tmp1 & delim & tmp2);
+      WebOutString("noshvcnr");
     end;
+  end;
+  return;
+end;
+
+webpublic
+global 
+updating procedure WebSaveSHVc()
+begin
+  area aPost;
+  integer i,pos,rownr,ship;
+  longint linesCnt;
+  string 255 line,tstr;
+  record SHVc SHr;
+  row SHVc SHrw;
+  boolean chng;
+  
+  if (LoggedInTest()) then begin
+    SHr.SerNr = WebGetArg("param");
+    readfirstmain(SHr,1,true);
+    chng = false;
+    webgetpostdata(aPost);
+    linesCnt = CountLinesInArea(aPost);
+    for (i=0;i<linesCnt;i=i+1) begin
+      line = GetLineFromArea(aPost,i);
+      pos = 0;
+      ExtractObjWithSeparator(";",line,true,pos,tstr);
+        tstr = StrReplace(tstr,chr(0),"");  tstr = StrReplace(tstr,chr(10),""); tstr = StrReplace(tstr,chr(13),"");
+        rownr = StringToInt(tstr);
+      ExtractObjWithSeparator(";",line,true,pos,tstr);
+        tstr = StrReplace(tstr,chr(0),"");  tstr = StrReplace(tstr,chr(10),""); tstr = StrReplace(tstr,chr(13),"");
+        ship = StringToInt(tstr);
+      MatRowGet(SHr,rownr,SHrw);
+      if (SHrw.Ship != ship) then begin
+        SHrw.Ship = ship;
+        matrowput(SHr,rownr,SHrw);
+        chng = true;
+      end;
+    end;
+    if (chng) then begin
+      if (RecordStore(SHr,true)) begin
+        WebOutString("ok");
+      end else begin
+        WebOutString("nok");
+      end;
+    end else begin
+      WebOutString("ok");
+    end;
+  end else begin
+    WebOutString("nli");
   end;
   return;
 end;
@@ -32,26 +100,28 @@ begin
 	record INVc INr;
   string 5 nl,delim;
   
-  //nl = "<br>";
-  //delim = " | ";
-  nl = chr(13) & chr(10);
-  delim = ",";
-  Randomize;
-  INr.Code = "1665147";
-  readfirstmain(INr,1,true);
-  WebOutString(INr.Code & delim & INr.Name & delim & Random(1,10) & delim & 0);
-  INr.Code = "3065022";
-  readfirstmain(INr,1,true);
-  WebOutString(nl & INr.Code & delim & INr.Name & delim & Random(1,10) & delim & 0);
-  INr.Code = "1665401";
-  readfirstmain(INr,1,true);
-  WebOutString(nl & INr.Code & delim & INr.Name & delim & Random(1,10) & delim & 0);
-  INr.Code = "1665301";
-  readfirstmain(INr,1,true);
-  WebOutString(nl & INr.Code & delim & INr.Name & delim & Random(1,10) & delim & 0);
-  INr.Code = "1665376";
-  readfirstmain(INr,1,true);
-  WebOutString(nl & INr.Code & delim & INr.Name & delim & Random(1,10) & delim & 0);
+  if (LoggedInTest()) then begin
+    //nl = "<br>";
+    //delim = " | ";
+    nl = chr(13) & chr(10);
+    delim = ",";
+    Randomize;
+    INr.Code = "1665147";
+    readfirstmain(INr,1,true);
+    WebOutString(INr.Code & delim & INr.Name & delim & Random(1,10) & delim & 0);
+    INr.Code = "3065022";
+    readfirstmain(INr,1,true);
+    WebOutString(nl & INr.Code & delim & INr.Name & delim & Random(1,10) & delim & 0);
+    INr.Code = "1665401";
+    readfirstmain(INr,1,true);
+    WebOutString(nl & INr.Code & delim & INr.Name & delim & Random(1,10) & delim & 0);
+    INr.Code = "1665301";
+    readfirstmain(INr,1,true);
+    WebOutString(nl & INr.Code & delim & INr.Name & delim & Random(1,10) & delim & 0);
+    INr.Code = "1665376";
+    readfirstmain(INr,1,true);
+    WebOutString(nl & INr.Code & delim & INr.Name & delim & Random(1,10) & delim & 0);
+  end;
   return;
 end;
 
@@ -62,7 +132,6 @@ begin
   record INVc INr;
   
   item = WebGetArg("item");
-  logtext(0,item);
   INr.Code = item;
   if(readfirstmain(INr,1,true))then begin
   	itemcode = INr.Code;
