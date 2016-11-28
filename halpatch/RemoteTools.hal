@@ -48,6 +48,9 @@ external procedure GetFullCurncyRate (var string,Date,var val,var val,var val,va
 external procedure StockMovSumUp(var record StockMovVc);
 external function LongInt GetCurUserLastNr(string);
 external procedure IVVc_PasteSalesMan(var record IVVc,string);
+external procedure GetObjs(string,string,var string);//Edit-------------------Vitalii 15:15 28.11.2016
+external function string 255 StrReplace(string,string,string);
+external procedure GetCurUser(var record UserVc);
 
 global
 procedure GetItemSalesAccFromOR(record ORVc ORr,var string salesacc)
@@ -1139,8 +1142,8 @@ LAddPrepaymentRow:;
   return;
 end;
 
-global
-function Boolean PasteOrdInInv(var record IVVc IVp,record ORVc ORp,Boolean addon,string lastcu,record RcVc RepSpec,var val orsum,Boolean addperceptionf,Boolean withholdingf,Boolean NLCostOnShipTestf,
+global updating
+function Boolean PasteOrdInInv(var record IVVc IVp,var record ORVc ORp,Boolean addon,string lastcu,record RcVc RepSpec,var val orsum,Boolean addperceptionf,Boolean withholdingf,Boolean NLCostOnShipTestf,
                                var Integer err,Boolean maintf,array record XSrsVc aXSrsr,var Integer axsrscnt)
 BEGIN
   record MainStockBlock MSb;
@@ -1185,6 +1188,10 @@ BEGIN
   Integer arptcnt;
   Integer ordtype; 
   record ARPayHistVc ARPHr;
+  record UserVc USr;//Edit-------------------Vitalii 15:11 28.11.2016
+  record ObjVc Objr;
+  string 255 obj,ot;
+
   
   lastrwcnt = MatRowCnt(IVp);
   orsum = blankval;
@@ -1277,11 +1284,29 @@ L20PasteOrdInInv:;
   IVp.ClientContact = ORp.CustContact;
   IVp.OurContact = ORp.OurContact;
   IVp.BankCode = ORp.BankCode;
+  //Edit-------------------Vitalii 14:47 28.11.2016
+  GetCurUser(USr);
+  ORp.SalesMan = USr.Code;
+  
+  Objr.Code = USr.PersObjx;
+  ReadFirstMain(Objr,1,true);
+  ot = Objr.OTCode;
+  obj = "";
+  GetObjs(ot,ORp.Objects,obj);
+  ORp.Objects = StrReplace(ORp.Objects,obj,"");
+  ORp.Objects = StrReplace(ORp.Objects,",,",",");
+  if nonblank(ORp.Objects) then begin
+    ORp.Objects = ORp.Objects & "," & USr.PersObjx;
+  end else begin
+    ORp.Objects = USr.PersObjx;
+  end;
+  RecordStore(ORp,true);
+  
+  IVp.SalesMan = ORp.SalesMan;
   if (maintf==false) then begin
     IVp.Objects = ORp.Objects;
-  end;
+  end;//Edit-------------------Vitalii 15:14 28.11.2016
   IVp.RefStr = ORp.RefStr;
-  IVp.SalesMan = ORp.SalesMan;
   IVVc_PasteSalesMan(IVp,"");
   IVp.CurncyCode = ORp.CurncyCode;
   IVp.LangCode = ORp.LangCode;
