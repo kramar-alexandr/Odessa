@@ -23,6 +23,7 @@ external function Integer CountObjects(string);
 external procedure ExtractElemFromSet(string,integer,var string);
 external function Boolean IsVATCodeDefined(string);
 external function Boolean ValidateBrazilianVATNr(string,string,Integer);
+external updating procedure GenerateRebateVouchers(string);// Edit ************************** Monday, 28 November 2016 11:22:21
 
 
 updating procedure AddToNumberLookupRegister(string phoneno,Integer compno,string custcode)
@@ -743,6 +744,8 @@ BEGIN
 
 //  RemoveNormalizedNumbers(CUr); // No need when saving...
   StoreNormalizedNumbers(CUr,CurrentCompany);
+  GenerateRebateVouchers(CUr.Code);// Edit ************************** Monday, 28 November 2016 11:22:21
+
 
   CUVcRecordSaveAfter = res;
   RETURN;
@@ -755,6 +758,7 @@ BEGIN
 
   RemoveNormalizedNumbers(CUr);
   StoreNormalizedNumbers(CUr,CurrentCompany);
+  GenerateRebateVouchers(CUr.Code);// Edit ************************** Monday, 28 November 2016 11:22:21
   CUVcRecordUpdateAfter = res;
   RETURN;
 END;

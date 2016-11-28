@@ -101,6 +101,22 @@ external updating procedure UnOk_IVVc(var record IVVc);//Edit-------------------
 external updating procedure UpdateSalesData(record IVVc);	//Edit----------------------Dima  10.03.2016
 external procedure SetNewORCustomStatusFlagOnWeb(record ORVc);// Edit ************************** Friday, 18 November 2016 09:45:15
 
+
+
+global updating procedure CloseRebVaucher(longint vauchernr,longint ivsernr)
+begin
+  record RebateVoucherVc RVr;
+  
+  RVr.VoucherSerNr = vauchernr;
+  if(readfirstkey("VoucherSerNr",RVr,1,true))then begin
+  	RVr.UsedFlag = 1;
+  	RVr.IVNr = ivsernr;
+  	recordstore(RVr,true);
+  end;
+
+return;
+end;
+
 procedure SetIVAcceptanceFlag(var record IVVc IVr,record IVVc prevIVr,LongInt stat)
 begin
   Integer acceptanceregister;
@@ -585,6 +601,9 @@ BEGIN
   	end;
 	end;
 	
+	if(IVr.OKFlag==1 and IVr.BirthDayVaucher>0)then begin
+		CloseRebVaucher(IVr.BirthDayVaucher,IVr.SerNr);
+  end;
 	UpdateSalesData(IVr);	//Edit----------------------Dima  10.03.2016  
   
 LIVVcRecordSaveAfter:;
@@ -879,6 +898,7 @@ BEGIN
   row IVVc IVrw;
   Boolean ihef,testf;
   record EInvCUVc EInvCUr;
+
   
   SetIVAcceptanceFlag(IVr,IV2r,stat);
   SetFinRef(IVr);
@@ -1220,6 +1240,9 @@ BEGIN
       end;
   end;
   
+  if(IVr.OKFlag==1 and IVr.BirthDayVaucher>0)then begin
+		CloseRebVaucher(IVr.BirthDayVaucher,IVr.SerNr);
+  end;
   UpdateSalesData(IVr);	//Edit----------------------Dima  10.03.2016
   
 LIVVcRecordUpdateAfter:;

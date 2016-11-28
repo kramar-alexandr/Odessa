@@ -809,7 +809,67 @@ begin
   IVDClassRebCodeEFAfter = true;
   return;
 end;
+// Edit Start ---------------------------------------------- Edit Start
+	//Monday, 28 November 2016 12:05:35
+	
+	
+	
+function Boolean IVDClassBirthDayVaucherEFAfter(Integer wn,Boolean changedf)
+begin  
+  record IVVc IVr;
+  record RebateVoucherVc RVr;
+  longint error;
+		
+  if (changedf) then begin  
+    DeselectWindow(wn,false);
+    GetWindowRecord(wn,IVr);
+    
+    error = -1;
+		RVr.VoucherSerNr = IVr.BirthDayVaucher;
+		if(readfirstkey("VoucherSerNr",RVr,1,true))then begin
+			if(RVr.UsedFlag>0)then begin
+				error = 31151;
+				goto lIVDClassBirthDayVaucherEFAfter;
+			end;
+		
+			if(IVr.InvDate<RVr.IsValidFromDate or IVr.InvDate>RVr.IsValidToDate)then begin
+				error = 31152;
+				goto lIVDClassBirthDayVaucherEFAfter;
+			end;
+			IVr.CustCode = RVr.CustCode;
+			putwindowrecord(wn,IVr);
+			IVDClassCustCodeEFAfter(wn,-1,1);
+			getwindowrecord(wn,IVr);
 
+			IVr.RebCode = RVr.RebCode;
+			putwindowrecord(wn,IVr);
+			IVDClassRebCodeEFAfter(wn,true);
+			getwindowrecord(wn,IVr);
+
+		end else begin
+			error = 31153;
+			goto lIVDClassBirthDayVaucherEFAfter;
+		end;	
+  end;  
+  
+  lIVDClassBirthDayVaucherEFAfter:;
+  if(error>0)then begin
+  	messagebox(error,"");
+  end;
+  
+  if(TouchScreenLook)then begin
+		//DisplayIVItem(IVr,rownr);
+		ReRunWindowDef(wn);
+		IVDClass_RefreshStringList(wn,IVr);
+		//WindowFieldGotoForTouchScreen(wn,-1,"ivcashcommand",true);
+  end;
+  
+  IVDClassBirthDayVaucherEFAfter = true;
+  return;
+end;
+
+	// Edit End ---------------------------------------------- Edit End
+	
 function Boolean IVDClassSumEFAfter(Integer wn,Integer fn,Integer rownr,Integer changed)
 begin  
   record IVVc IVr;
@@ -1457,6 +1517,7 @@ BEGIN
 		case "InvCountry": res = IVDClassInvCountryEFAfter(wn,changed!=0);
 		case "DelCountry": res = IVDClassDelCountryEFAfter(wn,changed!=0);
 		case "Position": res = IVDClassPositionEFAfter(wn,changed!=0);
+		case "BirthDayVaucher": res = IVDClassBirthDayVaucherEFAfter(wn,changed!=0);
 	  end;
  // end else begin //Edit-------------------Vitalii 10:44 25.12.2015
 	//res = true;

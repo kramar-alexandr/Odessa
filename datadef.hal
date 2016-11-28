@@ -2136,6 +2136,8 @@ RecordBegin(INVc,-,"artikel5");
   RecordField(OptUAHRate,M4Rate,0,0);	//Edit----------------------Dima  30.07.2015  
   RecordField(Position,M4Str,50,0);		//Edit----------------------Dima  11.01.2016
   RecordField(AllowSaleAllGoods,M4Mark,0,0);//Edit----------------------Dima  26.01.2016
+  RecordField(BirthDayVaucher,M4Long,0,0);// Edit ************************** Monday, 28 November 2016 11:53:25
+
   DefineIVVcRecordType_Array;
   MainKeyBegin(SerNr,1);
   StoreInBaseKey;
@@ -4809,6 +4811,7 @@ RecordBegin(IPVc,-,"");
   RecordBegin(RebateVoucherVc,-,"RebateVoucherVc"); //Edit***************************Sasha2,15:58 23.11.2016 {
   RecordField(SerNr,M4Long,0,0);
   RecordField(CustCode,M4Code,20,0);
+  RecordField(CustName,M4Str,200,0);
   RecordField(RebCode,M4Code,20,0);
   RecordField(VoucherSerNr,M4Long,0,0);
   RecordField(TransDate,M4Date,0,0);
@@ -4827,6 +4830,9 @@ RecordBegin(IPVc,-,"");
   KeySegment(SerNr);
   KeyBegin(VoucherSerNr);
   KeySegment(VoucherSerNr);
+  KeySegment(SerNr);
+  KeyBegin(CustName);
+  KeySegment(CustName);
   KeySegment(SerNr);
   EndRecord; //Edit***************************Sasha2,15:59 23.11.2016 }
   

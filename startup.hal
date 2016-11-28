@@ -105,7 +105,7 @@ begin
 	
 	Setting("Настройки синхронизации с Magento",SoapTClass,modSO);// Edit ************************** Monday, 14 November 2016 10:17:45
 	Setting("Ваучеры с процентной скидкой",RebateVoucherLClass,modSL); //Edit***************************Sasha2,16:56 23.11.2016
-	Setting("Настройки ваучеров с процентной скидкой",RebateVoucherTClass,modTC); //Edit***************************Sasha2,17:38 23.11.2016
+	Setting("Настройки ваучеров с процентной скидкой",RebateVoucherTClass,modSL); //Edit***************************Sasha2,17:38 23.11.2016
 
   //Report("Статистика НДС по аванс. отчетам",ExpVATRClass,ExpVATRn,0,modCL);
   //Report("Журнал путевых листов",WLJRClass,WLJRn,0,modCL);
@@ -266,6 +266,10 @@ begin
    SString(31148,"дня");
    SString(31149,"дней");
    SString(31150,"Сертификат");   
+   
+   SString(31151,"Ваучер уже использован");   
+   SString(31152,"Срок действия ваучера за пределами даты продажи"); 
+   SString(31153,"Ваучер не существует");  
 
 
   Maintenance("Экспорт склада CSV",ExportStockCSVClass,ExportStockCSVMn,modSY);

@@ -1418,6 +1418,7 @@ BEGIN
   IVr.TaxAuthReceiptDate = "";      
   IVr.TaxAuthReceiptTime = "";      
   IVr.OfficialSerNrSerie = "";
+  IVr.BirthDayVaucher = blankval;// Edit ************************** Monday, 28 November 2016 12:00:35
   rwcnt = MatRowCnt(IVr);
   for (i=0;i<rwcnt;i=i+1) begin
     MatRowGet(IVr,i,IVrw);

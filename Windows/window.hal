@@ -2975,6 +2975,7 @@ begin
   RecordList(4,17,-21,-39);
   RlColKey(4,4,"SerNr",SerNr,false,SerNr);
   RlColKey(70,70,"Клиент",CustCode,false,CustCode);
+  RlColKey(140,140,"Имя",CustName,false,CustName);
   RlColKey(230,230,"Номер ваучера",VoucherSerNr,false,VoucherSerNr);
   RlCol(310,310,"Выпущен",TransDate,false);
   RlCol(380,380,"Действует с",IsValidFromDate,false);

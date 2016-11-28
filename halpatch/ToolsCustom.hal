@@ -3069,7 +3069,9 @@ begin
   date curDate;
   LongInt newVoucherNr,smsNr;
   string 200 response;
-  
+  	
+  	logtext(0,"GenerateRebateVouchers");
+  	
     blockload(RebVchB);
     if (NonBlank(RebVchB.RebCode)) then begin
       curDate = CurrentDate;
@@ -3079,21 +3081,36 @@ begin
       while (LoopMain(CUr,1,TrHs)) begin
         testf = true;
         if (NonBlank(custCode) and CUr.Code!=custCode) then begin TrHs = false; testf = false; end;
-        if (BlankDate(CUr.Birthday)) then begin testf = false; end;
-        if (curDate < AddDay(CUr.Birthday,-AbsoluteVal(RebVchB.ValidDaysBeforeBirthDay))) then begin testf = false; end;
+        if (BlankDate(CUr.BirthDate)) then begin testf = false; end;
+        if (curDate < AddDay(CUr.BirthDate,-AbsoluteVal(RebVchB.ValidDaysBeforeBirthDay))) then begin testf = false; end;
+        
+        if(CUr.CustCat=="CUST")then begin
+        	testf = false;
+        end;
+        logtext(0,"tesf " & testf);
         if (testf) then begin
           RebateVoucher2r.CustCode = CUr.Code;
           RebateVoucher2r.ReleasedAtYear = GetYear(curDate);
           testf = !ReadFirstKey("CustCode",RebateVoucher2r,2,true);
         end;
+        logtext(0,"tesf " & testf);
+        RebateVoucherr.CustCode = CUr.Code;
+        RebateVoucherr.ReleasedAtYear = getyear(currentdate);
+        if(readfirstkey("CustCode",RebateVoucherr,2,true))then begin
+        	testf = false;
+        end;
+        
+        logtext(0,"tesf " & testf);
+        
         if (testf) then begin
           RECORDNEW(RebateVoucherr);
           RebateVoucherr.TransDate = curDate;
           RebateVoucherr.ReleasedAtYear = GetYear(curDate);
           RebateVoucherr.CustCode = CUr.Code;
           RebateVoucherr.RebCode = RebVchB.RebCode;
-          RebateVoucherr.IsValidFromDate = AddDay(CUr.Birthday,-AbsoluteVal(RebVchB.ValidDaysBeforeBirthDay));
-          RebateVoucherr.IsValidToDate = AddDay(CUr.Birthday,AbsoluteVal(RebVchB.ValidDaysAfterBirthDay));
+          RebateVoucherr.IsValidFromDate = AddDay(CUr.BirthDate,-AbsoluteVal(RebVchB.ValidDaysBeforeBirthDay));
+          RebateVoucherr.IsValidToDate = AddDay(CUr.BirthDate,AbsoluteVal(RebVchB.ValidDaysAfterBirthDay));
+          RebateVoucherr.CustName = CUr.Name;
           Randomize;
           newVoucherNr = Random(100000,999999);
           RebateVoucher2r.VoucherSerNr = newVoucherNr;

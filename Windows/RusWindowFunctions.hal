@@ -1066,7 +1066,7 @@ begin
     if (nonblank(sessiondesc)) then begin
       StaticText(h,v+=20,sessiondesc,false);
     end;
-
+	
     goto LDisplayRecordDetails_RUS01;
   end;  
 
@@ -1109,7 +1109,10 @@ begin
     v = v + 20;
     end;
   end;
-
+  
+  EditField(h+150,v,80,"Серификат именинника",Normal,BirthDayVaucher,false,0);// Edit ************************** Monday, 28 November 2016 12:45:22
+	v = v+ 16;// Edit ************************** Monday, 28 November 2016 12:45:22
+	
   if (ShowBaggerSupervisor!=0) then begin
     tstr = "Упаковщик: ";
     tstr = tstr & bagger;

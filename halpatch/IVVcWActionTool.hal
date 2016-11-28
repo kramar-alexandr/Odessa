@@ -1663,7 +1663,7 @@ BEGIN
   RETURN;
 END;
 
-global
+	global
 function string 40 IVITDefaultRemote(string default,string curmachine)
 BEGIN
   string 40 lsubset;
