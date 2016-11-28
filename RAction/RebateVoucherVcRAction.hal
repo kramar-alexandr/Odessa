@@ -143,3 +143,16 @@ BEGIN
   RebateVoucherVcRecordDuplicate = res; 
   RETURN;
 END;
+
+global
+function LongInt RebateVoucherVcRecordRemoveTest(var record RebateVoucherVc RebateVoucherr,record RebateVoucherVc RebateVoucher2r,LongInt long3,LongInt long4)
+BEGIN
+  LongInt res;
+
+  res = 1;
+  if (RebateVoucherr.UsedFlag!=0) then begin
+    res = 0;
+  end;
+  RebateVoucherVcRecordRemoveTest = res; 
+  RETURN;
+END;
