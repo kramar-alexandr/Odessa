@@ -3007,8 +3007,8 @@ begin
   h = 50;
   statictext(h,v+=10,"Текст для СМС @NR заменяется на номер сертификата",false);
   statictext(h,v+=10,"@FR - дата начала действия серт; @TO - дата конца действия",false);
-  EditField(h,v+=vs,300,"Текст СМС создания сертификата",Normal,SMSText1,false,0);
-  EditField(h,v+=vs,300,"Текст СМС поздравления",Normal,SMSText2,false,0);
+  EditField(h+150,v+=vs,300,"Текст СМС создания сертификата",Normal,SMSText1,false,0);
+  EditField(h+150,v+=vs,300,"Текст СМС поздравления",Normal,SMSText2,false,0);
   //EditField(h,v+=vs,300,"Текст",Normal,SMSText3,false,0);
   //EditField(h,v+=vs,300,"Текст",Normal,SMSText4,false,0);
   EndWindow;
