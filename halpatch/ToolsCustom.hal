@@ -21,6 +21,7 @@ external procedure ExtractObjWithSeparator(string,string,Boolean,var Integer,var
 external procedure GetFindCustBalance(string,LongInt,var val,var val,var val,var val,Integer,Integer,Integer,Integer,Integer,Integer,Boolean,var Boolean);// Edit ************************** Friday, 22 July 2016 10:49:11
 external procedure SetNewORCustomStatusFlagOnWeb(record ORVc);// Edit ************************** Friday, 18 November 2016 09:45:15
 external updating function string 255 CheckAndSendSMS(longint); //Edit***************************Sasha2,14:48 24.11.2016
+external function LongInt CountWorkingDays(Date,Date,string,string);// Edit ************************** Monday, 28 November 2016 16:01:47
 
 
 SetLangMode(LangRussian,"RUS",0);
@@ -3069,6 +3070,9 @@ begin
   date curDate;
   LongInt newVoucherNr,smsNr;
   string 200 response;
+  integer quant;
+  date nextCUDR;
+  integer daybefore,dayto;
   	
   	logtext(0,"GenerateRebateVouchers");
   	
@@ -3079,37 +3083,57 @@ begin
       CUr.Code = custCode;
       TrHs = true;
       while (LoopMain(CUr,1,TrHs)) begin
+      	nextCUDR = stringtodate(getday(CUr.BirthDate) & "/" & getmonth(CUr.BirthDate) & "/" & getyear(Currentdate));
+      	if(stringtodate(getday(CUr.BirthDate) & "/" & getmonth(CUr.BirthDate) & "/" & getyear(Currentdate))<currentdate)then begin
+      		nextCUDR = stringtodate(getday(CUr.BirthDate) & "/" & getmonth(CUr.BirthDate) & "/" & getyear(Currentdate)+1);
+      	end;
         testf = true;
         if (NonBlank(custCode) and CUr.Code!=custCode) then begin TrHs = false; testf = false; end;
         if (BlankDate(CUr.BirthDate)) then begin testf = false; end;
-        if (curDate < AddDay(CUr.BirthDate,-AbsoluteVal(RebVchB.ValidDaysBeforeBirthDay))) then begin testf = false; end;
+        if (curDate < AddDay(nextCUDR,-AbsoluteVal(RebVchB.ValidDaysBeforeBirthDay))) then begin testf = false; end;
         
         if(CUr.CustCat=="CUST")then begin
         	testf = false;
         end;
-        logtext(0,"tesf " & testf);
         if (testf) then begin
           RebateVoucher2r.CustCode = CUr.Code;
           RebateVoucher2r.ReleasedAtYear = GetYear(curDate);
           testf = !ReadFirstKey("CustCode",RebateVoucher2r,2,true);
         end;
-        logtext(0,"tesf " & testf);
         RebateVoucherr.CustCode = CUr.Code;
         RebateVoucherr.ReleasedAtYear = getyear(currentdate);
         if(readfirstkey("CustCode",RebateVoucherr,2,true))then begin
         	testf = false;
         end;
-        
-        logtext(0,"tesf " & testf);
-        
+                
         if (testf) then begin
           RECORDNEW(RebateVoucherr);
           RebateVoucherr.TransDate = curDate;
           RebateVoucherr.ReleasedAtYear = GetYear(curDate);
           RebateVoucherr.CustCode = CUr.Code;
           RebateVoucherr.RebCode = RebVchB.RebCode;
-          RebateVoucherr.IsValidFromDate = AddDay(CUr.BirthDate,-AbsoluteVal(RebVchB.ValidDaysBeforeBirthDay));
-          RebateVoucherr.IsValidToDate = AddDay(CUr.BirthDate,AbsoluteVal(RebVchB.ValidDaysAfterBirthDay));
+          
+          daybefore = AbsoluteVal(RebVchB.ValidDaysBeforeBirthDay);
+          dayto = AbsoluteVal(RebVchB.ValidDaysAfterBirthDay);
+          quant = 0;
+          quant = CountWorkingDays(AddDay(nextCUDR,-AbsoluteVal(RebVchB.ValidDaysBeforeBirthDay)),nextCUDR,CUr.Code,"UA");
+          
+          logtext(0,AddDay(nextCUDR,-AbsoluteVal(RebVchB.ValidDaysBeforeBirthDay)));
+          logtext(0,nextCUDR);
+          logtext(0,quant);
+          
+          
+          while(quant<daybefore)begin
+          	RebVchB.ValidDaysBeforeBirthDay = RebVchB.ValidDaysBeforeBirthDay + 1;
+          	quant = CountWorkingDays(AddDay(nextCUDR,-AbsoluteVal(RebVchB.ValidDaysBeforeBirthDay)),nextCUDR,CUr.Code,"UA");
+          end;
+          
+          RebateVoucherr.IsValidFromDate = AddDay(nextCUDR,-AbsoluteVal(RebVchB.ValidDaysBeforeBirthDay));
+          //RebateVoucherr.IsValidFromDate = AddDay(CUr.BirthDate,-quant);
+          
+          RebateVoucherr.IsValidToDate = AddDay(nextCUDR,AbsoluteVal(RebVchB.ValidDaysAfterBirthDay));
+          
+          
           RebateVoucherr.CustName = CUr.Name;
           Randomize;
           newVoucherNr = Random(100000,999999);

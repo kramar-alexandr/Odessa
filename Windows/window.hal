@@ -2949,7 +2949,7 @@ begin
 
   EditField(h,v,100,"No.",Normal,SerNr,false,0);
   EditField(h2,v,100,"Клиент",Normal,CustCode,false,CUSClass);
-  CheckBox(h3,v,0,"Подтвержден",OKFlag);
+  //CheckBox(h3,v,0,"Подтвержден",OKFlag);
   EditField(h,v+=vs,100,"Выпущен",Normal,TransDate,false,0);
   EditField(h2,v,100,"Скидка",Normal,RebCode,false,RebSClass);
   CheckBox(h3,v,0,"Использован",UsedFlag);
