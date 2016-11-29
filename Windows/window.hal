@@ -2996,18 +2996,21 @@ begin
   SetBlid(RebateVoucherBlock);
   SetWRect(64,80,500,300);
   v=6;vs = 20; h = 300;
+  CheckBox(h-250,v,0,"Включено",ActivateSystem);
   EditField(h,v,50,"Таблица скидок",Normal,RebCode,false,RebSClass);
   EditField(h,v+=vs,30,"Действителен до дня рожд.(дней)",Normal,ValidDaysBeforeBirthDay,false,0);
   EditField(h,v+=vs,30,"Действителен после дня рожд.(дней)",Normal,ValidDaysAfterBirthDay,false,0);
-  EditField(h,v+=vs,30,"Инф-вать про ваучер до дня рожд.за (дней)",Normal,ValidDaysBeforeBirthDay,false,0);
+  EditField(h,v+=vs,30,"Инф-вать про ваучер до начала действия (дней)",Normal,SendSMSBeforeBirthDayDays,false,0);
   EditField(h,v+=vs,80,"Инф-вать про ваучер в (время)",Normal,SendSMSBeforeBirthDayAtTime,false,0);
+  EditField(h,v+=vs,80,"Генерировать ваучер перед ДР (дней)",Normal,GenVauchersBeforeDays,false,0);
   v=v+2*vs;
   h = 50;
-  statictext(h,v+=10,"Текст для СМС",false);
-  EditField(h,v+=vs,300,"Текст",Normal,SMSText1,false,0);
-  EditField(h,v+=vs,300,"Текст",Normal,SMSText2,false,0);
-  EditField(h,v+=vs,300,"Текст",Normal,SMSText3,false,0);
-  EditField(h,v+=vs,300,"Текст",Normal,SMSText4,false,0);
+  statictext(h,v+=10,"Текст для СМС @NR заменяется на номер сертификата",false);
+  statictext(h,v+=10,"@FR - дата начала действия серт; @TO - дата конца действия",false);
+  EditField(h,v+=vs,300,"Текст СМС создания сертификата",Normal,SMSText1,false,0);
+  EditField(h,v+=vs,300,"Текст СМС поздравления",Normal,SMSText2,false,0);
+  //EditField(h,v+=vs,300,"Текст",Normal,SMSText3,false,0);
+  //EditField(h,v+=vs,300,"Текст",Normal,SMSText4,false,0);
   EndWindow;
 end;
 

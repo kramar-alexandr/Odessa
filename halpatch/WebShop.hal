@@ -19,6 +19,7 @@ external procedure NextM4Number(string,var string);// Edit *********************
 external procedure NPUpdateENstatusMn(record RcVc);
 external function boolean MySendRawWebRequest(string, string, boolean, string, string, string, string, boolean, area, var area, integer);
 external procedure SOAPLogin();
+external updating procedure GenerateRebateVouchers(string);
 
 SetLangMode(LangRussian,"RUS",0);
 
@@ -64,7 +65,7 @@ end;
 global updating procedure CustTimeTableAction()
 begin
   record RcVc RepSpec;
-  time t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,curt,curtnew;
+  time t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,curt,curtnew,t12;
   
   string 5 hr,mn;
   integer minute;
@@ -84,6 +85,8 @@ begin
     t10 = StringToTime("3:00");//Nowa poshta
 
 		t11 = StringToTime("1:00");//TextBackupToBackupServer
+		
+		t12 = StringToTime("4:00");//GIFT
     
     curt = CurrentTime; 
     hr = GetHour(curt);
@@ -116,6 +119,10 @@ begin
     	RefreshAllInnerRegistersNP;
     end;    
     
+    if (curtnew==t12) then begin
+    	logtext(0,"GenerateRebateVouchers");
+			GenerateRebateVouchers("");
+    end;
     if (curtnew==t11) then begin
     	SenBackuptoFTP;
     end;

@@ -3452,6 +3452,8 @@ if (HasTouchScreenLook==false) then begin
     EditField(h3,v+=vs,80,"Проект",Normal,PRCode,false,0);
   end;
   EditField(h3,v+=vs,80,"Причина кр.сч/ф",Normal,Reason,false,StandProblemsSClass);
+  EditField(h3,v+=vs,80,"Скидочный серт.",Normal,BirthDayVaucher,false,0);// Edit ************************** Monday, 28 November 2016 12:45:22
+
   
   if (CurrentUser=="SAUNOK") then begin		//Edit----------------------Dima  21.01.2016
 		EditField(h3,v+=vs,80,"LocOKNr",Normal,LocOKNr,false,0);

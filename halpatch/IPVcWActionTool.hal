@@ -1057,10 +1057,10 @@ BEGIN
   rwcnt = MatRowCnt(IPp);
   if ((rownr!=-1) and (rownr<rwcnt)) then begin
     MatRowGet(IPp,rownr,IPrw);
-    if (IPrw.InvoiceNr!=-1) then begin logtext(0,1); goto LWriteOffPrePayment; end;
-    if (IPrw.CUPNr==-1) then begin logtext(0,2); goto LWriteOffPrePayment; end;
-    if (blank(IPrw.CustCode)) then begin logtext(0,3); goto LWriteOffPrePayment; end;
-    if (PasteARPayInIP(IPp,IPrw)!=0) then begin logtext(0,4); goto LWriteOffPrePayment; end;
+    if (IPrw.InvoiceNr!=-1) then begin goto LWriteOffPrePayment; end;
+    if (IPrw.CUPNr==-1) then begin goto LWriteOffPrePayment; end;
+    if (blank(IPrw.CustCode)) then begin goto LWriteOffPrePayment; end;
+    if (PasteARPayInIP(IPp,IPrw)!=0) then begin goto LWriteOffPrePayment; end;
     IPrw.InvVal = -IPrw.InvVal;
     IPrw.RecVal = -IPrw.RecVal;
     IPrw.BankVal = -IPrw.BankVal;

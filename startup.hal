@@ -285,6 +285,8 @@ begin
 
 	
 	Maintenance("SEND SOAP",MyVClass,SOAPLogin,modDBMain);  //Edit**********Dima, 28.01.2014
+	
+	Maintenance("Генерировать скидочные ваучеры",MyVClass,GenerateRebateVouchersMn,modSL);  //Edit**********Dima, 28.01.2014
 
 	
   Maintenance("Пересчитать значение объема в карточке товара",RecalcINVolumeClass,RecalcINVolumeMn,modDBMain);//Edit***************************Sasha2,13:50 24.06.2014
