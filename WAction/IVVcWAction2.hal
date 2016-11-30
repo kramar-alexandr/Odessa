@@ -50,6 +50,7 @@ remote function Boolean FindLastInvoiceRowForSerial(LongInt,string ,string,var r
 external function Integer ArgEInvLock(record IVVc,integer);
 external function Integer GetArgIVType(integer,string,string,string);
 external function Boolean UserCanChangePendingRecord(Integer);
+external updating function Boolean IVDClassrebateserfOnEnterKey(Integer,Integer);// Edit ************************** Tuesday, 29 November 2016 17:38:21
 
 global
 function Boolean IVDClassNoInterestFlagButtonAction(Integer wn,Integer value)
@@ -897,6 +898,8 @@ BEGIN
     switch (fieldname) begin
       case "ivcashcommand":
         res = IVDClassivcashcommandOnEnterKey(wn,rownr);
+      case "rebateserf":// Edit ************************** Tuesday, 29 November 2016 17:38:36
+        res = IVDClassrebateserfOnEnterKey(wn,rownr);// Edit ************************** Tuesday, 29 November 2016 17:38:35
       case "PayDeal":
         if (TouchScreenLook) then begin
           GetWindowRecord(wn,IVr);

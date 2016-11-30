@@ -1110,7 +1110,7 @@ begin
     end;
   end;
   
-  EditField(h+150,v,80,"Скидочный сертификат",Normal,BirthDayVaucher,false,0);// Edit ************************** Monday, 28 November 2016 12:45:22
+  //EditField(h+150,v,80,"Скидочный сертификат",Normal,BirthDayVaucher,false,0);// Edit ************************** Monday, 28 November 2016 12:45:22
 	v = v+ 16;// Edit ************************** Monday, 28 November 2016 12:45:22
 	
   if (ShowBaggerSupervisor!=0) then begin
