@@ -12,6 +12,7 @@ begin
   string 255 param;
   
   if (LoggedInTest()) then begin
+  logtext(0,"WebLoadSHVc - " & currentuser);
     //nl = "<br>";
     //delim = " | ";
     nl = chr(13) & chr(10);
@@ -252,4 +253,155 @@ begin
 	writeareatofile(a_reply,"MagentaStatusReply.txt",1);
 	
 return;
+end;
+
+
+global procedure SOAPSalesOrderInfo(string ordnr)
+begin
+	record SoapBlock Soap;
+	string 50 host,port,path;
+	area a_req;
+	integer i;	
+	
+  blockload(Soap);
+  
+  addtexttoarea("<x:Envelope xmlns:x=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:urn=\"urn:Magento\">" & chr(13) & chr(10),a_req);
+  addtexttoarea(  "<x:Header/>" & chr(13) & chr(10),a_req);
+  addtexttoarea(  "<x:Body>" & chr(13) & chr(10),a_req);
+  addtexttoarea(    "<urn:salesOrderInfo >" & chr(13) & chr(10),a_req);
+  addtexttoarea(      "<urn:sessionId>" & Soap.Session & "</urn:sessionId>" & chr(13) & chr(10),a_req);
+  addtexttoarea(      "<urn:orderIncrementId>" & ordnr & "</urn:orderIncrementId>" & chr(13) & chr(10),a_req);
+  addtexttoarea(    "</urn:salesOrderInfo >" & chr(13) & chr(10),a_req);
+  addtexttoarea(  "</x:Body>" & chr(13) & chr(10),a_req);
+  addtexttoarea("</x:Envelope>" & chr(13) & chr(10),a_req);
+  
+  logtext(0,"SOAPSalesOrderInfo " & currenttime & " " & ordnr);
+  SendAsyncWebRequest(Soap.Host,Soap.Port,Soap.Port,Soap.Ssl==1,"POST",Soap.Path,"text/xml","",a_req,"SOAPSalesOrderInfoReply",20);
+
+  return;
+end;
+
+global updating procedure SOAPSalesOrderInfoReply(Area a_reply,Area a_replyheader,boolean timeout)
+begin
+	xml sopaxml;
+	string 200 session;
+	record SoapBlock Soap;
+  string 70 xmlpath;
+  vector string 255 res;
+  integer i,cnt;
+	
+	//writeareatofile(a_reply,"SOAPSalesOrderInfoReply.txt",1);
+  
+  sopaxml = ParseXMLArea(a_reply);
+  xmlpath = "SOAP-ENV:Envelope/SOAP-ENV:Body/ns1:salesOrderInfoResponse/result/";
+  
+  res["increment_id"]         = XmlGet(sopaxml,xmlpath & "increment_id");
+  res["store_id"]             = XmlGet(sopaxml,xmlpath & "store_id");
+  res["created_at"]           = XmlGet(sopaxml,xmlpath & "created_at");
+  res["updated_at"]           = XmlGet(sopaxml,xmlpath & "updated_at");
+  res["customer_id"]          = XmlGet(sopaxml,xmlpath & "customer_id");
+  res["tax_amount"]           = XmlGet(sopaxml,xmlpath & "tax_amount");
+  res["shipping_amount"]      = XmlGet(sopaxml,xmlpath & "shipping_amount");
+  res["discount_amount"]      = XmlGet(sopaxml,xmlpath & "discount_amount");
+  res["subtotal"]             = XmlGet(sopaxml,xmlpath & "subtotal");
+  res["grand_total"]          = XmlGet(sopaxml,xmlpath & "grand_total");
+  res["total_qty_ordered"]    = XmlGet(sopaxml,xmlpath & "total_qty_ordered");
+  res["base_tax_amount"]      = XmlGet(sopaxml,xmlpath & "base_tax_amount");
+  res["base_shipping_amount"] = XmlGet(sopaxml,xmlpath & "base_shipping_amount");
+  res["base_discount_amount"] = XmlGet(sopaxml,xmlpath & "base_discount_amount");
+  res["base_subtotal"]        = XmlGet(sopaxml,xmlpath & "base_subtotal");
+  res["base_grand_total"]     = XmlGet(sopaxml,xmlpath & "base_grand_total");
+  res["billing_address_id"]   = XmlGet(sopaxml,xmlpath & "billing_address_id");
+  res["shipping_address_id"]  = XmlGet(sopaxml,xmlpath & "shipping_address_id");
+  res["store_to_base_rate"]   = XmlGet(sopaxml,xmlpath & "store_to_base_rate");
+  res["store_to_order_rate"]  = XmlGet(sopaxml,xmlpath & "store_to_order_rate");
+  res["base_to_global_rate"]  = XmlGet(sopaxml,xmlpath & "base_to_global_rate");
+  res["base_to_order_rate"]   = XmlGet(sopaxml,xmlpath & "base_to_order_rate");
+  res["weight"]               = XmlGet(sopaxml,xmlpath & "weight");
+  res["store_name"]           = XmlGet(sopaxml,xmlpath & "store_name");
+  res["remote_ip"]            = XmlGet(sopaxml,xmlpath & "remote_ip");
+  res["status"]               = XmlGet(sopaxml,xmlpath & "status");
+  res["state"]                = XmlGet(sopaxml,xmlpath & "state");
+  res["applied_rule_ids"]     = XmlGet(sopaxml,xmlpath & "applied_rule_ids");
+  res["global_currency_code"] = XmlGet(sopaxml,xmlpath & "global_currency_code");
+  res["base_currency_code"]   = XmlGet(sopaxml,xmlpath & "base_currency_code");
+  res["store_currency_code"]  = XmlGet(sopaxml,xmlpath & "store_currency_code");
+  res["order_currency_code"]  = XmlGet(sopaxml,xmlpath & "order_currency_code");
+  res["shipping_method"]      = XmlGet(sopaxml,xmlpath & "shipping_method");
+  res["shipping_description"] = XmlGet(sopaxml,xmlpath & "shipping_description");
+  res["customer_email"]       = XmlGet(sopaxml,xmlpath & "customer_email");
+  res["customer_firstname"]   = XmlGet(sopaxml,xmlpath & "customer_firstname");
+  res["customer_lastname"]    = XmlGet(sopaxml,xmlpath & "customer_lastname");
+  res["quote_id"]             = XmlGet(sopaxml,xmlpath & "quote_id");
+  res["is_virtual"]           = XmlGet(sopaxml,xmlpath & "is_virtual");
+  res["customer_group_id"]    = XmlGet(sopaxml,xmlpath & "customer_group_id");
+  res["customer_note_notify"] = XmlGet(sopaxml,xmlpath & "customer_note_notify");
+  res["customer_is_guest"]    = XmlGet(sopaxml,xmlpath & "customer_is_guest");
+  res["email_sent"]           = XmlGet(sopaxml,xmlpath & "email_sent");
+  res["order_id"]             = XmlGet(sopaxml,xmlpath & "order_id");
+  //shipping_address
+  //billing_address
+  cnt = XmlCountChildren(sopaxml,xmlpath & "items");
+  for (i=0;i<cnt;i=i+1) begin
+    res["item" & i & "item_id"]                          = XmlGet(sopaxml,xmlpath & "items/item[" & i & "]/item_id");
+    res["item" & i & "order_id"]                         = XmlGet(sopaxml,xmlpath & "items/item[" & i & "]/order_id");
+    res["item" & i & "quote_item_id"]                    = XmlGet(sopaxml,xmlpath & "items/item[" & i & "]/quote_item_id");
+    res["item" & i & "created_at"]                       = XmlGet(sopaxml,xmlpath & "items/item[" & i & "]/created_at");
+    res["item" & i & "updated_at"]                       = XmlGet(sopaxml,xmlpath & "items/item[" & i & "]/updated_at");
+    res["item" & i & "product_id"]                       = XmlGet(sopaxml,xmlpath & "items/item[" & i & "]/product_id");
+    res["item" & i & "product_type"]                     = XmlGet(sopaxml,xmlpath & "items/item[" & i & "]/product_type");
+    res["item" & i & "product_options"]                  = XmlGet(sopaxml,xmlpath & "items/item[" & i & "]/product_options");
+    res["item" & i & "is_virtual"]                       = XmlGet(sopaxml,xmlpath & "items/item[" & i & "]/is_virtual");
+    res["item" & i & "sku"]                              = XmlGet(sopaxml,xmlpath & "items/item[" & i & "]/sku");
+    res["item" & i & "name"]                             = XmlGet(sopaxml,xmlpath & "items/item[" & i & "]/name");
+    res["item" & i & "applied_rule_ids"]                 = XmlGet(sopaxml,xmlpath & "items/item[" & i & "]/applied_rule_ids");
+    res["item" & i & "free_shipping"]                    = XmlGet(sopaxml,xmlpath & "items/item[" & i & "]/free_shipping");
+    res["item" & i & "is_qty_decimal"]                   = XmlGet(sopaxml,xmlpath & "items/item[" & i & "]/is_qty_decimal");
+    res["item" & i & "no_discount"]                      = XmlGet(sopaxml,xmlpath & "items/item[" & i & "]/no_discount");
+    res["item" & i & "qty_canceled"]                     = XmlGet(sopaxml,xmlpath & "items/item[" & i & "]/qty_canceled");
+    res["item" & i & "qty_invoiced"]                     = XmlGet(sopaxml,xmlpath & "items/item[" & i & "]/qty_invoiced");
+    res["item" & i & "qty_ordered"]                      = XmlGet(sopaxml,xmlpath & "items/item[" & i & "]/qty_ordered");
+    res["item" & i & "qty_refunded"]                     = XmlGet(sopaxml,xmlpath & "items/item[" & i & "]/qty_refunded");
+    res["item" & i & "qty_shipped"]                      = XmlGet(sopaxml,xmlpath & "items/item[" & i & "]/qty_shipped");
+    res["item" & i & "price"]                            = XmlGet(sopaxml,xmlpath & "items/item[" & i & "]/price");
+    res["item" & i & "base_price"]                       = XmlGet(sopaxml,xmlpath & "items/item[" & i & "]/base_price");
+    res["item" & i & "original_price"]                   = XmlGet(sopaxml,xmlpath & "items/item[" & i & "]/original_price");
+    res["item" & i & "base_original_price"]              = XmlGet(sopaxml,xmlpath & "items/item[" & i & "]/base_original_price");
+    res["item" & i & "tax_percent"]                      = XmlGet(sopaxml,xmlpath & "items/item[" & i & "]/tax_percent");
+    res["item" & i & "tax_amount"]                       = XmlGet(sopaxml,xmlpath & "items/item[" & i & "]/tax_amount");
+    res["item" & i & "base_tax_amount"]                  = XmlGet(sopaxml,xmlpath & "items/item[" & i & "]/base_tax_amount");
+    res["item" & i & "tax_invoiced"]                     = XmlGet(sopaxml,xmlpath & "items/item[" & i & "]/tax_invoiced");
+    res["item" & i & "base_tax_invoiced"]                = XmlGet(sopaxml,xmlpath & "items/item[" & i & "]/base_tax_invoiced");
+    res["item" & i & "discount_percent"]                 = XmlGet(sopaxml,xmlpath & "items/item[" & i & "]/discount_percent");
+    res["item" & i & "discount_amount"]                  = XmlGet(sopaxml,xmlpath & "items/item[" & i & "]/discount_amount");
+    res["item" & i & "base_discount_amount"]             = XmlGet(sopaxml,xmlpath & "items/item[" & i & "]/base_discount_amount");
+    res["item" & i & "discount_invoiced"]                = XmlGet(sopaxml,xmlpath & "items/item[" & i & "]/discount_invoiced");
+    res["item" & i & "base_discount_invoiced"]           = XmlGet(sopaxml,xmlpath & "items/item[" & i & "]/base_discount_invoiced");
+    res["item" & i & "amount_refunded"]                  = XmlGet(sopaxml,xmlpath & "items/item[" & i & "]/amount_refunded");
+    res["item" & i & "base_amount_refunded"]             = XmlGet(sopaxml,xmlpath & "items/item[" & i & "]/base_amount_refunded");
+    res["item" & i & "row_total"]                        = XmlGet(sopaxml,xmlpath & "items/item[" & i & "]/row_total");
+    res["item" & i & "base_row_total"]                   = XmlGet(sopaxml,xmlpath & "items/item[" & i & "]/base_row_total");
+    res["item" & i & "row_invoiced"]                     = XmlGet(sopaxml,xmlpath & "items/item[" & i & "]/row_invoiced");
+    res["item" & i & "base_row_invoiced"]                = XmlGet(sopaxml,xmlpath & "items/item[" & i & "]/base_row_invoiced");
+    res["item" & i & "row_weight"]                       = XmlGet(sopaxml,xmlpath & "items/item[" & i & "]/row_weight");
+    res["item" & i & "gift_message_available"]           = XmlGet(sopaxml,xmlpath & "items/item[" & i & "]/gift_message_available");
+    res["item" & i & "weee_tax_applied"]                 = XmlGet(sopaxml,xmlpath & "items/item[" & i & "]/weee_tax_applied");
+    res["item" & i & "weee_tax_applied_amount"]          = XmlGet(sopaxml,xmlpath & "items/item[" & i & "]/weee_tax_applied_amount");
+    res["item" & i & "weee_tax_applied_row_amount"]      = XmlGet(sopaxml,xmlpath & "items/item[" & i & "]/weee_tax_applied_row_amount");
+    res["item" & i & "base_weee_tax_applied_amount"]     = XmlGet(sopaxml,xmlpath & "items/item[" & i & "]/base_weee_tax_applied_amount");
+    res["item" & i & "base_weee_tax_applied_row_amount"] = XmlGet(sopaxml,xmlpath & "items/item[" & i & "]/base_weee_tax_applied_row_amount");
+    res["item" & i & "weee_tax_disposition"]             = XmlGet(sopaxml,xmlpath & "items/item[" & i & "]/weee_tax_disposition");
+    res["item" & i & "weee_tax_row_disposition"]         = XmlGet(sopaxml,xmlpath & "items/item[" & i & "]/weee_tax_row_disposition");
+    res["item" & i & "base_weee_tax_disposition"]        = XmlGet(sopaxml,xmlpath & "items/item[" & i & "]/base_weee_tax_disposition");
+    res["item" & i & "base_weee_tax_row_disposition"]    = XmlGet(sopaxml,xmlpath & "items/item[" & i & "]/base_weee_tax_row_disposition");
+  end;
+  
+  return;
+end;
+
+Global
+updating procedure MagentoTestMn(record RcVc RepSpec)
+begin
+  SOAPSalesOrderInfo(RepSpec.f1);
+  return;
 end;

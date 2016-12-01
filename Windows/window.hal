@@ -3051,3 +3051,12 @@ begin
 
   EndWindow;
 end;
+
+window MagentoTestVClass:1 //Edit-------------------Vitalii 15:29 01.12.2016
+ wtag("language","UKR"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+ begin
+WindowBegin("MagentoTestMn",MagentoTestVClass,CGMnt,RcType);
+  SetWRect(20,120,360,220);
+  EditField(100,6,100,"Ord. Nr.",Normal,f1,false,0);
+  EndWindow;
+end;
