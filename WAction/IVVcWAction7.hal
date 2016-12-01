@@ -76,6 +76,186 @@ remote procedure RecalcDiscountIVD(var record IVVc);//Edit----------------------
 remote procedure IVVc_PastePriceList(var record IVVc);// Edit ************************** Wednesday, 4 February 2015 14:34:16
 remote function Boolean PasteCust2InInv(var record IVVc,record LocalMachineBlock,string,Boolean,var string,var string,var string,var string,var string);
 remote procedure IVDUpdatePrices(var record IVVc,Boolean);// Edit ************************** Monday, 14 December 2015 15:16:18
+external function Boolean IVDClassBirthDayVaucherEFAfter(Integer,Boolean);// Edit ************************** Thursday, 1 December 2016 09:12:30
+
+
+global updating procedure LogoffKassir()
+begin
+record LocalMachineBlock LMb;
+record KassirLoginVc KLr,newKLr;
+
+blockload(LMb);
+
+	if(nonblank(LMb.LocalMachineCode))then begin
+		KLr.LocalMachine = LMb.LocalMachineCode;
+		if(readlastkey("LocalMachine",KLr,1,true))then begin
+			if(KLr.action==1)then begin
+				recordnew(newKLr);
+					newKLr.SerNr = NextSerNr("KassirLoginVc",CurrentDate,-1,false,"");	
+					newKLr.UserCode = KLr.UserCode;
+					newKLr.LocalMachine = KLr.LocalMachine;
+					newKLr.LogoffDate = currentdate;
+					newKLr.LogoffTime = currenttime;
+					newKLr.action = 0;
+				recordstore(newKLr,true);
+			end;
+		end;
+	end;
+
+return;
+end;
+
+global updating procedure DoLogoffKassir()
+begin
+integer wn,mwn;
+
+wn = curwindow;
+mwn = motherwindow(wn);
+LogoffKassir;
+closewindow(wn);
+		ReRunWindowDef(mwn);
+		WindowFieldGotoForTouchScreen(mwn,-1,"ivcashcommand",true);
+return;
+end;
+
+global updating procedure LoginKassir(string user)
+begin
+record LocalMachineBlock LMb;
+record KassirLoginVc KLr,newKLr;
+
+blockload(LMb);
+
+	if(nonblank(LMb.LocalMachineCode))then begin
+		recordnew(newKLr);
+			newKLr.SerNr = NextSerNr("KassirLoginVc",CurrentDate,-1,false,"");	
+			newKLr.UserCode = user;
+			newKLr.LocalMachine = LMb.LocalMachineCode;
+			newKLr.LoginDate = currentdate;
+			newKLr.LoginTime = currenttime;
+			newKLr.action = 1;
+		recordstore(newKLr,true);
+	end;
+
+return;
+end;
+
+global updating procedure ProceedLoginKassir()
+begin
+	integer wn,mwn;
+	record RcVc RepSpec;
+	record UserVc USr;
+	record LocalMachineBlock LMb;
+	
+	blockload(LMb);
+	
+	if(blank(LMb.LocalMachineCode))then begin
+		messagebox(0,"Empty LocalMachineCode");
+		goto lProceedLoginKassir;
+	end;
+	
+	wn = curwindow;
+	deselectwindow(wn,true);
+	getwindowrecord(wn,RepSpec);
+	If(RepSpec.f1=="RAY_1" or RepSpec.f1=="RAY_2" or RepSpec.f1=="KV_1" or RepSpec.f1=="KV_2")then begin
+		messagebox(0,"Error Login " & RepSpec.f1);
+		goto lProceedLoginKassir;
+	end;
+	
+	if(blank(RepSpec.f1))then begin
+		messagebox(0,"Empty Login");
+		goto lProceedLoginKassir;
+	end else begin
+		USr.Code = uppercase(RepSpec.f1);
+		if(readfirstmain(USr,1,true))then begin
+			if(CalcPassword(RepSpec.f2,USr.Code,0)==USr.NewPassWord)then begin
+				LogoffKassir;
+				LoginKassir(USr.Code);
+				
+				mwn = motherwindow(wn);
+				closewindow(wn);
+				ReRunWindowDef(mwn);
+				WindowFieldGotoForTouchScreen(mwn,-1,"ivcashcommand",true);
+				
+			end else begin
+				messagebox(0,"Error Login or Password");
+				goto lProceedLoginKassir;
+			end;
+		end else begin
+			messagebox(0,"Error Login or Password");
+			goto lProceedLoginKassir;
+		end;
+	end;
+	
+lProceedLoginKassir:;
+return;
+end;
+
+global updating procedure CancelLoginKassir()
+begin
+	integer wn;
+	wn = curwindow;
+	closewindow(wn);
+return;
+end;
+
+global procedure DoLoginKassir()
+begin
+	record RcVc RepSpec;
+	integer nwn,mwn;
+
+	mwn = curwindow;
+	
+	nwn = OpenWindow("DoLoginKassirRCLass",1,mwn,"","",RepSpec);
+	
+return;
+end;
+
+global updating procedure DoInsertPromoCodeProceed()
+begin
+	integer wn,mwn;
+	record RcVc RepSpec;
+	record UserVc USr;
+	record LocalMachineBlock LMb;
+	record IVVc IVr;
+		
+	wn = curwindow;
+	mwn = motherwindow(wn);
+	deselectwindow(wn,false);
+	getwindowrecord(wn,RepSpec);	
+	getwindowrecord(mwn,IVr);	
+	//messagebox(0,IVr.CustCode);
+	if(RepSpec.long1>0)then begin
+		IVr.BirthDayVaucher = RepSpec.long1;
+		putwindowrecord(mwn,IVr);
+		//PutWindowString(wn,"rebateserf","");
+		IVDClassBirthDayVaucherEFAfter(mwn,true);
+		closewindow(wn);
+		getwindowrecord(mwn,IVr);
+		if(TouchScreenLook)then begin
+			putwindowrecord(mwn,IVr);
+			IVDClass_RefreshStringList(mwn,IVr);
+			ReRunWindowDef(mwn);
+			WindowFieldGotoForTouchScreen(mwn,-1,"ivcashcommand",true);
+		end;
+		WindowFieldGotoForTouchScreen(wn,-1,"ivcashcommand",false);
+	end;
+	
+lDoInsertPromoCodeProceed:;
+return;
+end;
+
+global procedure DoInsertPromoCode()
+begin
+	record RcVc RepSpec;
+	integer nwn,mwn;
+
+	mwn = curwindow;
+	
+	nwn = OpenWindow("DoInsertPromoCodeRCLass",1,mwn,"","",RepSpec);
+	
+return;
+end;
+
 
 global
 procedure NPTSIVOpenLClassOpenExecute(Integer wn)
@@ -762,6 +942,12 @@ begin
         RepSpec.flags[0] = 4;
         nwn = OpenWindow("NPTSSearchBFCURClass",0,wn,"","",RepSpec);
         WindowFieldGoto(nwn,RepSpec,-1,"f1",true);
+        goto LIVDClassTouchScreenPasteButtonDo;
+      case 200:
+        DoLoginKassir;
+        goto LIVDClassTouchScreenPasteButtonDo;
+      case 201:
+        DoInsertPromoCode;
         goto LIVDClassTouchScreenPasteButtonDo;
     end;
   end;

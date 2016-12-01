@@ -113,7 +113,8 @@ begin
 				SalesData.CurncyCode = IVr.CurncyCode;
 				SalesData.CustCode = IVr.CustCode;// Edit ************************** Tuesday, 6 September 2016 09:26:45
 				SalesData.CustCat = IVr.CustCat;// Edit ************************** Tuesday, 6 September 2016 09:26:45
-
+				SalesData.Kassir = IVr.Kassir;// Edit ************************** Wednesday, 30 November 2016 14:30:39
+				
 				switch(IVrw.stp) begin 
 					case kInvoiceRowTypeNormal:
 						SalesData.ArtCode = IVrw.ArtCode;

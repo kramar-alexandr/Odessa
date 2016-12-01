@@ -756,6 +756,7 @@ BEGIN
   Array val avra2;
   Array val avra3;
   Integer acnt;
+  record RebateVoucherVc RVr;
 
   RecordNew(Rebr);
   Rebr.Code = IVp.RebCode;
@@ -769,6 +770,13 @@ BEGIN
 	if(ReadFirstMain(CUr,1,true)) then begin			//Edit-------------------------------------Dima  29.01.2015
 			IVp.RebCode = CUr.RebCode;
 			IVVc_PasteRebCode(IVp);
+	end;
+	if(IVp.BirthDayVaucher>0)then begin
+		RVr.VoucherSerNr = IVp.BirthDayVaucher;
+		if(readfirstkey("VoucherSerNr",RVr,1,true))then begin
+			IVp.RebCode = RVr.RebCode;
+			IVVc_PasteRebCode(IVp);
+		end;
 	end;
   
   IVSumup(IVp,true);   

@@ -270,6 +270,7 @@ begin
    SString(31151,"Ваучер уже использован");   
    SString(31152,"Срок действия ваучера за пределами даты продажи"); 
    SString(31153,"Ваучер не существует");  
+   SString(31154,"Сессия кассира не открыта");  
 
 
   Maintenance("Экспорт склада CSV",ExportStockCSVClass,ExportStockCSVMn,modSY);

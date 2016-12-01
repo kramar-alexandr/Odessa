@@ -4260,7 +4260,7 @@ end else begin
       SoftEditFieldTLX(360,6,h4,"",M4Str,ViewOnly,100,15,patM4black,"CustomerDisplayData_Line1",true,0);
       SoftEditFieldTLX(360,46,h4,"",M4Str,ViewOnly,100,25,patM4black,"CustomerDisplayData_Line2",true,0);
     end;
-    SoftEditField(360,86,100,"Скидочный Сертификат",Normal,"rebateserf",false,0,M4Str,255);//Edit by Victor 29.10.14
+    //SoftEditField(360,86,100,"Скидочный Сертификат",Normal,"rebateserf",false,0,M4Str,255);// Edit ************************** Thursday, 1 December 2016 09:11:12
 
     switch (LMb.POSButtonsPosition) begin
       case kPOSButtonsPositionLeft:

@@ -250,6 +250,8 @@ begin
   val cash; //Edit***************************Sasha2,16:37 25.03.2015
   Integer insertmode,updatemode; //Edit***************************Sasha2,16:45 25.03.2015
   record AccBlock ARAccb; //Edit***************************Sasha2,16:51 25.03.2015
+  record KassirLoginVc KLr;// Edit ************************** Wednesday, 30 November 2016 13:53:09
+
   
 //no client-server calls pls
   res = 0;
@@ -321,6 +323,25 @@ begin
       end;
     end;
   end; //Edit***************************Sasha2,15:43 25.03.2015 }
+  
+  if (TouchScreenLook) then begin //
+		if(nonblank(LMb.LocalMachineCode))then begin// Edit ************************** Wednesday, 30 November 2016 13:47:12
+			KLr.LocalMachine = LMb.LocalMachineCode;
+			if(readlastkey("LocalMachine",KLr,1,true))then begin
+				if(KLr.action==1)then begin
+					IVr.Kassir = KLr.UserCode;
+				end else begin
+					IVr.Kassir = "";
+				end;
+			end;
+			if(blank(IVr.Kassir))then begin
+				RecordCheckError(31154,"",-1,"SalesMan");      
+				res = -1; 
+				goto LIVVcRecordCheckClient;
+			end;
+		end;
+		
+  end;
   
   testf = true;
   if (IVr.InvType!=kInvoiceTypeCash and IVr.InvType!=kInvoiceTypeCashInvoiceReceiptPRT) then begin

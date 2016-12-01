@@ -3014,3 +3014,40 @@ begin
   EndWindow;
 end;
 
+window DoLoginKassirRCLass:1
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  real h,h2,h3,h4,hm,l,v,v2,v3,vm,vs,xv1,xv2;
+  WindowBegin("Логин кассира",DoLoginKassirRCLass,CGOther,RcType);
+  Modality(kModalityGlobal);
+  SetWRect(64,80,509,308);
+  vs=20;h=100;v=5;h2=200;
+
+  EditFieldTL(h,6 ,-20,"Логин",M4Str,Normal,40,f1,false,UserSClass);
+  EditFieldTL(h,v+=vs,-20,"Пароль",M4Star,Normal,40,f2,false,0);
+  v = v + 40 + v2;
+  
+  ColourPushButton(h,v+=2*vs,h2,v+3*vs,"CancelLoginKassir","Отмена",1);
+  ColourPushButton(h+100,v,h2+100,v+3*vs,"ProceedLoginKassir","Продолжить",2);
+  ColourPushButton(h+200,v,h2+200,v+3*vs,"DoLogoffKassir","Разлогиниться",3);
+
+  EndWindow;
+end;
+
+window DoInsertPromoCodeRCLass:1
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  real h,h2,h3,h4,hm,l,v,v2,v3,vm,vs,xv1,xv2;
+  WindowBegin("Ввод промо кода",DoInsertPromoCodeRCLass,CGOther,RcType);
+  Modality(kModalityGlobal);
+  SetWRect(64,80,509,308);
+  vs=20;h=100;v=5;h2=200;
+
+  EditFieldTL(h,6 ,80,"Код",M4Long,Normal,40,long1,false,0);
+  v = v + 40 + v2;
+  
+  ColourPushButton(h,v+=2*vs,h2,v+3*vs,"CancelLoginKassir","Отмена",1);
+  ColourPushButton(h+200,v,h2+200,v+3*vs,"DoInsertPromoCodeProceed","Ввод",2);
+
+  EndWindow;
+end;

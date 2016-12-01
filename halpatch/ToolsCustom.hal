@@ -3109,7 +3109,7 @@ begin
 						smstext = StrReplace(smstext,"@NR",RebateVoucher2r.VoucherSerNr);
 						smstext = StrReplace(smstext,"@FR",RebateVoucher2r.IsValidFromDate);
 						smstext = StrReplace(smstext,"@TO",RebateVoucher2r.IsValidToDate);
-						smsNr = AddSMStoStack(CUr.Phone,SMSb.Title1,smstext,CUr.Code,"RebateVoucherVc",RebateVoucher2r.SerNr,"",curDate,RebVchB.SendSMSBeforeBirthDayAtTime);
+						smsNr = AddSMStoStack(CUr.Phone,SMSb.Title1,smstext,CUr.Code,"RebateVoucherVc",RebateVoucher2r.SerNr,"WEB",curDate,RebVchB.SendSMSBeforeBirthDayAtTime);
 						
 					end;
 				end;

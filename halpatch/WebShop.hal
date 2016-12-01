@@ -560,6 +560,7 @@ begin
 					ORr.SalesGroup = "WEB";
 					ORr.SalesMan  = CurrentUser;
 					ORr.CurncyCode = "UAH_R";
+					ORr.PriceList = "RRP";
 					//ORr.BaseRate1 = 100;
 					//ORr.BaseRate2 = 100;
 					ORr.Location = WSSB.Location;

@@ -830,7 +830,15 @@ begin
         procstr = procstr & "TouchScreenPrintPreview";           
       case kPOSButtonTypeInsertFreeTextOnMatrix:
         AddTouchScreenPasteButton(h,v,width,heighttemp,procstr,i+1,lblstr,POSBrw.colnr);
-        procstr = "";          
+        procstr = "";  
+      
+      case 200:// Edit ************************** Wednesday, 30 November 2016 12:17:50
+        AddTouchScreenPasteButton(h,v,width,heighttemp,procstr,i+1,lblstr,POSBrw.colnr);
+        procstr = "";  
+    	case 201:// Edit ************************** Wednesday, 30 November 2016 12:17:50
+        AddTouchScreenPasteButton(h,v,width,heighttemp,procstr,i+1,lblstr,POSBrw.colnr);
+        procstr = "";  
+              
       case kPOSButtonTypeBlank:
         goto LLDrawPOSButtons_RUS;
     end;
@@ -1011,6 +1019,16 @@ begin
   real h,h2,h3,v;
   string 255 tstr;
   longint maxPoints;
+  record KassirLoginVc KLr;
+  integer KassirLogin;
+  record UserVc USr;
+  
+  KLr.LocalMachine = lmc;// Edit ************************** Wednesday, 30 November 2016 13:33:23
+  if(readlastkey("LocalMachine",KLr,1,true))then begin
+  	KassirLogin = KLr.action;
+  	USr.Code = KLr.UserCode;
+  	readfirstmain(USr,1,true);
+  end;
 
   BlockLoad(MPLb);
   maxPoints = MPLb.MaxPointsView;
@@ -1091,6 +1109,15 @@ begin
 	
   tstr = "Скидка: ";
   tstr = tstr & addr1;
+  StaticText(h,v+=20,tstr,false);
+  
+  
+  //tstr = "Кассир: ";
+  if(KassirLogin==0)then begin
+  	tstr = "Кассир не вошел в систему!";
+  end else begin
+  	tstr = "Кассир: " & USr.Name;
+  end;
   StaticText(h,v+=20,tstr,false);
 	
 	// Edit End ---------------------------------------------- Edit End

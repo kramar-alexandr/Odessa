@@ -2137,7 +2137,8 @@ RecordBegin(INVc,-,"artikel5");
   RecordField(Position,M4Str,50,0);		//Edit----------------------Dima  11.01.2016
   RecordField(AllowSaleAllGoods,M4Mark,0,0);//Edit----------------------Dima  26.01.2016
   RecordField(BirthDayVaucher,M4Long,0,0);// Edit ************************** Monday, 28 November 2016 11:53:25
-
+  RecordField(Kassir,M4Str,40,0);// Edit ************************** Wednesday, 30 November 2016 13:48:13
+  
   DefineIVVcRecordType_Array;
   MainKeyBegin(SerNr,1);
   StoreInBaseKey;
@@ -4701,6 +4702,7 @@ RecordBegin(IPVc,-,"");
   RecordField(stp,M4Int,0,0);
   RecordField(CustCode,M4Code,50,0);// Edit ************************** Tuesday, 6 September 2016 09:23:30
   RecordField(CustCat,M4Code,10,0);// Edit ************************** Thursday, 3 November 2016 09:56:39
+  RecordField(Kassir,M4Code,40,0);
   MainKeyBegin(InvNr,0);
   KeySegment(InvNr);
   KeySegment(RowNr);
@@ -4849,6 +4851,26 @@ RecordBegin(IPVc,-,"");
   	RecordField(GenVauchersBeforeDays,M4Int,0,0);
   	RecordField(ActivateSystem,M4Int,0,0);
   EndBlock;
+  
+  RecordBegin(KassirLoginVc,-,""); // Edit ************************** Wednesday, 30 November 2016 12:05:47
+  RecordField(SerNr,M4Long,0,0);
+  RecordField(UserCode,M4Code,20,0);
+  RecordField(LocalMachine,M4Code,20,0);
+  RecordField(LoginDate,M4Date,0,0);
+  RecordField(LoginTime,M4Time,0,0);
+  RecordField(LogoffDate,M4Date,0,0);
+  RecordField(LogoffTime,M4Time,0,0);
+  RecordField(action,M4Int,0,0);
+  MainKeyBegin(SerNr,0);
+  KeySegment(SerNr);
+  KeyBegin(action);
+  KeySegment(action);
+  KeySegment(UserCode);
+  KeySegment(SerNr);
+  KeyBegin(LocalMachine);
+  KeySegment(LocalMachine);
+  KeySegment(SerNr);
+  EndRecord; // Edit ************************** Wednesday, 30 November 2016 12:05:49
 
 return;
 end;
