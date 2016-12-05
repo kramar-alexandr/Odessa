@@ -21,6 +21,7 @@ external function boolean MySendRawWebRequest(string, string, boolean, string, s
 external procedure SOAPLogin();
 external updating procedure GenerateRebateVouchers(string);
 external function string 255 StrReplace(string,string,string);
+external procedure GetAvailableItems(var record ORVc);
 
 SetLangMode(LangRussian,"RUS",0);
 
@@ -470,6 +471,43 @@ begin
 return;
 end;
 
+global //Edit***************************Sasha2,17:49 05.12.2016 {
+updating procedure MakeReserveFromOrder(LongInt OrSerNr)
+begin
+  record ORVc ORr,OR2r;
+  row ORVc ORrw;
+  integer rwcnt,i;
+  val diff;
+  boolean foundf;
+  
+    ORr.SerNr = OrSerNr;
+    if (ReadFirstMain(ORr,1,true) and MatRowCnt(ORr)>0) then begin
+      if (ORr.OKFlag==0 and ORr.Reserved==0) then begin
+        RecordCopy(OR2r,ORr);
+    		GetAvailableItems(ORr);
+    		rwcnt = MatRowCnt(ORr);
+    		for (i=0;i<rwcnt;i=i+1) begin
+    		  MatRowGet(ORr,i,ORrw);
+    		  if (ORrw.AvailableQuant<ORrw.Quant) then begin
+    		    diff = ORrw.Quant - ORrw.AvailableQuant;
+    		    ORrw.Quant = ORrw.Quant - diff;
+    		    if (ORrw.Quant>0) then begin
+      		    foundf = true;
+      		  end;
+    		    ORrw.OrderQuant = diff;
+    		    MatRowPut(ORr,i,ORrw);
+    		  end;
+    		end;
+    		if (foundf) then begin
+    		  ORr.Reserved = 1;
+    		end;
+    		RecordUpdate(OR2r,ORr,true);
+    	end;
+    end;
+  
+  return;
+end; //Edit***************************Sasha2,17:49 05.12.2016 }
+
 global webpublic updating Procedure WebGetOrder() //Edit***************************Sasha2,15:18 04.07.2014
 begin
   record ORVc ORr;
@@ -486,7 +524,7 @@ begin
   Boolean chsum, chsumConfirm;
   string 10 rebgroup;
   record RebVc Rebr,Reb2r;
-  boolean updateflag;
+  boolean updateflag,recordSaved,testf;
 	string 20 IPaddr;
   string 200 firsname,lastname,middlename,resstr;
 
@@ -699,10 +737,12 @@ begin
 					if(ORr.SerNr>-1)then begin
 						if(updateflag)then begin
 							if (recordStore(ORr,true)) then begin
+							  recordSaved = true;
 								logtext(0,"Successful order import #" & ORr.SerNr);
 							end;
 						end else begin
 							if (recordInsert(ORr,true)) then begin
+							  recordSaved = true;
 								logtext(0,"Successful order import #" & ORr.SerNr);
 							end else begin
 								if (Blank(errors)) then begin errors = "Error1"; end else begin errors = errors & ",Error1"; end;
@@ -713,6 +753,14 @@ begin
 						if (Blank(errors)) then begin errors = "Error1"; end else begin errors = errors & ",Error1"; end;
 						logtext(0,"Error1 Order # nosernr" & ORr.SerNr);
 					end;
+					
+					if (recordSaved) then begin //Edit***************************Sasha2,17:49 05.12.2016 {
+					  testf = true;
+					  if (ORr.SelfDelivery==1 and FindSubString("Šˆ…‚",UpperCase(ORr.ShipAddr0))) then begin testf = false; end;
+					  if(testf) then begin
+					    MakeReserveFromOrder(ORr.SerNr);
+					  end;
+					end; //Edit***************************Sasha2,17:49 05.12.2016 }
 				end;
 			end;
 			if (ORCnt == 0) then begin
