@@ -3166,10 +3166,10 @@ begin
 					if (curDate<AddDay(nextCUDR,-RebVchB.GenVauchersBeforeDays)) then begin testf = false; end;
 					if (curDate>AddDay(nextCUDR,workdayto)) then begin testf = false; end;
 										
-					if(CUr.CustCat=="CUST")then begin
+					if(CUr.CustCat!="RETAI")then begin
 						testf = false;
 					end;
-					if(CUr.CustCat=="WEB")then begin
+					/*if(CUr.CustCat=="WEB")then begin
 						testf = false;
 					end;
 					if(CUr.CustCat=="EMPL")then begin
@@ -3177,7 +3177,7 @@ begin
 					end;
 					if(blank(CUr.CustCat))then begin
 						testf = false;
-					end;
+					end;*/
 					if (testf) then begin
 						RebateVoucher2r.CustCode = CUr.Code;
 						RebateVoucher2r.ReleasedAtYear = GetYear(curDate);
