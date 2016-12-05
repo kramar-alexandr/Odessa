@@ -3092,10 +3092,10 @@ begin
 					if (curDate!=nextCUDR) then begin testf = false; end;
 					if(RebVchB.SendSMSBeforeBirthDayAtTime>currenttime)then begin testf = false; end;
 				
-					if(CUr.CustCat=="CUST")then begin
+					/*if(CUr.CustCat=="CUST")then begin
 						testf = false;
-					end;
-					if(CUr.CustCat=="EMPL")then begin
+					end;*/
+					if(CUr.CustCat!="EMPL")then begin
 						testf = false;
 					end;
 					if (testf) then begin
@@ -3132,7 +3132,7 @@ begin
   string 200 response;
   integer quant;
   date nextCUDR,targetDRDate;
-  integer daybefore,dayto;
+  integer daybefore,dayto,workdayto;
   string 255 smstext;
   record SMSTextBlock SMSb;
   	
@@ -3145,23 +3145,37 @@ begin
 				TrHs = true;
 				daybefore = AbsoluteVal(RebVchB.ValidDaysBeforeBirthDay);
 				dayto = AbsoluteVal(RebVchB.ValidDaysAfterBirthDay);
-
+				workdayto = AbsoluteVal(RebVchB.ValidDaysAfterBirthDay);
+				
+				quant = 0;
+				quant = CountWorkingDays(currentdate,AddDay(currentdate,workdayto),CUr.Code,"UA");
+				while(quant<dayto)begin
+					workdayto = workdayto + 1;
+					quant = CountWorkingDays(currentdate,AddDay(currentdate,workdayto),CUr.Code,"UA");
+				end;
+								
 				while (LoopMain(CUr,1,TrHs)) begin
 					nextCUDR = stringtodate(getday(CUr.BirthDate) & "/" & getmonth(CUr.BirthDate) & "/" & getyear(Currentdate));
-					if(stringtodate(getday(CUr.BirthDate) & "/" & getmonth(CUr.BirthDate) & "/" & getyear(Currentdate))<currentdate)then begin
-						nextCUDR = stringtodate(getday(CUr.BirthDate) & "/" & getmonth(CUr.BirthDate) & "/" & getyear(Currentdate)+1);
+					if(nextCUDR<addday(currentdate,-workdayto))then begin
+						nextCUDR = addyear(nextCUDR,1);
 					end;
 					testf = true;
 					blockload(RebVchB);
 					if (NonBlank(custCode) and CUr.Code!=custCode) then begin TrHs = false; testf = false; end;
 					if (BlankDate(CUr.BirthDate)) then begin testf = false; end;
 					if (curDate<AddDay(nextCUDR,-RebVchB.GenVauchersBeforeDays)) then begin testf = false; end;
-					if (curDate>nextCUDR) then begin testf = false; end;
-				
+					if (curDate>AddDay(nextCUDR,workdayto)) then begin testf = false; end;
+										
 					if(CUr.CustCat=="CUST")then begin
 						testf = false;
 					end;
+					if(CUr.CustCat=="WEB")then begin
+						testf = false;
+					end;
 					if(CUr.CustCat=="EMPL")then begin
+						testf = false;
+					end;
+					if(blank(CUr.CustCat))then begin
 						testf = false;
 					end;
 					if (testf) then begin
@@ -3221,21 +3235,40 @@ begin
 							if (RECORDSTORE(RebateVoucherr,false)) then begin
 								logtext(0,"GenerateRebateVouchers " & CUr.Code & " " & CUr.Name & " " & CUr.BirthDate);
 								smstext = RebVchB.SMSText1;
-								if(currentdate==nextCUDR)then begin
+								if(currentdate>=nextCUDR)then begin
 									smstext = RebVchB.SMSText2;
 								end;
 								smstext = StrReplace(smstext,"@NR",RebateVoucherr.VoucherSerNr);
 								smstext = StrReplace(smstext,"@FR",RebateVoucherr.IsValidFromDate);
 								smstext = StrReplace(smstext,"@TO",RebateVoucherr.IsValidToDate);
-								if(curDate>addday(RebateVoucherr.IsValidFromDate,-RebVchB.SendSMSBeforeBirthDayDays))then begin
+								
+								if(currentdate>nextCUDR)then begin
+									smsNr = AddSMStoStack(CUr.Phone,SMSb.Title1,smstext,CUr.Code,"RebateVoucherVc",RebateVoucherr.SerNr,"WEB",curDate,AddSeconds(CurrentTime,-1));
+								end;
+								if(currentdate==nextCUDR and currenttime>stringtotime("9:00"))then begin
+									smsNr = AddSMStoStack(CUr.Phone,SMSb.Title1,smstext,CUr.Code,"RebateVoucherVc",RebateVoucherr.SerNr,"WEB",curDate,AddSeconds(CurrentTime,-1));
+								end;
+								if(curDate<nextCUDR)then begin
+									smsNr = AddSMStoStack(CUr.Phone,SMSb.Title1,smstext,CUr.Code,"RebateVoucherVc",RebateVoucherr.SerNr,"WEB",addday(RebateVoucherr.IsValidFromDate,-RebVchB.SendSMSBeforeBirthDayDays),RebVchB.SendSMSBeforeBirthDayAtTime);
+									smstext = RebVchB.SMSText2;
+									smstext = StrReplace(smstext,"@NR",RebateVoucherr.VoucherSerNr);
+									smstext = StrReplace(smstext,"@FR",RebateVoucherr.IsValidFromDate);
+									smstext = StrReplace(smstext,"@TO",RebateVoucherr.IsValidToDate);
+									smsNr = AddSMStoStack(CUr.Phone,SMSb.Title1,smstext,CUr.Code,"RebateVoucherVc",RebateVoucherr.SerNr,"WEB",nextCUDR,RebVchB.SendSMSBeforeBirthDayAtTime);
+								end;
+								
+								/*if(curDate>addday(RebateVoucherr.IsValidFromDate,-RebVchB.SendSMSBeforeBirthDayDays))then begin
 									//smsNr = AddSMStoStack(CUr.Phone,SMSb.Title1,smstext,CUr.Code,"RebateVoucherVc",RebateVoucherr.SerNr,"",curDate,AddSeconds(CurrentTime,-1));
 								end else begin
 									if(curDate==addday(RebateVoucherr.IsValidFromDate,-RebVchB.SendSMSBeforeBirthDayDays) and currenttime>RebVchB.SendSMSBeforeBirthDayAtTime)then begin
-										smsNr = AddSMStoStack(CUr.Phone,SMSb.Title1,smstext,CUr.Code,"RebateVoucherVc",RebateVoucherr.SerNr,"",addday(RebateVoucherr.IsValidFromDate,-RebVchB.SendSMSBeforeBirthDayDays),currenttime);
+										smsNr = AddSMStoStack(CUr.Phone,SMSb.Title1,smstext,CUr.Code,"RebateVoucherVc",RebateVoucherr.SerNr,"WEB",addday(RebateVoucherr.IsValidFromDate,-RebVchB.SendSMSBeforeBirthDayDays),currenttime);
 									end else begin
  										//smsNr = AddSMStoStack(CUr.Phone,SMSb.Title1,smstext,CUr.Code,"RebateVoucherVc",RebateVoucherr.SerNr,"",addday(RebateVoucherr.IsValidFromDate,-RebVchB.SendSMSBeforeBirthDayDays),RebVchB.SendSMSBeforeBirthDayAtTime);
 									end;
-								end;
+								end;*/
+								
+								
+								
 							end;
 						end;
 					end;
@@ -3243,7 +3276,7 @@ begin
 			end;
     end;
     
-    SendBirthdaySMS;
+    //SendBirthdaySMS;
   
   return;
 end;

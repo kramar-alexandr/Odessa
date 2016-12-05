@@ -5434,7 +5434,7 @@ begin
   EditField(h1,v+=vs,150,"Фамилия",Normal,NPLastName,false,0);
   EditField(h2,v,150,"Имя",Normal,NPFirstName,false,0);
   EditField(h3,v,150,"Отчество",Normal,NPMiddleName,false,0);
-
+	EditField(h1,v+=vs,-20,"Комментарий",Normal,Comment,false,0);
 /*
   StaticText(130,v+=50,"Адрес контрагента:",false);
   EditField(h1,v+=vs,150,"Улица",Normal,NPStreet,false,0);
@@ -5526,7 +5526,7 @@ email not working yet
 	SpecialMenu("Выгрузить таблицу в буфер обмена",'',18,"ExportToExcelORDsm"); // edit ----------Dima 26.11.2014, 23.01.2015
 	SpecialMenu("Отсортировать таблицу",'',20,"TableSortORDsm"); // edit ----------Dima 26.11.2014, 23.01.2015
 	SpecialMenu("Создать СМС с реквизитами",'',20,"MakeSMSORDsm");	//Edit----------------------Dima  26.06.2015
-	SpecialMenu("Просмотреть доступные товары",'',20,"GetAvailableItemsDsm");		//Edit----------------------Dima  26.06.2015
+	SpecialMenu("Просмотреть доступные товары",'f',20,"GetAvailableItemsDsm");		//Edit----------------------Dima  26.06.2015
 	SpecialMenu("Отменить заказ на перемещение",'',20,"CancelStockMoveOrderDsm");	//Edit----------------------Dima  30.12.2015
 	
 	SpecialMenu("Обновить задолженность клиента",'',20,"CalcCustBalDsm");	// Edit ************************** Friday, 22 July 2016 10:42:12
