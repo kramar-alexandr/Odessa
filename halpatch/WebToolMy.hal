@@ -82,8 +82,7 @@ begin
       end;
     end;
     if (chng) then begin
-      //if (RecordStore(SHr,true)) begin
-      if (RecordUpdate(oldSHr,SHr,true)) begin
+      if (RecordUpdate(oldSHr,SHr,true)==0) begin
         WebOutString("ok");
       end else begin
         WebOutString("nok");
