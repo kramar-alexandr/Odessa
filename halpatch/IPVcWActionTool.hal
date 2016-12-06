@@ -1373,8 +1373,14 @@ begin
 								RecordCopy(oldORr,ORr);
       					ORr.CustomStatusFlag = 9; //order is finished;
       					RecordUpdate(oldORr,ORr,true);
-      				end;	
+      				end else begin
+      					logtext(0,"SetORStatusFinished!!!!!!!!!!!error status DOne ORr.Sum4 == orderedSum and  SHr.OKFlag!=0 " & ORr.SerNr & " orderedSum " & orderedSum);
+      				end;
+						end else begin
+							logtext(0,"SetORStatusFinished!!!!!!!!!!!error status SH " & ORr.SerNr);
 						end;
+					end else begin
+						logtext(0,"SetORStatusFinished!!!!!!!!!!!error status DOne " & ORr.SerNr & " debt " & debt);
 					end;	
 				end;		
 			

@@ -3243,10 +3243,18 @@ begin
 								smstext = StrReplace(smstext,"@TO",RebateVoucherr.IsValidToDate);
 								
 								if(currentdate>nextCUDR)then begin
-									smsNr = AddSMStoStack(CUr.Phone,SMSb.Title1,smstext,CUr.Code,"RebateVoucherVc",RebateVoucherr.SerNr,"WEB",curDate,AddSeconds(CurrentTime,-1));
+									if(currenttime>=RebVchB.SendSMSBeforeBirthDayAtTime)then begin
+										smsNr = AddSMStoStack(CUr.Phone,SMSb.Title1,smstext,CUr.Code,"RebateVoucherVc",RebateVoucherr.SerNr,"WEB",curDate,AddSeconds(CurrentTime,-1));
+									end else begin
+										smsNr = AddSMStoStack(CUr.Phone,SMSb.Title1,smstext,CUr.Code,"RebateVoucherVc",RebateVoucherr.SerNr,"WEB",curDate,RebVchB.SendSMSBeforeBirthDayAtTime);
+									end;
 								end;
 								if(currentdate==nextCUDR and currenttime>stringtotime("9:00"))then begin
-									smsNr = AddSMStoStack(CUr.Phone,SMSb.Title1,smstext,CUr.Code,"RebateVoucherVc",RebateVoucherr.SerNr,"WEB",curDate,AddSeconds(CurrentTime,-1));
+									if(currenttime>=RebVchB.SendSMSBeforeBirthDayAtTime)then begin
+										smsNr = AddSMStoStack(CUr.Phone,SMSb.Title1,smstext,CUr.Code,"RebateVoucherVc",RebateVoucherr.SerNr,"WEB",curDate,AddSeconds(CurrentTime,-1));
+									end else begin
+										smsNr = AddSMStoStack(CUr.Phone,SMSb.Title1,smstext,CUr.Code,"RebateVoucherVc",RebateVoucherr.SerNr,"WEB",curDate,RebVchB.SendSMSBeforeBirthDayAtTime);
+									end;
 								end;
 								if(curDate<nextCUDR)then begin
 									smsNr = AddSMStoStack(CUr.Phone,SMSb.Title1,smstext,CUr.Code,"RebateVoucherVc",RebateVoucherr.SerNr,"WEB",addday(RebateVoucherr.IsValidFromDate,-RebVchB.SendSMSBeforeBirthDayDays),RebVchB.SendSMSBeforeBirthDayAtTime);

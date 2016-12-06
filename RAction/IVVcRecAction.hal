@@ -1038,13 +1038,13 @@ LSkipOfficialSerNrCheck:;
       end;
     end;    
   end;    
-  if (IVp.ExportFlag==0 and blank(IVp.CAE)) then begin
+  /*if (IVp.ExportFlag==0 and blank(IVp.CAE)) then begin
     if (UserCanAction("DisallowDomSales",false)) then begin
       RecordCheckError(20056,"",-1,"CustCode");   
       res = -1; 
       goto L99;
     end; 
-  end;
+  end;*/
   if (IVp.ExportFlag!=0 and blank(IVp.CAE)) then begin
     if (UserCanAction("DisallowExpSales",false)) then begin
       RecordCheckError(20049,"",-1,"CustCode");   

@@ -54,13 +54,14 @@ begin
   integer i,pos,rownr,ship;
   longint linesCnt;
   string 255 line,tstr;
-  record SHVc SHr;
+  record SHVc SHr,oldSHr;
   row SHVc SHrw;
   boolean chng;
   
   if (LoggedInTest()) then begin
     SHr.SerNr = WebGetArg("param");
     readfirstmain(SHr,1,true);
+    recordcopy(oldSHr,SHr);
     chng = false;
     webgetpostdata(aPost);
     linesCnt = CountLinesInArea(aPost);
@@ -81,7 +82,8 @@ begin
       end;
     end;
     if (chng) then begin
-      if (RecordStore(SHr,true)) begin
+      //if (RecordStore(SHr,true)) begin
+      if (RecordUpdate(oldSHr,SHr,true)) begin
         WebOutString("ok");
       end else begin
         WebOutString("nok");

@@ -492,12 +492,13 @@ begin
     		    diff = ORrw.Quant - ORrw.AvailableQuant;
     		    ORrw.Quant = ORrw.Quant - diff;
     		    if (ORrw.Quant>0) then begin
-      		    foundf = true;
+      		    
       		  end;
     		    ORrw.OrderQuant = diff;
     		    MatRowPut(ORr,i,ORrw);
     		  end;
     		end;
+    		foundf = true;
     		if (foundf) then begin
     		  ORr.Reserved = 1;
     		end;
@@ -531,7 +532,7 @@ begin
 	
 	IPaddr = WebRemoteIPAddress;
 	
-	if(IPaddr=="188.40.105.5" or IPaddr=="46.101.115.10" or IPaddr=="46.101.141.133")then begin
+	if(IPaddr=="188.40.105.5" or IPaddr=="46.101.115.10" or IPaddr=="46.101.141.133" or IPaddr=="127.0.0.1")then begin
 		logtext(0,"WebordConnectFrom " & IPaddr);
 		if(currenttime<stringtotime("23:59:59") and currenttime>stringtotime("00:30:00"))then begin// Edit ************************** Tuesday, 2 August 2016 10:01:05
 			logText(0,"WebGetOrder");

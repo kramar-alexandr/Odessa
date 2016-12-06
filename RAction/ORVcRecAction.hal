@@ -965,13 +965,13 @@ begin
       end;
     end;
   end;
-  if (ORr.ExportFlag==0) then begin
+  /*if (ORr.ExportFlag==0) then begin
     if (UserCanAction("DisallowDomSales",false)) then begin
       RecordCheckError(20056,"",-1,"CustCode");   
       res = -1; 
       goto LORVcRecordCheck;
     end; 
-  end;
+  end;*/
   if (ORr.ExportFlag!=0) then begin
     if (UserCanAction("DisallowExpSales",false)) then begin
       RecordCheckError(20049,"",-1,"CustCode");   

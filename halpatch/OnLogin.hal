@@ -181,7 +181,10 @@ BEGIN
   Boolean SetServerBuildProductCodef;
   record NPSettingsBlock NPSettingsb;
   integer diff;
-  BlockLoad(NPSettingsb);  
+	record KassirLoginVc KLr,newKLr; 
+
+  
+  BlockLoad(NPSettingsb); 
   
   if (ClientMode and IsStandardProduct) then begin
     BlockLoad(StdSrvb);
@@ -208,6 +211,26 @@ BEGIN
     end;
   end;
   BlockLoad(LMb);
+  
+  if (TouchScreenLook) then begin //
+		if(nonblank(LMb.LocalMachineCode))then begin// Edit ************************** Tuesday, 6 December 2016 15:41:14
+			KLr.LocalMachine = LMb.LocalMachineCode;
+			if(readlastkey("LocalMachine",KLr,1,true))then begin
+				if(KLr.action==1)then begin
+					IVr.Kassir = KLr.UserCode;
+					recordnew(newKLr);
+						newKLr.SerNr = NextSerNr("KassirLoginVc",CurrentDate,-1,false,"");	
+						newKLr.UserCode = KLr.UserCode;
+						newKLr.LocalMachine = KLr.LocalMachine;
+						newKLr.LogoffDate = currentdate;
+						newKLr.LogoffTime = currenttime;
+						newKLr.action = 0;
+					recordstore(newKLr,true);
+				end;
+			end;
+		end;
+  end;
+  
   savef = true;
   if (CompileType!=ctWindowsCE and CompileType!=ctSeries80 and CompileType!=ctSeries60 and CompileType!=ctNokiaE90 and CompileType!=ctBPadCE and CompileType!=ctWindowsCELandscape) then begin
 /*
