@@ -4703,6 +4703,7 @@ RecordBegin(IPVc,-,"");
   RecordField(CustCode,M4Code,50,0);// Edit ************************** Tuesday, 6 September 2016 09:23:30
   RecordField(CustCat,M4Code,10,0);// Edit ************************** Thursday, 3 November 2016 09:56:39
   RecordField(Kassir,M4Code,40,0);
+  RecordField(BirthDayVaucher,M4Long,0,0);// Edit ************************** Monday, 12 December 2016 14:41:07
   MainKeyBegin(InvNr,0);
   KeySegment(InvNr);
   KeySegment(RowNr);

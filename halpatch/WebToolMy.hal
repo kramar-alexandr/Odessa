@@ -250,8 +250,19 @@ begin
 	string 200 session;
 	boolean check;
 	record SoapBlock Soap;
+	area timearea,resarea;
 	
-	writeareatofile(a_reply,"MagentaStatusReply.txt",1);
+	insertareabeforearea(a_reply,resarea);
+	
+	addtexttoarea(currentdate & " " & currenttime & " ",timearea);
+	insertareabeforearea(timearea,resarea);
+	
+	writeareatofile(resarea,"MagentaStatusReply.txt",1);
+	if(getarealength(a_reply)>0)then begin
+		logtext(0,"SOAPUpdateStatusReply replylen " & getarealength(a_reply));
+	end else begin
+		logtext(0,"SOAPUpdateStatusReply empty Reply!!!!!!!!");
+	end;
 	
 return;
 end;
