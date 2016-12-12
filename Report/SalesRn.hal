@@ -147,6 +147,7 @@ begin
 		if (ReportType==0) then begin
 			OutString(480,0,"Продавец",false);
 		end;
+		OutString(480,0,"Скидочный ваучер",false); //Edit***************************Sasha2,14:48 12.12.2016
 		
 		EndFormat;
 		Black_Divider(0,1);
@@ -177,6 +178,7 @@ date startDate,endDate;
 string 200 itemType;
 string 20 keyloop,prevArtCode,currentCode,separator;
 record UserVc User;
+record IVVc IVr; //Edit***************************Sasha2,14:34 12.12.2016
 
 separator = "^";
 
@@ -406,9 +408,10 @@ separator = "^";
 								OutVal(460,0,rentSalPercent,M4Val,false);
 							end;
 							OutString(480,0,SalesData.SalesMan,false);	
+							OutString(480,0,SalesData.BirthDayVaucher,false);	//Edit***************************Sasha2,14:48 12.12.2016
 							if(currentuser=="SA")then begin
 								OutString(60,0,SalesData.CustCode,false);		
-							end;																										
+							end;								
 							EndFormat;					
 					end else begin	
 							//Суммируем данные для консолидированного отчета
