@@ -408,7 +408,11 @@ separator = "^";
 								OutVal(460,0,rentSalPercent,M4Val,false);
 							end;
 							OutString(480,0,SalesData.SalesMan,false);	
-							OutString(480,0,SalesData.BirthDayVaucher,false);	//Edit***************************Sasha2,14:48 12.12.2016
+							if (SalesData.BirthDayVaucher>1) then begin 	//Edit***************************Sasha2,14:48 12.12.2016 {
+							  OutString(480,0,SalesData.BirthDayVaucher,false);
+							end else begin
+							  OutString(480,0,"",false);
+							end; 	//Edit***************************Sasha2,14:48 12.12.2016 }	
 							if(currentuser=="SA")then begin
 								OutString(60,0,SalesData.CustCode,false);		
 							end;								
