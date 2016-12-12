@@ -3325,7 +3325,7 @@ begin
 	     if (ReadFirstMain(IVr,1,true)) then begin
 	       if (IVr.BirthDayVaucher>-1) then begin
 	         SalesData.BirthDayVaucher = -1;
-	         if (len(IVr.BirthDayVaucher)==6) then begin
+	         if (IVr.BirthDayVaucher<=999999) then begin
 	           SalesData.BirthDayVaucher = IVr.BirthDayVaucher;
 	         end;
 	         RECORDSTORE(SalesData,true);
