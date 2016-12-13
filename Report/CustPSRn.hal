@@ -1046,6 +1046,10 @@ BEGIN
   Array val debbal;
   Integer debcnt;
   record ARVc ARr;
+  record IVVc IVr; //Edit***************************Sasha2,14:37 13.12.2016
+  row IVVc IVrw; //Edit***************************Sasha2,15:13 13.12.2016
+  integer rwcnt,i,pos,sign; //Edit***************************Sasha2,15:19 13.12.2016
+  val totSum,totQty;
   
   // ArtMode==1, All invoices 
   // ArtMode==0, Last 5 invoices 
@@ -1142,6 +1146,89 @@ BEGIN
     StartFormat(10);
     EndFormat;
   end;
+  
+  if (frcc==tocc) then begin //Edit***************************Sasha2,14:16 13.12.2016 {
+    StartFormat(10);
+    EndFormat;
+    
+    IVr.CustCode = frcc;
+    IVr.TransDate = CurrentDate;
+    if (ReadLastKey("CustDate",IVr,1,true) and IVr.CustCode==frcc) then begin
+      StartFormat(15);
+        OutString(270,0,USetStr(31155),false);
+        OutString(470,0,DateDiff(CurrentDate,IVr.TransDate),false);
+      EndFormat;
+      StartFormat(10);
+      EndFormat;
+      Black_Divider(0,1);
+      StartFormat(10);
+      EndFormat;
+    end;
+    
+    StartFormat(15);
+      pos = 0;
+      OutString(pos,0,USetStr(12002),false); pos = pos + 70;
+      OutString(pos,0,USetStr(12003),false); pos = pos + 230;
+      OutString(pos,0,USetStr(12004),false); pos = pos + 40;
+      OutString(pos,0,USetStr(12005),false); pos = pos + 50;
+      OutString(pos,0,USetStr(12006),false); pos = pos + 50;
+      OutString(pos,0,USetStr(12448),false); pos = pos + 50;
+    EndFormat;
+    Gray_Divider(0,1);
+    
+    totQty = 0;
+    totSum = 0;
+    IVr.CustCode = frcc;
+    TrHs = true;
+    while (LoopBackKey("CustDate",IVr,1,TrHs)) begin
+      testf = true;
+      if (IVr.CustCode!=frcc) then begin TrHs = false; testf = false; end;
+      if (IVr.OKFlag==0 or IVr.Invalid!=0) then begin testf = false; end;
+      if (testf) then begin
+        rwcnt = MatRowCnt(IVr);
+        sign = 1;
+        if (IVr.InvType==kInvoiceTypeCredit or IVr.InvType==kInvoiceTypeCreditSpecialSales) then begin
+          sign = -1;
+        end;
+        for (i=0;i<rwcnt;i=i+1) begin
+          MatRowGet(IVr,i,IVrw);
+          if (IVrw.stp==1 and NonBlank(IVrw.ArtCode)) then begin
+            StartFormat(15);
+              pos = 0;
+              OutString(pos,0,IVrw.ArtCode,false); pos = pos + 70;
+              OutString(pos,0,IVrw.Spec,false); pos = pos + 230;
+              OutString(pos,0,IVrw.Quant*sign,false); pos = pos + 40;
+              totQty = totQty + IVrw.Quant*sign;
+              OutString(pos,0,IVrw.Price,false); pos = pos + 50;
+              OutString(pos,0,IVrw.vRebate,false); pos = pos + 50;
+              OutString(pos,0,IVrw.Sum*sign,false); pos = pos + 50;
+              totSum = totSum + IVrw.Sum*sign;
+            EndFormat;
+          end;
+        end;
+      end;
+    end;
+    
+    if (totQty>0) then begin
+      Gray_Divider(0,1);
+      StartFormat(15);
+        pos = 0;
+        OutString(pos,0,"",false); pos = pos + 70;
+        OutString(pos,0,"",false); pos = pos + 230;
+        OutString(pos,0,totQty,false); pos = pos + 40;
+        OutString(pos,0,"",false); pos = pos + 50;
+        OutString(pos,0,"",false); pos = pos + 50;
+        OutString(pos,0,totSum,false); pos = pos + 50;
+      EndFormat;
+    end;
+    
+    
+  end; //Edit***************************Sasha2,14:16 13.12.2016 }
+  
+  
+  
+  Black_Divider(0,1);
+  
   EndJob;
   RETURN;
 END;
