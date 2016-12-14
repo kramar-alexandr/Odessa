@@ -819,6 +819,9 @@ begin
 	    if (nonblank(IVrw.ArtCode)) then begin
 	      //if (IVrw.Price!=0) then begin
 	        rowprice = Round(IVrw.Price,rnd);
+	        if(IVrw.stp==kInvoiceRowTypeGiftVoucherSold)then begin
+	        	IVrw.Spec = "";
+	        end;
 	      	leng = len(IVrw.Spec);
 	      	pos = 0;
 	      	padspec = 40;
