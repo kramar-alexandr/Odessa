@@ -36,6 +36,9 @@ remote procedure HandlePrintEAN13StockMov(record StockMovVc,var array record PUV
 remote procedure CollectOrdersForStockMove(var record StockMovVc, record RcVc);//Edit----------------------Dima  14.08.2015
 remote procedure SMMismatchRn(record RcVc); //Edit***************************Sasha2,10:25 29.04.2016
 
+	SetLangMode(LangRussian,"RUS",0);
+
+
 global
 procedure CalcNewPrice(val oldprice,string extra,var val newprice)
 BEGIN
@@ -1466,3 +1469,46 @@ begin
    
    return;
 end; //Edit***************************Sasha2,10:52 29.04.2016 }
+
+
+global updating procedure DeleteOrdRowFromSMHardDsm()
+begin
+	record ORVc ORr;
+	record StockMovVc SMr;
+	row StockMovVc SMrw;
+	row ORVc ORrw;
+	record RcVc RepSpec;
+	integer wn,nwn,rownr,rownrReal,rwmax;
+	string 200 message1,message2;
+	
+  wn = CurWindow;
+  GetWindowRecord(wn,SMr);
+  
+  if (WindowState(wn)!=Rs_normal) then begin
+  	MessageBox(0,"Сохраните документ");
+  	goto LDeleteOrdRowFromSMHardDsm;
+  end;
+  if (SMr.SentOKFlag>0 or SMr.OrdFlag>0 or SMr.OKFlag>0) then begin
+  	MessageBox(0,"Перемещение уже подтверждено");
+  	goto LDeleteOrdRowFromSMHardDsm;
+  end;
+  
+  rownr = GetWindowCurRow(wn);
+  rownrReal = rownr + 1;
+  
+  if (rownr>=0) then begin
+		MatRowGet(SMr,rownr,SMrw);
+	end;  
+
+  if (rownr<0 or blank(SMrw.ArtCode)) then begin
+		MessageBox(0,"Выберите строку, которую нужно удалить");
+	end else begin
+		MatRowDelete(SMr,rownr);
+		recordstore(SMr,true);
+		PutWindowRecord(wn,SMr);
+		
+	end;
+LDeleteOrdRowFromSMHardDsm:;
+
+return;
+end;

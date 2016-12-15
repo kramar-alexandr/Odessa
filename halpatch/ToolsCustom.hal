@@ -1204,7 +1204,7 @@ begin
 		if (ORr.OrdDate > sEndDate) then begin TrHs = false; testf=false; end;
 		if (RepSpec.f2 != ORr.Location) then begin testf=false; end;
 		if (ORr.OKFlag>0 or ORr.Closed>0 or ORr.Reserved==0) then begin testf=false; end;
-		if (ORr.CustomStatusFlag>5 and ORr.CustomStatusFlag<12)	then begin testf=false; end; //search only for active orders
+		if (ORr.CustomStatusFlag>5 and ORr.CustomStatusFlag<12)	then begin testf=false; end; //search only for active orders		
 		if (testf) then begin	
 			rwcnt = MatRowCnt(ORr);
 			for(i=0;i<rwcnt;i=i+1)  begin

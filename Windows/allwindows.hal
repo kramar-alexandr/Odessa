@@ -6785,6 +6785,7 @@ t=1;
 	if (CurrentUser=="SA" or CurrentUser=="SA1") then begin
 	  SpecialMenu("Отчет несовпадений по количеству в перемещении",'',20,"StockMovMismatchDsm"); //Edit***************************Sasha2,10:28 29.04.2016
 	end;
+	SpecialMenu("Удалить проблемную строку по заказу",'',20,"DeleteOrdRowFromSMHardDsm");
   EndWindow;
 end;
 
