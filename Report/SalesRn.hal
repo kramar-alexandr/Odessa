@@ -146,9 +146,10 @@ begin
 		OutString(460,0,"Рент.,% зп.",false);
 		if (ReportType==0) then begin
 			OutString(480,0,"Продавец",false);
+			OutString(480,0,"Кассир",false);
+			OutString(480,0,"Скидочный ваучер",false); //Edit***************************Sasha2,14:48 12.12.2016
 		end;
-		OutString(480,0,"Скидочный ваучер",false); //Edit***************************Sasha2,14:48 12.12.2016
-		
+
 		EndFormat;
 		Black_Divider(0,1);
 
@@ -407,7 +408,8 @@ separator = "^";
 								OutVal(440,0,rentSal,M4Val,false);
 								OutVal(460,0,rentSalPercent,M4Val,false);
 							end;
-							OutString(480,0,SalesData.SalesMan,false);	
+							OutString(480,0,SalesData.SalesMan,false);
+							OutString(480,0,SalesData.Kassir,false);	
 							if (SalesData.BirthDayVaucher>-1) then begin 	//Edit***************************Sasha2,14:48 12.12.2016 {
 							  OutString(480,0,SalesData.BirthDayVaucher,false);
 							end else begin
@@ -484,7 +486,7 @@ separator = "^";
 	OutString(90,0,"",false);
 	OutString(120,0,"Всего:",false);
 	OutString(270,0,totalQty,false);
-	OutString(300,0,"",false);
+	//OutString(300,0,"",false);
 	OutString(300,0,"",false);
 	OutString(300,0,totalSum,false);
  if (UserCanAction("ViewCostPrice",true)) then begin
