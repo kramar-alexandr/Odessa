@@ -180,6 +180,8 @@ string 200 itemType;
 string 20 keyloop,prevArtCode,currentCode,separator;
 record UserVc User;
 record IVVc IVr; //Edit***************************Sasha2,14:34 12.12.2016
+vector string 255 CashiersVect; //Edit***************************Sasha2,12:15 16.12.2016
+record UserVc Userr; //Edit***************************Sasha2,12:15 16.12.2016
 
 separator = "^";
 
@@ -189,6 +191,13 @@ separator = "^";
 	
 	//tick2 = GetCurTick;
 	LogText(0,"start report " & 0);
+	
+	Userr.Code = "";
+	while (LoopMain(Userr,1,true)) begin
+	 if (NonBlank(Userr.Code)) then begin
+	   CashiersVect[Userr.Code] = Userr.Name;
+	 end;
+	end;
 
 	timeFrom = StringToTime(RepSpec.f5);
 	timeTo = StringToTime(RepSpec.f6);
@@ -409,7 +418,7 @@ separator = "^";
 								OutVal(460,0,rentSalPercent,M4Val,false);
 							end;
 							OutString(480,0,SalesData.SalesMan,false);
-							OutString(480,0,SalesData.Kassir,false);	
+							OutString(480,0,CashiersVect[SalesData.Kassir],false);	
 							if (SalesData.BirthDayVaucher>-1) then begin 	//Edit***************************Sasha2,14:48 12.12.2016 {
 							  OutString(480,0,SalesData.BirthDayVaucher,false);
 							end else begin
