@@ -363,7 +363,6 @@ separator = "^";
 		end;// Edit ************************** Thursday, 22 September 2016 14:04:55
 		
 		if (nonblank(RepSpec.f9) and (SalesData.CustCat!=RepSpec.f9)) then begin	testf=false;	end;
-		logtext(0,SalesData.CustCat);
 		
 		if (SalesData.stp!=kInvoiceRowTypeNormal) then begin testf=false; end;		//Edit----------------------Dima  04.05.2016	
 		
