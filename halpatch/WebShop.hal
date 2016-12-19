@@ -539,7 +539,7 @@ begin
 			logText(0,"WebGetOrder");
 			webgetpostdata(aPost); //Edit***************************Sasha2,15:18 04.07.2014
 			WRITEAREATOFILE(aPost,"post.txt",0);///////////////////////////////
-	
+		
 			xmlPost = PARSEXMLAREA(aPost);
 			if (!XmlNodeExists(xmlPost,"messagestart")) then begin
 				logtext(0,"<messagestart> tag is missing. Orders import failed");
@@ -551,7 +551,6 @@ begin
 				if (Blank(errors)) then begin errors = "Error4"; end else begin errors = errors & ",Error4"; end;
 				goto LWebGetOrder;
 			end;
-	
 			BlockLoad(WSSB);
 			nodeORCnt = XmlCountChildren(xmlPost,"orders");
 			ORCnt = 0;
@@ -573,7 +572,6 @@ begin
 					if(blank(CUr.eMail))then begin
 						CUr.eMail = "UnknownEMail";
 					end;
-			
 					rebgroup = XmlGetAttribute(xmlPost,"orders/order" & i,"group_id");
 			
 					if (!ReadFirstKey("eMail",Cur,1,true)) then begin
@@ -615,8 +613,6 @@ begin
 					//end;
 					
 					
-					
-					ORr.ShipAddr1 = XmlGetAttribute(xmlPost,"orders/order" & i ,"delivery");
 					ORr.ShipAddr2 = XmlGetAttribute(xmlPost,"orders/order" & i ,"country") & ", " & XmlGetAttribute(xmlPost,"orders/order" & i ,"city");
 					ORr.ShipAddr3 = XmlGetAttribute(xmlPost,"orders/order" & i ,"address");
 					ORr.Comment = XmlGetAttribute(xmlPost,"orders/order" & i ,"ordercomment");
@@ -644,6 +640,7 @@ begin
 						ORr.NPLastName = XmlGetAttribute(xmlPost,"orders/order" & i,"name");
 						resstr = XmlGetAttribute(xmlPost,"orders/order" & i,"name2");
 						resstr = StrReplace(resstr," ",":");
+						
 						if(nonblank(resstr))then begin
 							ORr.NPFirstName = firstinrange(resstr,20);
 							ORr.NPMiddleName = lastinrange(resstr,20);
@@ -652,7 +649,6 @@ begin
 					
 					ORr.NPPhone = CUr.Phone;
 					
-
 					
 					ORVc_PasteCurncyCode(ORr,"USD");		//Edit--------------------Dima 23.01.2015
 					if (FindSubString("Самовывоз",ORr.ShipAddr1)) then begin
@@ -704,7 +700,6 @@ begin
 										MatRowGet(ORr,rowNr,ORrw);   
 									ORrw.Price = price;
 									MatRowPut(ORr,rowNr,ORrw);
-							
 									ORVc_PastePrice(ORr,rowNr,chsum);
 										if (chsum) then begin
 										chsumConfirm = true;
@@ -741,15 +736,17 @@ begin
 						if(blank(ORr.RebCode))then begin
 							ORr.RebCode = "0%";
 						end;
-						For(i=0;i<rowNr;i=i+1) begin
-	  					matrowget(ORr,i,ORrw);
+						For(j=0;j<rowNr;j=j+1) begin
+	  					matrowget(ORr,j,ORrw);
 	  						ORrw.vRebate = blankval;
-	  					matrowput(ORr,i,ORrw);
+	  					matrowput(ORr,j,ORrw);
 						end; 
 						
 						
 						ORDUpdatePrices(ORr,false);
 					end;
+					
+					logtext(0,"ORr.SerNr" & ORr.SerNr);
 					
 					if(ORr.SerNr>-1)then begin
 						if(updateflag)then begin
