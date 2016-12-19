@@ -691,6 +691,11 @@ BEGIN
     if (ReadFirstMain(ORp,0,true)) then begin end;
   end;
   rwcnt = MatRowCnt(ORp);
+  if(ORp.OrderClass=="WEB")then begin// Edit ************************** Monday, 19 December 2016 15:33:43
+  	if(blank(ORp.RebCode))then begin
+  		ORp.RebCode = "0%";
+  	end;
+  end;
   for (i=0;i<rwcnt;i=i+1) begin
     MatRowGet(ORp,i,ORrw);
     if (nonblank(ORrw.ArtCode)) then begin
