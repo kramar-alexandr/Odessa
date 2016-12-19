@@ -745,9 +745,7 @@ begin
 						
 						ORDUpdatePrices(ORr,false);
 					end;
-					
-					logtext(0,"ORr.SerNr" & ORr.SerNr);
-					
+										
 					if(ORr.SerNr>-1)then begin
 						if(updateflag)then begin
 							if (recordStore(ORr,true)) then begin
