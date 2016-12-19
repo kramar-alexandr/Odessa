@@ -636,7 +636,7 @@ begin
 					ORr.NPFirstName = XmlGetAttribute(xmlPost,"orders/order" & i,"firstname");
 					ORr.NPMiddleName = XmlGetAttribute(xmlPost,"orders/order" & i,"middlename");
 					
-					if(blank(ORr.NPLastName))then begin
+					/*if(blank(ORr.NPLastName))then begin
 						ORr.NPLastName = XmlGetAttribute(xmlPost,"orders/order" & i,"name");
 						resstr = XmlGetAttribute(xmlPost,"orders/order" & i,"name2");
 						resstr = StrReplace(resstr," ",":");
@@ -645,7 +645,7 @@ begin
 							ORr.NPFirstName = firstinrange(resstr,20);
 							ORr.NPMiddleName = lastinrange(resstr,20);
 						end;
-					end;
+					end;*/
 					
 					ORr.NPPhone = CUr.Phone;
 					
