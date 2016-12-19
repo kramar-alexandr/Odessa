@@ -516,6 +516,7 @@ begin
   StrSetText(DisallowExpSales,"Не разрешать экспортные продажи");
   StrSetText(DisallowSaleBelowGP,"Не разрешать продажи ниже минимальной прибыли");
   StrSetText(DisallowWSFromSVO,"Не разрешать заказы на работу из заказа на обслуживание");
+  StrSetText(DoNotSetSalesManInOR,"Не проставлять продавца в Заказе клиента"); //Edit***************************Sasha2,15:36 19.12.2016
   StrSetText(ShowSerialNronPOSInvoices,"Отображать сер.№ на сч/ф кассвого терминала");
   StrSetText(AllowDispute,"Согласовывать сч/ф");
   StrSetText(DownloadHalcust,"Download halcust & halpatch");

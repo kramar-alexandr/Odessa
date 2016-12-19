@@ -1949,7 +1949,7 @@ begin
 row ORVc ORrw,OR2rw;
 integer rwcnt1,rwcnt2,i;
 
-  if (Blank(ORr.SalesMan)) then begin 
+  if (Blank(ORr.SalesMan) and UserCanAction("DoNotSetSalesManInOR",false)==false) then begin 
   	ORr.SalesMan = CurrentUser;
   end;
   if (ORr.CustomStatusFlag!=OR2r.CustomStatusFlag) then begin
@@ -2693,8 +2693,10 @@ begin
   ORr.Objects = USr.PersObjx;
   ORr.OurContact = USr.CurOurContact;
   ORr.Location = USr.Location;
-  ORr.SalesMan = USr.Code;
-  ORr.SalesGroup = USr.SalesGroup;  
+  if (UserCanAction("DoNotSetSalesManInOR",false)==false) then begin //Edit***************************Sasha2,15:40 19.12.2016
+    ORr.SalesMan = USr.Code;
+    ORr.SalesGroup = USr.SalesGroup;  
+  end;
   if (SingleUserMode) then begin
     ORr.SerNr = NextSerNr("ORVc",ORr.OrdDate,-1,false,"");
   end;
