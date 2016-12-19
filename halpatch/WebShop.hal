@@ -22,6 +22,7 @@ external procedure SOAPLogin();
 external updating procedure GenerateRebateVouchers(string);
 external function string 255 StrReplace(string,string,string);
 external procedure GetAvailableItems(var record ORVc);
+external procedure ORDUpdatePrices(var record ORVc,Boolean);// Edit ************************** Monday, 19 December 2016 11:16:53
 
 SetLangMode(LangRussian,"RUS",0);
 
@@ -734,7 +735,22 @@ begin
 						//if (Blank(errors)) then begin errors = "Error6"; end else begin errors = errors & ",Error6"; end;
 						logtext(0,"no rows in order #" & ORr.SerNr);
 					end;	
-				
+					
+					if(currentdate<=stringtodate("31/12/2016") and rowNr>0)then begin// Edit ************************** Monday, 19 December 2016 11:17:40
+						ORr.RebCode = CUr.RebCode;
+						if(blank(ORr.RebCode))then begin
+							ORr.RebCode = "0%";
+						end;
+						For(i=0;i<rowNr;i=i+1) begin
+	  					matrowget(ORr,i,ORrw);
+	  						ORrw.vRebate = blankval;
+	  					matrowput(ORr,i,ORrw);
+						end; 
+						
+						
+						ORDUpdatePrices(ORr,false);
+					end;
+					
 					if(ORr.SerNr>-1)then begin
 						if(updateflag)then begin
 							if (recordStore(ORr,true)) then begin
