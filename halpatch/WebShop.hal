@@ -510,6 +510,31 @@ begin
   return;
 end; //Edit***************************Sasha2,17:49 05.12.2016 }
 
+global //Edit***************************Sasha2,10:17 20.12.2016 {
+function string 255 StripExcessSpacesInString(string inStr)
+begin
+  string 255 resStr,strPart;
+  string 1 splitStr;
+  Integer pos;
+     
+    pos = 0;
+    splitStr = " ";
+    if (len(inStr)>0) then begin
+      ExtractObjWithSeparator(splitStr,inStr,true,pos,strPart);
+      while (NonBlank(strPart)) begin
+        if (Blank(resStr)) then begin
+          resStr = strPart;
+        end else begin
+          resStr = resStr & splitStr & strPart;
+        end;
+        ExtractObjWithSeparator(splitStr,inStr,true,pos,strPart);
+      end;
+    end;
+
+    StripExcessSpacesInString = resStr;
+    return;
+end; //Edit***************************Sasha2,10:17 20.12.2016 }
+
 global webpublic updating Procedure WebGetOrder() //Edit***************************Sasha2,15:18 04.07.2014
 begin
   record ORVc ORr;
@@ -636,16 +661,16 @@ begin
 					ORr.NPFirstName = XmlGetAttribute(xmlPost,"orders/order" & i,"firstname");
 					ORr.NPMiddleName = XmlGetAttribute(xmlPost,"orders/order" & i,"middlename");
 					
-					/*if(blank(ORr.NPLastName))then begin
+					if(blank(ORr.NPLastName))then begin
 						ORr.NPLastName = XmlGetAttribute(xmlPost,"orders/order" & i,"name");
-						resstr = XmlGetAttribute(xmlPost,"orders/order" & i,"name2");
+						resstr = StripExcessSpacesInString(XmlGetAttribute(xmlPost,"orders/order" & i,"name2"));
 						resstr = StrReplace(resstr," ",":");
 						
 						if(nonblank(resstr))then begin
 							ORr.NPFirstName = firstinrange(resstr,20);
 							ORr.NPMiddleName = lastinrange(resstr,20);
 						end;
-					end;*/
+					end;
 					
 					ORr.NPPhone = CUr.Phone;
 					
