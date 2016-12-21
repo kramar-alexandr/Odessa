@@ -151,9 +151,9 @@ begin
 	area importar,importoptar;
 //	area ftpRoutine;
   string 200 tstr;
-	string 10 location,loc1,loc2,loc3,loc4,loc5,loc6,qty,price,optprice,optprice5,optprice10,optprice15;
+	string 10 location,loc1,loc2,loc3,loc4,loc5,loc6,qty,price,optprice,optprice5,optprice10,optprice15,acprice;
 	string 10 loc1t,loc2t,loc3t,loc4t,loc5t,loc6t;
-	boolean testf;
+	boolean testf,foudnf;
 	integer inStock,dop_ostatok,pos;
 	integer realqty;
 	boolean r1f,r2f,r3f;
@@ -165,7 +165,7 @@ begin
 	 goto LExportStockCSVMn;
 	end;
 	
-	addtexttoarea("websites;type;sku;price;qty;in_stock;dop_ostatok",importar);
+	addtexttoarea("websites;type;sku;price;qty;in_stock;dop_ostatok;special_price",importar);
 	addtexttoarea(chr(13) & chr(10),importar);
 	
 	addtexttoarea("websites;type;sku;price;qty;in_stock;dop_ostatok;group_price:ος 0%;group_price:ος 5%;group_price:ος 10%;group_price:ος 15%",importoptar);
@@ -249,6 +249,13 @@ begin
 		end;
 		price = ValToString(PLr.ExVatPrice,M4Val,"",".",0);
 		
+		acprice = "MAGMI_DELETE";
+		PLr.ArtCode = INr.Code;
+		PLr.PLCode = "RRP_A";
+		if(readfirstmain(PLr,2,true))then begin
+			acprice = ValToString(PLr.ExVatPrice,M4Val,"",".",0);
+		end;
+		
 		// Edit Start ---------------------------------------------- Edit Start
 	//Thursday, 30 June 2016 15:19:57
 	
@@ -319,7 +326,7 @@ begin
 				
 		if (testf==true) then begin
 		  //price = ValToString(PLr.ExVatPrice,M4Val,"",".",0);
-			addtexttoarea("base;simple;" & INr.Code & ";" & price & ";" & qty & ";" & inStock & ";" & dop_ostatok,importar);
+			addtexttoarea("base;simple;" & INr.Code & ";" & price & ";" & qty & ";" & inStock & ";" & dop_ostatok & ";" & acprice,importar);
 			addtexttoarea(chr(13) & chr(10),importar);
 			
 			addtexttoarea("base;simple;" & INr.Code & ";" & price & ";" & qty & ";" & inStock & ";" & dop_ostatok & ";" & optprice & ";" & optprice5 & ";" & optprice10 & ";" & optprice15,importoptar);
