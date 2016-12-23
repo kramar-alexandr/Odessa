@@ -44,6 +44,13 @@ begin
 	OutString(14,0,"В ящике",false);
 	OutString(15,0,"№ паллеты",false);
 	OutString(16,0,"Комментарий",false);
+	OutString(16,0,"Фрахт",false);
+	OutString(16,0,"Таможня",false);
+	OutString(16,0,"Затраты 1",false);
+	OutString(16,0,"Затраты 2",false);
+	OutString(16,0,"Затраты 3",false);
+	OutString(16,0,"Затраты 4",false);
+	OutString(16,0,"Затраты 5",false);
 	EndFormat;
 	Black_Divider(0,1);
 
@@ -65,6 +72,13 @@ begin
 		OutString(14,0,POrw.QtyBox,false);
 		OutString(15,0,POrw.PalletNr,false);
 		OutString(16,0,POrw.Comment,false);
+		OutVal(16,0,POrw.ShipCost,M45Val,false);
+		OutString(16,0,POrw.CustomsCost,false);
+		OutVal(16,0,POrw.RowCost1,M45Val,false);
+		OutVal(16,0,POrw.RowCost2,M45Val,false);
+		OutVal(16,0,POrw.RowCost3,M45Val,false);
+		OutVal(16,0,POrw.RowCost4,M45Val,false);
+		OutVal(16,0,POrw.RowCost5,M45Val,false);
 		
 		EndFormat;	
 	end;		
