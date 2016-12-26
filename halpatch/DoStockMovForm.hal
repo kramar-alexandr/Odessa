@@ -275,6 +275,7 @@ LBREAKStockMov:;
           OutAddress("F_VIAADRESS",ViaLocr.Addr0,ViaLocr.Addr1,ViaLocr.Addr2,ViaLocr.Addr3,ViaLocr.Addr4,"");
         end;  
         OUTFORMFIELD("F_LEVDATUM",StockMovr.TransDate);
+        OUTFORMFIELD("MYF_ORDTRANSADTE",StockMovr.OrdTransDate);// Edit ************************** Monday, 26 December 2016 10:02:05
         OUTFORMFIELD("F_PLANSENTTIME",StockMovr.PlanSendTime);
         OUTFORMFIELD("F_PLANSENTDATE",StockMovr.PlanSendDate);
         OUTFORMFIELD("F_LEVNUMMER",StockMovr.SerNr);

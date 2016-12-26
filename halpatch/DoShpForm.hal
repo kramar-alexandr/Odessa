@@ -62,6 +62,8 @@ external function Boolean ExpandStructItem(string,string,val,var record SHVc);
 external procedure Mul2VAT(string,val,var val,var val,Integer);
 external procedure GetShipValue(record SHVc,record ORVc,var val,var val);
 external procedure GetFullCurncyRate (var string,Date,var val,var val,var val,var val,var val);
+external procedure CreateEAN128(var string);// Edit ************************** Monday, 26 December 2016 10:07:02
+
 
 SetLangMode(LangRussian,"RUS",0);	
 
@@ -884,6 +886,11 @@ BEGIN
 
   PrintInvoiceToBankData(CUr.BankAccount,Bankr,ORr.InvoiceToCode);
   PrintBankData(ORr.BankCode);
+  
+  tstr = "SH" & SHr.SerNr;// Edit ************************** Monday, 26 December 2016 10:08:55
+  CreateEAN128(tstr);
+	OUTFORMFIELD("MYF_BARSERNR",tstr);
+  
   OUTFORMFIELD("F_PLANSENTDATE",SHr.PlanSendDate);
   OUTFORMFIELD("F_PLANSENTTIME",SHr.PlanSendTime);
   OUTFORMFIELD("F_PLANARRIVALDATE",SHr.PlanArrDate);

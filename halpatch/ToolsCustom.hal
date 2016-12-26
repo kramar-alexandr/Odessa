@@ -135,11 +135,7 @@ area arr;
   end else begin
   res = res & chr(195) & chr(sum+41);
   end;
-  //res = res & chr(211);
-  //res = res & chr(211);
   res = res & chr(195) & chr(147);
-  addtexttoarea(res,arr);
-  writeareatofile(arr,"888",0);
   str = res;
 return;
 end;
@@ -2910,10 +2906,10 @@ begin
 	record PUVc PUr;
 	row PUVc PUrw;
 	
-	artcode = "2006085";
-	realcost = 6.4937;
-	min = 0.2;
-	max = 0.3;
+	artcode = "1606006";
+	realcost = 0.0153;
+	min = 1.5;
+	max = 1.6;
 	
 	IHr.ArtCode = artcode;
 	TrHs = true;
@@ -2927,7 +2923,7 @@ begin
 			end else begin
 				cost = IHr.TotCostPrice/IHr.Qty;
 			end;
-			if(cost>min and cost<max)then begin
+			if(true)then begin
 				if(IHr.StockAffectf>0)then begin
 					if(cost>min and cost<max)then begin
 						if(IHr.Qty<0)then begin
@@ -2988,8 +2984,8 @@ begin
 														SalesData.RowNr = IHr.Row;
 														if(readfirstmain(SalesData,2,true))then begin
 															SalesData.BasePrice = IVrw.BasePrice;
-															SalesData.rowGP = -IVrw.rowGP;
-															SalesData.Cost = -IVrw.BasePrice*IVrw.Quant;
+															SalesData.rowGP = IVrw.rowGP;
+															SalesData.Cost = IVrw.BasePrice*IVrw.Quant;
 															SalesData.UnitCost = IVrw.BasePrice;
 															recordstore(SalesData,true);
 														end;
@@ -3038,8 +3034,8 @@ begin
 						SalesData.RowNr = IHr.Row;
 						if(readfirstmain(SalesData,2,true))then begin
 							SalesData.BasePrice = IVrw.BasePrice;
-							SalesData.rowGP = -IVrw.rowGP;
-							SalesData.Cost = -IVrw.BasePrice*IVrw.Quant;
+							SalesData.rowGP = IVrw.rowGP;
+							SalesData.Cost = IVrw.BasePrice*IVrw.Quant;
 							SalesData.UnitCost = IVrw.BasePrice;
 							recordstore(SalesData,true);
 						end;
