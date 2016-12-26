@@ -283,6 +283,59 @@ begin
 return;
 end;
 
+global procedure ExportTableToExcelSHRn(record RcVc RepSpec)	//Edit--------Dima  23.01.2015
+begin
+  record SHVc SHr;
+  row	SHVc SHrw;
+  Integer rwcnt,i,wn;
+  
+  SHr.SerNr = RepSpec.long1;
+  if (ReadFirstMain(SHr,1,true)) then begin	  
+  rwcnt=MatRowCnt(SHr);
+ 
+	StartReportJob("ExportToExcel");
+	EndHeader;
+		
+	SetRepCol(2,50);
+	SetRepCol(3,100);
+	SetRepCol(4,150);
+	SetRepCol(5,200);
+	SetRepCol(6,250);
+	SetRepCol(7,300);
+	SetRepCol(8,350);
+	SetRepCol(9,400);
+
+
+
+	StartFormat(15);
+	OutString(0,0,"№",true);
+	OutString(2,0,"Товар",true);
+	OutString(5,0,"Описание",false);
+	OutString(6,0,"Скл.",false);
+	OutString(7,0,"Зак.",false);
+	OutString(8,0,"Своб.",false);
+
+	EndFormat;
+	Black_Divider(0,1);
+
+	for(i=0;i<rwcnt;i=i+1) begin
+		MatRowGet(SHr,i,SHrw)
+		StartFormat(15);			
+			OutString(0,0,i+1,false);
+			OutString(2,0,SHrw.ArtCode,false);
+			OutString(3,0,SHrw.Spec,false);
+			OutString(5,0,SHrw.InStock,false);
+			OutString(6,0,SHrw.Ordered,false);
+			OutString(7,0,SHrw.Ship,false);
+		EndFormat;	
+	end;		
+	EndJob;
+
+  end;
+
+return;
+end;
+
 
 
 

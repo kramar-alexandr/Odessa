@@ -2164,6 +2164,25 @@ begin
 return;
 end;
 
+global// added -------------------Dima  23.01.2015
+procedure ExportToExcelSHDsm()
+begin
+  record SHVc SHr;
+  record RcVc RepSpec;
+  integer wn;
+    
+  wn = CurWindow;
+  GetWindowRecord(wn,SHr);
+	RepSpec.Media = mtClipBoard; 
+  RepSpec.repname = "ExportTableToExcelSHRn";
+  RepSpec.flags[0] = wn;
+  RepSpec.long1 = SHr.SerNr;
+  RunReport(RepSpec,0);
+
+  
+return;
+end;
+
 
 global
 procedure ORStatusCUDsm()		//Edit-----------------------------Dima 27.01.2015

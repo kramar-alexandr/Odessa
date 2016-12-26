@@ -6166,6 +6166,8 @@ begin
   SpecialMenu("Удалить текущую ЭН Новой почты",'',1,"NPDeleteENDsm");
   SpecialMenu("Новая почта: проверить статус посылки",'',1,"NPGetDocStatusDsm");
   SpecialMenu("Повторная отправка СМС",'',1,"NPSendSMSDsm");	//Edit----------------------Dima  30.06.2015
+  SpecialMenu("Выгрузить таблицу в буфер обмена",'',1,"ExportToExcelSHDsm"); // edit ----------Dima 26.11.2014, 23.01.2015
+
   end;
   EndWindow;
 end;
