@@ -644,7 +644,7 @@ begin
 						ORr.ShipAddr0 = Cur.Name;
 					//end;
 					
-					
+					ORr.ShipAddr1 = XmlGetAttribute(xmlPost,"orders/order" & i ,"delivery");
 					ORr.ShipAddr2 = XmlGetAttribute(xmlPost,"orders/order" & i ,"country") & ", " & XmlGetAttribute(xmlPost,"orders/order" & i ,"city");
 					ORr.ShipAddr3 = XmlGetAttribute(xmlPost,"orders/order" & i ,"address");
 					ORr.Comment = XmlGetAttribute(xmlPost,"orders/order" & i ,"ordercomment");
