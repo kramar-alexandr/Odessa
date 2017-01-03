@@ -1469,7 +1469,13 @@ begin
   val bal;
   val LocSumQIn,LocSumQOut,LocSumQFwd,LocSumCPIn,LocSumCPOut,LocSumCPFwd,LocSumQ2;
   record POSVc POSr;//Edit----------------------Dima  27.01.2016
+  record UserVc Usr;
 
+  Usr.Code = currentuser;
+  readfirstmain(Usr,1,true);
+  if nonblank(Usr.Location) then begin
+    RepSpec.f6 = Usr.Location;
+  end;
   frloc = FirstInRange(RepSpec.f6,20);
   toloc = LastInRange(RepSpec.f6,20);
   
@@ -1480,7 +1486,6 @@ begin
 			toloc = POSr.Location;
 		end;
 	end;  
-  
   BlockLoad(MSb);
   BlockLoad(CAb);
   ItemHistHeader(RepSpec);
