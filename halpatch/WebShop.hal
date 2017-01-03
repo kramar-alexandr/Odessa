@@ -249,7 +249,7 @@ begin
 		end;
 		price = ValToString(PLr.ExVatPrice,M4Val,"",".",0);
 		
-		acprice = "MAGMI_DELETE";
+		acprice = price;
 		PLr.ArtCode = INr.Code;
 		PLr.PLCode = "RRP_A";
 		if(readfirstmain(PLr,2,true))then begin
