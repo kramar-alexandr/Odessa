@@ -42,7 +42,7 @@ begin
   
   	BlockLoad(SMSb);
   	
-  	logtext(0,"RemoveReservedMarkMn");
+  	//logtext(0,"RemoveReservedMarkMn");
     mindate = AddDay(CurrentDate,-31);
     sendTime = StringToTime("10:00:00");
     TrHs = true;
@@ -51,18 +51,18 @@ begin
     while (LoopKey("OrdDate",ORr,1,TrHs)) begin
       testf = true;
       logtext(0,"RemoveReservedMarkMn " & ORr.SerNr);
-      if (ORr.Reserved!=1 or ORr.OrdDate<mindate or blankdate(ORr.ReservToDate) or ORr.Closed==1) then begin testf = false; logtext(0,"RemoveReservedMarkMn false1"); end;
-      if (NonBlank(ORr.ReservToDate) and ORr.ReservToDate>CurrentDate) then begin testf = false;logtext(0,"RemoveReservedMarkMn false2"); end;
-      if (ORr.OrderClass!="WEB" and ORr.OrderClass!="RETAI") then begin testf = false;logtext(0,"RemoveReservedMarkMn false3"); end;// Edit ************************** Saturday, 29 August 2015 08:53:18
-      if (ORr.NPPaymentType!=0 or ORr.PrepaymentReceived!=0) then begin testf = false;logtext(0,"RemoveReservedMarkMn false4"); end;			//Edit----------------------Dima  23.09.2015
-      if (ORr.CustomStatusFlag!=5) then begin testf = false;logtext(0,"RemoveReservedMarkMn false5"); end;// Edit ************************** Saturday, 29 August 2015 08:53:19      
+      if (ORr.Reserved!=1 or ORr.OrdDate<mindate or blankdate(ORr.ReservToDate) or ORr.Closed==1) then begin testf = false; /*logtext(0,"RemoveReservedMarkMn false1");*/ end;
+      if (NonBlank(ORr.ReservToDate) and ORr.ReservToDate>CurrentDate) then begin testf = false;/*logtext(0,"RemoveReservedMarkMn false2");*/ end;
+      if (ORr.OrderClass!="WEB" and ORr.OrderClass!="RETAI") then begin testf = false;/*logtext(0,"RemoveReservedMarkMn false3");*/ end;// Edit ************************** Saturday, 29 August 2015 08:53:18
+      if (ORr.NPPaymentType!=0 or ORr.PrepaymentReceived!=0) then begin testf = false;/*logtext(0,"RemoveReservedMarkMn false4");*/ end;			//Edit----------------------Dima  23.09.2015
+      if (ORr.CustomStatusFlag!=5) then begin testf = false;/*logtext(0,"RemoveReservedMarkMn false5");*/ end;// Edit ************************** Saturday, 29 August 2015 08:53:19      
       
       if (testf and NonBlank(ORr.ReservToDate) and ORr.ReservToDate==CurrentDate) then begin// Edit ************************** Saturday, 29 August 2015 08:57:08
       	if (nonblank(SMSb.Text41)) then begin
       		newtext = ParseSMStext(SMSb.Text41,ORr);
 	        smsNr = AddSMStoStack(ORr.NPPhone,SMSb.Title4,newtext,ORr.CustCode,"ORVc",ORr.SerNr,ORr.OrderClass,CurrentDate,sendTime);
         end;
-        testf = false;logtext(0,"RemoveReservedMarkMn false6");
+        testf = false;//logtext(0,"RemoveReservedMarkMn false6");
       end;
       if (testf) then begin
         res = 0;
@@ -91,7 +91,7 @@ begin
               res = RecordUpdate(OR2r,ORr,true);
             end;
             if (res!=0) then begin
-              LogText(0,"Reserve off problem with order #" & ORr.SerNr);
+              /*LogText(0,"Reserve off problem with order #" & ORr.SerNr);*/
             end;
           end;
         end;

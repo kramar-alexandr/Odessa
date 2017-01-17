@@ -683,7 +683,7 @@ begin
 					
 					
 					ORVc_PasteCurncyCode(ORr,"USD");		//Edit--------------------Dima 23.01.2015
-					if (FindSubString("Самовывоз",ORr.ShipAddr1) and !FindSubString("КИЕВ",UpperCase(ORr.ShipAddr1))) then begin
+					if (FindSubString("Самовывоз",ORr.ShipAddr1)) then begin
 						ORr.SelfDelivery = 1;
 					end;
 					ORr.Advance = 0; //Edit----------------------Dima  18.12.2015			

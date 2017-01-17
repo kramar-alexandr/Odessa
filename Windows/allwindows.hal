@@ -7240,6 +7240,7 @@ begin
   EditField(h2,v,100,"Объект",Normal,AdditionalObjects,false,ObjSClass);		//Edit----------------------Dima  28.07.2015
   EnterSkip(Math);
   EditField(h,-21,100,"Подпись",ViewOnly,Sign,false,0);//Edit----------------------Dima  14.07.2015
+  EditField(h+150,-21,100,"Гр.Пр.",Normal,SalesGroup,false,0);// Edit ************************** Wednesday, 4 January 2017 16:16:16
   if (HasMultiCurrency) then begin
     fl = 40;
 //    if (GuiType==kGuiiPhone) then begin fl = 70; end;
@@ -10523,6 +10524,8 @@ begin
   RlColKey(4,4,"No.",InvoiceNr,false,InvoiceNr); 
   RlColKey(111,111,"Invoice date",DueDate,false,DueDate); 
   RlColKey(220,200,"Customer",CustName,false,CustName); 
+  RlCol(270,270,"RVal",RVal,false); 
+  RlCol(350,350,"BookRVal",BookRVal,false); 
   SearchField("Search "); 
   
   EndWindow;

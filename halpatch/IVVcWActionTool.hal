@@ -140,6 +140,7 @@ begin
       IVr.LCMLevel = LoyaltyCardr.LCMLevel;
       IVr.Points = 0;
       //if (LoyaltyCardr.PointsBalance<>0) then begin
+      if(IVr.OrderNr==-1)then begin// Edit ************************** Friday, 6 January 2017 11:02:27
         GetLCPrices(LoyaltyCardr.PointsBalance,LoyaltyCardr.LCMLevel,PLCode,RebCode);
         if (nonblank(PLCode) and (IVr.PriceList<>PLCode)) then begin 
           IVr.PriceList = PLCode;
@@ -152,6 +153,7 @@ begin
         if (MatRowCnt(IVr)>0) then begin 
           IVDUpdatePrices(IVr,false);
         end;  
+      end;
       //end;
     end else begin
       IVr.LCMLevel = "";

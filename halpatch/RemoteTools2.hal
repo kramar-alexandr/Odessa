@@ -35,6 +35,8 @@ external function LongInt IPVcRecordCheck(var record IPVc,record IPVc,LongInt,Lo
 external procedure IPPastePayMode(var record IPVc); //Edit***************************Sasha2,16:12 18.02.2015
 external function longint NextCUPNumber(); //Edit***************************Sasha2,9:45 19.02.2015
 external procedure IPVc_PasteBankCurncy(var record IPVc,Integer); //Edit***************************Sasha2,10:19 19.02.2015
+external procedure RecordAction_raExpandAllPayments(var record IPVc);// Edit ************************** Thursday, 12 January 2017 11:54:55
+
 
 SetLangMode(LangRussian,"RUS",0); //Edit***************************Sasha2,9:27 19.02.2015
 
@@ -766,7 +768,7 @@ begin
   record IVVc IVr;
   row IVVc credIVrw;
   record IPrsVc IPrsr;
-  record IPVc IPr,IP2r;
+  record IPVc IPr,IP2r,IP3r;
   row IPVc IPrw;
   record ARVc ARr;
   val sum,chk;
@@ -827,7 +829,7 @@ begin
             IPrw.RecVal = sum;
             MatRowPut(IPr,cnt,IPrw);
             IPVc_PasteRecVal(IPr,cnt);
-            cnt = cnt + 1;
+            /*cnt = cnt + 1;
             ClearRow(IPr,IPrw,kReceiptRowTypeNormal);
             IPrw.CustCode = credIVr.CustCode;
             MatRowPut(IPr,cnt,IPrw);
@@ -841,8 +843,9 @@ begin
             MatRowPut(IPr,cnt,IPrw);
             IPVc_PasteRecVal(IPr,cnt);
             MatRowGet(IPr,cnt,IPrw);
-            IPrw.CUPNr = NextCUPNumber;
-            MatRowPut(IPr,cnt,IPrw); 
+            //IPrw.CUPNr = NextCUPNumber;// Edit ************************** Thursday, 12 January 2017 11:57:42
+            //MatRowPut(IPr,cnt,IPrw); 
+            RecordAction_raExpandAllPayments(IPr);// Edit ************************** Thursday, 12 January 2017 11:58:59*/
             
             IPr.PayMode = DCBlb.DefCredCashPayDeal;
             IPPastePayMode(IPr);
@@ -850,7 +853,42 @@ begin
             IPr.OKFlag = 1;
             IPSumup(IPr);
             IPVcRecordCheck(IPr,IP2r,1,0); //for MakeTransFromIP
+            
             RecordInsert(IPr,false);
+            
+            RECORDNEW(IP3r);
+            cnt = 0;
+            IP3r.SerNr = NextSerNr("IPVc",CurrentDate,-1,true,"");
+            if (IP3r.SerNr==-1) then begin
+              goto LCreateCreditPayment;
+            end;
+            ClearRow(IP3r,IPrw,kReceiptRowTypeNormal);
+            IPrw.CustCode = credIVr.CustCode;
+            MatRowPut(IP3r,cnt,IPrw);
+            IPVc_PasteCustCode(IP3r,cnt,error);
+            MatRowGet(IP3r,cnt,IPrw);
+            IPrw.RecCurncy = curr;
+            MatRowPut(IP3r,cnt,IPrw);
+            IPVc_PasteRecCurncy(IP3r,cnt);
+            MatRowGet(IP3r,cnt,IPrw);
+            IPrw.RecVal = -sum;
+            MatRowPut(IP3r,cnt,IPrw);
+            IPVc_PasteRecVal(IP3r,cnt);
+            MatRowGet(IP3r,cnt,IPrw);
+            RecordAction_raExpandAllPayments(IP3r);// Edit ************************** Thursday, 12 January 2017 11:58:59
+            
+            IP3r.PayMode = DCBlb.DefCredCashPayDeal;
+            IPPastePayMode(IP3r);
+            IP3r.Comment = IP3r.Comment & " (Возврат по акту " & credIVr.SerNr & ")";
+            IP3r.OKFlag = 1;
+            IPSumup(IP3r);
+            IPVcRecordCheck(IP3r,IP2r,1,0); //for MakeTransFromIP
+            
+            RecordInsert(IP3r,false);
+            
+            createrecordlink(IPr,currentcompany,IP3r,currentcompany);
+            createrecordlink(IP3r,currentcompany,IPr,currentcompany);
+            
           end;
         end;
         
