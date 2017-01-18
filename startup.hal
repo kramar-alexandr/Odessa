@@ -303,6 +303,8 @@ begin
 	Maintenance("Recalculate POVc.ActOkFlag",MyVClass,RecalculatePOVC_ActOkFlag_Mn,modDBMain);
 	Maintenance("Recalculate ORVc.CustomStatusFlagText",MyVClass,RecalculateORVC_CustomStatusFlagText_Mn,modDBMain);	//Edit----------------------Dima  24.03.2015
 
+	Maintenance("Проверить перемещения по товарам",MyVClass,StockMovErrormn,modDBMain);
+	
 	Maintenance("Fix Prepayment",MyVClass,FixPrepaymentMn,modDBMain);	//Edit----------------------Dima  24.03.2015
 
 	Maintenance("Заполнить товары поставщиков",MyVClass,UpdateinAllPIrMn,modDBMain);	//Edit----------------------Dima  24.03.2015

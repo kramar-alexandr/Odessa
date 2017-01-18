@@ -50,7 +50,7 @@ begin
     
     while (LoopKey("OrdDate",ORr,1,TrHs)) begin
       testf = true;
-      logtext(0,"RemoveReservedMarkMn " & ORr.SerNr);
+      //logtext(0,"RemoveReservedMarkMn " & ORr.SerNr);
       if (ORr.Reserved!=1 or ORr.OrdDate<mindate or blankdate(ORr.ReservToDate) or ORr.Closed==1) then begin testf = false; /*logtext(0,"RemoveReservedMarkMn false1");*/ end;
       if (NonBlank(ORr.ReservToDate) and ORr.ReservToDate>CurrentDate) then begin testf = false;/*logtext(0,"RemoveReservedMarkMn false2");*/ end;
       if (ORr.OrderClass!="WEB" and ORr.OrderClass!="RETAI") then begin testf = false;/*logtext(0,"RemoveReservedMarkMn false3");*/ end;// Edit ************************** Saturday, 29 August 2015 08:53:18
@@ -3368,3 +3368,50 @@ begin
 	
 return;
 end; //Edit***************************Sasha2,14:49 12.12.2016 }
+
+
+global updating procedure StockMovErrormn()
+begin
+	record ItemHistVc IHr;
+	record StockMovVc SMr;
+	row StockMovVc SMrw;
+	integer i,mtrw;
+	record INVc INr;
+	boolean changef;
+	
+	SMr.SerNr = 21000;
+	while(loopmain(SMr,1,true))begin
+		changef = false;
+		if(SMr.OKFlag>0)then begin
+			mtrw = matrowcnt(SMr);
+			For(i=0;i<mtrw;i=i+1) begin
+				matrowget(SMr,i,SMrw);
+				if(SMrw.OrdQuant>0 and (SMrw.SentQuant!=0 or SMrw.Quant!=0))then begin
+					IHr.FileName = "StockMovVc";
+					IHr.TransNr = SMr.SerNr;
+					IHr.Row = i;
+					if(readfirstkey("FNTransNr",IHr,3,true))then begin
+						if(IHr.ArtCode!=SMrw.ArtCode)then begin
+							logtext(0,"IH not ident SM# " & SMr.SerNr & " row # " & i+1 & " item " & SMrw.ArtCode);
+							SMrw.ArtCode = IHr.ArtCode;
+							INr.Code = SMrw.ArtCode;
+							readfirstmain(INr,1,true);
+							SMrw.Spec = INr.Name;
+							matrowput(SMr,i,SMrw);
+							changef = true;
+						end;
+					end else begin
+						logtext(0,"IH not found for SM# " & SMr.SerNr & " row # " & i+1 & " item " & SMrw.ArtCode);
+					end;
+				end;
+			end; 
+		end;
+		
+		if(changef)then begin
+			recordstore(SMr,true);
+		end;
+		
+	end;
+	
+return;
+end;

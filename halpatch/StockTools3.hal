@@ -380,7 +380,9 @@ begin
   row StockMovVc StockMovrw;
   Boolean fromf,fromthrouf,fromsendf,tof,tothrouf,reservedf;
   record LocationVc toLocr;
-    
+  
+  logtext(0,"StockMovUpdateStock");
+  
   BlockLoad(MainStockRec);
   if (SMp.Reserved!=0) then begin
     reservedf = true;
@@ -463,6 +465,9 @@ begin
         if (StockMovrw.SentQuant!=0) then begin
           toLocr.Code = SMp.ThrouLocation;
           ReadFirstMain(toLocr,1,true);
+          if(StockMovrw.ArtCode=="1004271")then begin
+						logtext(0,"1 " & SMp.FrLocation & " " & SMp.SerNr);
+          end;
           StockMovUpdateStockFrom(SMp,SMp.FrLocation,StockMovrw,MainStockRec,toLocr,true,trflag,maintf,negf);
         end;
       end else begin
@@ -470,6 +475,9 @@ begin
           if (StockMovrw.Quant!=0) then begin
             toLocr.Code = SMp.ToLocation;
             ReadFirstMain(toLocr,1,true);
+            if(StockMovrw.ArtCode=="1004271")then begin
+            logtext(0,"2 " & SMp.FrLocation & " " & SMp.SerNr);
+            end;
             StockMovUpdateStockFrom(SMp,SMp.FrLocation,StockMovrw,MainStockRec,toLocr,false,trflag,maintf,negf);
           end;
         end;
@@ -478,6 +486,9 @@ begin
         if (StockMovrw.SentQuant!=0) then begin
           toLocr.Code = SMp.ThrouLocation;
           ReadFirstMain(toLocr,1,true);
+          if(StockMovrw.ArtCode=="1004271")then begin
+          logtext(0,"3 " & SMp.ThrouLocation & " " & SMp.SerNr);
+          end;
           StockMovUpdateStockTo(SMp,SMp.ThrouLocation,StockMovrw,MainStockRec,toLocr,true,trflag,maintf,negf);
         end;
       end;
@@ -485,6 +496,9 @@ begin
         if (StockMovrw.Quant!=0) then begin
           toLocr.Code = SMp.ToLocation;
           ReadFirstMain(toLocr,1,true);
+          if(StockMovrw.ArtCode=="1004271")then begin
+          logtext(0,"4 " & SMp.ThrouLocation & " " & SMp.SerNr);
+          end;
           StockMovUpdateStockFrom(SMp,SMp.ThrouLocation,StockMovrw,MainStockRec,toLocr,false,trflag,maintf,negf);
         end;
       end;
@@ -492,6 +506,9 @@ begin
         if (StockMovrw.Quant!=0) then begin
           toLocr.Code = SMp.ToLocation;
           ReadFirstMain(toLocr,1,true);
+          if(StockMovrw.ArtCode=="1004271")then begin
+          logtext(0,"5 " & SMp.ToLocation & " " & SMp.SerNr);
+          end;
           StockMovUpdateStockTo(SMp,SMp.ToLocation,StockMovrw,MainStockRec,toLocr,false,trflag,maintf,negf);
         end;
       end;
