@@ -373,7 +373,7 @@ BEGIN
         ORrw.Recepy = "";
       end;
     end;
-    ORrw.vRebate = vreb;
+    //ORrw.vRebate = vreb;// Edit ************************** Wednesday, 18 January 2017 17:19:58
     if (INr.ExplodeRec==0) then begin
       if (baseprice<>0) then begin
         ORrw.BasePrice = baseprice;

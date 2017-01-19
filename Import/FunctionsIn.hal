@@ -349,7 +349,18 @@ begin
   Userr.LastPONr = StringToLongint(ImportField);
   Userr.ExpiryDate = StringToDate(ImportField);
   Userr.SortCode = ImportField;
+  // Edit Start ---------------------------------------------- Edit Start
+	//Thursday, 19 January 2017 16:11:15
+	
+  Userr.CardNumber = ImportField;
+  Userr.AllowSalesForType = ImportField;
+  Userr.DisallowSalesForType = ImportField;
+  Userr.AllowSaleAllItems = StringToInt(ImportField);
+  Userr.SalesReportLocation = ImportField;
   
+  
+	// Edit End ---------------------------------------------- Edit End
+	
   rwcnt = 0;
   
   while (NextImportLine(false)) begin
