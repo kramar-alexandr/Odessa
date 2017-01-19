@@ -932,6 +932,7 @@ begin
   		if(readfirstmain(INr,1,true))then begin
   			POrw.Volume = INr.Volume * POrw.Quant;// Edit ************************** Wednesday, July 9, 2014 at 11:37:02
 				POrw.Weight = INr.Weight * POrw.Quant;// Edit ************************** Wednesday, July 9, 2014 at 11:37:01
+				POrw.NetWeight = INr.NetWeight * POrw.Quant; //Edit***************************Sasha2,15:19 19.01.2017
   		end;
   	MatRowPut(POr,i,POrw);
 	end; 

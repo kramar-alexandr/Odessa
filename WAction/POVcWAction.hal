@@ -2177,7 +2177,7 @@ begin
 	row POVc POrw;
 	record INVc	INr;
 	integer wn,i,rwcnt,cnt;
-	val weight,volume;
+	val weight,volume,netWeight;
 
 	wn = CurWindow;
 	GetWindowRecord(wn,POr);
@@ -2190,8 +2190,10 @@ begin
 		if (ReadFirstMain(INr,1,true)) then begin
 				volume = POrw.Volume / POrw.Quant;
 				weight = POrw.Weight / Porw.Quant;
+				netWeight = POrw.NetWeight / Porw.Quant;
 				INr.Volume = volume;
 				INr.Weight = weight;
+				INr.NetWeight = netWeight;
 				RecordStore(INr,true);
 				cnt = cnt+1;	
 		end;		

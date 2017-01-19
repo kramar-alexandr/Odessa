@@ -2509,7 +2509,7 @@ begin
     EditField(60,-21,40,"Паллеты",ViewOnly,TotPalletNr,true,0);// Edit ************************** Friday, July 4, 2014 at 17:48:24
 
     EditField(150,-41,60,"Объем",ViewOnly,TotVolume,true,0);// Edit ************************** Friday, July 4, 2014 at 17:49:15
-    EditField(150,-21,60,"Вес",ViewOnly,TotWeight,true,0);// Edit ************************** Friday, July 4, 2014 at 17:49:16
+    EditField(150,-21,60,"Брутто",ViewOnly,TotWeight,true,0);// Edit ************************** Friday, July 4, 2014 at 17:49:16
 
     EditField(270,-41,70,"Фрахт",Normal,ShipCost,true,0);// Edit ************************** Friday, July 4, 2014 at 17:51:05
     EditField(270,-21,70,"Таможня",Normal,CustomsCost,true,0);// Edit ************************** Friday, July 4, 2014 at 17:51:06
@@ -2638,8 +2638,9 @@ begin
       //MatColTL(1,-70,"Кол-во",0,M4UVal,Normal,0,AddUnitQty5,false,0); //Edit***************************Sasha2,17:51 23.06.2014
     Flip(flipnr); flipnr = flipnr + 1;
       MatCol(1,164,"Наименование",0,Spec,false,0);
-      MatColTL(1,-140,"Объем",0,M45Val,Normal,0,Volume,false,0);// Edit ************************** Friday, July 4, 2014 at 17:43:03
-      MatColTL(1,-70,"Вес",0,M45Val,Normal,0,Weight,true,0);// Edit ************************** Friday, July 4, 2014 at 17:43:06
+      MatColTL(1,-210,"Объем",0,M45Val,Normal,0,Volume,false,0);// Edit ************************** Friday, July 4, 2014 at 17:43:03
+      MatColTL(1,-140,"Нетто",0,M45Val,Normal,0,NetWeight,false,0);// Edit ************************** Friday, July 4, 2014 at 17:43:03
+      MatColTL(1,-70,"Брутто",0,M45Val,Normal,0,Weight,true,0);// Edit ************************** Friday, July 4, 2014 at 17:43:06
   end;
   DeleteRowTest;
   InsertRowTest;
@@ -3045,15 +3046,16 @@ begin
     EditField(h5,v+=vs ,50,"Вес",Normal,Weight,true,0);*/ //Edit***************************Sasha2,16:58 23.06.2014
 
     EditField(h4,v+=vs ,50,"Плотность",Normal,Density,true,0); //Edit***************************Sasha2,16:58 23.06.2014
-    EditField(h,v ,50,"Нетто",Normal,NetWeight,true,0); //Edit***************************Sasha2,16:59 23.06.2014
     EditField(h5,v ,50,"Объем",Normal,Volume,true,0); //Edit***************************Sasha2,16:59 23.06.2014
+    EditField(h4,v+vs ,50,"Нетто",Normal,NetWeight,true,0); //Edit***************************Sasha2,16:59 23.06.2014
+    StaticText(h4 + 55,v+vs+15,"КГ",false);
     /*if (GuiType == kGuiWPF or GuiType == kGuiWindowsDesktop) then begin
     	StaticText(h5 + 55,v + 15,"cm"& chr(179),false); //Edit***************************Sasha2,17:19 23.06.2014
     end else begin
     	StaticText(h5 + 55,v + 15,"cm3",false); //Edit***************************Sasha2,17:19 23.06.2014
     end;*/
     StaticText(h5 + 55,v + 15,"гл",false); //Edit***************************Sasha2,16:03 30.07.2014 !!!!!!!!!5 rows upper the same but with cm3
-    EditField(h5,v+=vs ,50,"Вес",Normal,Weight,true,0); //Edit***************************Sasha2,16:59 23.06.2014
+    EditField(h5,v+=vs ,50,"Брутто",Normal,Weight,true,0); //Edit***************************Sasha2,16:59 23.06.2014
     StaticText(h5 + 55,v + 15,"КГ",false);
 
   end;

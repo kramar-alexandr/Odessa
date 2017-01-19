@@ -201,6 +201,7 @@ BEGIN
   		if(readfirstmain(INr,1,true))then begin
   			POrw.Volume = INr.Volume * POrw.Quant;// Edit ************************** Wednesday, July 9, 2014 at 11:37:02
 				POrw.Weight = INr.Weight * POrw.Quant;// Edit ************************** Wednesday, July 9, 2014 at 11:37:01
+				POrw.NetWeight = INr.NetWeight * POrw.Quant; //Edit***************************Sasha2,15:19 19.01.2017
   		end;
   	MatRowPut(POp,i,POrw);
   end;*/
@@ -842,6 +843,7 @@ BEGIN
   //if (ReadFirstMain(INr,1,true)) then begin
   	POrw.Volume = INr.Volume * POrw.Quant;// Edit ************************** Wednesday, July 9, 2014 at 11:37:02
   	POrw.Weight = INr.Weight * POrw.Quant;// Edit ************************** Wednesday, July 9, 2014 at 11:37:01
+  	POrw.NetWeight = INr.NetWeight * POrw.Quant; //Edit***************************Sasha2,15:20 19.01.2017
 	  if(NonBlank(POrw.UnitCode))then begin// Edit ************************** Tuesday, 31 March 2015 12:47:24
 			if (NonBlank(POrw.AddUnittext2)) then begin 
 				if (POrw.AddUnittext2 != POrw.UnitCode) then begin
@@ -1261,9 +1263,11 @@ begin
     if(POrw.Quant<=0)then begin
 			POrw.Volume = INr.Volume;// Edit ************************** Wednesday, July 9, 2014 at 11:37:02
 			POrw.Weight = INr.Weight;// Edit ************************** Wednesday, July 9, 2014 at 11:37:01
+			POrw.NetWeight = INr.NetWeight; //Edit***************************Sasha2,14:55 19.01.2017
   	end else begin
   		POrw.Volume = INr.Volume*POrw.Quant;// Edit ************************** Wednesday, July 9, 2014 at 11:37:02
 			POrw.Weight = INr.Weight*POrw.Quant;// Edit ************************** Wednesday, July 9, 2014 at 11:37:01
+			POrw.NetWeight = INr.NetWeight*POrw.Quant;// Edit ************************** Wednesday, July 9, 2014 at 11:37:01
   	end;
   	POrw.AlternativeCode = INr.AlternativeCode; //Edit***************************Sasha2,13:54 06.11.2014
     if (pifound) then begin
