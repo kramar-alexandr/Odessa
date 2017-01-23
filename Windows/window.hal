@@ -298,12 +298,17 @@ begin
   EditField(h,v+=vs,-40,"Склад",Normal,Location,false,LocationSClass);
   EditField(h,v+=vs,100,"Прейскурант",Normal,PLCode,false,PLDefSClass);
   //EditField(h,v+=vs,50,"Указывать количество",Normal,Qty,true,0); //Edit***************************Sasha2,11:43 14.01.2015
-  StaticText(h,v+=vs*3,"Насройки FTP-сервера:",true);
+  StaticText(h,v+=vs*3,"Насройки FTP-сервера: Magmi",true);
   EditField(h,v+=10,100,"IP адрес FTP-сервера",Normal,HostIP,false,0);
   EditField(h,v+=vs,50,"Порт FTP-сервера",Normal,Port,false,0);
   EditField(h,v+=vs,100,"Логин",Normal,Login,false,0);
   EditField(h,v+=vs,100,"Пароль",Normal,Password,false,0);
-
+  
+	StaticText(h,v+=vs*3,"Насройки FTP-сервера: Magento (SSH)",true);
+  EditField(h,v+=10,100,"IP адрес FTP-сервера",Normal,OrdersHostIP,false,0);
+  EditField(h,v+=vs,50,"Порт FTP-сервера",Normal,OrdersPort,false,0);
+	
+	
   EndWindow;
 end;
 

@@ -567,7 +567,7 @@ begin
 	
 	IPaddr = WebRemoteIPAddress;
 	
-	if(IPaddr==ESCb.HostIP or IPaddr=="188.40.105.5" or IPaddr=="46.101.115.10" or IPaddr=="46.101.141.133" or IPaddr=="127.0.0.1"  or IPaddr=="88.198.218.219")then begin
+	if(IPaddr==ESCb.OrdersHostIP or IPaddr=="127.0.0.1")then begin
 		logtext(0,"WebordConnectFrom " & IPaddr);
 		if(currenttime<stringtotime("23:59:59") and currenttime>stringtotime("00:30:00"))then begin// Edit ************************** Tuesday, 2 August 2016 10:01:05
 			logText(0,"WebGetOrder");
