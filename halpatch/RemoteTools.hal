@@ -1867,6 +1867,10 @@ begin
   record POVc POr;
   array record XSrsVc aXSrsr;
   Integer axsrscnt;
+  integer mtrw,i;// Edit ************************** Monday, 23 January 2017 16:16:43
+  row IVVc IVrw;// Edit ************************** Monday, 23 January 2017 16:16:42
+  val prepaymentSum;// Edit ************************** Monday, 23 January 2017 16:16:41
+  record IVVc oldIVr;// Edit ************************** Monday, 23 January 2017 16:18:40
   
   res = -1;
   RecordNew(IVp);
@@ -1944,6 +1948,28 @@ begin
     end;
     UpdateCredMan(IVp,ORr.QuoteNr,errcode);
   end;
+  // Edit Start ---------------------------------------------- Edit Start
+	//Monday, 23 January 2017 16:17:17
+	
+  if(IVp.OKFlag==0 and ORr.OrderClass=="WEB")then begin
+  	mtrw = matrowcnt(IVp);
+  	For(i=0;i<mtrw;i=i+1) begin
+  		matrowget(IVp,i,IVrw);
+			if (IVrw.stp==kInvoiceRowTypePrepayment) then begin
+				prepaymentSum = prepaymentSum + IVrw.Sum;
+			end;
+		end; 
+		if(IVp.Sum4<=prepaymentSum)then begin 
+			RecordCopy(oldIVr,IVp);
+			IVp.OKFlag = 1;
+			if (RecordUpdate(oldIVr,IVp,true)!=0) then begin
+				IVp.OKFlag = 0;
+			end;
+		end;
+  end;
+  
+	// Edit End ---------------------------------------------- Edit End
+	
 LRecordAction_raPasteOrdInInv:;
   RecordAction_raPasteOrdInInv = res;
   RETURN;

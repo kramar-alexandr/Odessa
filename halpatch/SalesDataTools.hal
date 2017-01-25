@@ -1,6 +1,7 @@
 external function val MulRateToBase1(var string,val,val,val,val,val,val,roundmode);
 external function val AbsoluteVal(val);
 external procedure ExtractObj(string,var Integer,var string);
+external function Boolean FindSubString(string,string);	//Edit----------------------Dima  17.09.2015
 
 
 //Функция собирает данные для SalesDataVc из регистров IVVc,SHVc,PLVc, INvc
@@ -23,6 +24,7 @@ begin
   row SHVc SHrw;
   date komitentStart; 
   array record SHVc SHarray;
+  record ORVc ORr;
 	
 	if(IVr.OKFlag==1)then begin
 
@@ -52,6 +54,25 @@ begin
 					paygift = paygift + IVrw.Sum;
 			end;	
 		end;	
+		
+		
+		if(paycash==0 and payccard==0 and paygift==0)then begin
+			if(IVr.OrderNr>-1)then begin
+				ORr.SerNr = IVr.OrderNr;
+				if(readfirstmain(ORr,1,true) and ORr.OrderClass=="WEB")then begin
+					if(IVr.FiscalFlag==1)then begin
+						payccard = IVr.Sum4;
+					end else begin
+						if (FindSubString("Самовывоз",ORr.ShipAddr1) or ORr.NPPaymentType==1) then begin
+							paycash = IVr.Sum4;
+						end;
+					end;
+					if(paycash==0 and payccard==0 and paygift==0)then begin
+						payccard = IVr.Sum4;
+					end;
+				end;
+			end;
+		end;
 	
 		if (paycash>0) then begin	//учитываем возможную сдачу
 			paycash = IVr.Sum4 - payccard - paygift;

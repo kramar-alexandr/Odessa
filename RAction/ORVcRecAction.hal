@@ -2225,18 +2225,21 @@ begin
 	record SHVc SHr;
 
 	RecordNew(IVr);
+	if(ORr.AutoCreation>0)then begin// Edit ************************** Monday, 23 January 2017 16:04:57
+		IVr.FiscalFlag = 1;
+	end;
 	res = RecordAction_raPasteOrdInInv(IVr,ORr.SerNr,true,error);
   LogText(0,ORr.SerNr & ":  Invoice was created   " & IVr.SerNr);	
   if (error>0 or res>0) then begin
     LogText(error,"");
     LogText(res,"");
   end;
-  if (ORr.NPPaymentType==1) then begin	// set OK if not prepayment
+  if (ORr.NPPaymentType==1 and IVr.OKFlag==0) then begin	// set OK if not prepayment
 		RecordCopy(oldIVr,IVr);
 		IVr.OKFlag = 1;
 		if (RecordUpdate(oldIVr,IVr,true) != 0) then begin end;
   end;
-  
+    
   res = RecordAction_raPasteOrdInShip(SHr,ORr.SerNr,warning);
   if (nonblank(warning)) then begin
     LogText(0,warning);
