@@ -1,0 +1,39 @@
+external procedure PasteFromSysList(Integer,Integer);
+
+
+global
+procedure PromotionSClassArrayOnOpen(var Array string astr,var Integer acnt)
+BEGIN
+  record PromotionVc Promotionr;
+  
+  Promotionr.Code = "";
+  while (LoopMain(Promotionr,1,true)) begin
+    astr[acnt] = Left(Promotionr.Code & "                         ",20);
+    astr[acnt] = astr[acnt] & Promotionr.Description;
+    acnt = acnt + 1;
+  end;
+  
+  RETURN;
+END;
+
+global
+function Boolean PromotionSClassOnOpenWindow(Integer wn)
+begin
+  Array string 255 astr;
+  Integer i,acnt;
+  
+  PromotionSClassArrayOnOpen(astr,acnt);
+  for (i=0;i<acnt;i=i+1) begin
+    SetListString(wn,len(astr[i]),astr[i],false);    
+  end;
+  PromotionSClassOnOpenWindow = false;
+  return;
+end;
+
+global
+function Boolean PromotionSClassOnOKWindow(Integer wn)
+begin
+  PasteFromSysList(wn,-2);
+  PromotionSClassOnOKWindow = false;
+  return;
+end;

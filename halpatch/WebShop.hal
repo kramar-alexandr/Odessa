@@ -23,6 +23,7 @@ external updating procedure GenerateRebateVouchers(string);
 external function string 255 StrReplace(string,string,string);
 external procedure GetAvailableItems(var record ORVc);
 external procedure ORDUpdatePrices(var record ORVc,Boolean);// Edit ************************** Monday, 19 December 2016 11:16:53
+external function string 255 LookUpPromotionCode(date,string); //Edit***************************Sasha2,15:31 24.01.2017
 
 SetLangMode(LangRussian,"RUS",0);
 
@@ -659,6 +660,7 @@ begin
 					//ORr.BaseRate1 = 100;
 					//ORr.BaseRate2 = 100;
 					ORr.Location = WSSB.Location;
+					ORr.PromotionCode = LookUpPromotionCode(ORr.OrdDate,ORr.Location); //Edit***************************Sasha2,11:31 25.01.2017
 					ORr.PayDeal = WSSB.PayDeal;
 					ORr.ShipDeal = WSSB.ShipDeal;
 					ORr.CustomStatusFlag = 0;

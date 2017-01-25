@@ -96,6 +96,65 @@ external function LongInt HoursDiffWithoutRestDays(Date,Time,Date,Time);
 external procedure IVVc_PasteInvDate(var record IVVc,record LocalMachineBlock,var Integer,var Integer);//Edit----------------------Dima  06.01.2016
 external procedure CalcCustBalrem(var record ORVc);
 external procedure SOAPUpdateStatus(string,string);// Edit ************************** Friday, 18 November 2016 09:42:09
+external function string 255 LookUpPromotionCode(date,string); //Edit***************************Sasha2,15:31 24.01.2017
+external procedure NoDupObjs(string,var string); //Edit***************************Sasha2,16:04 24.01.2017
+
+global //Edit***************************Sasha2,9:51 25.01.2017 {
+procedure HandlePromotionObjectsIV(var record ORVc ORr,record ORVc OR2r,LongInt mode)
+begin
+  record PromotionVc Promotionr;
+  string 255 tstr,objStr;
+  integer pos;
+    
+    if (mode==Rs_insert) then begin
+      if (NonBlank(ORr.PromotionCode)) then begin
+        Promotionr.Code = ORr.PromotionCode;
+        if (ReadFirstMain(Promotionr,1,true) and NonBlank(Promotionr.Objects)) then begin
+          if (Blank(ORr.Objects)) then begin
+            ORr.Objects = Promotionr.Objects;
+          end else begin
+            ORr.Objects = ORr.Objects & "," & Promotionr.Objects;
+          end;
+        end;
+      end;
+    end;
+    if (mode==Rs_update) then begin
+      if (ORr.PromotionCode!=OR2r.PromotionCode) then begin
+        if (NonBlank(OR2r.PromotionCode)) then begin
+          Promotionr.Code = OR2r.PromotionCode;
+          if (ReadFirstMain(Promotionr,1,true) and NonBlank(Promotionr.Objects)) then begin
+            NoDupObjs(OR2r.Objects & "," & ORr.Objects,tstr);
+            OR2r.Objects = tstr;
+            pos = 0;
+            objStr = "";
+            ExtractObj(OR2r.Objects,pos,tstr);
+            while (nonblank(tstr)) begin
+              if (SetInSet(tstr,Promotionr.Objects)==false) then begin
+                objStr = objStr & tstr & ",";
+              end;
+              ExtractObj(OR2r.Objects,pos,tstr);
+            end;
+            if (NonBlank(objStr)) then begin
+              objStr = Left(objStr,len(objStr)-1);
+              ORr.Objects = objStr;
+            end;
+          end;
+        end;
+        if (NonBlank(ORr.PromotionCode)) then begin
+          Promotionr.Code = ORr.PromotionCode;
+          if (ReadFirstMain(Promotionr,1,true) and NonBlank(Promotionr.Objects)) then begin
+            if (Blank(ORr.Objects)) then begin
+              ORr.Objects = Promotionr.Objects;
+            end else begin
+              ORr.Objects = ORr.Objects & "," & Promotionr.Objects;
+            end;
+          end;
+        end;
+      end;
+    end;
+    
+  return;
+end; //Edit***************************Sasha2,9:51 25.01.2017 }
 
 global procedure SetNewORCustomStatusFlagOnWeb(record ORVc ORr)
 begin
@@ -2266,6 +2325,7 @@ begin
 	integer rwcnt;
 
   ORr.Prntdf = 0;
+  HandlePromotionObjectsIV(ORr,OR2r,2); //Edit***************************Sasha2,10:31 25.01.2017
   AutDelNonStockItem(ORr);
   UpdateOrdOut(OR2r,false,true);
   UpdateOrdOut(ORr,true,true);
@@ -2582,6 +2642,7 @@ begin
   if (blanktime(ORr.RegTime)) then begin
     ORr.RegTime = CurrentTime;
   end;
+  HandlePromotionObjectsIV(ORr,OR2r,1); //Edit***************************Sasha2,10:31 25.01.2017
   AutDelNonStockItem(ORr);
   UpdateOrdOut(ORr,true,true);
   UpdatePRSO(ORr,true);
@@ -2729,6 +2790,7 @@ begin
   ORr.Advance = 0;
   
   ORr.NPPayer = NPSettingsb.DefPayer;// Edit ************************** Monday, 17 October 2016 15:03:50
+  ORr.PromotionCode = LookUpPromotionCode(ORr.OrdDate,ORr.Location); //Edit***************************Sasha2,15:32 24.01.2017
   
   ORVcRecordDefaults = res;  
   return;

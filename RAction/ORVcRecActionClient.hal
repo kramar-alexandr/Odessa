@@ -5,6 +5,7 @@ external procedure RecordActionOR_Print2(record ORVc);
 remote function Boolean ifCustomerWithCurrentPhoneExist(string,var string );
 remote updating function boolean CheckCounterparty(var record ORVc);
 remote updating function string 200 SendPaymentSMS(record ORVc);	//Edit----------------------Dima  14.12.2015
+remote function string 255 LookUpPromotionCode(date,string); //Edit***************************Sasha2,15:31 24.01.2017
 
 global
 function LongInt ORVcRecordDefaultsClient(LongInt wn,var record ORVc ORr,record ORVc OR2r,LongInt long3,LongInt long4)
@@ -15,6 +16,7 @@ begin
   BlockLoad(LMb);  
   if (blank(ORr.Location)) then begin
     ORr.Location = LMb.DefLocation;
+    ORr.PromotionCode = LookUpPromotionCode(ORr.OrdDate,ORr.Location); //Edit***************************Sasha2,15:32 24.01.2017
   end;
   ORr.BranchID = LMb.BranchID;
   ORr.Objects = AddBranchObjectToObjectList(LMb.BranchID,ORr.Objects);

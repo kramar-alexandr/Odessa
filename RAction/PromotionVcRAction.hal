@@ -1,0 +1,153 @@
+external procedure ExtractObj(string,var Integer,var string);
+
+
+global
+function LongInt PromotionVcRecordDefaults(var record PromotionVc Promotionr,record PromotionVc Promotion2r,LongInt stat,LongInt long4)
+BEGIN
+  LongInt res;
+  string 255 tstr;
+    
+    Promotionr.DocDate = CurrentDate;
+  
+  PromotionVcRecordDefaults = res; 
+  RETURN;
+END;
+
+global
+function LongInt PromotionVcRecordDuplicate(var record PromotionVc Promotionr,record PromotionVc Promotion2r,LongInt stat,LongInt long4)
+BEGIN
+  LongInt res;
+  string 255 tstr;
+
+  Promotionr.Code = ""; 
+  Promotionr.DocDate = CurrentDate;
+  
+  PromotionVcRecordDuplicate = res; 
+  RETURN;
+END;
+
+
+global
+function LongInt PromotionVcRecordRemoveTest(var record PromotionVc Promotionr,record PromotionVc Promotion2r,LongInt long3,LongInt long4)
+BEGIN
+  LongInt res;
+
+  res = 1;
+  /*if (NonBlank(Promotionr.Description)) then begin
+    if (long3>0) then begin
+      MessageBox(1560,"");
+    end;
+    res = 0;
+    goto LPromotionVcRecordRemoveTest;
+  end;*/
+ 
+LPromotionVcRecordRemoveTest:;
+  PromotionVcRecordRemoveTest = res; 
+  RETURN;
+END;
+
+global
+updating function LongInt PromotionVcRecordSave(var record PromotionVc Promotionr,record PromotionVc Promotion2r,LongInt stat,LongInt long4)
+BEGIN
+  LongInt res;
+
+  PromotionVcRecordSave = res;
+  RETURN;
+END;
+
+global
+updating function LongInt PromotionVcRecordSaveAfter(var record PromotionVc Promotionr,record PromotionVc Promotion2r,LongInt stat,LongInt long4)
+BEGIN
+  LongInt res;
+
+  PromotionVcRecordSaveAfter = res;
+  RETURN;
+END;
+
+global
+updating function LongInt PromotionVcRecordUpdateAfter(var record PromotionVc Promotionr,record PromotionVc Promotion2r,LongInt stat,LongInt long4)
+BEGIN
+  LongInt res;
+
+  PromotionVcRecordUpdateAfter = res;
+  RETURN;
+END;
+
+
+global
+updating function LongInt PromotionVcRecordUpdate(var record PromotionVc Promotionr,record PromotionVc Promotion2r,LongInt stat,LongInt long4)
+BEGIN
+  LongInt res;
+
+  PromotionVcRecordUpdate = res;
+  RETURN;
+END;
+
+
+global
+function LongInt PromotionVcRecordCheck(var record PromotionVc Promotionr,record PromotionVc Promotion2r,LongInt stat,LongInt long4)
+BEGIN
+  LongInt res;
+  Integer insertmode,updatemode,pos;
+  record PromotionVc lPromotionr;
+  record ObjVc Objr;
+  string 100 tstr;
+
+  res = 0;     
+  insertmode = 1;
+  updatemode = 2;
+
+  if (blank(Promotionr.Code)) then begin
+    RecordCheckError(1854,Promotionr.Code,-1,"Code");      
+    res = -1; 
+    goto LPromotionVcRecordCheck;
+  end;
+  
+  if (blank(Promotionr.Description)) then begin
+    RecordCheckError(1854,Promotionr.Description,-1,"Description");      
+    res = -1; 
+    goto LPromotionVcRecordCheck;
+  end;
+  
+  if (blankdate(Promotionr.DocDate)) then begin
+    RecordCheckError(1854,Promotionr.DocDate,-1,"DocDate");      
+    res = -1; 
+    goto LPromotionVcRecordCheck;
+  end;
+  
+  if (blankdate(Promotionr.PromStrDate)) then begin
+    RecordCheckError(1854,Promotionr.PromStrDate,-1,"PromStrDate");      
+    res = -1; 
+    goto LPromotionVcRecordCheck;
+  end;
+  
+  if (blankdate(Promotionr.PromEndDate)) then begin
+    RecordCheckError(1854,Promotionr.PromEndDate,-1,"PromEndDate");      
+    res = -1; 
+    goto LPromotionVcRecordCheck;
+  end;
+  
+  if (blank(Promotionr.Objects)) then begin
+    RecordCheckError(1854,Promotionr.Objects,-1,"Objects");      
+    res = -1; 
+    goto LPromotionVcRecordCheck;
+  end else begin
+    pos = 0;
+    ExtractObj(Promotionr.Objects,pos,tstr);
+    while (nonblank(tstr)) begin
+      Objr.Code = tstr;
+      if (ReadFirstMain(Objr,1,true)==false) then begin
+        RecordCheckError(9588,Promotionr.Objects,-1,"Objects");      
+        res = -1; 
+        goto LPromotionVcRecordCheck;
+      end;
+      ExtractObj(Promotionr.Objects,pos,tstr);
+    end;
+  end;
+  
+LPromotionVcRecordCheck:;
+
+  PromotionVcRecordCheck = res;
+  RETURN;
+END;
+

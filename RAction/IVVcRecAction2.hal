@@ -100,8 +100,64 @@ external procedure Recalculate_CustomStatusFlagText(var record ORVc);	//Edit----
 external updating procedure UnOk_IVVc(var record IVVc);//Edit----------------------Dima  30.11.2015
 external updating procedure UpdateSalesData(record IVVc);	//Edit----------------------Dima  10.03.2016
 external procedure SetNewORCustomStatusFlagOnWeb(record ORVc);// Edit ************************** Friday, 18 November 2016 09:45:15
+external procedure NoDupObjs(string,var string); //Edit***************************Sasha2,16:04 24.01.2017
 
-
+global //Edit***************************Sasha2,9:51 25.01.2017 {
+procedure HandlePromotionObjectsIV(var record IVVc IVp,record IVVc IV2p,LongInt mode)
+begin
+  record PromotionVc Promotionr;
+  string 255 tstr,objStr;
+  integer pos;
+    
+    if (mode==Rs_insert) then begin
+      if (NonBlank(IVp.PromotionCode)) then begin
+        Promotionr.Code = IVp.PromotionCode;
+        if (ReadFirstMain(Promotionr,1,true) and NonBlank(Promotionr.Objects)) then begin
+          if (Blank(IVp.Objects)) then begin
+            IVp.Objects = Promotionr.Objects;
+          end else begin
+            IVp.Objects = IVp.Objects & "," & Promotionr.Objects;
+          end;
+        end;
+      end;
+    end;
+    if (mode==Rs_update) then begin
+      if (IVp.PromotionCode!=IV2p.PromotionCode) then begin
+        if (NonBlank(IV2p.PromotionCode)) then begin
+          Promotionr.Code = IV2p.PromotionCode;
+          if (ReadFirstMain(Promotionr,1,true) and NonBlank(Promotionr.Objects)) then begin
+            NoDupObjs(IV2p.Objects & "," & IVp.Objects,tstr);
+            IV2p.Objects = tstr;
+            pos = 0;
+            objStr = "";
+            ExtractObj(IV2p.Objects,pos,tstr);
+            while (nonblank(tstr)) begin
+              if (SetInSet(tstr,Promotionr.Objects)==false) then begin
+                objStr = objStr & tstr & ",";
+              end;
+              ExtractObj(IV2p.Objects,pos,tstr);
+            end;
+            if (NonBlank(objStr)) then begin
+              objStr = Left(objStr,len(objStr)-1);
+              IVp.Objects = objStr;
+            end;
+          end;
+        end;
+        if (NonBlank(IVp.PromotionCode)) then begin
+          Promotionr.Code = IVp.PromotionCode;
+          if (ReadFirstMain(Promotionr,1,true) and NonBlank(Promotionr.Objects)) then begin
+            if (Blank(IVp.Objects)) then begin
+              IVp.Objects = Promotionr.Objects;
+            end else begin
+              IVp.Objects = IVp.Objects & "," & Promotionr.Objects;
+            end;
+          end;
+        end;
+      end;
+    end;
+    
+  return;
+end; //Edit***************************Sasha2,9:51 25.01.2017 }
 
 global updating procedure CloseRebVaucher(longint vauchernr,longint ivsernr)
 begin
@@ -407,6 +463,7 @@ BEGIN
   record EInvoiceBlock EIb;
   row LegalInvNrBlock LINrbrw;
 
+  HandlePromotionObjectsIV(IVr,IV2r,1); //Edit***************************Sasha2,9:57 25.01.2017
   SetIVAcceptanceFlag(IVr,IV2r,stat);
   IVr.DiscSum = blankval;
   IVr.DiscPerc = blankval;
@@ -914,6 +971,7 @@ BEGIN
   record EInvCUVc EInvCUr;
 
   
+  HandlePromotionObjectsIV(IVr,IV2r,2); //Edit***************************Sasha2,9:57 25.01.2017
   SetIVAcceptanceFlag(IVr,IV2r,stat);
   SetFinRef(IVr);
   ihef = ItemHistExists("IVVc",IVr.SerNr);  

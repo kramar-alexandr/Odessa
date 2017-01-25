@@ -3415,3 +3415,29 @@ begin
 	
 return;
 end;
+
+global //Edit***************************Sasha2,15:15 24.01.2017 {
+function string 255 LookUpPromotionCode(date forDate,string location)
+begin
+  string 255 promCode;
+  record PromotionVc Promotionr;
+  Boolean TrHs,testf;
+  
+    if (NonBlankDate(forDate)) then begin
+      Promotionr.PromStrDate = forDate;
+      TrHs = true;
+      while (LoopBackKey("PromStrDate",Promotionr,1,TrHs)) begin
+        testf = true;
+        if (Promotionr.PromStrDate>forDate) then begin TrHs = false; testf = false; end;
+        if (Promotionr.PromEndDate<forDate) then begin testf = false; end;
+        if (NonBlank(Promotionr.Locations) and SetInSet(location,Promotionr.Locations)==false) then begin testf = false; end;
+        if (testf and Promotionr.PromStrDate<=forDate and Promotionr.PromEndDate>=forDate) then begin
+          promCode = Promotionr.Code;
+          TrHs = false;
+        end;
+      end;
+    end;
+  
+  LookUpPromotionCode = promCode;
+  return;
+end; //Edit***************************Sasha2,15:15 24.01.2017 }

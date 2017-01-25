@@ -38,6 +38,7 @@ external procedure CalcSum(val,val,val,val,var val,Integer);
 external procedure FindUserMailboxName(string,var string,var string);
 external function Boolean FindCustomerRelation(string,string,var record CUVc);
 external procedure GetPayDealText(string,string,var string);
+remote function string 255 LookUpPromotionCode(date,string); //Edit***************************Sasha2,15:31 24.01.2017
 
 function val FEIVQuantFract(LongInt curfeivnr,LongInt ordernr,LongInt ivsernr,Integer rownr)
 BEGIN
@@ -1438,6 +1439,7 @@ begin
   BlockLoad(CashierDefb);
   
   if (rownr<0) then begin
+    IVr.PromotionCode = LookUpPromotionCode(IVr.InvDate,IVr.Location); //Edit***************************Sasha2,11:31 25.01.2017
     rwcnt = MatRowCnt(IVr);
     for (i=0;i<rwcnt;i=i+1) begin
       MatRowGet(IVr,i,IVrw);

@@ -8,7 +8,7 @@ remote function Boolean PasteCust2InInv(var record IVVc,record LocalMachineBlock
 external function LongInt DateDiff(Date,Date);
 external procedure FindUserMailboxName(string,var string,var string);
 external function Boolean TouchScreenLook();
-
+remote function string 255 LookUpPromotionCode(date,string); //Edit***************************Sasha2,15:31 24.01.2017
 
 function Integer CheckStockSettings()
 begin
@@ -750,6 +750,7 @@ begin
   BlockLoad(LMb);  
   if (blank(IVr.Location)) then begin
     IVr.Location = LMb.DefLocation;
+    IVr.PromotionCode = LookUpPromotionCode(IVr.InvDate,IVr.Location); //Edit***************************Sasha2,15:32 24.01.2017
   end;
   IVr.BranchID = LMb.BranchID;
   IVr.Objects = AddBranchObjectToObjectList(LMb.BranchID,IVr.Objects);

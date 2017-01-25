@@ -3065,3 +3065,56 @@ WindowBegin("MagentoTestMn",MagentoTestVClass,CGMnt,RcType);
   EditField(100,6,100,"Ord. Nr.",Normal,f1,false,0);
   EndWindow;
 end;
+
+window PromotionDClass:1		//Edit----------------------Dima  27.08.2015
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+	real h,h2,h3,v,vs;
+  WindowBegin("Акция",PromotionDClass,CGview,-);
+  UseView(PromotionVc);
+  SetWRect(20,100,680,300);
+  h=90; h2 = 300; h3 = 500; v = 10; vs = 20;
+
+  EditField(h,v,200,"Код",Normal,Code,false,0);
+  EditField(h,v+=vs,100,"Дата док-та",Normal,DocDate,false,PasteCurDate);
+  v = v + vs;
+  EditField(h,v+=vs,450,"Описание",Normal,Description,false,0);
+  v = v + vs;
+  EditField(h,v+=vs,100,"Действует с",Normal,PromStrDate,false,PasteCurDate);
+  EditField(h2,v,100,"Действует до",Normal,PromEndDate,false,PasteCurDate);
+  EditField(h,v+=vs,100,"Склады",Normal,Locations,false,LocationSClass);
+  EditField(h2,v,100,"Объекты",Normal,Objects,false,ObjSClass);
+
+  EndWindow;
+end;
+
+window PromotionLClass:1 //Edit***************************Sasha2,17:03 23.11.2016
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  Integer pos;
+  WindowBegin("Акции",PromotionLClass,CGmlist,-);
+  SpawnClass(PromotionDClass);
+  SetWRect(20,80,800,500);
+  Sizeable(-1,-1,0,0);
+  UseView(PromotionVc);
+  RecordList(4,17,-21,-39);
+  RlColKey(pos=4,pos,"Код",Code,false,Code);
+  RlColKey(pos+=150,pos,"С даты",PromStrDate,false,PromStrDate);
+  RlCol(pos+=80,pos,"По дату",PromEndDate,false);
+  RlCol(pos+=80,pos,"Описание",Description,false);
+  RlCol(-100,-100,"Склады",Locations,false);
+
+  SearchField("Найти");
+  EndWindow;
+end;
+
+window PromotionSClass:1
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer,iPad")
+begin
+  WindowBegin("Выберите код акции",PromotionSClass,CGother,HBlRecType);
+  SetWRect(240,80,640,298);
+  Sizeable(-1,-1,-1,0);
+  StringList(9,9,-23,-10);
+  SearchField("Найти");
+  EndWindow;
+end;

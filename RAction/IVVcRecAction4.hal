@@ -46,6 +46,7 @@ external function Boolean CustomerCountryCodeIsISO(string);
 external function Boolean InvoiceToEInvoiceQueueTest(Integer,string,string,var record EInvCUVc);
 external function Boolean ExistStockTrans(string,Date,var Integer,var string,string,LongInt,record MainStockBlock);
 remote function boolean ArgEInvoiceBeingSentRemote(longint,string,Boolean);
+external function string 255 LookUpPromotionCode(date,string); //Edit***************************Sasha2,15:31 24.01.2017
 
 function string 10 GetIVCostAcc(record INVc INr,string vecode)//it is for automatic creation on Goods Receipt from Invoice, it must Credit Cost Account according to current settings
 BEGIN
@@ -1331,6 +1332,8 @@ begin
 			IVr.Position = Locr.DefaultCashierPosCode;
 		end;
 	end;  
+	IVr.PromotionCode = LookUpPromotionCode(IVr.InvDate,IVr.Location); //Edit***************************Sasha2,15:32 24.01.2017
+	
   IVVcRecordDefaults = res;  
   RETURN;
 END;

@@ -1254,6 +1254,7 @@ BEGIN
   if (ORr.Closed!=0) then begin						//Edit---------------------------------Dima  27.03.2015
     switch (fieldname) begin
       case "CustomStatusFlag": ;
+      case "PromotionCode": ;
       otherwise
         res = false;
         goto LORDClassActiveEditField;
@@ -1270,6 +1271,7 @@ BEGIN
       if (ORr.OKFlag!=0) then begin
         switch (fieldname) begin
           case "LangCode": ;
+          case "PromotionCode": ;
           otherwise
             res = false;
             goto LORDClassActiveEditField;
@@ -1354,12 +1356,14 @@ BEGIN
       end else begin
         if (UserCanAction("ChangeORItemSpec",true)==false) then begin res = false; end;
       end;
+    case "PromotionCode": res = true;
   end;
   if (ORShipdTest(ORr)==false) then begin goto LORDClassActiveEditField; end;
   if (wnst==Rs_update) then begin
     if (OR2r.OKFlag!=0) then begin
       switch (fieldname) begin
         case "PlanShip": res = true;
+        case "PromotionCode": res = true;
         otherwise res = false;
       end;
       if (rownr>=0) then begin
@@ -1386,7 +1390,7 @@ BEGIN
       end;
     end;
   end;
-  
+   
   if (res == true and fieldname=="ProcessingQuant" and Logisticsb.AllowChangeFields==0) then begin
   	res = false;
   end;

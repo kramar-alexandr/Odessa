@@ -709,6 +709,7 @@ BEGIN
         case "BankCode": res = true;
         case "Status": res = true;
         case "MachineName": res = true;
+        case "PromotionCode": res = true;
       end;
     end else begin
       GetWindowRecord(wn,IVr);
