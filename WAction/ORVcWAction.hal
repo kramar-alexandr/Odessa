@@ -2351,6 +2351,7 @@ begin
   record SMSTextBlock SMSb;
   val tempVal,tempsum,commission,tempCommission;
   roundmode rmde;
+  val comm0;
   
   BlockLoad(SMSb);	
 	
@@ -2369,6 +2370,7 @@ begin
 	end;	
 	
 	//Sum
+	comm0 = SMSb.Commission0/100+1;
 	rmde = SetRoundMode(0,kRoundingDirectionToFromPosInf,kRoundingModeTruncate,kRoundingStepNone);
 	tempsum = ORr.Sum4 - ORr.Advance;
 	tempsum = round(tempsum,rmde);
@@ -2377,8 +2379,8 @@ begin
 		tempsum = tempsum +1;
 	end;	
 	
-	tempVal = Round(tempsum * 1.005,rmde);
-	if (tempVal<tempsum * 1.005) then begin
+	tempVal = Round(tempsum * comm0,rmde);
+	if (tempVal<tempsum * comm0) then begin
 		tempVal = tempVal +1;
 	end;
 	IntVal = tempVal; //cut zero after coma

@@ -2251,6 +2251,7 @@ begin
   EditField(h,v+=vs,150,"Заголовок",Normal,Title1,false,0);
   EditField(h,v+=vs,360,"Текст",Normal,Requisites,false,0);
   EditField(h,v+=vs,150,"Реквизиты (по-умолчанию)",Normal,DefaultCard,false,0);
+  EditField(h,v+=30,80,"Базовая Комиссия (%)",Normal,Commission0,false,0);
   EditField(h,v+=30,80,"Комиссия (%)",Normal,Commission,false,0);
   EditField(h,v+=vs,80,"Минимальная комиссия (грн)",Normal,CommissionMin,false,0);
 

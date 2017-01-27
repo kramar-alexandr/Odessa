@@ -19,7 +19,7 @@ global
 procedure RhistvcExportMn()		//Edit----------------------Dima  30.05.2016
 BEGIN
 	record RHistVc RHistr;
-	boolean TrHs;
+	boolean TrHs,jump;
   string 50 fileName;
   integer fileCode;
   longint bytePos;
@@ -40,13 +40,38 @@ BEGIN
   RHistr.SerNr = 0;
   count = 0;
   
+	jump = true;
+  
   TrHs = true;
   SetAreaZeroSize(fileArea);
-  //RHistr.SerNr=1981208;
+  lNewDiapazon:;
+  //RHistr.SerNr=843890;
   while (LoopMain(RHistr,1,TrHs)) begin
-  	/*if(RHistr.SerNr>=1981224)then begin
+  	//LogText(0,RHistr.SerNr );
+  	
+  	count = count + 1;
+		if (count>10) then begin
+			count = 0;
+			logtext(0,RHistr.SerNr);
+		end;
+  	/*if(RHistr.SerNr>=843735 and RHistr.SerNr<843890)then begin
+			RHistr.SerNr=843890;
+			resetloop(RHistr);
+			jump = false;
+			goto lNewDiapazon;
   		TrHs = false;
   	end;*/
+  	
+  	
+  	if(RHistr.SerNr>=171030 and RHistr.SerNr<171180)then begin
+			RHistr.SerNr=171180;
+			resetloop(RHistr);
+			jump = false;
+			goto lNewDiapazon;
+  		TrHs = false;
+  	end;
+  	
+  	
   	
   	SetAreaZeroSize(recordArea);	
   	SetAreaZeroSize(blobArea);	
@@ -57,7 +82,9 @@ BEGIN
     GetRecordBlob(RHistr,"Math",blobArea);
     blobAreaSize = GetAreaLength(blobArea); 
     
-    if(blobAreaSize>0 and RHistr.SerNr!=1981219)then begin
+    
+    
+    if(blobAreaSize>0/* and (RHistr.SerNr<843735 or RHistr.SerNr>843745)*/)then begin
     	reccount = reccount + 1;
     
 			AddLongToArea(rhistAreaSize,fileArea);
@@ -72,7 +99,7 @@ BEGIN
 				
 			bytePos = bytePos + blobAreaSize + 2;
 
-			if (bytePos>50000000) then begin
+			if (bytePos>200000000) then begin
 					LogText(0,GetAreaLength(fileArea) & " area before writing");
 					createfile("RHistData/new/" & fileName & fileCode & ".txt");
 					closefile;
@@ -97,7 +124,7 @@ BEGIN
 		end;	
   end; 
   
-  if (bytePos<=50000000 and bytePos>0) then begin
+  if (bytePos<=200000000 and bytePos>0) then begin
   	WriteAreaToFile(fileArea,"RHistData/new/" & fileName & fileCode & ".txt",0);
   	LogText(0,"File  " & fileName & fileCode & ".txt  was written" );
   	LogText(0,"last record hist  " & RHistr.SerNr);
@@ -250,6 +277,7 @@ begin
 	TrHs = true;
 	while(loopmain(RH,1,TrHs))begin
 		if (TrHs) then begin
+			Logtext(0,RH.SerNr);
 			RecordDelete(RH);
     		StepBack(RH);
 		end;
