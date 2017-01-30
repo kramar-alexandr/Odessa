@@ -2292,6 +2292,14 @@ begin
   if (error>0 or res>0) then begin
     LogText(error,"");
     LogText(res,"");
+  end else begin
+  	if(IVr.SerNr>-1)then begin
+  		if(ORr.AutoCreation>0)then begin// Edit ************************** Monday, 23 January 2017 16:04:57
+				RecordCopy(oldIVr,IVr);
+				IVr.FiscalFlag = 1;
+				if (RecordUpdate(oldIVr,IVr,true) != 0) then begin end;
+			end;
+  	end;
   end;
   if (ORr.NPPaymentType==1 and IVr.OKFlag==0) then begin	// set OK if not prepayment
 		RecordCopy(oldIVr,IVr);

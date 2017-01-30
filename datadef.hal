@@ -4897,8 +4897,8 @@ RecordBegin(IPVc,-,"");
   KeySegment(Code);
   EndRecord; //Edit***************************Sasha2,17:19 23.01.2017}
   
-  /* FOR RECOVER ONLY!!!
-  RecordBegin(RHistVc,RHistView,"");
+  // FOR RECOVER ONLY!!!
+  /*RecordBegin(RHistVc,RHistView,"");
   ImpExpLevel(0);
   RegisterForAllCompanies(false);
   RecordField(SerNr,M4Long,0,0,);
