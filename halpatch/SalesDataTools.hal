@@ -2,7 +2,7 @@ external function val MulRateToBase1(var string,val,val,val,val,val,val,roundmod
 external function val AbsoluteVal(val);
 external procedure ExtractObj(string,var Integer,var string);
 external function Boolean FindSubString(string,string);	//Edit----------------------Dima  17.09.2015
-
+external procedure NoDupObjs(string,var string); //Edit***************************Sasha2,12:14 13.02.2017
 
 //Функция собирает данные для SalesDataVc из регистров IVVc,SHVc,PLVc, INvc
 //Расчет себестоимости - копия из старого отчета по продажам SalesRn
@@ -25,6 +25,7 @@ begin
   date komitentStart; 
   array record SHVc SHarray;
   record ORVc ORr;
+  string 255 tstr;
 	
 	if(IVr.OKFlag==1)then begin
 
@@ -136,6 +137,10 @@ begin
 				SalesData.CustCat = IVr.CustCat;// Edit ************************** Tuesday, 6 September 2016 09:26:45
 				SalesData.Kassir = IVr.Kassir;// Edit ************************** Wednesday, 30 November 2016 14:30:39
 				SalesData.BirthDayVaucher = IVr.BirthDayVaucher;// Edit ************************** Monday, 12 December 2016 14:41:28
+				NoDupObjs(IVr.Objects & "," & IVrw.Objects,tstr); //Edit***************************Sasha2,12:16 13.02.2017
+				if (NonBlank(tstr)) then begin
+				  SalesData.Objects = tstr; //Edit***************************Sasha2,12:17 13.02.2017
+				end;
 				
 				switch(IVrw.stp) begin 
 					case kInvoiceRowTypeNormal:
@@ -616,3 +621,67 @@ begin
 	
 return
 end;
+
+global //Edit***************************Sasha2,14:49 12.12.2016 {
+updating procedure UpdBDVaucherInSalesDataMn(record RcVc RepSpec)
+begin
+	record SalesDataVc SalesData;
+	record IVVc IVr;
+	Boolean TrHs,testf;
+	date strDate,endDate;
+	
+	 endDate = CurrentDate;
+	 strDate = AddDay(endDate,-21);
+	 
+	 TrHs=true;
+	 SalesData.InvDate = endDate; 
+	 while (LoopbackKey("DateCode",SalesData,1,TrHs)) begin
+	   testf = true;
+	   if (SalesData.InvDate>endDate) then begin testf = false; end;
+	   if (SalesData.InvDate<strDate) then begin testf = false; TrHs = false; end;
+	   if (testf) then begin
+	     IVr.SerNr = SalesData.InvNr;
+	     if (ReadFirstMain(IVr,1,true)) then begin
+	       if (IVr.BirthDayVaucher>-1) then begin
+	         SalesData.BirthDayVaucher = -1;
+	         if (IVr.BirthDayVaucher<=999999) then begin
+	           SalesData.BirthDayVaucher = IVr.BirthDayVaucher;
+	         end;
+	         RECORDSTORE(SalesData,true);
+	       end;
+	     end;
+	   end;
+	 end;
+	
+	
+return;
+end; //Edit***************************Sasha2,14:49 12.12.2016 }
+
+global //Edit***************************Sasha2,13:10 13.02.2017 {
+updating procedure UpdObjectsInSalesDataMn(record RcVc RepSpec)
+begin
+	record SalesDataVc SalesData,oldSalesData;
+	record IVVc IVr;
+	row IVVc IVrw;
+	string 255 tstr;
+	LongInt curIVSerNr;
+	 
+	 SalesData.InvNr = -1; 
+	 while (LoopMain(SalesData,1,true)) begin
+	   if (curIVSerNr!=SalesData.InvNr) then begin
+	     IVr.SerNr = SalesData.InvNr;
+	     ReadFirstMain(IVr,1,true);
+	     curIVSerNr = SalesData.InvNr;
+	   end;
+	   MatRowGet(IVr,SalesData.RowNr,IVrw);
+	   NoDupObjs(IVr.Objects & "," & IVrw.Objects,tstr);
+	   if (SalesData.Objects!=tstr) then begin
+  	   SalesData.Objects = tstr;
+       RECORDSTORE(SalesData,true); 
+	   end;
+         
+	 end;
+	
+	
+return;
+end; //Edit***************************Sasha2,13:10 13.02.2017 }

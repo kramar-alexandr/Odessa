@@ -3333,43 +3333,6 @@ begin
 return;
 end;
 
-
-global //Edit***************************Sasha2,14:49 12.12.2016 {
-updating procedure UpdateSalesDataMn(record RcVc RepSpec)
-begin
-	record SalesDataVc SalesData;
-	record IVVc IVr;
-	Boolean TrHs,testf;
-	date strDate,endDate;
-	
-	 endDate = CurrentDate;
-	 strDate = AddDay(endDate,-21);
-	 
-	 TrHs=true;
-	 SalesData.InvDate = endDate; 
-	 while (LoopbackKey("DateCode",SalesData,1,TrHs)) begin
-	   testf = true;
-	   if (SalesData.InvDate>endDate) then begin testf = false; end;
-	   if (SalesData.InvDate<strDate) then begin testf = false; TrHs = false; end;
-	   if (testf) then begin
-	     IVr.SerNr = SalesData.InvNr;
-	     if (ReadFirstMain(IVr,1,true)) then begin
-	       if (IVr.BirthDayVaucher>-1) then begin
-	         SalesData.BirthDayVaucher = -1;
-	         if (IVr.BirthDayVaucher<=999999) then begin
-	           SalesData.BirthDayVaucher = IVr.BirthDayVaucher;
-	         end;
-	         RECORDSTORE(SalesData,true);
-	       end;
-	     end;
-	   end;
-	 end;
-	
-	
-return;
-end; //Edit***************************Sasha2,14:49 12.12.2016 }
-
-
 global updating procedure StockMovErrormn()
 begin
 	record ItemHistVc IHr;

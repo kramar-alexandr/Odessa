@@ -663,6 +663,7 @@ begin
   EditFieldTL(h,v+=vs,150,"Склад",M4UStr,Normal,41,f3,false,LocationSClass);
   EditFieldTL(h,v+=vs,150,"Продавец",M4UStr,Normal,41,f4,false,UserSClass);
   EditFieldTL(h,v+=vs,150,"Категория кл.",M4UStr,Normal,41,f9,false,CCatSClass);// Edit ************************** Thursday, 3 November 2016 14:58:40
+  EditFieldTL(h,v+=vs,150,"Объект",M4UStr,Normal,41,f10,false,ObjSClass); //Edit***************************Sasha2,13:27 13.02.2017
   EditFieldTL(h,v+=vs,70,"Время",M4Str,Normal,41,f5,true,0);
   EditFieldTL(h+90,v,70,":",M4Str,Normal,41,f6,false,0);
 	ButtonFrame(h,v+=40,140,2,"Тип отчета");
