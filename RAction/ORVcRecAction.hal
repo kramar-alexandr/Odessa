@@ -2284,7 +2284,7 @@ begin
 	record SHVc SHr;
 
 	RecordNew(IVr);
-	if(ORr.AutoCreation>0)then begin// Edit ************************** Monday, 23 January 2017 16:04:57
+	if(ORr.AutoCreation>0 and ORr.NPPaymentType==0)then begin// Edit ************************** Monday, 23 January 2017 16:04:57
 		IVr.FiscalFlag = 1;
 	end;
 	res = RecordAction_raPasteOrdInInv(IVr,ORr.SerNr,true,error);
@@ -2294,7 +2294,7 @@ begin
     LogText(res,"");
   end else begin
   	if(IVr.SerNr>-1)then begin
-  		if(ORr.AutoCreation>0)then begin// Edit ************************** Monday, 23 January 2017 16:04:57
+  		if(ORr.AutoCreation>0 and ORr.NPPaymentType==0)then begin// Edit ************************** Monday, 23 January 2017 16:04:57
 				RecordCopy(oldIVr,IVr);
 				IVr.FiscalFlag = 1;
 				if (RecordUpdate(oldIVr,IVr,true) != 0) then begin end;

@@ -1380,6 +1380,9 @@ L20PasteOrdInInv:;
   if (fiscalf) then begin
     IVp.FiscalFlag = CUr.FiscalFlag;
   end;  
+  if(ORp.NPPaymentType==0 and ORp.OrderClass=="WEB")then begin// Edit ************************** Wednesday, 8 February 2017 12:24:41
+  	IVp.FiscalFlag = 1;
+  end;
   if (CUr.OnHoldFlag!=0) then begin goto LPasteOrdInInv; end;
   if (CUr.blockedFlag!=0) then begin goto LPasteOrdInInv; end;
   if (blank(IVp.VATNr)) then begin IVp.VATNr = CUr.VATNr; end;
