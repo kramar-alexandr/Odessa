@@ -25,6 +25,7 @@ external procedure QTSumup(var record QTVc);
 external procedure NextOfficialSerNr(string,LongInt,Date,string,var string);
 external function string 50 NextLegalSerNr(string,LongInt,Date,string,string,string);
 external procedure IVVc_PasteRebCode(var record IVVc); //Edit--------------------Dima 29.01.2015
+external procedure GetLocationReb(record INVc,string,val,var val,record RebVc,Integer,var val,var Boolean);// Edit ************************** Tuesday, 14 February 2017 13:01:05
 
 function string 255 GetInvoiceFormCode(record IVVc IVr)
 begin
@@ -674,7 +675,9 @@ BEGIN
     case 9: rebvp = Rebrw.vra9;
   end;
   RETURN;
-END;    
+END;
+
+
 
 procedure RecalcInvoiceRows(record IVVc IVp,string itcode,val rebvp,Integer UseDiscount,
                             Array Integer aCodeType,Array string aITCode,Array string aStaffCode,
@@ -718,6 +721,8 @@ BEGIN
   string 20 ITCode;
   string 20 StaffCode;
   val vra0,vra1,vra2,vra3;
+  record INVc INr;// Edit ************************** Tuesday, 14 February 2017 13:05:01
+  boolean tr;
   
   BlockLoad(GenOptr);
   rwcnt = MatRowCnt(Rebp);
@@ -728,14 +733,16 @@ BEGIN
         FindITHandleRow(Rebrw.ITCode,aCodeType,aITCode,aStaffCode,avra0,avra1,avra2,avra3,acnt,
                                      CodeType,ITCode,StaffCode,vra0,vra1,vra2,vra3);    
         if (ITCode==Rebrw.ITCode) then begin
-          GetStaffRebate(Rebrw.StaffCode,vra0,vra1,vra2,vra3,Rebrw,rebv);
+          //GetStaffRebate(Rebrw.StaffCode,vra0,vra1,vra2,vra3,Rebrw,rebv);// Edit ************************** Tuesday, 14 February 2017 13:01:29
+          GetLocationReb(INr,IVp.Location,vra0,vra1,Rebp,i,rebv,tr);
           RecalcInvoiceRows(IVp,ITCode,rebv,GenOptr.UseDiscount,aCodeType,aITCode,aStaffCode,avra0,avra1,avra2,avra3,acnt);
         end;
       case 1:
         FindITHandleRow(Rebrw.ITCode,aCodeType,aITCode,aStaffCode,avra0,avra1,avra2,avra3,acnt,
                                      CodeType,ITCode,StaffCode,vra0,vra1,vra2,vra3);    
         if (ITCode==Rebrw.ITCode) then begin
-          GetStaffRebate(Rebrw.StaffCode,vra0,vra1,vra2,vra3,Rebrw,rebv);
+          //GetStaffRebate(Rebrw.StaffCode,vra0,vra1,vra2,vra3,Rebrw,rebv);// Edit ************************** Tuesday, 14 February 2017 12:58:35
+					GetLocationReb(INr,IVp.Location,vra0,vra1,Rebp,i,rebv,tr);
           RecalcInvoiceRows(IVp,ITCode,rebv,GenOptr.UseDiscount,aCodeType,aITCode,aStaffCode,avra0,avra1,avra2,avra3,acnt);
         end;
     end;  
@@ -833,6 +840,8 @@ BEGIN
   string 20 ITCode;
   string 20 StaffCode;
   val vra0,vra1,vra2,vra3;
+  record INVc INr;// Edit ************************** Tuesday, 14 February 2017 13:05:01
+  boolean tr;
   
   BlockLoad(GenOptr);
   rwcnt = MatRowCnt(Rebp);
@@ -843,14 +852,16 @@ BEGIN
         FindITHandleRow(Rebrw.ITCode,aCodeType,aITCode,aStaffCode,avra0,avra1,avra2,avra3,acnt,
                                      CodeType,ITCode,StaffCode,vra0,vra1,vra2,vra3);    
         if (ITCode==Rebrw.ITCode) then begin
-          GetStaffRebate(Rebrw.StaffCode,vra0,vra1,vra2,vra3,Rebrw,rebv);
+          //GetStaffRebate(Rebrw.StaffCode,vra0,vra1,vra2,vra3,Rebrw,rebv);// Edit ************************** Tuesday, 14 February 2017 13:03:46
+          GetLocationReb(INr,ORp.Location,vra0,vra1,Rebp,i,rebv,tr);// Edit ************************** Tuesday, 14 February 2017 13:04:02
           RecalcOrderRows(ORp,ITCode,rebv,GenOptr.UseDiscount,aCodeType,aITCode,aStaffCode,avra0,avra1,avra2,avra3,acnt);
         end;
       case 1:
         FindITHandleRow(Rebrw.ITCode,aCodeType,aITCode,aStaffCode,avra0,avra1,avra2,avra3,acnt,
                         CodeType,ITCode,StaffCode,vra0,vra1,vra2,vra3);    
         if (ITCode==Rebrw.ITCode) then begin
-          GetStaffRebate(Rebrw.StaffCode,vra0,vra1,vra2,vra3,Rebrw,rebv);
+          //GetStaffRebate(Rebrw.StaffCode,vra0,vra1,vra2,vra3,Rebrw,rebv);// Edit ************************** Tuesday, 14 February 2017 13:03:53
+          GetLocationReb(INr,ORp.Location,vra0,vra1,Rebp,i,rebv,tr);// Edit ************************** Tuesday, 14 February 2017 13:03:57
           RecalcOrderRows(ORp,ITCode,rebv,GenOptr.UseDiscount,aCodeType,aITCode,aStaffCode,avra0,avra1,avra2,avra3,acnt);
         end;
     end;  

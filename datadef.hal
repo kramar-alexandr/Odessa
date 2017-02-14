@@ -4898,6 +4898,84 @@ RecordBegin(IPVc,-,"");
   KeySegment(Code);
   EndRecord; //Edit***************************Sasha2,17:19 23.01.2017}
   
+  RecordBegin(RebVc,-,"reb2");
+  NewAutosyncRegister(kSyncDirectionToClient,true);
+  RecordField(Code,M4Code,5,0);
+  RecordField(Comment,M4Str,60,0);
+  RecordField(StaffCode,M4Code,5,0);
+  RecordField(Math,M4Matrix,0,0);
+  RecordField(vra0,M41Val,0,0);
+  RecordField(vra1,M41Val,0,0);
+  RecordField(vra2,M41Val,0,0);
+  RecordField(vra3,M41Val,0,0);
+  RecordField(vra4,M41Val,0,0);
+  RecordField(vra5,M41Val,0,0);
+  RecordField(vra6,M41Val,0,0);
+  RecordField(vra7,M41Val,0,0);
+  RecordField(vra8,M41Val,0,0);
+  RecordField(vra9,M41Val,0,0);
+  RecordField(DiscAcc,M4Str,10,AccVc);
+  RecordField(DiscPerc,M4Qty,0,0);
+  RecordField(VATCode,M4Str,10,VATCodeBlock);
+  RecordField(FromDate,M4Date,0,0);
+  RecordField(ToDate,M4Date,0,0);
+  RecordField(Replaces,M4Code,5,RebVc);
+  RecordField(Loc1,M4Code,20,0);// Edit ************************** Tuesday, 14 February 2017 11:46:15
+  RecordField(Loc2,M4Code,20,0);// Edit ************************** Tuesday, 14 February 2017 11:46:17
+  RecordField(Loc3,M4Code,20,0);// Edit ************************** Tuesday, 14 February 2017 11:46:17
+  RecordField(Loc4,M4Code,20,0);// Edit ************************** Tuesday, 14 February 2017 11:46:17
+  RecordField(Loc5,M4Code,20,0);// Edit ************************** Tuesday, 14 February 2017 11:46:18
+  RecordField(Loc6,M4Code,20,0);// Edit ************************** Tuesday, 14 February 2017 11:46:18
+  RecordField(Loc7,M4Code,20,0);// Edit ************************** Tuesday, 14 February 2017 11:46:18
+  RecordField(Loc8,M4Code,20,0);// Edit ************************** Tuesday, 14 February 2017 11:46:19
+  RecordField(Loc9,M4Code,20,0);  // Edit ************************** Tuesday, 14 February 2017 11:46:20
+  RecordField(locvra1,M41Val,0,0);
+  RecordField(locvra2,M41Val,0,0);
+  RecordField(locvra3,M41Val,0,0);
+  RecordField(locvra4,M41Val,0,0);
+  RecordField(locvra5,M41Val,0,0);
+  RecordField(locvra6,M41Val,0,0);
+  RecordField(locvra7,M41Val,0,0);
+  RecordField(locvra8,M41Val,0,0);
+  RecordField(locvra9,M41Val,0,0);
+  ArrayBegin(Math,-,1);
+  ArrayField(ITCode,M4Code,20,ITVc);
+  ArrayField(StaffCode,M4Code,5,0);
+  ArrayField(vra0,M41Val,0,0);
+  ArrayField(vra1,M41Val,0,0);
+  ArrayField(vra2,M41Val,0,0);
+  ArrayField(vra3,M41Val,0,0);
+  ArrayField(vra4,M41Val,0,0);
+  ArrayField(vra5,M41Val,0,0);
+  ArrayField(vra6,M41Val,0,0);
+  ArrayField(vra7,M41Val,0,0);
+  ArrayField(vra8,M41Val,0,0);
+  ArrayField(vra9,M41Val,0,0);
+  ArrayField(CodeType,M4Set,14,0);
+  ArrayField(locvra1,M41Val,0,0);// Edit ************************** Tuesday, 14 February 2017 11:46:09
+  ArrayField(locvra2,M41Val,0,0);// Edit ************************** Tuesday, 14 February 2017 11:46:11
+  ArrayField(locvra3,M41Val,0,0);// Edit ************************** Tuesday, 14 February 2017 11:46:11
+  ArrayField(locvra4,M41Val,0,0);// Edit ************************** Tuesday, 14 February 2017 11:46:11
+  ArrayField(locvra5,M41Val,0,0);// Edit ************************** Tuesday, 14 February 2017 11:46:12
+  ArrayField(locvra6,M41Val,0,0);// Edit ************************** Tuesday, 14 February 2017 11:46:12
+  ArrayField(locvra7,M41Val,0,0);// Edit ************************** Tuesday, 14 February 2017 11:46:12
+  ArrayField(locvra8,M41Val,0,0);// Edit ************************** Tuesday, 14 February 2017 11:46:13
+  ArrayField(locvra9,M41Val,0,0);// Edit ************************** Tuesday, 14 February 2017 11:46:13
+  EndArray;
+  MainKeyBegin(Code,0);
+  KeySegment(Code);
+  KeySegment(FromDate);
+  KeyBegin(Replaces);
+  KeySegment(Replaces);
+  KeySegment(FromDate);
+  KeySegment(Code);
+  KeyBegin(ToDate);
+  KeySegment(Replaces);
+  KeySegment(ToDate);
+  KeySegment(Code);
+  KeySegment(FromDate);
+  EndRecord;
+  
   // FOR RECOVER ONLY!!!
   /*RecordBegin(RHistVc,RHistView,"");
   ImpExpLevel(0);
