@@ -396,7 +396,8 @@ begin
 	Import("Импорт email to cu",INImportIClass,UpdateCUEmailsIn,modDBMain);// Edit ************************** Tuesday, 26 May 2015 16:49:15
 	Import("Восстановление истории цен из экспорта",ImportDefaultIClass,RestorePLHistIn,modDBMain);//Edit----------------------Dima  11.02.2016
 	Import("Изменить наименования классификаций",ChangeClassificationNameIClass,ChangeClassificationNameIn,modSL); //Edit***************************Sasha2,15:00 25.05.2016
-
+  Import("Обновить клиентов",UpdateCUImportIClass,UpdateCUImportIn,modSL); //Edit***************************Sasha2,14:54 15.02.2017
+  
 	Export("ExxportIN",CashInvCroEClass,ExpRegINEn,modDBMain);
 	Export("ExxportPLHist",UILogEClass,ExpRegPLHistEn,modDBMain);
 

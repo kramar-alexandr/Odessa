@@ -3213,3 +3213,52 @@ begin
 
   EndWindow;
 end;
+
+window UpdateCUImportIClass:1	//Edit***************************Sasha2,14:41 15.02.2017
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+real h,v,vs;
+Integer i;
+  WindowBegin("Обновление клиентов",UpdateCUImportIClass,CGIcW,-);
+  SetWRect(20,80,470,600);
+  i=1; //номер колонки
+  h=10;  v=15;
+  StaticText(h,v,"Формат импорта",false);
+  h=20;  v=40;
+  StaticText(h,v,"Список колонок:",false);
+  v=v+30; vs=25;
+  StaticText(h,v, 	i & ". Код клиента",false);
+	 StaticText(h+150,v,"Обязательное поле",false);
+	 i=i+1;
+  StaticText(h,v+=vs,i & ". Название клиента",false);
+	 StaticText(h+150,v,"Необязательное поле",false);
+	 i=i+1;
+  StaticText(h,v+=vs,i & ". Страна",false);
+	 StaticText(h+150,v,"Необязательное поле",false);
+	 i=i+1;
+  StaticText(h,v+=vs, i & ". Область",false);
+	 StaticText(h+150,v,"Необязательное поле",false);
+	 i=i+1;
+  StaticText(h,v+=vs,i & ". Город",false);
+	 StaticText(h+150,v,"Необязательное поле",false);
+	 i=i+1;
+  StaticText(h,v+=vs,i & ". Мобильный телефон",false);
+	 StaticText(h+150,v,"Необязательное поле",false);
+	 i=i+1;
+
+  StaticText(h,v+=vs,i & ". E-mail",false);
+	 StaticText(h+150,v,"Необязательное поле",false);
+	 i=i+1;
+  StaticText(h,v+=vs,i & ". Дата рождения",false);
+	 StaticText(h+150,v,"Необязательное поле в формате DD/MM/YYYY",false);
+	 i=i+1;
+
+  StaticText(h,v+=vs,i & ". Адрес1",false);
+	 StaticText(h+150,v,"Необязательное поле",false);
+	 i=i+1;
+
+  StaticText(h,v+=40,"Примечание:   Все столбцы разделены <Tab>",false);
+  StaticText(h+75,v+=15,"Первая строка файла: шапка или пустая строка",false);
+
+  EndWindow;
+end;
