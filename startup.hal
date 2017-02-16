@@ -273,7 +273,10 @@ begin
    SString(31153,"Ваучер не существует");  
    SString(31154,"Сессия кассира не открыта");  
    SString(31155,"Последняя покупка была совершена (дней назад)");  
-
+	
+	
+	
+	Maintenance("Проставить склад первой покупки клиента",MyVClass,FillFirstDateByeCUMn,modDBMain);
   Maintenance("Экспорт склада CSV",ExportStockCSVClass,ExportStockCSVMn,modSY);
   Maintenance("Копирование ежедневного бэкапа на FTP",ExportStockCSVClass,SenBackuptoFTP,modSY);
   Maintenance("Экспорт CSV для мобильного",MyVClass,ExportAllItems,modSY);	//Edit----------------------Dima  24.03.2015

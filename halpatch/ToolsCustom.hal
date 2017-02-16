@@ -3404,3 +3404,19 @@ begin
   LookUpPromotionCode = promCode;
   return;
 end; //Edit***************************Sasha2,15:15 24.01.2017 }
+
+global updating procedure FillFirstDateByeCUMn()
+begin 
+	record CUVc CUr;
+	record IVVc IVr;
+	
+	while(loopmain(CUr,1,true))begin
+		IVr.CustCode = CUr.Code;
+		if(readfirstkey("CustCode",IVr,1,true))then begin
+			CUr.FreightNr = IVr.Location;
+			recordstore(CUr,true);
+		end;
+	end;
+	
+return;
+end;

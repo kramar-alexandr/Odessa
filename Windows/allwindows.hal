@@ -11628,6 +11628,7 @@ begin
   EditField(h,v+=vs,150,"Конт. лицо, телефон",Normal,Mobile,false,ContactSClass);
       EditField(h1,v,-20,"",Normal,Comment2,false,0);
   EditField(h,v+=vs,150,"WWW-адрес",Normal,wwwAddr,false,0);
+  		EditField(h1,v,120,"Склад первой покупки",Normal,FreightNr,false,LocationSClass);
   EditField(h,v+=vs,150,"Дата внесения изм.",Normal,DateChanged,false,0);
       EditField(h1,v,-20,"Классификация",Normal,Classification,false,CClassSClass);
   if (HasLocalization("BRA")) then begin 
@@ -11707,7 +11708,7 @@ begin
     v = v + vs;
   end;    
   EditField(h2+50,v,-20,"Комментарий к счету",Normal,OrderComment,false,0);
-  EditField(h,v+=vs,120,"№ фрахта",Normal,FreightNr,false,0);
+  //EditField(h,v+=vs,120,"№ фрахта",Normal,FreightNr,false,0);
   EditField(h2+50,v,70,"Регион",Normal,Region,false,CountryRegionSClass);//Edit-------------------Vitalii 12:38 23.05.2016
   EditField(h,vm=(v+=vs),120,"Условие отгр. (кл.)",Normal,ShipDeal,false,ShipDealSClass);
   EditField(h2+50,v,70,"Условие отгр. (пост.)",Normal,VEShipDeal,false,ShipDealSClass);
