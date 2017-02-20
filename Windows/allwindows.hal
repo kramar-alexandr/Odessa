@@ -1316,7 +1316,7 @@ external	procedure TSERWNT_RUS();
 external	procedure TSERWTouch_RUS();
 external	procedure TSERWTEST_RUS();
 external	procedure INVFORM_RUS(Boolean);
-external	procedure DisplayRecordDetails_RUS(LongInt,LongInt,string,date,time,string,string,string,string,string,string,string,string,string,string,string,Integer,string,string,string,val,string,Boolean,string,string);
+external	procedure DisplayRecordDetails_RUSMy(LongInt,LongInt,string,date,time,string,string,string,string,string,string,string,string,string,string,string,Integer,string,string,string,val,string,Boolean,string,string,record IVVc);
 external	procedure DrawPOSInterface_RUS(string,string,record POSButtonsVc,Integer,string,Integer);
 external	procedure DisplayRecordDetailsCustDisplay_RUS(LongInt,LongInt,string,date,time,string,string,string,string,string,string,Integer,string,string,string,val);
 external	function string 255 ResDayWClassWindowTitle_RUS();
@@ -4254,7 +4254,7 @@ end else begin
 
     // StopAlert("IsSessionOpen(" & IVr.MachineName & "," & IVr.DrawerCode & "," & IVr.TransDate & "," & IVr.TransTime & "); -> " & sessdesc);
 
-    DisplayRecordDetails_RUS(10,26,compname,td,tt,lmc,sm,nr,IVr.CustCode,IVr.Addr0,/*IVr.Addr1*/IVr.RebCode,IVr.Addr2,IVr.Addr3,IVr.Phone,IVr.Objects,IVr.LoyaltyCardNr,LMb.ShowBaggerSupervisor,"","","",blankval,sessdesc,true,points,IVr.TaxAdminServSeal);
+    DisplayRecordDetails_RUSMy(10,26,compname,td,tt,lmc,sm,nr,IVr.CustCode,IVr.Addr0,/*IVr.Addr1*/IVr.RebCode,IVr.Addr2,IVr.Addr3,IVr.Phone,IVr.Objects,IVr.LoyaltyCardNr,LMb.ShowBaggerSupervisor,"","","",blankval,sessdesc,true,points,IVr.TaxAdminServSeal,IVr);// Edit ************************** Monday, 20 February 2017 13:38:18
 
     if (bm<650) then begin
       SoftEditFieldTLX(360,6,h4,"",M4Str,ViewOnly,100,20,patM4black,"CustomerDisplayData_Line1",true,0);

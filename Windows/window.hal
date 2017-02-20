@@ -3059,6 +3059,24 @@ begin
   EndWindow;
 end;
 
+window DoInsertAkciaCodeRCLass:1
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  real h,h2,h3,h4,hm,l,v,v2,v3,vm,vs,xv1,xv2;
+  WindowBegin("Ввод промо кода",DoInsertAkciaCodeRCLass,CGOther,RcType);
+  Modality(kModalityGlobal);
+  SetWRect(64,80,509,308);
+  vs=20;h=100;v=5;h2=200;
+
+  EditFieldTL(h,6 ,80,"Код",M4Str,Normal,80,f1,false,PromotionSClass);
+  v = v + 40 + v2;
+  
+  ColourPushButton(h,v+=2*vs,h2,v+3*vs,"CancelLoginKassir","Отмена",1);
+  ColourPushButton(h+200,v,h2+200,v+3*vs,"DoInsertAkciaCodeProceed","Ввод",2);
+
+  EndWindow;
+end;
+
 window MagentoTestVClass:1 //Edit-------------------Vitalii 15:29 01.12.2016
  wtag("language","UKR"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
  begin
@@ -3115,6 +3133,7 @@ window PromotionSClass:1
 begin
   WindowBegin("Выберите код акции",PromotionSClass,CGother,HBlRecType);
   SetWRect(240,80,640,298);
+  Modality(kModalityAboveParent);
   Sizeable(-1,-1,-1,0);
   StringList(9,9,-23,-10);
   SearchField("Найти");

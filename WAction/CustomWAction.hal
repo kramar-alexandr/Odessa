@@ -5,12 +5,22 @@ global
 procedure PromotionSClassArrayOnOpen(var Array string astr,var Integer acnt)
 BEGIN
   record PromotionVc Promotionr;
+  record USerVc Userr;
+  boolean testf;
+  
+  Userr.Code = currentuser;
+  readfirstmain(Userr,1,true);
   
   Promotionr.Code = "";
   while (LoopMain(Promotionr,1,true)) begin
-    astr[acnt] = Left(Promotionr.Code & "                         ",20);
-    astr[acnt] = astr[acnt] & Promotionr.Description;
-    acnt = acnt + 1;
+  	testf = true;
+  	if(nonblank(Userr.Location) and !setinset(Userr.Location,Promotionr.Locations))then begin testf = false; end;
+  	
+  	if(testf)then begin
+			astr[acnt] = Left(Promotionr.Code & "                         ",20);
+			astr[acnt] = astr[acnt] & Promotionr.Description;
+			acnt = acnt + 1;
+    end;
   end;
   
   RETURN;

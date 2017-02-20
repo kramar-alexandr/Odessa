@@ -244,6 +244,38 @@ lDoInsertPromoCodeProceed:;
 return;
 end;
 
+global updating procedure DoInsertAkciaCodeProceed()
+begin
+	integer wn,mwn;
+	record RcVc RepSpec;
+	record UserVc USr;
+	record LocalMachineBlock LMb;
+	record IVVc IVr;
+		
+	wn = curwindow;
+	mwn = motherwindow(wn);
+	deselectwindow(wn,false);
+	getwindowrecord(wn,RepSpec);	
+	getwindowrecord(mwn,IVr);	
+	if(nonblank(RepSpec.f1))then begin
+		IVr.PromotionCode = RepSpec.f1;
+		putwindowrecord(mwn,IVr);
+		//PutWindowString(wn,"rebateserf","");
+		closewindow(wn);
+		getwindowrecord(mwn,IVr);
+		if(TouchScreenLook)then begin
+			putwindowrecord(mwn,IVr);
+			IVDClass_RefreshStringList(mwn,IVr);
+			ReRunWindowDef(mwn);
+			WindowFieldGotoForTouchScreen(mwn,-1,"ivcashcommand",true);
+		end;
+		WindowFieldGotoForTouchScreen(wn,-1,"ivcashcommand",false);
+	end;
+	
+lDoInsertAkciaCodeProceed:;
+return;
+end;
+
 global procedure DoInsertPromoCode()
 begin
 	record RcVc RepSpec;
@@ -252,6 +284,18 @@ begin
 	mwn = curwindow;
 	
 	nwn = OpenWindow("DoInsertPromoCodeRCLass",1,mwn,"","",RepSpec);
+	
+return;
+end;
+
+global procedure DoInsertAkciaCode()
+begin
+	record RcVc RepSpec;
+	integer nwn,mwn;
+		
+	mwn = curwindow;
+	
+	nwn = OpenWindow("DoInsertAkciaCodeRCLass",1,mwn,"","",RepSpec);
 	
 return;
 end;
@@ -706,7 +750,7 @@ begin
   string 255 errstr,prepstr,invdatewarn,transdatewarn;// Edit ************************** Monday, 14 December 2015 15:00:23
   Integer err;// Edit ************************** Monday, 14 December 2015 15:01:27
   transaction record RcVc gNPTSRepSpec;
-
+		
   wn = CurWindow;
   DeselectWIndow(wn,true);
   GetWindowRecord(wn,IVr);
@@ -949,6 +993,9 @@ begin
       case 201:
         DoInsertPromoCode;
         goto LIVDClassTouchScreenPasteButtonDo;
+      case 202:
+        DoInsertAkciaCode;
+        goto LIVDClassTouchScreenPasteButtonDo;//GOTO RUSWINDOWFUNCTION.hal
     end;
   end;
 LIVDClassTouchScreenPasteButtonDo:;
@@ -960,7 +1007,7 @@ procedure IVDClassTouchScreenPasteButton()
 begin
   Integer butnr;
   string 255 tagstr;
-  
+    
   tagstr = PushButtonTag;
   butnr = StringToInt(tagstr);
   IVDClassTouchScreenPasteButtonDo(butnr)

@@ -838,6 +838,9 @@ begin
     	case 201:// Edit ************************** Wednesday, 30 November 2016 12:17:50
         AddTouchScreenPasteButton(h,v,width,heighttemp,procstr,i+1,lblstr,POSBrw.colnr);
         procstr = "";  
+			case 202:// Edit ************************** Monday, 20 February 2017 10:49:49 - GOTO IVVCWAction7.hal
+        AddTouchScreenPasteButton(h,v,width,heighttemp,procstr,i+1,lblstr,POSBrw.colnr);
+        procstr = "";  
               
       case kPOSButtonTypeBlank:
         goto LLDrawPOSButtons_RUS;
@@ -1010,10 +1013,10 @@ begin
 end;
 
 global
-procedure DisplayRecordDetails_RUS(LongInt ah,LongInt av,string compname,date td,time tt,string lmc,string sm,string nr,string custcode,string custname,
+procedure DisplayRecordDetails_RUSMy(LongInt ah,LongInt av,string compname,date td,time tt,string lmc,string sm,string nr,string custcode,string custname,
                                string addr1,string addr2,string addr3,string phone,string objects,
                                string loyaltycardnr,Integer ShowBaggerSupervisor,string bagger,string supervisor,string disccardnr,val discfwdbal,
-                               string sessiondesc,Boolean showlc,string OfficialNum,string taxseal)
+                               string sessiondesc,Boolean showlc,string OfficialNum,string taxseal,record IVVc IVr)
 begin
   record MaxPointLoyCardBlock MPLb;
   real h,h2,h3,v;
@@ -1159,6 +1162,10 @@ begin
   end;
   if (nonblank(phone)) then begin 
     tstr = "Телефон: " & phone;
+    StaticText(h2,v+=20,tstr,false);
+  end;
+  if (nonblank(IVr.PromotionCode)) then begin 
+    tstr = "Акция: " & IVr.PromotionCode;
     StaticText(h2,v+20,tstr,false);
   end;
   
