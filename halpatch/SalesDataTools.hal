@@ -7,6 +7,8 @@ external procedure NoDupObjs(string,var string); //Edit*************************
 //Функция собирает данные для SalesDataVc из регистров IVVc,SHVc,PLVc, INvc
 //Расчет себестоимости - копия из старого отчета по продажам SalesRn
 //Основной документ - Сч/фактура, при её пересчете вызывается эта функция. При изменении отгрузок запускается эта же функция, но для соответствующих сч/фактур.
+SetLangMode(LangRussian,"RUS",0);	
+
 
 updating procedure CreateSalesData(record IVVc IVr)				//Edit----------------------Dima  10.03.2016
 begin
@@ -685,3 +687,40 @@ begin
 	
 return;
 end; //Edit***************************Sasha2,13:10 13.02.2017 }
+
+global //Edit***************************Sasha2,13:10 13.02.2017 {
+updating procedure UpdPromotionMn(record RcVc RepSpec)
+begin
+	record SalesDataVc SalesData,oldSalesData;
+	record IVVc IVr;
+	row IVVc IVrw;
+	string 255 tstr;
+	LongInt curIVSerNr;
+	boolean TrHs;
+	record PromotionVc Promotionr;
+		
+	 TrHs = true;
+	 IVr.InvDate = stringtodate("20/02/2017");
+	 while(loopkey("InvDate",IVr,1,TrHs))begin
+	 	if(IVr.InvDate>stringtodate("21/02/2017"))then begin TrHs = false; end;
+	 	
+	 	if(TrHs and IVr.Location=="6-KV" and blank(IVr.PromotionCode))then begin
+	 		IVr.PromotionCode = "20%_ДР_КИЕВ2017";
+	 		if (NonBlank(IVr.PromotionCode)) then begin
+        Promotionr.Code = IVr.PromotionCode;
+        if (ReadFirstMain(Promotionr,1,true) and NonBlank(Promotionr.Objects)) then begin
+          if (Blank(IVr.Objects)) then begin
+            IVr.Objects = Promotionr.Objects;
+          end else begin
+            IVr.Objects = IVr.Objects & "," & Promotionr.Objects;
+          end;
+        end;
+      end;
+	 		recordstore(IVr,true);
+	 		UpdateSalesData(IVr);
+	 	end;
+	 end;
+	  	
+return;
+end; //Edit***************************Sasha2,13:10 13.02.2017 }
+
