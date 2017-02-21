@@ -3064,7 +3064,7 @@ window DoInsertAkciaCodeRCLass:1
 begin
   real h,h2,h3,h4,hm,l,v,v2,v3,vm,vs,xv1,xv2;
   WindowBegin("‚вод промо кода",DoInsertAkciaCodeRCLass,CGOther,RcType);
-  Modality(kModalityGlobal);
+  //Modality(kModalityGlobal);
   SetWRect(64,80,509,308);
   vs=20;h=100;v=5;h2=200;
 
