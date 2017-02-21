@@ -16,7 +16,6 @@ begin
   Boolean addInfoF; //Edit***************************Sasha2,13:38 15.02.2017
   
   BlockLoad(LMb); //Edit***************************Sasha2,12:51 15.02.2017 {
-  LogText(0,LMb.LocalMachineCode & "----" & LMb.DefLocation);
   if (NonBlank(LMb.DefLocation)) then begin
     if (LMb.DefLocation=="3-RAY") then begin
       if (Blank(CUr.Region)) then begin

@@ -4,6 +4,7 @@ remote updating function Boolean AddContactCUDsmRemote(record CUVc,string);
 external procedure SetupCustPS2Rn(string,record RcVc);
 external function Integer GetInternetEnablerCountry();
 external procedure NextM4Number(string,var string);// Edit ************************** Tuesday, 18 October 2016 14:17:18
+external function LongInt CUVcRecordDefaultsClient(LongInt,var record CUVc,record CUVc,LongInt,LongInt); //Edit***************************Sasha2,10:54 21.02.2017
 
 global
 procedure OpenAddressLookupHelper(Integer wn)
@@ -193,13 +194,14 @@ global
 procedure CUNPTSSClassNewCustomer()
 begin
   Integer wn,mwn,nwn;
-  record CUVc CUr;
+  record CUVc CUr,CU2r;
   
   if (UserCanAction("AllowNewCustomerfromNPTS",true)) then begin
     wn = CurWindow;
     mwn = MotherWindow(wn);
     //CloseWindow(wn); //Edit***************************Sasha2,11:40 21.11.2014
     RecordNew(CUr);
+    CUVcRecordDefaultsClient(wn,CUr,CU2r,Rs_insert,0);
     CUr.RebCode = "0%";
     nwn = OpenWindow("CUNPTDSClass",1,mwn,"","",CUr);
     WindowFieldGoto(nwn,CUr,-1,"Name",true);
