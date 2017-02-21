@@ -1143,6 +1143,9 @@ BEGIN
   record BankFileBlock bfr;
   record CUUserLabelBlock CUUerLb;
   record TaxTemplateVc TTr;
+  record UserVc Userr;
+  
+  
 
   BlockLoad(bfr);
   BlockLoad(CUUerLb);
@@ -1150,6 +1153,14 @@ BEGIN
   insertmode = 1;
   updatemode = 2;
   BlockLoad(CSb);
+  
+  if(blank(CUr.FreightNr) and stat==insertmode)then begin
+  	Userr.Code = currentuser;
+  	readfirstmain(Userr,1,true);
+  	
+  	CUr.FreightNr = Userr.Location;
+  end;
+  
   oldnr = CUr.Code;
   if (blank(CUr.Code)) then begin
     if (GetNextCustNr(tstr)) then begin end;
