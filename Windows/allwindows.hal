@@ -7003,6 +7003,13 @@ begin
 	EditField(h,v+=vs,h1-h+50,"Телефон",Normal,Phone,false,0);
 	EditField(h,v+=vs,h1-h+50,"e-Mail",Normal,eMail,false,0);
 	EditField(h,v+=vs,h1-h+50,"Дата рождения",Normal,BirthDate,false,PasteCurDate);
+	
+	v= v + vs;
+	EditField(h,v+=vs,95,"Группа",ViewOnly,CustCat,false,0);
+	EditField(h,v+=vs,h1-h+50,"Страна",ViewOnly,CountryCode,false,0);
+	EditField(h,v+=vs,h1-h+50,"Область",ViewOnly,Region,false,0);
+	EditField(h,v+=vs,h1-h+50,"Город",ViewOnly,Ethnicity,false,0);
+	
 
 /*
   HalPushButton(h+120,v+=20,h+120+100,v+20,"UpdCustomerAddressCUDsm","Update Address");
