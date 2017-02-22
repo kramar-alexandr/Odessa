@@ -47,6 +47,9 @@ begin
         CUr.CustCat = CCatr.Code;
       end;
     end;
+    if (addInfoF and blank(CUr.PLCode)) then begin
+      CUr.PLCode = "RRP";
+    end;
   end; //Edit***************************Sasha2,12:51 15.02.2017 }
 
   if (TestModule("modPL") or TestModule("modPO") or TestModule("modAT2") or TestModule("modIN")) then begin
