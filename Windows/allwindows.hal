@@ -6991,7 +6991,7 @@ begin
   row NPTSNewCUFieldsBlock NPTSNCUFbrw;
 
   WindowBegin("Контакт",CUNPTDSClass,CGview,-);
-  Modality(kModalityGlobal);
+  Modality(kModalityDefault);
   DynamicWindow;
   SetWRect(20,80,680,461);
   Sizeable(-1,-1,0,0);
@@ -7006,9 +7006,9 @@ begin
 	
 	v= v + vs;
 	EditField(h,v+=vs,95,"Группа",ViewOnly,CustCat,false,0);
-	EditField(h,v+=vs,h1-h+50,"Страна",ViewOnly,CountryCode,false,0);
-	EditField(h,v+=vs,h1-h+50,"Область",ViewOnly,Region,false,0);
-	EditField(h,v+=vs,h1-h+50,"Город",ViewOnly,Ethnicity,false,0);
+	EditField(h,v+=vs,h1-h+50,"Страна",Normal,CountryCode,false,CountrySClass);
+	EditField(h,v+=vs,h1-h+50,"Область",Normal,Region,false,CountryRegionSClass);
+	EditField(h,v+=vs,h1-h+50,"Город",Normal,Ethnicity,false,CitySClass);
 	
 
 /*
