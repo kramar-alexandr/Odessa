@@ -5011,6 +5011,26 @@ RecordBegin(IPVc,-,"");
   KeySegment(SerNr);
   EndRecord;*/
   
+  RecordBegin(ORHistoryVc,-,"");
+  RecordField(SerNr,M4Long,0,0);
+  RecordField(ORNr,M4Long,0,0);
+  RecordField(Date,M4Date,0,0);
+  RecordField(Time,M4Time,0,0);
+  RecordField(CustomStatusFlag,M4Int,0,0);
+  RecordField(SalesMan,M4UStr,60,UserVc);
+  RecordField(Sum4,M4Val,0,0);
+  RecordField(rwcnt,M4Long,0,0);
+  RecordField(FeedBackStatus,M4Int,0,0);
+  RecordField(PrepaymentReceived,M4Mark,0,0);
+  RecordField(Reserved,M4Int,0,0);
+  RecordField(OKFlag,M4Mark,0,0);
+  MainKeyBegin(SerNr,0);
+  KeySegment(SerNr);
+  KeyBegin(ORNr);
+  KeySegment(ORNr);
+  KeySegment(SerNr);
+  EndRecord;
+  
 return;
 end;
 

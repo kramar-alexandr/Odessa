@@ -963,3 +963,12 @@ BEGIN
 
   RETURN;
 END;
+
+global//Edit-------------------Vitalii 17:41 27.02.2017
+procedure ORHistoryDClassButtonFlags(Integer wn,var Boolean duplOK,var Boolean newOK,var Boolean saveOK,var Boolean restOK)
+begin
+  saveOK = false;
+  duplOK = false;
+  newOK = false;
+  return;
+end;

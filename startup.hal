@@ -107,6 +107,7 @@ begin
 	Setting("Ваучеры с процентной скидкой",RebateVoucherLClass,modSL); //Edit***************************Sasha2,16:56 23.11.2016
 	Setting("Настройки ваучеров с процентной скидкой",RebateVoucherTClass,modSL); //Edit***************************Sasha2,17:38 23.11.2016
 	Setting("Акции",PromotionLClass,modSL); //Edit***************************Sasha2,17:58 23.01.2017
+  Setting("История изменений - Счета клиентов",ORHistoryLClass,modSO);//Edit-------------------Vitalii 16:52 27.02.2017
 
   //Report("Статистика НДС по аванс. отчетам",ExpVATRClass,ExpVATRn,0,modCL);
   //Report("Журнал путевых листов",WLJRClass,WLJRn,0,modCL);
@@ -376,6 +377,7 @@ begin
   Maintenance("Обновить объекты в SalesData",MyVClass,UpdObjectsInSalesDataMn,modDBMain); //Edit***************************Sasha2,13:33 13.02.2017
   
   Maintenance("Обновить Promotion",MyVClass,UpdPromotionMn,modDBMain); //Edit***************************Sasha2,13:33 13.02.2017
+  Maintenance("Заполнить ORHistoryVc",MyVClass,FillORHistoryVcMn,modSO);//Edit-------------------Vitalii 15:57 27.02.2017
 
   Import("Импорт цен",PLImportIClass,PLImportIn,modDI); //Added********************Dima 20.11.2014
   Import("Импорт товаров",INImportIClass,INImportIn,modIN);//Added********************Dima 20.11.2014

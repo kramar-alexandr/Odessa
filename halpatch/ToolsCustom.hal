@@ -3420,3 +3420,37 @@ begin
 	
 return;
 end;
+
+global updating procedure FillORHistoryVcMn()
+begin
+  record ORVc ORr;
+  record ORHistoryVc ORHr;
+  boolean TrHs;
+  
+  while (loopmain(ORr,1,true)) begin
+    RecordNew(ORHr);
+    ORHr.ORNr = ORr.SerNr;
+    ORHr.Date = CurrentDate;
+    ORHr.Time = CurrentTime;
+    ORHr.CustomStatusFlag = ORr.CustomStatusFlag;
+    ORHr.SalesMan = ORr.SalesMan;
+    ORHr.Sum4 = ORr.Sum4;
+    ORHr.rwcnt = MatRowCnt(ORr);
+    ORHr.FeedBackStatus = ORr.FeedBackStatus;
+    ORHr.PrepaymentReceived = ORr.PrepaymentReceived;
+    ORHr.Reserved = ORr.Reserved;
+    ORHr.OKFlag = ORr.OKFlag;
+    ORHr.SerNr = NextSerNr("ORHistoryVc",ORHr.Date,-1,false,"");
+    RecordStore(ORHr,true);
+  end;
+  
+  /*ORHr.SerNr = "";
+	TrHs = true;
+  while (loopmain(ORHr,1,TrHs)) begin
+    if (TrHs) then begin
+			RecordDelete(ORHr);
+      StepBack(ORHr);
+		end;
+  end;*/
+  return;
+end;

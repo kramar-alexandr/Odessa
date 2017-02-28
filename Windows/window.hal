@@ -3285,3 +3285,78 @@ Integer i;
 
   EndWindow;
 end;
+
+
+window ORHistoryLClass:1
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  WindowBegin("История изменений - Счета клиентов",ORHistoryLClass,CGmlist,SHView);
+  SpawnClass(ORHistoryDClass);
+  SetWRect(20,80,360,298);
+  Sizeable(-1,-1,0,0);
+  UseView(ORHistoryVc);
+  RecordList(4,17,-21,-39);
+  RlColKey(4,4,"SerNr",SerNr,false,SerNr);
+  RlColKey(140,140,"ORNr",ORNr,false,ORNr);
+  SearchField("Найти");
+  EndWindow;
+end;
+
+window ORHistoryDClass:2
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+	real h,v,vm;
+  integer wn;
+  record ORHistoryVc ORHr;
+  string 255 tstr;
+  
+  wn = curwindow;
+  getwindowrecord(wn,ORHr);
+  
+  WindowBegin("История изменений - Счета клиентов",ORHistoryDClass,CGview,-);
+  Sizeable(-1,-1,0,0);
+  UseView(ORHistoryVc);
+  SetWRect(20,100,330,200);
+  EditField(h=200,v=6,100,"SerNr",Normal,SerNr,false,0);
+  EditField(h,v+=20,100,"Номер счета",Normal,ORNr,false,0);
+  EditField(h,v+=20,100,"Дата",Normal,Date,false,0);
+  EditField(h,v+=20,100,"Время",Normal,Time,false,0);
+  tstr = "";
+  switch (ORHr.CustomStatusFlag) begin
+    case 0: tstr = "Новый";
+    case 1: tstr = "Открыт";
+    case 2: tstr = "Подтвержден";
+    case 3: tstr = "Не дозвонились";
+    case 4: tstr = "Заказ изменен";
+    case 5: tstr = "В сборке";
+    case 6: tstr = "Собран";
+    case 7: tstr = "Отправлен";
+    case 8: tstr = "Доставлен";
+    case 9: tstr = "Завершен";
+    case 10: tstr = "Отменен";
+    case 11: tstr = "В ожидании опл.";
+    case 12: tstr = "В ожидании товаров";
+    case 13: tstr = "Не достаточно тов-в";
+  end;
+  StaticText(h,v+=30,"Статус",true);
+  StaticText(h,v," - " & tstr,false);
+  EditField(h,v+=10,100,"Менеджер",Normal,SalesMan,false,0);
+  EditField(h,v+=20,100,"Сумма",Normal,Sum4,false,0);
+  EditField(h,v+=20,100,"Количество позиций",Normal,rwcnt,false,0);
+  tstr = "";
+  switch (ORHr.FeedBackStatus) begin
+    case 0: tstr = "Обратная связь от клиента получена";
+    case 1: tstr = "Не дозвонились 1-ый раз";
+    case 2: tstr = "Не дозвонились 2-ой раз";
+    case 3: tstr = "Не дозвонились 3-ий раз. Заказ закрыт";
+  end;
+  StaticText(h,v+=30,"Статус обратной связи с клиентом",true);
+  StaticText(h,v," - " & tstr,false);
+  CheckBox(h,v+=10,0,"Предоплата получена",PrepaymentReceived);
+  CheckBox(h,v+=20,0,"Reserved",Reserved);
+  CheckBox(h,v+=20,0,"OK",OKFlag);
+  
+  
+
+  EndWindow;
+end;
