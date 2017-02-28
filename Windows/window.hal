@@ -3361,3 +3361,22 @@ begin
 
   EndWindow;
 end;
+
+window ORHistoryRClass:1
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  real h,v,vm,vs;
+  WindowBegin("Определите журнал изменений счетов клиентам",ORHistoryRClass,CGRcW,RcType);
+  SetWRect(20,80,515,410);
+  v= 6; vs = 20; h=160;
+  PeriodField(h,v,"Период(Дата сч.кл.)");
+  EditFieldTL(h,v+=vs, 150,"Номер счета",M4Str,Normal,30,f1,false,0);
+  //StaticText(h,v+=30,"Несколько номеров - через запятую: XXX,YYY,ZZZ",false);
+  StaticText(h,v+=30,"Диапазон номеров - через двоеточие: XXX:YYY",false);
+  EditFieldTL(h,v+=(vs-10) ,150,"Клиент",M4UStr,Normal,20,f2,false,CUSClass);
+	EditFieldTL(h,v+=vs ,100,"Продавец",M4UStr,Normal,10,AccStr,false,UserSClass);
+	EditFieldTL(h,v+=vs ,50,"Группа продажи",M4UStr,Normal,10,f3,false,SalesGroupSClass);
+  EditFieldTL(h,v+=vs, 150,"Вид счёта",   M4UStr,Normal,11,ObjStr,false,OrderClassSClass);
+  EditFieldTL(h,v+=vs, 150,"Склад",M4UStr,Normal,10,f4,false,LocationSClass);
+  EndWindow;
+end;

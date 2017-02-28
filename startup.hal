@@ -57,6 +57,8 @@ begin
   Report("Дисбаланс статуса резерва",ReservISRClass,ReservISRn,0,modSO);
   Report("Отчет для комиссии",CommissionRClass,CommissionRn,0,modSL); //Edit----------------------Dima  08.04.2016  
   Report("Статистика продаж",MyBIRClass,MyBIRn,0,modSO);//Edit-------------------Vitalii 11:31 14.09.2016
+  Report("Журнал изменений счетов клиентам",ORHistoryRClass,ORHistoryRn,0,modSO);//Edit-------------------Vitalii 15:43 28.02.2017
+
 	
 	
 	Import("Импорт регистров БЕЗ ПЕРЕЗАПИСИ",ImportOfRegisterIClass,ImportOfRegister,modDBMain);	//Edit----------------------Dima  27.05.2015

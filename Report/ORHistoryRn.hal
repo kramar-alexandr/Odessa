@@ -1,0 +1,257 @@
+external procedure ExtractObj(string,var Integer,var string);
+
+SetLangMode(LangRussian,"RUS",0);	
+
+global
+procedure ORHistoryRn(record RcVc RepSpec)
+begin
+  record ORVc ORr;
+  row ORVc ORrw;
+  record ORHistoryVc ORHr;
+  record UserVc Ur;
+  area tmparea;
+  integer alen,pos,ordcnt,i;
+  longint fromord,toord,order,printedorderscnt;
+  string 100 ord,ordcondtype,tstr;
+  array longint ords;
+  array integer col;
+  boolean testf,TrHs,TrHs2;
+  
+  col[0] = 0;
+  col[1] = col[0] + 30;
+  col[2] = col[1] + 55;
+  col[3] = col[2] + 35;
+  col[4] = col[3] + 35;
+  col[5] = col[4] + 45;
+  col[6] = col[5] + 45;
+  col[7] = col[6] + 30;
+  col[8] = col[7] + 60;
+  col[9] = col[8] + 55;
+  col[10] = col[9] + 45;
+  col[11] = col[10] + 30;
+  
+  StartReportNoHeaderJob("Журнал изменений счетов клиентам");
+    StartFormat(15);
+      OutString(col[0],0,"SerNr",false);
+      OutString(col[1],0,"Номер счета",false);
+      OutString(col[2],0,"Дата",false);
+      OutString(col[3],0,"Время",false);
+      OutString(col[4],0,"Статус",false);
+      OutString(col[5],0,"Менеджер",false);
+      OutString(col[6],0,"Сумма",false);
+      OutString(col[7],0,"Кол-во позиций",false);
+      OutString(col[8],0,"Статус обр.св.",false);
+      OutString(col[9],0,"Предоплата",false);
+      OutString(col[10],0,"Резерв",false);
+      OutString(col[11],0,"ОК",false);
+    EndFormat;
+    Black_Divider(0,1);
+    if (nonblank(RepSpec.f1)) then begin
+      AddStringToArea(RepSpec.f1,tmparea);
+      alen = GetAreaLength(tmparea);
+      if (FindStringInArea(":",tmparea)!=alen) then begin
+        fromord = StringToLongInt(FirstInRange(RepSpec.f1,20));
+        toord = StringToLongInt(LastInRange(RepSpec.f1,20));
+        ordcondtype = "fromto";
+      end else begin
+        if (alen!=1) then begin
+          order = StringToLongInt(RepSpec.f1);
+          ordcondtype = "one";
+        end;
+      end;
+    
+      switch (ordcondtype) begin
+        case "one":
+          ORr.SerNr = order;
+        case "fromto":
+          ORr.SerNr = fromord;
+        case "array":
+          ORr.SerNr = ords[0];
+        otherwise
+          ORr.SerNr = 0;
+      end;
+      TrHs = true;
+      //while (LoopKey("OrdDate",ORr,1,TrHs)) begin
+      while (LoopMain(ORr,1,TrHs)) begin
+        testf = true;
+        //if !((ORr.OrdDate>=RepSpec.sStartDate) and (ORr.OrdDate<=RepSpec.sEndDate)) then begin testf = false; end;
+        switch (ordcondtype) begin
+          case "one":
+            TrHs = false;
+            if (ORr.SerNr!=order) then begin
+              testf = false;
+            end;
+          case "fromto":
+            if !((ORr.SerNr>=fromord) and (ORr.SerNr<=toord)) then begin
+              TrHs = false;
+              testf = false;
+            end;
+          otherwise
+            testf = true;
+        end;
+        if (nonblank(RepSpec.f2) and (ORr.CustCode!=RepSpec.f2)) then begin testf = false; end;
+        if nonblank(RepSpec.AccStr) then begin
+          if (ORr.SalesMan!=RepSpec.AccStr) then begin
+            testf = false;
+          end else begin
+            Ur.Code = ORr.SalesMan;
+            readfirstmain(Ur,1,true);
+            if (nonblank(RepSpec.f3) and (Ur.SalesGroup!=RepSpec.f3)) then begin testf = false; end;
+          end;
+        end;
+        if (nonblank(RepSpec.ObjStr) and (ORr.OrderClass!=RepSpec.ObjStr)) then begin testf = false; end;
+        if (nonblank(RepSpec.f4) and (ORr.Location!=RepSpec.f4)) then begin testf = false; end;
+        if (testf) then begin
+          ORHr.ORNr = ORr.SerNr;
+          printedorderscnt = printedorderscnt + 1;
+          TrHs2 = true;
+          resetloop(ORHr);
+          while (LoopKey("ORNr",ORHr,1,TrHs2)) begin
+            if (ORHr.ORNr!=ORr.SerNr) then begin TrHs2 = false; end;
+            if (TrHs2) then begin
+              StartFormat(15);
+                OutString(col[0],0,ORHr.SerNr,false);
+                OutString(col[1],0,ORHr.ORNr,false);
+                OutString(col[2],0,ORHr.Date,false);
+                OutString(col[3],0,ORHr.Time,false);
+                tstr = "";
+                switch (ORHr.CustomStatusFlag) begin
+                  case 0: tstr = "Новый";
+                  case 1: tstr = "Открыт";
+                  case 2: tstr = "Подтвержден";
+                  case 3: tstr = "Не дозвонились";
+                  case 4: tstr = "Заказ изменен";
+                  case 5: tstr = "В сборке";
+                  case 6: tstr = "Собран";
+                  case 7: tstr = "Отправлен";
+                  case 8: tstr = "Доставлен";
+                  case 9: tstr = "Завершен";
+                  case 10: tstr = "Отменен";
+                  case 11: tstr = "В ожидании опл.";
+                  case 12: tstr = "В ожидании товаров";
+                  case 13: tstr = "Не достаточно тов-в";
+                end;
+                OutString(col[4],0,tstr,false);
+                OutString(col[5],0,ORHr.SalesMan,false);
+                OutString(col[6],0,ORHr.Sum4,false);
+                OutString(col[7],0,ORHr.rwcnt,false);
+                tstr = "";
+                switch (ORHr.FeedBackStatus) begin
+                  case 0: tstr = "Обратная связь от клиента получена";
+                  case 1: tstr = "Не дозвонились 1-ый раз";
+                  case 2: tstr = "Не дозвонились 2-ой раз";
+                  case 3: tstr = "Не дозвонились 3-ий раз. Заказ закрыт";
+                end;
+                OutString(col[8],0,tstr,false);
+                tstr = "";
+                switch (ORHr.PrepaymentReceived) begin
+                  case 0: tstr = "Да";
+                  case 1: tstr = "Нет";
+                end;
+                OutString(col[9],0,tstr,false);
+                tstr = "";
+                switch (ORHr.Reserved) begin
+                  case 0: tstr = "Да";
+                  case 1: tstr = "Нет";
+                end;
+                OutString(col[10],0,tstr,false);
+                tstr = "";
+                switch (ORHr.OKFlag) begin
+                  case 0: tstr = "Да";
+                  case 1: tstr = "Нет";
+                end;
+                OutString(col[11],0,tstr,false);
+              EndFormat;
+            end;
+          end;
+          Gray_Divider(0,1);
+        end;
+      end;
+    end else begin
+      ORr.OrdDate = RepSpec.sStartDate;
+      TrHs = true;
+      while (LoopKey("OrdDate",ORr,1,TrHs)) begin
+        testf = true;
+        if !((ORr.OrdDate>=RepSpec.sStartDate) and (ORr.OrdDate<=RepSpec.sEndDate)) then begin testf = false; end;
+        if (nonblank(RepSpec.f2) and (ORr.CustCode!=RepSpec.f2)) then begin testf = false; end;
+        if nonblank(RepSpec.AccStr) then begin
+          if (ORr.SalesMan!=RepSpec.AccStr) then begin
+            testf = false;
+          end else begin
+            Ur.Code = ORr.SalesMan;
+            readfirstmain(Ur,1,true);
+            if (nonblank(RepSpec.f3) and (Ur.SalesGroup!=RepSpec.f3)) then begin testf = false; end;
+          end;
+        end;
+        if (nonblank(RepSpec.ObjStr) and (ORr.OrderClass!=RepSpec.ObjStr)) then begin testf = false; end;
+        if (nonblank(RepSpec.f4) and (ORr.Location!=RepSpec.f4)) then begin testf = false; end;
+        if (testf) then begin
+          ORHr.ORNr = ORr.SerNr;
+          printedorderscnt = printedorderscnt + 1;
+          TrHs2 = true;
+          resetloop(ORHr);
+          while (LoopKey("ORNr",ORHr,1,TrHs2)) begin
+            if (ORHr.ORNr!=ORr.SerNr) then begin TrHs2 = false; end;
+            if (TrHs2) then begin
+              StartFormat(15);
+                OutString(col[0],0,ORHr.SerNr,false);
+                OutString(col[1],0,ORHr.ORNr,false);
+                OutString(col[2],0,ORHr.Date,false);
+                OutString(col[3],0,ORHr.Time,false);
+                tstr = "";
+                switch (ORHr.CustomStatusFlag) begin
+                  case 0: tstr = "Новый";
+                  case 1: tstr = "Открыт";
+                  case 2: tstr = "Подтвержден";
+                  case 3: tstr = "Не дозвонились";
+                  case 4: tstr = "Заказ изменен";
+                  case 5: tstr = "В сборке";
+                  case 6: tstr = "Собран";
+                  case 7: tstr = "Отправлен";
+                  case 8: tstr = "Доставлен";
+                  case 9: tstr = "Завершен";
+                  case 10: tstr = "Отменен";
+                  case 11: tstr = "В ожидании опл.";
+                  case 12: tstr = "В ожидании товаров";
+                  case 13: tstr = "Не достаточно тов-в";
+                end;
+                OutString(col[4],0,tstr,false);
+                OutString(col[5],0,ORHr.SalesMan,false);
+                OutString(col[6],0,ORHr.Sum4,false);
+                OutString(col[7],0,ORHr.rwcnt,false);
+                tstr = "";
+                switch (ORHr.FeedBackStatus) begin
+                  case 0: tstr = "Обратная связь от клиента получена";
+                  case 1: tstr = "Не дозвонились 1-ый раз";
+                  case 2: tstr = "Не дозвонились 2-ой раз";
+                  case 3: tstr = "Не дозвонились 3-ий раз. Заказ закрыт";
+                end;
+                OutString(col[8],0,tstr,false);
+                tstr = "";
+                switch (ORHr.PrepaymentReceived) begin
+                  case 0: tstr = "Да";
+                  case 1: tstr = "Нет";
+                end;
+                OutString(col[9],0,tstr,false);
+                tstr = "";
+                switch (ORHr.Reserved) begin
+                  case 0: tstr = "Да";
+                  case 1: tstr = "Нет";
+                end;
+                OutString(col[10],0,tstr,false);
+                tstr = "";
+                switch (ORHr.OKFlag) begin
+                  case 0: tstr = "Да";
+                  case 1: tstr = "Нет";
+                end;
+                OutString(col[11],0,tstr,false);
+              EndFormat;
+            end;
+          end;
+          Gray_Divider(0,1);
+        end;
+      end;
+    end;
+  EndJob;
+  return;
+end;
