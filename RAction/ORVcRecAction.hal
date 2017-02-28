@@ -2428,6 +2428,49 @@ begin
 end;
 
 global
+updating procedure CreateORHistoryVcFromORVc(record ORVc ORr, record ORVc OR2r, boolean UpdateFlag)
+begin
+  record ORHistoryVc ORHr;
+  
+  if (UpdateFlag) then begin
+    if((OR2r.CustomStatusFlag!=ORr.CustomStatusFlag) or (OR2r.SalesMan!=ORr.SalesMan) or 
+    (OR2r.Sum4!=ORr.Sum4) or (OR2r.FeedBackStatus!=ORr.FeedBackStatus) or
+    (OR2r.PrepaymentReceived!=ORr.PrepaymentReceived) or (OR2r.Reserved!=ORr.Reserved) or
+    (OR2r.OKFlag!=ORr.OKFlag)) then begin
+      RecordNew(ORHr);
+      ORHr.ORNr = ORr.SerNr;
+      ORHr.Date = CurrentDate;
+      ORHr.Time = CurrentTime;
+      ORHr.CustomStatusFlag = ORr.CustomStatusFlag;
+      ORHr.SalesMan = ORr.SalesMan;
+      ORHr.Sum4 = ORr.Sum4;
+      ORHr.rwcnt = MatRowCnt(ORr);
+      ORHr.FeedBackStatus = ORr.FeedBackStatus;
+      ORHr.PrepaymentReceived = ORr.PrepaymentReceived;
+      ORHr.Reserved = ORr.Reserved;
+      ORHr.OKFlag = ORr.OKFlag;
+      ORHr.SerNr = NextSerNr("ORHistoryVc",ORHr.Date,-1,false,"");
+      RecordStore(ORHr,true);
+    end;
+  end else begin
+    RecordNew(ORHr);
+    ORHr.ORNr = ORr.SerNr;
+    ORHr.Date = CurrentDate;
+    ORHr.Time = CurrentTime;
+    ORHr.CustomStatusFlag = ORr.CustomStatusFlag;
+    ORHr.SalesMan = ORr.SalesMan;
+    ORHr.Sum4 = ORr.Sum4;
+    ORHr.rwcnt = MatRowCnt(ORr);
+    ORHr.FeedBackStatus = ORr.FeedBackStatus;
+    ORHr.PrepaymentReceived = ORr.PrepaymentReceived;
+    ORHr.Reserved = ORr.Reserved;
+    ORHr.OKFlag = ORr.OKFlag;
+    ORHr.SerNr = NextSerNr("ORHistoryVc",ORHr.Date,-1,false,"");
+    RecordStore(ORHr,true);
+  end;
+end;
+
+global
 updating function LongInt ORVcRecordUpdateAfter(var record ORVc ORr,record ORVc OR2r,LongInt long3,LongInt long4)
 begin
   LongInt res;
@@ -2435,7 +2478,6 @@ begin
   record SHVc SHr,oldSHr;
   boolean invoiceAccepted;
   string 50 oldstatus,newstatus;
-  record ORHistoryVc ORHr;
   
   if (ORr.CustomStatusFlag == 2 and ORr.AutoCreation!=0) then begin //Edit----------------------Dima  17.12.2015
   	MakeInvoiceAndShipmentForOR(ORr);
@@ -2539,27 +2581,7 @@ begin
   if(OR2r.FeedBackStatus!=ORr.FeedBackStatus and ORr.FeedBackStatus > OR2r.FeedBackStatus) then begin 
   	SendNoticeSMS(ORr);			//Edit----------------------Dima  31.08.2015
   end;  
-  
-  if((OR2r.CustomStatusFlag!=ORr.CustomStatusFlag) or (OR2r.SalesMan!=ORr.SalesMan) or 
-  (OR2r.Sum4!=ORr.Sum4) or (OR2r.FeedBackStatus!=ORr.FeedBackStatus) or
-  (OR2r.PrepaymentReceived!=ORr.PrepaymentReceived) or (OR2r.Reserved!=ORr.Reserved) or
-  (OR2r.OKFlag!=ORr.OKFlag)) then begin
-    RecordNew(ORHr);
-    ORHr.ORNr = ORr.SerNr;
-    ORHr.Date = CurrentDate;
-    ORHr.Time = CurrentTime;
-    ORHr.CustomStatusFlag = ORr.CustomStatusFlag;
-    ORHr.SalesMan = ORr.SalesMan;
-    ORHr.Sum4 = ORr.Sum4;
-    ORHr.rwcnt = MatRowCnt(ORr);
-    ORHr.FeedBackStatus = ORr.FeedBackStatus;
-    ORHr.PrepaymentReceived = ORr.PrepaymentReceived;
-    ORHr.Reserved = ORr.Reserved;
-    ORHr.OKFlag = ORr.OKFlag;
-    ORHr.SerNr = NextSerNr("ORHistoryVc",ORHr.Date,-1,false,"");
-    RecordStore(ORHr,true);
-  end;
-  
+  CreateORHistoryVcFromORVc(ORr,OR2r,true);
   
   ORVcRecordUpdateAfter = res; 
   return;
@@ -2728,8 +2750,7 @@ global
 updating function LongInt ORVcRecordSaveAfter(var record ORVc ORr,record ORVc OR2r,LongInt long3,LongInt long4)
 begin
   LongInt res;
-  record ORHistoryVc ORHr;
-
+  
 //  ORObjectStats(ORr,OR2r);it is stored only and not used ever
   CreateActFromOR(ORr);
   UpdateVARItemsOR(ORr);
@@ -2738,20 +2759,7 @@ begin
     UpdateOffSerNr(ORr.SerNr,"ORVc",0,ORr.OfficialSerNr,false);
   end;
   
-  RecordNew(ORHr);
-  ORHr.ORNr = ORr.SerNr;
-  ORHr.Date = CurrentDate;
-  ORHr.Time = CurrentTime;
-  ORHr.CustomStatusFlag = ORr.CustomStatusFlag;
-  ORHr.SalesMan = ORr.SalesMan;
-  ORHr.Sum4 = ORr.Sum4;
-  ORHr.rwcnt = MatRowCnt(ORr);
-  ORHr.FeedBackStatus = ORr.FeedBackStatus;
-  ORHr.PrepaymentReceived = ORr.PrepaymentReceived;
-  ORHr.Reserved = ORr.Reserved;
-  ORHr.OKFlag = ORr.OKFlag;
-  ORHr.SerNr = NextSerNr("ORHistoryVc",ORHr.Date,-1,false,"");
-  RecordStore(ORHr,true);
+  CreateORHistoryVcFromORVc(ORr,OR2r,false);
   
   ORVcRecordSaveAfter = res; 
   return;
