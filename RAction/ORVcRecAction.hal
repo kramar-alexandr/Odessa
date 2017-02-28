@@ -2728,6 +2728,7 @@ global
 updating function LongInt ORVcRecordSaveAfter(var record ORVc ORr,record ORVc OR2r,LongInt long3,LongInt long4)
 begin
   LongInt res;
+  record ORHistoryVc ORHr;
 
 //  ORObjectStats(ORr,OR2r);it is stored only and not used ever
   CreateActFromOR(ORr);
@@ -2736,6 +2737,21 @@ begin
   if (nonblank(ORr.OfficialSerNr)) then begin
     UpdateOffSerNr(ORr.SerNr,"ORVc",0,ORr.OfficialSerNr,false);
   end;
+  
+  RecordNew(ORHr);
+  ORHr.ORNr = ORr.SerNr;
+  ORHr.Date = CurrentDate;
+  ORHr.Time = CurrentTime;
+  ORHr.CustomStatusFlag = ORr.CustomStatusFlag;
+  ORHr.SalesMan = ORr.SalesMan;
+  ORHr.Sum4 = ORr.Sum4;
+  ORHr.rwcnt = MatRowCnt(ORr);
+  ORHr.FeedBackStatus = ORr.FeedBackStatus;
+  ORHr.PrepaymentReceived = ORr.PrepaymentReceived;
+  ORHr.Reserved = ORr.Reserved;
+  ORHr.OKFlag = ORr.OKFlag;
+  ORHr.SerNr = NextSerNr("ORHistoryVc",ORHr.Date,-1,false,"");
+  RecordStore(ORHr,true);
   
   ORVcRecordSaveAfter = res; 
   return;

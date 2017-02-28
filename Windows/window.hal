@@ -3310,17 +3310,18 @@ begin
   record ORHistoryVc ORHr;
   string 255 tstr;
   
-  wn = curwindow;
-  getwindowrecord(wn,ORHr);
   
   WindowBegin("История изменений - Счета клиентов",ORHistoryDClass,CGview,-);
   Sizeable(-1,-1,0,0);
   UseView(ORHistoryVc);
   SetWRect(20,100,330,200);
+  DynamicWindow;
   EditField(h=200,v=6,100,"SerNr",Normal,SerNr,false,0);
   EditField(h,v+=20,100,"Номер счета",Normal,ORNr,false,0);
   EditField(h,v+=20,100,"Дата",Normal,Date,false,0);
   EditField(h,v+=20,100,"Время",Normal,Time,false,0);
+  wn = curwindow;
+  getwindowrecord(wn,ORHr);
   tstr = "";
   switch (ORHr.CustomStatusFlag) begin
     case 0: tstr = "Новый";
