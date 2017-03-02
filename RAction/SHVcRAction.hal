@@ -76,7 +76,7 @@ external updating procedure UpdateORVcNewPostStatuses(record SHVc );//_*_*_*_***
 external updating procedure UpdateSalesDataFromSH(record SHVc);//Edit----------------------Dima  10.03.2016
 external updating procedure UpdateSalesData(record IVVc);	//Edit----------------------Dima  10.03.2016
 external procedure SetNewORCustomStatusFlagOnWeb(record ORVc);// Edit ************************** Friday, 18 November 2016 09:45:15
-
+external procedure CreateORHistoryVcFromORVc(record ORVc,record ORVc,boolean);
 
 function Boolean StockMovOKedForSH(LongInt shnr,var LongInt stmovnr)
 begin
@@ -1612,7 +1612,7 @@ global
 updating function LongInt SHVcRecordSaveAfter(var record SHVc SHr,record SHVc SH2r,LongInt stat,LongInt long4)
 begin
   LongInt res;
-	record ORVc ORr;
+	record ORVc ORr,oldORr;
 	record IVVc IVr;//Edit----------------------Dima  22.09.2015
 		
 	
@@ -1629,6 +1629,12 @@ begin
 				end;
 			end;
 			Recalculate_CustomStatusFlagText(ORr);
+			
+			oldORr.SerNr = ORr.SerNr;
+			if(readfirstmain(oldORr,1,true))then begin
+				CreateORHistoryVcFromORVc(ORr,oldORr,true);// Edit ************************** Wednesday, 1 March 2017 10:50:38
+			end;
+			
 			RecordStore(ORr,true);
 			SetNewORCustomStatusFlagOnWeb(ORr);
 		end;	
@@ -1646,6 +1652,10 @@ begin
 		if(ReadFirstMain(ORr,1,true)) then begin
 					ORr.CustomStatusFlag = 6;
 					Recalculate_CustomStatusFlagText(ORr);
+					oldORr.SerNr = ORr.SerNr;
+					if(readfirstmain(oldORr,1,true))then begin
+						CreateORHistoryVcFromORVc(ORr,oldORr,true);// Edit ************************** Wednesday, 1 March 2017 10:50:38
+					end;
 					RecordStore(ORr,true);
 					SetNewORCustomStatusFlagOnWeb(ORr);
 		end;	
@@ -1818,7 +1828,7 @@ begin
   Integer errcode;
   record OrdSettBlock OSb;
   record AutoActionBlock AAb;
-  record ORVc ORr;
+  record ORVc ORr,oldORr;
 
   
   ihef = ItemHistExists("SHVc",SHr.SerNr);
@@ -1857,6 +1867,10 @@ begin
 				SetNewORCustomStatusFlagOnWeb(ORr);
 				ORr.TransportNumber = SHr.TransportNumber;// Edit ************************** Monday, 12 December 2016 15:07:22
 				ORr.Packages = SHr.Packages;// Edit ************************** Monday, 12 December 2016 15:07:21
+				oldORr.SerNr = ORr.SerNr;
+				if(readfirstmain(oldORr,1,true))then begin
+					CreateORHistoryVcFromORVc(ORr,oldORr,true);// Edit ************************** Wednesday, 1 March 2017 10:50:38
+				end;
 				RecordStore(ORr,true);
 		end;
 		

@@ -63,6 +63,7 @@ external updating procedure GetRecipientContactPerson(string ,string );	//Edit--
 external function val HoursDifference(Date,Time,Date,Time);			//Edit----------------------Dima  14.12.2015
 external procedure Recalculate_CustomStatusFlagText(var record ORVc);		//Edit----------------------Dima  15.12.2015
 external procedure SetNewORCustomStatusFlagOnWeb(record ORVc);// Edit ************************** Friday, 18 November 2016 09:45:15
+external procedure CreateORHistoryVcFromORVc(record ORVc,record ORVc,boolean);// Edit ************************** Wednesday, 1 March 2017 10:54:05
 
 
 
@@ -1456,7 +1457,7 @@ end;
 
 global updating procedure CheckWaitingTimeForGoods()
 begin
-	record ORVc ORr;
+	record ORVc ORr,oldORr;
 	boolean TrHs;
 	
 	TrHs = true;
@@ -1469,6 +1470,10 @@ begin
 						//LogText(0,ORr.SerNr & "    changed.");
 						ORr.CustomStatusFlag = 13;
 						Recalculate_CustomStatusFlagText(ORr);
+						oldORr.SerNr = ORr.SerNr;
+						if(readfirstmain(oldORr,1,true))then begin
+							CreateORHistoryVcFromORVc(ORr,oldORr,true);// Edit ************************** Wednesday, 1 March 2017 10:50:38
+						end;
 						RecordStore(ORr,true);
 						SetNewORCustomStatusFlagOnWeb(ORr);// Edit ************************** Friday, 18 November 2016 09:45:45
 			end;

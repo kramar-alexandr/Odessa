@@ -99,6 +99,50 @@ external procedure SOAPUpdateStatus(string,string);// Edit *********************
 external function string 255 LookUpPromotionCode(date,string); //Edit***************************Sasha2,15:31 24.01.2017
 external procedure NoDupObjs(string,var string); //Edit***************************Sasha2,16:04 24.01.2017
 
+global
+updating procedure CreateORHistoryVcFromORVc(record ORVc ORr, record ORVc OR2r, boolean UpdateFlag)
+begin
+  record ORHistoryVc ORHr;
+  
+  if (UpdateFlag) then begin
+    if((OR2r.CustomStatusFlag!=ORr.CustomStatusFlag) or (OR2r.SalesMan!=ORr.SalesMan) or 
+    (OR2r.Sum4!=ORr.Sum4) or (OR2r.FeedBackStatus!=ORr.FeedBackStatus) or
+    (OR2r.PrepaymentReceived!=ORr.PrepaymentReceived) or (OR2r.Reserved!=ORr.Reserved) or
+    (OR2r.OKFlag!=ORr.OKFlag)) then begin
+      RecordNew(ORHr);
+      ORHr.ORNr = ORr.SerNr;
+      ORHr.Date = CurrentDate;
+      ORHr.Time = CurrentTime;
+      ORHr.CustomStatusFlag = ORr.CustomStatusFlag;
+      ORHr.SalesMan = ORr.SalesMan;
+      ORHr.Sum4 = ORr.Sum4;
+      ORHr.rwcnt = MatRowCnt(ORr);
+      ORHr.FeedBackStatus = ORr.FeedBackStatus;
+      ORHr.PrepaymentReceived = ORr.PrepaymentReceived;
+      ORHr.Reserved = ORr.Reserved;
+      ORHr.OKFlag = ORr.OKFlag;
+      ORHr.SerNr = NextSerNr("ORHistoryVc",ORHr.Date,-1,false,"");
+      RecordStore(ORHr,true);
+    end;
+  end else begin
+    RecordNew(ORHr);
+    ORHr.ORNr = ORr.SerNr;
+    ORHr.Date = CurrentDate;
+    ORHr.Time = CurrentTime;
+    ORHr.CustomStatusFlag = ORr.CustomStatusFlag;
+    ORHr.SalesMan = ORr.SalesMan;
+    ORHr.Sum4 = ORr.Sum4;
+    ORHr.rwcnt = MatRowCnt(ORr);
+    ORHr.FeedBackStatus = ORr.FeedBackStatus;
+    ORHr.PrepaymentReceived = ORr.PrepaymentReceived;
+    ORHr.Reserved = ORr.Reserved;
+    ORHr.OKFlag = ORr.OKFlag;
+    ORHr.SerNr = NextSerNr("ORHistoryVc",ORHr.Date,-1,false,"");
+    RecordStore(ORHr,true);
+  end;
+end;
+
+
 global //Edit***************************Sasha2,9:51 25.01.2017 {
 procedure HandlePromotionObjectsIV(var record ORVc ORr,record ORVc OR2r,LongInt mode)
 begin
@@ -2127,7 +2171,7 @@ end;
 
 global updating procedure UpdateORVcNewPostStatuses(record SHVc SHr)		//Edit----------------------Dima  23.09.2015
 begin
-	record ORVc ORr;
+	record ORVc ORr,oldORr;
 	string 50 sent, received,received2;
 	
 	sent = USetStr(31120);
@@ -2148,7 +2192,11 @@ begin
 						if (SHr.NPStatus == received2) then begin
 							ORr.CustomStatusFlag = 8;
 						end;
-						Recalculate_CustomStatusFlagText(ORr);													
+						Recalculate_CustomStatusFlagText(ORr);		
+						oldORr.SerNr = ORr.SerNr;
+						if(readfirstmain(oldORr,1,true))then begin
+							CreateORHistoryVcFromORVc(ORr,oldORr,true);// Edit ************************** Wednesday, 1 March 2017 10:50:38
+						end;											
 						RecordStore(ORr,true);
 						SetNewORCustomStatusFlagOnWeb(ORr);// Edit ************************** Friday, 18 November 2016 09:52:07
 				end;
@@ -2425,49 +2473,6 @@ begin
  
   ORVcRecordUpdate = res; 
   return;
-end;
-
-global
-updating procedure CreateORHistoryVcFromORVc(record ORVc ORr, record ORVc OR2r, boolean UpdateFlag)
-begin
-  record ORHistoryVc ORHr;
-  
-  if (UpdateFlag) then begin
-    if((OR2r.CustomStatusFlag!=ORr.CustomStatusFlag) or (OR2r.SalesMan!=ORr.SalesMan) or 
-    (OR2r.Sum4!=ORr.Sum4) or (OR2r.FeedBackStatus!=ORr.FeedBackStatus) or
-    (OR2r.PrepaymentReceived!=ORr.PrepaymentReceived) or (OR2r.Reserved!=ORr.Reserved) or
-    (OR2r.OKFlag!=ORr.OKFlag)) then begin
-      RecordNew(ORHr);
-      ORHr.ORNr = ORr.SerNr;
-      ORHr.Date = CurrentDate;
-      ORHr.Time = CurrentTime;
-      ORHr.CustomStatusFlag = ORr.CustomStatusFlag;
-      ORHr.SalesMan = ORr.SalesMan;
-      ORHr.Sum4 = ORr.Sum4;
-      ORHr.rwcnt = MatRowCnt(ORr);
-      ORHr.FeedBackStatus = ORr.FeedBackStatus;
-      ORHr.PrepaymentReceived = ORr.PrepaymentReceived;
-      ORHr.Reserved = ORr.Reserved;
-      ORHr.OKFlag = ORr.OKFlag;
-      ORHr.SerNr = NextSerNr("ORHistoryVc",ORHr.Date,-1,false,"");
-      RecordStore(ORHr,true);
-    end;
-  end else begin
-    RecordNew(ORHr);
-    ORHr.ORNr = ORr.SerNr;
-    ORHr.Date = CurrentDate;
-    ORHr.Time = CurrentTime;
-    ORHr.CustomStatusFlag = ORr.CustomStatusFlag;
-    ORHr.SalesMan = ORr.SalesMan;
-    ORHr.Sum4 = ORr.Sum4;
-    ORHr.rwcnt = MatRowCnt(ORr);
-    ORHr.FeedBackStatus = ORr.FeedBackStatus;
-    ORHr.PrepaymentReceived = ORr.PrepaymentReceived;
-    ORHr.Reserved = ORr.Reserved;
-    ORHr.OKFlag = ORr.OKFlag;
-    ORHr.SerNr = NextSerNr("ORHistoryVc",ORHr.Date,-1,false,"");
-    RecordStore(ORHr,true);
-  end;
 end;
 
 global

@@ -24,6 +24,7 @@ external function string 255 StrReplace(string,string,string);
 external procedure GetAvailableItems(var record ORVc);
 external procedure ORDUpdatePrices(var record ORVc,Boolean);// Edit ************************** Monday, 19 December 2016 11:16:53
 external function string 255 LookUpPromotionCode(date,string); //Edit***************************Sasha2,15:31 24.01.2017
+external procedure CreateORHistoryVcFromORVc(record ORVc,record ORVc,boolean);// Edit ************************** Wednesday, 1 March 2017 10:54:05
 
 SetLangMode(LangRussian,"RUS",0);
 
@@ -545,7 +546,7 @@ end; //Edit***************************Sasha2,10:17 20.12.2016 }
 
 global webpublic updating Procedure WebGetOrder() //Edit***************************Sasha2,15:18 04.07.2014
 begin
-  record ORVc ORr;
+  record ORVc ORr,oldORr;
   row ORVc ORrw;
   record CUVc Cur;
   record ModuleBlock OptFeature;
@@ -785,6 +786,10 @@ begin
 										
 					if(ORr.SerNr>-1)then begin
 						if(updateflag)then begin
+							oldORr.SerNr = ORr.SerNr;
+							if(readfirstmain(oldORr,1,true))then begin
+								CreateORHistoryVcFromORVc(ORr,oldORr,true);// Edit ************************** Wednesday, 1 March 2017 10:50:38
+							end;
 							if (recordStore(ORr,true)) then begin
 							  recordSaved = true;
 								logtext(0,"Successful order import #" & ORr.SerNr);
