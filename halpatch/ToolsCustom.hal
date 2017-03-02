@@ -3454,3 +3454,22 @@ begin
   end;*/
   return;
 end;
+
+global updating procedure SetCustomRabateMn()
+begin
+	record CUVc CUr;
+	boolean testf;
+	
+	while(loopmain(CUr,1,true))begin
+		testf = true;
+		if(blank(CUr.CustCat))then begin testf = false; end;
+		//if(CUr.CustCat=="")then begin testf = false; end;
+		
+		if(testf and blank(CUr.RebCode))then begin
+			CUr.RebCode = "0%";
+			recordstore(CUr,true);
+		end;
+	end;
+	
+return;
+end;
