@@ -21,6 +21,13 @@ begin
   boolean testf,TrHs,TrHs2;
   Time prevTime,tim;
   Date prevDate;
+  record UserVc USr;// Edit ************************** Thursday, 2 March 2017 11:13:36
+  string 200 userloc;
+  
+  USr.Code = currentuser;
+  readfirstmain(USr,1,true);
+  
+  userloc = USr.SalesReportLocation;
   
   col[0] = 0;
   col[1] = col[0] + 25;
@@ -109,6 +116,9 @@ begin
         end;
         if (nonblank(RepSpec.ObjStr) and (ORr.OrderClass!=RepSpec.ObjStr)) then begin testf = false; end;
         if (nonblank(RepSpec.f4) and (ORr.Location!=RepSpec.f4)) then begin testf = false; end;
+        if (nonblank(userloc) and userloc!=ORr.Location)then begin testf = false; end;
+        
+        
         if (testf) then begin
           ORHr.ORNr = ORr.SerNr;
           printedorderscnt = printedorderscnt + 1;
@@ -230,6 +240,8 @@ begin
         end;
         if (nonblank(RepSpec.ObjStr) and (ORr.OrderClass!=RepSpec.ObjStr)) then begin testf = false; end;
         if (nonblank(RepSpec.f4) and (ORr.Location!=RepSpec.f4)) then begin testf = false; end;
+        if (nonblank(userloc) and userloc!=ORr.Location)then begin testf = false; end;
+        
         if (testf) then begin
           ORHr.ORNr = ORr.SerNr;
           printedorderscnt = printedorderscnt + 1;
