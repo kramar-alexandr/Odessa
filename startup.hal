@@ -125,6 +125,8 @@ begin
 
   Report("Несовпадения по складу 1-КОС",TovTestRClass,TovTestRn,0,modDBMain);
   Report("1-КОС с пустым местом",OneKocBlankPosRClass,OneKocBlankPosRn,0,modDBMain);
+  
+  Report("ВЫгрузка номеров ЭН НП и Мадженто",TovTestRClass,ORWithENNPRn,0,modIN);
 
    SString(24193,"К оплате");
 

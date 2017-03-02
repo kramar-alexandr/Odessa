@@ -349,3 +349,55 @@ begin
   EndJob;
   return;
 end;
+
+
+
+global
+procedure ORWithENNPRn(record RcVc RepSpec)
+begin
+  record ORVc ORr;
+  row ORVc ORrw;
+  record ORHistoryVc ORHr;
+  record UserVc Ur;
+  area tmparea;
+  integer alen,pos,ordcnt,i,days;
+  longint fromord,toord,order,printedorderscnt,prevCSF,timedif;
+  string 100 ord,ordcondtype,tstr;
+  array longint ords;
+  array integer col;
+  boolean testf,TrHs,TrHs2;
+  Time prevTime,tim;
+  Date prevDate;
+  record UserVc USr;// Edit ************************** Thursday, 2 March 2017 11:13:36
+  string 200 userloc;
+  record SHVc SHr;
+  
+
+  
+  StartReportNoHeaderJob("Номера счетов");
+    StartFormat(15);
+      OutString(0,0,"SerNR Hansa",false);
+      OutString(70,0,"SerNR Magento",false);
+      OutString(140,0,"EN NovaPoshta",false);
+    EndFormat;
+    
+    while(loopmain(SHr,1,true))begin
+    	testf = true;
+    	if(SHr.SHClass!="WEB")then begin testf = false; end;
+    	if(blank(SHr.NPIntDocNumber))then begin testf = false; end;
+    	
+    	if(testf)then begin
+    		ORr.SerNr = SHr.OrderNr;
+    		readfirstmain(ORr,1,true);
+    		
+    		StartFormat(15);
+					OutString(0,0,SHr.OrderNr,false);
+					OutString(70,0,ORr.CustOrdNr,false);
+					OutString(140,0,SHr.NPIntDocNumber,false);
+				EndFormat;
+    	end;
+    end;
+    
+  EndJob;
+  return;
+end;
