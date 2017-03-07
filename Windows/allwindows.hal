@@ -5040,10 +5040,12 @@ begin
   RadioButton(h4-150,v=25,0,0,"Новый",CustomStatusFlag);
   RadioButton(h4-150,v+=16,1,0,"Открыт",CustomStatusFlag);
   RadioButton(h4-150,v+=16,2,0,"Подтвержден",CustomStatusFlag);
+  RadioButton(h4-150,v+=16,14,0,"Подтвержден (Резерв)",CustomStatusFlag);
   RadioButton(h4-150,v+=16,3,0,"Не дозвонились",CustomStatusFlag);
   RadioButton(h4-150,v+=16,4,0,"Заказ изменен",CustomStatusFlag);
   RadioButton(h4-150,v+=16,12,0,"В ожидании товаров",CustomStatusFlag);
   RadioButton(h4-150,v+=16,13,0,"Не достаточно тов-в",CustomStatusFlag);
+  
   RadioButton(h4-5,v=25,11,0,"В ожидании опл.",CustomStatusFlag);
   RadioButton(h4-5,v+=16,5,0,"В сборке",CustomStatusFlag);
   RadioButton(h4-5,v+=16,6,0,"Собран",CustomStatusFlag);
@@ -6768,16 +6770,16 @@ t=1;
   EditField(h,v+=vs,-40,"",Normal,ToAddr2,false,0);
   EditField(h,v+=vs,-40,"",Normal,ToAddr3,false,0);
   EditField(h,v+=vs,-40,"",Normal,ToAddr4,false,0);
-  SpecialMenu("Стоимость в старой цене за единицу",'=',0,"StockMovFillFIFODsm");
+  //SpecialMenu("Стоимость в старой цене за единицу",'=',0,"StockMovFillFIFODsm");
   SpecialMenu("Статус товара",'I',1,"ItemStatusStockMovDsm");
   SpecialMenu("Поиск и добавление товара",'f',1,"TableSearchAddition2Dsm");	//Edit-------Dima  13.01.2015
   if (HasModNL) then begin
     SpecialMenu("Открыть запись операции отправки",' ',2,"OpenTRFromStockMovSent");
     SpecialMenu("Открыть запись операции получения",'t',3,"OpenTRFromStockMov");
   end;
-  if (HasQualityControl) then begin
+  /*if (HasQualityControl) then begin
     SpecialMenu("Контроль качества",'u',2,"QualConFromStockMovDsm");
-  end;
+  end;*/
   if (HasLocalization("PRT")) then begin
     if (HasETaxDocuments) then begin
       SpecialMenu("Send to Tax Authorities",'',10,"EShipPRTDsm");
@@ -6788,10 +6790,12 @@ t=1;
   SpecialMenu("Распечатать EAN13 этикетки 5*13",'',1,"PrintLabelEANDsm");
 	SpecialMenu("Отсортировать таблицу по коду",'',20,"TableSortStockMov_ByCodeDsm"); 	//Edit----------------------Dima  11.02.2015
 	SpecialMenu("Отсортировать таблицу по наименованию",'',20,"TableSortStockMov_ByNameDsm"); 	//Edit----------------------Dima  11.02.2015
+	SpecialMenu("Собрать по коробкам",'',20,"BoxingStockMovItemDsm"); 	//Edit----------------------Dima  11.02.2015
 	if (CurrentUser=="SA" or CurrentUser=="SA1") then begin
 	  SpecialMenu("Отчет несовпадений по количеству в перемещении",'',20,"StockMovMismatchDsm"); //Edit***************************Sasha2,10:28 29.04.2016
 	end;
 	SpecialMenu("Удалить проблемную строку по заказу",'',20,"DeleteOrdRowFromSMHardDsm");
+	SpecialMenu("Остановить сбор веб резервов",'',20,"StopWebReservingDsm");
   EndWindow;
 end;
 

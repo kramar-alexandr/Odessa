@@ -169,7 +169,7 @@ MinInTableStockMov = pos;
 return;
 end;
 
-
+global
 procedure TableSortAscending_StockMov(var record StockMovVc SMr, string key) //Edit----------------------Dima  11.02.2015
 begin
 	record StockMovVc oldSMr;

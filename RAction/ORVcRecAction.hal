@@ -219,6 +219,7 @@ begin
 		case 11:newstatus = "pending_payment";//В ожидании опл.
 		case 12:newstatus = "pending_stock";//В ожидании товаров
 		case 13:newstatus = "no_stock";//Не достаточно тов-в
+		case 14:newstatus = "approved";//Подтвержден резерв
 	end;
 	if(nonblank(newstatus))then begin
 		if(ORr.OrderClass=="WEB" and nonblank(ORr.CustOrdNr))then begin
@@ -2107,6 +2108,31 @@ boolean res;
 return;
 end;
 
+global
+function boolean CheckORVcConfirmReservStatus(record ORVc ORr)			//Edit----------------------Dima  23.09.2015
+begin
+integer i,rwcnt;
+row ORVc ORrw;
+boolean res;
+
+	res = true;
+
+	rwcnt = MatRowCnt(ORr);
+	for(i=0;i<rwcnt;i=i+1) begin
+		MatRowGet(ORr,i,ORrw);
+		if (ORrw.NecessaryQuant!=(ORrw.Quant + ORrw.ProcessingQuant)) then begin
+			res = false;
+			i = rwcnt;
+		end;
+	end;
+	
+	logtext(0,"CheckORVcConfirmReservStatus " & res);
+	
+	LCheckORVcConfirmReservStatus:;
+	CheckORVcConfirmReservStatus = res;
+return;
+end;
+
 
 
 global
@@ -2150,7 +2176,8 @@ begin
     case 7: ORr.CustomStatusFlagText = USetStr(31109);
     case 8: ORr.CustomStatusFlagText = USetStr(31110);
     case 9: ORr.CustomStatusFlagText = USetStr(31111);
-    case 10: ORr.CustomStatusFlagText = USetStr(31112);           
+    case 10: ORr.CustomStatusFlagText = USetStr(31112);  
+    case 14: ORr.CustomStatusFlagText = USetStr(31158);             
 
   end;
   
@@ -2413,9 +2440,13 @@ begin
 		ORr.CustomStatusFlag = 2;
 	end;
 	if (ORr.CustomStatusFlag == 2 and CheckORVcConfirmStatus(ORr)==false) then begin
-	  ORr.CustomStatusFlag = 12;
-	  ORr.WaitingForItemsDate = CurrentDate;
-	  ORr.WaitingForItemsTime = CurrentTime;
+		if(CheckORVcConfirmReservStatus(ORr))then begin
+			ORr.CustomStatusFlag = 14;
+		end else begin
+			ORr.CustomStatusFlag = 12;
+			ORr.WaitingForItemsDate = CurrentDate;
+			ORr.WaitingForItemsTime = CurrentTime;
+	  end;
 	end;
 	
 	if (CheckORVcWaitingStatus(ORr)) then begin
@@ -2428,8 +2459,14 @@ begin
 			end;
 	end;
 	
-	if (CheckORVcConfirmStatus(ORr)==true  and ORr.Reserved!=0  and (ORr.CustomStatusFlag < 5 or ORr.CustomStatusFlag > 11)) then begin //recalculate after StockMov (logistics)
-		ORr.CustomStatusFlag = 2;
+	if (ORr.Reserved!=0  and (ORr.CustomStatusFlag < 5 or ORr.CustomStatusFlag > 11)) then begin //recalculate after StockMov (logistics)
+		if(CheckORVcConfirmStatus(ORr))then begin
+			ORr.CustomStatusFlag = 2;
+		end else begin
+			if(CheckORVcConfirmReservStatus(ORr))then begin
+				ORr.CustomStatusFlag = 14;
+			end;
+		end;
 	end;	
 		
   if (OR2r.Closed==0 and ORr.Closed!=0 and ORr.CustomStatusFlag!=10) then begin //Edit***************************Sasha2,16:19 04.02.2015 {
@@ -2506,6 +2543,7 @@ begin
   		case 11:oldstatus = "pending_payment";//В ожидании опл.
   		case 12:oldstatus = "pending_stock";//В ожидании товаров
   		case 13:oldstatus = "no_stock";//Не достаточно тов-в
+  		case 14:newstatus = "approved";//Подтвержден резерв
   	end;
   	switch(ORr.CustomStatusFlag)begin
   		case 0:newstatus = "pending";//Новый
@@ -2522,6 +2560,7 @@ begin
   		case 11:newstatus = "pending_payment";//В ожидании опл.
   		case 12:newstatus = "pending_stock";//В ожидании товаров
   		case 13:newstatus = "no_stock";//Не достаточно тов-в
+  		case 14:newstatus = "approved";//Подтвержден резерв
   	end;
   	if(oldstatus!=newstatus and nonblank(newstatus))then begin
   		if(ORr.OrderClass=="WEB" and nonblank(ORr.CustOrdNr))then begin
@@ -2719,13 +2758,23 @@ begin
 	if (ORr.AutoCreation!=0 and ORr.Reserved!=0) then begin
 		ORr.CustomStatusFlag = 2;
 	end;	
-	if (CheckORVcConfirmStatus(ORr) and ORr.Reserved!=0 ) then begin			//Edit----------------------Dima  23.09.2015
-		ORr.CustomStatusFlag = 2;
+	if (ORr.Reserved!=0) then begin			//Edit----------------------Dima  23.09.2015
+		if(CheckORVcConfirmStatus(ORr))then begin
+			ORr.CustomStatusFlag = 2;
+		end else begin
+			if(CheckORVcConfirmReservStatus(ORr))then begin
+				ORr.CustomStatusFlag = 14;
+			end;
+		end;
 	end;
-	if (ORr.CustomStatusFlag == 2 and CheckORVcConfirmStatus(ORr)==false) then begin
-	  ORr.CustomStatusFlag = 12;
-	  ORr.WaitingForItemsDate = CurrentDate;
-	  ORr.WaitingForItemsTime = CurrentTime;
+	if (ORr.CustomStatusFlag==2 and CheckORVcConfirmStatus(ORr)==false) then begin
+			if(CheckORVcConfirmReservStatus(ORr))then begin
+				ORr.CustomStatusFlag = 14;
+			end else begin
+			 	ORr.CustomStatusFlag = 12;
+				ORr.WaitingForItemsDate = CurrentDate;
+				ORr.WaitingForItemsTime = CurrentTime;
+			end;
 	end;		
   if (ORr.Closed!=0 and ORr.CustomStatusFlag!=10) then begin //Edit***************************Sasha2,16:19 04.02.2015 {
     ORr.CustomStatusFlag = 10;

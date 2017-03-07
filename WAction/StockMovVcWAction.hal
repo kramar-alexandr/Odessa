@@ -35,6 +35,10 @@ remote function string 20 FindCustRouteByLocation(string,string,string);
 remote procedure HandlePrintEAN13StockMov(record StockMovVc,var array record PUVc,var array integer); //Edit***************************Sasha2,16:15 26.01.2015
 remote procedure CollectOrdersForStockMove(var record StockMovVc, record RcVc);//Edit----------------------Dima  14.08.2015
 remote procedure SMMismatchRn(record RcVc); //Edit***************************Sasha2,10:25 29.04.2016
+remote updating procedure StopWebReserving(longint);
+remote updating procedure StockMovBoxingQty(var record StockMovVc);// Edit ************************** Tuesday, 7 March 2017 11:43:03
+
+
 
 	SetLangMode(LangRussian,"RUS",0);
 
@@ -778,7 +782,13 @@ BEGIN
   BlockLoad(Logisticsb);  
  
   res = true;
-  GetWindowRecord(wn,StockMovr);    
+  GetWindowRecord(wn,StockMovr);   
+  
+  if(StockMovr.AutoCompliteFlag>0 and StockMovr.StopAutoComplite==0 and changed>0)then begin
+  	res = false;
+  	Messagebox(31156,"");
+  end;
+   
   GetPrevWindowRecord(wn,StockMov2r);
 
   if (wnst==Rs_update) then begin
@@ -1524,5 +1534,51 @@ begin
 	end;
 LDeleteOrdRowFromSMHardDsm:;
 
+return;
+end;
+
+
+global updating procedure StopWebReservingDsm()
+begin
+	record StockMovVc SMr;
+	integer wn;
+	
+	
+	wn = curwindow;
+	if(windowstate(wn)==0)then begin
+		getwindowrecord(wn,SMr);
+		if(SMr.AutoCompliteFlag==1 and SMr.StopAutoComplite==0)then begin
+			StopWebReserving(SMr.SerNr);
+			UpdateBrowses("StockMovVc");
+			messagebox(31159,"");
+		end;
+	end else begin
+		messagebox(31157,"");
+	end;
+	
+	
+return;
+end;
+
+global updating procedure BoxingStockMovItemDsm()
+begin
+	record StockMovVc SMr;
+	integer wn;
+	
+	
+	wn = curwindow;
+	if(windowstate(wn)==0)then begin
+		getwindowrecord(wn,SMr);
+		if(SMr.OKFlag==0 and SMr.SentOKFlag==0 and SMr.OrdFlag==0)then begin
+			StockMovBoxingQty(SMr);
+			putwindowrecord(wn,SMr);
+		end else begin
+			messagebox(31160,"");
+		end;
+	end else begin
+		messagebox(31157,"");
+	end;
+	
+	
 return;
 end;

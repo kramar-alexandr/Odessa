@@ -7,6 +7,8 @@ remote function Boolean StockMovVc_PasteArtCode(var record StockMovVc,Integer,In
 external updating function longint AddSMStoStack(string,string,string,string,string,longint,string,date,time); //Edit***************************Sasha2,16:45 28.08.2015
 external function string 255 ParseSMStext(string, record ORVc);
 external function boolean CheckORVcConfirmStatus(record ORVc);		//Edit----------------------Dima  24.09.2015
+external function boolean CheckORVcConfirmReservStatus(record ORVc);		//Edit----------------------Dima  24.09.2015
+
 external procedure PrintAcceptanceActivities(Integer,string,string,string);
 external procedure PurgeTRExtYc(record PurgeTRVc,var string);
 external function val MulRateToBase1(var string,val,val,val,val,val,val,roundmode);
@@ -1211,7 +1213,6 @@ begin
 				
 					SMrw.ArtCode = ORrw.ArtCode;
 					SMrw.OrdQuant = ORrw.OrderQuant - ORrw.ProcessingQuant;
-					//SMrw.OrderProcessing =  SMrw.OrdQuant;
 					SMrw.ORSerial = ORr.SerNr;
 					SMrw.ORRowUID = ORrw.UID;
 					MatRowPut(SMr,j,SMrw);
@@ -1224,6 +1225,99 @@ begin
 
 	end;
 
+end;
+
+
+global updating procedure AddOrderForStockMove(var record StockMovVc SMr,var record ORVc ORr,boolean inser)// Edit ************************** Monday, 6 March 2017 11:21:47
+begin
+	row ORVc ORrw;
+	row StockMovVc SMrw;
+	boolean TrHs,testf;
+	integer rwcnt,i,j;
+	longint pos;
+	array string 255 aWarning;
+	string 10 str1,str2;
+	date sStartDate,sEndDate;
+	integer smrows;
+	record StockMovVc oldSMr;
+	record ItemStatusVc ISr;
+	vector val artcodeinstock,artcodeneed;
+	boolean addrow;
+	record ORVc oldORr;
+	
+	
+	j=0;
+	pos = 0;
+	
+	recordcopy(oldORr,ORr);
+	
+	rwcnt = MatRowCnt(ORr);
+	for(i=0;i<rwcnt;i=i+1)  begin
+		MatRowGet(ORr,i,ORrw);
+			artcodeneed[ORrw.ArtCode] = artcodeneed[ORrw.ArtCode] + ORrw.OrderQuant;
+			ISr.Code = ORrw.ArtCode;
+			ISr.Location = SMr.FrLocation;
+			if(readfirstmain(ISr,2,true))then begin
+				artcodeinstock[ORrw.ArtCode] = ISr.Instock - ISr.RsrvQty;
+			end;
+			
+	end;
+	
+	if(inser==false)then begin
+		recordcopy(oldSMr,SMr);
+		if(SMr.Reserved>0)then begin
+			SMr.Reserved = 0;
+			recordupdate(oldSMr,SMr,true);
+		end;
+	end;
+	smrows = matrowcnt(SMr);
+	rwcnt = MatRowCnt(ORr);
+	addrow = false;
+	for(i=0;i<rwcnt;i=i+1)  begin
+		MatRowGet(ORr,i,ORrw);
+		if (ORrw.OrderQuant - ORrw.ProcessingQuant > 0 and artcodeinstock[ORrw.ArtCode]>0) then begin
+			addrow = true;
+			LogText(0,"Auto logistics creation: " & SMr.SerNr & "  OR:" & ORr.SerNr & "  code " & ORrw.ArtCode & "  ord:" & ORrw.OrderQuant & "  proc:" & ORrw.ProcessingQuant);
+		
+			SMrw.ArtCode = ORrw.ArtCode;
+			if((ORrw.OrderQuant - ORrw.ProcessingQuant)<=artcodeinstock[ORrw.ArtCode])then begin
+				SMrw.OrdQuant = ORrw.OrderQuant - ORrw.ProcessingQuant;
+				if(inser==false)then begin
+					SMrw.OrderProcessing = ORrw.OrderQuant - ORrw.ProcessingQuant;
+					ORrw.ProcessingQuant = SMrw.OrdQuant;
+					matrowput(ORr,i,ORrw);
+				end;
+			end else begin
+				SMrw.OrdQuant = artcodeinstock[ORrw.ArtCode];
+				if(inser==false)then begin
+					SMrw.OrderProcessing = artcodeinstock[ORrw.ArtCode];
+					ORrw.ProcessingQuant = SMrw.OrdQuant;
+					matrowput(ORr,i,ORrw);
+				end;
+			end;
+			SMrw.ORSerial = ORr.SerNr;
+			SMrw.ORRowUID = ORrw.UID;
+			MatRowPut(SMr,smrows,SMrw);
+			StockMovVc_PasteArtCode(SMr,smrows,1,aWarning);
+			smrows=smrows+1;
+			addrow = true;
+		end;			
+	end;
+	
+	if(inser==false and addrow)then begin
+		recordupdate(oldORr,ORr,true);
+		recordcopy(oldSMr,SMr);
+		if(SMr.Reserved==0)then begin
+			SMr.Reserved = 1;
+			SMr.TransDate = Currentdate;
+			recordupdate(oldSMr,SMr,true);
+			CreateRecordLink(SMr,CurrentCompany,ORr,CurrentCompany);
+		 	CreateRecordLink(ORr,CurrentCompany,SMr,CurrentCompany);
+		end;
+	end else begin
+		SMr.Reserved = 1;
+		recordinsert(SMr,true);
+	end;
 end;
 
 global updating procedure ReSaveORVcMn()	//Edit----------------------Dima  28.08.2015
@@ -1403,6 +1497,10 @@ record SHVc SHr;
 	end;
 	if (CheckORVcConfirmStatus(ORr)) then begin
 		ORr.CustomStatusFlag = 2;
+	end else begin
+		if(CheckORVcConfirmReservStatus(ORr))then begin
+			ORr.CustomStatusFlag = 14;
+		end;
 	end;
   if(ORr.FeedBackStatus==1 or ORr.FeedBackStatus==2) then begin
   		ORr.CustomStatusFlag = 3;		//Edit----------------------Dima  22.09.2015

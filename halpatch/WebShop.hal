@@ -25,6 +25,7 @@ external procedure GetAvailableItems(var record ORVc);
 external procedure ORDUpdatePrices(var record ORVc,Boolean);// Edit ************************** Monday, 19 December 2016 11:16:53
 external function string 255 LookUpPromotionCode(date,string); //Edit***************************Sasha2,15:31 24.01.2017
 external procedure CreateORHistoryVcFromORVc(record ORVc,record ORVc,boolean);// Edit ************************** Wednesday, 1 March 2017 10:54:05
+external updating procedure AddOrderForStockMove(var record StockMovVc,var record ORVc,boolean);// Edit ************************** Monday, 6 March 2017 11:29:42
 
 SetLangMode(LangRussian,"RUS",0);
 
@@ -489,6 +490,11 @@ begin
   integer rwcnt,i;
   val diff;
   boolean foundf;
+  record StockMovVc SMr;
+  boolean TrHs,testf,inserflag;
+  record WebShopSettingsBlock WSb;
+  
+  blockload(WSb);
   
     ORr.SerNr = OrSerNr;
     if (ReadFirstMain(ORr,1,true) and MatRowCnt(ORr)>0) then begin
@@ -513,6 +519,42 @@ begin
     		  ORr.Reserved = 1;
     		end;
     		RecordUpdate(OR2r,ORr,true);
+    		
+    		if(WSb.AutoRes1KOC>0)then begin
+					if(foundf)then begin
+						SMr.TransDate = currentdate;
+						TrHs = true;
+						inserflag = true;
+						while(loopbackkey("TransDate",SMr,1,TrHs))begin
+							testf = true;
+							if(SMr.TransDate<addday(SMr.TransDate,-1))then begin TrHs = false; testf = false; end;
+							if(SMr.StopAutoComplite>0)then begin testf = false; end;
+							if(SMr.AutoCompliteFlag<1)then begin testf = false; end;
+							if(SMr.OrdFlag>0)then begin testf = false; end;
+							if(SMr.SentOKFlag>0)then begin testf = false; end;
+							if(SMr.OKFlag>0)then begin testf = false; end;
+						
+							if(testf)then begin
+								inserflag = false;
+								TrHs = false;
+								testf = false;
+							end;
+						end;
+						if(inserflag)then begin
+							recordnew(SMr);
+							SMr.OrdTransDate = currentdate;
+							SMr.FrLocation = "1-KOC";
+							SMr.ThrouLocation = "00";
+							SMr.ToLocation = "RYBRAY";
+							SMr.AutoCompliteFlag = 1;
+							SMr.SerNr = NextSerNr("StockMovVc",CurrentDate,-1,false,"");
+							SMr.Comment = "Ђторезервирование товаров интернет магазина";
+						end;
+						logtext(0,"Ђторезервирование товаров интернет магазина");
+						AddOrderForStockMove(SMr,ORr,inserflag);
+					end;
+    			
+    		end;
     	end;
     end;
   

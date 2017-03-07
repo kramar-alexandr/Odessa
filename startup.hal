@@ -127,7 +127,9 @@ begin
   Report("1-КОС с пустым местом",OneKocBlankPosRClass,OneKocBlankPosRn,0,modDBMain);
   
   Report("ВЫгрузка номеров ЭН НП и Мадженто",TovTestRClass,ORWithENNPRn,0,modIN);
-
+		
+	SString(964,"");	
+	
    SString(24193,"К оплате");
 
    SString(31000,"На текущем складе:");
@@ -278,8 +280,11 @@ begin
    SString(31153,"Ваучер не существует");  
    SString(31154,"Сессия кассира не открыта");  
    SString(31155,"Последняя покупка была совершена (дней назад)");  
-	
-	
+	 SString(31156,"Закройте документ на автодобавление перед редактированием"); 
+	 SString(31157,"отмените изменения к документу"); 
+	 SString(31158,"Подтвержден (резерв)");
+	 SString(31159,"Произведен подгон товара под упаковку (по возможности)");  
+	 SString(31160,"Перемещение уже подтверждено");  
 	
 	Maintenance("Проставить склад первой покупки клиента",MyVClass,FillFirstDateByeCUMn,modDBMain);
   Maintenance("Экспорт склада CSV",ExportStockCSVClass,ExportStockCSVMn,modSY);

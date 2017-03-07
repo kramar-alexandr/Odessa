@@ -1,6 +1,11 @@
 external procedure ORVc_PasteQuant(var record ORVc,Integer,Boolean,var Boolean);//Edit----------------------Dima  20.08.2015
 external procedure ORSumup(var record ORVc);//Edit----------------------Dima  20.08.2015
 external procedure GetAvailableItems(var record ORVc);	//Edit----------------------Dima  24.09.2015
+external procedure TableSortAscending_StockMov(var record StockMovVc,string);// Edit ************************** Tuesday, 7 March 2017 11:30:41
+external function Boolean StockMovVc_PasteQuant(var record StockMovVc,Integer);// Edit ************************** Tuesday, 7 March 2017 11:36:28
+
+SetLangMode(LangRussian,"RUS",0);
+
 
 function val Min(val v1,val v2)
 begin
@@ -316,13 +321,14 @@ global updating
 begin
   integer rwcnt,j;
   row ORVc ORrw;
-  record ORVc ORr;
+  record ORVc ORr,oldORr;
 
 
  	if (SMrw2.ORSerial>0) then begin		//if rewriting need					
 
 				ORr.SerNr = SMrw2.ORSerial;
-				if (ReadFirstMain(ORr,1,true)) then begin				
+				if (ReadFirstMain(ORr,1,true)) then begin			
+					recordcopy(oldORr,ORr);	
 					rwcnt = MatRowCnt(ORr);
 					for(j=0;j<rwcnt;j=j+1) begin
 						MatRowGet(ORr,j,ORrw);
@@ -347,7 +353,7 @@ begin
 						end; 
 					end;
 					
-					if (RecordStore(ORr,true)) then begin		end; 
+					recordupdate(oldORr,ORr,true);	
 				end; 			 
  	end;		
 
@@ -526,4 +532,74 @@ begin
 			RecordUpdate(oldORr,ORr,true);
 		end;
 	end;  
+end;
+
+global updating procedure StockMovBoxingQty(var record StockMovVc SMr)
+begin
+	integer mtrw,i;
+	row StockMovVc SMrw;
+	vector val boxqty,smqty;
+	vector boolean chanflag;
+	record INVc INr;
+	val dif;
+		
+	mtrw = matrowcnt(SMr);
+	For(i=0;i<mtrw;i=i+1) begin
+	  matrowget(SMr,i,SMrw);
+	  smqty[SMrw.ArtCode] = smqty[SMrw.ArtCode] + SMrw.OrdQuant;
+	  if(boxqty[SMrw.ArtCode]==blankval)then begin
+	  	boxqty[SMrw.ArtCode] = 1;
+	  	INr.Code = SMrw.ArtCode;
+	  	if(readfirstmain(INr,1,true))then begin
+	  		if(INr.AddUnittext3=="“")then begin
+	  			boxqty[SMrw.ArtCode] = INr.AddUnitCoef3;
+	  		end else begin
+	  			if(INr.AddUnittext2=="“")then begin
+						boxqty[SMrw.ArtCode] = INr.AddUnitCoef2;
+					end;
+	  		end;
+	  	end;
+	  end;
+	end; 
+	
+	For(i=0;i<mtrw;i=i+1) begin
+	  matrowget(SMr,i,SMrw);
+	  if(chanflag[SMrw.ArtCode]==false)then begin
+	  	if(boxqty[SMrw.ArtCode]>1)then begin
+	  		if(smqty[SMrw.ArtCode]<=boxqty[SMrw.ArtCode])then begin
+	  			SMrw.OrdQuant = SMrw.OrdQuant + boxqty[SMrw.ArtCode] - smqty[SMrw.ArtCode];
+	  			chanflag[SMrw.ArtCode] = true;
+	  			matrowput(SMr,i,SMrw);
+	  			StockMovVc_PasteQuant(SMr,i);
+	  		end else begin
+	  			while(smqty[SMrw.ArtCode]>boxqty[SMrw.ArtCode])begin
+	  				smqty[SMrw.ArtCode] = smqty[SMrw.ArtCode] - boxqty[SMrw.ArtCode];
+	  				logtext(0,smqty[SMrw.ArtCode]);
+	  				if(smqty[SMrw.ArtCode]<=boxqty[SMrw.ArtCode])then begin
+	  					SMrw.OrdQuant = SMrw.OrdQuant + boxqty[SMrw.ArtCode] - smqty[SMrw.ArtCode];
+							chanflag[SMrw.ArtCode] = true;
+							matrowput(SMr,i,SMrw);
+							StockMovVc_PasteQuant(SMr,i);
+	  				end;
+	  			end;
+	  		end;
+	  	end;
+	  end;
+	end; 
+
+return;
+end;
+
+global updating procedure StopWebReserving(longint sernr)
+begin
+	record StockMovVc SMr;
+	
+	SMr.SerNr = sernr;
+	readfirstmain(SMr,1,true);
+	SMr.StopAutoComplite = 1;
+	TableSortAscending_StockMov(SMr,"ArtCode");
+	StockMovBoxingQty(SMr);
+	recordstore(SMr,true);
+
+return;
 end;

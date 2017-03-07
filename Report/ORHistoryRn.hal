@@ -156,6 +156,7 @@ begin
                   case 11: tstr = "В ожидании опл.";
                   case 12: tstr = "В ожидании товаров";
                   case 13: tstr = "Не достаточно тов-в";
+                  case 14: tstr = "Подтвержден (резерв)";
                 end;
                 OutString(col[4],0,tstr,false);
                 if (prevCSF!=ORHr.CustomStatusFlag) then begin
@@ -279,6 +280,7 @@ begin
                   case 11: tstr = "В ожидании опл.";
                   case 12: tstr = "В ожидании товаров";
                   case 13: tstr = "Не достаточно тов-в";
+                  case 14: tstr = "Подтвержден (резерв)";
                 end;
                 OutString(col[4],0,tstr,false);
                 if (prevCSF!=ORHr.CustomStatusFlag) then begin
