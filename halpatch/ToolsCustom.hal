@@ -1315,6 +1315,7 @@ begin
 		 	CreateRecordLink(ORr,CurrentCompany,SMr,CurrentCompany);
 		end;
 	end else begin
+		//recordupdate(oldORr,ORr,true);
 		SMr.Reserved = 1;
 		recordinsert(SMr,true);
 	end;

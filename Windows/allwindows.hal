@@ -5537,8 +5537,7 @@ email not working yet
 	SpecialMenu("Отсортировать таблицу",'',20,"TableSortORDsm"); // edit ----------Dima 26.11.2014, 23.01.2015
 	SpecialMenu("Создать СМС с реквизитами",'',20,"MakeSMSORDsm");	//Edit----------------------Dima  26.06.2015
 	SpecialMenu("Просмотреть доступные товары",'R',20,"GetAvailableItemsDsm");		//Edit----------------------Dima  26.06.2015
-	SpecialMenu("Отменить заказ на перемещение",'',20,"CancelStockMoveOrderDsm");	//Edit----------------------Dima  30.12.2015
-	
+	SpecialMenu("Отменить заказ на перемещение",'',20,"CancelStockMoveOrderDsm");	//Edit----------------------Dima  30.12.2015	
 	SpecialMenu("Обновить задолженность клиента",'',20,"CalcCustBalDsm");	// Edit ************************** Friday, 22 July 2016 10:42:12
 	SpecialMenu("Послать статус в Magento",'',20,"UpdateMagontoStatDsm");	// Edit ************************** Monday, 14 November 2016 15:13:12
   end;

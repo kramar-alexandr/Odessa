@@ -363,11 +363,11 @@ end;
 
 
 global updating
- procedure CalculateProcessQtyForOrders(var vector record ORVc orders,var array longint orderNumbers,row StockMovVc SMrw2,var row StockMovVc SMrw,boolean found)	//Edit----------------------Dima  04.09.2015
+ procedure CalculateProcessQtyForOrders(var vector record ORVc orders,var vector record ORVc oldorders,var array longint orderNumbers,row StockMovVc SMrw2,var row StockMovVc SMrw,boolean found)	//Edit----------------------Dima  04.09.2015
 begin
   integer rwcnt,j;
   row ORVc ORrw;
-  record ORVc ORr;
+  record ORVc ORr,oldORr;
   boolean or_exist;
   vector boolean checkingVector;
   
@@ -387,6 +387,7 @@ begin
 					if (ReadFirstMain(ORr,1,true)) then begin
 						or_exist = true;
 						orders[ORr.SerNr] = ORr;
+						oldorders[ORr.SerNr] = ORr;
 						orderNumbers[orderNumbers.length] = ORr.SerNr;
 						checkingVector[ORr.SerNr] = true;					
 					end;
@@ -425,16 +426,17 @@ begin
 end; 
 
 
-global updating procedure StoreProcessingQtyToOrders(vector record ORVc orders,array longint orderNumbers)		//Edit----------------------Dima  28.12.2015
+global updating procedure StoreProcessingQtyToOrders(vector record ORVc orders,vector record ORVc oldorders,array longint orderNumbers)		//Edit----------------------Dima  28.12.2015
 begin
 	integer i,j;
-	record ORVc ORr;
+	record ORVc ORr,oldORr;
 	row ORVc ORrw;
 	
 	for(i=0;i<orderNumbers.length;i=i+1) begin
 		ORr = orders[orderNumbers[i]];	
-		
-		if (RecordStore(ORr,true)) then begin		end; 
+		oldORr = oldorders[orderNumbers[i]];
+		//if (RecordStore(ORr,true)) then begin		end;
+		recordupdate(oldORr,ORr,true);
 	end;  
 end;
 
@@ -447,7 +449,7 @@ begin
 	row StockMovVc SMrw,SMrw2;
 	integer UID,diff;
 	boolean found;
-	vector record ORVc orders;
+	vector record ORVc orders,oldorders;
 	array longint orderNumbers;
 	
 
@@ -472,14 +474,14 @@ begin
 						diff = -SMrw2.OrdQuant;
 				end;
 				if (diff!=0) then begin		
-					CalculateProcessQtyForOrders(orders,orderNumbers,SMrw2,SMrw,found);
+					CalculateProcessQtyForOrders(orders,oldorders,orderNumbers,SMrw2,SMrw,found);
 					if (found) then begin
 						MatRowPut(StockMovr,put,SMrw);
 					end;
 				end;
 		end;
 	end;
-	StoreProcessingQtyToOrders(orders,orderNumbers);
+	StoreProcessingQtyToOrders(orders,oldorders,orderNumbers);
 end;
 
 
@@ -574,7 +576,6 @@ begin
 	  		end else begin
 	  			while(smqty[SMrw.ArtCode]>boxqty[SMrw.ArtCode])begin
 	  				smqty[SMrw.ArtCode] = smqty[SMrw.ArtCode] - boxqty[SMrw.ArtCode];
-	  				logtext(0,smqty[SMrw.ArtCode]);
 	  				if(smqty[SMrw.ArtCode]<=boxqty[SMrw.ArtCode])then begin
 	  					SMrw.OrdQuant = SMrw.OrdQuant + boxqty[SMrw.ArtCode] - smqty[SMrw.ArtCode];
 							chanflag[SMrw.ArtCode] = true;

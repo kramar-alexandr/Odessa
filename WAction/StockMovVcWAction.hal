@@ -970,6 +970,7 @@ begin
   normalmode = 0;//Rs_normal
   insertmode = 1;//Rs_insert
   updatemode = 2;//Rs_update
+  
   if (WindowState(wn)==normalmode) then begin
     GetWindowRecord(wn,StockMovr);
     if (StockMovr.OKFlag!=0) then begin
@@ -994,7 +995,13 @@ begin
         res = false;
       end;
     end;
-  end;  
+  end; 
+  if(StockMovr.AutoCompliteFlag>0 and StockMovr.StopAutoComplite==0)then begin// Edit ************************** Tuesday, 7 March 2017 14:44:48
+  	res = false;
+  	Messagebox(31156,"");
+  end;
+  
+   
   StockMovDClassOKFlagButtonAction = res;
   return;
 end;
@@ -1043,6 +1050,10 @@ begin
     MessageBox(20080,"");
     res = false;
   end;
+  if(StockMovr.AutoCompliteFlag>0 and StockMovr.StopAutoComplite==0)then begin// Edit ************************** Tuesday, 7 March 2017 14:44:48
+  	res = false;
+  	Messagebox(31156,"");
+  end;
   StockMovDClassSentOKFlagButtonAction = res;
   return;
 end;
@@ -1084,6 +1095,10 @@ begin
       res = false;
     end;
   end;  
+  if(StockMovr.AutoCompliteFlag>0 and StockMovr.StopAutoComplite==0)then begin// Edit ************************** Tuesday, 7 March 2017 14:44:48
+  	res = false;
+  	Messagebox(31156,"");
+  end;
   StockMovDClassOrdFlagButtonAction = res;
   return;
 end;

@@ -222,21 +222,23 @@ begin
 	area a_req,replyarea;
 	integer i;	
 		
-		blockload(Soap);
+		if(status!="pending")then begin
+			blockload(Soap);
 				
-		addtexttoarea("<x:Envelope xmlns:x=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:urn=\"urn:Magento\">" & chr(13) & chr(10),a_req);
-		addtexttoarea("<x:Header/>" & chr(13) & chr(10),a_req);
-			addtexttoarea("<x:Body>" & chr(13) & chr(10),a_req);
-				addtexttoarea("<urn:salesOrderAddComment>" & chr(13) & chr(10),a_req);
-					addtexttoarea("<urn:sessionId>" & Soap.Session & "</urn:sessionId>" & chr(13) & chr(10),a_req);
-					addtexttoarea("<urn:orderIncrementId>" & ordnr & "</urn:orderIncrementId>" & chr(13) & chr(10),a_req);
-					addtexttoarea("<urn:status>" & status & "</urn:status>" & chr(13) & chr(10),a_req);
-				addtexttoarea("</urn:salesOrderAddComment>" & chr(13) & chr(10),a_req);
-			addtexttoarea("</x:Body>" & chr(13) & chr(10),a_req);
-		addtexttoarea("</x:Envelope>" & chr(13) & chr(10),a_req);
+			addtexttoarea("<x:Envelope xmlns:x=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:urn=\"urn:Magento\">" & chr(13) & chr(10),a_req);
+			addtexttoarea("<x:Header/>" & chr(13) & chr(10),a_req);
+				addtexttoarea("<x:Body>" & chr(13) & chr(10),a_req);
+					addtexttoarea("<urn:salesOrderAddComment>" & chr(13) & chr(10),a_req);
+						addtexttoarea("<urn:sessionId>" & Soap.Session & "</urn:sessionId>" & chr(13) & chr(10),a_req);
+						addtexttoarea("<urn:orderIncrementId>" & ordnr & "</urn:orderIncrementId>" & chr(13) & chr(10),a_req);
+						addtexttoarea("<urn:status>" & status & "</urn:status>" & chr(13) & chr(10),a_req);
+					addtexttoarea("</urn:salesOrderAddComment>" & chr(13) & chr(10),a_req);
+				addtexttoarea("</x:Body>" & chr(13) & chr(10),a_req);
+			addtexttoarea("</x:Envelope>" & chr(13) & chr(10),a_req);
 				
-		logtext(0,"SOAPUpdateStatus " & currenttime & "  " & getarealength(replyarea) & " " & ordnr & " " & status);
-		SendAsyncWebRequest(Soap.Host,Soap.Port,Soap.Port,Soap.Ssl==1,"POST",Soap.Path,"text/xml","",a_req,"SOAPUpdateStatusReply",20);
+			logtext(0,"SOAPUpdateStatus " & currenttime & "  " & getarealength(replyarea) & " " & ordnr & " " & status);
+			SendAsyncWebRequest(Soap.Host,Soap.Port,Soap.Port,Soap.Ssl==1,"POST",Soap.Path,"text/xml","",a_req,"SOAPUpdateStatusReply",20);
+		end;
 
 
 	
