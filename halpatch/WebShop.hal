@@ -1207,3 +1207,42 @@ begin
 	
 return;
 end;
+
+webpublic global updating
+procedure WebSetUserBirthDate()
+begin
+  record CUVc CUr,oldCUr;
+  string 100 email,dob,apikey;
+  date dateofbirth;
+  
+  email = WebGetArg("email");
+  dob = WebGetArg("date");
+  apikey = WebGetArg("apikey");
+  
+  if(nonblank(email) and nonblank(dob) and nonblank(apikey))then begin
+  	if(apikey=="ADRCftGYmhuKO")then begin
+  		dateofbirth = stringtodate(dob);
+  		if(dateofbirth<currentdate and dateofbirth>stringtodate("1/1/1917"))then begin
+  			CUr.eMail = email;
+  			if(readfirstkey("eMail",CUr,1,true))then begin
+  				if(blankdate(CUr.BirthDate))then begin
+						recordcopy(oldCUr,CUr);
+						CUr.BirthDate = dateofbirth;
+						recordupdate(oldCUr,CUr,true);
+						weboutstring("Done!");
+  				end else begin
+  					weboutstring("BirthDate already exists");
+  				end;
+  			end else begin
+  				weboutstring("Wrong eMail");
+  			end;
+  		end else begin
+				weboutstring("Wrong date");
+  		end;
+  	end else begin
+  		weboutstring("Wrong key");
+  	end;
+  end;
+  
+return;
+end;
