@@ -88,15 +88,17 @@ begin
     case 2: res = kRowcolorYellow;
     case 3: res = kRowcolorRed;
     case 4: res = kRowcolorRed;
-    case 12: res = kRowcolorRed;
-    case 13: res = kRowcolorRed;
-    case 11: res = kRowcolorGreen;
     case 5: res = kRowcolorGreen;
     case 6: res = kRowcolorGreen;
     case 7: res = kRowcolorGreen;
     case 8: res = kRowcolorGreen;
     case 9: res = kRowColorNone;
     case 10: res = kRowColorNone;
+    case 11: res = kRowcolorGreen;
+    case 12: res = kRowcolorRed;
+    case 13: res = kRowcolorRed;
+    case 14: res = kRowcolorYellow;
+    
     otherwise res = kRowColorNone;
   end;
   
