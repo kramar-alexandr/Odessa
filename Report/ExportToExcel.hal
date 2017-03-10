@@ -26,6 +26,7 @@ begin
 	SetRepCol(11,500);
 	SetRepCol(12,550);
 	SetRepCol(13,600);
+	
 
 
 	StartFormat(15);
@@ -41,6 +42,7 @@ begin
 	OutString(10,0,"Сумма",false);
 	OutString(12,0,"Объем",false);
 	OutString(13,0,"Вес",false);
+	OutString(13,0,"Нетто",false);
 	OutString(14,0,"В ящике",false);
 	OutString(15,0,"№ паллеты",false);
 	OutString(16,0,"Комментарий",false);
@@ -69,6 +71,7 @@ begin
 		OutString(10,0,POrw.Sum,false);
 		OutVal(12,0,POrw.Volume,M45Val,false);	//Edit by Victor 30.01.15
 		OutVal(13,0,POrw.Weight,M45Val,false);	//Edit by Victor 30.01.15
+		OutVal(13,0,POrw.NetWeight,M45Val,false);	// Edit ************************** Thursday, 9 March 2017 13:16:46
 		OutString(14,0,POrw.QtyBox,false);
 		OutString(15,0,POrw.PalletNr,false);
 		OutString(16,0,POrw.Comment,false);

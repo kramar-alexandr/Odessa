@@ -540,10 +540,11 @@ global updating procedure StockMovBoxingQty(var record StockMovVc SMr)
 begin
 	integer mtrw,i;
 	row StockMovVc SMrw;
-	vector val boxqty,smqty;
+	vector val boxqty,smqty,avalqty;
 	vector boolean chanflag;
 	record INVc INr;
 	val dif;
+	record ItemStatusVc ISr;
 		
 	mtrw = matrowcnt(SMr);
 	For(i=0;i<mtrw;i=i+1) begin
@@ -551,6 +552,14 @@ begin
 	  smqty[SMrw.ArtCode] = smqty[SMrw.ArtCode] + SMrw.OrdQuant;
 	  if(boxqty[SMrw.ArtCode]==blankval)then begin
 	  	boxqty[SMrw.ArtCode] = 1;
+	  	ISr.Code = SMrw.ArtCode;
+	  	ISr.Location = SMr.FrLocation;
+	  	if(readfirstmain(ISr,2,true))then begin
+				avalqty[SMrw.ArtCode] = ISr.Instock - ISr.RsrvQty;
+	  	end else begin
+				avalqty[SMrw.ArtCode] = 0;
+	  	end;
+	  	
 	  	INr.Code = SMrw.ArtCode;
 	  	if(readfirstmain(INr,1,true))then begin
 	  		if(INr.AddUnittext3=="“")then begin
@@ -569,15 +578,19 @@ begin
 	  if(chanflag[SMrw.ArtCode]==false)then begin
 	  	if(boxqty[SMrw.ArtCode]>1)then begin
 	  		if(smqty[SMrw.ArtCode]<=boxqty[SMrw.ArtCode])then begin
-	  			SMrw.OrdQuant = SMrw.OrdQuant + boxqty[SMrw.ArtCode] - smqty[SMrw.ArtCode];
+	  			if(smqty[SMrw.ArtCode]<=avalqty[SMrw.ArtCode] - boxqty[SMrw.ArtCode] + smqty[SMrw.ArtCode])then begin
+						SMrw.OrdQuant = SMrw.OrdQuant + boxqty[SMrw.ArtCode] - smqty[SMrw.ArtCode];
+	  			end;
 	  			chanflag[SMrw.ArtCode] = true;
 	  			matrowput(SMr,i,SMrw);
 	  			StockMovVc_PasteQuant(SMr,i);
 	  		end else begin
 	  			while(smqty[SMrw.ArtCode]>boxqty[SMrw.ArtCode])begin
-	  				smqty[SMrw.ArtCode] = smqty[SMrw.ArtCode] - boxqty[SMrw.ArtCode];
+	  				smqty[SMrw.ArtCode] = smqty[SMrw.ArtCode] - boxqty[SMrw.ArtCode];	  				
 	  				if(smqty[SMrw.ArtCode]<=boxqty[SMrw.ArtCode])then begin
-	  					SMrw.OrdQuant = SMrw.OrdQuant + boxqty[SMrw.ArtCode] - smqty[SMrw.ArtCode];
+							if(smqty[SMrw.ArtCode]<=avalqty[SMrw.ArtCode] - boxqty[SMrw.ArtCode] + smqty[SMrw.ArtCode])then begin
+								SMrw.OrdQuant = SMrw.OrdQuant + boxqty[SMrw.ArtCode] - smqty[SMrw.ArtCode];
+	  					end;
 							chanflag[SMrw.ArtCode] = true;
 							matrowput(SMr,i,SMrw);
 							StockMovVc_PasteQuant(SMr,i);

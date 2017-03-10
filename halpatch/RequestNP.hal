@@ -401,10 +401,6 @@ begin
 	//messagebox(0,"In");
 
   if(MySendRawWebRequest(host,"443",true,"POST",page & getParam,"text/xml","",false,mainRequest,replyarea,5))then begin  //WORK! 
-    //messagebox(0,"Connection on!");
-    //logtext(0,"Hansa World: Connection on. Document has been saved.");
-    //writeareatofile(replyarea,"1reply.txt",0);
-    
     GetXMLArea(replyarea);
     writeareatofile(replyarea,"1CreateENReply.txt",0);
     xdata = ParseXMLArea(replyarea);
@@ -423,7 +419,6 @@ begin
 		LogText(0,"EN created succesfully" & SHr.SerNr & "  DocNumber:" & SHr.NPIntDocNumber);
 			i = i + 1;
 		end;
-		
     
     end else begin
  		logtext(0,"Hansa World: No Connection to api.novaposhta.ua. EN creation");
@@ -440,9 +435,9 @@ begin
   string 20 timed;
   area basestring;   
 
-	addtexttoarea("POST " & aPage & " HTTP/1.1" & chr(13) & chr(10),aRequest);
+	//addtexttoarea("POST " & aPage & " HTTP/1.1" & chr(13) & chr(10),aRequest);
  	addtexttoarea("host: " & aWeb & chr(13) & chr(10),aRequest);
- 	addtexttoarea("Connection: keep-alive" & chr(13) & chr(10),aRequest);
+ 	//addtexttoarea("Connection: keep-alive" & chr(13) & chr(10),aRequest);
  	addtexttoarea("Content-Type: application/xml" & chr(13) & chr(10),aRequest);
  	AddTextToArea("" & chr(13) & chr(10),aRequest);
  	//messagebox(0, urlencode("https://" & aWeb));
@@ -466,6 +461,176 @@ begin
 return;
 end;
 
+procedure CreateAddressRequestProxy(string aWeb, string aPage, string aKey,string aModel,string aMethod,string aParam, var area aRequest)
+begin
+  area request,replyarea,test;
+  string 100 tstr;
+  string 200 getParam, host, page, webAddr;
+  string 20 timed;
+  area basestring;   
+
+ 	addtexttoarea("host: " & aWeb & chr(13) & chr(10),aRequest);
+ 	addtexttoarea("Content-Type: application/xml" & chr(13) & chr(10),aRequest);
+ 	AddTextToArea("" & chr(13) & chr(10),aRequest);
+ 	
+ 	AddTextToArea("{\"host\" : \"" & "api.novaposhta.ua" & "\"," & chr(13),aRequest);
+ 	AddTextToArea("\"port\" : 443," & chr(13),aRequest);
+ 	AddTextToArea("\"https\" : true," & chr(13),aRequest);
+ 	AddTextToArea("\"page\" : \"" & "/v2.0/xml/" & "\"," & chr(13),aRequest);
+ 	AddTextToArea("\"callbackhost\" : \"" & "127.0.0.1" & "\"," & chr(13),aRequest);
+ 	AddTextToArea("\"callbackport\" : \"" & "1080" & "\"," & chr(13),aRequest);
+ 	AddTextToArea("\"callbackpage\" : \"" & "/WebGetNPGetCytiesRequestProxy.hal" & "\"," & chr(13),aRequest);
+ 	AddTextToArea("\"xmldata\" : \"",aRequest);
+ 	AddTextToArea("<?xml version=\\\"1.0\\\" encoding=\\\"UTF-8\\\"?>",aRequest);
+  AddTextToArea("<file>",aRequest);
+  AddTextToArea("<apiKey>" & ConvertXml(aKey) & "</apiKey>",aRequest);
+  AddTextToArea("<modelName>" & ConvertXml(aModel) & "</modelName>",aRequest);
+  AddTextToArea("<calledMethod>" & ConvertXml(aMethod) & "</calledMethod>",aRequest);
+  AddTextToArea("<methodProperties>",aRequest);
+  AddTextToArea("<Page>" & ConvertXml("1") & "</Page>",aRequest);
+  AddTextToArea("</methodProperties>",aRequest);
+  AddTextToArea("</file>",aRequest);
+  AddTextToArea("\"}" & chr(13),aRequest);
+
+	AddTextToArea("" & chr(13) & chr(10),aRequest);
+
+  
+return;
+end;
+
+global webpublic updating procedure WebGetNPGetCytiesRequestProxy()
+begin
+	area request,replyarea,mainRequest;
+  boolean TrHs,ssl;
+  string 200 getParam,host,page,webaddr,path;
+  area basestring;
+  xml xdata;
+  string 255 xpath, city, cityRU,errors,port;
+  longint i;
+  record NPCityVc NPCityr;
+  record NPSettingsBlock NPSettingsb;
+  
+	BlockLoad(NPSettingsb); 
+	
+	webgetpostdata(replyarea);
+	logtext(0,"WebGetNPGetCytiesRequestProxy");
+	writeareatofile(replyarea,"1getStatusReplyCyties.txt",0);
+
+  if(GetAreaLength(replyarea)>0)then begin  
+    GetXMLArea(replyarea);
+		xdata = ParseXMLArea(replyarea);
+		i = 0;  
+		NPParseErrors(xdata,errors);
+		if (nonblank(errors)) then begin
+			LogText(0," Error:" & errors);
+			goto WebLNPGetCytiesRequestProxyMn;
+		end;
+		
+		
+		if(CountRecords("NPCityVc") > 0) then begin
+			NPCityr.City = "";
+			while (LoopMain(NPCityr,1,true)) begin
+				NPCityr.synchFlag = 0;
+				if (RecordStore(NPCityr,true)) then begin		end;
+			end;
+		end;
+		
+		while(XmlNodeExists(xdata,"root/data/item[" & i & "]/Description"))begin
+			city = XmlGet(xdata,"root/data/item[" & i & "]/Description");
+			NPCityr.City = city;
+			if(ReadFirstMain(NPCityr, 1, true))then begin //existing city
+				NPCityr.synchFlag = 1;
+				NPCityr.City = city;
+				NPCityr.CityRU = XmlGet(xdata,"root/data/item[" & i & "]/DescriptionRu");
+				NPCityr.Ref = XmlGet(xdata,"root/data/item[" & i & "]/Ref");
+				NPCityr.Delivery1 = StringToInt(XmlGet(xdata,"root/data/item[" & i & "]/Delivery1"));
+				NPCityr.Delivery2 = StringToInt(XmlGet(xdata,"root/data/item[" & i & "]/Delivery2"));
+				NPCityr.Delivery3 = StringToInt(XmlGet(xdata,"root/data/item[" & i & "]/Delivery3"));
+				NPCityr.Delivery4 = StringToInt(XmlGet(xdata,"root/data/item[" & i & "]/Delivery4"));
+				NPCityr.Delivery5 = StringToInt(XmlGet(xdata,"root/data/item[" & i & "]/Delivery5"));
+				NPCityr.Delivery6 = StringToInt(XmlGet(xdata,"root/data/item[" & i & "]/Delivery6"));
+				NPCityr.Delivery7 = StringToInt(XmlGet(xdata,"root/data/item[" & i & "]/Delivery7"));
+				NPCityr.NPArea  = XmlGet(xdata,"root/data/item[" & i & "]/Area");
+			
+				if (RecordStore(NPCityr,true)) then begin		end;
+			end else begin	//new city
+				RecordNew(NPCityr);
+					NPCityr.synchFlag = 1;
+					NPCityr.City = city;
+					NPCityr.CityRU = XmlGet(xdata,"root/data/item[" & i & "]/DescriptionRu");
+					NPCityr.Ref = XmlGet(xdata,"root/data/item[" & i & "]/Ref");
+					NPCityr.Delivery1 = StringToInt(XmlGet(xdata,"root/data/item[" & i & "]/Delivery1"));
+					NPCityr.Delivery2 = StringToInt(XmlGet(xdata,"root/data/item[" & i & "]/Delivery2"));
+					NPCityr.Delivery3 = StringToInt(XmlGet(xdata,"root/data/item[" & i & "]/Delivery3"));
+					NPCityr.Delivery4 = StringToInt(XmlGet(xdata,"root/data/item[" & i & "]/Delivery4"));
+					NPCityr.Delivery5 = StringToInt(XmlGet(xdata,"root/data/item[" & i & "]/Delivery5"));
+					NPCityr.Delivery6 = StringToInt(XmlGet(xdata,"root/data/item[" & i & "]/Delivery6"));
+					NPCityr.Delivery7 = StringToInt(XmlGet(xdata,"root/data/item[" & i & "]/Delivery7"));
+					NPCityr.NPArea  = XmlGet(xdata,"root/data/item[" & i & "]/Area");
+				if (RecordStore(NPCityr,true)) then begin		end;
+			end;		
+			logtext(0,"cityRU: " & i & " " & city);
+			i = i + 1;
+		end;
+	
+		ResetLoop	(NPCityr);
+
+		TrHs = true;
+		NPCityr.synchFlag = 0;
+		while (LoopKey("synchFlag",NPCityr,1,TrHs)) begin
+			if (NPCityr.synchFlag!=0) then begin TrHs = false; end;
+			if (TrHs) then begin
+				RecordDelete(NPCityr);
+				StepBack(NPCityr);
+			end;
+		end;
+  end;
+WebLNPGetCytiesRequestProxyMn:  
+	
+	
+	weboutstring("Done");
+return;
+end;
+
+global updating
+procedure NPGetCytiesRequestProxyMn(record RcVc RepSpec)
+begin
+  area request,replyarea,mainRequest;
+  boolean TrHs,ssl;
+  string 200 getParam,host,page,webaddr,path;
+  area basestring;
+  xml xdata;
+  string 255 xpath, city, cityRU,errors,port;
+  longint i;
+  record NPCityVc NPCityr;
+  record NPSettingsBlock NPSettingsb;
+  
+	BlockLoad(NPSettingsb); 
+  
+  if (blank(NPSettingsb.APIkey)) then begin
+  	goto LNPGetCytiesRequestProxyMn;
+  end;
+   
+  host = "api.novaposhta.ua";
+  port = "443";
+  ssl = true;
+  page = "/v2.0/xml/";
+  
+  host = "127.0.0.1";
+  port = "1070";
+  ssl = false;
+  page = "/getProxyRequest";
+   
+	CreateAddressRequestProxy(host, page, NPSettingsb.APIkey, "Address","getCities", "", mainRequest); //get status	
+  if(MySendRawWebRequest(host,port,ssl,"POST",page & getParam,"text/xml","",false,mainRequest,replyarea,5))then begin  //WORK! 
+      
+	end else begin
+ 		logtext(0,"Hansa World: No Connection to api.novaposhta.ua");
+  end;
+ 
+	LNPGetCytiesRequestProxyMn:;
+  return;
+end;
 
 global updating
 procedure NPGetCytiesRequestMn(record RcVc RepSpec)

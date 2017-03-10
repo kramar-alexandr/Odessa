@@ -75,7 +75,7 @@ remote function LongInt HoursDiffWithoutRestDays(Date,Time,Date,Time);
 remote updating function boolean CancelLogisticsOrderFromStocMove(var record  ORVc, integer);//Edit----------------------Dima  25.01.2016
 remote procedure CalcCustBalrem(var record ORVc);
 remote procedure SOAPUpdateStatus(string,string);
-
+remote updating procedure MakeReserveFromOrder(longint);// Edit ************************** Friday, 10 March 2017 13:38:29
 
 global //Edit***************************Sasha2,15:51 04.02.2015 {
 function Integer ORLClassRowColor(record ORVc ORr)
@@ -2705,6 +2705,51 @@ begin
 		Beep;
 	end;
   
+
+return;
+end;
+
+global updating procedure SendToReservLogisticDsm()
+begin
+	record ORVc ORr;
+	row ORVc ORrw;
+	integer wn,mtrw,i;
+	boolean testf;
+	
+	
+	wn = curwindow;
+	if(windowstate(wn)==0)then begin
+		getwindowrecord(wn,ORr);
+		testf = true;
+		if(ORr.Reserved>1)then begin testf = false; end;
+		if(testf)then begin
+			mtrw = matrowcnt(ORr);
+			For(i=0;i<mtrw;i=i+1) begin
+	  		matrowget(ORr,i,ORrw);
+	  		if(ORrw.OrderQuant>0)then begin
+	  			testf = false;
+	  		end;
+	  		if(ORrw.Shipd1>0)then begin
+	  			testf = false;
+	  		end;
+			end; 
+		end;
+		if(ORr.OrderClass!="WEB")then begin 
+			testf = false;
+		end;
+		if(ORr.OKFlag>0)then begin 
+			testf = false;
+		end;
+		
+		if(testf)then begin
+			MakeReserveFromOrder(ORr.SerNr);
+			UpdateBrowses("ORVc");
+		end else begin
+			messagebox(31161,"");
+		end;
+	end else begin
+		messagebox(31157,"");
+	end;
 
 return;
 end;
