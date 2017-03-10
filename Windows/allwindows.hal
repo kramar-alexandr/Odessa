@@ -11752,7 +11752,8 @@ begin
     EditField(h2,v+=vs,80,"Наш № у пост-ка",Normal,VECustID,false,0);
     EditField(h2,v+=vs,80,"Получатель",Normal,VEInvoiceToCode,false,VESClass);
     EditField(h2,v+=vs,80,"Факторинг",Normal,VEFactoring,false,VESClass);
-    EditField(h2,v+=vs,80,"Мин. сумма заказа",Normal,MinOrdSum,false,0);
+    //EditField(h2,v+=vs,80,"Мин. сумма заказа",Normal,MinOrdSum,false,0); //Edit***************************Sasha2,15:42 10.03.2017
+    v = v + vs; //Edit***************************Sasha2,15:42 10.03.2017
     EditField(h2,v+=vs,80,"Ссылка",Normal,RefStr,false,0);
     EditField(h2,v+=vs,80,"Послед. изменение",Normal,DateChanged,false,0);
     CheckBox(h5,v=12,0,"Закрыт",blockedFlag);
@@ -11797,6 +11798,7 @@ begin
   if (StandardHansa==false) then begin
     EditField(h2,v+=vs,80,"Группа продаж",Normal,SalesGroup,false,SalesGroupSClass);
   end;
+  EditField(h2,v+=vs,80,"До след.скидки",Normal,MinOrdSum,false,0); //Edit***************************Sasha2,15:41 10.03.2017
   ButtonFrame(h5,v=24,150,3,"Цена основана на");
   RadioButton(h5,v,0,0,"на дату счета",PriceBasedOn);
   RadioButton(h5,v+=16,1,0,"на дату заплан. отгрузки",PriceBasedOn);
