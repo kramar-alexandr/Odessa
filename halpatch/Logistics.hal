@@ -47,7 +47,7 @@ global updating procedure CreateLinksToOrders(record StockMovVc SMr)//Edit------
 begin
 	row StockMovVc SMrw;
 	integer rwcnt,i;
-	record ORVc ORr;
+	record ORVc ORr,oldORr;
 	vector longint matches;
 	array longint orders;
 	
@@ -59,7 +59,11 @@ begin
 		if (ReadFirstMain(ORr,1,true)) then begin			
 		 	CreateRecordLink(SMr,CurrentCompany,ORr,CurrentCompany);
 		 	CreateRecordLink(ORr,CurrentCompany,SMr,CurrentCompany);
-		end; 	  
+		end; 
+		if(ORr.CustomStatusFlag==14)then begin
+			recordcopy(oldORr,ORr);
+			recordupdate(oldORr,ORr,true);
+		end; 
 	end;  
 end;
 

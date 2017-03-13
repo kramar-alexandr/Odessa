@@ -1305,7 +1305,7 @@ begin
 	end;
 	
 	if(inser==false and addrow)then begin
-		recordupdate(oldORr,ORr,true);
+		
 		recordcopy(oldSMr,SMr);
 		if(SMr.Reserved==0)then begin
 			SMr.Reserved = 1;
@@ -1314,6 +1314,7 @@ begin
 			CreateRecordLink(SMr,CurrentCompany,ORr,CurrentCompany);
 		 	CreateRecordLink(ORr,CurrentCompany,SMr,CurrentCompany);
 		end;
+		recordupdate(oldORr,ORr,true);
 	end else begin
 		//recordupdate(oldORr,ORr,true);
 		SMr.Reserved = 1;

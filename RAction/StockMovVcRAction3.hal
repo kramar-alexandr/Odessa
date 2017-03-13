@@ -262,11 +262,10 @@ BEGIN
   end;
   
 
-
+  UpdateLinksToOrders(StockMovr,StockMov2r); 	//Edit----------------------Dima  20.08.2015
 	if ((StockMovr.OKFlag!=0) and (StockMov2r.OKFlag==0)) then begin
     ReserveReceivedItems(StockMovr);
   end;   
-  UpdateLinksToOrders(StockMovr,StockMov2r); 	//Edit----------------------Dima  20.08.2015
 
   
   StockMovVcRecordUpdateAfter = res;

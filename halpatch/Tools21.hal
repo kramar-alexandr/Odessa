@@ -735,12 +735,10 @@ BEGIN
     end;
     IPrsr.IVNr = IVp.SerNr;
     IPrsr.TransType = kIPrsTransTypeReceipt;
-    if(currentuser!="SA")then begin
-			if (ReadFirstKey("IVKey",IPrsr,2,true)) then begin
-				res = 22058;
-				goto LIsUnOKAllowed_IVVc;
-			end;
-    end;
+		if (ReadFirstKey("IVKey",IPrsr,2,true)) then begin
+			res = 22058;
+			goto LIsUnOKAllowed_IVVc;
+		end;
     IPrsr.IVNr = IVp.SerNr;
     IPrsr.TransType = kIPrsTransTypePurgeNLTransaction;
     if (ReadFirstKey("IVKey",IPrsr,2,true)) then begin

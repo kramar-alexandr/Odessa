@@ -899,11 +899,10 @@ BEGIN
 	
 	recordStore(StockMovr, true);
 	*/
-	
+	CreateLinksToOrders(StockMovr);		//Edit----------------------Dima  20.08.2015
 	if (StockMovr.OKFlag!=0)  then begin		//Edit----------------------Dima  20.08.2015
     ReserveReceivedItems(StockMovr);
   end; 	
-	CreateLinksToOrders(StockMovr);		//Edit----------------------Dima  20.08.2015
 	
 	//***
   

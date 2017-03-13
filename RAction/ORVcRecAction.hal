@@ -2116,6 +2116,7 @@ row ORVc ORrw;
 boolean res;
 record StockMovVc SMr;
 record RLinkVc RLr;
+integer notenr;
 
 	res = true;
 
@@ -2125,6 +2126,17 @@ record RLinkVc RLr;
 		if (ORrw.NecessaryQuant!=(ORrw.Quant + ORrw.ProcessingQuant)) then begin
 			res = false;
 			i = rwcnt;
+		end;
+	end;
+	
+	if(res)then begin
+		notenr = 1;
+		while (ReadRecordLink(ORr,notenr,SMr,RLr)) begin
+			logtext(0,SMr.SerNr);
+			if(SMr.FrLocation!="1-KOC")then begin
+				res = false;
+			end;
+			notenr = notenr + 1;
 		end;
 	end;
 	
@@ -2441,7 +2453,7 @@ begin
 	if (ORr.AutoCreation!=0 and OR2r.AutoCreation==0 and ORr.Reserved!=0) then begin
 		ORr.CustomStatusFlag = 2;
 	end;
-	if (ORr.CustomStatusFlag == 2 and CheckORVcConfirmStatus(ORr)==false) then begin
+	if ((ORr.CustomStatusFlag == 2 and CheckORVcConfirmStatus(ORr)==false) or ORr.CustomStatusFlag==14) then begin
 		if(CheckORVcConfirmReservStatus(ORr))then begin
 			ORr.CustomStatusFlag = 14;
 		end else begin
@@ -2769,7 +2781,7 @@ begin
 			end;
 		end;
 	end;
-	if (ORr.CustomStatusFlag==2 and CheckORVcConfirmStatus(ORr)==false) then begin
+	if ((ORr.CustomStatusFlag==2 and CheckORVcConfirmStatus(ORr)==false) or ORr.CustomStatusFlag==14) then begin
 			if(CheckORVcConfirmReservStatus(ORr))then begin
 				ORr.CustomStatusFlag = 14;
 			end else begin
