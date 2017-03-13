@@ -1,0 +1,28 @@
+SetLangMode(LangRussian,"RUS",0);
+
+global
+procedure UncorrectIVRn(record RcVc RepSpec)
+begin
+  record IVVc IVr;
+  record PDVc PDr;
+  record CurncyCodeVc CCr;
+  boolean TrHs,printf;
+	
+  StartReportNoHeaderJob("Некорректные сч.ф.");
+	
+  TrHs = true;
+	While (LoopMain(IVr,1,TrHs)) begin
+    printf = false;
+		PDr.Code = IVr.PayDeal;
+    if !(ReadFirstMain(PDr,1,true)) then begin printf = true; end;
+    CCr.CurncyCode = IVr.CurncyCode;
+    if !(ReadFirstMain(CCr,1,true)) then begin printf = true; end;
+    if (printf) then begin
+      StartFormat(15);
+        OutLongInt(20,"DblIVVc",IVr.SerNr,false);
+      EndFormat;
+    end;
+	end;	
+	EndJob;
+
+end;

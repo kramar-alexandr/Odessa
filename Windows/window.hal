@@ -3395,3 +3395,12 @@ begin
   EditFieldTL(h,v+=vs, 150,"Склад",M4UStr,Normal,10,f4,false,LocationSClass);
   EndWindow;
 end;
+
+window UncorrectIVRClass:1 //Edit-------------------Vitalii 12:49 13.03.2017
+  wtag("language","UKR"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer") 
+begin
+  WindowBegin("Некорректные сч.ф.",UncorrectIVRClass,CGRcW,RcType);
+  SetWRect(20,80,400,250);
+  UseView(RcVc);
+  EndWindow;
+end;
