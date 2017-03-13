@@ -387,6 +387,8 @@ begin
   Maintenance("Проставить номер скидочного ваучера",MyVClass,UpdBDVaucherInSalesDataMn,modDBMain);
   Maintenance("Обновить объекты в SalesData",MyVClass,UpdObjectsInSalesDataMn,modDBMain); //Edit***************************Sasha2,13:33 13.02.2017
   
+  Maintenance("ExportBadIVVc",MyVClass,ExportBrockenIV,modDBMain); //Edit***************************Sasha2,13:33 13.02.2017
+  
   Maintenance("0% Rebate CUVc",MyVClass,SetCustomRabateMn,modSL);
   
   Maintenance("Обновить Promotion",MyVClass,UpdPromotionMn,modDBMain); //Edit***************************Sasha2,13:33 13.02.2017

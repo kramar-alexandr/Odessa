@@ -3572,3 +3572,22 @@ begin
 	
 return;
 end;
+
+global procedure ExportBrockenIV()
+begin
+	record IVVc IVr;
+	area res;
+	
+	IVr.SerNr = 25053;
+	readfirstmain(IVr,1,true);
+	Addrecordtoarea(IVr,"IVVc",res);
+	writeareatofile(res,IVr.SerNr & ".txt",0);
+	setareazerosize(res);
+	IVr.SerNr = 25054;
+	readfirstmain(IVr,1,true);
+	Addrecordtoarea(IVr,"IVVc",res);
+	writeareatofile(res,IVr.SerNr & ".txt",0);
+	setareazerosize(res);
+	
+return;
+end;

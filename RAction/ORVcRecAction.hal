@@ -2114,6 +2114,8 @@ begin
 integer i,rwcnt;
 row ORVc ORrw;
 boolean res;
+record StockMovVc SMr;
+record RLinkVc RLr;
 
 	res = true;
 
