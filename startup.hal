@@ -62,6 +62,7 @@ begin
 	
 	
 	Import("Импорт регистров БЕЗ ПЕРЕЗАПИСИ",ImportOfRegisterIClass,ImportOfRegister,modDBMain);	//Edit----------------------Dima  27.05.2015
+	Import("Импорт регистров C ПЕРЕЗАПИСЬЮ",ImportOfRegisterRewriteIClass,ImportOfRegisterRewriting,modDBMain);
 
 	
   Setting("Авансовые отчеты",ExpLClass,modCL);

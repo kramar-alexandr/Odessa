@@ -1433,3 +1433,132 @@ string 100 tag;
     RegisterImport(tag);
   RETURN;
 END;
+
+global
+updating procedure ImportOfRegisterRewriting(record RcVc RepSpec)	//Edit----------------------Dima  28.05.2015
+BEGIN
+string 100 tag;
+string 50 registerVc;
+	record LocClVc LocClr,oldLocClr;
+	record INVc INr;
+	record CLInVc CLInr;
+	record CLOutVc CLOutr;
+	record IPVc IPr;
+	record OPVc OPr;
+	record IVVc IVr;
+	record VIVc VIr;
+	record POVc POr;
+	record SHVc SHr;
+	record PUVc PUr;
+	record SDVc SDr;
+	record StockMovVc StockMovr;
+	record RetVc Retr;
+	record RetPUVc RetPUr;
+	record ORVc ORr;
+	record TRVc TRr;
+	record FBVc FBr;
+	record ItemHistVc IHr;
+	record ItemStatusVc ISr;
+	record AccVc Accr;
+	record DocVc Docr;
+	
+	registerVc = UpperCase(RepSpec.f1);
+	tag = ImportField;
+
+	if (nonblank(registerVc))	then begin
+		while (NextImportLine(false)) begin
+			switch(registerVc) begin
+				case "LOCCLVC": 					 	
+ 			  	  ImportOneRecord(LocClr,tag);
+ 			  	  oldLocClr.Code = LocClr.Code;
+ 			  	  if (ReadFirstMain(oldLocClr,1,true)) then begin  	  
+							RecordUpdate(oldLocClr,LocClr,false);
+						end else begin
+							RecordStore(LocClr,false);
+						end;
+				case "DocVc": 					 	
+ 			  	  ImportOneRecord(Docr,tag);
+ 			  	  RecordStore(Docr,true);
+				
+				case "INVC": 					 	
+ 			  	  ImportOneRecord(INr,tag);
+ 			  	  RecordStore(INr,true);
+ 			  	  
+				case "CLINVC": 					 	
+ 			  	  ImportOneRecord(CLInr,tag);
+ 			  	  RecordStore(CLInr,true); 
+ 			  	  
+				case "CLOUTVC": 					 	
+ 			  	  ImportOneRecord(CLOutr,tag);
+ 			  	  RecordStore(CLOutr,true); 
+ 			  	  
+				case "IPVC": 					 	
+ 			  	  ImportOneRecord(IPr,tag);
+ 			  	  RecordStore(IPr,true); 
+ 			  	  
+				case "OPVC": 					 	
+ 			  	  ImportOneRecord(OPr,tag);
+ 			  	  RecordStore(OPr,true); 
+ 			  	  
+				case "IVVC": 					 	
+ 			  	  ImportOneRecord(IVr,tag);
+ 			  	  RecordStore(IVr,true); 
+ 			  	  
+				case "VIVC": 					 	
+ 			  	  ImportOneRecord(VIr,tag);
+ 			  	  RecordStore(VIr,true); 
+ 			  	  
+				case "POVC": 					 	
+ 			  	  ImportOneRecord(POr,tag);
+ 			  	  RecordStore(POr,true); 
+ 			  	  
+				case "PUVC": 					 	
+ 			  	  ImportOneRecord(PUr,tag);
+ 			  	  RecordStore(PUr,true); 
+ 			  	  
+				case "SDVC": 					 	
+ 			  	  ImportOneRecord(SDr,tag);
+ 			  	  RecordStore(SDr,true); 
+ 			  	  
+				case "STOCKMOVVC": 					 	
+ 			  	  ImportOneRecord(StockMovr,tag);
+ 			  	  RecordStore(StockMovr,true); 
+ 			  	  
+				case "RETVC": 					 	
+ 			  	  ImportOneRecord(Retr,tag);
+ 			  	  RecordStore(Retr,true); 
+ 			  	  
+				case "RETPUVC": 					 	
+ 			  	  ImportOneRecord(RetPUr,tag);
+ 			  	  RecordStore(RetPUr,true);
+ 			  	  
+				case "ORVC": 					 	
+ 			  	  ImportOneRecord(ORr,tag);
+ 			  	  RecordStore(ORr,true);
+ 			  	  
+				case "TRVC": 					 	
+ 			  	  ImportOneRecord(TRr,tag);
+ 			  	  RecordStore(TRr,true); 
+ 			  	  
+				case "FBVC": 					 	
+ 			  	  ImportOneRecord(FBr,tag);
+ 			  	  RecordStore(FBr,true);
+ 			  	  
+				case "ITEMHISTVC": 					 	
+ 			  	  ImportOneRecord(IHr,tag);
+ 			  	  RecordStore(IHr,true); 
+ 			  	  
+				case "ITEMSTATUSVC": 					 	
+ 			  	  ImportOneRecord(ISr,tag);
+ 			  	  RecordStore(ISr,true);
+ 			  	  
+ 			  case "AccVc": 					 	
+ 			  	  ImportOneRecord(Accr,tag);
+ 			  	  RecordStore(Accr,true);  			  	   			  	   			  	  			  	   			  	   			  	   			  	   			  	   			  	   			  	   			  	   			  	   			  	   			  	   			  	   			  	  			  	  
+					
+			end;
+		end;	
+  end;  
+
+  RETURN;
+END;
