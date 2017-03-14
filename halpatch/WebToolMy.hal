@@ -170,7 +170,7 @@ begin
 			//logtext(0,xmlget(sopaxml,"SOAP-ENV:Envelope/SOAP-ENV:Body/ns1:loginResponse/loginReturn"));
 			session = xmlget(sopaxml,"SOAP-ENV:Envelope/SOAP-ENV:Body/ns1:loginResponse/loginReturn");
 			if(nonblank(session))then begin
-				logtext(0,"SOAP session " & session);
+				logtext(0,"NODE SOAP session " & session);
 				blockload(Soap);
 					Soap.Session = session;
 					Soap.LastSesDate = currentdate;
@@ -186,50 +186,6 @@ begin
 		logtext(0,"Error length");
 	end;
 	
-return;
-end;
-
-global procedure SOAPLogin()
-begin
-	record SoapBlock Soap;
-	string 50 host,port,path;
-	area a_req,replyarea;
-	integer i;	
-		
-		blockload(Soap);
-		addtexttoarea("host: 127.0.0.1" & chr(13) & chr(10),a_req);
-		addtexttoarea("Content-Type: application/xml" & chr(13) & chr(10),a_req);
-		AddTextToArea("" & chr(13) & chr(10),a_req);
-		
-		AddTextToArea("{\"host\" : \"" & Soap.Host & "\"," & chr(13),a_req);
-		AddTextToArea("\"port\" : " & Soap.Port & "," & chr(13),a_req);
-		AddTextToArea("\"https\" : false," & chr(13),a_req);
-		AddTextToArea("\"page\" : \"" & Soap.Path & "\"," & chr(13),a_req);
-		AddTextToArea("\"callbackhost\" : \"" & "127.0.0.1" & "\"," & chr(13),a_req);
-		AddTextToArea("\"callbackport\" : \"" & "1080" & "\"," & chr(13),a_req);
-		AddTextToArea("\"callbackpage\" : \"" & "/WebSOAPLoginCallBack.hal" & "\"," & chr(13),a_req);
-		AddTextToArea("\"xmldata\" : \"",a_req);
-		addtexttoarea("<x:Envelope xmlns:x=\\\"http://schemas.xmlsoap.org/soap/envelope/\\\" xmlns:urn=\\\"urn:Magento\\\">",a_req);
-		addtexttoarea("<x:Header/>",a_req);
-		addtexttoarea("<x:Body>",a_req);
-		addtexttoarea("<urn:login>",a_req);
-		addtexttoarea("<urn:username>" & Soap.Login & "</urn:username>",a_req);
-		addtexttoarea("<urn:apiKey>" & Soap.Password & "</urn:apiKey>",a_req);
-		addtexttoarea("</urn:login>",a_req);
-		addtexttoarea("</x:Body>",a_req);
-		addtexttoarea("</x:Envelope>",a_req);
-		AddTextToArea("\"}" & chr(13),a_req);
-		
-		writeareatofile(a_req,"SoapRequest.txt",0);
-				
-		logtext(0,"SOAPLogin " & currenttime & "  " & getarealength(replyarea));
-		if(MySendRawWebRequest("127.0.0.1","1070",false,"POST","/getProxyRequest","application/xml","",false,a_req,replyarea,3))then begin  //WORK! 
-      
-		end else begin
-			logtext(0,"Hansa World: No Connection to api.novaposhta.ua");
-		end;
-		//SendAsyncWebRequest(Soap.Host,Soap.Port,Soap.Port,Soap.Ssl==1,"POST",Soap.Path,"text/xml","",a_req,"SOAPloginReply",20);
-
 return;
 end;
 
@@ -258,6 +214,57 @@ begin
 return;
 end;
 
+global procedure SOAPLogin()
+begin
+	record SoapBlock Soap;
+	string 50 host,port,path;
+	area a_req,replyarea;
+	integer i;	
+	record WebShopSettingsBlock WSb;
+  
+  blockload(WSb);
+		
+		blockload(Soap);
+		addtexttoarea("host: 127.0.0.1" & chr(13) & chr(10),a_req);
+		addtexttoarea("Content-Type: application/xml" & chr(13) & chr(10),a_req);
+		AddTextToArea("" & chr(13) & chr(10),a_req);
+		
+		AddTextToArea("{\"host\" : \"" & Soap.Host & "\"," & chr(13),a_req);
+		AddTextToArea("\"port\" : " & Soap.Port & "," & chr(13),a_req);
+		AddTextToArea("\"https\" : false," & chr(13),a_req);
+		AddTextToArea("\"page\" : \"" & Soap.Path & "\"," & chr(13),a_req);
+		AddTextToArea("\"callbackhost\" : \"" & "127.0.0.1" & "\"," & chr(13),a_req);
+		AddTextToArea("\"callbackport\" : \"" & "1080" & "\"," & chr(13),a_req);
+		AddTextToArea("\"callbackpage\" : \"" & "/WebSOAPLoginCallBack.hal" & "\"," & chr(13),a_req);
+		AddTextToArea("\"xmldata\" : \"",a_req);
+		addtexttoarea("<x:Envelope xmlns:x=\\\"http://schemas.xmlsoap.org/soap/envelope/\\\" xmlns:urn=\\\"urn:Magento\\\">",a_req);
+		addtexttoarea("<x:Header/>",a_req);
+		addtexttoarea("<x:Body>",a_req);
+		addtexttoarea("<urn:login>",a_req);
+		addtexttoarea("<urn:username>" & Soap.Login & "</urn:username>",a_req);
+		addtexttoarea("<urn:apiKey>" & Soap.Password & "</urn:apiKey>",a_req);
+		addtexttoarea("</urn:login>",a_req);
+		addtexttoarea("</x:Body>",a_req);
+		addtexttoarea("</x:Envelope>",a_req);
+		AddTextToArea("\"}" & chr(13),a_req);
+		
+		writeareatofile(a_req,"SoapRequest.txt",0);
+		
+		if(WSb.UseNode)then begin
+			logtext(0,"SOAPLogin " & currenttime & "  " & getarealength(replyarea));
+			if(MySendRawWebRequest("127.0.0.1","1070",false,"POST","/getProxyRequest","application/xml","",false,a_req,replyarea,3))then begin  //WORK! 
+			
+			end else begin
+				SOAPLoginOld;
+				logtext(0,"Hansa World: No Connection to NODE!!!");
+			end;
+		end else begin
+			SOAPLoginOld;
+		end;
+
+return;
+end;
+
 
 global updating procedure SOAPloginReply(Area a_reply,Area a_replyheader,boolean timeout)
 begin
@@ -273,7 +280,7 @@ begin
 			//logtext(0,xmlget(sopaxml,"SOAP-ENV:Envelope/SOAP-ENV:Body/ns1:loginResponse/loginReturn"));
 			session = xmlget(sopaxml,"SOAP-ENV:Envelope/SOAP-ENV:Body/ns1:loginResponse/loginReturn");
 			if(nonblank(session))then begin
-				logtext(0,"SOAP session " & session);
+				logtext(0,"HANSA SOAP session " & session);
 				blockload(Soap);
 					Soap.Session = session;
 					Soap.LastSesDate = currentdate;
@@ -293,72 +300,30 @@ return;
 end;
 
 
-global webpublic updating procedure WebSOAPLoginCallBack()
+global webpublic updating procedure WebSOAPUpdateStatusCallBack()
 begin
 	xml sopaxml;
 	string 200 session;
 	boolean check;
 	record SoapBlock Soap;
-	area timearea,resarea;
+	area timearea,a_reply;
 	
-	logtext(0,WebGetArg("ordnum"));
-	
+	logtext(0,"WebSOAPUpdateStatusCallBack" & WebGetArg("ordnum"));
+		
 	//writeareatofile(resarea,"MagentaStatusReply.txt",1);
-	/*if(getarealength(a_reply)>0)then begin
+	webgetpostdata(a_reply);
+	if(getarealength(a_reply)>0)then begin
 		logtext(0,"SOAPUpdateStatusReply replylen " & getarealength(a_reply));
 	end else begin
 		logtext(0,"SOAPUpdateStatusReply empty Reply!!!!!!!!");
-	end;*/
+	end;
 	
 return;
 end;
 
-global procedure SOAPUpdateStatus(string ordnr, string status)
+global webpublic procedure WebNodeErrorLog()
 begin
-	record SoapBlock Soap;
-	string 50 host,port,path;
-	area a_req,replyarea;
-	integer i;	
-		
-		if(status!="pending")then begin
-			blockload(Soap);
-			
-			
-			addtexttoarea("host: 127.0.0.1" & chr(13) & chr(10),a_req);
-			addtexttoarea("Content-Type: application/xml" & chr(13) & chr(10),a_req);
-			AddTextToArea("" & chr(13) & chr(10),a_req);
-		
-			AddTextToArea("{\"host\" : \"" & Soap.Host & "\"," & chr(13),a_req);
-			AddTextToArea("\"port\" : " & Soap.Port & "," & chr(13),a_req);
-			AddTextToArea("\"https\" : false," & chr(13),a_req);
-			AddTextToArea("\"page\" : \"" & Soap.Path & "\"," & chr(13),a_req);
-			AddTextToArea("\"callbackhost\" : \"" & "127.0.0.1" & "\"," & chr(13),a_req);
-			AddTextToArea("\"callbackport\" : \"" & "1080" & "\"," & chr(13),a_req);
-			AddTextToArea("\"callbackpage\" : \"" & "/WebSOAPUpdateStatusCallBack.hal" & "\"," & chr(13),a_req);
-			AddTextToArea("\"callbackgetdata\" : \"" & "?ordnum=" & ordnr & "\"," & chr(13),a_req);
-			AddTextToArea("\"xmldata\" : \"",a_req);
-			addtexttoarea("<x:Envelope xmlns:x=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:urn=\"urn:Magento\">" & chr(13) & chr(10),a_req);
-			addtexttoarea("<x:Header/>",a_req);
-				addtexttoarea("<x:Body>",a_req);
-					addtexttoarea("<urn:salesOrderAddComment>",a_req);
-						addtexttoarea("<urn:sessionId>" & Soap.Session & "</urn:sessionId>",a_req);
-						addtexttoarea("<urn:orderIncrementId>" & ordnr & "</urn:orderIncrementId>" & chr(13) & chr(10),a_req);
-						addtexttoarea("<urn:status>" & status & "</urn:status>",a_req);
-					addtexttoarea("</urn:salesOrderAddComment>",a_req);
-				addtexttoarea("</x:Body>",a_req);
-			addtexttoarea("</x:Envelope>",a_req);
-			AddTextToArea("\"}" & chr(13),a_req);
-		
-			writeareatofile(a_req,"SoapRequest.txt",0);
-				
-			logtext(0,"SOAPUpdateStatus " & currenttime & "  " & getarealength(replyarea) & " " & ordnr & " " & status);
-			//SendAsyncWebRequest(Soap.Host,Soap.Port,Soap.Port,Soap.Ssl==1,"POST",Soap.Path,"text/xml","",a_req,"SOAPUpdateStatusReply",20);
-			if(MySendRawWebRequest("127.0.0.1","1070",false,"POST","/getProxyRequest","application/xml","",false,a_req,replyarea,3))then begin  //WORK! 
-
-			end else begin
-				logtext(0,"NODE SERVER OFFLINE!!!!!!!!!!!!!!!!!!! ");
-			end;
-		end;
+	
 return;
 end;
 
@@ -386,12 +351,68 @@ begin
 			logtext(0,"SOAPUpdateStatus " & currenttime & "  " & getarealength(replyarea) & " " & ordnr & " " & status);
 			SendAsyncWebRequest(Soap.Host,Soap.Port,Soap.Port,Soap.Ssl==1,"POST",Soap.Path,"text/xml","",a_req,"SOAPUpdateStatusReply",20);
 		end;
-
-
-	
+		
 return;
 end;
 
+global procedure SOAPUpdateStatus(string ordnr, string status)
+begin
+	record SoapBlock Soap;
+	string 50 host,port,path;
+	area a_req,replyarea;
+	integer i;	
+	record WebShopSettingsBlock WSb;
+  
+  blockload(WSb);
+		
+		if(status!="pending")then begin
+			blockload(Soap);
+			
+			
+			addtexttoarea("host: 127.0.0.1" & chr(13) & chr(10),a_req);
+			addtexttoarea("Content-Type: application/xml" & chr(13) & chr(10),a_req);
+			AddTextToArea("" & chr(13) & chr(10),a_req);
+		
+			AddTextToArea("{\"host\" : \"" & Soap.Host & "\"," & chr(13),a_req);
+			AddTextToArea("\"port\" : " & Soap.Port & "," & chr(13),a_req);
+			AddTextToArea("\"https\" : false," & chr(13),a_req);
+			AddTextToArea("\"page\" : \"" & Soap.Path & "\"," & chr(13),a_req);
+			AddTextToArea("\"callbackhost\" : \"" & "127.0.0.1" & "\"," & chr(13),a_req);
+			AddTextToArea("\"callbackport\" : \"" & "1080" & "\"," & chr(13),a_req);
+			AddTextToArea("\"callbackpage\" : \"" & "/WebSOAPUpdateStatusCallBack.hal" & "\"," & chr(13),a_req);
+			AddTextToArea("\"callbackgetdata\" : \"" & "?ordnum=" & ordnr & "\"," & chr(13),a_req);
+			AddTextToArea("\"xmldata\" : \"",a_req);
+			addtexttoarea("<x:Envelope xmlns:x=\\\"http://schemas.xmlsoap.org/soap/envelope/\\\" xmlns:urn=\\\"urn:Magento\\\">",a_req);
+			addtexttoarea("<x:Header/>",a_req);
+				addtexttoarea("<x:Body>",a_req);
+					addtexttoarea("<urn:salesOrderAddComment>",a_req);
+						addtexttoarea("<urn:sessionId>" & Soap.Session & "</urn:sessionId>",a_req);
+						addtexttoarea("<urn:orderIncrementId>" & ordnr & "</urn:orderIncrementId>",a_req);
+						addtexttoarea("<urn:status>" & status & "</urn:status>",a_req);
+					addtexttoarea("</urn:salesOrderAddComment>",a_req);
+				addtexttoarea("</x:Body>",a_req);
+			addtexttoarea("</x:Envelope>",a_req);
+			AddTextToArea("\"}" & chr(13),a_req);
+		
+			writeareatofile(a_req,"SoapRequest.txt",0);
+				
+			logtext(0,"SOAPUpdateStatus " & currenttime & "  " & getarealength(replyarea) & " " & ordnr & " " & status);
+			//SendAsyncWebRequest(Soap.Host,Soap.Port,Soap.Port,Soap.Ssl==1,"POST",Soap.Path,"text/xml","",a_req,"SOAPUpdateStatusReply",20);
+			
+			if(WSb.UseNode==1)then begin
+				if(MySendRawWebRequest("127.0.0.1","1070",false,"POST","/getProxyRequest","application/xml","",false,a_req,replyarea,3))then begin  //WORK! 
+
+				end else begin
+					logtext(0,"NODE SERVER OFFLINE!!!!!!!!!!!!!!!!!!! ");
+					SOAPUpdateStatusOld(ordnr,status);
+				end;
+			end else begin
+				logtext(0,"NO NODE");
+				SOAPUpdateStatusOld(ordnr,status);
+			end;
+		end;
+return;
+end;
 
 global updating procedure SOAPUpdateStatusReply(Area a_reply,Area a_replyheader,boolean timeout)
 begin

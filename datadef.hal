@@ -1536,6 +1536,7 @@ RecordBegin(INVc,-,"artikel5");
   RecordField(PayDeal,M4Code,2,0);
   RecordField(ShipDeal,M4Code,5,0);
   RecordField(AutoRes1KOC,M4Int,0,0);
+  RecordField(UseNode,M4Int,0,0);
   EndBlock; //Edit***************************Sasha2,10:19 14.07.2014 }
   
   RecordBegin(ORVc,-,"ORVc2");

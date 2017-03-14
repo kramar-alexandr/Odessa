@@ -5501,37 +5501,37 @@ email not working yet
   SpecialMenu("Поиск товара",'',1,"ItemSearchDsm");
   SpecialMenu("Поиск в текущей таблице",'f',1,"TableSearchDsm"); // edit ----------Dima 25.11.2014
   SpecialMenu("Статус счета",'r',5,"ORInfoRnORDsm");
-  if (StandardHansa==false) then begin
+  /*if (StandardHansa==false) then begin
     SpecialMenu("Цены предыдущей продажи",' ',12,"ORLastSPrsm");
     SpecialMenu("Распечатать внутренний заказ",' ',4,"Or2FormORDsm");
-  end;
-  SpecialMenu("Резервирования",' ',15,"OrderReservORDsm");
-  if (StandardHansa==false) then begin
+  end;*/
+  //SpecialMenu("Резервирования",' ',15,"OrderReservORDsm");
+  /*if (StandardHansa==false) then begin
     SpecialMenu("Отправить для утверждения",' ',6,"ORSendforAcceptanceORDsm");
     SpecialMenu("Отменить запрос на утверждение",' ',2,"CancelApprovalRequestDsm");
-  end;
-  SpecialMenu("Создать деятельность",'c',9,"CreateActFromORDsm");
+  end;*/
+  //SpecialMenu("Создать деятельность",'c',9,"CreateActFromORDsm");
   SpecialMenu("Создать отгрузку",'L',0,"SHFromORDsm");
-  SpecialMenu("Создать счет-фактуру на аванс",'o',3,"DownPayFromORDsm");
-  if (HaseMail) then begin
+  //SpecialMenu("Создать счет-фактуру на аванс",'o',3,"DownPayFromORDsm");
+  /*if (HaseMail) then begin
   SpecialMenu("Создать e-mail",'m',11,"CreateMailFromORDsm");
-  end;
+  end;*/
   SpecialMenu("Создать реализацию",'F',1,"IVFromORDsm");
-  if (HasModTS) then begin
+  /*if (HasModTS) then begin
     SpecialMenu("Создать проект",' ',9,"CreatePRFromORDsm");
     SpecialMenu("Создать бюджет проекта",' ',10,"CreateTBBUFromORDsm");
-  end;
-  if (HasModPO) then begin
+  end;*/
+  /*if (HasModPO) then begin
     SpecialMenu("Создать заказ поставщику",' ',4,"POFromORDsm");
-  end;
-  if (GuiType==kGuiiPhone) then begin
+  end;*/
+  /*if (GuiType==kGuiiPhone) then begin
     SpecialMenu("Подписать",' ',10,"SignORDsm");
-  end;
+  end;*/
   SpecialMenu("Создать возврат товаров",'B',6,"RetFromORsm");
   SpecialMenu("Создать перемещение по складу",' ',8,"StockMovFromORDsm");
-  if (HasTaxMatrix) then begin
+  /*if (HasTaxMatrix) then begin
     SpecialMenu("Открыть матрицу налогов",' ',25,"OpenVatMatrixORDsm");
-  end;
+  end;*/
   SpecialMenu("Справка по клиенту",'e',0,"ORStatusCUDsm");	//Edit------------------Dima 27.01.2015
 	SpecialMenu("Выгрузить таблицу в буфер обмена",'',18,"ExportToExcelORDsm"); // edit ----------Dima 26.11.2014, 23.01.2015
 	SpecialMenu("Отсортировать таблицу",'',20,"TableSortORDsm"); // edit ----------Dima 26.11.2014, 23.01.2015

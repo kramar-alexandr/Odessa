@@ -2695,6 +2695,7 @@ begin
 			case 11:newstatus = "pending_payment";//В ожидании опл.
 			case 12:newstatus = "pending_stock";//В ожидании товаров
 			case 13:newstatus = "no_stock";//Не достаточно тов-в
+			case 14:newstatus = "approved";//Подтвержден
 		end;
 		if(nonblank(newstatus))then begin
 			if(ORr.OrderClass=="WEB" and nonblank(ORr.CustOrdNr))then begin
