@@ -253,7 +253,7 @@ begin
 		if(WSb.UseNode)then begin
 			logtext(0,"SOAPLogin " & currenttime & "  " & getarealength(replyarea));
 			if(MySendRawWebRequest("127.0.0.1","1070",false,"POST","/getProxyRequest","application/xml","",false,a_req,replyarea,3))then begin  //WORK! 
-			
+				logtext(0,"EndRequest");
 			end else begin
 				SOAPLoginOld;
 				logtext(0,"Hansa World: No Connection to NODE!!!");
@@ -401,7 +401,7 @@ begin
 			
 			if(WSb.UseNode==1)then begin
 				if(MySendRawWebRequest("127.0.0.1","1070",false,"POST","/getProxyRequest","application/xml","",false,a_req,replyarea,3))then begin  //WORK! 
-
+					logtext(0,"EndRequest");
 				end else begin
 					logtext(0,"NODE SERVER OFFLINE!!!!!!!!!!!!!!!!!!! ");
 					SOAPUpdateStatusOld(ordnr,status);
