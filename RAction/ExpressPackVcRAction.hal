@@ -27,7 +27,8 @@ END;
 
 
 
-global updating procedure CreateExpressListRemote(var record ExpressPackVc EPr, record RcVc RepSpec)
+global 
+updating procedure CreateExpressListRemote(var record ExpressPackVc EPr, record RcVc RepSpec)
 begin
 	record ORVc ORr;
 	row ORVc ORrw;

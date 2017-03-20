@@ -3441,23 +3441,23 @@ WindowBegin("Экспресс сборка",ExpressPackDClass,CGview,-);
   EditField(h1,v+=20,100,"Время",ViewOnly,TransTime,false,0);
 	
 	h3=370;
-	CheckBox(h3,v=6,0,"Новый",									OrdSatatus00);
-	CheckBox(h3,v+=20,0,"Открыт",								OrdSatatus01);
-	CheckBox(h3,v+=20,0,"Подтвержден",					OrdSatatus02);
-	CheckBox(h3,v+=20,0,"Подтвержден (Резерв)",	OrdSatatus14);
-	CheckBox(h3,v+=20,0,"Не дозвонились",				OrdSatatus03);
-	CheckBox(h3,v+=20,0,"Заказ изменен",				OrdSatatus04);
-	CheckBox(h3,v+=20,0,"В ожидании товаров",		OrdSatatus12);
-	CheckBox(h3,v+=20,0,"Не достаточно тов-в",	OrdSatatus13);
+	CheckBox(h3,v=6,0,"Новый",OrdStatus00);
+	CheckBox(h3,v+=20,0,"Открыт",OrdStatus01);
+	CheckBox(h3,v+=20,0,"Подтвержден",OrdStatus02);
+	CheckBox(h3,v+=20,0,"Подтвержден (Резерв)",OrdStatus14);
+	CheckBox(h3,v+=20,0,"Не дозвонились",OrdStatus03);
+	CheckBox(h3,v+=20,0,"Заказ изменен",OrdStatus04);
+	CheckBox(h3,v+=20,0,"В ожидании товаров",OrdStatus12);
+	CheckBox(h3,v+=20,0,"Не достаточно тов-в",OrdStatus13);
 
 	h4 = 550;
-	CheckBox(h4,v=6,0,"В ожидании опл.",				OrdSatatus11);
-	CheckBox(h4,v+=20,0,"В сборке",							OrdSatatus05);
-	CheckBox(h4,v+=20,0,"Собран",								OrdSatatus06);
-	CheckBox(h4,v+=20,0,"Отправлен",						OrdSatatus07);
-	CheckBox(h4,v+=20,0,"Доставлен",						OrdSatatus08);
-	CheckBox(h4,v+=20,0,"Завершен",							OrdSatatus09);
-	CheckBox(h4,v+=20,0,"Отменен",							OrdSatatus10);
+	CheckBox(h4,v=6,0,"В ожидании опл.",OrdStatus11);
+	CheckBox(h4,v+=20,0,"В сборке",OrdStatus05);
+	CheckBox(h4,v+=20,0,"Собран",OrdStatus06);
+	CheckBox(h4,v+=20,0,"Отправлен",OrdStatus07);
+	CheckBox(h4,v+=20,0,"Доставлен",OrdStatus08);
+	CheckBox(h4,v+=20,0,"Завершен",OrdStatus09);
+	CheckBox(h4,v+=20,0,"Отменен",OrdStatus10);
 
 	
 	MatrixBegin(10,v+=60,-40,-10,-,200);
@@ -3490,5 +3490,41 @@ begin
   
   SpecialMenu("Создать экспресс лист",'E',0,"CreateExpressListDsm");
   
+  EndWindow;
+end;
+
+window SpecifyExpressPackParamsClass:1
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  real h,h2,v,v2,vm,vs;
+  WindowBegin("Определите параметры экспресс сборки",SpecifyExpressPackParamsClass,CGRcW,RcType);
+  SetWRect(20,80,470,370);
+  vs = 20;
+  h=150;
+  PeriodField(h,v=6,"Период");
+  EditFieldTL(h,v+=20,150,"Склад",M4UStr,Normal,150,f1,false,LocationSClass);
+  
+  v = v + 2*vs;
+  v2 = v;
+  h = 100;
+  CheckBox(h,v,0,"Новый",flags[0]);
+	CheckBox(h,v+=20,0,"Открыт",flags[1]);
+	CheckBox(h,v+=20,0,"Подтвержден",flags[2]);
+	CheckBox(h,v+=20,0,"Подтвержден (Резерв)",flags[14]);
+	CheckBox(h,v+=20,0,"Не дозвонились",flags[3]);
+	CheckBox(h,v+=20,0,"Заказ изменен",flags[4]);
+	CheckBox(h,v+=20,0,"В ожидании товаров",flags[12]);
+	CheckBox(h,v+=20,0,"Не достаточно тов-в",flags[13]);
+	
+	h2 = h + 150;
+	v = v2;
+	CheckBox(h2,v,0,"В ожидании опл.",flags[11]);
+	CheckBox(h2,v+=20,0,"В сборке",flags[5]);
+	CheckBox(h2,v+=20,0,"Собран",flags[6]);
+	CheckBox(h2,v+=20,0,"Отправлен",flags[7]);
+	CheckBox(h2,v+=20,0,"Доставлен",flags[8]);
+	CheckBox(h2,v+=20,0,"Завершен",flags[9]);
+	CheckBox(h2,v+=20,0,"Отменен",flags[10]);
+
   EndWindow;
 end;
