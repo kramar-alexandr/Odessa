@@ -310,8 +310,9 @@ begin
 	
 	logtext(0,"WebSOAPUpdateStatusCallBack" & WebGetArg("ordnum"));
 		
-	//writeareatofile(resarea,"MagentaStatusReply.txt",1);
 	webgetpostdata(a_reply);
+	//writeareatofile(a_reply,"MagentaStatusReply.txt",1);
+
 	if(getarealength(a_reply)>0)then begin
 		logtext(0,"SOAPUpdateStatusReply replylen " & getarealength(a_reply));
 	end else begin

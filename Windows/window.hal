@@ -3354,6 +3354,7 @@ begin
     case 11: tstr = "В ожидании опл.";
     case 12: tstr = "В ожидании товаров";
     case 13: tstr = "Не достаточно тов-в";
+    case 14: tstr = "Подтвержден (резерв)";
   end;
   StaticText(h,v+=30,"Статус",true);
   StaticText(h,v," - " & tstr,false);
@@ -3403,5 +3404,74 @@ begin
   WindowBegin("Некорректные сч.ф.",UncorrectIVRClass,CGRcW,RcType);
   SetWRect(20,80,400,250);
   UseView(RcVc);
+  EndWindow;
+end;
+
+
+window NPDescripLClass:1
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  WindowBegin("Новая почта - Товары",NPDescripLClass,CGmlist,SHView);
+  SpawnClass(NPDescripDClass);
+  SetWRect(20,80,560,298);
+  Sizeable(-1,-1,0,0);
+  UseView(NPDescripVc);
+  RecordList(4,17,-21,-39);
+  RlColKey(4,4,"Описание",Description,false,Description);
+  RlColKey(140,140,"Описание (Rus)",DescriptionRU,false,DescriptionRU);
+  RlColKey(300,300,"Ref",Ref,false,Ref);
+  SearchField("Найти");
+  EndWindow;
+end;
+
+window ExpressPackDClass:2
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+	real h,v,vm;
+  integer wn;
+  string 255 tstr;
+WindowBegin("Экспресс сборка",ExpressPackDClass,CGview,-);
+  Sizeable(-1,-1,0,0);
+  UseView(ExpressPackVc);
+  SetWRect(20,100,330,200);
+  EditField(h=200,v=6,100,"Номер",Normal,SerNr,false,0);
+  EditField(h,v+=20,100,"Дата",Normal,TransDate,false,0);
+  EditField(h,v+=20,100,"Время",Normal,TransTime,false,0);
+
+  /*  case 0: tstr = "Новый";
+    case 1: tstr = "Открыт";
+    case 2: tstr = "Подтвержден";
+    case 3: tstr = "Не дозвонились";
+    case 4: tstr = "Заказ изменен";
+    case 5: tstr = "В сборке";
+    case 6: tstr = "Собран";
+    case 7: tstr = "Отправлен";
+    case 8: tstr = "Доставлен";
+    case 9: tstr = "Завершен";
+    case 10: tstr = "Отменен";
+    case 11: tstr = "В ожидании опл.";
+    case 12: tstr = "В ожидании товаров";
+    case 13: tstr = "Не достаточно тов-в";
+    case 14: tstr = "Подтвержден (Резерв)";*/
+  
+  
+  EndWindow;
+end;
+
+
+window ExpressPackLClass:1
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  WindowBegin("Экспресс сборка",ExpressPackLClass,CGmlist,SHView);
+  SpawnClass(ExpressPackDClass);
+  SetWRect(20,80,560,298);
+  Sizeable(-1,-1,0,0);
+  UseView(ExpressPackVc);
+  RecordList(4,17,-21,-39);
+  RlColKey(4,4,"Номер",SerNr,false,SerNr);
+  RlColKey(140,140,"Дата",TransDate,false,TransDate);
+  RlCol(200,200,"Время",TransTime,false);
+  RlColKey(-100,-100,"Склад",Location,false,Location);
+  SearchField("Найти");
   EndWindow;
 end;
