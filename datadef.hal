@@ -5070,7 +5070,6 @@ RecordBegin(IPVc,-,"");
   RecordField(OrdSatatus27,M4Int,0,0);
   RecordField(OrdSatatus28,M4Int,0,0);
   RecordField(OrdSatatus29,M4Int,0,0);
-  RecordField(OrdSatatus30,M4Int,0,0);
   
   RecordField(Math,M4Matrix,0,0);
   ArrayBegin(Math,-,1);
