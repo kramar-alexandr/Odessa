@@ -3427,33 +3427,47 @@ end;
 window ExpressPackDClass:2
   wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
 begin
-	real h,v,vm;
+	real h,h1,h3,h4,v,vm;
   integer wn;
   string 255 tstr;
 WindowBegin("Экспресс сборка",ExpressPackDClass,CGview,-);
   Sizeable(-1,-1,0,0);
   UseView(ExpressPackVc);
   SetWRect(20,100,330,200);
-  EditField(h=200,v=6,100,"Номер",Normal,SerNr,false,0);
-  EditField(h,v+=20,100,"Дата",Normal,TransDate,false,0);
-  EditField(h,v+=20,100,"Время",Normal,TransTime,false,0);
+  h=50;h1=250;
+  EditField(h,v=6,100,"Номер",Normal,SerNr,false,0);
+  EditField(h,v+=20,100,"Склад",Normal,Location,false,LocationSClass);
+  EditField(h1,v=6,100,"Дата",ViewOnly,TransDate,false,0);
+  EditField(h1,v+=20,100,"Время",ViewOnly,TransTime,false,0);
+	
+	h3=370;
+	CheckBox(h3,v=6,0,"Новый",									OrdSatatus00);
+	CheckBox(h3,v+=20,0,"Открыт",								OrdSatatus01);
+	CheckBox(h3,v+=20,0,"Подтвержден",					OrdSatatus02);
+	CheckBox(h3,v+=20,0,"Подтвержден (Резерв)",	OrdSatatus14);
+	CheckBox(h3,v+=20,0,"Не дозвонились",				OrdSatatus03);
+	CheckBox(h3,v+=20,0,"Заказ изменен",				OrdSatatus04);
+	CheckBox(h3,v+=20,0,"В ожидании товаров",		OrdSatatus12);
+	CheckBox(h3,v+=20,0,"Не достаточно тов-в",	OrdSatatus13);
 
-  /*  case 0: tstr = "Новый";
-    case 1: tstr = "Открыт";
-    case 2: tstr = "Подтвержден";
-    case 3: tstr = "Не дозвонились";
-    case 4: tstr = "Заказ изменен";
-    case 5: tstr = "В сборке";
-    case 6: tstr = "Собран";
-    case 7: tstr = "Отправлен";
-    case 8: tstr = "Доставлен";
-    case 9: tstr = "Завершен";
-    case 10: tstr = "Отменен";
-    case 11: tstr = "В ожидании опл.";
-    case 12: tstr = "В ожидании товаров";
-    case 13: tstr = "Не достаточно тов-в";
-    case 14: tstr = "Подтвержден (Резерв)";*/
-  
+	h4 = 550;
+	CheckBox(h4,v=6,0,"В ожидании опл.",				OrdSatatus11);
+	CheckBox(h4,v+=20,0,"В сборке",							OrdSatatus05);
+	CheckBox(h4,v+=20,0,"Собран",								OrdSatatus06);
+	CheckBox(h4,v+=20,0,"Отправлен",						OrdSatatus07);
+	CheckBox(h4,v+=20,0,"Доставлен",						OrdSatatus08);
+	CheckBox(h4,v+=20,0,"Завершен",							OrdSatatus09);
+	CheckBox(h4,v+=20,0,"Отменен",							OrdSatatus10);
+
+	
+	MatrixBegin(10,v+=60,-40,-10,-,200);
+  flip(0);
+  MatCol(1,30,"Товар",0,ArtCode,false,INSclass);
+  MatCol(1,120,"Кол-во",0,Quant,false,0);
+  MatCol(1,180,"Название",0,Spec,false,0);
+  MatCol(1,-120,"Заказ",0,OrdNum,false,0);
+  MatCol(1,-60,"Строка",0,OrdRow,false,0);
+  EndMatrix;
   
   EndWindow;
 end;
@@ -3473,5 +3487,8 @@ begin
   RlCol(200,200,"Время",TransTime,false);
   RlColKey(-100,-100,"Склад",Location,false,Location);
   SearchField("Найти");
+  
+  SpecialMenu("Создать экспресс лист",'E',0,"CreateExpressListDsm");
+  
   EndWindow;
 end;

@@ -5040,6 +5040,7 @@ RecordBegin(IPVc,-,"");
   RecordField(TransDate,M4Date,0,0);
   RecordField(TransTime,M4Time,0,0);
   RecordField(Sign,M4Code,20,0);
+  RecordField(OrdSatatus00,M4Int,0,0);
   RecordField(OrdSatatus01,M4Int,0,0);
   RecordField(OrdSatatus02,M4Int,0,0);
   RecordField(OrdSatatus03,M4Int,0,0);
@@ -5082,6 +5083,8 @@ RecordBegin(IPVc,-,"");
 
   EndArray;
   MainKeyBegin(SerNr,1);
+  StoreInBaseKey;
+  AppendFieldToKeyName(Location);
   KeySegment(SerNr);
   SubsetKeyBegin2(TransDate);
   StoreInBaseKey;

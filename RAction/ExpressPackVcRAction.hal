@@ -1,0 +1,44 @@
+
+
+global
+function LongInt ExpressPackVcRecordCheck(var record ExpressPackVc EPr,record ExpressPackVc EP2r,LongInt stat,LongInt long4)
+BEGIN
+  LongInt res;
+  
+  res = 0;
+  
+  if(EPr.SerNr<0)then begin
+  	EPr.SerNr = NextSerNr("ExpressPackVc",CurrentDate,-1,false,"");	
+  end;
+  
+  if(blank(EPr.TransDate))then begin
+  	EPr.TransDate = currentdate;
+  end;
+  if(blank(EPr.TransTime))then begin
+  	EPr.TransTime = currenttime;
+  end;
+  
+  
+  
+  ExpressPackVcRecordCheck = res;
+  RETURN;
+END;
+
+
+
+
+global updating procedure CreateExpressListRemote(var record ExpressPackVc EPr, record RcVc RepSpec)
+begin
+	record ORVc ORr;
+	row ORVc ORrw;
+	record ExpressPackVc oldEPr;
+	boolean testf,TrHs;
+	
+	oldEPr.TransDate = RepSpec.sStartDate;
+	while(loopkey("TransDate",EPr,1,TrHs))begin
+	
+	end;
+	
+
+return;
+end;
