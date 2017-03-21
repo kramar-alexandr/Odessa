@@ -3465,7 +3465,7 @@ WindowBegin("Экспресс сборка",ExpressPackDClass,CGview,-);
   MatCol(1,30,"Товар",0,ArtCode,false,INSclass);
   MatCol(1,120,"Кол-во",0,Quant,false,0);
   MatCol(1,180,"Название",0,Spec,false,0);
-  MatCol(1,-120,"Заказ",0,OrdNum,false,0);
+  MatCol(1,-120,"Заказ",0,OrdNum,false,ORSClass);
   MatCol(1,-60,"Строка",0,OrdRow,false,0);
   EndMatrix;
   
@@ -3497,7 +3497,7 @@ window SpecifyExpressPackParamsClass:1
   wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
 begin
   real h,h2,v,v2,vm,vs;
-  WindowBegin("Определите параметры экспресс сборки",SpecifyExpressPackParamsClass,CGRcW,RcType);
+  WindowBegin("Определите параметры экспресс сборки",SpecifyExpressPackParamsClass,CGother,RcType);
   SetWRect(20,80,470,370);
   vs = 20;
   h=150;
@@ -3515,6 +3515,8 @@ begin
 	CheckBox(h,v+=20,0,"Заказ изменен",flags[4]);
 	CheckBox(h,v+=20,0,"В ожидании товаров",flags[12]);
 	CheckBox(h,v+=20,0,"Не достаточно тов-в",flags[13]);
+	
+	HalPushButton(h,v+=50,h+200,v+vs,"CreateExpressListRun","Создать сборочный лист");
 	
 	h2 = h + 150;
 	v = v2;

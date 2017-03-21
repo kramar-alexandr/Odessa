@@ -5096,6 +5096,10 @@ RecordBegin(IPVc,-,"");
   AppendFieldToKeyName(Location);
   KeySegment(Location);
   KeySegment(SerNr);
+  KeyBegin(LocationTransDate);
+  KeySegment(Location);
+  KeySegment(TransDate);
+  KeySegment(SerNr);
   
   EndRecord;
   

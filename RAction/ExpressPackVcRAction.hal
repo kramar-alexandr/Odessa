@@ -1,4 +1,4 @@
-
+external updating procedure OpenExpressPackWindow(record ExpressPackVc);
 
 global
 function LongInt ExpressPackVcRecordCheck(var record ExpressPackVc EPr,record ExpressPackVc EP2r,LongInt stat,LongInt long4)
@@ -25,7 +25,15 @@ BEGIN
 END;
 
 
+procedure OpenExpressPackWindow(record ExpressPackVc EPr)
+begin
+	Integer wn;
+	
+	messagebox(0,3);
+	OpenWindow("ExpressPackDClass",1,0,wn,"",EPr);
 
+return;
+end;
 
 global 
 updating procedure CreateExpressListRemote(var record ExpressPackVc EPr, record RcVc RepSpec)
@@ -33,11 +41,133 @@ begin
 	record ORVc ORr;
 	row ORVc ORrw;
 	record ExpressPackVc oldEPr;
-	boolean testf,TrHs;
+	row ExpressPackVc oldEPrw,EPrw;
+	boolean testf,TrHs,orTrHs,ortestf;
+	vector boolean usedorders;
+	integer mtrw,i;
+	
+	EPr.TransDate = currentdate;
+	EPr.Location = RepSpec.f1;
+	EPr.Signature = CurrentUser;
+	EPr.SerNr = NextSerNr("ExpressPackVc",CurrentDate,-1,false,"");	
 	
 	oldEPr.TransDate = RepSpec.sStartDate;
-	while(loopkey("TransDate",EPr,1,TrHs))begin
+	oldEPr.Location = RepSpec.f1;
+	TrHs = true;
+	while(loopkey("LocationTransDate",oldEPr,2,TrHs))begin
+		testf = true;
+		if(oldEPr.TransDate>RepSpec.sEndDate)then begin TrHs = false; testf = false; end;
+		if(oldEPr.TransDate<RepSpec.sStartDate)then begin TrHs = false; testf = false; end;
+		if(oldEPr.Location!=RepSpec.f1)then begin testf = false; end;
 	
+		if(testf)then begin
+			mtrw = matrowcnt(oldEPr);
+			For(i=0;i<mtrw;i=i+1) begin
+				matrowget(oldEPr,i,oldEPrw);
+				usedorders[oldEPrw.OrdNum] = true;
+			end; 
+		end;
+	end;
+	
+	EPr.OrdStatus00 = RepSpec.flags[0];
+	EPr.OrdStatus01 = RepSpec.flags[1];
+	EPr.OrdStatus02 = RepSpec.flags[2];
+	EPr.OrdStatus03 = RepSpec.flags[3];
+	EPr.OrdStatus04 = RepSpec.flags[4];
+	EPr.OrdStatus05 = RepSpec.flags[5];
+	EPr.OrdStatus06 = RepSpec.flags[6];
+	EPr.OrdStatus07 = RepSpec.flags[7];
+	EPr.OrdStatus08 = RepSpec.flags[8];
+	EPr.OrdStatus09 = RepSpec.flags[9];
+	EPr.OrdStatus10 = RepSpec.flags[10];
+	EPr.OrdStatus11 = RepSpec.flags[11];
+	EPr.OrdStatus12 = RepSpec.flags[12];
+	EPr.OrdStatus13 = RepSpec.flags[13];
+	EPr.OrdStatus14 = RepSpec.flags[14];
+	EPr.OrdStatus15 = RepSpec.flags[15];
+	EPr.OrdStatus16 = RepSpec.flags[16];
+	EPr.OrdStatus17 = RepSpec.flags[17];
+	EPr.OrdStatus18 = RepSpec.flags[18];
+	EPr.OrdStatus19 = RepSpec.flags[19];
+	EPr.OrdStatus20 = RepSpec.flags[20];
+	EPr.OrdStatus21 = RepSpec.flags[21];
+	EPr.OrdStatus22 = RepSpec.flags[22];
+	EPr.OrdStatus23 = RepSpec.flags[23];
+	EPr.OrdStatus24 = RepSpec.flags[24];
+	EPr.OrdStatus25 = RepSpec.flags[25];
+	EPr.OrdStatus26 = RepSpec.flags[26];
+	EPr.OrdStatus27 = RepSpec.flags[27];
+	EPr.OrdStatus28 = RepSpec.flags[28];
+	EPr.OrdStatus29 = RepSpec.flags[29];
+	
+	if(recordinsert(EPr,true))then begin
+		
+	end;
+			
+	orTrHs = true;
+	ORr.OrdDate = RepSpec.sStartDate;
+	while(loopkey("OrdDate",ORr,1,orTrHs))begin
+		ortestf = true;
+		if(ORr.OrdDate>RepSpec.sEndDate)then begin orTrHs = false; ortestf = false; end;
+		if(ORr.OrdDate<RepSpec.sStartDate)then begin orTrHs = false; ortestf = false; end;
+		if(ORr.Location!=RepSpec.f1)then begin ortestf = false; end;
+		if(usedorders[ORr.SerNr])then begin ortestf = false; end;
+		
+		switch(ORr.CustomStatusFlag)begin
+			case 0: if(RepSpec.flags[0]==0)then begin ortestf = false; end;
+			case 1: if(RepSpec.flags[1]==0)then begin ortestf = false; end;
+			case 2: if(RepSpec.flags[2]==0)then begin ortestf = false; end;
+			case 3: if(RepSpec.flags[3]==0)then begin ortestf = false; end;
+			case 4: if(RepSpec.flags[4]==0)then begin ortestf = false; end;
+			case 5: if(RepSpec.flags[5]==0)then begin ortestf = false; end;
+			case 6: if(RepSpec.flags[6]==0)then begin ortestf = false; end;
+			case 7: if(RepSpec.flags[7]==0)then begin ortestf = false; end;
+			case 8: if(RepSpec.flags[8]==0)then begin ortestf = false; end;
+			case 9: if(RepSpec.flags[9]==0)then begin ortestf = false; end;
+			case 10: if(RepSpec.flags[10]==0)then begin ortestf = false; end;
+			case 11: if(RepSpec.flags[11]==0)then begin ortestf = false; end;
+			case 12: if(RepSpec.flags[12]==0)then begin ortestf = false; end;
+			case 13: if(RepSpec.flags[13]==0)then begin ortestf = false; end;
+			case 14: if(RepSpec.flags[14]==0)then begin ortestf = false; end;
+			case 15: if(RepSpec.flags[15]==0)then begin ortestf = false; end;
+			case 16: if(RepSpec.flags[16]==0)then begin ortestf = false; end;
+			case 17: if(RepSpec.flags[17]==0)then begin ortestf = false; end;
+			case 18: if(RepSpec.flags[18]==0)then begin ortestf = false; end;
+			case 19: if(RepSpec.flags[19]==0)then begin ortestf = false; end;
+			case 20: if(RepSpec.flags[20]==0)then begin ortestf = false; end;
+			case 21: if(RepSpec.flags[21]==0)then begin ortestf = false; end;
+			case 22: if(RepSpec.flags[22]==0)then begin ortestf = false; end;
+			case 23: if(RepSpec.flags[23]==0)then begin ortestf = false; end;
+			case 24: if(RepSpec.flags[24]==0)then begin ortestf = false; end;
+			case 25: if(RepSpec.flags[25]==0)then begin ortestf = false; end;
+			case 26: if(RepSpec.flags[26]==0)then begin ortestf = false; end;
+			case 27: if(RepSpec.flags[27]==0)then begin ortestf = false; end;
+			case 28: if(RepSpec.flags[28]==0)then begin ortestf = false; end;
+			case 29: if(RepSpec.flags[29]==0)then begin ortestf = false; end;
+		
+		end;
+		if(ortestf)then begin
+			mtrw = matrowcnt(ORr);
+			if(mtrw>0)then begin
+				createrecordlink(ORr,currentcompany,EPr,currentcompany);
+				createrecordlink(EPr,currentcompany,ORr,currentcompany);
+			end;
+			For(i=0;i<mtrw;i=i+1) begin
+				matrowget(ORr,i,ORrw);
+				if(nonblank(ORrw.ArtCode))then begin
+					EPrw.ArtCode = ORrw.ArtCode;
+					EPrw.Spec = ORrw.Spec;
+					EPrw.Quant = ORrw.Quant;
+					EPrw.OrdNum = ORr.SerNr;
+					EPrw.OrdRow = i;
+					matrowput(EPr,matrowcnt(EPr),EPrw);	  					
+				end;
+			end;  
+		end;			
+	end;
+	
+	if(recordstore(EPr,true))then begin
+		
 	end;
 	
 
