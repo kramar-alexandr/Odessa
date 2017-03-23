@@ -3399,7 +3399,7 @@ begin
 end;
 
 window UncorrectIVRClass:1 //Edit-------------------Vitalii 12:49 13.03.2017
-  wtag("language","UKR"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer") 
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer") 
 begin
   WindowBegin("Некорректные сч.ф.",UncorrectIVRClass,CGRcW,RcType);
   SetWRect(20,80,400,250);
@@ -3460,7 +3460,7 @@ WindowBegin("Экспресс сборка",ExpressPackDClass,CGview,-);
 	CheckBox(h4,v+=20,0,"Отменен",OrdStatus10);
 
 	
-	MatrixBegin(10,v+=60,-40,-10,-,200);
+	MatrixBegin(10,v+=60,-40,-10,-,1000);
   flip(0);
   MatCol(1,30,"Товар",0,ArtCode,false,INSclass);
   MatCol(1,120,"Кол-во",0,Quant,false,0);
@@ -3469,6 +3469,8 @@ WindowBegin("Экспресс сборка",ExpressPackDClass,CGview,-);
   MatCol(1,-60,"Строка",0,OrdRow,false,0);
   EndMatrix;
   
+  SpecialMenu("Печатать экспресс лист",'E',0,"PrintExpressListDsm");
+  SpecialMenu("Напечатать расходные накладные ",'T',0,"PrintSHExpressDsm");
   EndWindow;
 end;
 
@@ -3528,5 +3530,17 @@ begin
 	CheckBox(h2,v+=20,0,"Завершен",flags[9]);
 	CheckBox(h2,v+=20,0,"Отменен",flags[10]);
 
+  EndWindow;
+end;
+
+window PrintExpressListRClass:1 
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer") 
+begin
+	real h,h2,v,v2,vm,vs;
+  WindowBegin("Определите печать экспресс листа",PrintExpressListRClass,CGRcW,RcType);
+  SetWRect(20,80,400,250);
+  UseView(RcVc);
+  h = 100;
+  EditFieldTL(h,v=20,150,"Номер",M4Long,Normal,150,long1,false,0);
   EndWindow;
 end;

@@ -47,6 +47,7 @@ begin
 	integer mtrw,i;
 	
 	EPr.TransDate = currentdate;
+	EPr.TransTime = currenttime;
 	EPr.Location = RepSpec.f1;
 	EPr.Signature = CurrentUser;
 	EPr.SerNr = NextSerNr("ExpressPackVc",CurrentDate,-1,false,"");	

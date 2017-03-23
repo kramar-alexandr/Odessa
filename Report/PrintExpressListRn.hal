@@ -1,0 +1,60 @@
+
+	SetLangMode(LangRussian,"RUS",0);
+
+
+global procedure PrintExpressListRn(record RcVc RepSpec)
+begin
+	record ExpressPackVc EPr;
+	row ExpressPackVc EPrw;
+	vector string 200 name;
+	vector boolean found;
+	vector val quant;
+	array string 100 artcode;
+	integer i,mtrw,k;
+	
+	EPr.SerNr = RepSpec.long1;
+	if(readfirstmain(EPr,1,true))then begin
+		
+		mtrw = matrowcnt(EPr);
+		For(i=0;i<mtrw;i=i+1) begin
+	  	matrowget(EPr,i,EPrw);
+	  	if(found[EPrw.ArtCode])then begin
+	  		quant[EPrw.ArtCode] = quant[EPrw.ArtCode] + EPrw.Quant;
+	  	end else begin
+	  		artcode[k] = EPrw.ArtCode;
+	  		found[EPrw.ArtCode] = true;
+	  		quant[EPrw.ArtCode] = quant[EPrw.ArtCode] + EPrw.Quant;
+	  		name[EPrw.ArtCode] = EPrw.Spec;
+	  		k = k+1;
+	  	end;
+	  	
+		end; 
+		
+		StartReportNoHeaderJob("Экспресс сборка");
+		
+		startformat(15);
+			outstring(0,0,"#",false);
+			outstring(15,0,"Код",false);
+			outstring(70,0,"Кол-во",false);
+			outstring(100,0,"Название",false);
+		endformat;
+		black_divider(0,1);
+		
+		For(i=0;i<k;i=i+1) begin
+			startformat(15);
+				outstring(0,0,i,false);
+				outstring(15,0,artcode[i],false);
+				outstring(70,0,valtostring(quant[artcode[i]],M4Val,".",",",1),false);
+				outstring(100,0,name[artcode[i]],false);
+			endformat;
+			gray_Divider(0,1);
+		end; 
+		
+		endjob;
+		
+	end;
+	
+
+return;
+end;
+
