@@ -424,7 +424,10 @@ BEGIN
         if (Rebrw.CodeType==0) then begin
           if (INr.Group==Rebrw.ITCode) then begin
 //            GetStaffReb(INr,Rebrw.StaffCode,qtp,pricep,Rebr,rebvp,foundstaff);
-            GetLocationReb(INr,location,qtp,pricep,Rebr,i,rebvp,foundstaff);
+            	GetLocationReb(INr,location,qtp,pricep,Rebr,i,rebvp,foundstaff);
+            	if(nonblank(Rebrw.StaffCode))then begin// Edit ************************** Friday, 24 March 2017 14:20:32
+								GetStaffReb(INr,Rebrw.StaffCode,qtp,pricep,Rebr,i,rebvp,foundstaff);
+            	end;
             res = true;
             goto LGetRebateLocation;
           end;
@@ -432,12 +435,19 @@ BEGIN
         if (Rebrw.CodeType==1) then begin
           if (INr.Code==Rebrw.ITCode) then begin
             GetLocationReb(INr,location,qtp,pricep,Rebr,i,rebvp,foundstaff);
+						if(nonblank(Rebrw.StaffCode))then begin// Edit ************************** Friday, 24 March 2017 14:20:32
+							GetStaffReb(INr,Rebrw.StaffCode,qtp,pricep,Rebr,i,rebvp,foundstaff);
+            end;
             res = true;
             goto LGetRebateLocation;
           end;
         end;
       end;
       GetLocationReb(INr,location,qtp,pricep,Rebr,-1,rebvp,foundstaff);
+      if(nonblank(Rebr.StaffCode))then begin// Edit ************************** Friday, 24 March 2017 14:20:32
+				GetStaffReb(INr,Rebr.StaffCode,qtp,pricep,Rebr,-1,rebvp,foundstaff);
+      end;
+      
       res = true;
     end;
   end;
