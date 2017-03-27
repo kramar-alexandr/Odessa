@@ -54,7 +54,7 @@ string 50 backupfile,month,year,day;
 	if (len(month)==1) then begin
 		month = "0" & month;
 	end;
-	day = getmonth(currentdate);
+	day = getday(currentdate);
 	if (len(day)==1) then begin
 		day = "0" & day;
 	end;

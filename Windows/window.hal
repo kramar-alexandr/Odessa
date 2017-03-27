@@ -3467,10 +3467,12 @@ WindowBegin("Экспресс сборка",ExpressPackDClass,CGview,-);
   MatCol(1,180,"Название",0,Spec,false,0);
   MatCol(1,-120,"Заказ",0,OrdNum,false,ORSClass);
   MatCol(1,-60,"Строка",0,OrdRow,false,0);
+  MatCol(1,-15,"пч.",0,Printed,false,0);
   EndMatrix;
   
   SpecialMenu("Печатать экспресс лист",'E',0,"PrintExpressListDsm");
-  SpecialMenu("Напечатать расходные накладные ",'T',0,"PrintSHExpressDsm");
+  SpecialMenu("Напечатать НОВЫЕ расходные накладные ",'T',0,"PrintSHExpressDsm");
+  SpecialMenu("Напечатать ВСЕ расходные накладные ",'R',0,"PrintAllSHExpressDsm");
   EndWindow;
 end;
 

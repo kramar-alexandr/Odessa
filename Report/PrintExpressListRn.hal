@@ -10,7 +10,8 @@ begin
 	vector boolean found;
 	vector val quant;
 	array string 100 artcode;
-	integer i,mtrw,k;
+	integer i,j,mtrw,k;
+	string 100 tempartcode;
 	
 	EPr.SerNr = RepSpec.long1;
 	if(readfirstmain(EPr,1,true))then begin
@@ -29,6 +30,18 @@ begin
 	  	end;
 	  	
 		end; 
+		
+		if(k>1)then begin
+			For(i=0;i<k;i=i+1) begin
+				For(j=0;j<k-1;j=j+1) begin
+					tempartcode = artcode[j];
+					if(name[artcode[j]]>name[artcode[j+1]])then begin
+						artcode[j] = artcode[j+1];
+						artcode[j+1] = tempartcode;
+					end;
+				end; 
+			end; 
+		end;
 		
 		StartReportNoHeaderJob("Экспресс сборка");
 		

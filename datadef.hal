@@ -5079,6 +5079,7 @@ RecordBegin(IPVc,-,"");
   ArrayField(OrdNum,M4Long,0,0);
   ArrayField(OrdRow,M4Int,0,0);
   ArrayField(Place,M4Str,250,0);
+  ArrayField(Printed,M4Int,0,0);
 
   EndArray;
   MainKeyBegin(SerNr,1);
