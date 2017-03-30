@@ -275,6 +275,8 @@ LogText(0,"RemoveIHrecordsStockMov");
   While(LoopKey("FNTransNr",IHr,3,TrHs)) begin	
   	testf = true;
   	if(IHr.TransNr!=SerialNr) then begin TrHs=false; testf=false; end;
+  	if(IHr.FileName!="StockMovVc") then begin TrHs=false; testf=false; end;
+  	if(IHr.Row!=rownr) then begin TrHs=false; testf=false; end;
   	if(IHr.Location!=fromLoc or IHr.Qty>0) then begin testf=false; end; //record "from" always < 0
   	
   	if (testf) then begin
@@ -306,6 +308,8 @@ LogText(0,"RemoveIHrecordsStockMov");
   While(LoopKey("FNTransNr",IHr,3,TrHs)) begin	
   	testf = true;
   	if(IHr.TransNr!=SerialNr) then begin TrHs=false; end;
+  	if(IHr.FileName!="StockMovVc") then begin TrHs=false; testf=false; end;
+  	if(IHr.Row!=rownr) then begin TrHs=false; testf=false; end;
   	if(IHr.Location!=toLoc or IHr.Qty<0) then begin testf=false; end; //record "from" always > 0
   	
   	if (testf) then begin
@@ -594,7 +598,7 @@ begin
 			TrHs = true;  
 				
   		While(LoopKey("FNTransNr",IHr,3,TrHs)) begin	
-  			if(IHr.TransNr!=IVr.SerNr or IHr.Row!=i) then begin TrHs=false;end;
+  			if(IHr.TransNr!=IVr.SerNr or IHr.Row!=i or IHr.FileName!="IVVc") then begin TrHs=false;end;
   			
   			if (TrHs) then begin
   				INr.Code = IVrw.ArtCode;

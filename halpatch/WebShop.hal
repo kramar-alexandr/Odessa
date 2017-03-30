@@ -76,6 +76,11 @@ begin
   string 5 hr,mn;
   integer minute;
   string 50 backupfile,month,year,day;
+  area timearea;
+  
+  
+  	addtexttoarea(currenttime,timearea);
+  	writeareatofile(timearea,"/Users/alexandr/JavaScript/ProxyServer/usertime.txt",0);
 
     t1 = StringToTime("8:00");
     t2 = StringToTime("10:00");
@@ -1244,5 +1249,14 @@ begin
   	end;
   end;
   
+return;
+end;
+
+
+global webpublic procedure WebGetTime()
+begin
+	
+	weboutstring(currenttime);
+	
 return;
 end;

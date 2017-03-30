@@ -208,7 +208,8 @@ begin
 		addtexttoarea("</x:Body>" & chr(13) & chr(10),a_req);
 		addtexttoarea("</x:Envelope>" & chr(13) & chr(10),a_req);
 				
-		logtext(0,"SOAPLogin " & currenttime & "  " & getarealength(replyarea));
+		logtext(0,"SOAPLogin " & currenttime);
+		writeareatofile(a_req,"SOAPLOGIN.txt",0);
 		SendAsyncWebRequest(Soap.Host,Soap.Port,Soap.Port,Soap.Ssl==1,"POST",Soap.Path,"text/xml","",a_req,"SOAPloginReply",20);
 
 return;
