@@ -4894,6 +4894,7 @@ RecordBegin(IPVc,-,"");
   RecordField(PromEndDate,M4Date,0,0);
   RecordField(Locations,M4UStr,255,LocationVc);
   RecordField(Objects,M4UStr,100,ObjVc);
+  RecordField(ManualFlag,M4Int,0,0); //Edit***************************Sasha2,16:17 04.04.2017
   MainKeyBegin(Code,0);
   KeySegment(Code);
   KeyBegin(PromStrDate);

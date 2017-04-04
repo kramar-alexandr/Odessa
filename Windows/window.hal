@@ -3114,6 +3114,8 @@ begin
   v = v + vs;
   EditField(h,v+=vs,100,"Действует с",Normal,PromStrDate,false,PasteCurDate);
   EditField(h2,v,100,"Действует до",Normal,PromEndDate,false,PasteCurDate);
+  EditField(h2,v,100,"Действует до",Normal,PromEndDate,false,PasteCurDate);
+  CheckBox(h3,v,0,"Ручной ввод",ManualFlag); //Edit***************************Sasha2,16:23 04.04.2017
   EditField(h,v+=vs,100,"Склады",Normal,Locations,false,LocationSClass);
   EditField(h2,v,100,"Объекты",Normal,Objects,false,ObjSClass);
 

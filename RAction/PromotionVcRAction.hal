@@ -115,13 +115,13 @@ BEGIN
     goto LPromotionVcRecordCheck;
   end;
   
-  if (blankdate(Promotionr.PromStrDate)) then begin
+  if (blankdate(Promotionr.PromStrDate) and Promotionr.ManualFlag<1) then begin
     RecordCheckError(1854,Promotionr.PromStrDate,-1,"PromStrDate");      
     res = -1; 
     goto LPromotionVcRecordCheck;
   end;
   
-  if (blankdate(Promotionr.PromEndDate)) then begin
+  if (blankdate(Promotionr.PromEndDate) and Promotionr.ManualFlag<1) then begin
     RecordCheckError(1854,Promotionr.PromEndDate,-1,"PromEndDate");      
     res = -1; 
     goto LPromotionVcRecordCheck;
