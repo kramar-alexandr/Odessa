@@ -33,6 +33,7 @@ global //Edit***************************Sasha2,17:05 14.08.2015 {
 updating procedure RemoveReservedMarkMn()
 begin
   record ORVc ORr,OR2r;
+  row ORVc ORrw;
   boolean TrHs,testf,okedf;
   date mindate;
   LongInt res;
@@ -41,6 +42,8 @@ begin
   time sendTime;
   record SMSTextBlock SMSb;
   string 200 newtext;
+  integer i,mtrw;
+  boolean statusflag;
   
   	BlockLoad(SMSb);
   	
@@ -57,9 +60,34 @@ begin
       if (NonBlank(ORr.ReservToDate) and ORr.ReservToDate>CurrentDate) then begin testf = false;/*logtext(0,"RemoveReservedMarkMn false2");*/ end;
       if (ORr.OrderClass!="WEB" and ORr.OrderClass!="RETAI") then begin testf = false;/*logtext(0,"RemoveReservedMarkMn false3");*/ end;// Edit ************************** Saturday, 29 August 2015 08:53:18
       if (ORr.NPPaymentType!=0 or ORr.PrepaymentReceived!=0) then begin testf = false;/*logtext(0,"RemoveReservedMarkMn false4");*/ end;			//Edit----------------------Dima  23.09.2015
-      if (ORr.CustomStatusFlag!=11) then begin testf = false;/*logtext(0,"RemoveReservedMarkMn false5");*/ end;// Edit ************************** Saturday, 29 August 2015 08:53:19      
+      //if (ORr.CustomStatusFlag!=11) then begin testf = false;/*logtext(0,"RemoveReservedMarkMn false5");*/ end;// Edit ************************** Saturday, 29 August 2015 08:53:19      
       
-      if (testf and NonBlank(ORr.ReservToDate) and ORr.ReservToDate==CurrentDate) then begin// Edit ************************** Saturday, 29 August 2015 08:57:08
+      statusflag = false;
+      switch(ORr.CustomStatusFlag)begin
+				case 0:statusflag = true;
+				case 1:statusflag = true;
+      	case 2:statusflag = true;
+      	case 3:statusflag = true;
+      	case 9:statusflag = true;
+      	case 10:statusflag = true;
+      	case 11:statusflag = true;
+      end;
+      
+      if(testf)then begin
+      	testf = statusflag;
+      end;
+      
+      if(testf and ORr.CustomStatusFlag!=11)then begin
+      	mtrw = matrowcnt(ORr);
+      	For(i=0;i<mtrw;i=i+1) begin
+	  			matrowget(ORr,i,ORrw);
+	  			if(ORrw.Invd>0 or ORrw.Shipd1>0)then begin
+	  				testf = false;
+	  			end;
+				end; 
+      end;
+      
+      if (testf and NonBlank(ORr.ReservToDate) and ORr.ReservToDate==CurrentDate and ORr.CustomStatusFlag==11) then begin// Edit ************************** Saturday, 29 August 2015 08:57:08
       	if (nonblank(SMSb.Text41)) then begin
       		newtext = ParseSMStext(SMSb.Text41,ORr);
 	        smsNr = AddSMStoStack(ORr.NPPhone,SMSb.Title4,newtext,ORr.CustCode,"ORVc",ORr.SerNr,ORr.OrderClass,CurrentDate,sendTime);
@@ -79,7 +107,7 @@ begin
           RecordCopy(OR2r,ORr);
           ORr.Reserved = 0;
           if (RecordUpdate(OR2r,ORr,true)==0) then begin 
-     	      	if (nonblank(SMSb.Text42)) then begin
+     	      	if (nonblank(SMSb.Text42) and ORr.CustomStatusFlag==11) then begin
 			      		newtext = ParseSMStext(SMSb.Text42,ORr);  
             		AddSMStoStack(ORr.NPPhone,SMSb.Title4,newtext,ORr.CustCode,"ORVc",ORr.SerNr,ORr.OrderClass,CurrentDate,sendTime);
             	end;	

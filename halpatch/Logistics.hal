@@ -159,10 +159,12 @@ begin
 							end;							
 							if (SMprocessTemp>ORrw.OrderQuant) then begin
 								res = false;
+								logtext(0,"SMrw2.ORSerial CheckWritingQtyBackToORVc " & SMrw2.ORSerial);
 								goto LCheckWritingQtyBackToORVc;
 							end;
 							if (ORprocessTemp<0 or ORprocessTemp>ORrw.NecessaryQuant-ORrw.Quant) then begin
 								res = false;
+								logtext(0,"SMrw2.ORSerial CheckWritingQtyBackToORVc " & SMrw2.ORSerial);
 								sernr = ORr.SerNr;
 								goto LCheckWritingQtyBackToORVc;
 							end;
@@ -170,7 +172,9 @@ begin
 						end; 
 					end;
 
-				end; 			 
+				end else begin
+					logtext(0,"SMrw2.ORSerial CheckWritingQtyBackToORVc " & SMrw2.ORSerial);
+				end;			 
  	end;		
 	LCheckWritingQtyBackToORVc:;
 	CheckWritingQtyBackToORVc = res;
@@ -610,14 +614,16 @@ end;
 
 global updating procedure StopWebReserving(longint sernr)
 begin
-	record StockMovVc SMr;
+	record StockMovVc SMr,oldSMr;
 	
 	SMr.SerNr = sernr;
 	readfirstmain(SMr,1,true);
+	RecordCopy(oldSMr,SMr);
 	SMr.StopAutoComplite = 1;
 	TableSortAscending_StockMov(SMr,"ArtCode");
 	StockMovBoxingQty(SMr);
-	recordstore(SMr,true);
+	RecordUpdate(oldSMr,SMr,true);
+
 
 return;
 end;

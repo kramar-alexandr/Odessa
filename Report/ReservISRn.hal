@@ -27,7 +27,7 @@ integer diff,pos;
     if (ISr.Location==";;;") then begin testf = false; end;
     if(testf)then begin
       diff = ISr.Instock - ISr.RsrvQty;
-      if(diff<0)then begin
+      if(diff<0 or ISr.RsrvQty<0)then begin
         StartFormat(15)
           pos = 0;
           OutString(pos,0,ISr.Code,false); //ArtCode
