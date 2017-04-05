@@ -25,6 +25,7 @@ external procedure SetNewORCustomStatusFlagOnWeb(record ORVc);// Edit **********
 external updating function string 255 CheckAndSendSMS(longint); //Edit***************************Sasha2,14:48 24.11.2016
 external function LongInt CountWorkingDays(Date,Date,string,string);// Edit ************************** Monday, 28 November 2016 16:01:47
 external function string 255 StrReplace(string,string,string);// Edit ************************** Tuesday, 29 November 2016 13:59:09
+external procedure ExpandStructure(record INVc,string,string,Integer,var val,var val,Boolean);
 
 
 SetLangMode(LangRussian,"RUS",0);
@@ -3620,4 +3621,41 @@ begin
 	setareazerosize(res);
 	
 return;
+end;
+
+
+global
+function val ItemInStockUseReserv(var record INVc INr,string alocation)
+begin
+  val res;
+  record ItemStatusVc ISr;
+  record MainStockBlock MSb;
+  val ord;
+  Boolean found;
+  string 255 location;
+  
+  ISr.Code = INr.Code;
+  if (alocation<>"") then begin
+    location = alocation;
+  end else begin
+    BlockLoad(MSb);
+    location = MSb.MainStock;
+  end;
+  if ((INr.ItemType==2) and (nonblank(INr.Recepy))) then begin
+    ExpandStructure(INr,INr.Recepy,location,MSb.UpdateAvailable,res,ord,true);
+  end else begin 
+    found = true;
+    ISr.Code = INr.Code;
+    ISr.Location = location;
+    while (LoopMain(ISr,2,found)) begin
+      if (ISr.Code!=INr.Code) then begin found = false; end;
+      if (ISr.Location!=location) then begin found = false; end;
+      if (found) then begin
+        res = res + ISr.Instock - ISr.RsrvQty;// Edit ************************** Wednesday, 5 April 2017 13:04:55
+      end;
+    end; 
+  
+  end;
+  ItemInStockUseReserv = res;
+  return;
 end;

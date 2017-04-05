@@ -65,6 +65,9 @@ begin
 	SetRepCol(8,450);
 	
 	StartFormat(15);
+		OutString(0,0,"Остаток на складе за вычетом существующих резервов!!!",false);
+	EndFormat;
+	StartFormat(15);
 	OutString(0,0,"Код",false);
 	OutString(2,0,"Классификация",false);
 	OutString(3,0,"Название",false);
@@ -85,7 +88,6 @@ begin
 	    OutString(7,0,"Y_ВЫСТАВКА",false);
 	    Locr.Code = "Y_ВЫСТАВКА";	    
   end; //Edit***************************Sasha2,10:15 23.01.2015 }
-	EndFormat;
 
 	if (ReadFirstMain(Locr,1,true)) then begin	end;
 
@@ -112,6 +114,8 @@ begin
 		for(i=0;i<positions.length;i=i+1) begin
 			OutString(410+stepPos*i,0,positions[i],false);
 		end;
+		EndFormat;
+	end else begin
 		EndFormat;
 	end;
 	
@@ -153,32 +157,53 @@ begin
 				    ItemStatusr.Code = INr.Code;
 				    ItemStatusr.Location = "3-RAY";
 				    if (ReadFirstMain(ItemStatusr,2,true)) then begin			//поиск по Code, Location
-    					OutString(7,0,ItemStatusr.Instock,false);
+    					OutString(7,0,ItemStatusr.Instock - ItemStatusr.RsrvQty,false);
     				end;
     				ItemStatusr.Code = INr.Code;
     				ItemStatusr.Location = "4-NIZ";
     				if (ReadFirstMain(ItemStatusr,2,true)) then begin			
-    					OutString(8,0,ItemStatusr.Instock,false);
+    					OutString(8,0,ItemStatusr.Instock - ItemStatusr.RsrvQty,false);
     				end;
     			case 2:
     			  ItemStatusr.Code = INr.Code;
     			  ItemStatusr.Location = "6-KV";
 				    if (ReadFirstMain(ItemStatusr,2,true)) then begin			//поиск по Code, Location
-    					OutString(7,0,ItemStatusr.Instock,false);
+    					OutString(7,0,ItemStatusr.Instock - ItemStatusr.RsrvQty,false);
     				end;
     			case 3:
     			  ItemStatusr.Code = INr.Code;
     			  ItemStatusr.Location = "Y_ВЫСТАВКА";
 				    if (ReadFirstMain(ItemStatusr,2,true)) then begin			//поиск по Code, Location
-    					OutString(7,0,ItemStatusr.Instock,false);
+    					OutString(7,0,ItemStatusr.Instock - ItemStatusr.RsrvQty,false);
     				end;    				
 				end; //Edit***************************Sasha2,10:22 23.01.2015 }
 			end else begin
+				switch (lmflag) begin //Edit***************************Sasha2,10:22 23.01.2015 {
+				  case 1:
+				    ItemStatusr.Code = INr.Code;
+				    ItemStatusr.Location = "3-RAY";
+				    if (ReadFirstMain(ItemStatusr,2,true)) then begin			//поиск по Code, Location
+    				end;
+    			case 2:
+    			  ItemStatusr.Code = INr.Code;
+    			  ItemStatusr.Location = "6-KV";
+				    if (ReadFirstMain(ItemStatusr,2,true)) then begin			//поиск по Code, Location
+    				end;
+    			case 3:
+    			  ItemStatusr.Code = INr.Code;
+    			  ItemStatusr.Location = "Y_ВЫСТАВКА";
+				    if (ReadFirstMain(ItemStatusr,2,true)) then begin			//поиск по Code, Location
+    				end;    				
+				end;
 				for(i=0;i<positions.length;i=i+1) begin
 					PISr.ArtCode = INr.Code;
 					PISr.Position = positions[i];
 					if (ReadFirstMain(PISr,2,true)) then begin
-						OutString(410+stepPos*i,0,PISr.Instock,false);
+						if(i==0)then begin
+							OutString(410+stepPos*i,0,PISr.Instock - ItemStatusr.RsrvQty,false);
+						end else begin
+							OutString(410+stepPos*i,0,PISr.Instock,false);
+						end;
 					end;
 				end;
 			end;

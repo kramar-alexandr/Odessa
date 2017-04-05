@@ -1,4 +1,5 @@
 remote function val ItemInStock(var record INVc,string);	
+remote function val ItemInStockUseReserv(var record INVc,string);	
 
 SetLangMode(LangRussian,"RUS",0);
 
@@ -31,7 +32,7 @@ global function string 255 IN1SClassInStockNIZ(var record INVc INr)	// Edit by V
 begin
   transaction string 255 gLocation;
   
-  IN1SClassInStockNIZ = ItemInStock(INr,"3-RAY");// Put stock!
+  IN1SClassInStockNIZ = ItemInStockUseReserv(INr,"3-RAY");// Put stock!// Edit ************************** Wednesday, 5 April 2017 13:06:10
   return;
 end;
 
@@ -39,7 +40,7 @@ global function string 255 IN1SClassInStockKV(var record INVc INr)	//Edit by Vic
 begin
   transaction string 255 gLocation;
   
-  IN1SClassInStockKV = ItemInStock(INr,"6-KV");
+  IN1SClassInStockKV = ItemInStockUseReserv(INr,"6-KV");// Edit ************************** Wednesday, 5 April 2017 13:06:11
   return;
 end;
 
@@ -48,7 +49,7 @@ global function string 255 IN1SClassInStockEXPO(var record INVc INr)	//Edit-----
 begin
   transaction string 255 gLocation;
   
-  IN1SClassInStockEXPO = ItemInStock(INr,USetStr(31141));
+  IN1SClassInStockEXPO = ItemInStockUseReserv(INr,USetStr(31141));// Edit ************************** Wednesday, 5 April 2017 13:06:25
   return;
 end;
 

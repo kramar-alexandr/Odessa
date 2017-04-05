@@ -128,6 +128,7 @@ begin
 	//Export("Export RHist",ExpItemsBarCodesOptEClass,RhistvcExportEn,modDBMain);
 
   Report("Несовпадения по складу 1-КОС",TovTestRClass,TovTestRn,0,modDBMain);
+  Report("Несовпадения по складу 3-RAY",TovTestRClass,TovTest3RAYRn,0,modDBMain);
   Report("1-КОС с пустым местом",OneKocBlankPosRClass,OneKocBlankPosRn,0,modDBMain);
   
   Report("ВЫгрузка номеров ЭН НП и Мадженто",TovTestRClass,ORWithENNPRn,0,modIN);
