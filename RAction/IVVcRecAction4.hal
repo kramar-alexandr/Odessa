@@ -1239,7 +1239,7 @@ begin
   IVr.PayDeal = "";
   IVr.Objects = "";
   GetCurUser(USr);
-  IVr.Objects = USr.PersObjx;
+  
   IVr.InvComment = "";
   tstr = IVr.CurncyCode;
   GetFullCurncyRate(tstr,IVr.TransDate,fr,to1,to2,br1,br2);
@@ -1254,9 +1254,12 @@ begin
   IVr.LastRemDate = blankd;
   IVr.OurContact = USr.CurOurContact;
   IVr.Location = USr.Location;
-  IVr.SalesMan = USr.Code;
-  GetSalesGroup(IVr.SalesMan,tstr);
-  IVr.SalesGroup = tstr;
+  if (UserCanAction("DoNotSetSalesManInOR",false)==false) then begin // Edit ************************** Friday, 7 April 2017 13:28:39
+		IVr.Objects = USr.PersObjx;
+		IVr.SalesMan = USr.Code;
+  	GetSalesGroup(IVr.SalesMan,tstr);
+  	IVr.SalesGroup = tstr;
+  end;
   IVr.Sum0 = blankval;
   IVr.Sum1 = blankval;
   IVr.Sum2 = blankval;

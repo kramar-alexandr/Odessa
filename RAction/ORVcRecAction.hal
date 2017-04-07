@@ -2518,7 +2518,10 @@ begin
   SetRowsUID(ORr);	//Edit----------------------Dima  14.08.2015
   
   if (ORr.OrderClass == "RETAI" and ORr.Reserved!=0 and OR2r.Reserved==0) then begin		//Edit----------------------Dima  18.12.2015
-	  ORr.ReservToDate = AddDay(CurrentDate,1);
+	  ORr.ReservToDate = AddDay(CurrentDate,3);
+	  if(GetDateId(CurrentDate)>3)then begin
+	  	ORr.ReservToDate = AddDay(CurrentDate,4);
+	  end;
 	end;  
 
  
@@ -2803,6 +2806,9 @@ begin
   
   if (ORr.OrderClass == "RETAI" and ORr.Reserved!=0) then begin		//Edit----------------------Dima  18.12.2015
 	  ORr.ReservToDate = AddDay(CurrentDate,1);
+	  if(GetDateId(CurrentDate)>3)then begin
+	  	ORr.ReservToDate = AddDay(CurrentDate,4);
+	  end;
 	end;    
   
   //if (ORr.DeliveryNewPost) then begin
