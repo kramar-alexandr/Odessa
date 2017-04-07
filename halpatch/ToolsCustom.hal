@@ -3541,10 +3541,12 @@ begin
 	record IVVc IVr;
 	
 	while(loopmain(CUr,1,true))begin
-		IVr.CustCode = CUr.Code;
-		if(readfirstkey("CustCode",IVr,1,true))then begin
-			CUr.FreightNr = IVr.Location;
-			recordstore(CUr,true);
+		if(blank(CUr.FreightNr))then begin
+			IVr.CustCode = CUr.Code;
+			if(readfirstkey("CustCode",IVr,1,true))then begin
+				CUr.FreightNr = IVr.Location;
+				recordstore(CUr,true);
+			end;
 		end;
 	end;
 	

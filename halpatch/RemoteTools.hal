@@ -1286,9 +1286,12 @@ L20PasteOrdInInv:;
   IVp.BankCode = ORp.BankCode;
   IVp.PromotionCode = ORp.PromotionCode; //Edit***************************Sasha2,16:50 24.01.2017
   //Edit-------------------Vitalii 14:47 28.11.2016
-  GetCurUser(USr);
-  ORp.SalesMan = USr.Code;
-  
+  //GetCurUser(USr);
+  USr.Code = currentuser;
+  readfirstmain(USr,1,true);
+  if (blank(ORp.SalesMan) and UserCanAction("DoNotSetSalesManInOR",false)==false) then begin
+		ORp.SalesMan = USr.Code;
+  end;
   Objr.Code = USr.PersObjx;
   ReadFirstMain(Objr,1,true);
   ot = Objr.OTCode;

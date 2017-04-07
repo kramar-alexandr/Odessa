@@ -477,6 +477,8 @@ begin
 	Cur.CurncyCode = "UAH_R";
 	Cur.PLCode = "RRP";
 	Cur.VATCode = "0%";
+	CUr.RebCode = "0%";
+	CUr.FreightNr = "RYBRAY";
 	Cur.OnAccount = 1;		//Edit----------------------Dima  11.02.2015
 	Cur.SelfBilling = 1;	//Edit----------------------Dima  11.02.2015
 	CUr.DateCreated = currentdate;
