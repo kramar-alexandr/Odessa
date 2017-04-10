@@ -1291,25 +1291,28 @@ L20PasteOrdInInv:;
   readfirstmain(USr,1,true);
   if (blank(ORp.SalesMan) and UserCanAction("DoNotSetSalesManInOR",false)==false) then begin
 		ORp.SalesMan = USr.Code;
-  end;
-  Objr.Code = USr.PersObjx;
-  ReadFirstMain(Objr,1,true);
-  ot = Objr.OTCode;
-  obj = "";
-  GetObjs(ot,ORp.Objects,obj);
-  ORp.Objects = StrReplace(ORp.Objects,obj,"");
-  ORp.Objects = StrReplace(ORp.Objects,",,",",");
-  if nonblank(ORp.Objects) then begin
-    ORp.Objects = ORp.Objects & "," & USr.PersObjx;
-  end else begin
-    ORp.Objects = USr.PersObjx;
+  
+		Objr.Code = USr.PersObjx;
+		ReadFirstMain(Objr,1,true);
+		ot = Objr.OTCode;
+		obj = "";
+		GetObjs(ot,ORp.Objects,obj);
+		ORp.Objects = StrReplace(ORp.Objects,obj,"");
+		ORp.Objects = StrReplace(ORp.Objects,",,",",");
+		if nonblank(ORp.Objects) then begin
+			ORp.Objects = ORp.Objects & "," & USr.PersObjx;
+		end else begin
+			ORp.Objects = USr.PersObjx;
+		end;
+	
+		IVp.SalesMan = ORp.SalesMan;
+		if (maintf==false) then begin
+			IVp.Objects = ORp.Objects;
+		end;//Edit-------------------Vitalii 15:14 28.11.2016
   end;
   RecordStore(ORp,true);
   
-  IVp.SalesMan = ORp.SalesMan;
-  if (maintf==false) then begin
-    IVp.Objects = ORp.Objects;
-  end;//Edit-------------------Vitalii 15:14 28.11.2016
+  
   IVp.RefStr = ORp.RefStr;
   IVVc_PasteSalesMan(IVp,"");
   IVp.CurncyCode = ORp.CurncyCode;
