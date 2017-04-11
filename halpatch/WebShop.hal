@@ -1262,3 +1262,29 @@ begin
 	
 return;
 end;
+
+global procedure SendToServerArtCode(string artcode,string user,string localmachine)
+begin
+	area art;
+	string 100 filename;
+	record INVc INr;
+	row INVc INrw;
+	
+	if(nonblank(artcode))then begin
+		INr.Code = artcode;
+		if(readfirstmain(INr,1,true))then begin
+			if(matrowcnt(INr)>0)then begin
+				matrowget(INr,0,INrw);
+				if(nonblank(INrw.Text))then begin
+					filename = "userimage/" & user & localmachine & ".txt";
+					createfile(filename)
+					CloseFile;  
+					addtexttoarea(INrw.Text,art);
+					writeareatofile(art,filename,0);
+				end;
+			end;
+		end;
+	end;
+	
+return;
+end;

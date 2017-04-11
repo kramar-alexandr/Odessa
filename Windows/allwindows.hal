@@ -4165,9 +4165,12 @@ end else begin
   record POSButtonsVc POSBr;
   string 255 bc1,bc2,compname,lmc,nr,sessdesc,sm;
   time tt;
+  record CompaniesBlock CBb;// Edit ************************** Tuesday, 11 April 2017 13:13:21
+	row CompaniesBlock CBrw;// Edit ************************** Tuesday, 11 April 2017 13:13:21
   //record LoyaltyCardVc LCr;
 
   BlockLoad(LMb);
+  BlockLoad(CBb);// Edit ************************** Tuesday, 11 April 2017 13:13:20
 
     //StopAlert(LMb.POSButtonGroup);
 
@@ -4264,7 +4267,13 @@ end else begin
       SoftEditFieldTLX(360,46,h4,"",M4Str,ViewOnly,100,25,patM4black,"CustomerDisplayData_Line2",true,0);
     end;
     //SoftEditField(360,86,100,"Скидочный Сертификат",Normal,"rebateserf",false,0,M4Str,255);// Edit ************************** Thursday, 1 December 2016 09:11:12
-
+		
+		
+		//WebPage(10,590,400,-130,"http://" & SERVERIPADDRESS() & ":1070/index?user=" & currentuser & curmachinename ,"");// Edit ************************** Tuesday, 11 April 2017 13:12:13
+		//WebPage(10,590,400,-130,"http://google.com" ,"");// Edit ************************** Tuesday, 11 April 2017 13:12:13
+    
+    //Web Page For Images Of Pics
+    
     switch (LMb.POSButtonsPosition) begin
       case kPOSButtonsPositionLeft:
         CheckBox(50,-72,0,"",FiscalFlag); //Edit***************************Sasha2,13:44 14.07.2015

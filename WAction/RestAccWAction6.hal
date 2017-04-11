@@ -30,6 +30,7 @@ external procedure PrintLongLine(); //Edit***************************Sasha2,14:3
 external procedure M4PadString(string,Integer,string,Boolean,var string); //Edit***************************Sasha2,14:51 14.11.2014
 external procedure OpenCashDrawer_IVVc(record IVVc); //Edit***************************Sasha2,16:18 14.11.2014
 external procedure UpdInvPrt(var record IVVc); //Edit***************************Sasha2,16:18 14.11.2014
+remote procedure SendToServerArtCode(string,string,string);// Edit ************************** Tuesday, 11 April 2017 16:50:23
 
 global
 procedure GetPrintData(string localmachine,var record MachineCashVc MCr)
@@ -458,6 +459,8 @@ begin
   tstr = tstr & t2; 
   totalString = ValToString(IVr.Sum4,M4Val,ThousandSeparator,DecimalSeparator,0);
   //SetPOSWindowDisplay(IVrw.ArtCode & " " & IVrw.Spec,tstr);
+	//SendToServerArtCode(IVrw.ArtCode,currentuser,curmachinename);// Edit ************************** Tuesday, 11 April 2017 16:46:36
+  //For WebImages!!!
   SetPOSWindowDisplay(IVrw.Spec,tstr);															//Edit----------------------Dima  19.02.2015
 	SetPOSWindowDisplay_SendToSerialPortDevicesTotalSum(totalString);//Edit----------------------Dima  19.02.2015
   return;
