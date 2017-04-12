@@ -285,6 +285,16 @@ begin
       end;
     end;
   end;
+  if (transf) then begin //Edit***************************Sasha2,11:20 12.04.2017 {
+    if (Blank(SHp.Collector)) then begin
+      error = 1854;
+      errorstr = "";
+      rownr = -1;
+      fieldstr = "Collector";
+      res = -1;
+      goto LSHVcRecordCheck;
+    end;
+  end; //Edit***************************Sasha2,11:20 12.04.2017 }
   if (SHp.OKFlag==0) then begin
     if (stat==Rs_update) then begin
       if (SH2p.OKFlag==1) then begin unokf = true; end;
