@@ -272,11 +272,13 @@ end;
 global updating procedure RhistvcCleanMn()
 begin
 	record RHistVc RH;
-	boolean TrHs;
+	boolean TrHs,testf;
 	
 	TrHs = true;
 	while(loopmain(RH,1,TrHs))begin
-		if (TrHs) then begin
+		testf = true;
+		if (NonBlank(RH.User)) then begin testf = false; end;
+		if (testf) then begin
 			Logtext(0,RH.SerNr);
 			RecordDelete(RH);
     		StepBack(RH);
