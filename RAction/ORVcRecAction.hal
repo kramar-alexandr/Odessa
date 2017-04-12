@@ -157,7 +157,9 @@ begin
           if (Blank(ORr.Objects)) then begin
             ORr.Objects = Promotionr.Objects;
           end else begin
-            ORr.Objects = ORr.Objects & "," & Promotionr.Objects;
+          	if(!setinset(Promotionr.Objects,ORr.Objects))then begin
+							ORr.Objects = ORr.Objects & "," & Promotionr.Objects;
+            end;
           end;
         end;
       end;
@@ -190,7 +192,9 @@ begin
             if (Blank(ORr.Objects)) then begin
               ORr.Objects = Promotionr.Objects;
             end else begin
-              ORr.Objects = ORr.Objects & "," & Promotionr.Objects;
+            	if(!setinset(Promotionr.Objects,ORr.Objects))then begin
+								ORr.Objects = ORr.Objects & "," & Promotionr.Objects;
+              end;
             end;
           end;
         end;

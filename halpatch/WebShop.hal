@@ -1263,12 +1263,43 @@ begin
 return;
 end;
 
+/*global procedure SendToServerArtCode(string artcode,string user,string localmachine)
+begin
+	area art;
+	string 100 filename;
+	record INVc INr;
+	row INVc INrw;
+	record CompaniesBlock CBb;// Edit ************************** Wednesday, 12 April 2017 13:39:17
+  row CompaniesBlock CBrw;// Edit ************************** Tuesday, 11 April 2017 13:13:21
+  area a_req;
+
+  BlockLoad(CBb);// Edit ************************** Tuesday, 11 April 2017 13:13:20
+  matrowget(CBb,0,CBrw);
+  
+	SendAsyncWebRequest(CBrw.TCPIP,CBrw.Port,CBrw.Port,false,"POST","/WEbSendToServerArtCode.hal?artcode=" & artcode & "&user=" & user & "&localmachine=" & localmachine,"text/xml","",a_req,"SendToServerArtCodeReply",20);
+
+	
+return;
+end;
+
+global updating procedure SendToServerArtCodeReply(Area a_reply,Area a_replyheader,boolean timeout)
+begin
+
+return;
+end;*/
+
+//global webpublic procedure WEbSendToServerArtCode()
 global procedure SendToServerArtCode(string artcode,string user,string localmachine)
 begin
 	area art;
 	string 100 filename;
 	record INVc INr;
 	row INVc INrw;
+	//string 20 artcode,user,localmachine;
+	
+/*	artcode = webgetarg("artcode");
+	user = webgetarg("user");
+	localmachine = webgetarg("localmachine");*/
 	
 	if(nonblank(artcode))then begin
 		INr.Code = artcode;

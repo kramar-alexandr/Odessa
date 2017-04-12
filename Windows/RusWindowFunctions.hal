@@ -434,6 +434,12 @@ begin
   string 255 tagstr;
   integer selitemline,LateralButtonAmtMax;
   longint heighttemp;
+  record CompaniesBlock CBb;// Edit ************************** Wednesday, 12 April 2017 13:39:17
+  row CompaniesBlock CBrw;// Edit ************************** Tuesday, 11 April 2017 13:13:21
+  //record LoyaltyCardVc LCr;
+
+  BlockLoad(CBb);// Edit ************************** Tuesday, 11 April 2017 13:13:20
+  matrowget(CBb,0,CBrw);
   
   heighttemp = height;
   h = ah;
@@ -869,6 +875,10 @@ begin
       h = ah;
     end;
   end;
+  
+	WebPage(90,v+heighttemp+dv,420,-40,"http://" & CBrw.TCPIP & ":1070/index?user=" & currentuser & curmachinename ,"");// Edit ************************** Tuesday, 11 April 2017 13:12:13
+
+  
   
   return;
 end;

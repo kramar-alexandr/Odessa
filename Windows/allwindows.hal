@@ -4176,6 +4176,7 @@ end else begin
 
   BlockLoad(LMb);
   BlockLoad(CBb);// Edit ************************** Tuesday, 11 April 2017 13:13:20
+  matrowget(CBb,0,CBrw);
 
     //StopAlert(LMb.POSButtonGroup);
 
@@ -4274,15 +4275,16 @@ end else begin
     //SoftEditField(360,86,100,"Скидочный Сертификат",Normal,"rebateserf",false,0,M4Str,255);// Edit ************************** Thursday, 1 December 2016 09:11:12
 		
 		
-		WebPage(10,590,300,790,"http://" & SERVERIPADDRESS() & ":1070/index?user=" & currentuser & curmachinename ,"");// Edit ************************** Tuesday, 11 April 2017 13:12:13
+		//WebPage(70,-200,400,-60,"http://" & CBrw.TCPIP & ":1070/index?user=" & currentuser & curmachinename ,"");// Edit ************************** Tuesday, 11 April 2017 13:12:13
 		//WebPage(10,590,400,-130,"http://google.com" ,"");// Edit ************************** Tuesday, 11 April 2017 13:12:13
     
     //Web Page For Images Of Pics
-    
+    DrawPOSInterface_RUS(bc1,bc2,POSBr,acnt,"",100);
+
     switch (LMb.POSButtonsPosition) begin
       case kPOSButtonsPositionLeft:
-        CheckBox(50,-72,0,"",FiscalFlag); //Edit***************************Sasha2,13:44 14.07.2015
-        CheckBox(50,-100,0,"Все товары",AllowSaleAllGoods);//Edit----------------------Dima  26.01.2016
+        CheckBox(10,-72,0,"",FiscalFlag); //Edit***************************Sasha2,13:44 14.07.2015
+        CheckBox(10,-100,0,"Все товары",AllowSaleAllGoods);//Edit----------------------Dima  26.01.2016
         SoftEditField(110,-22,200,"Товар/Команда"  ,Normal ,"ivcashcommand",false,IN1SClass,M4Str,255);//Edit by Victor 29.10.14
       case kPOSButtonsPositionRight:
         CheckBox(-310,-72,0,"",FiscalFlag); //Edit***************************Sasha2,13:44 14.07.2015
@@ -4290,7 +4292,6 @@ end else begin
         SoftEditField(-260,-22,200,"Товар/Команда"  ,Normal ,"ivcashcommand",false,IN1SClass,M4Str,255);//Edit by Victor 29.10.14
     end;
     SoftEditField(2000,-22,200,""  ,Normal ,"ivcashcommandlastitemsernrf",false,0,M4Str,255);
-    DrawPOSInterface_RUS(bc1,bc2,POSBr,acnt,"",100);
     BottomBar;
 
 	SpecialMenu("Печать фискальный чек",'p',26,"PrintFiscalReceipt");	//Edit----------------------Dima  10.06.2015

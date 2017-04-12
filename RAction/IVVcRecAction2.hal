@@ -117,7 +117,9 @@ begin
           if (Blank(IVp.Objects)) then begin
             IVp.Objects = Promotionr.Objects;
           end else begin
-            IVp.Objects = IVp.Objects & "," & Promotionr.Objects;
+          	if(!setinset(Promotionr.Objects,IVp.Objects))then begin
+							IVp.Objects = IVp.Objects & "," & Promotionr.Objects;
+            end;
           end;
         end;
       end;
@@ -150,7 +152,9 @@ begin
             if (Blank(IVp.Objects)) then begin
               IVp.Objects = Promotionr.Objects;
             end else begin
-              IVp.Objects = IVp.Objects & "," & Promotionr.Objects;
+            	if(!setinset(Promotionr.Objects,IVp.Objects))then begin
+								IVp.Objects = IVp.Objects & "," & Promotionr.Objects;
+              end;
             end;
           end;
         end;
