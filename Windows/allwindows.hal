@@ -4274,7 +4274,7 @@ end else begin
     //SoftEditField(360,86,100,"Скидочный Сертификат",Normal,"rebateserf",false,0,M4Str,255);// Edit ************************** Thursday, 1 December 2016 09:11:12
 		
 		
-		//WebPage(10,590,400,-130,"http://" & SERVERIPADDRESS() & ":1070/index?user=" & currentuser & curmachinename ,"");// Edit ************************** Tuesday, 11 April 2017 13:12:13
+		WebPage(10,590,300,790,"http://" & SERVERIPADDRESS() & ":1070/index?user=" & currentuser & curmachinename ,"");// Edit ************************** Tuesday, 11 April 2017 13:12:13
 		//WebPage(10,590,400,-130,"http://google.com" ,"");// Edit ************************** Tuesday, 11 April 2017 13:12:13
     
     //Web Page For Images Of Pics

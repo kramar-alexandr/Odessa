@@ -1273,15 +1273,22 @@ begin
 	if(nonblank(artcode))then begin
 		INr.Code = artcode;
 		if(readfirstmain(INr,1,true))then begin
-			if(matrowcnt(INr)>0)then begin
-				matrowget(INr,0,INrw);
-				if(nonblank(INrw.Text))then begin
-					filename = "userimage/" & user & localmachine & ".txt";
-					createfile(filename)
-					CloseFile;  
-					addtexttoarea(INrw.Text,art);
-					writeareatofile(art,filename,0);
-				end;
+			if(nonblank(INr.WebAddress1))then begin
+				filename = "userimage/" & user & localmachine & ".txt";
+				createfile(filename)
+				CloseFile;  
+				addtexttoarea("<div><img src=\"",art);
+				addtexttoarea(INr.WebAddress1,art);
+				addtexttoarea("\"/></div>",art);
+				writeareatofile(art,filename,0);
+			end else begin
+				filename = "userimage/" & user & localmachine & ".txt";
+				createfile(filename)
+				CloseFile;  
+				addtexttoarea("<div><img src=\"",art);
+				addtexttoarea("http://www.rybray.com.ua/skin/frontend/default/rybray/images/logo.gif",art);
+				addtexttoarea("\"/></div>",art);
+				writeareatofile(art,filename,0);
 			end;
 		end;
 	end;

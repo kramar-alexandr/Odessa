@@ -1839,7 +1839,7 @@ LkInvoiceRowTypeNormal1:;
         tstr = tstr & t2; 
         totalString = ValToString(IVr.Sum4,M4Val,ThousandSeparator,DecimalSeparator,0); 
 //        SetPOSWindowDisplay(IVrw.ArtCode & " " & IVrw.Spec,tstr);
-				//SendToServerArtCode(IVrw.ArtCode,currentuser,curmachinename);// Edit ************************** Tuesday, 11 April 2017 16:46:36
+				SendToServerArtCode(IVrw.ArtCode,currentuser,curmachinename);// Edit ************************** Tuesday, 11 April 2017 16:46:36
         //For WebImages!!!
         
         SetPOSWindowDisplay(IVrw.Spec,tstr);															//Edit----------------------Dima  19.02.2015
