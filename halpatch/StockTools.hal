@@ -91,6 +91,7 @@ begin
       if(User2r.SalesGroup=="OPT" and Userr.SalesGroup=="‘Š‹“")then begin testf = true; end;
       if(User2r.SalesGroup=="OPT" and Userr.SalesGroup=="OPT")then begin testf = false; end;
       if(User2r.SalesGroup=="WEB" and Userr.SalesGroup=="ˆŒ“")then begin testf = true; end;
+      if(User2r.SalesGroup=="SKL_W" and Userr.SalesGroup=="ˆŒ“")then begin testf = true; end;
       if(User2r.SalesGroup=="WEB" and Userr.SalesGroup=="WEB")then begin testf = false; end;
       if (Userr.TerminatedFlag!=0) then begin testf = false; end;
       if (testf) then begin
