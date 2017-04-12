@@ -2876,7 +2876,7 @@ begin
   string 255 label;
 
   WindowBegin("Товар",INDClass,CGview,-);
-  SetWRect(20,70,800,600);
+  SetWRect(20,70,850,600);
   Sizeable(-1,-1,-1,0);
   DynamicWindow;
   UseView(INVc);
@@ -2917,6 +2917,7 @@ begin
     TileButton(tilenr,"Доп.данные"); tilenr = tilenr + 1;
   end;
   TileButton(tilenr,"Записки"); tilenr = tilenr + 1;
+  TileButton(tilenr,"Web-адреса"); tilenr = tilenr + 1; //Edit***************************Sasha2,9:36 12.04.2017
   if (HasCharts) then begin
     TileButton(tilenr,"BI"); tilenr = tilenr + 1;
   end;
@@ -3255,6 +3256,10 @@ begin
   Tile(tilenr,400,false,tilenr,Math2); tilenr = tilenr + 1;
   StaticText(50,v=20,"Записки",true);
   TextField(60,v-5,-20,370,Math2,0);
+  Tile(tilenr,70,false,tilenr,WebAddress1); tilenr = tilenr + 1; //Edit***************************Sasha2,9:43 12.04.2017 {
+  EditField(h,vm=(v=6),-20,"Web адрес 1",Normal,WebAddress1,true,0);
+  EditField(h,v+=vs,-20,"Web адрес 2",Normal,WebAddress1,false,0);
+  EditField(h,v+=vs,-20,"Web адрес 3",Normal,WebAddress1,false,0); //Edit***************************Sasha2,9:43 12.04.2017 }
   if (HasCharts) then begin
     Tile(tilenr,400,false,tilenr,-); tilenr = tilenr + 1;
     ChartArea(10,6,-10,390,"$INDCLass_BIChart");
@@ -11494,7 +11499,7 @@ begin
 
   WindowBegin("Контакт",CUDClass,CGview,-);
   DynamicWindow;
-  SetWRect(20,80,800,441);
+  SetWRect(20,80,750,441);
   Sizeable(-1,-1,0,0);
   UseView(CUVc);
   FormName(PrintCUD);
@@ -11590,7 +11595,6 @@ begin
     end;
   end;
   TileButton(tilenr,"Заметки"); tilenr = tilenr + 1;   
-  TileButton(tilenr,"Web-адреса"); tilenr = tilenr + 1; //Edit***************************Sasha2,9:36 12.04.2017
   /*if (CUr.CUType!=0 and HasCharts) then begin// Edit ************************** Tuesday, 5 July 2016 10:00:00
     TileButton(tilenr,"BI"); tilenr = tilenr + 1;
   end;*/
@@ -11992,10 +11996,6 @@ begin
     Tile(tilenr,400,false,tilenr,-); tilenr = tilenr + 1;
     ChartArea(10,6,-10,390,"$CUDCLass_BIChart");
   end;*/
-  Tile(tilenr,70,false,tilenr,Math2); tilenr = tilenr + 1; //Edit***************************Sasha2,9:43 12.04.2017 {
-  EditField(h,vm=(v=6),-20,"Web адрес 1",Normal,WebAddress1,true,0);
-  EditField(h,v+=vs,-20,"Web адрес 2",Normal,WebAddress1,false,0);
-  EditField(h,v+=vs,-20,"Web адрес 3",Normal,WebAddress1,false,0); //Edit***************************Sasha2,9:43 12.04.2017 }
 
   if (GuiType==kGuiMetro) then begin // Temporarily disabled on Windows 8
     if (UserCanReport("CustPSRn","",true)) then begin
