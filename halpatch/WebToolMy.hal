@@ -163,6 +163,7 @@ begin
 	record SoapBlock Soap;
 	
 	webgetpostdata(a_reply);
+	//writeareatofile(a_reply,"SOAPLOGIN.txt",0);
 	if(getarealength(a_reply)>0)then begin	
 		check = getstringfromarea(a_reply,0,18)=="<?xml version=\"1.0";
 		if(check)then begin
@@ -222,17 +223,25 @@ begin
 	area a_req,replyarea;
 	integer i;	
 	record WebShopSettingsBlock WSb;
+	string 10 ssl; 
   
   blockload(WSb);
 		
+		
 		blockload(Soap);
+		ssl = "false";
+		if(Soap.Ssl>0)then begin
+			ssl = "true";
+		end;
+		
+		
 		addtexttoarea("host: 127.0.0.1" & chr(13) & chr(10),a_req);
 		addtexttoarea("Content-Type: application/xml" & chr(13) & chr(10),a_req);
 		AddTextToArea("" & chr(13) & chr(10),a_req);
 		
 		AddTextToArea("{\"host\" : \"" & Soap.Host & "\"," & chr(13),a_req);
 		AddTextToArea("\"port\" : " & Soap.Port & "," & chr(13),a_req);
-		AddTextToArea("\"https\" : false," & chr(13),a_req);
+		AddTextToArea("\"https\" : " & ssl & "," & chr(13),a_req);
 		AddTextToArea("\"page\" : \"" & Soap.Path & "\"," & chr(13),a_req);
 		AddTextToArea("\"callbackhost\" : \"" & "127.0.0.1" & "\"," & chr(13),a_req);
 		AddTextToArea("\"callbackport\" : \"" & "1080" & "\"," & chr(13),a_req);
@@ -364,12 +373,18 @@ begin
 	area a_req,replyarea;
 	integer i;	
 	record WebShopSettingsBlock WSb;
+  string 10 ssl;
   
   blockload(WSb);
+  
+  
 		
 		if(status!="pending")then begin
 			blockload(Soap);
-			
+			ssl = "false";
+			if(Soap.Ssl>0)then begin
+				ssl = "true";
+			end;
 			
 			addtexttoarea("host: 127.0.0.1" & chr(13) & chr(10),a_req);
 			addtexttoarea("Content-Type: application/xml" & chr(13) & chr(10),a_req);
@@ -377,7 +392,7 @@ begin
 		
 			AddTextToArea("{\"host\" : \"" & Soap.Host & "\"," & chr(13),a_req);
 			AddTextToArea("\"port\" : " & Soap.Port & "," & chr(13),a_req);
-			AddTextToArea("\"https\" : false," & chr(13),a_req);
+			AddTextToArea("\"https\" : " & ssl & "," & chr(13),a_req);
 			AddTextToArea("\"page\" : \"" & Soap.Path & "\"," & chr(13),a_req);
 			AddTextToArea("\"callbackhost\" : \"" & "127.0.0.1" & "\"," & chr(13),a_req);
 			AddTextToArea("\"callbackport\" : \"" & "1080" & "\"," & chr(13),a_req);

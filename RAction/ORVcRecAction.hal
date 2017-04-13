@@ -234,6 +234,28 @@ begin
 return;
 end;
 
+
+global procedure UpdateORWebStatusesMn(record RcVc RepSpec)
+begin
+	record ORvc ORr;
+	boolean TrHs,testf;
+	
+	ORr.OrdDate = RepSpec.sStartDate;
+	TrHs = true;
+	while(loopkey("OrdDate",ORr,1,TrHs))begin
+		testf = true;
+		if(ORr.OrdDate>RepSpec.sEndDate)then begin testf = false; TrHs = false; end;
+		if(ORr.OrdDate<RepSpec.sStartDate)then begin testf = false; TrHs = false; end;
+		if(ORr.OrderClass!="WEB")then begin testf = false; end;
+		
+		if(testf)then begin
+			SetNewORCustomStatusFlagOnWeb(ORr);
+		end;
+	end;
+
+return;
+end;
+
 procedure SetORAcceptanceFlag(var record ORVc ORr,record ORVc prevORr,LongInt stat)
 begin
   val bc1v;
