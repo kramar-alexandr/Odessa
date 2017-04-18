@@ -1396,6 +1396,9 @@ BEGIN
   end;
   
 LORDClassActiveEditField:;
+	if(currentuser=="SAUNOK")then begin// Edit ************************** Friday, 14 April 2017 10:39:22
+		res = true;
+	end;
   ORDClassActiveEditField = res;
   RETURN;
 END;

@@ -3332,6 +3332,7 @@ begin
 					if(CUr.CustCat!="RETAI")then begin
 						testf = false;
 					end;
+										
 					/*if(CUr.CustCat=="WEB")then begin
 						testf = false;
 					end;

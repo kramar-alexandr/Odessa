@@ -494,12 +494,13 @@ updating procedure MakeReserveFromOrder(LongInt OrSerNr)
 begin
   record ORVc ORr,OR2r;
   row ORVc ORrw;
-  integer rwcnt,i;
+  integer rwcnt,i,pos;
   val diff;
-  boolean foundf;
+  boolean foundf,process;
   record StockMovVc SMr;
   boolean TrHs,testf,inserflag;
   record WebShopSettingsBlock WSb;
+  string 50 tstr;
   
   blockload(WSb);
   
@@ -527,38 +528,61 @@ begin
     		end;
     		RecordUpdate(OR2r,ORr,true);
     		
-    		if(WSb.AutoRes1KOC>0)then begin
+    		if(WSb.AutoRes1KOC>0 and nonblank(WSb.LocationQuer))then begin
 					if(foundf)then begin
-						SMr.TransDate = currentdate;
-						TrHs = true;
-						inserflag = true;
-						while(loopbackkey("TransDate",SMr,1,TrHs))begin
-							testf = true;
-							if(SMr.TransDate<addday(SMr.TransDate,-1))then begin TrHs = false; testf = false; end;
-							if(SMr.StopAutoComplite>0)then begin testf = false; end;
-							if(SMr.AutoCompliteFlag<1)then begin testf = false; end;
-							if(SMr.OrdFlag>0)then begin testf = false; end;
-							if(SMr.SentOKFlag>0)then begin testf = false; end;
-							if(SMr.OKFlag>0)then begin testf = false; end;
+						pos = 0;
+						ExtractObjWithSeparator(",",WSb.LocationQuer,true,pos,tstr);
+						while(nonblank(tstr))begin
+							if(nonblank(tstr) and tstr!="RYBRAY")then begin
+								process = false;
+								ORr.SerNr = OrSerNr;
+								if(readfirstmain(ORr,1,true))then begin
+									rwcnt = MatRowCnt(ORr);
+									for (i=0;i<rwcnt;i=i+1) begin
+										MatRowGet(ORr,i,ORrw);
+										if (ORrw.OrderQuant - ORrw.ProcessingQuant>0) then begin
+											process = true;
+										end;
+									end;
+								end;
+								if(process)then begin
+									SMr.TransDate = currentdate;
+									TrHs = true;
+									inserflag = true;
+									while(loopbackkey("TransDate",SMr,1,TrHs))begin
+										testf = true;
+										if(SMr.TransDate<addday(SMr.TransDate,-1))then begin TrHs = false; testf = false; end;
+										if(SMr.StopAutoComplite>0)then begin testf = false; end;
+										if(SMr.AutoCompliteFlag<1)then begin testf = false; end;
+										if(SMr.OrdFlag>0)then begin testf = false; end;
+										if(SMr.SentOKFlag>0)then begin testf = false; end;
+										if(SMr.OKFlag>0)then begin testf = false; end;
+										if(SMr.FrLocation!=tstr)then begin testf = false; end;
 						
-							if(testf)then begin
-								inserflag = false;
-								TrHs = false;
-								testf = false;
+										if(testf)then begin
+											inserflag = false;
+											TrHs = false;
+											testf = false;
+										end;
+									end;
+									resetloop(SMr);
+									if(inserflag)then begin
+										recordnew(SMr);
+										SMr.OrdTransDate = currentdate;
+										SMr.FrLocation = tstr;
+										SMr.ThrouLocation = "00";
+										SMr.ToLocation = "RYBRAY";
+										SMr.AutoCompliteFlag = 1;
+										SMr.SerNr = NextSerNr("StockMovVc",CurrentDate,-1,false,"");
+										SMr.Comment = "Ђторезервирование товаров интернет магазина";
+									end;
+									logtext(0,"Ђторезервирование товаров интернет магазина " & tstr);
+									AddOrderForStockMove(SMr,ORr,inserflag);
+								end;
+								ExtractObjWithSeparator(",",WSb.LocationQuer,true,pos,tstr);
 							end;
 						end;
-						if(inserflag)then begin
-							recordnew(SMr);
-							SMr.OrdTransDate = currentdate;
-							SMr.FrLocation = "1-KOC";
-							SMr.ThrouLocation = "00";
-							SMr.ToLocation = "RYBRAY";
-							SMr.AutoCompliteFlag = 1;
-							SMr.SerNr = NextSerNr("StockMovVc",CurrentDate,-1,false,"");
-							SMr.Comment = "Ђторезервирование товаров интернет магазина";
-						end;
-						logtext(0,"Ђторезервирование товаров интернет магазина");
-						AddOrderForStockMove(SMr,ORr,inserflag);
+						
 					end;
     			
     		end;
@@ -1302,8 +1326,16 @@ begin
 	localmachine = webgetarg("localmachine");*/
 	
 	if(nonblank(artcode))then begin
-		INr.Code = artcode;
+		filename = "userimage/" & user & localmachine & ".txt";
+		createfile(filename)
+		CloseFile;  
+		addtexttoarea("<div><img height=300 src=\"",art);
+		addtexttoarea("https://www.rybray.com.ua/get-image.php?sku="& artcode,art);
+		addtexttoarea("\"/></div>",art);
+		writeareatofile(art,filename,0);
+		/*INr.Code = artcode;
 		if(readfirstmain(INr,1,true))then begin
+			INr.WebAddress1 = "https://www.rybray.com.ua/get-image.php?sku="& artcode;
 			if(nonblank(INr.WebAddress1))then begin
 				filename = "userimage/" & user & localmachine & ".txt";
 				createfile(filename)
@@ -1321,7 +1353,7 @@ begin
 				addtexttoarea("\"/></div>",art);
 				writeareatofile(art,filename,0);
 			end;
-		end;
+		end;*/
 	end;
 	
 return;

@@ -1540,6 +1540,7 @@ RecordBegin(INVc,-,"artikel5");
   RecordField(ShipDeal,M4Code,5,0);
   RecordField(AutoRes1KOC,M4Int,0,0);
   RecordField(UseNode,M4Int,0,0);
+  RecordField(LocationQuer,M4Str,250,0);// Edit ************************** Friday, 14 April 2017 11:18:53
   EndBlock; //Edit***************************Sasha2,10:19 14.07.2014 }
   
   RecordBegin(ORVc,-,"ORVc2");
@@ -4549,6 +4550,7 @@ RecordBegin(IPVc,-,"");
   RecordField(ParamStr4,M4Str,200,0);
   RecordField(ParamVal1,M4Val,0,0);
   RecordField(ParamVal2,M4Val,0,0);
+  RecordField(SmallEtic,M4Int,0,0);
   EndBlock; //Edit***************************Sasha2,11:36 15.07.2015 }  
   
   //Edit-------------------Vitalii 14:02 14.12.2015

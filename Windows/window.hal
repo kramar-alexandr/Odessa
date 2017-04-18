@@ -333,12 +333,13 @@ begin
   //v = 6; vs = 20; h = 180;
   //EditField(h=250,v,-40,"Название исходящего файла для сохранения",Normal,FileName,false,0);
 
-  SetWRect(10,80,370,270);
+  SetWRect(10,80,400,270);
   v = 6; vs = 20; h = 150;
   EditField(h,v,150,"Склад",Normal,Location,false,LocationSClass);
   EditField(h,v+=vs,60,"Условия оплаты",Normal,PayDeal,false,PDSClass);
   EditField(h,v+=vs,60,"Условия отгрузки",Normal,ShipDeal,false,ShipDealSClass);
-	CheckBox(h,v+=vs,0,"Авторезерв с 1-KOC",AutoRes1KOC);
+	CheckBox(h,v+=vs,0,"Авторезерв",AutoRes1KOC);
+  EditField(h,v+=vs,-5,"Очередь складов резерва",Normal,LocationQuer,false,LocationSClass);
 	CheckBox(h,v+=vs,0,"Использовать Node.js прокси сервер",UseNode);
   EndWindow;
 end; //Edit***************************Sasha2,10:24 14.07.2014 }
@@ -2429,6 +2430,8 @@ begin
     EditField(h,v+=vs,f,"Название принтера",Normal,PrinterNameWin,false,0);
     StaticText(h,v+=2*vs,"Для Mac OS ______________",false);
     EditField(h,v+=6,f,"Название принтера",Normal,PrinterNameMac,false,0);
+    
+    CheckBox(h,v+=18,0,"Маленькая наклейка",SmallEtic);
   EndWindow;
 end; //Edit***************************Sasha2,16:12 25.09.2014 }
 
