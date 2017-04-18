@@ -86,7 +86,11 @@ begin
       //addtexttoarea("q592" & chr(13) & chr(10),aLabel); //Set Label Width 74 mm
       addtexttoarea("q304" & chr(13) & chr(10),aLabel); //Set Label Width 57      
       //addtexttoarea("Q120,16" & chr(13) & chr(10),aLabel); //Set Label Height 10mm
-      addtexttoarea("Q200,16" & chr(13) & chr(10),aLabel); //Set Label Height 39
+      if(ZPb.SmallEtic==0)then begin
+				addtexttoarea("Q200,16" & chr(13) & chr(10),aLabel); //Set Label Height 39      
+      end else begin
+      	addtexttoarea("Q200,20" & chr(13) & chr(10),aLabel); //Set Label Height 39   
+      end;
       //addtexttoarea("R280,0" & chr(13) & chr(10),aLabel);
       addtexttoarea("D13" & chr(13) & chr(10),aLabel); //print density
       addtexttoarea("I8,C" & chr(13) & chr(10),aLabel); //appropriate character set for printing and display (KDU) "C": Wi1n2d5o1ws Cyrillic
@@ -105,11 +109,11 @@ begin
 				addtexttoarea("A10,80,0,2,1,1,N,V03" & chr(13) & chr(10),aLabel); // Prints an ASCII text string
 				addtexttoarea("B10,110,0,1,2,2,50,B,V04" & chr(13) & chr(10),aLabel); // print standard bar codes
       end else begin
-      	addtexttoarea("A20,5,0,3,1,1,N,V00" & chr(13) & chr(10),aLabel); // Prints an ASCII text string
-				addtexttoarea("A20,35,0,1,1,1,N,V01" & chr(13) & chr(10),aLabel); // Prints an ASCII text string
-				addtexttoarea("A20,55,0,1,1,1,N,V02" & chr(13) & chr(10),aLabel); // Prints an ASCII text string
-				addtexttoarea("A20,75,0,1,1,1,N,V03" & chr(13) & chr(10),aLabel); // Prints an ASCII text string
-				addtexttoarea("B20,105,0,1,2,2,40,B,V04" & chr(13) & chr(10),aLabel); // print standard bar codes
+      	addtexttoarea("A30,5,0,3,1,1,N,V00" & chr(13) & chr(10),aLabel); // Prints an ASCII text string
+				addtexttoarea("A30,35,0,1,1,1,N,V01" & chr(13) & chr(10),aLabel); // Prints an ASCII text string
+				addtexttoarea("A30,55,0,1,1,1,N,V02" & chr(13) & chr(10),aLabel); // Prints an ASCII text string
+				addtexttoarea("A30,75,0,1,1,1,N,V03" & chr(13) & chr(10),aLabel); // Prints an ASCII text string
+				addtexttoarea("B30,105,0,1,2,2,40,B,V04" & chr(13) & chr(10),aLabel); // print standard bar codes
       end;
       addtexttoarea("PAV05" & chr(13) & chr(10),aLabel); // to automatically print the form
       addtexttoarea("FE" & chr(13) & chr(10),aLabel); // command is used to end a form store sequence.

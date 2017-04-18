@@ -1327,9 +1327,10 @@ begin
 	
 	if(nonblank(artcode))then begin
 		filename = "userimage/" & user & localmachine & ".txt";
+		logtext(0,"URL FILENAME " & filename);
 		createfile(filename)
-		CloseFile;  
-		addtexttoarea("<div><img height=300 src=\"",art);
+		//CloseFile;  
+		addtexttoarea("<div><img height=100 src=\"",art);
 		addtexttoarea("https://www.rybray.com.ua/get-image.php?sku="& artcode,art);
 		addtexttoarea("\"/></div>",art);
 		writeareatofile(art,filename,0);
