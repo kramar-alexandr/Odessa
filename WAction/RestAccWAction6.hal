@@ -835,7 +835,7 @@ begin
 	      		leng = leng - padspec;
 	      		pos = pos + padspec;
 	      	end;
-  		    M4PadString(ValToString(IVrw.Quant,M4UVal,"",",",0) & " X",10," ",true,L2);
+  		    M4PadString(ValToString(IVrw.Quant,M4UVal,"",",",1) & " X",10," ",true,L2);
   		    s = s & L2;
   		    unitprice = true;
   		    if (unitprice) then begin
