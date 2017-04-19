@@ -1627,9 +1627,21 @@ begin
   Integer i,rwcnt;
   record ARPayHistVc ARPayHr;
   record OPPVc OPPr;
+  record IVVc IVr;
   
   res = 1;
   SHr.OrderNr = ORp.SerNr;
+  if (ReadFirstKey("OrderKey",SHr,1,true)) then begin //Edit***************************Sasha2,13:50 19.04.2017 {
+    if (errmf!=0) then begin MessageBox(1560,""); end;
+    res = 0;
+    goto LORRemoveTest;
+  end; 
+  IVr.OrderNr = ORp.SerNr;
+  if (ReadFirstKey("OrderNr",IVr,1,true)) then begin
+    if (errmf!=0) then begin MessageBox(1560,""); end;
+    res = 0;
+    goto LORRemoveTest;
+  end; //Edit***************************Sasha2,13:50 19.04.2017 }
   rwcnt = MatRowCnt(ORp);
   for (i=0;i<rwcnt;i=i+1) begin
     MatRowGet(ORp,i,ORrw);
