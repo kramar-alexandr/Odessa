@@ -3560,3 +3560,162 @@ begin
   EditFieldTL(h,v=20,150,"Номер",M4Long,Normal,150,long1,false,0);
   EndWindow;
 end;
+
+window ArtStatIClass:1
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  boolean Colourf,DiscUPrf,GPPrcf,GPf,InStockf,Instock2f,LeadDatef,Locsf,NotRsrvdf,OrddOutf,POQtyf,Shpblef,Statf,Varf,CostPricef;
+  real h,hs,l,v;
+  record CompaniesBlock CBb;// Edit ************************** Wednesday, 12 April 2017 13:39:17
+  row CompaniesBlock CBrw;// Edit ************************** Tuesday, 11 April 2017 13:13:21
+  BlockLoad(CBb);// Edit ************************** Tuesday, 11 April 2017 13:13:20
+  matrowget(CBb,0,CBrw);
+  
+  WindowBegin("Cтатус товара",ArtStatIClass,CGother,RcType);
+  DynamicWindow;
+  ItemStatusUserSettings(CurrentUser,InStockf,OrddOutf,POQtyf,Shpblef,GPf,NotRsrvdf,GPPrcf,DiscUPrf,Instock2f,Varf,LeadDatef,Statf,Locsf,CostPricef);
+  l = 1200;//1040;
+  if (!InStockf) then begin l = l - 80; end;
+  if (!OrddOutf) then begin l = l - 80; end;
+  if (!POQtyf) then begin l = l - 80; end;
+  if (!Shpblef) then begin l = l - 80; end;
+  if (!NotRsrvdf) then begin l = l - 80; end;
+  if (!GPf) then begin l = l - 80; end;
+  if (!GPPrcf) then begin l = l - 80; end;
+  if (!DiscUPrf) then begin l = l - 80; end;
+  if (!Instock2f) then begin l = l - 80; end;
+  if (!LeadDatef) then begin l = l - 90; end;
+  if (!Varf) then begin l = l - 60; end;
+  if (!Locsf) then begin l = l - 60; end;
+  if (!Statf) then begin l = l - 60; end;
+  if (!CostPricef) then begin l = l - 60; end;
+  SetWRect(3,80,l,329);
+  Modality(2);
+  if (IsWebClient) then begin
+    v = 37;
+    h = 1;
+    hs = 70;
+  end else begin
+    v = 15;
+    h = 20;
+    hs = 80;
+  end;
+  StaticText(h,v,  "Товар",false);
+  if (InStockf) then begin
+//    StaticText(h+=(hs+10),v,  "Склад",false);
+    ColourPushButton(h+=(hs+6),v-12,h+67,v+3,"ArtStatIClassSL","Склад",1001);
+  end;
+  if (OrddOutf) then begin
+//    StaticText(h+=hs,v,  "Order",false);
+    ColourPushButton(h+=(hs+2),v-12,h+62,v+3,"ArtStatIClassOS","Счета кл.",1001);
+  end;
+  if (POQtyf) then begin
+//    StaticText(h+=hs,v,  "Purch.Ord",false);
+    ColourPushButton(h+=(hs-1),v-12,h+62,v+3,"ArtStatIClassPOS","Зак. пост.",1001);
+  end;
+  if (Shpblef) then begin
+    StaticText(h+=hs,v,  "Доступно",false);
+  end;
+  if (NotRsrvdf) then begin
+    StaticText(h+=hs,v,  "Незарезерв.",false);
+  end;
+  if (GPf) then begin
+    StaticText(h+=hs,v,  "Прибыль",false);
+  end;
+  if (GPPrcf) then begin
+    StaticText(h+=hs,v,  "Прибыль,%",false);
+  end;
+  if (DiscUPrf) then begin
+    StaticText(h+=hs,v,  "Цена со ск.",false);
+  end;
+  if (Instock2f) then begin
+    StaticText(h+=hs,v,  "На складе,2",false);
+  end;
+  if (LeadDatef) then begin
+    StaticText(h+=hs,v,  "Дата",false);
+  end;
+  if (CostPricef) then begin
+    StaticText(h+=hs,v,  "Стоим.",false);
+  end;
+  if (IsWebClient) then begin
+    h = 1;
+  end else begin
+    h = 20;
+  end;
+  EditFieldTL(h,v+=10, 70,"",M4UStr,ViewOnly,20,f1,false,0);
+  if (InStockf) then begin
+    EditFieldTL(h+=(hs+10),v, 60,"",M4Str,ViewOnly,20,f2,true,0);
+  end;
+  if (OrddOutf) then begin
+    EditFieldTL(h+=hs,v ,60,"",M4Str,ViewOnly,20,f3,true,0);
+  end;
+  if (POQtyf) then begin
+    EditFieldTL(h+=hs,v ,60,"",M4Str,ViewOnly,20,LastAcc,true,0);
+  end;
+  if (Shpblef) then begin
+    EditFieldTL(h+=hs,v ,60,"",M4Str,ViewOnly,20,FirstAcc,true,0);
+  end;
+  if (NotRsrvdf) then begin
+    EditFieldTL(h+=hs,v ,60,"",M4Str,ViewOnly,20,Stext,true,0);
+  end;
+  if (GPf) then begin
+    EditFieldTL(h+=hs,v ,60,"",M4Str,ViewOnly,20,AccStr,true,0);
+  end;
+  if (GPPrcf) then begin
+    EditFieldTL(h+=hs,v ,60,"",M4Str,ViewOnly,20,ObjStr,true,0);
+  end;
+  if (DiscUPrf) then begin
+    EditFieldTL(h+=hs,v ,60,"",M4Str,ViewOnly,20,TransStr,true,0);
+  end;
+  if (Instock2f) then begin
+    EditFieldTL(h+=hs,v ,60,"",M4Str,ViewOnly,20,f4,true,0);
+  end;
+  if (LeadDatef) then begin
+    EditFieldTL(h+=hs,v ,70,"",M4Date,ViewOnly,0,d1,true,0);
+  end;
+  if (CostPricef) then begin
+    EditFieldTL(h+=hs,v ,70,"",M423Val,ViewOnly,0,vals4,true,0);
+  end;
+  if (IsWebClient) then begin
+    h = h - 200;
+    v = 1;
+  end else begin
+    v = 20;
+  end;
+  if (Varf) then begin
+    ColourPushButton(h+=87,v,h+58,v+26,"DoVARMaskStock","Вар.",1001);
+    //HalPushButton(h+=87,20,h+43,40,"DoVARMaskStock","Var");
+    Colourf = true;
+  end;
+  if (Locsf) then begin
+    if (Colourf) then begin
+      ColourPushButton(h+=62,v,h+58,v+26,"DoLocationItem","Скл.",1001);
+    end else begin
+      ColourPushButton(h+=87,v,h+58,v+26,"DoLocationItem","Скл.",1001);
+    end;
+    //HalPushButton(h+=47,v,h+43,40,"DoLocationItem","Loc");
+    Colourf = true;
+  end;
+  if (Statf) then begin
+    if (Varf) then begin
+      if (Colourf) then begin
+        ColourPushButton(h+=62,v,h+58,v+26,"DoFutureStockHist","Буд.",1001);
+      end else begin
+        ColourPushButton(h+=87,v,h+58,v+26,"DoFutureStockHist","Буд.",1001);
+      end;
+      //HalPushButton(h+=47,v,h+43,40,"DoFutureStockHist","Future");
+    end else begin
+      if (Colourf) then begin
+        ColourPushButton(h+=62,v,h+58,v+26,"DoFutureStockHist","Буд.",1001);
+      end else begin
+        ColourPushButton(h+=87,v,h+58,v+26,"DoFutureStockHist","Буд.",1001);
+      end;
+      //HalPushButton(h+=47,20,h+43,40,"DoFutureStockHist","Future");
+    end;
+    Colourf = true;
+  end;
+  
+  WebPage(20,50,-20,-20,"http://" & CBrw.TCPIP & ":1070/index?user=" & currentuser & curmachinename ,"");// Edit ************************** Tuesday, 11 April 2017 13:12:13
+
+  EndWindow;
+end;

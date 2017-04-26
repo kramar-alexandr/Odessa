@@ -658,7 +658,7 @@ begin
 			if (!XmlNodeExists(xmlPost,"messageend")) then begin
 				logtext(0,"<messageend> tag is missing. Orders import failed");
 				if (Blank(errors)) then begin errors = "Error4"; end else begin errors = errors & ",Error4"; end;
-				goto LWebGetOrder;
+				goto LWebGetOrder;// Edit ************************** Wednesday, 19 April 2017 09:54:52
 			end;
 			BlockLoad(WSSB);
 			nodeORCnt = XmlCountChildren(xmlPost,"orders");
@@ -670,6 +670,7 @@ begin
 					ORr.CustOrdNr = XmlGetAttribute(xmlPost,"orders/order" & i,"orderno"); 
 					if(readfirstkey("CustOrdNr",ORr,1,true))then begin
 						updateflag = true;
+						goto LWebGetOrderExist;
 					end else begin
 						recordNew(ORr);
 						ORr.SerNr = NextSerNr("ORVc",CurrentDate,-1,false,"");
@@ -889,6 +890,7 @@ begin
 					  end;
 					end; //Edit***************************Sasha2,17:49 05.12.2016 }
 				end;
+LWebGetOrderExist:;	
 			end;
 			if (ORCnt == 0) then begin
 				//if (Blank(errors)) then begin errors = "Error5"; end else begin errors = errors & ",Error5"; end;
@@ -1313,6 +1315,13 @@ return;
 end;*/
 
 //global webpublic procedure WEbSendToServerArtCode()
+
+global updating procedure SendToServerArtCodeReply(Area a_reply,Area a_replyheader,boolean timeout)
+begin
+		
+return;
+end;
+
 global procedure SendToServerArtCode(string artcode,string user,string localmachine)
 begin
 	area art;
@@ -1326,14 +1335,18 @@ begin
 	localmachine = webgetarg("localmachine");*/
 	
 	if(nonblank(artcode))then begin
-		filename = "userimage/" & user & localmachine & ".txt";
-		logtext(0,"URL FILENAME " & filename);
-		createfile(filename)
+		/*filename = "userimage/" & user & localmachine & ".txt";
+		//logtext(0,"URL FILENAME " & filename);
+		//createfile(filename)
 		//CloseFile;  
-		addtexttoarea("<div><img height=100 src=\"",art);
+		addtexttoarea("<div><img height=150 src=\"",art);
 		addtexttoarea("https://www.rybray.com.ua/get-image.php?sku="& artcode,art);
 		addtexttoarea("\"/></div>",art);
-		writeareatofile(art,filename,0);
+		writeareatofile(art,filename,0);*/
+		
+		SendAsyncWebRequest("127.0.0.1","1070","1070",false,"GET","/setUserImage?user=" & user & localmachine & "&artcode=" & artcode ,"text/xml","",art,"SendToServerArtCodeReply",20);
+
+		
 		/*INr.Code = artcode;
 		if(readfirstmain(INr,1,true))then begin
 			INr.WebAddress1 = "https://www.rybray.com.ua/get-image.php?sku="& artcode;

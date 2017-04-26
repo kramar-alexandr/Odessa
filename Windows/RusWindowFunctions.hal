@@ -876,7 +876,7 @@ begin
     end;
   end;
   
-	WebPage(90,v+heighttemp+dv,420,-40,"http://" & CBrw.TCPIP & ":1070/index?user=" & currentuser & curmachinename ,"");// Edit ************************** Tuesday, 11 April 2017 13:12:13
+	WebPage(90,v+heighttemp+dv,420,-40,"http://" & CBrw.TCPIP & ":1070/index?time=" & currenttime & random(0,1000) & "&user=" & currentuser & curmachinename ,"");// Edit ************************** Tuesday, 11 April 2017 13:12:13
 
   
   
@@ -1007,7 +1007,7 @@ begin
   switch (GuiType) begin
     case kGuiiPhone: dh = 3; dv = 3; height = 70; width = 101;
     otherwise
-      dh = 2; dv = 5; height = 55; width = 98;
+      dh = 2; dv = 5; height = 35; width = 98;// Edit ************************** Tuesday, 18 April 2017 12:03:33
   end;  
   if (acnt>0) then begin
     DrawPOSButtons_RUS(h,v,width,height,dh,dv,POSBr,ovrclass,stackspace);
@@ -1172,11 +1172,11 @@ begin
   end;
   if (nonblank(phone)) then begin 
     tstr = "Телефон: " & phone;
-    StaticText(h2,v+=20,tstr,false);
+    StaticText(h2+60,(v+=20)-60,tstr,false);
   end;
   if (nonblank(IVr.PromotionCode)) then begin 
     tstr = "Акция: " & IVr.PromotionCode;
-    StaticText(h2,v+20,tstr,false);
+    StaticText(h2+60,(v+=20)-60,tstr,false);
   end;
   
 
