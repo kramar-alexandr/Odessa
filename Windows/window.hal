@@ -3126,7 +3126,6 @@ begin
   v = v + vs;
   EditField(h,v+=vs,100,"Действует с",Normal,PromStrDate,false,PasteCurDate);
   EditField(h2,v,100,"Действует до",Normal,PromEndDate,false,PasteCurDate);
-  EditField(h2,v,100,"Действует до",Normal,PromEndDate,false,PasteCurDate);
   CheckBox(h3,v,0,"Ручной ввод",ManualFlag); //Edit***************************Sasha2,16:23 04.04.2017
   EditField(h,v+=vs,100,"Склады",Normal,Locations,false,LocationSClass);
   EditField(h2,v,100,"Объекты",Normal,Objects,false,ObjSClass);
@@ -3717,5 +3716,79 @@ begin
   
   WebPage(20,50,-20,-20,"http://" & CBrw.TCPIP & ":1070/index?user=" & currentuser & curmachinename ,"");// Edit ************************** Tuesday, 11 April 2017 13:12:13
 
+  EndWindow;
+end;
+
+window AlternativeRebateDClass:1 //Edit***************************Sasha2,16:27 25.04.2017
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+	real h,h2,h3,v,vs;
+	Integer f,flipnr,pos;
+	
+  WindowBegin("Альтернативные скидки",AlternativeRebateDClass,CGview,-);
+  UseView(AlternativeRebateVc);
+  SetWRect(20,100,680,600);
+  Sizeable(-1,-1,0,0);
+  h=90; h2 = 300; h3 = 550; v = 10; vs = 20;
+
+  EditField(h,v,200,"Код",Normal,Code,false,0);
+  EditField(h,v+=vs,100,"Дата док-та",Normal,DocDate,false,PasteCurDate);
+  EditField(h2,v,100,"Действует с",Normal,PromStrDate,false,PasteCurDate);
+  EditField(h3,v,100,"Действует до",Normal,PromEndDate,false,PasteCurDate);
+  v = v + vs;
+  EditField(h,v+=vs,450,"Описание",Normal,Description,false,0);
+  v = v + vs;
+  EditField(h,v+=vs,100,"Склады",Normal,Locations,false,LocationSClass);
+  EditField(h2,v,100,"Объекты",Normal,Objects,false,ObjSClass);
+  CheckBox(h3,v,0,"Активна",IsActiveFlag);
+  
+  MatrixBegin(25,v+=40,-50,-7,-,299);
+  Flip(0);
+  pos = 30;
+  MatCol(1,pos,"Категория",0,TriggerCategory,false,0);
+  MatCol(1,pos+=70,"Бренд",0,TriggerBrand,false,0);
+  MatCol(1,pos+=80,"Артикулы",0,TriggerArtCode,false,0);
+  flipnr = 1;
+  Flip(flipnr); flipnr = flipnr + 1;
+  MatCol(1,pos+=150,"Цена от",0,PriceFrom,false,0);
+  MatCol(1,pos+=60,"Кол-во от",0,QuantFrom,false,0);
+  MatCol(1,pos+=60,"Сумма от",0,SumFrom,false,0);
+  MatCol(1,pos+=60,"Процент,%",0,perRebate,false,0);
+  MatCol(1,pos+=60,"Процент абс.",0,absRebate,false,0);
+  Flip(flipnr); flipnr = flipnr + 1;
+  pos = 330;
+  MatCol(1,pos,"На катег.",0,DiscountedCategory,false,0);
+  MatCol(1,pos+=70,"На бренд",0,DiscountedBrand,false,0);
+  MatCol(1,pos+=80,"На Артик.",0,DiscountedArtCode,false,0);
+  MatCol(1,pos+=120,"На кол-во",0,DiscountedQuant,false,0);
+  EndMatrix;
+  if (flipnr>2) then begin
+    for (f=1;f<flipnr;f=f+1) begin
+      VTab(-35,v,-16,v+vs,ToolFlip,f,chr(asc("A") + f - 1));
+      v = v + vs;
+    end;
+  end;
+  
+  EndWindow;
+end;
+
+window AlternativeRebateLClass:1 //Edit***************************Sasha2,16:21 25.04.2017
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  Integer pos;
+  WindowBegin("Альтернативная скидка",AlternativeRebateLClass,CGmlist,-);
+  SpawnClass(AlternativeRebateDClass);
+  SetWRect(20,80,800,500);
+  Sizeable(-1,-1,0,0);
+  UseView(AlternativeRebateVc);
+  RecordList(4,17,-21,-39);
+  RlColKey(pos=4,pos,"Код",Code,false,Code);
+  RlColKey(pos+=150,pos,"С даты",PromStrDate,false,PromStrDate);
+  RlCol(pos+=80,pos,"По дату",PromEndDate,false);
+  RlCol(pos+=80,pos,"Активна",IsActiveFlag,false);
+  RlCol(pos+=60,pos,"Описание",Description,false);
+  //RlCol(-100,-100,"Склады",Locations,false);
+
+  SearchField("Найти");
   EndWindow;
 end;

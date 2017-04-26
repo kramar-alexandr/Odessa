@@ -30,6 +30,7 @@ external procedure NextM4Number(string,var string);
 external procedure NP_PasteRecipientWarehouseDesc(var record SHVc);//Edit----------------------Dima  05.05.2015
 external procedure NP_PasteSenderWarehouseDesc(var record SHVc);
 external procedure NP_PasteSender(var record SHVc);	//Edit----------------------Dima  27.04.2015
+external updating procedure RecalcORMn(record RcVc); //Edit***************************Sasha2,14:27 19.04.2017
 
 global
 function Boolean PasteCustInShip(record SHVc SHp,string clcd)
@@ -1110,6 +1111,7 @@ global
 updating function Integer RecordAction_raPasteOrdInShip(var record SHVc SHp,LongInt ordnr,var string warning)
 BEGIN
   record SRBlock SRRec;
+  record RcVc RepSpecRecalcOR; //Edit***************************Sasha2,14:28 19.04.2017
   Integer res;
   LongInt newnr;
   string 255 tstr;
@@ -1139,6 +1141,13 @@ BEGIN
       goto LRecordAction_raPasteOrdInShip;
     end;
   end;
+  
+  RecordNew(RepSpecRecalcOR); //Edit***************************Sasha2,14:29 19.04.2017 {
+  RepSpecRecalcOR.f1 = SHp.OrderNr;
+  RepSpecRecalcOR.flags[0] = 1;
+  RepSpecRecalcOR.flags[1] = 1;
+  RecalcORMn(RepSpecRecalcOR); //Edit***************************Sasha2,14:29 19.04.2017 }
+  
   ORr.SerNr = SHp.OrderNr;
   if (ReadFirstMain(ORr,1,true)) then begin end; //## what if not found?
 /*JJDS  

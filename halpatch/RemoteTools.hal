@@ -51,6 +51,7 @@ external procedure IVVc_PasteSalesMan(var record IVVc,string);
 external procedure GetObjs(string,string,var string);//Edit-------------------Vitalii 15:15 28.11.2016
 external function string 255 StrReplace(string,string,string);
 external procedure GetCurUser(var record UserVc);
+external updating procedure RecalcORMn(record RcVc); //Edit***************************Sasha2,14:27 19.04.2017
 
 global
 procedure GetItemSalesAccFromOR(record ORVc ORr,var string salesacc)
@@ -1866,7 +1867,7 @@ global
 updating function Integer RecordAction_raPasteOrdInInv(var record IVVc IVp,LongInt ordnr,Boolean NLCostOnShipTestf,var Integer errcode)
 begin
   record ORVc ORr;
-  record RcVc RepSpec;
+  record RcVc RepSpec,RepSpecRecalcOR; //Edit***************************Sasha2,14:28 19.04.2017
   record SRBlock SRRec;
   Integer res;
   LongInt newnr;
@@ -1888,6 +1889,13 @@ begin
   IVp.OrderNr = ordnr;
   IVp.UpdStockFlag = 0;
   IVp.OrderType = ORr.OrderType;
+  
+  RecordNew(RepSpecRecalcOR); //Edit***************************Sasha2,14:29 19.04.2017 {
+  RepSpecRecalcOR.f1 = ordnr;
+  RepSpecRecalcOR.flags[0] = 1;
+  RepSpecRecalcOR.flags[1] = 1;
+  RecalcORMn(RepSpecRecalcOR); //Edit***************************Sasha2,14:29 19.04.2017 }
+  
   ORr.SerNr = ordnr;
   if (ReadFirstMain(ORr,1,true)) then begin
   end;
