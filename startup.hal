@@ -114,6 +114,7 @@ begin
 	Setting("Настройки ваучеров с процентной скидкой",RebateVoucherTClass,modSL); //Edit***************************Sasha2,17:38 23.11.2016
 	Setting("Акции",PromotionLClass,modSL); //Edit***************************Sasha2,17:58 23.01.2017
   Setting("История изменений - Счета клиентов",ORHistoryLClass,modSO);//Edit-------------------Vitalii 16:52 27.02.2017
+  Setting("Альтернативная скидка",AlternativeRebateLClass,modDI); //Edit***************************Sasha2,17:58 23.01.2017
 
   //Report("Статистика НДС по аванс. отчетам",ExpVATRClass,ExpVATRn,0,modCL);
   //Report("Журнал путевых листов",WLJRClass,WLJRn,0,modCL);
