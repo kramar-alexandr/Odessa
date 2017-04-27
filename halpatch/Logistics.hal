@@ -621,7 +621,7 @@ begin
 	RecordCopy(oldSMr,SMr);
 	SMr.StopAutoComplite = 1;
 	TableSortAscending_StockMov(SMr,"ArtCode");
-	StockMovBoxingQty(SMr);
+	//StockMovBoxingQty(SMr);// Edit ************************** Thursday, 27 April 2017 10:12:29 Poprosili ubrat
 	RecordUpdate(oldSMr,SMr,true);
 
 
