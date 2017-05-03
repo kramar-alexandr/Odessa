@@ -2245,7 +2245,7 @@ end;
 window SMSTextTClass:1				//Edit----------------------Dima  26.06.2015
   wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
 begin
-  real h,v,vs;
+  real h,v,vs,vh,h2;
   WindowBegin("Текст СМС сообщений",SMSTextTClass,CGSbl,-);
   SetBlid(SMSTextBlock);
   SetWRect(64,80,630,450);
@@ -2265,7 +2265,16 @@ begin
   EditField(h,v+=vs,150,"Реквизиты (по-умолчанию)",Normal,DefaultCard,false,0);
   EditField(h,v+=30,80,"Базовая Комиссия (%)",Normal,Commission0,false,0);
   EditField(h,v+=30,80,"Комиссия (%)",Normal,Commission,false,0);
+  vh = v;
+  h2 = h+100;
   EditField(h,v+=vs,80,"Минимальная комиссия (грн)",Normal,CommissionMin,false,0);
+  
+  statictext(h2,vh,"Шаблоны",false);
+  statictext(h2,vh+=vs,"%Sum% - Сумма заказа",false);
+  statictext(h2,vh+=vs,"%Card% - Номер платежной карты",false);
+  statictext(h2,vh+=vs,"%Date% - Дата заказа",false);
+  statictext(h2,vh+=vs,"%Order% - Номер заказа",false);
+  statictext(h2,vh+=vs,"%Commission% - комиссия",false);
 
   Tile(2,200,false,"","Title2");
   v=6;

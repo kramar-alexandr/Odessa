@@ -2405,6 +2405,8 @@ begin
 	resString = ReplaceAllSubStringInString(replaceSum,sum,temp);
 	temp = ReplaceAllSubStringInString(replaceOrder,ORr.CustOrdNr,resString);
 	resString = ReplaceAllSubStringInString(replaceCommission,commisionStr,temp);
+	temp = ReplaceAllSubStringInString(replaceDate,ORr.OrdDate,resString);
+	resString = temp;
 
 ParseSMStext = resString;
 return;
