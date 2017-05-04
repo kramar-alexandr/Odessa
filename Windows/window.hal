@@ -2264,17 +2264,19 @@ begin
   EditField(h,v+=vs,360,"Текст",Normal,Requisites,false,0);
   EditField(h,v+=vs,150,"Реквизиты (по-умолчанию)",Normal,DefaultCard,false,0);
   EditField(h,v+=30,80,"Базовая Комиссия (%)",Normal,Commission0,false,0);
-  EditField(h,v+=30,80,"Комиссия (%)",Normal,Commission,false,0);
   vh = v;
   h2 = h+100;
+  EditField(h,v+=30,80,"Комиссия (%)",Normal,Commission,false,0);
   EditField(h,v+=vs,80,"Минимальная комиссия (грн)",Normal,CommissionMin,false,0);
   
   statictext(h2,vh,"Шаблоны",false);
   statictext(h2,vh+=vs,"%Sum% - Сумма заказа",false);
+  statictext(h2,vh+=vs,"%IntSum% - Сумма заказа без десят.",false);
   statictext(h2,vh+=vs,"%Card% - Номер платежной карты",false);
   statictext(h2,vh+=vs,"%Date% - Дата заказа",false);
   statictext(h2,vh+=vs,"%Order% - Номер заказа",false);
   statictext(h2,vh+=vs,"%Commission% - комиссия",false);
+  statictext(h2,vh+=vs,"%CR% - новая строка",false);
 
   Tile(2,200,false,"","Title2");
   v=6;

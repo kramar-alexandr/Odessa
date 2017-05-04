@@ -13,14 +13,16 @@ begin
 	str=UpperCase(findWord);   
 	inStr=Source;		
 	if (diff<0) then begin
-	goto	breakFunction;
+		goto	breakFunction;
 	end;
 	
 	for(i=0;i<=diff;i=i+1) begin
 	 temp = mid(inStr,i,length);
 	 if(UpperCase(temp)==str) then begin
 			res = left(inStr,i) & newWord & Right(inStr,lengthFind-i-length);
-			i = i + length;
+			lengthFind = len(res);
+			diff=lengthFind-length;
+			//i = i + length;
 			inStr = res;
 	 end;	
 	end;

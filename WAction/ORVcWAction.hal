@@ -2346,10 +2346,10 @@ global
 function string 255 ParseSMStext(string text, record ORVc ORr)	//Edit----------------------Dima  02.07.2015
 begin
   record UserVc Userr;
-	string 10 replaceSum,replaceCard,replaceDate,replaceOrder,replaceCommission;
+	string 10 replaceSum,replaceCard,replaceDate,replaceOrder,replaceCommission,replaceIntSum,replaceCR;
 	string 50 sum,card,commisionStr;
 	string 255 resString,temp;
-	longint  IntVal;
+	longint  IntVal,IntSum;
   record SMSTextBlock SMSb;
   val tempVal,tempsum,commission,tempCommission;
   roundmode rmde;
@@ -2358,10 +2358,12 @@ begin
   BlockLoad(SMSb);	
 	
 	replaceSum = "%Sum%";
+	replaceIntSum = "%IntSum%";
 	replaceCard = "%Card%";
 	replaceDate = "%Date%";
 	replaceOrder = "%Order%";
 	replaceCommission = "%Commission%";
+	replaceCR = "%CR%";
 	
 	//Card
 	Userr.Code = ORr.SalesMan;
@@ -2400,13 +2402,16 @@ begin
 	end;
 	IntVal = tempCommission;
 	commisionStr = IntVal;	
-
-	temp = ReplaceAllSubStringInString(replaceCard,card,text);
-	resString = ReplaceAllSubStringInString(replaceSum,sum,temp);
-	temp = ReplaceAllSubStringInString(replaceOrder,ORr.CustOrdNr,resString);
-	resString = ReplaceAllSubStringInString(replaceCommission,commisionStr,temp);
-	temp = ReplaceAllSubStringInString(replaceDate,ORr.OrdDate,resString);
-	resString = temp;
+	
+	IntSum = sum;
+	
+	resString = ReplaceAllSubStringInString(replaceCard,card,text);
+	resString = ReplaceAllSubStringInString(replaceSum,sum,resString);
+	resString = ReplaceAllSubStringInString(replaceOrder,ORr.CustOrdNr,resString);
+	resString = ReplaceAllSubStringInString(replaceCommission,commisionStr,resString);
+	resString = ReplaceAllSubStringInString(replaceDate,ORr.OrdDate,resString);
+	resString = ReplaceAllSubStringInString(replaceIntSum,IntSum,resString);
+	resString = ReplaceAllSubStringInString(replaceCR,chr(13),resString);
 
 ParseSMStext = resString;
 return;
