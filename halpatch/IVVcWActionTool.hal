@@ -65,6 +65,8 @@ external function Boolean GetItemPriceDiscount3(string,val,var record INVc,strin
                                                 string,Boolean,var Boolean,string,var string,var val,string,string,var string);
 external function Boolean INVc_AllowSales(record INVc,var LongInt);
 external function boolean ItemHasClassification(record INVc,string);	//Edit----------------------Dima  26.01.2016
+external procedure AlternativeRebateIVVc(var record IVVc);// Edit ************************** Friday, 5 May 2017 09:49:37
+
 
 
 global
@@ -380,6 +382,9 @@ BEGIN
       end;
     end;
   end;
+  
+	//AlternativeRebateIVVc(IVr);// Edit ************************** Friday, 5 May 2017 16:02:03
+  
   if (IVDchrsum(IVr,rownr)) then begin
     IVDchsum(IVr,rownr);
   end;

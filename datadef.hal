@@ -333,6 +333,8 @@ begin
   ArrayField(UnitComment,M4Str,200,0);
   ArrayField(SalaryPrice,M423Val,0,0);	//Edit----------------------Dima  15.03.2016
   ArrayField(CommisionPrice,M423Val,0,0);	//Edit----------------------Dima  27.04.2016
+  ArrayField(AltRebTargFlag,M4Str,50,0);// Edit ************************** Thursday, 4 May 2017 12:07:07
+  ArrayField(AltRebDiscFlag,M4Str,50,0);// Edit ************************** Thursday, 4 May 2017 12:07:07
   EndArray;
   return;
 end; 
@@ -5760,7 +5762,7 @@ RecordBegin(IPVc,-,"");
   ArrayField(PriceFrom,M423Val,0,0);
   ArrayField(QuantFrom,M4UVal,0,0);
   ArrayField(SumFrom,M4Val,0,0);
-  ArrayField(perRebate,M4Str,10,0);
+  ArrayField(perRebate,M41Val,0,0);
   ArrayField(absRebate,M41Val,0,0);
   ArrayField(DiscountedCategory,M4Code,20,0);
   ArrayField(DiscountedBrand,M4Code,20,0);

@@ -1404,3 +1404,110 @@ begin
   GetHotelWIPAccount = res;
   return;
 end;
+
+
+global procedure AlternativeRebateIVVc(var record IVVc IVr)begin
+row IVVc IVrw;
+record AlternativeRebateVc AlRebr;
+row AlternativeRebateVc AlRebrw;
+boolean foundf,TrHs,testf,trfoundf;
+integer mtrw,i,trmtrw,j,trqtyi;
+record INVc INr;
+val trqtyval,AkcQty,AkcSum;
+	
+	
+	mtrw = matrowcnt(IVr);
+	For(i=0;i<mtrw;i=i+1) begin
+	  matrowget(IVr,i,IVrw)
+	  	IVrw.AltRebTargFlag = "";
+	  	IVrw.AltRebDiscFlag = "";
+	  matrowput(IVr,i,IVrw);
+	end; 
+	
+	TrHs = true;
+	foundf = false;
+	while(loopmain(AlRebr,1,TrHs))begin	
+		testf = true;
+		if(AlRebr.PromStrDate<IVr.InvDate or AlRebr.PromEndDate>IVr.InvDate)then begin testf = false; end;
+		if(AlRebr.IsActiveFlag==0)then begin testf = false; end;
+		if(nonblank(AlRebr.Locations) and !setinset(IVr.Location,AlRebr.Locations))then begin testf = false; end;
+		
+		if(testf and TrHs)then begin
+			foundf = true;
+			TrHs = false;
+			
+			AkcQty = 0;
+			AkcSum = 0;
+			trqtyi = 0;
+			trqtyval = 0;
+			
+			trmtrw = matrowcnt(AlRebr);
+			mtrw = matrowcnt(IVr);
+			trfoundf = false;
+			
+			For(i=0;i<mtrw;i=i+1) begin
+				matrowget(IVr,i,IVrw);
+				if(nonblank(IVrw.ArtCode) and IVrw.stp==kInvoiceRowTypeNormal)then begin
+					INr.Code = IVrw.ArtCode;
+					if(readfirstmain(INr,1,true))then begin
+						For(j=0;j<trmtrw;j=j+1) begin
+							matrowget(AlRebr,j,AlRebrw);
+							if(blank(IVrw.AltRebTargFlag))then begin
+								if(setinset(AlRebrw.TriggerCategory,INr.DispGroups) or setinset(AlRebrw.TriggerBrand,INr.DispGroups) or AlRebrw.TriggerArtCode==INr.Code or IVrw.Price>=AlRebrw.PriceFrom)then begin
+									AkcSum = AkcSum + IVrw.Quant * IVrw.Quant;
+									AkcQty = AkcQty + IVrw.Quant;
+									trqtyval = trqtyval + IVrw.Quant/AlRebrw.QuantFrom;
+									trqtyi = trqtyval;
+									IVrw.AltRebTargFlag = AlRebr.Code;
+									trfoundf = true;
+									matrowput(IVr,i,IVrw);
+								end;
+							end;
+						end; 
+					end;
+				end;
+			end;
+			
+			if(trfoundf)then begin
+				For(i=0;i<mtrw;i=i+1) begin
+					matrowget(IVr,i,IVrw);
+					if(nonblank(IVrw.ArtCode) and IVrw.stp==kInvoiceRowTypeNormal)then begin
+						INr.Code = IVrw.ArtCode;
+						if(readfirstmain(INr,1,true))then begin
+							For(j=0;j<trmtrw;j=j+1) begin
+								matrowget(AlRebr,j,AlRebrw);
+								if(blank(IVrw.AltRebDiscFlag))then begin
+									if(setinset(AlRebrw.DiscountedCategory,INr.DispGroups) or setinset(AlRebrw.DiscountedBrand,INr.DispGroups) or AlRebrw.DiscountedArtCode==INr.Code or IVrw.Price>=AlRebrw.PriceFrom)then begin
+										
+										if(trqtyi>0)then begin
+											if(IVrw.Quant<=trqtyi)then begin
+												trqtyi = trqtyi - IVrw.Quant;
+												if(AlRebrw.absRebate!=0)then begin
+													IVrw.Sum = IVrw.Sum - AlRebrw.absRebate * IVrw.Quant;
+												end;
+												if(AlRebrw.perRebate!=0)then begin
+													IVrw.Sum = IVrw.Quant*IVrw.Price*(1-AlRebrw.absRebate/100);
+												end;
+											end else begin
+										
+											end;
+										
+											IVrw.AltRebDiscFlag = AlRebr.Code;
+											matrowput(IVr,i,IVrw);
+										end;
+									end;
+								end;
+							end; 
+						end;
+					end;
+				end;
+			end;
+			 
+		end;
+	end;
+	
+	
+	
+
+return;
+end;

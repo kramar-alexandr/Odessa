@@ -570,6 +570,9 @@ begin
 										recordnew(SMr);
 										SMr.OrdTransDate = currentdate;
 										SMr.FrLocation = tstr;
+										if(SMr.FrLocation=="1-KOC")then begin
+											SMr.FrPos = "ŠŽ‘_2";
+										end;
 										SMr.ThrouLocation = "00";
 										SMr.ToLocation = "RYBRAY";
 										SMr.AutoCompliteFlag = 1;
