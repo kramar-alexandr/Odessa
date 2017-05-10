@@ -494,13 +494,15 @@ updating procedure MakeReserveFromOrder(LongInt OrSerNr)
 begin
   record ORVc ORr,OR2r;
   row ORVc ORrw;
-  integer rwcnt,i,pos;
+  integer rwcnt,i,pos,posi,j,k;
   val diff;
   boolean foundf,process;
   record StockMovVc SMr;
   boolean TrHs,testf,inserflag;
   record WebShopSettingsBlock WSb;
   string 50 tstr;
+  array string 20 apos;
+  record PosVc Posr;
   
   blockload(WSb);
   
@@ -534,53 +536,78 @@ begin
 						ExtractObjWithSeparator(",",WSb.LocationQuer,true,pos,tstr);
 						while(nonblank(tstr))begin
 							if(nonblank(tstr) and tstr!="RYBRAY")then begin
-								process = false;
-								ORr.SerNr = OrSerNr;
-								if(readfirstmain(ORr,1,true))then begin
-									rwcnt = MatRowCnt(ORr);
-									for (i=0;i<rwcnt;i=i+1) begin
-										MatRowGet(ORr,i,ORrw);
-										if (ORrw.OrderQuant - ORrw.ProcessingQuant>0) then begin
-											process = true;
+								apos[0] = "";
+								posi = 1;
+								
+								if(tstr=="3-RAY")then begin
+									apos[0] = "4-NIZ";
+									apos[1] = "3-RAY";
+									posi = 2;
+								
+									/*Posr.Location = tstr;
+									k=0;
+									while(loopkey("Location",Posr,1,true))begin
+										if(nonblank(tstr) and Posr.Location==tstr and nonblank(Posr.Code))then begin
+											apos[k] = Posr.Code;
+											k=k+1;
+											posi = k;
 										end;
-									end;
+									end;*/
 								end;
-								if(process)then begin
-									SMr.TransDate = currentdate;
-									TrHs = true;
-									inserflag = true;
-									while(loopbackkey("TransDate",SMr,1,TrHs))begin
-										testf = true;
-										if(SMr.TransDate<addday(SMr.TransDate,-1))then begin TrHs = false; testf = false; end;
-										if(SMr.StopAutoComplite>0)then begin testf = false; end;
-										if(SMr.AutoCompliteFlag<1)then begin testf = false; end;
-										if(SMr.OrdFlag>0)then begin testf = false; end;
-										if(SMr.SentOKFlag>0)then begin testf = false; end;
-										if(SMr.OKFlag>0)then begin testf = false; end;
-										if(SMr.FrLocation!=tstr)then begin testf = false; end;
+								
+								for(j=0;j<posi;j=j+1)begin
+									process = false;
+									ORr.SerNr = OrSerNr;
+									if(readfirstmain(ORr,1,true))then begin
+										rwcnt = MatRowCnt(ORr);
+										for (i=0;i<rwcnt;i=i+1) begin
+											MatRowGet(ORr,i,ORrw);
+											if (ORrw.OrderQuant - ORrw.ProcessingQuant>0) then begin
+												process = true;
+											end;
+										end;
+									end;
+									if(process)then begin
+										SMr.TransDate = currentdate;
+										TrHs = true;
+										inserflag = true;
+										while(loopbackkey("TransDate",SMr,1,TrHs))begin
+											testf = true;
+											if(SMr.TransDate<addday(SMr.TransDate,-1))then begin TrHs = false; testf = false; end;
+											if(SMr.StopAutoComplite>0)then begin testf = false; end;
+											if(SMr.AutoCompliteFlag<1)then begin testf = false; end;
+											if(SMr.OrdFlag>0)then begin testf = false; end;
+											if(SMr.SentOKFlag>0)then begin testf = false; end;
+											if(SMr.OKFlag>0)then begin testf = false; end;
+											if(SMr.FrLocation!=tstr)then begin testf = false; end;
+											if(SMr.FrPos!=apos[j] and nonblank(apos[j]))then begin testf = false; end;// Edit ************************** Wednesday, 10 May 2017 10:37:13
 						
-										if(testf)then begin
-											inserflag = false;
-											TrHs = false;
-											testf = false;
+											if(testf)then begin
+												inserflag = false;
+												TrHs = false;
+												testf = false;
+											end;
 										end;
-									end;
-									resetloop(SMr);
-									if(inserflag)then begin
-										recordnew(SMr);
-										SMr.OrdTransDate = currentdate;
-										SMr.FrLocation = tstr;
-										if(SMr.FrLocation=="1-KOC")then begin
-											SMr.FrPos = "КОС_2";
+										resetloop(SMr);
+										if(inserflag)then begin
+											recordnew(SMr);
+											SMr.OrdTransDate = currentdate;
+											SMr.FrLocation = tstr;
+											if(SMr.FrLocation=="1-KOC")then begin
+												SMr.FrPos = "КОС_2";
+											end;
+											if(SMr.FrLocation=="3-RAY")then begin
+												SMr.FrPos = apos[j];
+											end;
+											SMr.ThrouLocation = "00";
+											SMr.ToLocation = "RYBRAY";
+											SMr.AutoCompliteFlag = 1;
+											SMr.SerNr = NextSerNr("StockMovVc",CurrentDate,-1,false,"");
+											SMr.Comment = "Аторезервирование товаров интернет магазина";
 										end;
-										SMr.ThrouLocation = "00";
-										SMr.ToLocation = "RYBRAY";
-										SMr.AutoCompliteFlag = 1;
-										SMr.SerNr = NextSerNr("StockMovVc",CurrentDate,-1,false,"");
-										SMr.Comment = "Аторезервирование товаров интернет магазина";
+										logtext(0,"Аторезервирование товаров интернет магазина " & tstr);
+										AddOrderForStockMove(SMr,ORr,inserflag);
 									end;
-									logtext(0,"Аторезервирование товаров интернет магазина " & tstr);
-									AddOrderForStockMove(SMr,ORr,inserflag);
 								end;
 								ExtractObjWithSeparator(",",WSb.LocationQuer,true,pos,tstr);
 							end;

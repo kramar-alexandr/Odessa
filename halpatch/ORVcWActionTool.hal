@@ -64,6 +64,7 @@ external function val HoursDifference(Date,Time,Date,Time);			//Edit------------
 external procedure Recalculate_CustomStatusFlagText(var record ORVc);		//Edit----------------------Dima  15.12.2015
 external procedure SetNewORCustomStatusFlagOnWeb(record ORVc);// Edit ************************** Friday, 18 November 2016 09:45:15
 external procedure CreateORHistoryVcFromORVc(record ORVc,record ORVc,boolean);// Edit ************************** Wednesday, 1 March 2017 10:54:05
+external procedure ExtractObjWithSeparator(string,string,Boolean,var Integer,var string); //Edit***************************Sasha2,11:03 14.01.2015
 
 
 
@@ -1367,8 +1368,10 @@ end;
 global procedure GetAvailableItems(var record ORVc ORr)	//Edit----------------------Dima  29.09.2015
 Begin
 	row ORVc ORrw;
-	integer rwcnt,i;
+	integer rwcnt,i,pos;
+	string 255 tstr;
 	record ItemStatusVc ISr;
+	record WebShopSettingsBlock WSb;
 	
 	rwcnt = MatRowCnt(ORr);
 	for(i=0;i<rwcnt;i=i+1) begin
@@ -1391,6 +1394,21 @@ Begin
 						ORrw.AvailableQuant = ISr.Instock - (ISr.RsrvQty - ORrw.Quant);
 					end;
 			end;
+			/*if(ORr.OrderClass=="WEB")then begin
+				ExtractObjWithSeparator(",",WSb.LocationQuer,true,pos,tstr);
+				while(nonblank(tstr))begin
+					if(nonblank(tstr))then begin
+						if(tstr!=ORr.Location)then begin
+							ISr.Code = ORrw.ArtCode;
+							ISr.Location = tstr;
+							if(ReadFirstMain(ISr,2,true)) then begin
+								ORrw.AvailableQuant = ORrw.AvailableQuant + ISr.Instock - ISr.RsrvQty;
+							end;
+						end;
+					end;
+					ExtractObjWithSeparator(",",WSb.LocationQuer,true,pos,tstr);
+				end;
+			end;*/
 			MatRowPut(ORr,i,ORrw);
 		end;
 		end;

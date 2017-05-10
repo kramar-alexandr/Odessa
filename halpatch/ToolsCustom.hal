@@ -1273,6 +1273,7 @@ begin
 	vector val artcodeinstock,artcodeneed;
 	boolean addrow;
 	record ORVc oldORr;
+	record PISVc PISr;
 	
 	
 	j=0;
@@ -1283,13 +1284,24 @@ begin
 	rwcnt = MatRowCnt(ORr);
 	for(i=0;i<rwcnt;i=i+1)  begin
 		MatRowGet(ORr,i,ORrw);
-			artcodeneed[ORrw.ArtCode] = artcodeneed[ORrw.ArtCode] + ORrw.OrderQuant;
-			ISr.Code = ORrw.ArtCode;
-			ISr.Location = SMr.FrLocation;
-			if(readfirstmain(ISr,2,true))then begin
-				artcodeinstock[ORrw.ArtCode] = ISr.Instock - ISr.RsrvQty;
+		artcodeneed[ORrw.ArtCode] = artcodeneed[ORrw.ArtCode] + ORrw.OrderQuant;
+		ISr.Code = ORrw.ArtCode;
+		ISr.Location = SMr.FrLocation;
+		if(readfirstmain(ISr,2,true))then begin
+			artcodeinstock[ORrw.ArtCode] = ISr.Instock - ISr.RsrvQty;
+			if(SMr.FrLocation=="3-RAY" and SMr.FrPos=="4-NIZ")then begin
+				PISr.ArtCode = ORrw.ArtCode;
+				PISr.Location = SMr.FrLocation;
+				PISr.Position = "4-NIZ";
+				if(readfirstmain(PISr,3,true))then begin
+					if(PISr.Instock>ISr.RsrvQty and artcodeinstock[ORrw.ArtCode]>0)then begin
+						artcodeinstock[ORrw.ArtCode] = PISr.Instock - ISr.RsrvQty;
+					end else begin
+						artcodeinstock[ORrw.ArtCode] = 0;
+					end;
+				end;
 			end;
-			
+		end;
 	end;
 	
 	if(inser==false)then begin
