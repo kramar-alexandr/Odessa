@@ -1149,47 +1149,47 @@ begin
     		ORrw.RRPPrice = PLr.ExVatPrice;
     		MatRowPut(ORr,i,ORrw);
     	end;
-    	
     end;
+    
     switch (ORrw.stp) begin
       case 1:
         if (nonblank(ORrw.Spec) and blank(ORrw.ArtCode) and blank(ORrw.Quant)) then begin
           goto LORVcRecordRowCheck;
         end;
         if (HasModNL) then begin
-        if (ARAccRec.VATCodeCtrl==1) then begin
-          Accr.AccNumber = ORrw.SalesAcc;
-          if (blank(Accr.AccNumber)) then begin
-            //Get Account from setting ? 
-          end;
-          if (ReadFirstMain(Accr,1,true)) then begin
-            if ((nonblank(Accr.VATCode)) and (Accr.VATCode!=ORrw.VATCode)) then begin
-              RecordCheckError(1245,"",i,"VATCode");      
-              res = -1;
-              goto LORVcRecordCheck;
+          if (ARAccRec.VATCodeCtrl==1) then begin
+            Accr.AccNumber = ORrw.SalesAcc;
+            if (blank(Accr.AccNumber)) then begin
+              //Get Account from setting ? 
             end;
-          end else begin
-            tstr = ORrw.SalesAcc;
-            ConvertSalesAcc(tstr,ORr.ExportFlag);
-            Accr.AccNumber = tstr;
             if (ReadFirstMain(Accr,1,true)) then begin
               if ((nonblank(Accr.VATCode)) and (Accr.VATCode!=ORrw.VATCode)) then begin
                 RecordCheckError(1245,"",i,"VATCode");      
                 res = -1;
                 goto LORVcRecordCheck;
               end;
+            end else begin
+              tstr = ORrw.SalesAcc;
+              ConvertSalesAcc(tstr,ORr.ExportFlag);
+              Accr.AccNumber = tstr;
+              if (ReadFirstMain(Accr,1,true)) then begin
+                if ((nonblank(Accr.VATCode)) and (Accr.VATCode!=ORrw.VATCode)) then begin
+                  RecordCheckError(1245,"",i,"VATCode");      
+                  res = -1;
+                  goto LORVcRecordCheck;
+                end;
+              end;
+            end;
+          end else begin
+            if (nonblank(ORrw.SalesAcc)) then begin
+              Accr.AccNumber = ORrw.SalesAcc;
+              if (ReadFirstMain(Accr,1,true)==false) then begin
+                RecordCheckError(1931,"",i,"SalesAcc");      
+                res = -1;
+                goto LORVcRecordCheck;
+              end;
             end;
           end;
-        end else begin
-          if (nonblank(ORrw.SalesAcc)) then begin
-            Accr.AccNumber = ORrw.SalesAcc;
-            if (ReadFirstMain(Accr,1,true)==false) then begin
-              RecordCheckError(1931,"",i,"SalesAcc");      
-              res = -1;
-              goto LORVcRecordCheck;
-            end;
-          end;
-        end;
         end;
         if (VATAccIsClosed(ORrw.VATCode,tstr,1)) then begin
           RecordCheckError(1258,tstr,i,"VATCode");      
@@ -1232,6 +1232,13 @@ begin
           end;
         end;
         if (nonblank(ORrw.ArtCode)) then begin
+          if (transf and Blank(ORr.OrderClass) and ORrw.MinOrderedQuant>0) then begin //Edit***************************Sasha2,11:33 10.05.2017 {
+            if (ORrw.Quant<ORrw.MinOrderedQuant) then begin
+              RecordCheckError(12053,USetStr(20111),i,"Quant");
+              res = -1; 
+              goto LORVcRecordCheck;
+            end;
+          end; //Edit***************************Sasha2,11:33 10.05.2017 }
           if (HasLocalization("PRT")) then begin
             if (ORrw.vRebate<0) then begin
               RecordCheckError(22034,"",i,"vRebate");      
@@ -1285,13 +1292,13 @@ begin
             goto LORVcRecordCheck;
           end;
           if(stat==updatemode)then begin //Edit***************************Sasha2,14:01 28.10.2014 {
-			if(ORr.Reserved!=0 and OR2r.Reserved!=0)then begin
-				if(ORr.Location!=OR2r.Location)then begin
-					RecordCheckError(22067,"",-1,"Location");      
-					res = -1;
-					goto LORVcRecordCheck;
-				end;
-			end;
+      			if(ORr.Reserved!=0 and OR2r.Reserved!=0)then begin
+      				if(ORr.Location!=OR2r.Location)then begin
+      					RecordCheckError(22067,"",-1,"Location");      
+      					res = -1;
+      					goto LORVcRecordCheck;
+      				end;
+      			end;
           end; //Edit***************************Sasha2,14:01 28.10.2014 }
           location = ORrw.Location;
           if (blank(location)) then begin
@@ -1349,7 +1356,7 @@ begin
                     ISr.RsrvQty = 0;
                   end; //Edit***************************Sasha2,14:04 28.10.2014 }
                   if ((orsrv)>(ISr.Instock-ISr.RsrvQty+orsrved)) then begin // StockRsrvQty ?
-                  	if(currentuser!="SA" and currentuser!="ALENA_BYST")then begin// Edit ************************** Friday, 28 August 2015 15:49:44
+                  	if(currentuser!="SA" and currentuser!="ALENA_BYST")then begin // Edit ************************** Friday, 28 August 2015 15:49:44
 											RecordCheckError(20011,"",i,"Quant");      
 											res = -1;
 											goto LORVcRecordCheck;

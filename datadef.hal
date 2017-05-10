@@ -1794,6 +1794,7 @@ RecordBegin(INVc,-,"artikel5");
   ArrayField(AvailableQuant,M4UVal,0,0);
   ArrayField(NecessaryQuant,M4UVal,0,0);
   ArrayField(RRPPrice,M4Val,0,0);// Edit ************************** Wednesday, 13 July 2016 10:59:38
+  ArrayField(MinOrderedQuant,M4UVal,0,0); //Edit***************************Sasha2,10:48 10.05.2017
   EndArray;
   MainKeyBegin(SerNr,1);
   StoreInBaseKey;

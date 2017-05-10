@@ -5139,10 +5139,11 @@ begin
   Flip(flipnr); flipnr = flipnr + 1;
 //  MatCol(t=1,194,"Description",0,Spec,false,0);
   t = 1;
-  MatCol(t,95,"Необходимо",0,NecessaryQuant,true,0);
-  MatCol(t,155,"Кол-во",0,Quant,true,0);
+  MatCol(t,95,"Кол-во",0,Quant,true,0);
+  MatCol(t,155,"Необходимо",0,NecessaryQuant,true,0);
   MatCol(t,215,"Доступно",0,AvailableQuant,true,0);
-  MatCol(t,275,"Описание",0,Spec,false,0);
+  MatColTL(t,275,"Мин.заказ",0,M4UVal,ViewOnly,0,MinOrderedQuant,true,0);  //Edit***************************Sasha2,10:51 10.05.2017
+  MatCol(t,335,"Описание",0,Spec,false,0);
   MatCol(t,-205,"Цена",0,Price,true,PLSClass);
   MatCol(t,-125,"%",0,vRebate,true,0);
   MatCol(t,-90,"Сумма",0,Sum,true,0);

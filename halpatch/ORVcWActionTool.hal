@@ -66,7 +66,7 @@ external procedure SetNewORCustomStatusFlagOnWeb(record ORVc);// Edit **********
 external procedure CreateORHistoryVcFromORVc(record ORVc,record ORVc,boolean);// Edit ************************** Wednesday, 1 March 2017 10:54:05
 external procedure ExtractObjWithSeparator(string,string,Boolean,var Integer,var string); //Edit***************************Sasha2,11:03 14.01.2015
 
-
+SetLangMode(LangRussian,"RUS",0);
 
 
 global
@@ -94,6 +94,36 @@ begin
   end;
   return;
 end;
+
+global //Edit***************************Sasha2,10:59 10.05.2017 {
+function val GetAddUnitCoef(string unitText,record INVc INr)
+begin
+  val res;
+  Boolean foundf;
+    
+    res = BlankVal;
+    if (NonBlank(unitText)) then begin
+      if (INr.AddUnittext2==unitText) then begin
+        res = INr.AddUnitCoef2;
+        foundf = true;
+      end;
+      if (foundf==false and INr.AddUnittext3==unitText) then begin
+        res = INr.AddUnitCoef3;
+        foundf = true;
+      end;
+      if (foundf==false and INr.AddUnittext4==unitText) then begin
+        res = INr.AddUnitCoef4;
+        foundf = true;
+      end;
+      if (foundf==false and INr.AddUnittext5==unitText) then begin
+        res = INr.AddUnitCoef5;
+        foundf = true;
+      end;
+    end;
+    
+    GetAddUnitCoef = res;
+  return;
+end; //Edit***************************Sasha2,10:59 10.05.2017 }
 
 global
 function Boolean ORVc_PasteArtCode(var record ORVc ORr,Integer rownr,var string inwarning,var string warning,Boolean varf)
@@ -172,6 +202,7 @@ BEGIN
     ORrw.AddUnitQty2 = INr.AddUnitCoef2; //Edit***************************Sasha2,12:20 28.01.2015
     ORrw.AddUnittext3 = INr.AddUnittext3; //Edit***************************Sasha2,12:20 28.01.2015
     ORrw.AddUnitQty3 = INr.AddUnitCoef3; //Edit***************************Sasha2,12:20 28.01.2015
+    ORrw.MinOrderedQuant = GetAddUnitCoef("åàç",INr); //Edit***************************Sasha2,11:52 10.05.2017
     ORrw.CustArtCode = CustArtCode(ORr.CustCode,ORrw.ArtCode);
     GetTaxesDiscounts(ORr.CustCode,ORr.OrdDate,ORrw.VATCode,tax2code,t,tax2reb);
     if (ORr.NoTax2==0) then begin
