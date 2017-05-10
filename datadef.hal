@@ -4725,6 +4725,7 @@ RecordBegin(IPVc,-,"");
   RecordField(Kassir,M4Code,40,0);
   RecordField(BirthDayVaucher,M4Long,0,0);// Edit ************************** Monday, 12 December 2016 14:41:07
   RecordField(Objects,M4UStr,100,ObjVc); //Edit***************************Sasha2,11:55 13.02.2017
+  RecordField(MinOrder,M4Val,0,0);
   MainKeyBegin(InvNr,0);
   KeySegment(InvNr);
   KeySegment(RowNr);

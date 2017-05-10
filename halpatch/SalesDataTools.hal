@@ -160,7 +160,25 @@ begin
 				if (ReadFirstMain(INr,1,true)) then begin
 					SalesData.DispGroups = INr.DispGroups;
 					SalesData.ItemGroup = INr.Group;
-
+					
+					// Edit Start ---------------------------------------------- Edit Start
+					//Wednesday, 10 May 2017 12:46:03
+	
+					if(INr.AddUnittext2=="åàç")then begin
+						SalesData.MinOrder = INr.AddUnitCoef2;
+					end;
+					if(INr.AddUnittext3=="åàç")then begin
+						SalesData.MinOrder = INr.AddUnitCoef3;
+					end;
+					if(INr.AddUnittext4=="åàç")then begin
+						SalesData.MinOrder = INr.AddUnitCoef4;
+					end;
+					if(INr.AddUnittext5=="åàç")then begin
+						SalesData.MinOrder = INr.AddUnitCoef5;
+					end;
+						
+					// Edit End ---------------------------------------------- Edit End
+	
 					pos = 0;
 					txt = "";
 					ExtractObj(INr.DispGroups,pos,txt);

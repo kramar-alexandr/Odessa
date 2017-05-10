@@ -124,10 +124,12 @@ begin
 		OutString(90,0,"Код товара",false);
 		OutString(120,0,"Наименование",false);	
 		OutString(170,0,"Тип",false);		
+		OutString(175,0,"Мин. заказ",false);	
 	end else begin			//Consolidated
 		OutString(20,0,"Код товара",false);
 		OutString(60,0,"Наименование",false);
 		OutString(170,0,"Тип",false);
+		OutString(175,0,"Мин. заказ",false);
 	end;
 	
 		OutString(270,0,"Кол-во",false);
@@ -402,7 +404,7 @@ separator = "^";
 							
 							itemType = getPartOfString(SalesData.ItemType,2,separator);		//Extract Code of (Code^Name);
 							OutString(170,0,itemType,false);
-							
+							OutString(175,0,SalesData.MinOrder,false);// Edit ************************** Wednesday, 10 May 2017 12:47:46							
 							OutString(270,0,SalesData.Quant,false);
 							OutVal(300,0,SalesData.Price,M45Val,false);
               OutVal(305,0,SalesData.Sum/SalesData.Quant,M45Val,false);//Edit-------------------Vitalii 13:48 05.09.2016
@@ -457,6 +459,7 @@ separator = "^";
 							OutString(60,0,prevSalesData.Spec,false);				
 							itemType = getPartOfString(prevSalesData.ItemType,2,separator);		//Extract Code of (Code^Name);				
 							OutString(170,0,itemType,false);
+							OutString(175,0,prevSalesData.MinOrder,false);// Edit ************************** Wednesday, 10 May 2017 12:47:46
 							OutString(270,0,qty,false);
 							OutVal(300,0,salesum/qty,M4Val,false);						//Price
 							OutVal(310,0,salesum,M4Val,false);
@@ -491,6 +494,7 @@ separator = "^";
 		OutString(60,0,"",false);
 		OutString(60,0,"",false);
 	end;
+	OutString(60,0,"",false);
 	OutString(60,0,"",false);
 	OutString(90,0,"",false);
 	OutString(120,0,"Всего:",false);
