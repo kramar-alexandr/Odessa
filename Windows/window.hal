@@ -2764,6 +2764,7 @@ begin
   EditFieldTL(h,v+=vs, 150,"Вид счёта",   M4UStr,Normal,11,ObjStr,false,OrderClassSClass);
   EditFieldTL(h,v+=vs, 150,"Товар",   M4UStr,Normal,20,LastAcc,false,INSClass);
   EditFieldTL(h,v+=vs, 150,"Склад",M4UStr,Normal,10,f4,false,LocationSClass);
+  EditFieldTL(h,v+=vs, 150,"Классификация",M4UStr,Normal,10,f5,false,DiSClass);
   EditField(h,v+=vs,200,"Поиск",Normal,f6,false,0);// Edit ************************** Tuesday, 12 July 2016 15:31:55
   StaticText(h,v+=30,"Гибкий поиск через запятую XXX,YYY,ZZZ",false);
   CheckBox(h,v+=20,0,"Только зарезервированные",flags[8]);

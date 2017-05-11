@@ -190,6 +190,7 @@ begin
   string 50 closelocation;
   record UserVc USr;
   integer pos;
+  record INVc INr; //Edit***************************Sasha2,17:14 11.05.2017
   
   USr.Code = currentuser;
   if(readfirstmain(USr,1,true))then begin
@@ -496,6 +497,21 @@ begin
         end;
 L30:;
       end;
+      
+      if (testf and nonblank(RepSpec.f5) and RepSpec.ArtMode==0) then begin //Edit***************************Sasha2,17:10 11.05.2017 {
+        testf = false;
+        rwcnt = MatRowCnt(ORr);
+        for (i=0;i<rwcnt;i=i+1) begin
+          MatRowGet(ORr,i,ORrw);
+          if (NonBlank(ORrw.ArtCode)) then begin
+            INr.Code = ORrw.ArtCode;
+            if (ReadFirstMain(INr,1,true) and SetInSet(RepSpec.f5,INr.DispGroups)) then begin
+              testf = true;
+              i = rwcnt;
+            end;
+          end;
+        end;
+      end; //Edit***************************Sasha2,17:10 11.05.2017 }
 
      
       if (testf) then begin
