@@ -1299,6 +1299,8 @@ begin
 					end else begin
 						artcodeinstock[ORrw.ArtCode] = 0;
 					end;
+				end else begin
+					artcodeinstock[ORrw.ArtCode] = 0;
 				end;
 			end;
 		end;
