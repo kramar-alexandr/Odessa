@@ -358,6 +358,7 @@ begin
 		AddToText(ORr.OrderType & ";",Letr);
 		AddToText(ORr.ORCONr & ";",Letr);
 		AddToText(ORr.CustomStatusFlagText & ";",Letr);
+		AddToText(ORr.Objects & ";",Letr);
 
 		
 		if (nonblank(RepSpec.f6) and (!StringInText(RepSpec.f6,Letr))) then begin// Edit ************************** Tuesday, 12 July 2016 15:52:23
@@ -520,8 +521,10 @@ L30:;
             StartFormat(15);
             OutString(0,"DblORVc",ORr.SerNr,false);
             OutString(40,0,ORr.OrderClass,false);// Edit ************************** Wednesday, 13 July 2016 09:51:26
-            OutDate(90,0,ORr.OrdDate,true);
-            OutString(100,0,ORr.Addr0,false);
+            OutDate(80,0,ORr.OrdDate,false);
+            OutString(110,"DblCUVc",ORr.CustCode,false);// Edit ************************** Thursday, 11 May 2017 11:24:17
+            OutString(150,0,ORr.Addr0,false);
+            OutString(200,0,ORr.Objects,false);
             if (ORr.TREONr>0) then begin
               OutString(290,0,ORr.TREONr,false);
             end;
@@ -537,9 +540,11 @@ L30:;
             StartFormat(15);
             OutString(0,"DblORVc",ORr.SerNr,false);
             OutString(40,0,ORr.OrderClass,false);// Edit ************************** Wednesday, 13 July 2016 09:51:25
-            OutDate(120,0,ORr.OrdDate,true);
-            OutString(140,0,ORr.Addr0,false);
+            OutDate(100,0,ORr.OrdDate,false);
+            OutString(140,"DblCUVc",ORr.CustCode,false);// Edit ************************** Thursday, 11 May 2017 11:24:17
+            OutString(180,0,ORr.Addr0,false);
             OutString(220,0,ORr.Comment,false);// Edit ************************** Wednesday, 13 July 2016 09:49:06
+            OutString(320,0,ORr.Objects,false);// Edit ************************** Thursday, 11 May 2017 15:41:04
             OutString(390,0,ORr.CustomStatusFlagText,false);// Edit ************************** Wednesday, 13 July 2016 09:49:06
             if (HasMultiCurrency) then begin
               OutVal(440,0,iv,M4Val,true);

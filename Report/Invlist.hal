@@ -1393,7 +1393,8 @@ LkInvoiceTypeCredit1:;
                   OutString(30,0,IVr.TransTime,false);//Edit----------------------Dima  12.08.2015
                   OutDate(60,0,IVr.InvDate,false);
                   OutString(90,0,CUr.RebCode,false); //Edit***************************Sasha2,9:30 03.06.2015
-                  OutStringCut(120,170,0,IVr.Addr0,false,0);//Edit***************************Sasha2,9:30 03.06.2015
+                  OutString(150,"DblCUVc",CUr.Code,false);// Edit ************************** Thursday, 11 May 2017 11:42:06
+                  OutStringCut(200,170,0,IVr.Addr0,false,0);//Edit***************************Sasha2,9:30 03.06.2015
                   tstr = "";
                   if (IVr.InvType==kInvoiceTypeNormal or IVr.InvType==kInvoiceTypeNormalSpecialSales) then begin
                     tstr = USetStr(2361);
@@ -1407,7 +1408,7 @@ LkInvoiceTypeCredit1:;
                   if (IVr.InvType==kInvoiceTypeInterest) then begin
                     tstr = USetStr(2364);
                   end;
-                  OutString(170,0,tstr,false);
+                  OutString(350,0,tstr,false);
   
                   OutVal(5,0,VATrw.DebVal,M4Val,true);
                   MulVATIV(VATrw.VATCode,VATrw.DebVal,vatv,t1,IVr.InclVAT,IVr.NoTAXonVAT);
@@ -1439,7 +1440,8 @@ LkInvoiceTypeCredit1:;
               OutString(30,0,IVr.TransTime,false);//Edit----------------------Dima  12.08.2015
               OutDate(60,0,IVr.InvDate,false);
               OutString(90,0,CUr.RebCode,false); //Edit***************************Sasha2,9:30 03.06.2015
-              OutStringCut(120,220,0,IVr.Addr0,false,0); //Edit***************************Sasha2,9:34 03.06.2015
+              OutString(150,"DblCUVc",CUr.Code,false);// Edit ************************** Thursday, 11 May 2017 11:42:06
+              OutStringCut(200,220,0,IVr.Addr0,false,0); //Edit***************************Sasha2,9:34 03.06.2015
               tstr = "";
               if (IVr.InvType==kInvoiceTypeNormal or IVr.InvType==kInvoiceTypeNormalSpecialSales) then begin
                 tstr = USetStr(2361);
@@ -1453,7 +1455,7 @@ LkInvoiceTypeCredit1:;
               if (IVr.InvType==kInvoiceTypeInterest) then begin
                 tstr = USetStr(2364);
               end;
-              OutString(285,0,tstr,false);
+              OutString(350,0,tstr,false);
               if (RepSpec.flags[15]!=0) then begin
                 OutVal(5,0,ivnvat,M4Val,true);
                 OutVal(6,0,iv,M4Val,true);
@@ -1482,7 +1484,8 @@ LkInvoiceTypeCredit1:;
           end else begin
             StartFormat(15);
             OutString(0,"DblCustPS2",CreateInvoiceNumber(IVr.SerNr,IVr.OfficialSerNr),false);
-            OutString(100,0,Left(IVr.Addr0,16),false);
+            OutString(150,"DblCUVc",CUr.Code,false);// Edit ************************** Thursday, 11 May 2017 11:42:06
+            OutString(200,0,Left(IVr.Addr0,16),false);
             OutVal(430,0,ivnvat,M4Val,true);
             if (HasMultiCurrency) then begin 
               OutString(465,0,IVr.CurncyCode,true);
@@ -1496,7 +1499,8 @@ LkInvoiceTypeCredit1:;
             OutString(30,0,IVr.TransTime,false);//Edit----------------------Dima  12.08.2015
             OutDate(60,0,IVr.InvDate,false);
             OutString(90,0,CUr.RebCode,false); //Edit***************************Sasha2,9:30 03.06.2015
-            OutStringCut(120,275,0,IVr.Addr0,false,0); //Edit***************************Sasha2,9:35 03.06.2015
+            OutString(150,"DblCUVc",CUr.Code,false);// Edit ************************** Thursday, 11 May 2017 11:42:06
+            OutStringCut(200,275,0,IVr.Addr0,false,0); //Edit***************************Sasha2,9:35 03.06.2015
             tstr = "";
             if (IVr.InvType==kInvoiceTypeNormal or IVr.InvType==kInvoiceTypeNormalSpecialSales) then begin
               tstr = USetStr(2361);
@@ -1510,7 +1514,7 @@ LkInvoiceTypeCredit1:;
             if (IVr.InvType==kInvoiceTypeInterest) then begin
               tstr = USetStr(2364);
             end;
-            OutString(280,0,tstr,false);
+            OutString(350,0,tstr,false);
             if (RepSpec.flags[15]!=0) then begin
               OutVal(5,0,ivnvat,M4Val,true);
               OutVal(6,0,iv,M4Val,true);
@@ -1555,7 +1559,8 @@ LkInvoiceTypeCredit1:;
           OutString(30,0,IVr.TransTime,false);//Edit----------------------Dima  12.08.2015
           OutDate(60,0,IVr.InvDate,false);
           OutString(90,0,CUr.RebCode,false); //Edit***************************Sasha2,9:30 03.06.2015
-          OutString(120,0,IVr.Addr0,false);
+          OutString(150,"DblCUVc",CUr.Code,false);// Edit ************************** Thursday, 11 May 2017 11:42:06
+          OutString(200,0,IVr.Addr0,false);
 //          OpM44o(120,295,0,&IVr.Addr0,M4Str,false,false);
           tstr = "";
           if (IVr.InvType==kInvoiceTypeNormal or IVr.InvType==kInvoiceTypeNormalSpecialSales) then begin
@@ -1570,7 +1575,7 @@ LkInvoiceTypeCredit1:;
           if (IVr.InvType==kInvoiceTypeInterest) then begin
             tstr = USetStr(2364);
           end;
-          OutString(280,0,tstr,false);
+          OutString(350,0,tstr,false);// Edit ************************** Thursday, 11 May 2017 13:21:36
           OutVal(4,0,iv,M4Val,true);
           if (HasMultiCurrency) then begin 
             OutString(465,0,IVr.CurncyCode,true);

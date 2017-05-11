@@ -119,6 +119,7 @@ begin
 	if (ReportType==0) then begin //Detailed		
 		OutString(0,0,"Дата",false);
 		OutString(20,0,"Время",false);
+		OutString(30,0,"Клиент",false);// Edit ************************** Thursday, 11 May 2017 10:48:59
 		OutString(40,0," № ",false);
 		OutString(60,0,"Склад",false);
 		OutString(90,0,"Код товара",false);
@@ -397,6 +398,7 @@ separator = "^";
 							StartFormat(15);
 							OutString(0,0,SalesData.InvDate,false);
 							OutString(20,0,SalesData.TransTime,false);
+							OutString(30,0,SalesData.CustCode,false);// Edit ************************** Thursday, 11 May 2017 10:48:59
 							OutString(40,0,SalesData.InvNr,false);
 							OutString(60,0,SalesData.Location,false);
 							OutString(90,0,SalesData.ArtCode,false);
@@ -490,6 +492,7 @@ separator = "^";
 	StartFormat(15);
 	if (RepSpec.ArtMode==0) then begin
 		OutString(0,0,"",false);
+		OutString(30,0,"",false);
 		OutString(40,0,"",false);
 		OutString(60,0,"",false);
 		OutString(60,0,"",false);
