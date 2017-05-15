@@ -1414,7 +1414,7 @@ row AlternativeRebateVc AlRebrw;
 boolean foundf,TrHs,testf,trfoundf;
 integer mtrw,i,trmtrw,j,trqtyi;
 record INVc INr;
-val trqtyval,AkcQty,AkcSum;
+val trqtyval,AkcQty,AkcSum,newquant;
 boolean trigtestf,targtestf;
 	
 	logtext(0,"AlternativeRebateIVVc");
@@ -1528,7 +1528,28 @@ boolean trigtestf,targtestf;
 												logtext(0,"AlternativeRebateIVVc AltRebDiscFlag " & IVrw.AltRebDiscFlag);
 												matrowput(IVr,i,IVrw);
 											end else begin
-										
+												newquant = IVrw.Quant - trqtyi;
+												IVrw.Quant = newquant;
+												IVrw.Sum = IVrw.Quant*IVrw.Price;
+												matrowput(IVr,mtrw,IVrw);
+												IVDchsum(IVr,mtrw);
+												mtrw = mtrw + 1;
+												IVrw.Quant = trqtyi;
+												trqtyi = trqtyi - IVrw.Quant;
+												if(AlRebrw.absRebate!=0)then begin
+													IVrw.Sum = IVrw.Quant*IVrw.Price - AlRebrw.absRebate * IVrw.Quant;
+													IVrw.vRebate = (IVrw.Quant*IVrw.Price - IVrw.Sum)/(IVrw.Quant*IVrw.Price)*100;
+													IVDchsum(IVr,i);
+													logtext(0,"absRebate" & IVrw.Sum);
+												end;
+												if(AlRebrw.perRebate!=0)then begin
+													IVrw.Sum = IVrw.Quant*IVrw.Price*(1-AlRebrw.absRebate/100);
+													IVrw.vRebate = AlRebrw.perRebate;
+													logtext(0,"perRebate" & IVrw.Sum);
+												end;
+												IVrw.AltRebDiscFlag = AlRebr.Code;
+												logtext(0,"AlternativeRebateIVVc AltRebDiscFlag " & IVrw.AltRebDiscFlag);
+												matrowput(IVr,i,IVrw);
 											end;
 											
 											
