@@ -21,6 +21,7 @@ external procedure GetStructureCostPrice(string,var val);
 external function Boolean GetFirstItem(var string,var record INVc);
 external procedure SetDefProjectUnit(string,var string);
 external function Boolean GetRebateLocation(record INVc,var val,var val,string,string,var val,var Boolean,Date,string);// Edit ************************** Tuesday, 14 February 2017 11:39:24
+external procedure IVDchsum(var record IVVc,Integer);
 
 /*  This code will calculate the price if the price is not in the prices register, I don't think it should work that way
 function Boolean GetPurchaseItem(string artcode,var record PIVc PIp)
@@ -1414,11 +1415,17 @@ boolean foundf,TrHs,testf,trfoundf;
 integer mtrw,i,trmtrw,j,trqtyi;
 record INVc INr;
 val trqtyval,AkcQty,AkcSum;
+boolean trigtestf,targtestf;
 	
+	logtext(0,"AlternativeRebateIVVc");
 	
 	mtrw = matrowcnt(IVr);
 	For(i=0;i<mtrw;i=i+1) begin
-	  matrowget(IVr,i,IVrw)
+	  matrowget(IVr,i,IVrw);
+	  	if(nonblank(IVrw.AltRebDiscFlag))then begin
+	  		IVrw.Sum = IVrw.Price * IVrw.Quant;
+	  		IVrw.vRebate = blankval;
+	  	end;
 	  	IVrw.AltRebTargFlag = "";
 	  	IVrw.AltRebDiscFlag = "";
 	  matrowput(IVr,i,IVrw);
@@ -1428,10 +1435,12 @@ val trqtyval,AkcQty,AkcSum;
 	foundf = false;
 	while(loopmain(AlRebr,1,TrHs))begin	
 		testf = true;
-		if(AlRebr.PromStrDate<IVr.InvDate or AlRebr.PromEndDate>IVr.InvDate)then begin testf = false; end;
-		if(AlRebr.IsActiveFlag==0)then begin testf = false; end;
-		if(nonblank(AlRebr.Locations) and !setinset(IVr.Location,AlRebr.Locations))then begin testf = false; end;
+		if(AlRebr.PromStrDate>IVr.InvDate or AlRebr.PromEndDate<IVr.InvDate)then begin testf = false; logtext(0,"tf1"); end;
+		if(AlRebr.IsActiveFlag==0)then begin testf = false; logtext(0,"tf2"); end;
+		if(nonblank(AlRebr.Locations) and !setinset(IVr.Location,AlRebr.Locations))then begin testf = false; logtext(0,"tf3"); end;
 		
+		logtext(0,"AlternativeRebateIVVc testf " & testf);
+		logtext(0,"AlternativeRebateIVVc TrHs " & TrHs);
 		if(testf and TrHs)then begin
 			foundf = true;
 			TrHs = false;
@@ -1453,13 +1462,23 @@ val trqtyval,AkcQty,AkcSum;
 						For(j=0;j<trmtrw;j=j+1) begin
 							matrowget(AlRebr,j,AlRebrw);
 							if(blank(IVrw.AltRebTargFlag))then begin
-								if(setinset(AlRebrw.TriggerCategory,INr.DispGroups) or setinset(AlRebrw.TriggerBrand,INr.DispGroups) or AlRebrw.TriggerArtCode==INr.Code or IVrw.Price>=AlRebrw.PriceFrom)then begin
+								trigtestf = false;
+								if(nonblank(AlRebrw.TriggerCategory) and setinset(AlRebrw.TriggerCategory,INr.DispGroups))then begin trigtestf = true; end;
+								if(nonblank(AlRebrw.TriggerBrand) and setinset(AlRebrw.TriggerBrand,INr.DispGroups))then begin trigtestf = true; end;
+								if(nonblank(AlRebrw.TriggerArtCode) and AlRebrw.TriggerArtCode==INr.Code)then begin trigtestf = true; end;
+								
+								if(trigtestf)then begin
+									if(AlRebrw.PriceFrom!=0 and IVrw.Price<AlRebrw.PriceFrom)then begin trigtestf = false; end;
+								end;
+								
+								if(trigtestf)then begin
 									AkcSum = AkcSum + IVrw.Quant * IVrw.Quant;
 									AkcQty = AkcQty + IVrw.Quant;
 									trqtyval = trqtyval + IVrw.Quant/AlRebrw.QuantFrom;
 									trqtyi = trqtyval;
 									IVrw.AltRebTargFlag = AlRebr.Code;
 									trfoundf = true;
+									logtext(0,"AlternativeRebateIVVc AltRebTargFlag " & IVrw.AltRebTargFlag);
 									matrowput(IVr,i,IVrw);
 								end;
 							end;
@@ -1477,23 +1496,42 @@ val trqtyval,AkcQty,AkcSum;
 							For(j=0;j<trmtrw;j=j+1) begin
 								matrowget(AlRebr,j,AlRebrw);
 								if(blank(IVrw.AltRebDiscFlag))then begin
-									if(setinset(AlRebrw.DiscountedCategory,INr.DispGroups) or setinset(AlRebrw.DiscountedBrand,INr.DispGroups) or AlRebrw.DiscountedArtCode==INr.Code or IVrw.Price>=AlRebrw.PriceFrom)then begin
+									targtestf = false;
+									logtext(0,"targtestf1 " & targtestf & INr.Code);
+									if(nonblank(AlRebrw.DiscountedCategory) and setinset(AlRebrw.DiscountedCategory,INr.DispGroups))then begin targtestf = true; end;
+									if(nonblank(AlRebrw.DiscountedBrand) and setinset(AlRebrw.DiscountedBrand,INr.DispGroups))then begin targtestf = true; end;
+									if(nonblank(AlRebrw.DiscountedArtCode) and AlRebrw.DiscountedArtCode==INr.Code)then begin targtestf = true; end;
+									
+									logtext(0,"targtestf2 " & targtestf);
+									if(targtestf)then begin
+										if(AkcSum>=AlRebrw.SumFrom and AlRebrw.SumFrom>0)then begin trigtestf = true; end;
+									end;
+									
+									if(targtestf)then begin
 										
 										if(trqtyi>0)then begin
+											logtext(0,"trqtyi " & trqtyi);
 											if(IVrw.Quant<=trqtyi)then begin
 												trqtyi = trqtyi - IVrw.Quant;
 												if(AlRebrw.absRebate!=0)then begin
-													IVrw.Sum = IVrw.Sum - AlRebrw.absRebate * IVrw.Quant;
+													IVrw.Sum = IVrw.Quant*IVrw.Price - AlRebrw.absRebate * IVrw.Quant;
+													IVrw.vRebate = (IVrw.Quant*IVrw.Price - IVrw.Sum)/(IVrw.Quant*IVrw.Price)*100;
+													IVDchsum(IVr,i);
+													logtext(0,"absRebate" & IVrw.Sum);
 												end;
 												if(AlRebrw.perRebate!=0)then begin
 													IVrw.Sum = IVrw.Quant*IVrw.Price*(1-AlRebrw.absRebate/100);
+													IVrw.vRebate = AlRebrw.perRebate;
+													logtext(0,"perRebate" & IVrw.Sum);
 												end;
+												IVrw.AltRebDiscFlag = AlRebr.Code;
+												logtext(0,"AlternativeRebateIVVc AltRebDiscFlag " & IVrw.AltRebDiscFlag);
+												matrowput(IVr,i,IVrw);
 											end else begin
 										
 											end;
-										
-											IVrw.AltRebDiscFlag = AlRebr.Code;
-											matrowput(IVr,i,IVrw);
+											
+											
 										end;
 									end;
 								end;

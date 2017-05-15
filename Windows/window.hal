@@ -3785,20 +3785,20 @@ begin
   pos = 30;
   MatCol(1,pos,"Категория",0,TriggerCategory,false,0);
   MatCol(1,pos+=70,"Бренд",0,TriggerBrand,false,0);
-  MatCol(1,pos+=80,"Артикулы",0,TriggerArtCode,false,0);
+  MatCol(1,pos+=80,"Артикул",0,TriggerArtCode,false,0);
   flipnr = 1;
   Flip(flipnr); flipnr = flipnr + 1;
-  MatCol(1,pos+=150,"Цена от",0,PriceFrom,false,0);
+  MatCol(1,pos+=100,"Цена от",0,PriceFrom,false,0);
   MatCol(1,pos+=60,"Кол-во от",0,QuantFrom,false,0);
   MatCol(1,pos+=60,"Сумма от",0,SumFrom,false,0);
-  MatCol(1,pos+=60,"Процент,%",0,perRebate,false,0);
-  MatCol(1,pos+=60,"Процент абс.",0,absRebate,false,0);
+  MatCol(1,pos+=60,"Скидка,%",0,perRebate,false,0);
+  MatCol(1,-70,"Скидка абс.",0,absRebate,false,0);
   Flip(flipnr); flipnr = flipnr + 1;
   pos = 330;
   MatCol(1,pos,"На катег.",0,DiscountedCategory,false,0);
   MatCol(1,pos+=70,"На бренд",0,DiscountedBrand,false,0);
   MatCol(1,pos+=80,"На Артик.",0,DiscountedArtCode,false,0);
-  MatCol(1,pos+=120,"На кол-во",0,DiscountedQuant,false,0);
+  MatCol(1,-70,"На кол-во",0,DiscountedQuant,false,0);
   EndMatrix;
   if (flipnr>2) then begin
     for (f=1;f<flipnr;f=f+1) begin
