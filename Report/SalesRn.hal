@@ -2,6 +2,7 @@ external function val MulRateToBase1(var string,val,val,val,val,val,val,roundmod
 external function val AbsoluteVal(val);
 external procedure ExtractObj(string,var Integer,var string);
 external procedure ExtractObjWithSeparator(string,string,Boolean,var Integer,var string);
+external function Boolean FindStringInString(string,string);// Edit ************************** Thursday, 30 June 2016 10:55:59
 
 
 SetLangMode(LangRussian,"RUS",0);
@@ -185,6 +186,7 @@ record UserVc User;
 record IVVc IVr; //Edit***************************Sasha2,14:34 12.12.2016
 vector string 255 CashiersVect; //Edit***************************Sasha2,12:15 16.12.2016
 record UserVc Userr; //Edit***************************Sasha2,12:15 16.12.2016
+boolean multiloc;
 
 separator = "^";
 
@@ -275,10 +277,18 @@ separator = "^";
 		loop = 2;
 	end;
 	
+	multiloc = false;
 	if (NonBlank(RepSpec.f3)) then begin
-		keyloop = "Location" & keyloop;  //LocationDateCode or LocationCodeDate
-		loop = 3;
-		SalesData.Location = RepSpec.f3;
+		For(i=0;i<len(RepSpec.f3);i=i+1) begin
+			if(","==mid(RepSpec.f3,i,1))then begin
+				multiloc = true;
+			end;
+		end; 
+		if(multiloc==false)then begin
+			keyloop = "Location" & keyloop;  //LocationDateCode or LocationCodeDate
+			loop = 3;
+			SalesData.Location = RepSpec.f3;
+		end;
 	end;		
 	
 
@@ -347,9 +357,13 @@ separator = "^";
 					if (SalesData.InvDate > endDate) then begin	TrHs=false;	testf=false;	end;
 		end;					
 			
-
-		if (nonblank(RepSpec.f3) and (SalesData.Location!=RepSpec.f3)) then begin	testf=false;	end;
-		if (nonblank(RepSpec.f3) and Left(keyloop,8)=="Location" and (SalesData.Location!=RepSpec.f3)) then begin	testf=false; TrHs=false;	end;
+		
+		if(multiloc)then begin
+			if(nonblank(RepSpec.f3) and !setinset(SalesData.Location,RepSpec.f3))then begin testf=false;	end;
+		end else begin
+			if (nonblank(RepSpec.f3) and (SalesData.Location!=RepSpec.f3)) then begin	testf=false;	end;
+			if (nonblank(RepSpec.f3) and Left(keyloop,8)=="Location" and (SalesData.Location!=RepSpec.f3)) then begin	testf=false; TrHs=false;	end;
+		end;
 		
 		if (nonblank(RepSpec.f4) and (SalesData.SalesMan!=RepSpec.f4)) then begin	testf=false;	end;
 		if ((SalesData.TransTime<=timeFrom) or (SalesData.TransTime>=timeTo)) then begin	testf=false;	end;
@@ -546,7 +560,7 @@ time timeFrom, timeTo;
 date startDate,endDate;
 string 20 keyloop,prevArtCode,currentCode;
 record UserVc User;
-
+boolean multiloc;
 		
 	qty = 0;
 	
@@ -627,11 +641,19 @@ record UserVc User;
 		loop = 2;
 	end;
 	
+	multiloc = false;
 	if (NonBlank(RepSpec.f3)) then begin
-		keyloop = "Location" & keyloop;  //LocationDateCode or LocationCodeDate
-		loop = 3;
-		SalesData.Location = RepSpec.f3;
-	end;		
+		For(i=0;i<len(RepSpec.f3);i=i+1) begin
+			if(","==mid(RepSpec.f3,i,1))then begin
+				multiloc = true;
+			end;
+		end; 
+		if(multiloc==false)then begin
+			keyloop = "Location" & keyloop;  //LocationDateCode or LocationCodeDate
+			loop = 3;
+			SalesData.Location = RepSpec.f3;
+		end;
+	end;
 	
 
 	TrHs=true;
@@ -691,9 +713,14 @@ record UserVc User;
 					if (SalesData.InvDate > endDate) then begin	TrHs=false;	testf=false;	end;
 		end;					
 			
-
-		if (nonblank(RepSpec.f3) and (SalesData.Location!=RepSpec.f3)) then begin	testf=false;	end;
-		if (nonblank(RepSpec.f3) and Left(keyloop,8)=="Location" and (SalesData.Location!=RepSpec.f3)) then begin	testf=false; TrHs=false;	end;
+		if(multiloc)then begin
+			if(nonblank(RepSpec.f3) and !setinset(SalesData.Location,RepSpec.f3))then begin testf=false;	end;
+		end else begin
+			if (nonblank(RepSpec.f3) and (SalesData.Location!=RepSpec.f3)) then begin	testf=false;	end;
+			if (nonblank(RepSpec.f3) and Left(keyloop,8)=="Location" and (SalesData.Location!=RepSpec.f3)) then begin	testf=false; TrHs=false;	end;
+		end;
+		
+		
 		
 		if (nonblank(RepSpec.f4) and (SalesData.SalesMan!=RepSpec.f4)) then begin	testf=false;	end;
 		if ((SalesData.TransTime<=timeFrom) or (SalesData.TransTime>=timeTo)) then begin	testf=false;	end;
