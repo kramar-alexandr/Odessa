@@ -3676,3 +3676,11 @@ begin
   ItemInStockUseReserv = res;
   return;
 end;
+
+global procedure GitHALFilesMn(record RcVc RepSpec)
+begin
+	
+	runprogram("githal.sh","");
+	
+return;
+end;
