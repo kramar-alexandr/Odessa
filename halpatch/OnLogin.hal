@@ -575,6 +575,16 @@ not ready yet
 				MessageBox(0,msg);
 			end;
 		end;
+		if (Userr.AccessGroup=="ADMIN"  and NonBlankDate(NPSettingsb.APIkeyDueDate1)) then begin
+  		diff = DateDiff(NPSettingsb.APIkeyDueDate1,CurrentDate);
+			if (diff<=3) then begin
+				if (diff>1) then begin msg = diff & " " & USetStr(31148); end;
+				if (diff==1) then begin msg = diff & " " &  USetStr(31147); end;
+				if (diff==0) then begin msg = diff & " " &  USetStr(31149); end;									
+				msg = USetStr(31146) & msg;
+				MessageBox(0,msg);
+			end;
+		end;
 		end;
 	end;  
   

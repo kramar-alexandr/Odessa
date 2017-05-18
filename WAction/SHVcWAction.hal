@@ -25,9 +25,9 @@ remote updating procedure SHVcToPackListVc(var record SHVc);//Edit--------------
 remote procedure NP_PasteSender(var record SHVc);
 remote procedure NP_PasteSenderWarehouseDesc(var record SHVc);
 remote procedure NP_PasteRecipientWarehouseDesc(var record SHVc);//Edit----------------------Dima  06.05.2015
-remote function string 255 NPGetDocumentStatusRequest(string);//Edit----------------------Dima  06.05.2015
-remote updating procedure NPCreateRequestMn(var record SHVc,var string);
-remote function boolean NPDeleteDocumentRequest(string );//Edit----------------------Dima  06.05.2015
+remote function string 255 NPGetDocumentStatusRequest(string,string);//Edit----------------------Dima  06.05.2015
+remote updating procedure NPCreateRequestMn(var record SHVc,var string,string);
+remote function boolean NPDeleteDocumentRequest(string,string);//Edit----------------------Dima  06.05.2015
 remote function boolean CheckENremote(record SHVc, var longint,var string);
 remote updating function boolean CheckCounterpartySH(var record SHVc);
 remote function string 200 SendSMSNewPost(record SHVc);	//Edit----------------------Dima  30.06.2015
@@ -76,12 +76,17 @@ begin
 	  	if(nonblank(SHr.NPDocumentRef)) then begin
 	  		BlockLoad(NPSettingsb);
 				if(nonblank(SHr.NPIntDocNumber) and (SHr.NPPrinted==0)) then begin
-					NPCreateRequestMn(SHr, errors);															//update before printing if necessary
+					ORr.SerNr = SHr.OrderNr;
+					readfirstmain(ORr,1,true);
+					NPCreateRequestMn(SHr, errors, ORr.OrderClass);															//update before printing if necessary
 					//PutWindowRecord(wn,SHr);
 					//GetWindowRecord(wn,SHr);
 				end;	  		
-	  		 
-				www = "http://my.novaposhta.ua/orders/printDocument/orders[]/" & SHr.NPDocumentRef & "/type/html/apiKey/" & NPSettingsb.APIkey;
+	  		if(ORr.OrderClass=="WEB")then begin
+					www = "http://my.novaposhta.ua/orders/printDocument/orders[]/" & SHr.NPDocumentRef & "/type/html/apiKey/" & NPSettingsb.APIkey;
+				end else begin
+					www = "http://my.novaposhta.ua/orders/printDocument/orders[]/" & SHr.NPDocumentRef & "/type/html/apiKey/" & NPSettingsb.APIkey1;
+				end;
 				OpenWebBrowser(www);
 				SHr.NPPrinted = 1;
 	  	end else begin
@@ -112,11 +117,15 @@ begin
 	  	if(nonblank(SHr.NPDocumentRef))then begin
 	  		BlockLoad(NPSettingsb);
 				if(nonblank(SHr.NPIntDocNumber) and nonblank(SHr.NPDocumentRef) and blank(SHr.NPPrinted))then begin
-					NPCreateRequestMn(SHr, errors);															//update before printing if necessary
-					//PutWindowRecord(wn,SHr);
-					//GetWindowRecord(wn,SHr); 
+					ORr.SerNr = SHr.OrderNr;
+					readfirstmain(ORr,1,true);
+					NPCreateRequestMn(SHr, errors, ORr.OrderClass);															//update before printing if necessary
 				end;	  		 
-	  		www = "https://my.novaposhta.ua/orders/printMarkings/orders[]/" & SHr.NPDocumentRef & "/type/html/apiKey/" & NPSettingsb.APIkey;
+				if(ORr.OrderClass=="WEB")then begin
+					www = "https://my.novaposhta.ua/orders/printMarkings/orders[]/" & SHr.NPDocumentRef & "/type/html/apiKey/" & NPSettingsb.APIkey;
+	  		end else begin
+	  			www = "https://my.novaposhta.ua/orders/printMarkings/orders[]/" & SHr.NPDocumentRef & "/type/html/apiKey/" & NPSettingsb.APIkey1;
+	  		end;
 				OpenWebBrowser(www);
 				SHr.NPPrinted = 1;
 	  	end else begin
@@ -149,7 +158,9 @@ begin
 	end;
 	
 	if (CheckEN(SHr,wn)) then begin
-	  	NPCreateRequestMn(SHr,errors);
+			ORr.SerNr = SHr.OrderNr;
+			readfirstmain(ORr,1,true);
+	  	NPCreateRequestMn(SHr,errors,ORr.OrderClass);
 	  	if (nonblank(errors)) then begin	//NewPost's response
 				MessageBox(0,errors);
 			end;
@@ -212,7 +223,7 @@ begin
 	integer wn,nwn;
 	string 255 msg;
 	record SHVc SHr;
-	
+	record ORVc ORr;
 	integer i,rwcnt;
 	row SHVc SHrw;
 
@@ -220,7 +231,9 @@ begin
 	GetWindowRecord(wn,SHr);
 	DeselectWindow(wn,false);
   if (nonblank(SHr.NPIntDocNumber)) then begin
-  	msg = NPGetDocumentStatusRequest(SHr.NPIntDocNumber);
+  	ORr.SerNr = SHr.OrderNr;
+		readfirstmain(ORr,1,true);
+  	msg = NPGetDocumentStatusRequest(SHr.NPIntDocNumber,ORr.OrderClass);
   	
   	if (SHr.NPStatus!=msg) then begin
   		SHr.NPStatus = msg;
@@ -237,14 +250,16 @@ begin
 	integer wn,nwn;
 	string 255 msg;
 	record SHVc SHr;
-	
+	record ORVc ORr;
 	integer i,rwcnt;
 	row SHVc SHrw;
 
 	wn = CurWindow;
 	GetWindowRecord(wn,SHr);
   if (nonblank(SHr.NPIntDocNumber)) then begin
-		if (NPDeleteDocumentRequest(SHr.NPDocumentRef)) then begin
+  	ORr.SerNr = SHr.OrderNr;
+		readfirstmain(ORr,1,true);
+		if (NPDeleteDocumentRequest(SHr.NPDocumentRef,ORr.OrderClass)) then begin
 			SHr.NPIntDocNumber = "";
 			SHr.NPCostOnSite = "";
 			SHr.NPDocumentRef = "";

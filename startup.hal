@@ -94,6 +94,7 @@ begin
 	Setting("Плательщики обратной доставки",NPTypesOfPayersRedeliveryLClass,modNPost);
 
 	Setting("Контрагенты",NPCounterpartyLClass,modNPost);
+	Setting("Контрагенты1",NPCounterparty1LClass,modNPost);
 	Setting("Контрагенты-отправители",NPCounterpartySenderLClass,modNPost);
 	Setting("Адреса контрагентов",NPAddressesLClass,modNPost);
   Setting("Настройки Новой почты",NPSettingsTClass,modNPost);

@@ -1347,7 +1347,8 @@ begin
 	record NPCounterpartySenderVc NPCSr;
 	row NPCounterpartySenderVc NPCSrw;
 	integer rwcnt;
-	
+		
+		logtext(0,"NP_PasteSender " & SHr.NPSender);
 		NPCSr.Ref = SHr.NPSender;
 		if (ReadFirstKey("Ref",NPCSr,1,true)) then begin
 			SHr.NPCitySender = NPCSr.CityDescription;

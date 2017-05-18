@@ -59,6 +59,8 @@ external function Boolean FindItemVAR(string,var string,var string,var string,va
 
 forward procedure ORVc_PasteQuant(var record ORVc,Integer,Boolean,var Boolean);
 external updating function boolean NPCreateCounterparty(record NPCounterpartyVc);	//Edit----------------------Dima  15.04.2015
+external updating function boolean NPCreateCounterparty1(record NPCounterparty1Vc);	//Edit----------------------Dima  15.04.2015
+
 external updating procedure GetRecipientContactPerson(string ,string );	//Edit----------------------Dima  05.05.2015
 external function val HoursDifference(Date,Time,Date,Time);			//Edit----------------------Dima  14.12.2015
 external procedure Recalculate_CustomStatusFlagText(var record ORVc);		//Edit----------------------Dima  15.12.2015
@@ -1274,20 +1276,36 @@ global
 procedure ORVc_PasteNPPhone(var record ORVc ORp)		//Edit----------------------Dima  15.04.2015
 begin
 	record NPCounterpartyVc NPCr;
+	record NPCounterparty1Vc NPC1r;
 	record NPServiceTypesVc NPSerTyper;
 	
-	NPCr.Phone = ORp.NPPhone;
-	if (ReadFirstKey("Phone",NPCr,1,true)) then begin
-		ORp.NPFirstName = NPCr.FirstName;
-		ORp.NPMiddleName = NPCr.MiddleName;
-		ORp.NPLastName = NPCr.LastName;
-		ORp.NPEmail = NPCr.Email;
-		ORp.NPCityRecipient = NPCr.CityDescription;	
-		NPSerTyper.Ref = "WarehouseWarehouse";	//!!!
-		if (ReadFirstKey("Ref",NPSerTyper,1,true)) then begin
-			ORp.NPServiceType = NPSerTyper.Description;
+	if(ORp.OrderClass=="WEB")then begin
+		NPCr.Phone = ORp.NPPhone;
+		if (ReadFirstKey("Phone",NPCr,1,true)) then begin
+			ORp.NPFirstName = NPCr.FirstName;
+			ORp.NPMiddleName = NPCr.MiddleName;
+			ORp.NPLastName = NPCr.LastName;
+			ORp.NPEmail = NPCr.Email;
+			ORp.NPCityRecipient = NPCr.CityDescription;	
+			NPSerTyper.Ref = "WarehouseWarehouse";	//!!!
+			if (ReadFirstKey("Ref",NPSerTyper,1,true)) then begin
+				ORp.NPServiceType = NPSerTyper.Description;
+			end;
+		end;	
+	end else begin
+		NPC1r.Phone = ORp.NPPhone;
+		if (ReadFirstKey("Phone",NPC1r,1,true)) then begin
+			ORp.NPFirstName = NPC1r.FirstName;
+			ORp.NPMiddleName = NPC1r.MiddleName;
+			ORp.NPLastName = NPC1r.LastName;
+			ORp.NPEmail = NPC1r.Email;
+			ORp.NPCityRecipient = NPC1r.CityDescription;	
+			NPSerTyper.Ref = "WarehouseWarehouse";	//!!!
+			if (ReadFirstKey("Ref",NPSerTyper,1,true)) then begin
+				ORp.NPServiceType = NPSerTyper.Description;
+			end;
 		end;
-	end;	
+	end;
   
 
   return;
@@ -1299,6 +1317,7 @@ global updating
 function boolean CheckCounterparty(var record ORVc ORr) 	//Edit----------------------Dima  16.04.2015
 begin
 	record NPCounterpartyVc NPCr;
+	record NPCounterparty1Vc NPC1r;
 	record NPCityVc NPCityr;
 	boolean res;
   record NPSettingsBlock NPSettingsb;
@@ -1307,28 +1326,66 @@ begin
 	
 	res = true;
 	NPCityr.City = ORr.NPCityRecipient;
-	if (ReadFirstMain(NPCityr,1,true)) then begin
-		NPCr.CityRef = NPCityr.Ref;
-	end;
-	NPCr.FirstName = ORr.NPFirstName;
-	NPCr.LastName = ORr.NPLastName;
-	NPCr.Phone = ORr.NPPhone;
 	
-	if (ReadFirstMain(NPCr,4,true) == false) then begin
+	
+	if(ORr.OrderClass=="WEB")then begin
+		if (ReadFirstMain(NPCityr,1,true)) then begin
+			NPCr.CityRef = NPCityr.Ref;
+		end;
 		NPCr.FirstName = ORr.NPFirstName;
 		NPCr.LastName = ORr.NPLastName;
 		NPCr.Phone = ORr.NPPhone;
-		NPCr.MiddleName = ORr.NPMiddleName;
-		NPCr.CityRef = NPCityr.Ref;
-		NPCr.Email = ORr.NPEmail;
-		NPCr.CounterpartyType = "PrivatePerson";
-		NPCr.CounterpartyProperty = "Recipient";
-		res = NPCreateCounterparty(NPCr);
+	
+		if (ReadFirstMain(NPCr,4,true) == false) then begin
+			NPCr.FirstName = ORr.NPFirstName;
+			NPCr.LastName = ORr.NPLastName;
+			NPCr.Phone = ORr.NPPhone;
+			NPCr.MiddleName = ORr.NPMiddleName;
+			NPCr.CityRef = NPCityr.Ref;
+			NPCr.Email = ORr.NPEmail;
+			NPCr.CounterpartyType = "PrivatePerson";
+			NPCr.CounterpartyProperty = "Recipient";
+			res = NPCreateCounterparty(NPCr);
+		end else begin
+			if (MatRowCnt(NPCr)==0) then begin					//if connection crashed during updating and Counterparty doesn't have Contact person
+				switch(ORr.OrderClass)begin
+					case "WEB":GetRecipientContactPerson(NPCr.Ref, NPSettingsb.APIkey);
+					case "":GetRecipientContactPerson(NPCr.Ref,NPSettingsb.APIkey1);
+					otherwise 
+						GetRecipientContactPerson(NPCr.Ref, NPSettingsb.APIkey1);
+				end;
+			
+			end;
+		end;	
 	end else begin
-		if (MatRowCnt(NPCr)==0) then begin					//if connection crashed during updating and Counterparty doesn't have Contact person
-  		GetRecipientContactPerson(NPCr.Ref, NPSettingsb.APIkey);
-  	end;
-	end;	
+		if (ReadFirstMain(NPCityr,1,true)) then begin
+			NPC1r.CityRef = NPCityr.Ref;
+		end;
+		NPC1r.FirstName = ORr.NPFirstName;
+		NPC1r.LastName = ORr.NPLastName;
+		NPC1r.Phone = ORr.NPPhone;
+	
+		if (ReadFirstMain(NPCr,4,true) == false) then begin
+			NPC1r.FirstName = ORr.NPFirstName;
+			NPC1r.LastName = ORr.NPLastName;
+			NPC1r.Phone = ORr.NPPhone;
+			NPC1r.MiddleName = ORr.NPMiddleName;
+			NPC1r.CityRef = NPCityr.Ref;
+			NPC1r.Email = ORr.NPEmail;
+			NPC1r.CounterpartyType = "PrivatePerson";
+			NPC1r.CounterpartyProperty = "Recipient";
+			res = NPCreateCounterparty1(NPC1r);
+		end else begin
+			if (MatRowCnt(NPC1r)==0) then begin					//if connection crashed during updating and Counterparty doesn't have Contact person
+				switch(ORr.OrderClass)begin
+					case "WEB":GetRecipientContactPerson(NPC1r.Ref, NPSettingsb.APIkey);
+					case "":GetRecipientContactPerson(NPC1r.Ref,NPSettingsb.APIkey1);
+					otherwise 
+						GetRecipientContactPerson(NPC1r.Ref, NPSettingsb.APIkey1);
+				end;
+			end;
+		end;	
+	end;
 	CheckCounterparty = res;
 return;
 end;
@@ -1339,36 +1396,77 @@ global updating
 function boolean CheckCounterpartySH(var record SHVc SHr) 	//Edit----------------------Dima  16.04.2015
 begin
 	record NPCounterpartyVc NPCr;
+	record NPCounterparty1Vc NPC1r;
 	record NPCityVc NPCityr;
 	boolean res;
   record NPSettingsBlock NPSettingsb;
+  record ORVc ORr;
   
   BlockLoad(NPSettingsb);
 	
 	res = true;
+	ORr.SerNr = SHr.OrderNr;
+	readfirstmain(ORr,1,true);
 	NPCityr.City = SHr.NPCityRecipient;
-	if (ReadFirstMain(NPCityr,1,true)) then begin
-		NPCr.CityRef = NPCityr.Ref;
-	end;
-	NPCr.FirstName = SHr.NPRecipientFirstName;
-	NPCr.LastName = SHr.NPRecipientLastName;
-	NPCr.Phone = SHr.NPRecipientsPhone;
-	
-	if (ReadFirstMain(NPCr,4,true) == false) then begin
-		LogText(0,"Counterparty was created from delivery " & SHr.SerNr);
+	if(ORr.OrderClass=="WEB")then begin
+		if (ReadFirstMain(NPCityr,1,true)) then begin
+			NPCr.CityRef = NPCityr.Ref;
+		end;
 		NPCr.FirstName = SHr.NPRecipientFirstName;
 		NPCr.LastName = SHr.NPRecipientLastName;
 		NPCr.Phone = SHr.NPRecipientsPhone;
-		NPCr.MiddleName = SHr.NPRecipientMiddleName;
-		NPCr.CityRef = NPCityr.Ref;
-		NPCr.CounterpartyType = "PrivatePerson";
-		NPCr.CounterpartyProperty = "Recipient";
-		res = NPCreateCounterparty(NPCr);
+	
+		if (ReadFirstMain(NPCr,4,true) == false) then begin
+			LogText(0,"Counterparty was created from delivery " & SHr.SerNr);
+			NPCr.FirstName = SHr.NPRecipientFirstName;
+			NPCr.LastName = SHr.NPRecipientLastName;
+			NPCr.Phone = SHr.NPRecipientsPhone;
+			NPCr.MiddleName = SHr.NPRecipientMiddleName;
+			NPCr.CityRef = NPCityr.Ref;
+			NPCr.CounterpartyType = "PrivatePerson";
+			NPCr.CounterpartyProperty = "Recipient";
+			res = NPCreateCounterparty(NPCr);
+		end else begin
+			if (MatRowCnt(NPCr)==0) then begin	
+								//if connection crashed during updating and Counterparty doesn't have Contact person
+				switch(ORr.OrderClass)begin
+					case "WEB":GetRecipientContactPerson(NPCr.Ref, NPSettingsb.APIkey);
+					case "":GetRecipientContactPerson(NPCr.Ref,NPSettingsb.APIkey1);
+					otherwise 
+						GetRecipientContactPerson(NPCr.Ref, NPSettingsb.APIkey1);
+				end;
+			end;
+		end;	
 	end else begin
-		if (MatRowCnt(NPCr)==0) then begin					//if connection crashed during updating and Counterparty doesn't have Contact person
-  		GetRecipientContactPerson(NPCr.Ref, NPSettingsb.APIkey);
-  	end;
-	end;	
+		if (ReadFirstMain(NPCityr,1,true)) then begin
+			NPCr.CityRef = NPCityr.Ref;
+		end;
+		NPC1r.FirstName = SHr.NPRecipientFirstName;
+		NPC1r.LastName = SHr.NPRecipientLastName;
+		NPC1r.Phone = SHr.NPRecipientsPhone;
+	
+		if (ReadFirstMain(NPC1r,4,true) == false) then begin
+			LogText(0,"Counterparty was created from delivery " & SHr.SerNr);
+			NPC1r.FirstName = SHr.NPRecipientFirstName;
+			NPC1r.LastName = SHr.NPRecipientLastName;
+			NPC1r.Phone = SHr.NPRecipientsPhone;
+			NPC1r.MiddleName = SHr.NPRecipientMiddleName;
+			NPC1r.CityRef = NPCityr.Ref;
+			NPC1r.CounterpartyType = "PrivatePerson";
+			NPC1r.CounterpartyProperty = "Recipient";
+			res = NPCreateCounterparty1(NPC1r);
+		end else begin
+			if (MatRowCnt(NPCr)==0) then begin	
+								//if connection crashed during updating and Counterparty doesn't have Contact person
+				switch(ORr.OrderClass)begin
+					case "WEB":GetRecipientContactPerson(NPCr.Ref, NPSettingsb.APIkey);
+					case "":GetRecipientContactPerson(NPCr.Ref,NPSettingsb.APIkey1);
+					otherwise 
+						GetRecipientContactPerson(NPCr.Ref, NPSettingsb.APIkey1);
+				end;
+			end;
+		end;	
+	end;
 	CheckCounterpartySH = res;
 return;
 end;

@@ -83,6 +83,7 @@ external function Boolean GetForeignCurncyRate(string,var val,var val,var val,Da
 external function Boolean IsLetter(string);
 external procedure TableSortOR2(var record ORVc);//Edit----------------------Dima  07.07.2015
 external updating function boolean NPDeleteCounterparty(record NPCounterpartyVc);
+external updating function boolean NPDeleteCounterparty1(record NPCounterparty1Vc);
 remote updating function boolean CheckCounterparty(var record ORVc);
 external function LongInt DateDiff(Date,Date); //Edit***************************Sasha2,11:26 18.08.2015
 external updating function longint AddSMStoStack(string, string, string,string,string,longint,string,date,time);//Edit----------------------Dima  28.08.2015
@@ -2501,6 +2502,7 @@ begin
 	val fr,to1,to2;//Edit---------------------------Dima 29.01.2015
 	Date edt;	//Edit--------------------------------Dima 29.01.2015
 	record NPCounterpartyVc NPCounterpartyr;
+	record NPCounterparty1Vc NPCounterpartyr1;
 	record ORVc oldORr;
 	row ORVc ORrw;
 	integer rwcnt;
@@ -2573,13 +2575,22 @@ begin
   end; //Edit***************************Sasha2,16:19 04.02.2015 }
   if(ORr.DeliveryNewPost != 0)then begin
 	  if(ORr.NPPhone == OR2r.NPPhone and (ORr.NPLastName != OR2r.NPLastName or ORr.NPFirstName != OR2r.NPFirstName)) then begin
-	  	NPCounterpartyr.Phone = OR2r.NPPhone;
-	  	NPCounterpartyr.LastName = OR2r.NPLastName;
-	  	NPCounterpartyr.FirstName = OR2r.NPFirstName;
-	  	if(readfirstKey("Phone",NPCounterpartyr, 3, true)) then begin
-	  		NPDeleteCounterparty(NPCounterpartyr);
-	  		CheckCounterparty(ORr);
-	  		
+	  	if(ORr.OrderClass=="WEB")then begin
+				NPCounterpartyr.Phone = OR2r.NPPhone;
+				NPCounterpartyr.LastName = OR2r.NPLastName;
+				NPCounterpartyr.FirstName = OR2r.NPFirstName;
+				if(readfirstKey("Phone",NPCounterpartyr, 3, true)) then begin
+					NPDeleteCounterparty(NPCounterpartyr);
+					CheckCounterparty(ORr);
+				end;
+	  	end else begin
+	  		NPCounterpartyr1.Phone = OR2r.NPPhone;
+				NPCounterpartyr1.LastName = OR2r.NPLastName;
+				NPCounterpartyr1.FirstName = OR2r.NPFirstName;
+				if(readfirstKey("Phone",NPCounterpartyr1, 3, true)) then begin
+					NPDeleteCounterparty1(NPCounterpartyr1);
+					CheckCounterparty(ORr);
+				end;
 	  	end;
 	  end;
   end;
@@ -2999,7 +3010,11 @@ begin
   ORr.OfficialSerNrSerie = "";
   ORr.Advance = 0;
   
-  ORr.NPPayer = NPSettingsb.DefPayer;// Edit ************************** Monday, 17 October 2016 15:03:50
+  if(ORr.OrderClass=="WEB")then begin
+		ORr.NPPayer = NPSettingsb.DefPayer;// Edit ************************** Monday, 17 October 2016 15:03:50
+  end else begin
+  	ORr.NPPayer = NPSettingsb.DefPayer1;// Edit ************************** Monday, 17 October 2016 15:03:50
+  end;
   ORr.PromotionCode = LookUpPromotionCode(ORr.OrdDate,ORr.Location); //Edit***************************Sasha2,15:32 24.01.2017
   
   ORVcRecordDefaults = res;  

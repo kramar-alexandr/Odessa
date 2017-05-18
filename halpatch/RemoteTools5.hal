@@ -861,29 +861,54 @@ LPasteOrdInShipLimitMes:
   SHp.ORCOType = SalesContractType(ORr.ORCONr);
   SHp.Manager = ORr.SalesMan; //Edit***************************Sasha2,15:45 27.01.2015
   
-  if (ORr.DeliveryNewPost) then begin
-  	SHp.NPSender = NPSettingsb.DefSenderRef;			//Edit----------------------Dima  16.04.2015
-  	SHp.NPSenderWarehouse = NPSettingsb.DefSenderWarehouse;
-  	SHp.NPServiceType = NPSettingsb.DefServiceType;
-  	SHp.NPBackDeliveryType = NPSettingsb.DefRedeliveryCargoType;
-  	SHp.NPBackDeliveryPayer = NPSettingsb.DefRedeliveryPayer;
-  	SHp.NPCargoType = NPSettingsb.DefCargoType;
-  	SHp.NPCargoDescription = NPSettingsb.DefCargoDescription;
-  	if(nonblank(ORr.NPPayer))then begin// Edit ************************** Monday, 17 October 2016 15:00:08
-  		SHp.NPPayer = ORr.NPPayer;
-  	end else begin
-			SHp.NPPayer = NPSettingsb.DefPayer;
-  	end;
-  	SHp.NPPaymentMethod = NPSettingsb.DefPaymentForm;
-		NP_PasteSender(SHp); 
-		NP_PasteSenderWarehouseDesc(SHp);
-  	SHp.NPRecipientLastName = ORr.NPLastName;			
-  	SHp.NPRecipientFirstName = ORr.NPFirstName;
-  	SHp.NPRecipientMiddleName = ORr.NPMiddleName;
-  	SHp.NPRecipientsPhone = ORr.NPPhone;
-  	SHp.NPCityRecipient = ORr.NPCityRecipient;
-  	SHp.NPRecipientWarehouse = ORr.NPWarehouse;
-  	NP_PasteRecipientWarehouseDesc(SHp);				//Edit----------------------Dima  07.05.2015
+  if (ORr.DeliveryNewPost==1) then begin
+  	if(ORr.OrderClass=="WEB")then begin// Edit ************************** Wednesday, 17 May 2017 15:45:47
+			SHp.NPSender = NPSettingsb.DefSenderRef;			//Edit----------------------Dima  16.04.2015
+			SHp.NPSenderWarehouse = NPSettingsb.DefSenderWarehouse;
+			SHp.NPServiceType = NPSettingsb.DefServiceType;
+			SHp.NPBackDeliveryType = NPSettingsb.DefRedeliveryCargoType;
+			SHp.NPBackDeliveryPayer = NPSettingsb.DefRedeliveryPayer;
+			SHp.NPCargoType = NPSettingsb.DefCargoType;
+			SHp.NPCargoDescription = NPSettingsb.DefCargoDescription;
+			if(nonblank(ORr.NPPayer))then begin// Edit ************************** Monday, 17 October 2016 15:00:08
+				SHp.NPPayer = ORr.NPPayer;
+			end else begin
+				SHp.NPPayer = NPSettingsb.DefPayer;
+			end;
+			SHp.NPPaymentMethod = NPSettingsb.DefPaymentForm;
+			NP_PasteSender(SHp); 
+			NP_PasteSenderWarehouseDesc(SHp);
+			SHp.NPRecipientLastName = ORr.NPLastName;			
+			SHp.NPRecipientFirstName = ORr.NPFirstName;
+			SHp.NPRecipientMiddleName = ORr.NPMiddleName;
+			SHp.NPRecipientsPhone = ORr.NPPhone;
+			SHp.NPCityRecipient = ORr.NPCityRecipient;
+			SHp.NPRecipientWarehouse = ORr.NPWarehouse;
+			NP_PasteRecipientWarehouseDesc(SHp);				//Edit----------------------Dima  07.05.2015
+  	end else begin// Edit ************************** Wednesday, 17 May 2017 15:45:45
+  		SHp.NPSender = NPSettingsb.DefSenderRef1;			//Edit----------------------Dima  16.04.2015
+			SHp.NPSenderWarehouse = NPSettingsb.DefSenderWarehouse1;
+			SHp.NPServiceType = NPSettingsb.DefServiceType1;
+			SHp.NPBackDeliveryType = NPSettingsb.DefRedeliveryCargoType1;
+			SHp.NPBackDeliveryPayer = NPSettingsb.DefRedeliveryPayer1;
+			SHp.NPCargoType = NPSettingsb.DefCargoType1;
+			SHp.NPCargoDescription = NPSettingsb.DefCargoDescription1;
+			if(nonblank(ORr.NPPayer))then begin// Edit ************************** Monday, 17 October 2016 15:00:08
+				SHp.NPPayer = ORr.NPPayer;
+			end else begin
+				SHp.NPPayer = NPSettingsb.DefPayer1;
+			end;
+			SHp.NPPaymentMethod = NPSettingsb.DefPaymentForm1;
+			NP_PasteSender(SHp); 
+			NP_PasteSenderWarehouseDesc(SHp);
+			SHp.NPRecipientLastName = ORr.NPLastName;			
+			SHp.NPRecipientFirstName = ORr.NPFirstName;
+			SHp.NPRecipientMiddleName = ORr.NPMiddleName;
+			SHp.NPRecipientsPhone = ORr.NPPhone;
+			SHp.NPCityRecipient = ORr.NPCityRecipient;
+			SHp.NPRecipientWarehouse = ORr.NPWarehouse;
+			NP_PasteRecipientWarehouseDesc(SHp);				//Edit----------------------Dima  07.05.2015
+  	end;// Edit ************************** Wednesday, 17 May 2017 15:45:44
   end;
   
   if(ORr.DeliveryNewPost == 1)then begin

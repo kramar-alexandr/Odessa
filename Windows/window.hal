@@ -1332,15 +1332,76 @@ begin
   EndWindow;
 end;
 
+window NPCounterparty1DClass:1
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+	real h,h2,v,vm;
+  WindowBegin("Новая почта - Контрагент 1",NPCounterparty1DClass,CGview,-);
+  Sizeable(520,400,0,0);
+  UseView(NPCounterparty1Vc);
+  ActiveFieldOnNew("Имя");
+  SetWRect(20,100,530,600);
+  h=75; h2 = 230;
+  EditField(h,v=6,250,"CityRef",Normal,CityRef,false,0);
+  EditField(400,v,250,"Город",Normal,CityDescription,false,0);
+  EditField(h,v+=20,250,"Reference",Normal,Ref,false,0);
+  EditField(h,v+=20,110,"Фамилия",Normal,LastName,false,0);
+  EditField(h2,v,110,"Имя",Normal,FirstName,false,0);
+  EditField(400,v,110,"Отчество",Normal,MiddleName,false,0);
+  EditField(h,v+=20,110,"Телефон",Normal,Phone,false,0);
+  EditField(h2,v,110,"E-mail",Normal,Email,false,0);
+  EditField(h,v+=20,110,"Тип",Normal,CounterpartyType,false,NPCounterpartyTypesSClass);
+  EditField(h2+20,v,110,"Категория",Normal,CounterpartyProperty,false,NPTypesOfPayersSClass);
+  EditField(h,v+=20,110,"Улица",Normal,StreetRef,false,0);
+  EditField(h2,v,50,"Дом",Normal,Buildingnumber,false,0);
+  EditField(400,v,50,"Квартира",Normal,Flat,false,0);
+  MatrixBegin(25,v+=40,-100,-7,-,99);
+  Flip(0);
+  MatCol(1,30,"Фамилия",0,LastName,false,0);
+  MatCol(1,120,"Имя",0,FirstName,false,0);
+  Flip(1);
+  MatCol(1,210,"Отчество",0,MiddleName,false,0);
+  MatCol(1,300,"Телефон",0,Phones,false,0);
+  MatCol(1,400,"E-mail",0,Email,false,0);
+  Flip(2);
+  MatCol(1,210,"Ref",0,Ref,false,0);
+  MatCol(1,400,"Owner",0,Owner,false,0);
+  EndMatrix;
+  VTab(-85,v,-65,v+20,ToolFlip,1,"A");
+  VTab(-85,v+=20,-65,v+20,ToolFlip,2,"B");
+
+  EndWindow;
+end;
+
 
 window NPCounterpartyLClass:1
   wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
 begin
-  WindowBegin("Новая почта - Контрагенты",NPCounterpartyLClass,CGmlist,SHView);
+  WindowBegin("Новая почта - Контрагенты 1",NPCounterpartyLClass,CGmlist,SHView);
   SpawnClass(NPCounterpartyDClass);
   SetWRect(20,80,560,600);
   Sizeable(-1,-1,0,0);
   UseView(NPCounterpartyVc);
+  RecordList(4,17,-21,-39);
+  RlColKey(4,4,"Фамилия",LastName,false,LastName);
+  RlCol(80,80,"Имя",FirstName,false);
+  RlColKey(180,180,"Категория",CounterpartyProperty,false,CounterpartyProperty);
+  RlColKey(280,280,"Тип",CounterpartyType,false,CounterpartyType);
+  RlCol(350,350,"Reference",Ref,false);
+  RlColKey(450,450,"CityRef",CityRef,false,CityRef);
+
+  SearchField("Найти");
+  EndWindow;
+end;
+
+window NPCounterparty1LClass:1
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  WindowBegin("Новая почта - Контрагенты",NPCounterparty1LClass,CGmlist,SHView);
+  SpawnClass(NPCounterparty1DClass);
+  SetWRect(20,80,560,600);
+  Sizeable(-1,-1,0,0);
+  UseView(NPCounterparty1Vc);
   RecordList(4,17,-21,-39);
   RlColKey(4,4,"Фамилия",LastName,false,LastName);
   RlCol(80,80,"Имя",FirstName,false);
@@ -2038,10 +2099,19 @@ window NPSettingsTClass:1				//Edit----------------------Dima  27.04.2015
   wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
 begin
   real h,h2,h3,v,vs;
+  Integer tilenr;
   WindowBegin("Настройки Новой почты",NPSettingsTClass,CGSbl,-);
   SetBlid(NPSettingsBlock);
   SetWRect(64,80,550,300);
   v=6;vs = 20; h = 80; h2 = 130;
+  
+  Tile(0,20,false,"","APIkey");
+  TileButton(1,"Рыбацкий Рай");
+  TileButton(2,"Голден Кетч");
+  
+  tilenr = 1;
+  Tile(1,40,false,1,"APIkey"); tilenr = tilenr + 1;
+  v=6;
   EditField(h,v+=vs,200,"API-ключ",Normal,APIkey,false,0);
   EditField(h2,v+=vs,150,"Срок API-ключа",Normal,APIkeyDueDate,false,PasteCurDate);
   EditField(h2,v+=vs,200,"Отправитель(ссылка)",Normal,DefSenderRef,false,NPCounterpartySenderSClass);
@@ -2057,6 +2127,25 @@ begin
   EditField(h2,v+=vs,200,"Способ оплаты",Normal,DefPaymentForm,false,NPPaymentFormsSClass);
   EditField(h2,v+=vs+10,200,"Тип обратной доставки",Normal,DefRedeliveryCargoType,false,NPBackDelivCargoTypeSClass);
   EditField(h2,v+=vs,200,"Плательщик",Normal,DefRedeliveryPayer,false,NPTypesOfPayersRedeliverySClass);
+  
+  Tile(2,40,false,2,"APIkey1");
+  v=6;
+  EditField(h,v+=vs,200,"API-ключ",Normal,APIkey1,false,0);
+  EditField(h2,v+=vs,150,"Срок API-ключа",Normal,APIkeyDueDate1,false,PasteCurDate);
+  EditField(h2,v+=vs,200,"Отправитель(ссылка)",Normal,DefSenderRef1,false,NPCounterpartySenderSClass);
+  EditField(h,v+=vs,200,"Отправитель",Normal,DefSenderDescription1,false,0);
+  EditField(h2,v+=vs,200,"Город(ссылка)",Normal,DefSenderCityRef1,false,0);
+  EditField(h,v+=vs,200,"Город",Normal,DefSenderCityDescription1,false,0);
+  EditField(h2,v+=vs,200,"Отделение НП",Normal,DefSenderWarehouse1,false,NPWarehouseSClass);
+  StaticText(h-50,v+=40,"Параметры доставки:",false);
+  EditField(h2,v+=vs,200,"Тип доставки",Normal,DefServiceType1,false,NPServiceTypesSClass);
+  EditField(h2,v+=vs,200,"Тип груза",Normal,DefCargoType1,false,NPCargoTypeSClass);
+  EditField(h2,v+=vs,200,"Описание груза",Normal,DefCargoDescription1,false,NPDescripSClass);
+  EditField(h2,v+=vs,200,"Плательщик",Normal,DefPayer1,false,NPTypesOfPayersSClass);
+  EditField(h2,v+=vs,200,"Способ оплаты",Normal,DefPaymentForm1,false,NPPaymentFormsSClass);
+  EditField(h2,v+=vs+10,200,"Тип обратной доставки",Normal,DefRedeliveryCargoType1,false,NPBackDelivCargoTypeSClass);
+  EditField(h2,v+=vs,200,"Плательщик",Normal,DefRedeliveryPayer1,false,NPTypesOfPayersRedeliverySClass);
+  
   EndWindow;
 end;
 

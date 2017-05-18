@@ -3921,6 +3921,84 @@ RecordBegin(IPVc,-,"");
   EndRecord;
   
   
+  RecordBegin(NPCounterparty1Vc,-,"");				//Edit----------------------Dima  09.04.2015
+  RecordField(LastName,M4Str,80,0);
+  RecordField(CityRef,M4Str,100,0);  
+  RecordField(FirstName,M4Str,80,0);
+  RecordField(MiddleName,M4Str,80,0);
+  RecordField(Description,M4Str,200,0);
+  RecordField(Ref,M4Str,50,0);
+  RecordField(Phone,M4Str,20,0);
+  RecordField(Email,M4Str,50,0);
+  RecordField(CounterpartyType,M4Str,40,0);
+  RecordField(CounterpartyProperty,M4Str,40,0);
+  RecordField(synchFlag,M4Int,0,0);  
+  RecordField(EDRPOU,M4Str,20,0);
+  RecordField(Counterparty,M4Str,50,0);
+  RecordField(OwnershipForm,M4Str,100,0);
+  RecordField(OwnershipFormDescription,M4Str,200,0);  
+  RecordField(Math,M4Matrix,0,0);
+  RecordField(StreetRef,M4Str,100,0);
+  RecordField(Buildingnumber,M4Str,10,0);
+  RecordField(Flat,M4Str,10,0);   
+  RecordField(CityDescription,M4Str,100,0);  
+  ArrayBegin(Math,-,1);
+  ArrayField(FirstName,M4Str,80,0);
+  ArrayField(LastName,M4Str,80,0);
+  ArrayField(MiddleName,M4Str,80,0);
+	ArrayField(Phones,M4Str,20,0);
+  ArrayField(Email,M4Str,50,0);
+  ArrayField(Ref,M4Str,100,0);
+  ArrayField(Owner,M4Str,100,0);
+  ArrayField(Description,M4Str,200,0); 
+  EndArray;
+  MainKeyBegin(LastName,0);
+  KeySegment(LastName);
+  KeySegment(FirstName);
+  KeySegment(Phone);
+  KeySegment(CityRef);
+  KeyBegin(synchFlag);
+  KeySegment(synchFlag);
+  KeySegment(LastName);
+  KeySegment(FirstName);
+  KeySegment(Phone);
+  KeySegment(CityRef);
+  KeyBegin(CounterpartyProperty);
+  KeySegment(CounterpartyProperty);
+  KeySegment(LastName);
+  KeySegment(FirstName);
+  KeySegment(Phone);
+  KeySegment(CityRef);
+  KeyBegin(CounterpartyType);
+  KeySegment(LastName);
+  KeySegment(FirstName);
+  KeySegment(Phone);
+  KeySegment(CityRef);
+  KeyBegin(Phone);
+  KeySegment(Phone);
+  KeySegment(LastName);
+  KeySegment(FirstName);
+  KeySegment(CityRef);
+  KeyBegin(CityRef);
+  KeySegment(CityRef);
+  KeySegment(LastName);
+  KeySegment(FirstName);
+  KeySegment(Phone);
+  KeyBegin(Ref);
+  KeySegment(Ref);
+  KeySegment(LastName); 
+  KeyBegin(FirstName);
+  KeySegment(FirstName);
+  KeySegment(LastName); 
+	KeySegment(MiddleName);
+	KeySegment(CityRef); 
+	KeySegment(Ref);  
+  KeyBegin(Description);
+  KeySegment(Description);
+	KeySegment(CityDescription); 
+	KeySegment(Phone);
+  EndRecord;
+  
   
   RecordBegin(NPCounterpartySenderVc,-,"");						// RybRay
   RecordField(LastName,M4Str,80,0);
@@ -4305,6 +4383,26 @@ RecordBegin(IPVc,-,"");
 	RecordField(DefPaymentForm,M4Str,100,0);
 	RecordField(DefCargoDescription,M4Str,200,0);
 	RecordField(APIkeyDueDate,M4Date,0,0);
+	
+// Edit Start ---------------------------------------------- Edit Start
+	//Tuesday, 16 May 2017 18:55:02
+	RecordField(DefSenderDescription1,M4Str,200,0);
+	RecordField(DefSenderRef1,M4Str,100,0);
+	RecordField(DefSenderCityDescription1,M4Str,150,0);
+	RecordField(DefSenderCityRef1,M4Str,100,0);
+	RecordField(APIkey1,M4Str,100,0);
+	RecordField(DefSenderWarehouse1,M4Int,0,0);
+	RecordField(DefServiceType1,M4Str,100,0);
+	RecordField(DefPayer1,M4Str,100,0);
+	RecordField(DefCargoType1,M4Str,100,0);
+	RecordField(DefRedeliveryPayer1,M4Str,100,0);
+	RecordField(DefRedeliveryCargoType1,M4Str,100,0);
+	RecordField(DefPaymentForm1,M4Str,100,0);
+	RecordField(DefCargoDescription1,M4Str,200,0);
+	RecordField(APIkeyDueDate1,M4Date,0,0);
+	
+	// Edit End ---------------------------------------------- Edit End
+	
 	EndBlock; 
 	
 	//should be removed

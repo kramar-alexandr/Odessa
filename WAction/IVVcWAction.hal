@@ -819,20 +819,32 @@ begin
   record IVVc IVr;
   record RebateVoucherVc RVr;
   longint error;
+	integer i,mtrw;
+	row IVVc IVrw;
+	boolean credflag;
 		
   if (changedf) then begin  
     DeselectWindow(wn,false);
     GetWindowRecord(wn,IVr);
     
+    credflag = false;
+    mtrw = matrowcnt(IVr);
+    For(i=0;i<mtrw;i=i+1) begin
+	  	matrowget(IVr,i,IVrw);
+	  	if(nonblank(IVrw.ArtCode) and IVrw.Quant<0)then begin
+	  		credflag = true;
+	  	end;
+		end; 
+    
     error = -1;
 		RVr.VoucherSerNr = IVr.BirthDayVaucher;
 		if(readfirstkey("VoucherSerNr",RVr,1,true))then begin
-			if(RVr.UsedFlag>0)then begin
+			if(RVr.UsedFlag>0 and credflag==false)then begin
 				error = 31151;
 				goto lIVDClassBirthDayVaucherEFAfter;
 			end;
 		
-			if(IVr.InvDate<RVr.IsValidFromDate or IVr.InvDate>RVr.IsValidToDate)then begin
+			if((IVr.InvDate<RVr.IsValidFromDate or IVr.InvDate>RVr.IsValidToDate) and credflag==false)then begin
 				error = 31152;
 				goto lIVDClassBirthDayVaucherEFAfter;
 			end;
