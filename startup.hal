@@ -397,7 +397,7 @@ begin
   Maintenance("ExportBadIVVc",MyVClass,ExportBrockenIV,modDBMain); //Edit***************************Sasha2,13:33 13.02.2017
   
   Maintenance("0% Rebate CUVc",MyVClass,SetCustomRabateMn,modSL);
-  Maintenance("Git HAL Files",MyVClass,GitHALFilesMn,modTC);
+  Maintenance("Git HAL Files1",MyVClass,GitHALFilesMn,modTC);
   Maintenance("Обновить Promotion",MyVClass,UpdPromotionMn,modDBMain); //Edit***************************Sasha2,13:33 13.02.2017
   
   Maintenance("Обновить статусы WEB заказов",UpdateORWebStatusesVClass,UpdateORWebStatusesMn,modSO); //Edit***************************Sasha2,13:33 13.02.2017
