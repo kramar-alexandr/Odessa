@@ -383,7 +383,7 @@ BEGIN
     end;
   end;
   
-	AlternativeRebateIVVc(IVr);// Edit ************************** Friday, 5 May 2017 16:02:03
+	//AlternativeRebateIVVc(IVr);// Edit ************************** Friday, 5 May 2017 16:02:03
   IVDchsum(IVr,rownr);
   if (IVDchrsum(IVr,rownr)) then begin
     IVDchsum(IVr,rownr);
