@@ -3680,6 +3680,7 @@ end;
 global procedure GitHALFilesMn(record RcVc RepSpec)
 begin
 	
+	logtext(0,"GIT Pull HAL");
 	runprogram("githal.sh","");
 	
 return;
