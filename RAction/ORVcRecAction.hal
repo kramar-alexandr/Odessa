@@ -1574,9 +1574,14 @@ LORVcRecordRowCheck:;
     
     NPCityr.City = ORr.NPCityRecipient;
     if (ReadFirstMain(NPCityr,1,true)==false) then begin
-         RecordCheckError(31045,"",-1,"NPCityRecipient"); 
-         res = -1; 
-         goto LORVcRecordCheck;
+    		NPCityr.CityRU = ORr.NPCityRecipient;
+    		if(readfirstkey("CityRU",NPCityr,1,true)==false)then begin
+					RecordCheckError(31045,"",-1,"NPCityRecipient"); 
+         	res = -1; 
+         	goto LORVcRecordCheck;	
+				end else begin
+					ORr.NPCityRecipient = NPCityr.City;
+				end;
 		end;
 		
 		NPWarehouser.City = ORr.NPCityRecipient;

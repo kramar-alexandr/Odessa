@@ -294,7 +294,7 @@ begin
 	 SString(31160,"Перемещение уже подтверждено");  
 	 SString(31161,"Проверьте что заказ не зарезервирован и товары не в заказе на перемещение");  
 	
-	Maintenance("Проставить склад первой покупки клиента",MyVClass,FillFirstDateByeCUMn,modDBMain);
+	Maintenance("Проставить склад первой покупки клиента",MyVClass,FillFirstDateByeCUMn,modSL);
   Maintenance("Экспорт склада CSV",ExportStockCSVClass,ExportStockCSVMn,modSY);
   Maintenance("Копирование ежедневного бэкапа на FTP",ExportStockCSVClass,SenBackuptoFTP,modSY);
   Maintenance("Экспорт CSV для мобильного",MyVClass,ExportAllItems,modSY);	//Edit----------------------Dima  24.03.2015
