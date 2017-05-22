@@ -775,6 +775,7 @@ begin
 								
 								end else begin
 									ORr.NPCityRecipient = "!!!" & ORr.NPCityRecipient;
+									ORr.DeliveryNewPost = 0;
 								end;
 							end;
 							if(nonblank(ORr.ShipAddr3))then begin
