@@ -763,21 +763,22 @@ begin
 					ORr.NPAdresDeliv = 0;
 					if(FindSubString("Новая почта",ORr.ShipAddr1) or FindSubString("Нова почта",ORr.ShipAddr1))then begin
 						ORr.DeliveryNewPost = 1;
-						if(FindSubString("###",ORr.ShipAddr3))then begin
-							ORr.NPAdresDeliv = 1;
-							ORr.NPCityRecipient = delcity;
-							NPCityr.City = ORr.NPCityRecipient;
-							if (ReadFirstMain(NPCityr,1,true)) then begin
-								//NPCr.CityRef = NPCityr.Ref;
+						ORr.NPCityRecipient = delcity;
+						NPCityr.City = ORr.NPCityRecipient;
+						if (ReadFirstMain(NPCityr,1,true)) then begin
+							//NPCr.CityRef = NPCityr.Ref;
+						end else begin
+							NPCityr.CityRU = ORr.NPCityRecipient;
+							if(readfirstkey("CityRU",NPCityr,1,true))then begin
+							
 							end else begin
-								NPCityr.CityRU = ORr.NPCityRecipient;
-								if(readfirstkey("CityRU",NPCityr,1,true))then begin
-								
-								end else begin
-									ORr.NPCityRecipient = "!!!" & ORr.NPCityRecipient;
-									ORr.DeliveryNewPost = 0;
-								end;
+								ORr.NPCityRecipient = "!!!" & ORr.NPCityRecipient;
+								ORr.DeliveryNewPost = 0;
 							end;
+						end;
+						
+						if(FindSubString("###",ORr.ShipAddr3))then begin
+							ORr.NPAdresDeliv = 1;						
 							if(nonblank(ORr.ShipAddr3))then begin
 								if(len(ORr.ShipAddr3)>12)then begin
 									lenth = len(ORr.ShipAddr3);
