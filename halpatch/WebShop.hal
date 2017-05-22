@@ -761,7 +761,9 @@ begin
 					ORr.Comment = XmlGetAttribute(xmlPost,"orders/order" & i ,"ordercomment");
 					payment = XmlGetAttribute(xmlPost,"orders/order" & i ,"payment");
 					ORr.NPAdresDeliv = 0;
-					if(FindSubString("Новая почта",ORr.ShipAddr1) or FindSubString("Нова почта",ORr.ShipAddr1))then begin
+					
+					
+					if((FindSubString("Новая почта",ORr.ShipAddr1) or FindSubString("Нова почта",ORr.ShipAddr1)) and FindSubString("###AUTO###",ORr.Comment))then begin
 						ORr.DeliveryNewPost = 1;
 						ORr.NPCityRecipient = delcity;
 						NPCityr.City = ORr.NPCityRecipient;
