@@ -344,9 +344,9 @@ begin
 		AddTextToArea("				<ContactRecipient>" & ConvertXml(ContactRecipient) & "</ContactRecipient>" & chr(13),aRequest);
   end else begin
   	AddTextToArea("				<RecipientCityName>" & ConvertXml(SHr.NPCityRecipient) & "</RecipientCityName>" & chr(13),aRequest);
-  	AddTextToArea("				<RecipientAddressName>" & ConvertXml(SHr.NPAdresStreet) & "</RecipientAddressName>" & chr(13),aRequest);
-  	AddTextToArea("				<RecipientHouse>" & ConvertXml(SHr.NPAdresBuild) & "</RecipientHouse>" & chr(13),aRequest);
-  	AddTextToArea("				<RecipientFlat>" & ConvertXml(SHr.NPAdresFloat) & "</RecipientFlat>" & chr(13),aRequest);
+  	AddTextToArea("				<RecipientAddressName>" & ConvertXml(SHr.NPAdresStreet & " " & SHr.NPAdresBuild) & "</RecipientAddressName>" & chr(13),aRequest);
+  	AddTextToArea("				<RecipientHouse>" & ConvertXml(SHr.NPAdresFloat) & "</RecipientHouse>" & chr(13),aRequest);
+  	AddTextToArea("				<RecipientFlat></RecipientFlat>" & chr(13),aRequest);
   	AddTextToArea("				<RecipientName>" & ConvertXml(SHr.NPRecipientLastName & " " & SHr.NPRecipientFirstName & " " &  SHr.NPRecipientMiddleName) & "</RecipientName>" & chr(13),aRequest);
   	AddTextToArea("				<RecipientType>" & ConvertXml("PrivatePerson") & "</RecipientType>" & chr(13),aRequest);
 
