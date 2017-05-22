@@ -313,14 +313,21 @@ begin
 	if(aMethod == "update")then begin
 		AddTextToArea("				<Ref>" & ConvertXml(SHr.NPDocumentRef) & "</Ref>" & chr(13),aRequest);
 	end;
-
+	
+	if(SHr.NPAdresDeliv==1)then begin
+		AddTextToArea("				<NewAddress>1</NewAddress>" & chr(13),aRequest);// Edit ************************** Monday, 22 May 2017 10:29:20
+	end;
   AddTextToArea("				<PayerType>" & ConvertXml(TypeOfPayer) & "</PayerType>" & chr(13),aRequest);
   AddTextToArea("				<PaymentMethod>" & ConvertXml(PaymentForm) & "</PaymentMethod>" & chr(13),aRequest);
   AddTextToArea("				<DateTime>" & ConvertXml(dd & "." & mm & "." & yyyy) & "</DateTime>" & chr(13),aRequest);//"29.04.2015"
   AddTextToArea("				<CargoType>" & ConvertXml(CargoType) & "</CargoType>" & chr(13),aRequest);
   AddTextToArea("				<VolumeGeneral>" & ConvertXml(ValToString(Volume,M45Val,SysFormatRec.thousSep,SysFormatRec.decimalPt,0)) & "</VolumeGeneral>" & chr(13),aRequest);
   AddTextToArea("				<Weight>" & ConvertXml(Weight) & "</Weight>" & chr(13),aRequest);
-  AddTextToArea("				<ServiceType>" & ConvertXml("WarehouseWarehouse") & "</ServiceType>" & chr(13),aRequest);
+  if(SHr.NPAdresDeliv==0)then begin
+		AddTextToArea("				<ServiceType>" & ConvertXml("WarehouseWarehouse") & "</ServiceType>" & chr(13),aRequest);
+  end else begin
+  	AddTextToArea("				<ServiceType>" & ConvertXml("WarehouseDoors") & "</ServiceType>" & chr(13),aRequest);
+  end;
   AddTextToArea("				<SeatsAmount>" & ConvertXml(SeatsAmount) & "</SeatsAmount>" & chr(13),aRequest);
   AddTextToArea("				<Description>" & ConvertXml(Descrip) & "</Description>" & chr(13),aRequest);
   AddTextToArea("				<Cost>" & ConvertXml(Cost) & "</Cost>" & chr(13),aRequest);
@@ -329,10 +336,23 @@ begin
   AddTextToArea("				<SenderAddress>" & ConvertXml(SenderAddress) & "</SenderAddress>" & chr(13),aRequest);
   AddTextToArea("				<ContactSender>" & ConvertXml(ContactSender) & "</ContactSender>" & chr(13),aRequest);
   AddTextToArea("				<SendersPhone>" & ConvertXml(SendersPhone) & "</SendersPhone>" & chr(13),aRequest);
-  AddTextToArea("				<CityRecipient>" & ConvertXml(CityRecipient) & "</CityRecipient>" & chr(13),aRequest);
-  AddTextToArea("				<Recipient>" & ConvertXml(Recipient) & "</Recipient>" & chr(13),aRequest);
-  AddTextToArea("				<RecipientAddress>" & ConvertXml(RecipientAddress) & "</RecipientAddress>" & chr(13),aRequest);
-  AddTextToArea("				<ContactRecipient>" & ConvertXml(ContactRecipient) & "</ContactRecipient>" & chr(13),aRequest);
+  
+  if(SHr.NPAdresDeliv==0)then begin
+		AddTextToArea("				<CityRecipient>" & ConvertXml(CityRecipient) & "</CityRecipient>" & chr(13),aRequest);
+		AddTextToArea("				<Recipient>" & ConvertXml(Recipient) & "</Recipient>" & chr(13),aRequest);
+		AddTextToArea("				<RecipientAddress>" & ConvertXml(RecipientAddress) & "</RecipientAddress>" & chr(13),aRequest);
+		AddTextToArea("				<ContactRecipient>" & ConvertXml(ContactRecipient) & "</ContactRecipient>" & chr(13),aRequest);
+  end else begin
+  	AddTextToArea("				<RecipientCityName>" & ConvertXml(SHr.NPCityRecipient) & "</RecipientCityName>" & chr(13),aRequest);
+  	AddTextToArea("				<RecipientAddressName>" & ConvertXml(SHr.NPAdresStreet) & "</RecipientAddressName>" & chr(13),aRequest);
+  	AddTextToArea("				<RecipientHouse>" & ConvertXml(SHr.NPAdresBuild) & "</RecipientHouse>" & chr(13),aRequest);
+  	AddTextToArea("				<RecipientFlat>" & ConvertXml(SHr.NPAdresFloat) & "</RecipientFlat>" & chr(13),aRequest);
+  	AddTextToArea("				<RecipientName>" & ConvertXml(SHr.NPRecipientLastName & " " & SHr.NPRecipientFirstName & " " &  SHr.NPRecipientMiddleName) & "</RecipientName>" & chr(13),aRequest);
+  	AddTextToArea("				<RecipientType>" & ConvertXml("PrivatePerson") & "</RecipientType>" & chr(13),aRequest);
+
+  end;
+  
+  
   AddTextToArea("				<RecipientsPhone>" & ConvertXml(RecipientsPhone) & "</RecipientsPhone>" & chr(13),aRequest);
   logtext(0,"ResipPhone--- " & ConvertXml(RecipientsPhone));
   

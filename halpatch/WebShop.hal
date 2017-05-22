@@ -657,7 +657,7 @@ begin
   record WebShopSettingsBlock WSSB;
   area aPost;
   xml xmlPost;
-  integer nodeORCnt,nodeRowCnt,i,j,rowNr,ORCnt;
+  integer nodeORCnt,nodeRowCnt,i,j,rowNr,ORCnt,k,lenth,fin;
   val qty,price,sum;
   string 255 artcode,artspec,inwarning,warning,errors;
   Boolean chsum, chsumConfirm;
@@ -665,8 +665,9 @@ begin
   record RebVc Rebr,Reb2r;
   boolean updateflag,recordSaved,testf;
 	string 20 IPaddr;
-  string 200 firsname,lastname,middlename,resstr;
+  string 255 firsname,lastname,middlename,resstr,payment,delcity,tempadr,street,build,float,tempadr1;
 	record ExportStockCSVBlock ESCb;
+	record NPCityVc NPCityr;
 	
 	blockload(ESCb);
 	
@@ -754,9 +755,85 @@ begin
 					//end;
 					
 					ORr.ShipAddr1 = XmlGetAttribute(xmlPost,"orders/order" & i ,"delivery");
-					ORr.ShipAddr2 = XmlGetAttribute(xmlPost,"orders/order" & i ,"country") & ", " & XmlGetAttribute(xmlPost,"orders/order" & i ,"city");
+					delcity = XmlGetAttribute(xmlPost,"orders/order" & i ,"city");
+					ORr.ShipAddr2 = XmlGetAttribute(xmlPost,"orders/order" & i ,"country") & ", " & delcity;
 					ORr.ShipAddr3 = XmlGetAttribute(xmlPost,"orders/order" & i ,"address");
 					ORr.Comment = XmlGetAttribute(xmlPost,"orders/order" & i ,"ordercomment");
+					payment = XmlGetAttribute(xmlPost,"orders/order" & i ,"payment");
+					ORr.NPAdresDeliv = 0;
+					if(FindSubString("Новая почта",ORr.ShipAddr1) or FindSubString("Нова почта",ORr.ShipAddr1))then begin
+						ORr.DeliveryNewPost = 1;
+						if(FindSubString("###",ORr.ShipAddr3))then begin
+							ORr.NPAdresDeliv = 1;
+							ORr.NPCityRecipient = delcity;
+							NPCityr.City = ORr.NPCityRecipient;
+							if (ReadFirstMain(NPCityr,1,true)) then begin
+								//NPCr.CityRef = NPCityr.Ref;
+							end else begin
+								NPCityr.CityRU = ORr.NPCityRecipient;
+								if(readfirstkey("CityRU",NPCityr,1,true))then begin
+								
+								end else begin
+									ORr.NPCityRecipient = "!!!" & ORr.NPCityRecipient;
+								end;
+							end;
+							if(nonblank(ORr.ShipAddr3))then begin
+								if(len(ORr.ShipAddr3)>12)then begin
+									lenth = len(ORr.ShipAddr3);
+									street = "";
+									build = "";
+									float = "";
+									tempadr = ORr.ShipAddr3;
+									tempadr1 = ORr.ShipAddr3;
+									fin = 0;
+									For(k=0;k<lenth-3;k=k+1) begin
+	  								if(mid(tempadr,k,3)=="###")then begin
+	  									fin = fin + 1;
+	  									if(fin==1)then begin
+	  										tempadr = mid(tempadr,k+3,lenth-k-3);
+	  										lenth = lenth - 3;
+	  										k=-1;
+	  									end;
+	  									if(fin==2)then begin
+	  										street = left(tempadr,k);
+	  										tempadr = mid(tempadr,k+3,lenth-k-3);
+	  										lenth = lenth - 3;
+	  										k=-1;
+	  									end;
+	  									if(fin==3)then begin
+	  										build = left(tempadr,k);
+	  										tempadr = mid(tempadr,k+3,lenth-k-3);
+	  										lenth = lenth - 3;
+	  										k=-1;
+	  									end;
+	  									if(fin==4)then begin
+	  										float = left(tempadr,k);
+	  										tempadr = mid(tempadr,k+3,lenth-k-3);
+	  										lenth = lenth - 3;
+	  										k=-1;
+	  									end;
+	  								end;
+									end; 
+									logtext(0,"street " & street);
+									logtext(0,"build " & build);
+									logtext(0,"float " & float);
+								end;
+							end;
+							
+							
+						end else begin
+						
+						end;
+						
+					end;
+					if(FindSubString("Наложенный платеж",payment))then begin
+						ORr.NPPaymentType = 1;
+					end;
+					if(FindSubString("###AUTO###",ORr.Comment))then begin// Edit ************************** Friday, 19 May 2017 11:31:32
+						logtext(0,"###AUTO###");
+						ORr.AutoCreation = 1;
+					end;
+					
 					ORr.OrderClass = "WEB";
 					ORr.SalesGroup = "WEB";
 					ORr.SalesMan  = CurrentUser;

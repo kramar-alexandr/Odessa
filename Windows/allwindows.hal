@@ -5469,9 +5469,18 @@ begin
  */
 
   StaticText(100,v+=50,"Адрес доставки:",true);
+  
+  ButtonFrame(h2,v,140,2,"Доставка на:");
+  RadioButton(h2,v,0,0,"Отделение",NPAdresDeliv);
+  RadioButton(h2,v+20,1,0,"Адрес",NPAdresDeliv);
+  
   EditField(h1,v+=vs,150,"Город",Normal,NPCityRecipient,false,NPCitySClass);
   EditField(h1,v+=vs,70,"Отделение НП",Normal,NPWarehouse,false,NPWarehouseSClass);
   EditField(h2,v,250,"",ViewOnly,NPWarehouseDesc,false,0);
+  
+  EditField(h1,v+=vs,70,"Улица",Normal,NPAdresStreet,false,0);
+  EditField(h1+140,v,40,"Дом",Normal,NPAdresBuild,false,0);
+  EditField(h1+280,v,40,"Квартира",Normal,NPAdresFloat,false,0);
 
   ButtonFrame(h1,v+=70,140,2,"Способ оплаты");
   RadioButton(h1,v,0,0,"Предоплата",NPPaymentType);
@@ -6039,16 +6048,36 @@ begin
     	EditField(h1,v+=5,100,"Фамилия",Normal,NPRecipientLastName,false,0);
     	EditField(h2-90,v,100,"Имя",Normal,NPRecipientFirstName,false,0);
     	EditField(h3-90,v,100,"Отчество",Normal,NPRecipientMiddleName,false,0);
+    	
+    	ButtonFrame(h3+130,v,80,2,"Доставка на:");
+			RadioButton(h3+130,v,0,0,"Отделение",NPAdresDeliv);
+			RadioButton(h3+130,v+20,1,0,"Адрес",NPAdresDeliv);
+    	
+    	
     	EditField(h1,v+=vs,100,"Город",Normal,NPCityRecipient,false,0);
     	EditField(h2,v,100,"Отделение НП",Normal,NPRecipientWarehouse,false,NPWarehouseSClass);
     	EditField(h3-90,v,200,"",Normal,NPRecipientWarehouseDesc,false,0);
+  
+			EditField(h1,v+=vs,170,"Улица",Normal,NPAdresStreet,false,0);
+			EditField(h2,v,40,"Дом",Normal,NPAdresBuild,false,0);
+			EditField(h3-90,v,40,"Квартира",Normal,NPAdresFloat,false,0);
+    	
     end else begin
     	EditField(h1,v+=5,100,"Фамилия",ViewOnly,NPRecipientLastName,false,0);
     	EditField(h2-90,v,100,"Имя",ViewOnly,NPRecipientFirstName,false,0);
     	EditField(h3-90,v,100,"Отчество",ViewOnly,NPRecipientMiddleName,false,0);
+    	
+    	ButtonFrame(h3+40,v,140,2,"Доставка на:");
+			RadioButton(h3+40,v,0,0,"Отделение",NPAdresDeliv);
+			RadioButton(h3+40,v+20,1,0,"Адрес",NPAdresDeliv);
+				
     	EditField(h1,v+=vs,100,"Город",ViewOnly,NPCityRecipient,false,0);
     	EditField(h2,v,100,"Отделение НП",ViewOnly,NPRecipientWarehouse,false,NPWarehouseSClass);
     	EditField(h3-90,v,200,"",ViewOnly,NPRecipientWarehouseDesc,false,0);
+    	
+    	EditField(h1,v+=vs,170,"Улица",ViewOnly,NPAdresStreet,false,0);
+			EditField(h2,v,40,"Дом",ViewOnly,NPAdresBuild,false,0);
+			EditField(h3-90,v,40,"Квартира",ViewOnly,NPAdresFloat,false,0);
 		end;
   // EditField(h3,v,150,"Адрес",Normal,NPRecipientAddress,false,0);
 		h3 = 570;

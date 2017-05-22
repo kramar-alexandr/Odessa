@@ -32,6 +32,9 @@ external procedure NP_PasteSenderWarehouseDesc(var record SHVc);
 external procedure NP_PasteSender(var record SHVc);	//Edit----------------------Dima  27.04.2015
 external updating procedure RecalcORMn(record RcVc); //Edit***************************Sasha2,14:27 19.04.2017
 
+SetLangMode(LangRussian,"RUS",0);
+
+
 global
 function Boolean PasteCustInShip(record SHVc SHp,string clcd)
 BEGIN
@@ -865,7 +868,11 @@ LPasteOrdInShipLimitMes:
   	if(ORr.OrderClass=="WEB")then begin// Edit ************************** Wednesday, 17 May 2017 15:45:47
 			SHp.NPSender = NPSettingsb.DefSenderRef;			//Edit----------------------Dima  16.04.2015
 			SHp.NPSenderWarehouse = NPSettingsb.DefSenderWarehouse;
-			SHp.NPServiceType = NPSettingsb.DefServiceType;
+			if(ORr.NPAdresDeliv==0)then begin
+				SHp.NPServiceType = NPSettingsb.DefServiceType;
+			end else begin
+				SHp.NPServiceType = "Відділення-Адреса";
+			end;
 			SHp.NPBackDeliveryType = NPSettingsb.DefRedeliveryCargoType;
 			SHp.NPBackDeliveryPayer = NPSettingsb.DefRedeliveryPayer;
 			SHp.NPCargoType = NPSettingsb.DefCargoType;
@@ -884,11 +891,21 @@ LPasteOrdInShipLimitMes:
 			SHp.NPRecipientsPhone = ORr.NPPhone;
 			SHp.NPCityRecipient = ORr.NPCityRecipient;
 			SHp.NPRecipientWarehouse = ORr.NPWarehouse;
+			
+			SHp.NPAdresDeliv = ORr.NPAdresDeliv;
+			SHp.NPAdresStreet = ORr.NPAdresStreet;
+			SHp.NPAdresBuild = ORr.NPAdresBuild;
+			SHp.NPAdresFloat = ORr.NPAdresFloat;
+			
 			NP_PasteRecipientWarehouseDesc(SHp);				//Edit----------------------Dima  07.05.2015
   	end else begin// Edit ************************** Wednesday, 17 May 2017 15:45:45
   		SHp.NPSender = NPSettingsb.DefSenderRef1;			//Edit----------------------Dima  16.04.2015
 			SHp.NPSenderWarehouse = NPSettingsb.DefSenderWarehouse1;
-			SHp.NPServiceType = NPSettingsb.DefServiceType1;
+			if(ORr.NPAdresDeliv==0)then begin
+				SHp.NPServiceType = NPSettingsb.DefServiceType1;
+			end else begin
+				SHp.NPServiceType = "Відділення-Адреса";
+			end;
 			SHp.NPBackDeliveryType = NPSettingsb.DefRedeliveryCargoType1;
 			SHp.NPBackDeliveryPayer = NPSettingsb.DefRedeliveryPayer1;
 			SHp.NPCargoType = NPSettingsb.DefCargoType1;
@@ -907,6 +924,12 @@ LPasteOrdInShipLimitMes:
 			SHp.NPRecipientsPhone = ORr.NPPhone;
 			SHp.NPCityRecipient = ORr.NPCityRecipient;
 			SHp.NPRecipientWarehouse = ORr.NPWarehouse;
+			
+			SHp.NPAdresDeliv = ORr.NPAdresDeliv;
+			SHp.NPAdresStreet = ORr.NPAdresStreet;
+			SHp.NPAdresBuild = ORr.NPAdresBuild;
+			SHp.NPAdresFloat = ORr.NPAdresFloat;
+			
 			NP_PasteRecipientWarehouseDesc(SHp);				//Edit----------------------Dima  07.05.2015
   	end;// Edit ************************** Wednesday, 17 May 2017 15:45:44
   end;

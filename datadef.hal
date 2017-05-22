@@ -1720,6 +1720,10 @@ RecordBegin(INVc,-,"artikel5");
 	RecordField(TransportNumber,M4Str,20,0);// Edit ************************** Monday, 12 December 2016 15:02:59
 	RecordField(Packages,M4Qty,0,0);// Edit ************************** Monday, 12 December 2016 15:03:00
 	RecordField(PromotionCode,M4Code,20,0); //Edit***************************Sasha2,14:55 24.01.2017
+	RecordField(NPAdresDeliv,M4Int,0,0);
+	RecordField(NPAdresStreet,M4Str,200,0);
+	RecordField(NPAdresBuild,M4Str,200,0);
+	RecordField(NPAdresFloat,M4Str,200,0);
 	
   ArrayBegin(Math,-,1);
   ArrayField(stp,M4Int,0,0);
@@ -2642,6 +2646,10 @@ RecordBegin(INVc,-,"artikel5");
 	RecordField(NPStatusCode,M4Int,0,0);
 	RecordField(NPStatus,M4Str,200,0);	//Edit----end------------------Dima  08.05.2015
 	RecordField(Assembly,M4Mark,0,0);	//Edit by Victor 27.05.15
+	RecordField(NPAdresDeliv,M4Int,0,0);
+	RecordField(NPAdresStreet,M4Str,200,0);
+	RecordField(NPAdresBuild,M4Str,200,0);
+	RecordField(NPAdresFloat,M4Str,200,0);
 
   ArrayBegin(Math,-,1);
   ArrayField(OrdRow,M4Long,0,0);
