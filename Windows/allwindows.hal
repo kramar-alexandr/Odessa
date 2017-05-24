@@ -6086,7 +6086,11 @@ begin
   	EditField(h1,v+=vs,120,"Плательщик",Normal,NPPayer,false,NPTypesOfPayersSClass);
   	EditField(h2,v,90,"Способ оплаты",Normal,NPPaymentMethod,false,NPPaymentFormsSClass);
   	EditField(h3,v,100,"Тип доставки",Normal,NPServiceType,false,NPServiceTypesSClass);
-		EditField(h2,v+=vs,90,"Страх.стоимость",ViewOnly,NPCost,false,0);
+  	if (UserCanAction("AllowToEditNewPostFields",false)) then begin //Edit***************************Sasha2,10:14 24.05.2017 {
+  	  EditField(h2,v+=vs,90,"Страх.стоимость",Normal,NPCost,false,0);
+  	end else begin
+  	  EditField(h2,v+=vs,90,"Страх.стоимость",ViewOnly,NPCost,false,0);
+  	end; //Edit***************************Sasha2,10:14 24.05.2017 }
 		EditField(h3,v,100,"Нов. страх. стоимость",Normal,NPCostEdit,false,0);
   	//EditField(h3+20,v,100,"Страх.стоимость",Normal,NPCost,false,0);
     StaticText(110,v+=35,"Обратная доставка:",true);

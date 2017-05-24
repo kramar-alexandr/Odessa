@@ -561,6 +561,7 @@ LkIVRowTypeNormal4:;
         AddStringListRow(wn,width,LMb.POSFontSize,IVrw.Spec,IVrw.PayMode,"",IVrw.CurncyCode,ValToString(IVrw.Sum,M4Val,ThousandSeparator,DecimalSeparator,0),"",i,"","");
     end;
   end;
+  AddStringListRow(wn,width,LMb.POSFontSize,"","","","","","","","",""); //Edit***************************Sasha2,14:16 24.05.2017
   StringListScrollBottom(wn);
   SetWindowSubset(wn,GetWindowSubset(wn));
   if (line<=0) then begin line = 1; end;
