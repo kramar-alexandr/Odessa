@@ -834,7 +834,7 @@ begin
 							end;
 						end;
 												
-						if(ORr.DeliveryNewPost==1)then begin						
+						//if(ORr.DeliveryNewPost==1)then begin						
 							if(FindSubString("###",ORr.ShipAddr3))then begin
 								ORr.NPAdresDeliv = 1;						
 								if(nonblank(ORr.ShipAddr3))then begin
@@ -879,12 +879,8 @@ begin
 										logtext(0,"float " & float);
 									end;
 								end;
-							
-							
-							end else begin
-						
 							end;
-						end;
+						//end;
 						
 					end;
 					if(FindSubString("Наложенный платеж",payment))then begin
