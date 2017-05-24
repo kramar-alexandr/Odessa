@@ -826,8 +826,10 @@ begin
 									ORr.NPWarehouse = NPWarehouser.Number;
 									ORr.NPWarehouseDesc = NPWarehouser.Description;
 								end else begin
-									ORr.DeliveryNewPost = 0;
-									logtext(0,"Новая почта error NPWarehouser ");
+									if(!FindSubString("###",ORr.ShipAddr3))then begin
+										ORr.DeliveryNewPost = 0;
+										logtext(0,"Новая почта error NPWarehouser ");
+									end;
 								end;
 							end;
 						end;
