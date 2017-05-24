@@ -5479,8 +5479,8 @@ begin
   EditField(h2,v,250,"",ViewOnly,NPWarehouseDesc,false,0);
   
   EditField(h1,v+=vs,70,"Улица",Normal,NPAdresStreet,false,0);
-  EditField(h1+140,v,40,"Дом",Normal,NPAdresBuild,false,0);
-  EditField(h1+280,v,40,"Квартира",Normal,NPAdresFloat,false,0);
+  EditField(h1+140,v,40,"Дом/Квартира",Normal,NPAdresBuild,false,0);
+  EditField(h1+280,v,40,"Этаж",Normal,NPAdresFloat,false,0);
 
   ButtonFrame(h1,v+=70,140,2,"Способ оплаты");
   RadioButton(h1,v,0,0,"Предоплата",NPPaymentType);

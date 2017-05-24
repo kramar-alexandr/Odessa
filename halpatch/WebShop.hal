@@ -877,6 +877,10 @@ begin
 										logtext(0,"street " & street);
 										logtext(0,"build " & build);
 										logtext(0,"float " & float);
+										ORr.NPAdresStreet = street;
+										ORr.NPAdresBuild = build;
+										ORr.NPFlat = float;
+										
 									end;
 								end;
 							end;
