@@ -99,6 +99,7 @@ external procedure CalcCustBalrem(var record ORVc);
 external procedure SOAPUpdateStatus(string,string);// Edit ************************** Friday, 18 November 2016 09:42:09
 external function string 255 LookUpPromotionCode(date,string); //Edit***************************Sasha2,15:31 24.01.2017
 external procedure NoDupObjs(string,var string); //Edit***************************Sasha2,16:04 24.01.2017
+external function Boolean FindSubString(string,string);// Edit ************************** Wednesday, 24 May 2017 15:21:31
 
 global
 updating procedure CreateORHistoryVcFromORVc(record ORVc ORr, record ORVc OR2r, boolean UpdateFlag)
@@ -1586,11 +1587,13 @@ LORVcRecordRowCheck:;
 		
 		NPWarehouser.City = ORr.NPCityRecipient;
 		NPWarehouser.Number = ORr.NPWarehouse;
-		if (ReadFirstKey("City",NPWarehouser,2,true)==false) then begin
-         RecordCheckError(31049,"",-1,"NPWarehouse"); 
-         res = -1; 
-         goto LORVcRecordCheck;
-		end;	
+		if(FindSubString("###",ORr.ShipAddr3)==false)then begin
+			if (ReadFirstKey("City",NPWarehouser,2,true)==false) then begin
+					 RecordCheckError(31049,"",-1,"NPWarehouse"); 
+					 res = -1; 
+					 goto LORVcRecordCheck;
+			end;	
+		end;
   
   end;	//Edit----end----------------------------------Dima  15.04.2015
   
