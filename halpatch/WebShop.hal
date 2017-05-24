@@ -783,20 +783,22 @@ begin
 					
 					if((FindSubString("Новая почта",ORr.ShipAddr1) or FindSubString("Нова почта",ORr.ShipAddr1)))then begin
 						ORr.DeliveryNewPost = 1;
+						ORr.NPCityRecipient = delcity;
 						
 						if (ORr.DeliveryNewPost==1) then begin	
 							if (blank(ORr.NPFirstName) or blank(ORr.NPLastName)) then begin
 								ORr.DeliveryNewPost = 0;
+								logtext(0,"Новая почта error NPFirstName NPLastName");
 							end;
 							if (blank(ORr.NPPhone)) then begin
 								ORr.DeliveryNewPost = 0;
+								logtext(0,"Новая почта error NPPhone");
 							end; 
 							if (blank(ORr.NPCityRecipient)) then begin
+								logtext(0,"Новая почта error blank NPCityRecipient");
 								ORr.DeliveryNewPost = 0;
 							end;   
-							
-							
-							ORr.NPCityRecipient = delcity;
+														
 							NPCityr.City = ORr.NPCityRecipient;
 							if (ReadFirstMain(NPCityr,1,true)) then begin
 								//NPCr.CityRef = NPCityr.Ref;
@@ -807,6 +809,7 @@ begin
 								end else begin
 									ORr.NPCityRecipient = "!!!" & ORr.NPCityRecipient;
 									ORr.DeliveryNewPost = 0;
+									logtext(0,"Новая почта error NPCityRecipient " & ORr.NPCityRecipient);
 								end;
 							end;
 							
@@ -824,6 +827,7 @@ begin
 									ORr.NPWarehouseDesc = NPWarehouser.Description;
 								end else begin
 									ORr.DeliveryNewPost = 0;
+									logtext(0,"Новая почта error NPWarehouser ");
 								end;
 							end;
 						end;
