@@ -812,12 +812,15 @@ begin
 							
 							NPWarehouser.Description = ORr.ShipAddr3;
 							NPWarehouser.CityRef = NPCityr.Ref;
+							logtext(0,"Find NPWarehouser " & NPWarehouser.Description & " __ " & NPWarehouser.CityRef);
 							if(readfirstkey("Description",NPWarehouser,2,true))then begin
 								ORr.NPWarehouse = NPWarehouser.Number;
 							end else begin
 								NPWarehouser.DescriptionRu = ORr.ShipAddr3;
+								NPWarehouser.CityRef = NPCityr.Ref;
 								if(readfirstkey("DescriptionRu",NPWarehouser,2,true))then begin
 									ORr.NPWarehouse = NPWarehouser.Number;
+									ORr.NPWarehouseDesc = NPWarehouser.Description;
 								end else begin
 									ORr.DeliveryNewPost = 0;
 								end;
