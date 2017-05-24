@@ -826,7 +826,7 @@ begin
 									ORr.NPWarehouse = NPWarehouser.Number;
 									ORr.NPWarehouseDesc = NPWarehouser.Description;
 								end else begin
-									if(!FindSubString("###",ORr.ShipAddr3))then begin
+									if(FindSubString("###",ORr.ShipAddr3)==false)then begin
 										ORr.DeliveryNewPost = 0;
 										logtext(0,"Новая почта error NPWarehouser ");
 									end;
