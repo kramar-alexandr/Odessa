@@ -1752,6 +1752,11 @@ begin
  row ORVc ORrw;
  row SHVc SHrw;
  integer i,rwcnt,qty;
+ roundmode rnd;
+ 
+	rnd = DefaultValRoundoff;
+	rnd.decimals = 0;
+	rnd.mode = kRoundingModeTruncate;
  
  cost = 0;
  rwcnt = MatRowCnt(SHr);
@@ -1766,6 +1771,12 @@ begin
  
  	if(ORr.CurncyCode=="USD" and ORr.OptUAHRate!=0)then begin
   	cost = cost * ORr.OptUAHRate;
+  	//cost = round(cost,rnd);
+  	if(cost<round(cost,rnd))then begin
+  		cost = round(cost+1,rnd);
+  	end else begin
+  		cost = round(cost,rnd);
+  	end;
 	end;
 /*  
  if(ORr.CurncyCode != "UAH") then begin //?? UAH or UAH_R
