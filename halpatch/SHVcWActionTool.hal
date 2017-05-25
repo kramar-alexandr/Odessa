@@ -1763,7 +1763,10 @@ begin
 			cost = cost + ORrw.Sum*SHrw.Ordered/ORrw.Quant;  	
   	end; 
  end;
-  
+ 
+ 	if(ORr.CurncyCode=="USD" and ORr.OptUAHRate!=0)then begin
+  	cost = cost * ORr.OptUAHRate;
+	end;
 /*  
  if(ORr.CurncyCode != "UAH") then begin //?? UAH or UAH_R
  		CurValToOtherCur(CurrentDate,ORr.CurncyCode, cost,"UAH",cost2,DefaultCurRoundOff);
