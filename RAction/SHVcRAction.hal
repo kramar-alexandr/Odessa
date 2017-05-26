@@ -1876,6 +1876,9 @@ begin
 				Recalculate_CustomStatusFlagText(ORr);
 				SetNewORCustomStatusFlagOnWeb(ORr);
 				ORr.TransportNumber = SHr.TransportNumber;// Edit ************************** Monday, 12 December 2016 15:07:22
+				if(blank(SHr.TransportNumber) and nonblank(SHr.NPIntDocNumber))then begin
+					ORr.TransportNumber = SHr.NPIntDocNumber;
+				end;
 				ORr.Packages = SHr.Packages;// Edit ************************** Monday, 12 December 2016 15:07:21
 				oldORr.SerNr = ORr.SerNr;
 				if(readfirstmain(oldORr,1,true))then begin
