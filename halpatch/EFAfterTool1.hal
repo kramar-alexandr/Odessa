@@ -85,6 +85,11 @@ begin
   val cost,advance;	//Edit----------------------Dima  15.05.2015
   record SHVc SHcheck;	//Edit----------------------Dima  15.12.2015
   boolean TrHs;
+  roundmode rnd;
+ 
+	rnd = DefaultValRoundoff;
+	rnd.decimals = 0;
+	rnd.mode = kRoundingModeTruncate;
   
   ORr.SerNr = SHr.OrderNr;
   if (ReadFirstMain(ORr,1,true)) then begin
@@ -125,7 +130,16 @@ begin
 					end;
 				end;
 				advance = ORr.Advance;
-  			if (ORr.Advance>cost) then begin
+				if(ORr.CurncyCode=="USD" and ORr.OptUAHRate!=0)then begin
+					advance = advance * ORr.OptUAHRate;
+					if(advance>round(advance,rnd))then begin
+						advance = round(advance+1,rnd);
+					end else begin
+						advance = round(advance,rnd);
+					end;
+				end;
+				
+  			if (advance>cost) then begin
 					advance = cost;
 				end;
 				if (counter<=1) then begin

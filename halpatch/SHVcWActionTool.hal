@@ -1772,7 +1772,7 @@ begin
  	if(ORr.CurncyCode=="USD" and ORr.OptUAHRate!=0)then begin
   	cost = cost * ORr.OptUAHRate;
   	//cost = round(cost,rnd);
-  	if(cost<round(cost,rnd))then begin
+  	if(cost>round(cost,rnd))then begin
   		cost = round(cost+1,rnd);
   	end else begin
   		cost = round(cost,rnd);
