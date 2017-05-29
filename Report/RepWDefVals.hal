@@ -1907,6 +1907,17 @@ BEGIN
   RepSpec.flags[4] = 1;
   RepSpec.flags[5] = 1;
   RepSpec.flags[6] = 1;
+  // Edit Start ---------------------------------------------- Edit Start
+	//Monday, 29 May 2017 14:30:59
+	
+  RepSpec.sStartDate = currentdate;
+  RepSpec.sEndDate = currentdate;
+  RepSpec.Period2Str = currentdate;
+  RepSpec.Period2Str = currentdate & ":";
+  RepSpec.Period2Str = RepSpec.Period2Str & currentdate;
+  
+	// Edit End ---------------------------------------------- Edit End
+	
   RepSpec.d1Code = "00:00:00";	//Edit----------------------Dima  12.08.2015
   RepSpec.d2Code = "23:59:59";	//Edit----------------------Dima  12.08.2015
   
