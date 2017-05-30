@@ -6219,7 +6219,7 @@ begin
   SpecialMenu("Создать/обновить ЭН Новой почты",'',1,"NPCreateENDsm");
   SpecialMenu("Напечатать ЭН Новой почты",'',1,"NPPrintENDsm");
   SpecialMenu("Напечатать маркировку ЭН Новой почты",'',1,"NPPrintMarkENDsm");
-  SpecialMenu("Напечатать маркировку ЭН Новой почты Zebra",'',1,"NPPrintMarkENZebraDsm");
+  //SpecialMenu("Напечатать маркировку ЭН Новой почты Zebra",'',1,"NPPrintMarkENZebraDsm");
   SpecialMenu("Удалить текущую ЭН Новой почты",'',1,"NPDeleteENDsm");
   SpecialMenu("Новая почта: проверить статус посылки",'',1,"NPGetDocStatusDsm");
   SpecialMenu("Повторная отправка СМС",'',1,"NPSendSMSDsm");	//Edit----------------------Dima  30.06.2015
