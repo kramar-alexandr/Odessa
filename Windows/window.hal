@@ -3919,3 +3919,564 @@ begin
   SearchField("Найти");
   EndWindow;
 end;
+
+
+window SHDClass:1
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  real h,h0,h1,h2,h3,h4,h5,h6,t,v,vm,vs;
+  Integer tilenr,f,flipnr,i;
+  integer sQuant;
+
+  WindowBegin("Отгрузка",SHDClass,CGview,-);
+  SetWRect(20,80,800,520);
+  Sizeable(-1,-1,0,0);
+  UseView(SHVc);
+  vs = 20;
+  sQuant = 2;	//.stp //Edit----------------------Dima  21.12.2015
+  
+  Tile(0,74,false,"",SerNr);
+  EditField(75,vm=(v=6),95,"Но.",Normal,SerNr,false,TSerSClass);
+  EditField(75,v+=20,95,"Грузополуч-ль",ViewOnly,CustCode,false,0);
+  EditField(h=255,v=vm,-40,"Наим.",Normal,Addr0,false,0);
+  v = v + vs;
+  if (HasOfficialSerNr) then begin
+    EditField(h,vm=v,135,"Офиц. номер",Normal,OfficialSerNr,false,LegalInvNrSClass);
+  end;
+  if (HasTREO) then begin
+    EditField(h+230,vm,95,"TREO Но.",Normal,TREONr,false,0);
+  end;
+  CheckBox(h4=-100,v,0,"OK",OKFlag);
+  CheckBox(h4,v+15,0,"Готов к сборке",Assembly);
+  tilenr = 1;
+  if (IsEnterprise) then begin
+    TileButton(tilenr,"Условия"); tilenr = tilenr + 1;
+    TileButton(tilenr,"Товары"); tilenr = tilenr + 1;
+    TileButton(tilenr,"Условия дост."); tilenr = tilenr + 1;
+    TileButton(tilenr,"Упаковка"); tilenr = tilenr + 1;
+    TileButton(tilenr,"Адрес доставки"); tilenr = tilenr + 1;
+    TileButton(tilenr,"Комментарий"); tilenr = tilenr + 1;
+    if (StandardHansa==false) then begin
+      TileButton(tilenr,"Фрахт"); tilenr = tilenr + 1;
+    end;
+  end else begin
+    TileButton(tilenr,"Коммент."); tilenr = tilenr + 1;
+    TileButton(tilenr,"Товары"); tilenr = tilenr + 1;
+    TileButton(tilenr,"Адрес"); tilenr = tilenr + 1;
+    if (HasLocalization("PRT")) then begin
+      if (HasModIN and HasModSL) then begin
+        TileButton(tilenr,"Packaging"); tilenr = tilenr + 1;
+      end;
+      TileButton(tilenr,"Фрахт"); tilenr = tilenr + 1;
+    end;
+  end;
+  TileButton(tilenr,"Новая почта"); tilenr = tilenr + 1;	//Edit----------------------Dima  16.04.2015
+  tilenr = 1;
+  Tile(tilenr,70,false,tilenr,ShipDate); tilenr = tilenr + 1;
+  vs = 20; h1 = 110; h2 = 290; h3 = 530; h4 = -100;
+  EditField(h1,vm=(v=6),82,"Дата",Normal,ShipDate,false,PasteCurDate);
+  if (HasMultiLocations) then begin
+    v = v + vs;
+    EditField(h1,v,82,"Склад",Normal,Location,false,LocationSClass);
+  end;
+  if (HasRoute) then begin
+    v = v + vs;
+    EditField(h1,v,82,"Маршрут",Normal,Sorting,false,DelRouteSClass);
+  end;
+  v = v + vs; //Edit***************************Sasha2,13:49 06.02.2015
+  EditField(h1,v,82,"Дата ОК",Normal,ShipOkDate,false,0); //Edit***************************Sasha2,13:43 06.02.2015
+  if (HasObjects) then begin
+    EditField(h2,v=vm,135,"Объекты",Normal,Objects,false,ObjSClass);
+  end;
+  if (HasBranch) then begin
+    v = v + vs;
+    EditField(h2,v,135,"Филиал",ViewOnly,BranchID,false,0);
+  end;
+  EditField(h2,v=v+vs,135,"Группа продаж",Normal,SalesGroup,false,SalesGroupSClass);
+  if (HasMultiLocations) then begin
+    v = v + vs;
+  end;
+  if (HasModTS) then begin
+    EditField(h2,v,135,"Проект",ViewOnly,PRCode,false,0);
+  end;
+  if (HasObjects) then begin
+    EditField(h3,v=vm,80,"Счет №",ViewOnly,OrderNr,false,0);
+  end else begin
+    if (IsEnterprise==false) then begin
+      EditField(h2,v=vm,135,"Номер заказа",ViewOnly,OrderNr,false,0);
+    end;
+  end;
+  if (IsEnterprise) then begin
+    EditField(h3,v+=vs,80,"Вид счёта",Normal,SHClass,false,OrderClassSClass);
+    EditField(h3,v+=vs,80,"Менеджер",ViewOnly,Manager,false,0); //Edit***************************Sasha2,15:30 27.01.2015
+    EditField(h3,v+=vs,80,"Сборщик",Normal,Collector,false,UserNPTSSClass); //Edit***************************Sasha2,15:30 27.01.2015
+    CheckBox(h4,v=6,0,"Сообщение",Check1);
+  end;
+  if (IsEnterprise==false) then begin
+    if (HasMultiLocations) then begin
+      EditField(h1,v+=2*vs,-40,"Коммент.",Normal,Comment,false,0);
+    end else begin
+      EditField(h1,v+=vs,-40,"Коммент.",Normal,Comment,false,0);
+    end;
+  end;
+  Tile(tilenr,190,true,tilenr,Math); tilenr = tilenr + 1;
+  v = 20;
+  MatrixBegin(4,v,-50,-35,-,999);// Edit ************************** Thursday, 25 June 2015 17:29:44
+  MatTypedRow(stp);
+  
+  //Кривой код, но по-другому не получилось. Убрал Flip(0), Везде дублируются поля из Flip(0). Без этого плохо отображается //Edit----------------------Dima  21.12.2015
+  /*
+  Flip(0);
+  MatCol(1,32,"Товар",0,ArtCode,false,ForSaleINSClass);
+//  MatCol(1,94,"Var",0,VARList,false,VARSClass);
+//  MatCol(1,144,"Description",0,Spec,false,0);
+  MatCol(1,94,"Наименование",0,Spec,false,0);
+  MatCol(t=kInvoiceRowTypeStructuredItemComponent,32,"Товар",0,ArtCode,false,ForSaleINSClass);
+//  MatCol(t,94,"Var",0,VARList,false,VARSClass);
+//  MatCol(t,144,"Description",0,Spec,false,0);
+  MatCol(t,94,"Наименование",0,Spec,false,0);  
+  */
+  
+  flipnr = 1;
+  Flip(flipnr); flipnr = flipnr + 1;
+  MatCol(1,32,"Товар",0,ArtCode,false,ForSaleINSClass);
+  MatCol(1,94,"Наименование",0,Spec,false,0);  
+  if (HasCustItem) then begin
+    MatCol(1,-230,"Товар кл.",0,CustArtCode,false,CUINSClass);
+  end;
+  MatCol(1,-150,"Скл.",0,InStock,true,0);
+  MatCol(1,-98,"Зак.",0,Ordered,true,0);
+  MatCol(1,-50,"Своб.",0,Ship,true,0);
+  
+  t = sQuant;
+  MatCol(t=sQuant,32,"Товар",0,ArtCode,false,ForSaleINSClass);	//Edit----------------------Dima  21.12.2015
+  MatCol(t,94,"Наименование",0,Spec,false,0);  									//Edit----------------------Dima  21.12.2015
+  if (HasCustItem) then begin
+    MatCol(t,-230,"Товар кл.",0,CustArtCode,false,CUINSClass);
+  end;
+  MatCol(t,-150,"Скл.",0,InStock,true,0);
+  MatCol(t,-98,"Зак.",0,Ordered,true,0);
+  MatCol(t,-70,"Своб.",0,Ship,true,0);  
+  
+  Flip(flipnr); flipnr = flipnr + 1;
+  if (IsEnterprise==false) then begin
+    if (HasSerialNumbers) then begin
+      MatCol(1,-350,"Серийный номер",0,SerialNr,false,SerialNrSClass);
+    end;
+    if (HasObjects) then begin
+      MatCol(1,-250,"Объекты",0,Objects,false,ObjSClass);
+    end;
+    if (UserCanAction("ViewCostPrice",true)) then begin
+    	MatCol(1,-98,"Знач. склада",0,FIFORowVal,false,0); //Edit***************************Sasha2,10:18 10.11.2014
+    end;
+    if (HasLocalization("RUS")) then begin
+      Flip(flipnr); flipnr = flipnr + 1;
+  		MatCol(1,32,"Товар",0,ArtCode,false,ForSaleINSClass);		//Edit----------------------Dima  21.12.2015
+  		MatCol(1,94,"Наименование",0,Spec,false,0);       
+      MatCol(1,-230,"Ед-ца",0,UnitCode,false,UnitSClass);
+      MatCol(1,-180,"Название",0,UnitComment,false,0);
+    end;
+  end else begin
+  	MatCol(1,32,"Товар",0,ArtCode,false,ForSaleINSClass);		//Edit----------------------Dima  21.12.2015
+  	MatCol(1,94,"Наименование",0,Spec,false,0);  
+    MatCol(1,-350,"Серийный номер",0,SerialNr,false,SerialNrSClass);
+    MatCol(1,-250,"Срок годности",0,BestBefore,false,0);
+    MatCol(1,-150,"Склад",0,Location,false,LocationSClass);
+    if (StandardHansa==false) then begin
+      MatCol(1,-50,"Место",0,PosCode,false,UsedPosSClass);
+    end;
+
+    Flip(flipnr); flipnr = flipnr + 1;
+  	MatCol(1,32,"Товар",0,ArtCode,false,ForSaleINSClass);		//Edit----------------------Dima  21.12.2015
+  	MatCol(1,94,"Наименование",0,Spec,false,0); 				    
+    if (UserCanAction("ViewCostPrice",true)) then begin //Edit***************************Sasha2,10:20 10.11.2014 {
+    	MatCol(1,-400,"Ц.обр.закупки",0,BBCostPrice,false,0);
+    	MatCol(1,-320,"FIFO по строке",0,FIFORowVal,false,0);
+    end; //Edit***************************Sasha2,10:20 10.11.2014 }
+    if (StandardHansa==false) then begin
+      MatCol(1,-220,"Ср. взв.(вал.2)",0,WAB2,false,0);
+    end;
+    if (UserCanAction("ViewCostPrice",true)) then begin
+    	MatCol(1,-120,"Отпускная ц.",0,BasePrice,false,0); //Edit***************************Sasha2,10:17 10.11.2014
+    end;
+    MatCol(1,-40,"Коэфф.",0,Coefficient,false,0);
+    if (UserCanAction("ViewCostPrice",true)) then begin //Edit***************************Sasha2,10:21 10.11.2014 {
+    	MatCol(t=kInvoiceRowTypeStructuredItemComponent,-400,"BuyBack Pr.",0,BBCostPrice,false,0);
+    	MatCol(t,-320,"FIFO по строке",0,FIFORowVal,false,0);
+    end; //Edit***************************Sasha2,10:21 10.11.2014 }
+    if (StandardHansa==false) then begin
+      MatCol(t,-220,"Ср. взв.(вал.2)",0,WAB2,false,0);
+    end;
+    if (UserCanAction("ViewCostPrice",true)) then begin
+    	MatCol(t,-120,"Отпускная цена",0,BasePrice,false,0); //Edit***************************Sasha2,10:18 10.11.2014
+    end;
+    MatCol(t,-40,"Коэфф.",0,Coefficient,false,0);
+    Flip(flipnr); flipnr = flipnr + 1;
+  	MatCol(1,32,"Товар",0,ArtCode,false,ForSaleINSClass);		//Edit----------------------Dima  21.12.2015
+  	MatCol(1,94,"Наименование",0,Spec,false,0);     
+    MatCol(1,-400,"Структура",0,Recepy,false,0);
+    MatCol(1,-320,"Источник",0,Source,false,SourceSClass);
+    MatCol(1,-240,"Отфактурирован",0,Invd,false,0);
+    if (StandardHansa==false) then begin
+      MatCol(1,-160,"Дата отправки",0,DespatchRowDate,false,PasteCurDate);
+      MatCol(1,-80,"Время отправки",0,DespatchRowTime,false,PasteCurTime);
+    end;
+    MatCol(t=kInvoiceRowTypeStructuredItemComponent,-400,"Структура",0,Recepy,false,0);
+    MatCol(t,-300,"Источник",0,Source,false,SourceSClass);
+    MatCol(t,-240,"Отфактурирован",0,Invd,false,0);
+    if (StandardHansa==false) then begin
+      MatCol(t,-160,"Дата отправки",0,DespatchRowDate,false,PasteCurDate);
+      MatCol(t,-80,"Время отправки",0,DespatchRowTime,false,PasteCurTime);
+    end;
+    Flip(flipnr); flipnr = flipnr + 1;
+  	MatCol(1,32,"Товар",0,ArtCode,false,ForSaleINSClass);		//Edit----------------------Dima  21.12.2015
+  	MatCol(1,94,"Наименование",0,Spec,false,0);     
+    MatCol(1,-400,"Счет реал.",0,SalesAcc,false,AccSClass);
+    MatCol(1,-330,"Счет стоим.",0,CostAcc,false,AccSClass);
+    MatCol(1,-250,"Объекты",0,Objects,false,ObjSClass);
+    MatCol(1,-135,"Шир.",0,UnitXval,true,0);
+    MatCol(1,-90,"Выс.",0,UnitYval,true,0);
+    MatCol(1,-45,"Выс.",0,UnitZval,true,0);
+    MatCol(t=kInvoiceRowTypeStructuredItemComponent,-400,"Счет реал.",0,SalesAcc,false,AccSClass);
+    MatCol(t,-330,"Счет стоим.",0,CostAcc,false,AccSClass);
+    MatCol(t,-250,"Объекты",0,Objects,false,ObjSClass);
+    MatCol(t,-135,"Шир.",0,UnitXval,true,0);
+    MatCol(t,-90,"Выс.",0,UnitYval,true,0);
+    MatCol(t,-45,"Выс.",0,UnitZval,true,0);
+    if (StandardHansa==false) then begin
+      Flip(flipnr); flipnr = flipnr + 1;
+	  	MatCol(1,32,"Товар",0,ArtCode,false,ForSaleINSClass);		//Edit----------------------Dima  21.12.2015
+	  	MatCol(1,94,"Наименование",0,Spec,false,0);       
+      MatCol(1,-300,"Упаковок",0,RowPackages,false,0);
+      MatCol(1,-220,"Тип",0,PackageType,false,PackTypeSClass);
+      MatCol(1,-170,"Описание",0,PackageDesc,false,0);
+      MatCol(1,-70,"Акциз",0,ExciseNr,false,0);
+      MatCol(t=kInvoiceRowTypeStructuredItemComponent,-300,"Упаковок",0,RowPackages,false,0);
+      MatCol(t,-220,"Тип",0,PackageType,false,PackTypeSClass);
+      MatCol(t,-170,"Описание",0,PackageDesc,false,0);
+      MatCol(t,-70,"Акциз",0,ExciseNr,false,0);
+    end;
+  end;
+  
+  InsertRowTest;
+  DeleteRowTest;
+  EndMatrix;
+  vs = 22;
+//  v = 21;
+  v = v + 1;
+  if (flipnr>2) then begin
+    for (f=1;f<flipnr;f=f+1) begin
+      VTab(-35,v,-16,v+vs,ToolFlip,f,chr(asc("A") + f - 1));
+      v = v + vs;
+    end;
+  end;
+
+//  CheckBox(20,-20,0,"OK",OKFlag);
+  if (HasLocalization("PRT")) then begin
+    EditField(120,-20,150,"Tax Auth. Approval",Normal,TaxAdminServSeal,false,0);
+//    SoftEditField(120,-20,150,"Tax Auth. Approval",Normal,"TaxAdminServSeal",false,0,M4Str,200);
+  end;
+  EditField(-131,-20,80,"Общее кол-во",ViewOnly,TotQty,true,0);
+  
+  if (CurrentUser=="SAUNOK") then begin
+	  EditField(150,-20,100,"LocOKNr",Normal,LocOKNr,false,0);//Edit----------------------Dima  21.01.2016
+  end;  
+  
+  if (IsEnterprise) then begin
+    Tile(tilenr,90,false,tilenr,ShipMode); tilenr = tilenr + 1;
+    vs = 20;
+    EditField(h1,v=vm,82,"Способ отгр.",Normal,ShipMode,false,DMSClass);
+    EditField(h1,v+=vs,80,"Сумма налога",ViewOnly,TAX1Sum,true,0);
+    if (StandardHansa==false) then begin
+      EditField(h1,v+=vs,80,"Заявлен. значение",Normal,DeclaredVal,true,0);
+      EditField(h1,v+=vs,-20,"Статус отгрузки",ViewOnly,EShipStatus,false,0);
+      if (HasLocalization("BRA,BOL,PRT")) then begin
+      EditField(h1,v+=vs,80,"Утв. нал. службы",Normal,TaxAdminServSeal,false,0);
+      end;
+    end;
+    EditField(h2,v=vm,80,"Итого кол-во",ViewOnly,TotQty,true,0);
+    EditField(h2,v+=vs,80,"Итого вес",Normal,TotWeight,true,0);
+    EditField(h2,v+=vs,80,"Итого объем",Normal,TotVolume,true,0);
+    CheckBox(473,v=vm,0,"Использовать адрес для выст. счета",Check2);
+    if (StandardHansa==false) then begin
+      CheckBox(473,v+=16,0,"Создана электронная отгрузка",EShipmentCreated);
+      CheckBox(473,v+=16,0,"Собрана электронная отгрузка",EShipCollected);
+    end;
+    Tile(tilenr,110,false,tilenr,Packages); tilenr = tilenr + 1;
+    h2 = 310;
+    EditField(h1,v=6,160,"Трансп. №",Normal,TransportNumber,false,0); //Edit***************************Sasha2,12:54 28.01.2015
+    EditField(h1,v+=vs,82,"Упаковки",Normal,Packages,true,0);
+    if (HasLanguages) then begin
+    EditField(h1,v+=vs,82,"Языка",Normal,LangCode,false,LangSClass);
+    end;
+    EditField(h1,v+=vs,82,"Валюта",Normal,CurncyCode,false,CurncyCodeSClass);
+    if (StandardHansa==false) then begin
+      EditField(h1,v+=vs,-20,"Инстр.по трансп.",Normal,TransportDirect,false,0);
+      EditField(h1,v+=vs,80,"План. дата отпр.",Normal,PlanSendDate,false,PasteCurDate);
+      EditField(h1,v+=vs,80,"План. время отпр.",Normal,PlanSendTime,false,PasteCurTime);
+    end;
+
+    EditField(h2+100,v=6,135,"Из города",Normal,FromCity,false,0); //Edit***************************Sasha2,12:54 28.01.2015
+    EditField(h2+100,v+=vs,135,"В город",Normal,ToCity,false,0); //Edit***************************Sasha2,12:54 28.01.2015
+    EditField(h2+100,v+=vs,135,"Из дока",Normal,FromDock,false,0); //Edit***************************Sasha2,12:54 28.01.2015
+    EditField(h2+100,v+=vs,135,"В док",Normal,ToDock,false,0); //Edit***************************Sasha2,12:54 28.01.2015
+    if (StandardHansa==false) then begin
+      EditField(h2,v+=2*vs,80,"План. дата приб.",Normal,PlanArrDate,false,PasteCurDate);
+      EditField(h2,v+=vs,80,"План. время  приб.",Normal,PlanArrTime,false,PasteCurTime);
+    end;
+  end;
+  Tile(tilenr,150,false,tilenr,Addr1); tilenr = tilenr + 1;
+  vs = 20;
+  if (IsEnterprise) then begin
+    if (StandardHansa==false) then begin
+      EditField(h1,v=6,80,"Код адреса",Normal,DelAddrCode,false,DelAddr3SClass);
+      EditField(h1,v+=vs,-20,"Получатель",Normal,Addr1,false,0);	//Edit by Victor 26.01.15
+    end else begin
+      EditField(h1,v=6,-20,"Адрес",Normal,Addr1,false,0);
+    end;
+    EditField(h1,v+=vs,-20,"Адрес",Normal,Addr2,false,0);
+  end else begin
+    EditField(h1,v=6,-20,"Получатель",Normal,Addr1,false,0);   // From dict	//Edit by Victor 26.01.15
+    EditField(h1,v+=vs,-20,"",Normal,Addr2,false,0);
+  end;
+  EditField(h1,v+=vs,-20,"",Normal,Addr3,false,0);
+  EditField(h1,v+=vs,-20,"",Normal,DelAddr3,false,0);
+  EditField(h1,v+=vs,-20,"",Normal,DelAddr4,false,0);
+  if (HasCountryPerCustomer) then begin
+    EditField(h1,v+=vs,80,"Страны",Normal,DelCountry,false,CountrySClass);
+    if (HasLocalization("BRA")) then begin
+      EditField(h2-109,v,232,"",ViewOnly,DelCountryName,false,0);
+    end;
+  end;
+  if (IsEnterprise) then begin
+    EditField(h3,v,-20,"Регион",Normal,Region,false,RegionSClass);
+    Tile(tilenr,30,false,tilenr,Comment); tilenr = tilenr + 1;
+    EditField(h1+10,v=6,-20,"Комментарий",Normal,Comment,false,0);
+    EditField(h1+10,v+=20,-20,"Основание",Normal,ORCOType,false,0); // NEWTRANSLATE
+    if (HasNumberSeries and HasLocalization("PRT")) then begin
+      if (HasOfficialSerNr) then begin
+        EditField(h1+10,v+=vs,100,"Official Ser No. 2",Normal,OfficialSerNr2,false,0);
+        EditField(h2,v,135,"Status",Normal,Status,false,SetSClass);
+      end;
+    end;
+  end else begin
+    if (HasLocalization("RUS")) then begin
+      EditField(h1,v+=vs,80,"Итого вес",Normal,TotWeight,true,0);
+    end;
+  end;
+  if (IsStandardProduct and HasLocalization("PRT") and HasModIN and HasModSL) then begin
+    Tile(tilenr,110,false,tilenr,PlanSendDate); tilenr = tilenr + 1;
+    h2 = 310;
+    EditField(h1,v=6,80,"Plan. Sent Date",Normal,PlanSendDate,false,PasteCurDate);
+    EditField(h1,v+=vs,80,"Plan. Sent Time",Normal,PlanSendTime,false,PasteCurTime);
+    EditField(h2,v=6,80,"Plan. Arrival Date",Normal,PlanArrDate,false,PasteCurDate);
+    EditField(h2,v+=vs,80,"Plan. Arrival Time",Normal,PlanArrTime,false,PasteCurTime);
+  end;
+  if (IsEnterprise or HasLocalization("PRT")) and (StandardHansa==false) then begin
+    Tile(tilenr,130,false,tilenr,FreightCode); tilenr = tilenr + 1;
+    if (IsEnterprise) then begin
+      HalPushButton(473,2,600,22,"UpdateSHPackages","Определить упаковку");
+    end;
+    EditField(h1,v=6,80,"Трансп. компания",Normal,FreightCode,false,FreightCompanySClass);
+    EditField(h1,v+=vs,-20,"Название",Normal,FreightCompany,false,0);
+    EditField(h1,v+=vs,-20,"ИНН",Normal,FreightCompanyRegNr,false,0);
+    EditField(h1,v+=vs,-20,"Инф-ия о машине",Normal,TruckInfo,false,0);
+    EditField(h1,v+=vs,-20,"Водитель",Normal,Driver,false,0);
+    EditField(h1,v+=vs,-20,"CMR",Normal,CMRText,false,0); // International transporting number
+  end;
+
+  h1 = 100; h2 = 345; h3 = 550;
+  Tile(tilenr,250,false,tilenr,NPSender); tilenr = tilenr + 1;		//Edit----------------------Dima  16.04.2015
+   StaticText(90,v=15,"Отправитель:",true);
+    EditField(h1,v+=5,190,"Название",Normal,NPSender,false,NPCounterpartySenderSClass);
+    EditField(h2,v,100,"Город",Normal,NPCitySender,false,0);
+    EditField(h3,v,120,"Отделение НП",Normal,NPSenderWarehouse,false,NPWarehouseSClass);
+    EditField(h1,v+=vs,190,"Контактное лицо",Normal,NPContactSender,false,0);
+    EditField(h2,v,100,"Телефон",Normal,NPSendersPhone,false,0);
+    EditField(h3,v,120,"",ViewOnly,NPSenderWarehouseDesc,false,0);
+    //EditField(h2,v,150,"Адрес",Normal,NPSenderAddress,false,0);
+    StaticText(90,v+=40,"Получатель:",true);
+    if (CurrentUser=="SA") then begin
+    	EditField(h1,v+=5,100,"Фамилия",Normal,NPRecipientLastName,false,0);
+    	EditField(h2-90,v,100,"Имя",Normal,NPRecipientFirstName,false,0);
+    	EditField(h3-90,v,100,"Отчество",Normal,NPRecipientMiddleName,false,0);
+    	
+    	ButtonFrame(h3+130,v,80,2,"Доставка на:");
+			RadioButton(h3+130,v,0,0,"Отделение",NPAdresDeliv);
+			RadioButton(h3+130,v+20,1,0,"Адрес",NPAdresDeliv);
+    	
+    	
+    	EditField(h1,v+=vs,100,"Город",Normal,NPCityRecipient,false,0);
+    	EditField(h2,v,100,"Отделение НП",Normal,NPRecipientWarehouse,false,NPWarehouseSClass);
+    	EditField(h3-90,v,200,"",Normal,NPRecipientWarehouseDesc,false,0);
+  
+			EditField(h1,v+=vs,170,"Улица",Normal,NPAdresStreet,false,0);
+			EditField(h2,v,40,"Дом/Квартира",Normal,NPAdresBuild,false,0);
+			EditField(h3-90,v,40,"Этаж",Normal,NPAdresFloat,false,0);
+    	
+    end else begin
+    	EditField(h1,v+=5,100,"Фамилия",ViewOnly,NPRecipientLastName,false,0);
+    	EditField(h2-90,v,100,"Имя",ViewOnly,NPRecipientFirstName,false,0);
+    	EditField(h3-90,v,100,"Отчество",ViewOnly,NPRecipientMiddleName,false,0);
+    	
+    	ButtonFrame(h3+40,v,140,2,"Доставка на:");
+			RadioButton(h3+40,v,0,0,"Отделение",NPAdresDeliv);
+			RadioButton(h3+40,v+20,1,0,"Адрес",NPAdresDeliv);
+				
+    	EditField(h1,v+=vs,100,"Город",ViewOnly,NPCityRecipient,false,0);
+    	EditField(h2,v,100,"Отделение НП",ViewOnly,NPRecipientWarehouse,false,NPWarehouseSClass);
+    	EditField(h3-90,v,200,"",ViewOnly,NPRecipientWarehouseDesc,false,0);
+    	
+    	EditField(h1,v+=vs,170,"Улица",ViewOnly,NPAdresStreet,false,0);
+			EditField(h2,v,40,"Дом/Квартира",ViewOnly,NPAdresBuild,false,0);
+			EditField(h3-90,v,40,"Этаж",ViewOnly,NPAdresFloat,false,0);
+			//
+		end;
+  // EditField(h3,v,150,"Адрес",Normal,NPRecipientAddress,false,0);
+		h3 = 570;
+  	EditField(h1,v+=30,120,"Тип груза",Normal,NPCargoType,false,NPCargoTypeSClass);
+  	EditField(h2,v,150,"Описание груза",Normal,NPCargoDescription,false,NPDescripSClass);
+  	EditField(h1,v+=vs,120,"Плательщик",Normal,NPPayer,false,NPTypesOfPayersSClass);
+  	EditField(h2,v,90,"Способ оплаты",Normal,NPPaymentMethod,false,NPPaymentFormsSClass);
+  	EditField(h3,v,100,"Тип доставки",Normal,NPServiceType,false,NPServiceTypesSClass);
+  	if (UserCanAction("AllowToEditNewPostFields",false)) then begin //Edit***************************Sasha2,10:14 24.05.2017 {
+  	  EditField(h2,v+=vs,90,"Страх.стоимость",Normal,NPCost,false,0);
+  	end else begin
+  	  EditField(h2,v+=vs,90,"Страх.стоимость",ViewOnly,NPCost,false,0);
+  	end; //Edit***************************Sasha2,10:14 24.05.2017 }
+		EditField(h3,v,100,"Нов. страх. стоимость",Normal,NPCostEdit,false,0);
+  	//EditField(h3+20,v,100,"Страх.стоимость",Normal,NPCost,false,0);
+    StaticText(110,v+=35,"Обратная доставка:",true);
+   	EditField(h1,v+=5,120,"Тип груза",Normal,NPBackDeliveryType,false,NPBackDelivCargoTypeSClass);
+  	EditField(h2,v,100,"Плательщик",Normal,NPBackDeliveryPayer,false,NPTypesOfPayersRedeliverySClass);
+  	h3=600;
+		EditField(h3,v,70,"Наложенный платеж",ViewOnly,NPCostCOD,false,0);
+		EditField(h3,v+=vs,70,"Нов. наложен. платеж",Normal,NPCostCODEdit,false,0);
+		EditField(h1,v+=25,350,"Комментарий",Normal,NPComment,false,0);
+
+
+		Black_Divider(0,1);
+  	h0=10; h1=70; h2 = 180; h3 = 260; h4=340; h5 = 450; h6 = 580;
+  	StaticText(h1,v+=60,"Упаковка",false);
+  	StaticText(h2,v,"Длина(см)",false);
+  	StaticText(h3,v,"Ширина(см)",false);
+  	StaticText(h4,v,"Высота(см)",false);
+  	StaticText(h5+15,v,"Объём",false);
+  	StaticText(h6+15,v,"Вес(кг)",false);
+
+  	i=1;
+  	EditField(h1,v+=vs-10,90,"Тип",Normal,NPPackType1,false,StandBoxesSClass);
+  	StaticText(h0,v+12,i,false);i=i+1;
+  	EditField(h2,v,50,"",Normal,NPLength1,false,0);
+  	EditField(h3,v,50,"",Normal,NPWidth1,false,0);
+  	EditField(h4,v,50,"",Normal,NPHeight1,false,0);
+  	EditField(h5,v,90,"",Normal,NPRowVolume1,false,0);
+  	EditField(h6,v,90,"",Normal,NPRowWeight1,false,0);
+
+  	EditField(h1,v+=vs,90,"Тип",Normal,NPPackType2,false,StandBoxesSClass);
+  	StaticText(h0,v+12,i,false);i=i+1;
+  	EditField(h2,v,50,"",Normal,NPLength2,false,0);
+  	EditField(h3,v,50,"",Normal,NPWidth2,false,0);
+  	EditField(h4,v,50,"",Normal,NPHeight2,false,0);
+  	EditField(h5,v,90,"",Normal,NPRowVolume2,false,0);
+  	EditField(h6,v,90,"",Normal,NPRowWeight2,false,0);
+
+  	EditField(h1,v+=vs,90,"Тип",Normal,NPPackType3,false,StandBoxesSClass);
+  	StaticText(h0,v+12,i,false);i=i+1;
+  	EditField(h2,v,50,"",Normal,NPLength3,false,0);
+  	EditField(h3,v,50,"",Normal,NPWidth3,false,0);
+  	EditField(h4,v,50,"",Normal,NPHeight3,false,0);
+  	EditField(h5,v,90,"",Normal,NPRowVolume3,false,0);
+  	EditField(h6,v,90,"",Normal,NPRowWeight3,false,0);
+
+  	EditField(h1,v+=vs,90,"Тип",Normal,NPPackType4,false,StandBoxesSClass);
+  	StaticText(h0,v+12,i,false);i=i+1;
+  	EditField(h2,v,50,"",Normal,NPLength4,false,0);
+  	EditField(h3,v,50,"",Normal,NPWidth4,false,0);
+  	EditField(h4,v,50,"",Normal,NPHeight4,false,0);
+  	EditField(h5,v,90,"",Normal,NPRowVolume4,false,0);
+  	EditField(h6,v,90,"",Normal,NPRowWeight4,false,0);
+
+  	EditField(h1,v+=vs,90,"Тип",Normal,NPPackType5,false,StandBoxesSClass);
+  	StaticText(h0,v+12,i,false);i=i+1;
+  	EditField(h2,v,50,"",Normal,NPLength5,false,0);
+  	EditField(h3,v,50,"",Normal,NPWidth5,false,0);
+  	EditField(h4,v,50,"",Normal,NPHeight5,false,0);
+  	EditField(h5,v,90,"",Normal,NPRowVolume5,false,0);
+  	EditField(h6,v,90,"",Normal,NPRowWeight5,false,0);
+
+  	EditField(h5,v+=vs,90,"Объём",Normal,NPVolumeGeneral,false,0);
+  	EditField(h6,v,90,"Вес",Normal,NPWeight,false,0);
+
+  	EditField(h1,v+=30,100,"Номер ЭН",Normal,NPIntDocNumber,false,0);
+  	EditField(h4,v,80,"Цена доставки",Normal,NPCostOnSite,false,0);
+ 		CheckBox(h6,v,0,"ЭН Напечатана",NPPrinted);
+		EditField(h1,v+=vs,200,"Статус",Normal,NPStatus,false,0);
+
+
+  if (GuiType==kGuiMetro) then begin // Temporarily disabled on Windows 8
+    SpecialMenu("Статус товара",'I',2,"ItemStatusSHDsm");
+    if (HasModNL) then begin
+      SpecialMenu("Открыть запись операции",'t',3,"OpenTRFromSH");
+    end;
+    SpecialMenu("Печать этикеток фрахта",'l',0,"PrintSHLabSHDsm");
+    if (IsEnterprise or HasLocalization("PRT") or IsSberbankProduct) then begin
+      SpecialMenu("Создать возврат товаров",'B',5,"RetFromSHSpec");
+    end;
+  end else begin
+  SpecialMenu("Печать этикеток фрахта",'l',0,"PrintSHLabSHDsm");
+  if (IsEnterprise) then begin
+    SpecialMenu("Пересчитать вес",'w',1,"SHCalcWeightDsm");
+  end;
+  SpecialMenu("Статус товара",'I',2,"ItemStatusSHDsm");
+  if (HasModNL) then begin
+    SpecialMenu("Открыть запись операции",'t',3,"OpenTRFromSH");
+  end;
+  if (HasLocalization("SWE")) then begin
+    SpecialMenu("Экспорт ASG",' ',4,"ASGEnSHDsm"); /* Specific for Sweden */
+  end;
+  if (HasLocalization("NOR")) then begin
+    SpecialMenu("Winedi Export",' ',4,"WinEDIEnSHDsm"); /* Specific for Norway */
+  end;
+  if (IsEnterprise or HasLocalization("PRT")) then begin
+    SpecialMenu("Создать возврат товаров",'B',5,"RetFromSHSpec");
+  end;
+  if (HasLocalization("PRT")) then begin
+    if (HasETaxDocuments) then begin
+    SpecialMenu("Send to Tax Authorities",'',10,"EShipPRTDsm");  //tax authorities server is down
+    end;
+  end;
+  if (IsEnterprise) then begin
+    SpecialMenu("Заполнить серийные номера партий",' ',6,"INBatchSHSpec");
+    if (StandardHansa==false) then begin
+      SpecialMenu("Разделить строку",' ',7,"SplitRowSHDsm");
+    end;
+  end;
+  if (HasModWHM) then begin
+    SpecialMenu("Утвердить складские перемещения",' ',8,"OKStockMovSHrDsm");
+    SpecialMenu("Список комплектаций по складу",' ',9,"PickingListDsm");
+  end;
+//  SpecialMenu("Calculate Manually",' ',10,"CalcSHMan"); /* Specific for one customer in Portugal, you may comment it out */
+  if (IsEnterprise) then begin
+    if (StandardHansa==false) then begin
+      SpecialMenu("Зарегестрировать электронную отгрузку",' ',9,"EShipRegisterDsm");
+    end;
+    if (GuiType==kGuiiPhone) then begin
+      SpecialMenu("Подписать",' ',10,"SignSHDsm");
+    end;
+  end;
+  SpecialMenu("Поиск и добавление товара",'f',1,"TableSearchAdditionDsm"); // edit ----------Dima 12.01.2015
+  SpecialMenu("Перенести данные из Зак. в Своб. построчно",'',1,"OrderedToShipSHDsm"); //Edit***************************Sasha2,15:22 27.01.2015
+  SpecialMenu("Открыть пак-лист",'',1,"ShowPackListSHDsm");
+  SpecialMenu("Создать/обновить ЭН Новой почты",'',1,"NPCreateENDsm");
+  SpecialMenu("Напечатать ЭН Новой почты",'',1,"NPPrintENDsm");
+  SpecialMenu("Напечатать маркировку ЭН Новой почты",'',1,"NPPrintMarkENDsm");
+  SpecialMenu("Напечатать маркировку ЭН Новой почты Zebra",'',1,"NPPrintMarkZebraENDsm");
+  SpecialMenu("Удалить текущую ЭН Новой почты",'',1,"NPDeleteENDsm");
+  SpecialMenu("Новая почта: проверить статус посылки",'',1,"NPGetDocStatusDsm");
+  SpecialMenu("Повторная отправка СМС",'',1,"NPSendSMSDsm");	//Edit----------------------Dima  30.06.2015
+  SpecialMenu("Выгрузить таблицу в буфер обмена",'',1,"ExportToExcelSHDsm"); // edit ----------Dima 26.11.2014, 23.01.2015
+
+  end;
+  EndWindow;
+end;

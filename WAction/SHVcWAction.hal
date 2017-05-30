@@ -138,7 +138,7 @@ begin
 end;
 
 global
-updating procedure NPPrintMarkENZebraDsm()	//Edit by Victor 07.05.15
+updating procedure NPPrintMarkZebraENDsm()	//Edit by Victor 07.05.15
 begin
   integer wn;
   record SHVc SHr;
