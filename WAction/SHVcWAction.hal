@@ -138,6 +138,44 @@ begin
 end;
 
 global
+updating procedure NPPrintMarkENZebraDsm()	//Edit by Victor 07.05.15
+begin
+  integer wn;
+  record SHVc SHr;
+  record RcVc RepSpec;
+  record ORVc ORr;
+  string 255  www,errors;
+  record NPSettingsBlock NPSettingsb;
+  
+  
+  wn = CurWindow;
+  GetWindowRecord(wn,SHr);
+  	
+	if (CheckEN(SHr,wn)) then begin
+	  	if(nonblank(SHr.NPDocumentRef))then begin
+	  		BlockLoad(NPSettingsb);
+				if(nonblank(SHr.NPIntDocNumber) and nonblank(SHr.NPDocumentRef) and blank(SHr.NPPrinted))then begin
+					ORr.SerNr = SHr.OrderNr;
+					readfirstmain(ORr,1,true);
+					NPCreateRequestMn(SHr, errors, ORr.OrderClass);															//update before printing if necessary
+				end;	  		 
+				if(ORr.OrderClass=="WEB")then begin
+					www = "https://my.novaposhta.ua/orders/printMarkings/orders[]/" & SHr.NPDocumentRef & "/type/html/apiKey/" & NPSettingsb.APIkey & "/zebra/zebra";
+	  		end else begin
+	  			www = "https://my.novaposhta.ua/orders/printMarkings/orders[]/" & SHr.NPDocumentRef & "/type/html/apiKey/" & NPSettingsb.APIkey1 & "/zebra/zebra";
+	  		end;
+				OpenWebBrowser(www);
+				SHr.NPPrinted = 1;
+	  	end else begin
+				MessageBox(31057,"");	
+			end;
+  end;
+  PutWindowRecord(wn,SHr);
+  WindowDoOK(wn,0);
+  return;
+end;
+
+global
 updating procedure NPCreateENDsm()	//Edit by Victor 28.04.15
 begin
   integer wn;
