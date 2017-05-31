@@ -1734,12 +1734,14 @@ begin
   record PackListVc PackListr;
   record ORVc ORr;  
   record SMSTextBlock SMSb;
+  record SMSTextOptBlock SMSOb;
   record CUVc CUr;
   string 255 newtext;
   integer i;
   row SHVc SHrw;
 
 	BlockLoad(SMSb);//Edit----------------------Dima  16.09.2015
+	BlockLoad(SMSOb);
 
   if ((SHr.OrderNr!=-1) and (SH2r.OKFlag==0)) then begin
     if (UpdateOrderFromShip(SHr,true,SH2r,true,false)) then begin end;
@@ -1770,10 +1772,17 @@ begin
   	if (ORr.SelfDelivery>0 and (SHr.OKFlag!=0) and (SH2r.OKFlag==0)) then begin			//Edit----------------------Dima  16.09.2015
 			CUr.Code = ORr.CustCode;
 			ReadFirstMain(CUr,1,true);
-			if (nonblank(SMSb.Text51)) then begin
-				newtext = ParseSMStext(SMSb.Text51,ORr);
-  			AddSMStoStack(CUr.Phone,SMSb.Title5,newtext,ORr.CustCode,"SHVc",SHr.SerNr,ORr.OrderClass,"","");
-  		end;			  		
+			if(nonblank(ORr.OrderClass))then begin
+				if (nonblank(SMSb.Text51)) then begin
+					newtext = ParseSMStext(SMSb.Text51,ORr);
+					AddSMStoStack(CUr.Phone,SMSb.Title5,newtext,ORr.CustCode,"SHVc",SHr.SerNr,ORr.OrderClass,"","");
+				end;	
+  		end else begin
+  			if (nonblank(SMSOb.Text51)) then begin
+					newtext = ParseSMStext(SMSOb.Text51,ORr);
+					AddSMStoStack(CUr.Phone,SMSOb.Title5,newtext,ORr.CustCode,"SHVc",SHr.SerNr,ORr.OrderClass,"","");
+				end;
+  		end;		  		
   	end;  
   end;
   

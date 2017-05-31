@@ -4454,6 +4454,25 @@ RecordBegin(IPVc,-,"");
 	RecordField(CommissionMin,M4UVal,0,0);			
 	RecordField(Commission0,M4UVal,0,0);	
 	EndBlock; 
+	
+	BlockBegin(SMSTextOptBlock,-,"");					//Edit----------------------Dima  26.06.2015
+	RecordField(Requisites,M4Str,255,0);
+	RecordField(Title1,M4Str,100,0);
+	RecordField(Title2,M4Str,100,0);
+	RecordField(DefaultCard,M4Str,100,0);
+	RecordField(Title3,M4Str,100,0);
+	RecordField(Text31,M4Str,255,0);
+	RecordField(Text32,M4Str,255,0);
+	RecordField(Text33,M4Str,255,0);
+	RecordField(Title4,M4Str,100,0);
+	RecordField(Text41,M4Str,255,0);
+	RecordField(Text42,M4Str,255,0);
+	RecordField(Title5,M4Str,100,0);
+	RecordField(Text51,M4Str,255,0);
+	RecordField(Commission,M4UVal,0,0);	
+	RecordField(CommissionMin,M4UVal,0,0);			
+	RecordField(Commission0,M4UVal,0,0);	
+	EndBlock; 
 
 
 	BlockBegin(GlobalVariablesBlock,-,"");		//Edit----------------------Dima  10.06.2015

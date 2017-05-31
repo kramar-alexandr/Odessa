@@ -2351,11 +2351,13 @@ begin
 	string 255 resString,temp;
 	longint  IntVal,IntSum;
   record SMSTextBlock SMSb;
+  record SMSTextOptBlock SMSOb;
   val tempVal,tempsum,commission,tempCommission;
   roundmode rmde;
   val comm0;
   
   BlockLoad(SMSb);	
+  BlockLoad(SMSOb);
 	
 	replaceSum = "%Sum%";
 	replaceIntSum = "%IntSum%";
@@ -2370,11 +2372,19 @@ begin
 	if (ReadFirstMain(Userr,1,true) and nonblank(Userr.CardNumber)) then begin
 				card = Userr.CardNumber;		
 	end else begin
-				card = SMSb.DefaultCard;
+				if(nonblank(ORr.OrderClass))then begin
+					card = SMSb.DefaultCard;
+				end else begin
+					card = SMSOb.DefaultCard;
+				end;
 	end;	
 	
 	//Sum
-	comm0 = SMSb.Commission0/100+1;
+	if(nonblank(ORr.OrderClass))then begin
+		comm0 = SMSb.Commission0/100+1;
+	end else begin
+		comm0 = SMSOb.Commission0/100+1;
+	end;
 	rmde = SetRoundMode(0,kRoundingDirectionToFromPosInf,kRoundingModeTruncate,kRoundingStepNone);
 	tempsum = ORr.Sum4 - ORr.Advance;
 	tempsum = round(tempsum,rmde);
@@ -2391,10 +2401,18 @@ begin
 	sum = IntVal;
 	
 	//Commission
-	if (ORr.Sum4*SMSb.Commission*0.01 < SMSb.CommissionMin) then begin
-		commission = SMSb.CommissionMin;
+	if(nonblank(ORr.OrderClass))then begin
+		if (ORr.Sum4*SMSb.Commission*0.01 < SMSb.CommissionMin) then begin
+			commission = SMSb.CommissionMin;
+		end else begin
+			commission = ORr.Sum4*SMSb.Commission*0.01;
+		end;
 	end else begin
-		commission = ORr.Sum4*SMSb.Commission*0.01;
+		if (ORr.Sum4*SMSOb.Commission*0.01 < SMSOb.CommissionMin) then begin
+			commission = SMSOb.CommissionMin;
+		end else begin
+			commission = ORr.Sum4*SMSOb.Commission*0.01;
+		end;	
 	end;
 	tempCommission = round(commission,SetRoundModeD(0));
 	if (tempCommission<commission) then begin
@@ -2424,9 +2442,11 @@ begin
   record CUVc CUr;
   record RcVc RepSpec;
   record SMSTextBlock SMSb;
+  record SMSTextOptBlock SMSOb;
   integer wn,nwn;
   
   BlockLoad(SMSb);
+  BlockLoad(SMSOb);
   
   wn = CurWindow;
   GetWindowRecord(wn,ORr);
@@ -2440,9 +2460,13 @@ begin
 	end;
 	
 	
-	
-	RepSpec.f3 = SMSb.Title1;
-  RepSpec.f2 = ParseSMStext(SMSb.Requisites,ORr);  
+	if(nonblank(ORr.OrderClass))then begin
+		RepSpec.f3 = SMSb.Title1;
+		RepSpec.f2 = ParseSMStext(SMSb.Requisites,ORr);  
+  end else begin
+  	RepSpec.f3 = SMSOb.Title1;
+		RepSpec.f2 = ParseSMStext(SMSOb.Requisites,ORr);  
+  end;
   
   nwn = OpenWindow("SMSSendingORTClass",0,wn,"","",RepSpec);
 return;

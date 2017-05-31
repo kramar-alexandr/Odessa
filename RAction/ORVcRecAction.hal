@@ -2374,12 +2374,14 @@ global updating procedure SendNoticeSMS(record ORVc ORr)	//Edit-----------------
 begin
 	string 20 phone;
   record SMSTextBlock SMSb;
+  record SMSTextOptBlock SMSOb;
   record CUVc CUr;
   string 255 text,newtext;
   record SMSstackVc SMSr;
   longint smsNr;
 
   BlockLoad(SMSb);	
+  BlockLoad(SMSOb);
 	
 	if (nonblank(ORr.NPPhone)) then begin
 		phone = ORr.NPPhone;
@@ -2389,17 +2391,29 @@ begin
 		phone = CUr.Phone;
 	end;
 	
-	switch (ORr.FeedBackStatus) begin	
-		case 1: text = SMSb.Text31;
-		case 2: text = SMSb.Text32;
-		case 3: text = SMSb.Text33;	
+	if(nonblank(ORr.OrderClass))then begin
+		switch (ORr.FeedBackStatus) begin	
+			case 1: text = SMSb.Text31;
+			case 2: text = SMSb.Text32;
+			case 3: text = SMSb.Text33;	
+		end;
+	end else begin
+		switch (ORr.FeedBackStatus) begin	
+			case 1: text = SMSOb.Text31;
+			case 2: text = SMSOb.Text32;
+			case 3: text = SMSOb.Text33;	
+		end;
 	end;
 
 	newtext = ParseSMStext(text,ORr);
 
 	if (nonblank(text)) then begin
 		newtext = ParseSMStext(text,ORr);
-  	smsNr =	AddSMStoStack(phone,SMSb.Title3,newtext,ORr.CustCode,"ORVc",ORr.SerNr,ORr.OrderClass,"","");
+		if(nonblank(ORr.OrderClass))then begin
+			smsNr =	AddSMStoStack(phone,SMSb.Title3,newtext,ORr.CustCode,"ORVc",ORr.SerNr,ORr.OrderClass,"","");
+  	end else begin
+  		smsNr =	AddSMStoStack(phone,SMSOb.Title3,newtext,ORr.CustCode,"ORVc",ORr.SerNr,ORr.OrderClass,"","");
+  	end;
   end;
 end;
 
@@ -2409,9 +2423,11 @@ begin
 	longint smsNr;
   record CUVc CUr;
   record SMSTextBlock SMSb;
+  record SMSTextOptBlock SMSOb;
   string 20 phone
 
 	BlockLoad(SMSb);
+	BlockLoad(SMSOb);
 
 	if (nonblank(ORr.NPPhone)) then begin
 		phone = ORr.NPPhone;
@@ -2420,9 +2436,15 @@ begin
 		ReadFirstMain(CUr,1,true);
 		phone = CUr.Phone;
 	end;
-
-  text = ParseSMStext(SMSb.Requisites,ORr);  
-  smsNr = AddSMStoStack(phone,SMSb.Title1,text,ORr.CustCode,"ORVc",ORr.SerNr,ORr.OrderClass,"","");
+	
+	if(nonblank(ORr.OrderClass))then begin
+		text = ParseSMStext(SMSb.Requisites,ORr);  
+		smsNr = AddSMStoStack(phone,SMSb.Title1,text,ORr.CustCode,"ORVc",ORr.SerNr,ORr.OrderClass,"","");
+  end else begin
+  	text = ParseSMStext(SMSOb.Requisites,ORr);  
+  	smsNr = AddSMStoStack(phone,SMSOb.Title1,text,ORr.CustCode,"ORVc",ORr.SerNr,ORr.OrderClass,"","");
+  end;
+  
 	response = CheckAndSendSMS(smsNr); 
 
 SendPaymentSMS = response;

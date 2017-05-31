@@ -1815,17 +1815,23 @@ Begin
   string 200 response,text;
   string 15 title,placeWord;
   record SMSTextBlock SMSb;
+  record SMSTextOptBlock SMSOb;
   record SMSstackVc SMSr;
   longint smsNr;
   
   BlockLoad(SMSb);  
+  BlockLoad(SMSOb);  
   
   ORr.SerNr = SHr.OrderNr;
   if (ReadFirstMain(ORr,1,true)) then begin
   		PackListr.SerNr = SHr.SerNr;
   		if (ReadFirstMain(PackListr,1,true)) then begin 
   			placeNr = MatRowCnt(PackListr);
-  			title = left(SMSb.Title2,11);			//limitation from ePochta
+  			if(nonblank(ORr.OrderClass))then begin
+					title = left(SMSb.Title2,11);			//limitation from ePochta
+  			end else begin
+  				title = left(SMSOb.Title2,11);			//limitation from ePochta
+  			end;
   			placeWord = GetPlaceWord(placeNr);
   			text = USetStr(31091) & ORr.CustOrdNr & ". " & USetStr(31092) & SHr.NPIntDocNumber & "(" & placeNr & placeWord & ")";
   			

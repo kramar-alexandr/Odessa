@@ -42,11 +42,13 @@ begin
   longint smsNr;
   time sendTime;
   record SMSTextBlock SMSb;
+  record SMSTextOptBlock SMSOb;
   string 200 newtext;
   integer i,mtrw;
   boolean statusflag;
   
   	BlockLoad(SMSb);
+  	BlockLoad(SMSOb);
   	
   	//logtext(0,"RemoveReservedMarkMn");
     mindate = AddDay(CurrentDate,-31);
@@ -89,9 +91,17 @@ begin
       end;
       
       if (testf and NonBlank(ORr.ReservToDate) and ORr.ReservToDate==CurrentDate and ORr.CustomStatusFlag==11) then begin// Edit ************************** Saturday, 29 August 2015 08:57:08
-      	if (nonblank(SMSb.Text41)) then begin
-      		newtext = ParseSMStext(SMSb.Text41,ORr);
-	        smsNr = AddSMStoStack(ORr.NPPhone,SMSb.Title4,newtext,ORr.CustCode,"ORVc",ORr.SerNr,ORr.OrderClass,CurrentDate,sendTime);
+      	
+      	if(nonblank(ORr.OrderClass))then begin
+					if (nonblank(SMSb.Text41)) then begin
+						newtext = ParseSMStext(SMSb.Text41,ORr);
+						smsNr = AddSMStoStack(ORr.NPPhone,SMSb.Title4,newtext,ORr.CustCode,"ORVc",ORr.SerNr,ORr.OrderClass,CurrentDate,sendTime);
+					end;
+        end else begin
+        	if (nonblank(SMSOb.Text41)) then begin
+						newtext = ParseSMStext(SMSOb.Text41,ORr);
+						smsNr = AddSMStoStack(ORr.NPPhone,SMSOb.Title4,newtext,ORr.CustCode,"ORVc",ORr.SerNr,ORr.OrderClass,CurrentDate,sendTime);
+					end;
         end;
         testf = false;//logtext(0,"RemoveReservedMarkMn false6");
       end;
@@ -108,10 +118,17 @@ begin
           RecordCopy(OR2r,ORr);
           ORr.Reserved = 0;
           if (RecordUpdate(OR2r,ORr,true)==0) then begin 
-     	      	if (nonblank(SMSb.Text42) and ORr.CustomStatusFlag==11) then begin
-			      		newtext = ParseSMStext(SMSb.Text42,ORr);  
-            		AddSMStoStack(ORr.NPPhone,SMSb.Title4,newtext,ORr.CustCode,"ORVc",ORr.SerNr,ORr.OrderClass,CurrentDate,sendTime);
-            	end;	
+          		if(nonblank(ORr.OrderClass))then begin
+								if(nonblank(SMSb.Text42) and ORr.CustomStatusFlag==11) then begin
+									newtext = ParseSMStext(SMSb.Text42,ORr);  
+									AddSMStoStack(ORr.NPPhone,SMSb.Title4,newtext,ORr.CustCode,"ORVc",ORr.SerNr,ORr.OrderClass,CurrentDate,sendTime);
+								end;	
+            	end else begin
+            		if(nonblank(SMSOb.Text42) and ORr.CustomStatusFlag==11) then begin
+									newtext = ParseSMStext(SMSOb.Text42,ORr);  
+									AddSMStoStack(ORr.NPPhone,SMSOb.Title4,newtext,ORr.CustCode,"ORVc",ORr.SerNr,ORr.OrderClass,CurrentDate,sendTime);
+								end;
+            	end;
             res = 0;
             if (okedf) then begin
               RecordCopy(OR2r,ORr);
@@ -3252,8 +3269,10 @@ begin
   integer daybefore,dayto;
   string 255 smstext;
   record SMSTextBlock SMSb;
+  record SMSTextOptBlock SMSOb;
 
   	blockload(SMSb);
+  	blockload(SMSOb);
 		blockload(RebVchB);
 		if(RebVchB.ActivateSystem>0)then begin
 			if (NonBlank(RebVchB.RebCode)) then begin
@@ -3287,7 +3306,7 @@ begin
 						smstext = StrReplace(smstext,"@FR",RebateVoucher2r.IsValidFromDate);
 						smstext = StrReplace(smstext,"@TO",RebateVoucher2r.IsValidToDate);
 						smsNr = AddSMStoStack(CUr.Phone,SMSb.Title1,smstext,CUr.Code,"RebateVoucherVc",RebateVoucher2r.SerNr,"WEB",curDate,RebVchB.SendSMSBeforeBirthDayAtTime);
-						
+												
 					end;
 				end;
 			end;
@@ -3312,8 +3331,10 @@ begin
   integer daybefore,dayto,workdayto;
   string 255 smstext;
   record SMSTextBlock SMSb;
+  record SMSTextOptBlock SMSOb;
   	
   	blockload(SMSb);
+  	blockload(SMSOb);
 		blockload(RebVchB);
 		if(RebVchB.ActivateSystem>0)then begin
 			if (NonBlank(RebVchB.RebCode)) then begin
