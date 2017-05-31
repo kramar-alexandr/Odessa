@@ -160,9 +160,9 @@ begin
 					NPCreateRequestMn(SHr, errors, ORr.OrderClass);															//update before printing if necessary
 				end;	  		 
 				if(ORr.OrderClass=="WEB")then begin
-					www = "https://my.novaposhta.ua/orders/printMarkings/orders[]/" & SHr.NPDocumentRef & "/type/html/apiKey/" & NPSettingsb.APIkey & "/zebra/zebra";
+					www = "https://my.novaposhta.ua/orders/printMarkings/orders[]/" & SHr.NPDocumentRef & "/type/pdf/apiKey/" & NPSettingsb.APIkey & "/zebra/zebra";
 	  		end else begin
-	  			www = "https://my.novaposhta.ua/orders/printMarkings/orders[]/" & SHr.NPDocumentRef & "/type/html/apiKey/" & NPSettingsb.APIkey1 & "/zebra/zebra";
+	  			www = "https://my.novaposhta.ua/orders/printMarkings/orders[]/" & SHr.NPDocumentRef & "/type/pdf/apiKey/" & NPSettingsb.APIkey1 & "/zebra/zebra";
 	  		end;
 				OpenWebBrowser(www);
 				SHr.NPPrinted = 1;
