@@ -938,6 +938,9 @@ LPasteOrdInShipLimitMes:
 		if(ORr.NPPaymentType == 1 or (ORr.NPPaymentType == 0 and ORr.PrepaymentReceived == 1))then begin
 			SHp.Assembly = 1;
 		end;
+		if(blank(ORr.OrderClass))then begin
+			SHp.Assembly = 1;
+		end;
   end;
   rwcnt = MatRowCnt(ORr);
   srw = 0;

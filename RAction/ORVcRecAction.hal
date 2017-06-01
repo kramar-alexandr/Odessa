@@ -2734,7 +2734,7 @@ begin
 				RecordUpdate(oldSHr,SHr,true);//Edit----------------------Dima  16.07.2015
 			end;
 			
-			if(ORr.NPPaymentType == 0 and ORr.PrepaymentReceived == 0)then begin
+			if(ORr.NPPaymentType == 0 and ORr.PrepaymentReceived == 0 and ORr.OrderClass=="WEB")then begin
 				RecordCopy(oldSHr,SHr);
 				SHr.Assembly = 0;
 				RecordUpdate(oldSHr,SHr,true);//Edit----------------------Dima  16.07.2015
