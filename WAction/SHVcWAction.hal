@@ -1264,10 +1264,11 @@ BEGIN
       otherwise   
       	res = true;
     end; 
-   end else begin	      
+  end else begin	      
    		res = false;
    		switch (fieldname) begin
 				case "Collector":	res = true;
+				case "Sorting":	res = true;
       end;
    end;
      //Edit-------------------Vitalii 10:43 25.12.2015
