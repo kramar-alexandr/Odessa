@@ -1848,7 +1848,7 @@ begin
   record OrdSettBlock OSb;
   record AutoActionBlock AAb;
   record ORVc ORr,oldORr;
-
+	record PackListVc PcLr;
   
   ihef = ItemHistExists("SHVc",SHr.SerNr);
   if ((SHr.OKFlag!=0) and (SH2r.OKFlag==0)) then begin
@@ -1885,10 +1885,15 @@ begin
 				Recalculate_CustomStatusFlagText(ORr);
 				SetNewORCustomStatusFlagOnWeb(ORr);
 				ORr.TransportNumber = SHr.TransportNumber;// Edit ************************** Monday, 12 December 2016 15:07:22
+				ORr.Packages = SHr.Packages;// Edit ************************** Monday, 12 December 2016 15:07:21
+
 				if(blank(SHr.TransportNumber) and nonblank(SHr.NPIntDocNumber))then begin
 					ORr.TransportNumber = SHr.NPIntDocNumber;
+					PcLr.SerNr = SHr.SerNr;
+					if(readfirstmain(PcLr,1,true))then begin
+						ORr.Packages = matrowcnt(PcLr);
+					end;
 				end;
-				ORr.Packages = SHr.Packages;// Edit ************************** Monday, 12 December 2016 15:07:21
 				oldORr.SerNr = ORr.SerNr;
 				if(readfirstmain(oldORr,1,true))then begin
 					CreateORHistoryVcFromORVc(ORr,oldORr,true);// Edit ************************** Wednesday, 1 March 2017 10:50:38
