@@ -887,7 +887,7 @@ BEGIN
   PrintInvoiceToBankData(CUr.BankAccount,Bankr,ORr.InvoiceToCode);
   PrintBankData(ORr.BankCode);
   
-  tstr = "SH" & SHr.SerNr;// Edit ************************** Monday, 26 December 2016 10:08:55
+  tstr = /*"SH" & */SHr.SerNr;// Edit ************************** Monday, 26 December 2016 10:08:55
   CreateEAN128(tstr);
 	OUTFORMFIELD("MYF_BARSERNR",tstr);
   
