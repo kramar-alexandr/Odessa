@@ -1587,7 +1587,7 @@ LORVcRecordRowCheck:;
 		
 		NPWarehouser.City = ORr.NPCityRecipient;
 		NPWarehouser.Number = ORr.NPWarehouse;
-		if(FindSubString("###",ORr.ShipAddr3)==false)then begin
+		if(FindSubString("###",ORr.ShipAddr3)==false and ORr.NPAdresDeliv==0)then begin
 			if (ReadFirstKey("City",NPWarehouser,2,true)==false) then begin
 					 RecordCheckError(31049,"",-1,"NPWarehouse"); 
 					 res = -1; 
