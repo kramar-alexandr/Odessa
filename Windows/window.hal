@@ -2366,10 +2366,14 @@ begin
   statictext(h2,vh+=vs,"%Order% - Номер заказа",false);
   statictext(h2,vh+=vs,"%Commission% - комиссия",false);
   statictext(h2,vh+=vs,"%CR% - новая строка",false);
+  statictext(h2,vh+=vs,"Отгр.: %Place% - 'слово место/мест'",false);
+  statictext(h2,vh+=vs,"Отгр.: %Seats% - кол-во мест",false);
+  statictext(h2,vh+=vs,"Отгр.: %TTN% - номер ТТН",false);
 
   Tile(2,200,false,"","Title2");
   v=6;
   EditField(h,v+=vs,150,"Заголовок",Normal,Title2,false,0);
+  EditField(h,v+=vs,150,"Смс с ТТН",Normal,ShipmentText,false,0);
 
   Tile(3,200,false,"","Title3");
   v=6;
@@ -2395,7 +2399,7 @@ window SMSTextOptTClass:1				//Edit----------------------Dima  26.06.2015
   wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
 begin
   real h,v,vs,vh,h2;
-  WindowBegin("Текст СМС сообщений",SMSTextOptTClass,CGSbl,-);
+  WindowBegin("Текст СМС сообщений ОПТ",SMSTextOptTClass,CGSbl,-);
   SetBlid(SMSTextOptBlock);
   SetWRect(64,80,630,450);
   vs = 20; h = 170;
@@ -2426,10 +2430,14 @@ begin
   statictext(h2,vh+=vs,"%Order% - Номер заказа",false);
   statictext(h2,vh+=vs,"%Commission% - комиссия",false);
   statictext(h2,vh+=vs,"%CR% - новая строка",false);
+  statictext(h2,vh+=vs,"Отгр.: %Place% - 'слово место/мест'",false);
+  statictext(h2,vh+=vs,"Отгр.: %Seats% - кол-во мест",false);
+  statictext(h2,vh+=vs,"Отгр.: %TTN% - номер ТТН",false);
 
   Tile(2,200,false,"","Title2");
   v=6;
   EditField(h,v+=vs,150,"Заголовок",Normal,Title2,false,0);
+  EditField(h,v+=vs,150,"Смс с ТТН",Normal,ShipmentText,false,0);
 
   Tile(3,200,false,"","Title3");
   v=6;
