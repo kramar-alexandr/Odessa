@@ -2373,7 +2373,7 @@ begin
   Tile(2,200,false,"","Title2");
   v=6;
   EditField(h,v+=vs,150,"Заголовок",Normal,Title2,false,0);
-  EditField(h,v+=vs,150,"Смс с ТТН",Normal,ShipmentText,false,0);
+  EditField(h,v+=vs,-20,"Смс с ТТН",Normal,ShipmentText,false,0);
 
   Tile(3,200,false,"","Title3");
   v=6;
@@ -2437,7 +2437,7 @@ begin
   Tile(2,200,false,"","Title2");
   v=6;
   EditField(h,v+=vs,150,"Заголовок",Normal,Title2,false,0);
-  EditField(h,v+=vs,150,"Смс с ТТН",Normal,ShipmentText,false,0);
+  EditField(h,v+=vs,-20,"Смс с ТТН",Normal,ShipmentText,false,0);
 
   Tile(3,200,false,"","Title3");
   v=6;
