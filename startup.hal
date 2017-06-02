@@ -301,7 +301,8 @@ begin
 	 SString(31163,"При отправке на логистику в заказе не должно быть уже отгруженных товаров D");
 	 SString(31164,"Заказ должен быть категории WEB");
 	 SString(31165,"Галочка ОК должна быть снята");
-	
+	 SString(31166,"Галочка Резерв должна быть снята");
+	 
 	Maintenance("Проставить склад первой покупки клиента",MyVClass,FillFirstDateByeCUMn,modSL);
   Maintenance("Экспорт склада CSV",ExportStockCSVClass,ExportStockCSVMn,modSY);
   Maintenance("Копирование ежедневного бэкапа на FTP",ExportStockCSVClass,SenBackuptoFTP,modSY);

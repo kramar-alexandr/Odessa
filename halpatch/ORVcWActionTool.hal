@@ -1655,19 +1655,20 @@ begin
 				MatRowGet(SMr,i,SMrw);
 				if (SMrw.ORRowUID==ORrw.UID and SMrw.ArtCode==ORrw.ArtCode and SMrw.ORSerial==ORr.SerNr) then begin
 					RecordCopy(oldSMr,SMr);
+						SMr.Reserved = 0;
+					RecordUpdate(oldSMr,SMr);
 					processingQty = SMrw.OrderProcessing;
 					
 					SMrw.OrderProcessing = BlankVal;
 					SMrw.ORSerial = -1;
 					SMrw.ORRowUID = BlankVal;
 					MatRowPut(SMr,i,SMrw);
-					logtext(0,SMr.AutoCompliteFlag & " __ " & SMr.StopAutoComplite);
 					if(SMr.AutoCompliteFlag>0 and SMr.StopAutoComplite==0)then begin
 						matrowdelete(SMr,i);
 					end;
 					i = rwcnt;
 					
-					if (RecordStore(SMr,true)) then begin	
+					if (RecordUpdate(oldSMr,SMr)) then begin	
 						ORrw.ProcessingQuant = ORrw.ProcessingQuant - processingQty;
 						ORrw.OrderQuant = ORrw.OrderQuant - processingQty;
 						if (ORrw.ProcessingQuant==0) then begin TrHs = false; end;		//all stock movements were found

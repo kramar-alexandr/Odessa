@@ -2778,6 +2778,10 @@ begin
 			testf = false;
 			messagebox(31165,"");
 		end;
+		if(ORr.Reserved>0)then begin 
+			testf = false;
+			messagebox(31166,"");
+		end;
 		
 		if(testf)then begin
 			MakeReserveFromOrder(ORr.SerNr);
