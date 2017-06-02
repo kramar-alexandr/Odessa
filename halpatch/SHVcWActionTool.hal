@@ -34,6 +34,8 @@ external procedure CurValToOtherCur(Date,string,val,string,var val,roundmode);	/
 //external function string 255 SendSMS(string, string, string,boolean,string);//Edit----------------------Dima  30.06.2015
 external updating function string 255 SendSMS(record SMSstackVc, boolean);
 external updating function longint AddSMStoStack(string, string, string,string,string,longint,string,date,time);//Edit----------------------Dima  28.08.2015
+external function string 255 ParseSMStext(string, record ORVc);// Edit ************************** Friday, 2 June 2017 11:44:04
+external function string 255 ReplaceAllSubStringInString(string, string, string);//Edit----------------------Dima  02.07.2015
 
 SetLangMode(LangRussian,"RUS",0); 
 
@@ -1812,7 +1814,7 @@ Begin
   record PackListVc PackListr;
   record ORVc ORr;
   integer placeNr;
-  string 200 response,text;
+  string 200 response,text,resString,ttn;
   string 15 title,placeWord;
   record SMSTextBlock SMSb;
   record SMSTextOptBlock SMSOb;
@@ -1827,15 +1829,33 @@ Begin
   		PackListr.SerNr = SHr.SerNr;
   		if (ReadFirstMain(PackListr,1,true)) then begin 
   			placeNr = MatRowCnt(PackListr);
+  			if(SHr.Packages>0)then begin
+  				placeNr = SHr.Packages;
+  			end;
   			if(nonblank(ORr.OrderClass))then begin
 					title = left(SMSb.Title2,11);			//limitation from ePochta
+					text = SMSb.ShipmentText;
   			end else begin
   				title = left(SMSOb.Title2,11);			//limitation from ePochta
+  				text = SMSOb.ShipmentText;
   			end;
-  			placeWord = GetPlaceWord(placeNr);
-  			text = USetStr(31091) & ORr.CustOrdNr & ". " & USetStr(31092) & SHr.NPIntDocNumber & "(" & placeNr & placeWord & ")";
   			
-  			smsNr = AddSMStoStack(ORr.NPPhone,title,text,ORr.CustCode,"SHVc",SHr.SerNr,ORr.OrderClass,"","");
+  			
+  			placeWord = GetPlaceWord(placeNr);
+  			
+  			ttn = SHr.NPIntDocNumber;
+  			if(nonblank(SHr.TransportNumber))then begin
+  				ttn = SHr.TransportNumber;
+  			end;
+  			
+  			resString = ParseSMStext(text,ORr);
+  			resString = ReplaceAllSubStringInString("%Place%",placeWord,resString);
+  			resString = ReplaceAllSubStringInString("%Seats%",placeNr,resString);
+  			resString = ReplaceAllSubStringInString("%TTN%",ttn,resString);
+  			
+  			//text = USetStr(31091) & ORr.CustOrdNr & ". " & USetStr(31092) & SHr.NPIntDocNumber & "(" & placeNr & placeWord & ")";
+  			
+  			smsNr = AddSMStoStack(ORr.NPPhone,title,resString,ORr.CustCode,"SHVc",SHr.SerNr,ORr.OrderClass,"","");
 			end;
 	end; 
 

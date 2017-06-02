@@ -318,7 +318,7 @@ begin
 
 	wn = CurWindow;
 	GetWindowRecord(wn,SHr);
-  if (nonblank(SHr.NPIntDocNumber) and (SHr.OKFlag>0)) then begin
+  if ((nonblank(SHr.NPIntDocNumber) or nonblank(SHr.TransportNumber)) and (SHr.OKFlag>0)) then begin
 			msg = SendSMSNewPost(SHr);
 			if (nonblank(msg)) then begin
 				MessageBox(0,msg);
