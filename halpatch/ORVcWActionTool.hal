@@ -1656,7 +1656,8 @@ begin
 				if (SMrw.ORRowUID==ORrw.UID and SMrw.ArtCode==ORrw.ArtCode and SMrw.ORSerial==ORr.SerNr) then begin
 					RecordCopy(oldSMr,SMr);
 						SMr.Reserved = 0;
-					RecordUpdate(oldSMr,SMr);
+					RecordUpdate(oldSMr,SMr,true);
+					RecordCopy(oldSMr,SMr);
 					processingQty = SMrw.OrderProcessing;
 					
 					SMrw.OrderProcessing = BlankVal;
@@ -1668,7 +1669,8 @@ begin
 					end;
 					i = rwcnt;
 					
-					if (RecordUpdate(oldSMr,SMr)) then begin	
+					SMr.Reserved = 1;
+					if (RecordUpdate(oldSMr,SMr,true)==0) then begin	
 						ORrw.ProcessingQuant = ORrw.ProcessingQuant - processingQty;
 						ORrw.OrderQuant = ORrw.OrderQuant - processingQty;
 						if (ORrw.ProcessingQuant==0) then begin TrHs = false; end;		//all stock movements were found

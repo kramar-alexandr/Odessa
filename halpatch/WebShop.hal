@@ -503,9 +503,7 @@ begin
   string 50 tstr;
   array string 20 apos;
   record PosVc Posr;
-  
-  logtext(0,"MakeReserveFromOrder");
-  
+    
   blockload(WSb);
   
     ORr.SerNr = OrSerNr;
@@ -538,8 +536,6 @@ begin
 						ExtractObjWithSeparator(",",WSb.LocationQuer,true,pos,tstr);
 						while(nonblank(tstr))begin
 							if(nonblank(tstr) and tstr!="RYBRAY")then begin
-							
-								logtext(0,WSb.LocationQuer & " " & tstr);
 								apos[0] = "";
 								posi = 1;
 								
@@ -571,7 +567,6 @@ begin
 											end;
 										end;
 									end;
-									logtext(0,process);
 									if(process)then begin
 										SMr.TransDate = currentdate;
 										TrHs = true;

@@ -2325,7 +2325,8 @@ begin
   
 	
 	res = CancelLogisticsOrderFromStocMove(ORr,RepSpec.flags[1]);
-
+	updatebrowses("ORVc");
+	PutWindowRecord(mwn,ORr);
 	PutWindowRecord(mwn,ORr);
 	WindowDoOK(mwn,0);
 	
