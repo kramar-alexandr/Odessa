@@ -2762,17 +2762,21 @@ begin
 	  		matrowget(ORr,i,ORrw);
 	  		if(ORrw.OrderQuant>0)then begin
 	  			testf = false;
+	  			messagebox(31162,"");
 	  		end;
 	  		if(ORrw.Shipd1>0)then begin
 	  			testf = false;
+	  			messagebox(31163,"");
 	  		end;
 			end; 
 		end;
 		if(ORr.OrderClass!="WEB")then begin 
 			testf = false;
+			messagebox(31164,"");
 		end;
 		if(ORr.OKFlag>0)then begin 
 			testf = false;
+			messagebox(31165,"");
 		end;
 		
 		if(testf)then begin
