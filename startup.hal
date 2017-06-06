@@ -438,7 +438,8 @@ begin
 	Import("Изменить наименования классификаций",ChangeClassificationNameIClass,ChangeClassificationNameIn,modSL); //Edit***************************Sasha2,15:00 25.05.2016
   Import("Обновить клиентов",UpdateCUImportIClass,UpdateCUImportIn,modSL); //Edit***************************Sasha2,14:54 15.02.2017
 	Import("Залить минимальные заказы",INMinOrderImportIClass,INMinOrderImportIn,modIN); //Edit***************************Sasha2,14:54 15.02.2017
-
+	Import("Залить MOQ",INMinOrderImportIClass,INMOQOrderImportIn,modIN); //Edit***************************Sasha2,14:54 15.02.2017
+	
 	Export("ExxportIN",CashInvCroEClass,ExpRegINEn,modDBMain);
 	Export("ExxportPLHist",UILogEClass,ExpRegPLHistEn,modDBMain);
 

@@ -2632,6 +2632,7 @@ begin
       //MatColTL(1,-310,"Ед.изм.3",0,M4Str,ViewOnly,0,AddUnittext3,true,0);
 			MatColTL(1,-200,"Упаковок",0,M4UVal,Normal,0,AddUnitQty3,true,0);	//Edit by Victor 30.01.15
       MatColTL(1,-160,"В упаковке",0,M4UVal,ViewOnly,0,QtyPack,false,0);	//Edit by Victor 30.01.15
+      MatColTL(1,-80,"MOQ",0,M4UVal,ViewOnly,0,MOQ,false,0);// Edit ************************** Tuesday, 6 June 2017 15:26:24
       //MatColTL(1,-250,"Ед.изм.4",0,M4Str,ViewOnly,0,AddUnittext4,true,0);
       //MatColTL(1,-190,"Кол-во",0,M4UVal,Normal,0,AddUnitQty4,false,0);
       //MatColTL(1,-130,"Ед.изм.5",0,M4Str,ViewOnly,0,AddUnittext5,true,0);

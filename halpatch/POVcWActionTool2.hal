@@ -1260,6 +1260,17 @@ begin
     POrw.AddUnitQty5 = INr.AddUnitCoef5;// Edit ************************** четверг, 26 июня 2014 г., 20:49:44
     POrw.QtyPack = INr.AddUnitCoef3;	//Edit by Victor 30.01.15
     POrw.QtyBox = INr.AddUnitCoef2;	//Edit by Victor 30.01.15
+    
+    if(INr.AddUnittext3=="MOQ")then begin
+			POrw.MOQ = INr.AddUnitCoef3;
+		end;
+		if(INr.AddUnittext4=="MOQ")then begin
+			POrw.MOQ = INr.AddUnitCoef4;
+		end;
+		if(INr.AddUnittext5=="MOQ")then begin
+			POrw.MOQ = INr.AddUnitCoef5;
+		end;
+		
     if(POrw.Quant<=0)then begin
 			POrw.Volume = INr.Volume;// Edit ************************** Wednesday, July 9, 2014 at 11:37:02
 			POrw.Weight = INr.Weight;// Edit ************************** Wednesday, July 9, 2014 at 11:37:01

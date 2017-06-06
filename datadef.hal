@@ -961,6 +961,7 @@ RecordBegin(INVc,-,"artikel5");
   ArrayField(PrintQuant,M4UVal,0,0);//Edit----------------------Dima  23.05.2016
   ArrayField(BarCode,M4Str,20,0);		//Edit----------------------Dima  23.05.2016 
   ArrayField(NetWeight,M45Val,0,0); //Edit***************************Sasha2,14:37 19.01.2017
+  ArrayField(MOQ,M4Val,0,0);// Edit ************************** Tuesday, 6 June 2017 15:25:10
   EndArray;
   MainKeyBegin(SerNr,1);
   StoreInBaseKey;
