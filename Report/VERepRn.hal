@@ -2,7 +2,7 @@ external procedure LookupInHist(string, Date, Date, string,var val,var val,var v
 external function Boolean SetInSet2(string,string);
 remote procedure CollectOrderRows(var record ORVc,Date,Date,string);
 remote procedure CollectPORows(var record POVc,Date,Date,string);
-remote procedure GetISStatus(string,var val,var val,var val,string);
+remote procedure GetISStatus(string,var val,var val,var val,string,var val,var val);
 external procedure ExtractObj(string,var Integer,var string);
 
 SetLangMode(LangRussian,"RUS",0);
@@ -262,7 +262,7 @@ BEGIN
   val soldall,sold0,strRest0,gotval0,curRest0,SDqty0,saleopt0,saleroz0;
   boolean nofindf;
   val OrdQty,POQty,POUnOkQty,retPU,SDqty,stin,stout,saleopt,saleroz;
-  val OrdQty0,POQty0,POUnOkQty0; 
+  val OrdQty0,POQty0,POUnOkQty0,OrdQtyRR,OrdQty1K; 
   longint OrdQtyInt;
   integer rw,pos,size,size2,startPos;
   string 255 tstr,frin,toin;
@@ -362,6 +362,8 @@ RecordNew(ISr);
    OutString(260,0,"Списано",false);
    OutString(280,0,"Остаток",false);
    OutString(300,0,"К отгрузке клиентам",false);
+   OutString(310,0,"К отгрузке клиентам 1-KOC",false);
+   OutString(320,0,"К отгрузке клиентам RYBRAY",false);
 
    step=(360-320)/(locationsBal.length + positionsBal.length);
    startPos = 320;
@@ -433,7 +435,7 @@ RecordNew(ISr);
   		
   		if(size>0)then begin
 				for(i=0; i<size; i=i+1) begin
-					GetISStatus(INr.Code,OrdQty0,POQty0,POUnOkQty0,locations[i]);
+					GetISStatus(INr.Code,OrdQty0,POQty0,POUnOkQty0,locations[i],OrdQtyRR,OrdQty1K);
 					OrdQty = OrdQty + OrdQty0;
 					POQty = POQty + POQty0;
 					POUnOkQty = POUnOkQty + POUnOkQty0;
@@ -454,7 +456,7 @@ RecordNew(ISr);
 					saleroz = saleroz0;
 				end;	
 			end else begin
-				GetISStatus(INr.Code,OrdQty,POQty,POUnOkQty,RepSpec.f2);		//Edit ------------------------------Dima.                склад - f2, не f1		
+				GetISStatus(INr.Code,OrdQty,POQty,POUnOkQty,RepSpec.f2,OrdQtyRR,OrdQty1K);		//Edit ------------------------------Dima.                склад - f2, не f1		
 				LookupInHist(INr.Code, RepSpec.sStartDate, RepSpec.sEndDate,RepSpec.f2,sold0,strRest,gotval,curRest,TRWH,retPU,SDqty,stin,stout,saleopt,saleroz,LocBalValues,PosBalValues);
 				soldall = sold0;
   		end;
@@ -492,6 +494,8 @@ RecordNew(ISr);
 				OutString(260,0,-(retPU+SDqty),false);
 				OutString(280,0,curRest,false);
 				OutString(300,0,OrdQty,false);
+				OutString(310,0,OrdQty1K,false);
+				OutString(320,0,OrdQtyRR,false);
 
 
   			for(i = 0; i < locationsBal.length; i = i+1) begin

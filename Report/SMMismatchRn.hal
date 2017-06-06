@@ -2,7 +2,7 @@ external procedure LookupInHist(string, Date, Date, string,var val,var val,var v
 external function Boolean SetInSet2(string,string);
 remote procedure CollectOrderRows(var record ORVc,Date,Date,string);
 remote procedure CollectPORows(var record POVc,Date,Date,string);
-remote procedure GetISStatus(string,var val,var val,var val,string);
+remote procedure GetISStatus(string,var val,var val,var val,string,var val,var val);
 external procedure ExtractObj(string,var Integer,var string);
 
 SetLangMode(LangRussian,"RUS",0);
