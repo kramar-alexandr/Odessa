@@ -231,11 +231,6 @@ begin
   RecordField(IntrastatTransCode,M4Code,20,0);
   RecordField(GlobalTransportNr,M4UStr,30,0);
   RecordField(GlobalTransportDate,M4Date,0,0);
-  RecordField(AddAddr1,M4Str,255,0);
-  RecordField(AddAddr2,M4Str,255,0);
-  RecordField(AddAddr3,M4Str,255,0);
-  RecordField(AddAddr4,M4Str,255,0);
-  RecordField(AddAddr5,M4Str,255,0);
   return;
 end; 
 
@@ -2169,7 +2164,11 @@ RecordBegin(INVc,-,"artikel5");
   RecordField(BirthDayVaucher,M4Long,0,0);// Edit ************************** Monday, 28 November 2016 11:53:25
   RecordField(Kassir,M4Str,40,0);// Edit ************************** Wednesday, 30 November 2016 13:48:13
   RecordField(PromotionCode,M4Code,20,0); //Edit***************************Sasha2,14:55 24.01.2017
-  
+  RecordField(AddAddr1,M4Str,255,0);// Edit ************************** Wednesday, 7 June 2017 17:11:49
+  RecordField(AddAddr2,M4Str,255,0);// Edit ************************** Wednesday, 7 June 2017 17:11:49
+  RecordField(AddAddr3,M4Str,255,0);// Edit ************************** Wednesday, 7 June 2017 17:11:50
+  RecordField(AddAddr4,M4Str,255,0);// Edit ************************** Wednesday, 7 June 2017 17:11:50
+  RecordField(AddAddr5,M4Str,255,0);// Edit ************************** Wednesday, 7 June 2017 17:11:51
   DefineIVVcRecordType_Array;
   MainKeyBegin(SerNr,1);
   StoreInBaseKey;
