@@ -1118,6 +1118,17 @@ BEGIN
     ORp.Addr1 = CUr.InvAddr0;
     ORp.Addr2 = CUr.InvAddr1;
     ORp.Addr3 = CUr.InvAddr2;
+    // Edit Start ---------------------------------------------- Edit Start
+	//Wednesday, 7 June 2017 16:54:03
+	
+    ORp.AddAddr1 = CUr.AddInvAddr1;
+    ORp.AddAddr2 = CUr.AddInvAddr2;
+    ORp.AddAddr3 = CUr.AddInvAddr3;
+    ORp.AddAddr4 = CUr.AddInvAddr4;
+    ORp.AddAddr5 = CUr.AddInvAddr5;
+    
+	// Edit End ---------------------------------------------- Edit End
+	
     ORp.InvAddr3 = CUr.InvAddr3;
     ORp.InvAddr4 = CUr.InvAddr4;
     ORp.InvCountry = CUr.CountryCode;

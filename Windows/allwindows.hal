@@ -4005,16 +4005,21 @@ if (HasTouchScreenLook==false) then begin
   Tile(7,250,false,"7",Addr1); vs = 20;
   label = UserDefined("CUVc","InvAddr0");
   if (blank(label)) then begin label = "Invoice"; end;
-  EditField(h=110,v=6,-20,label,Normal,Addr1,false,0);
+  EditField(h=70,v=6,280,label,Normal,Addr1,false,0);
+  EditField(h+350,v,-20,"прод. адр.",Normal,AddAddr1,false,0);
   label = UserDefined("CUVc","InvAddr1");
   if (blank(label)) then begin label = "Адрес"; end;
-  EditField(h,v+=vs, -20,label,Normal,Addr2,false,0);
+  EditField(h,v+=vs,280,label,Normal,Addr2,false,0);
+  EditField(h+350,v,-20,"прод. адр.",Normal,AddAddr2,false,0);
   label = UserDefined("CUVc","InvAddr2");
-  EditField(h,v+=vs, -20,label,Normal,Addr3,false,0);
+  EditField(h,v+=vs,280,label,Normal,Addr3,false,0);
+  EditField(h+350,v,-20,"прод. адр.",Normal,AddAddr3,false,0);
   label = UserDefined("CUVc","InvAddr3");
-  EditField(h,v+=vs, -20,label,Normal,InvAddr3,false,0);
+  EditField(h,v+=vs,280,label,Normal,InvAddr3,false,0);
+  EditField(h+350,v,-20,"прод. адр.",Normal,AddAddr4,false,0);
   label = UserDefined("CUVc","InvAddr4");
-  EditField(h,v+=vs, -20,label,Normal,InvAddr4,false,0);
+  EditField(h,v+=vs,280,label,Normal,InvAddr4,false,0);
+  EditField(h+350,v,-20,"прод. адр.",Normal,AddAddr5,false,0);
   EditField(h,vm=(v+=vs),80,"Страна",Normal,InvCountry,false,CountrySClass);
   if (HasLocalization("BRA")) then begin
     EditField(h2-89,v,232,"",ViewOnly,InvCountryName,false,0);
@@ -5396,16 +5401,23 @@ begin
   Tile(6,250,false,"6",Addr1);
   label = UserDefined("CUVc","InvAddr0");
   if (blank(label)) then begin label = "Invoice"; end;
-  EditField(h=110,v=6,-20,label,Normal,Addr1,false,0);
+  EditField(h=70,v=6,330,label,Normal,Addr1,false,0);
+  EditField(h+400,v,-20,"прод. адр.",Normal,AddAddr1,false,0);// Edit ************************** Wednesday, 7 June 2017 16:26:33
   label = UserDefined("CUVc","InvAddr1");
   if (blank(label)) then begin label = "Адрес"; end;
-  EditField(h,v+=vs, -20,label,Normal,Addr2,false,0);
+  EditField(h,v+=vs,330,label,Normal,Addr2,false,0);
+  EditField(h+400,v,-20,"прод. адр.",Normal,AddAddr2,false,0);// Edit ************************** Wednesday, 7 June 2017 16:26:33
   label = UserDefined("CUVc","InvAddr2");
-  EditField(h,v+=vs, -20,label,Normal,Addr3,false,0);
+  EditField(h,v+=vs,330,label,Normal,Addr3,false,0);
+  EditField(h+400,v,-20,"прод. адр.",Normal,AddAddr3,false,0);// Edit ************************** Wednesday, 7 June 2017 16:26:33
   label = UserDefined("CUVc","InvAddr3");
-  EditField(h,v+=vs, -20,label,Normal,InvAddr3,false,0);
+  EditField(h,v+=vs, 330,label,Normal,InvAddr3,false,0);
+  EditField(h+400,v,-20,"прод. адр.",Normal,AddAddr4,false,0);// Edit ************************** Wednesday, 7 June 2017 16:26:33
+
   label = UserDefined("CUVc","InvAddr4");
-  EditField(h,v+=vs, -20,label,Normal,InvAddr4,false,0);
+  EditField(h,v+=vs, 330,label,Normal,InvAddr4,false,0);
+  EditField(h+400,v,-20,"прод. адр.",Normal,AddAddr5,false,0);// Edit ************************** Wednesday, 7 June 2017 16:26:33
+
   EditField(h,vm=(v+=vs),80,"Страна",Normal,InvCountry,false,CountrySClass);
   if (HasLocalization("BRA")) then begin
     EditField(h2-89,v,232,"",ViewOnly,InvCountryName,false,0);
@@ -11086,9 +11098,10 @@ begin
   if blank(label) then begin
     label = "Адрес 1";
   end;
+  EditField(h-70,v+=vs,250,label,Normal,InvAddr0,false,0);
+  EditField(h+250,v,-100,"прод. адр.",Normal,AddInvAddr1,false,0);
   
-  EditField(h,v+=vs,-100,label,Normal,InvAddr0,false,0);
-  ButtonFrame(-80,v,60,2,"Тип");
+  ButtonFrame(-80,v,60,3,"Тип");
   	RadioButton(-80,v,0,0,"Магазин",AgeStatus);
   	RadioButton(-80,v+17,1,0,"Рынок",AgeStatus);
     RadioButton(-80,v+34,2,0,"Оба",AgeStatus);//Edit-------------------Vitalii 10:29 05.09.2016
@@ -11097,22 +11110,26 @@ begin
   if blank(label) then begin
     label = "Адрес 2";
   end;
-  EditField(h,v+=vs,-100,label,Normal,InvAddr1,false,0);
+  EditField(h-70,v+=vs,250,label,Normal,InvAddr1,false,0);
+  EditField(h+250,v,-100,"прод. адр.",Normal,AddInvAddr2,false,0);
   label = UserDefined("CUVc","InvAddr2");
   if blank(label) then begin
     label = "Адрес 3";
   end;
-  EditField(h,v+=vs,-100,label,Normal,InvAddr2,false,0);
+  EditField(h-70,v+=vs,250,label,Normal,InvAddr2,false,0);
+  EditField(h+250,v,-100,"прод. адр.",Normal,AddInvAddr3,false,0);
   label = UserDefined("CUVc","InvAddr3");
   if blank(label) then begin
     label = "Адрес 4";
   end;
-  EditField(h,v+=vs,-100,label,Normal,InvAddr3,false,0);
+  EditField(h-70,v+=vs,250,label,Normal,InvAddr3,false,0);
+  EditField(h+250,v,-100,"прод. адр.",Normal,AddInvAddr4,false,0);
   label = UserDefined("CUVc","InvAddr4");
   if blank(label) then begin
     label = "Адрес 5";
   end;
-  EditField(h,v+=vs,-100,label,Normal,InvAddr4,false,0);
+  EditField(h-70,v+=vs,250,label,Normal,InvAddr4,false,0);
+  EditField(h+250,v,-100,"прод. адр.",Normal,AddInvAddr5,false,0);
   
   EditField(h,v+=vs,50,"Страна",Normal,CountryCode,false,CountrySClass);
       EditField(h1,v,-20,"Ответственный менеджер",Normal,Department,false,UserSClass);//Edit-------------------Vitalii 11:12 05.09.2016

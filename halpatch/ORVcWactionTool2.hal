@@ -43,6 +43,17 @@ BEGIN
     ORr.Addr1  = CUr.InvAddr0;
     ORr.Addr2  = CUr.InvAddr1;
     ORr.Addr3  = CUr.InvAddr2;
+    // Edit Start ---------------------------------------------- Edit Start
+	//Wednesday, 7 June 2017 17:01:46
+	
+    ORr.AddAddr1 = CUr.AddInvAddr1;
+    ORr.AddAddr2 = CUr.AddInvAddr2;
+    ORr.AddAddr3 = CUr.AddInvAddr3;
+    ORr.AddAddr4 = CUr.AddInvAddr4;
+    ORr.AddAddr5 = CUr.AddInvAddr5;
+    
+	// Edit End ---------------------------------------------- Edit End
+	
     ORr.InvAddr3 = CUr.InvAddr3;
     ORr.InvAddr4 = CUr.InvAddr4;
     ORr.CustCat = CUr.CustCat;

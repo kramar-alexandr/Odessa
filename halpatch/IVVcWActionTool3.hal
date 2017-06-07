@@ -1384,6 +1384,17 @@ BEGIN
     IVr.Addr1 = CUr.InvAddr0;
     IVr.Addr2 = CUr.InvAddr1;
     IVr.Addr3 = CUr.InvAddr2;
+    // Edit Start ---------------------------------------------- Edit Start
+	//Wednesday, 7 June 2017 16:55:01
+	
+   	IVr.AddAddr1 = CUr.AddInvAddr1;
+   	IVr.AddAddr2 = CUr.AddInvAddr2;
+   	IVr.AddAddr3 = CUr.AddInvAddr3;
+   	IVr.AddAddr4 = CUr.AddInvAddr4;
+   	IVr.AddAddr5 = CUr.AddInvAddr5;
+    
+	// Edit End ---------------------------------------------- Edit End
+	
     IVr.InvAddr3 = CUr.InvAddr3;
     IVr.InvAddr4 = CUr.InvAddr4;
     IVr.ClientContact = CUr.Person;

@@ -171,6 +171,17 @@ begin
       IVp.Addr1 = CUr.InvAddr0;
       IVp.Addr2 = CUr.InvAddr1;
       IVp.Addr3 = CUr.InvAddr2;
+      
+       // Edit Start ---------------------------------------------- Edit Start
+	//Wednesday, 7 June 2017 16:55:01
+	
+   	IVp.AddAddr1 = CUr.AddInvAddr1;
+   	IVp.AddAddr2 = CUr.AddInvAddr2;
+   	IVp.AddAddr3 = CUr.AddInvAddr3;
+   	IVp.AddAddr4 = CUr.AddInvAddr4;
+   	IVp.AddAddr5 = CUr.AddInvAddr5;
+    
+	// Edit End ---------------------------------------------- Edit End
       IVp.InvAddr3 = CUr.InvAddr3;
       IVp.InvAddr4 = CUr.InvAddr4;
       IVp.CustCat = CUr.CustCat;
@@ -188,6 +199,16 @@ L20OrdDownPay:;
     IVp.Addr1 = ORr.Addr1;
     IVp.Addr2 = ORr.Addr2;
     IVp.Addr3 = ORr.Addr3;
+     // Edit Start ---------------------------------------------- Edit Start
+	//Wednesday, 7 June 2017 16:55:01
+	
+   	IVp.AddAddr1 = CUr.AddInvAddr1;
+   	IVp.AddAddr2 = CUr.AddInvAddr2;
+   	IVp.AddAddr3 = CUr.AddInvAddr3;
+   	IVp.AddAddr4 = CUr.AddInvAddr4;
+   	IVp.AddAddr5 = CUr.AddInvAddr5;
+    
+	// Edit End ---------------------------------------------- Edit End
     IVp.InvAddr3 = ORr.InvAddr3;
     IVp.InvAddr4 = ORr.InvAddr4;
     IVp.InvCountry = ORr.InvCountry;
@@ -788,6 +809,16 @@ begin
       IVp.Addr1 = CUr.InvAddr0;
       IVp.Addr2 = CUr.InvAddr1;
       IVp.Addr3 = CUr.InvAddr2;
+       // Edit Start ---------------------------------------------- Edit Start
+	//Wednesday, 7 June 2017 16:55:01
+	
+   	IVp.AddAddr1 = CUr.AddInvAddr1;
+   	IVp.AddAddr2 = CUr.AddInvAddr2;
+   	IVp.AddAddr3 = CUr.AddInvAddr3;
+   	IVp.AddAddr4 = CUr.AddInvAddr4;
+   	IVp.AddAddr5 = CUr.AddInvAddr5;
+    
+	// Edit End ---------------------------------------------- Edit End
       IVp.InvAddr3 = CUr.InvAddr3;
       IVp.InvAddr4 = CUr.InvAddr4;
       IVp.InvCountry = CUr.CountryCode;
@@ -835,6 +866,16 @@ begin
     IVp.Addr1 = CUr.InvAddr0;
     IVp.Addr2 = CUr.InvAddr1;
     IVp.Addr3 = CUr.InvAddr2;
+     // Edit Start ---------------------------------------------- Edit Start
+	//Wednesday, 7 June 2017 16:55:01
+	
+   	IVp.AddAddr1 = CUr.AddInvAddr1;
+   	IVp.AddAddr2 = CUr.AddInvAddr2;
+   	IVp.AddAddr3 = CUr.AddInvAddr3;
+   	IVp.AddAddr4 = CUr.AddInvAddr4;
+   	IVp.AddAddr5 = CUr.AddInvAddr5;
+    
+	// Edit End ---------------------------------------------- Edit End
     IVp.InvAddr3 = CUr.InvAddr3;
     IVp.InvAddr4 = CUr.InvAddr4;
     IVp.InvCountry = CUr.CountryCode;
