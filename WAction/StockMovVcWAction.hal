@@ -906,6 +906,8 @@ BEGIN
           res = false;
         end;
       end;
+    case "Comment":
+      res = true;
     otherwise
       switch (wnst) begin
         case Rs_update:
