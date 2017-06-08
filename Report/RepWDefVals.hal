@@ -451,6 +451,7 @@ BEGIN
   end;
 
   RepSpec.flags[11] = 1;
+  RepSpec.flags[10] = 1;
 // ?
   switch (CostAccr.PrimaryCostModel) begin
     case kCostModelQueued: RepSpec.flags[10] = 0;
