@@ -408,6 +408,7 @@ begin
   Maintenance("0% Rebate CUVc",MyVClass,SetCustomRabateMn,modSL);
   Maintenance("Git HAL Files",MyVClass,GitHALFilesMn,modTC);
   Maintenance("Обновить Promotion",MyVClass,UpdPromotionMn,modDBMain); //Edit***************************Sasha2,13:33 13.02.2017
+  Maintenance("Область в карточках контактов",MyVClass,OblastInCUMn,modDBMain);// Edit ************************** Friday, 9 June 2017 15:05:37
   
   Maintenance("Обновить статусы WEB заказов",UpdateORWebStatusesVClass,UpdateORWebStatusesMn,modSO); //Edit***************************Sasha2,13:33 13.02.2017
   //Maintenance("Заполнить ORHistoryVc",MyVClass,FillORHistoryVcMn,modSO);//Edit-------------------Vitalii 15:57 27.02.2017

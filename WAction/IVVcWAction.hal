@@ -2300,6 +2300,17 @@ end; //Edit***************************Sasha2,17:00 17.08.2015 }
 
 
 global 
+procedure CreateLoyCardfrIV()		//Edit----------------------Dima  10.06.2015
+begin
+	record LoyaltyCardVc LCr;
+	
+	recordNew(LCr);
+	OpenWindow("LoyaltyCardDClass",1,0,"","",LCr);
+
+end;
+
+
+global 
 updating procedure PrintFiscalReceipt()		//Edit----------------------Dima  10.06.2015
 begin
 	record IVVc IVr;

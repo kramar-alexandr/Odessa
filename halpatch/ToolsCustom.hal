@@ -3738,3 +3738,30 @@ begin
   FindRebateVoucherForReturnIV = res;
   return;
 end; //Edit***************************Sasha2,16:11 08.06.2017 }
+
+
+global updating procedure OblastInCUMn(record RcVc RepSpec)
+begin
+	record CUVc CUr;
+	record CountryRegionVc CRr;
+	vector string 255 oblast;
+	string 20 reg;
+	
+	while(loopmain(CUr,1,true))begin
+		reg = left(CUr.Region,10);
+		if(nonblank(reg))then begin
+			if(blank(oblast[reg]))then begin
+				CRr.Code = reg;
+				if(readfirstmain(CRr,1,true))then begin
+					oblast[reg] = left(CRr.Comment,len(CRr.Comment)-5) & ", ";
+				end;
+			end;
+			if(nonblank(oblast[reg]))then begin
+				CUr.AddInvAddr1 = "αλ. " & oblast[reg]; 
+				RecordStore(CUr,true);
+			end;
+		end;
+	end;
+
+return;
+end;
