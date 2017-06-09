@@ -55,11 +55,11 @@ begin
     end;
   end; //Edit***************************Sasha2,12:51 15.02.2017 }
 
-  if (TestModule("modPL") or TestModule("modPO") or TestModule("modAT2") or TestModule("modIN")) then begin
+  /*if (TestModule("modPL") or TestModule("modPO") or TestModule("modAT2") or TestModule("modIN")) then begin
     CUr.CUType = 0;
     CUr.VEType = 1;
     treatedf = true;
-  end;
+  end;*/
   if (TestModule("modHRM")) then begin
     CUr.EmployeeType = 1;
     CUr.CUType = 0;
