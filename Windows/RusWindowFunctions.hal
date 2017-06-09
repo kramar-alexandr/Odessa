@@ -838,16 +838,18 @@ begin
         AddTouchScreenPasteButton(h,v,width,heighttemp,procstr,i+1,lblstr,POSBrw.colnr);
         procstr = "";  
       
-      case 200:// Edit ************************** Wednesday, 30 November 2016 12:17:50
+      case 200: // Edit ************************** Wednesday, 30 November 2016 12:17:50
         AddTouchScreenPasteButton(h,v,width,heighttemp,procstr,i+1,lblstr,POSBrw.colnr);
         procstr = "";  
-    	case 201:// Edit ************************** Wednesday, 30 November 2016 12:17:50
+    	case 201: // Edit ************************** Wednesday, 30 November 2016 12:17:50
         AddTouchScreenPasteButton(h,v,width,heighttemp,procstr,i+1,lblstr,POSBrw.colnr);
         procstr = "";  
-			case 202:// Edit ************************** Monday, 20 February 2017 10:49:49 - GOTO IVVCWAction7.hal
+			case 202: // Edit ************************** Monday, 20 February 2017 10:49:49
         AddTouchScreenPasteButton(h,v,width,heighttemp,procstr,i+1,lblstr,POSBrw.colnr);
         procstr = "";  
-              
+      case 203: //Edit***************************Sasha2,17:05 08.06.2017 - GOTO IVVCWAction7.hal
+        AddTouchScreenPasteButton(h,v,width,heighttemp,procstr,i+1,lblstr,POSBrw.colnr);
+        procstr = "";        
       case kPOSButtonTypeBlank:
         goto LLDrawPOSButtons_RUS;
     end;

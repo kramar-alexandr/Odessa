@@ -78,6 +78,7 @@ remote function Boolean PasteCust2InInv(var record IVVc,record LocalMachineBlock
 remote procedure IVDUpdatePrices(var record IVVc,Boolean);// Edit ************************** Monday, 14 December 2015 15:16:18
 external function Boolean IVDClassBirthDayVaucherEFAfter(Integer,Boolean);// Edit ************************** Thursday, 1 December 2016 09:12:30
 remote procedure SendToServerArtCode(string,string,string);// Edit ************************** Tuesday, 11 April 2017 16:50:23
+remote function Boolean FindRebateVoucherForReturnIV(var record IVVc); //Edit***************************Sasha2,16:49 08.06.2017
 
 global updating procedure LogoffKassir()
 begin
@@ -209,6 +210,34 @@ begin
 	
 return;
 end;
+
+global //Edit***************************Sasha2,15:53 08.06.2017 {
+procedure RebateVoucherItemsReturn()
+begin
+  record IVVc IVr;
+  Integer wn;
+  
+    wn = CurWindow;
+    if (GetWindowFileName(wn)=="IVVc") then begin
+      deselectwindow(wn,true);
+      GetWindowRecord(wn,IVr);
+      if (IVr.OKFlag==0) then begin
+        if (FindRebateVoucherForReturnIV(IVr)) then begin
+          putwindowrecord(wn,IVr);
+          if (IVr.Sum4>0) then begin
+            IVDClassToolIVReturn; 
+          end;
+        end else begin
+          MessageBox(27354,"");
+        end;
+      end else begin
+        MessageBox(1520,"");
+      end;
+      WindowFieldGotoForTouchScreen(wn,-1,"ivcashcommand",true);
+    end;
+  
+  return;
+end; //Edit***************************Sasha2,15:53 08.06.2017 }
 
 global updating procedure DoInsertPromoCodeProceed()
 begin
@@ -995,7 +1024,10 @@ begin
         goto LIVDClassTouchScreenPasteButtonDo;
       case 202:
         DoInsertAkciaCode;
-        goto LIVDClassTouchScreenPasteButtonDo;//GOTO RUSWINDOWFUNCTION.hal
+        goto LIVDClassTouchScreenPasteButtonDo;
+      case 203:
+        RebateVoucherItemsReturn;
+        goto LIVDClassTouchScreenPasteButtonDo; //GOTO RUSWINDOWFUNCTION.hal
     end;
   end;
 LIVDClassTouchScreenPasteButtonDo:;
