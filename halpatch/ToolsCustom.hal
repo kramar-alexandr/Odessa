@@ -26,7 +26,8 @@ external updating function string 255 CheckAndSendSMS(longint); //Edit**********
 external function LongInt CountWorkingDays(Date,Date,string,string);// Edit ************************** Monday, 28 November 2016 16:01:47
 external function string 255 StrReplace(string,string,string);// Edit ************************** Tuesday, 29 November 2016 13:59:09
 external procedure ExpandStructure(record INVc,string,string,Integer,var val,var val,Boolean);
-
+external function LongInt DateDiff(Date,Date);
+remote procedure IVVc_PasteRebCode(var record IVVc);
 
 SetLangMode(LangRussian,"RUS",0);
 
@@ -3706,3 +3707,34 @@ begin
 	
 return;
 end;
+
+global //Edit***************************Sasha2,16:11 08.06.2017 {
+function Boolean FindRebateVoucherForReturnIV(var record IVVc returnIVr)
+begin
+  Boolean res,TrHs,testf,foundf;
+  record IVVc sourceIVr;
+    
+    sourceIVr.CustCode = returnIVr.CustCode;
+    TrHs = true;
+    while (LoopBackKey("CustCode",sourceIVr,1,TrHs)) begin
+      testf = true;
+      if (sourceIVr.CustCode!=returnIVr.CustCode) then begin TrHs = false; testf = false; end;
+      if (DateDiff(CurrentDate,sourceIVr.InvDate)>31) then begin TrHs = false; testf = false; end;
+      if (sourceIVr.Sum4<=0) then begin testf = false; end;
+      if (testf) then begin
+        if (sourceIVr.BirthDayVaucher>-1) then begin
+          foundf = true;
+          TrHs = false;
+        end;
+      end;
+    end;
+    if (foundf) then begin
+      returnIVr.RebCode = sourceIVr.RebCode;
+      IVVc_PasteRebCode(returnIVr);
+      res = true;
+    end;
+    
+    
+  FindRebateVoucherForReturnIV = res;
+  return;
+end; //Edit***************************Sasha2,16:11 08.06.2017 }

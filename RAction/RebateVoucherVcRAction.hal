@@ -8,7 +8,7 @@ begin
   LongInt res;
   Integer insertmode,updatemode;
   record RebateVoucherVc RebateVoucher3r;
-  Boolean TrHs;
+  Boolean TrHs,testf;
 
   res = 0;
   insertmode = 1;//Rs_insert
@@ -23,12 +23,18 @@ begin
   
   RebateVoucher3r.CustCode = RebateVoucherr.CustCode;
   RebateVoucher3r.ReleasedAtYear = RebateVoucherr.ReleasedAtYear;
-  if (ReadFirstKey("CustCode",RebateVoucher3r,2,true)) then begin
-    if(check==1) then begin
-      RecordCheckError(1709,"",-1,"ReleasedAtYear");      
+  TrHs = true;
+  while (LoopBackKey("CustCode",RebateVoucher3r,2,TrHs)) begin
+    testf = true;
+    if (RebateVoucher3r.CustCode!=RebateVoucherr.CustCode or RebateVoucher3r.ReleasedAtYear!=RebateVoucherr.ReleasedAtYear) then begin TrHs = false; testf = false; end;
+    if (RebateVoucher3r.SerNr==RebateVoucherr.SerNr) then begin testf = false; end;
+    if (testf) then begin
+      if(check==1) then begin
+        RecordCheckError(1709,"",-1,"ReleasedAtYear");      
+      end;
+      res = 1709; 
+      goto LRebateVoucherVcRecordCheck; 
     end;
-    res = 1709; 
-    goto LRebateVoucherVcRecordCheck; 
   end;
   
   if (blank(RebateVoucherr.CustCode)) then begin
