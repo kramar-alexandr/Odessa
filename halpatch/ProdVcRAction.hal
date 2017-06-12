@@ -896,10 +896,8 @@ BEGIN
 				matrowget(Prodp,i,Prodrw);
 				if(Prodrw.OutQty!=0) then begin
 					subTotalRelVal = subTotalRelVal + Prodrw.RelVal;
-					logtext(0,"subTotalRelVal " & subTotalRelVal);
 				end else begin
 					if (subTotalRelVal!=100) then begin
-						logtext(0,"Prodrw.OutQty " & subTotalRelVal);
 						fieldnam = "RelVal";
 						rowno = i;
 						res = 31124; 
