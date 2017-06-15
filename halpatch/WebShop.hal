@@ -719,7 +719,7 @@ begin
 					if (!ReadFirstKey("eMail",Cur,1,true)) then begin
 						CreateCUFromXML(CUr,xmlPost,i,errors);
 					end else begin
-						if(nonblank(CUr.RebCode))then begin
+						/*if(nonblank(CUr.RebCode))then begin
 							if(CUr.CustCat=="WEB")then begin
 								Rebr.Code = CUr.RebCode;
 								readfirstmain(Rebr,1,true);
@@ -745,7 +745,7 @@ begin
 								end;
 								recordStore(CUr,true);
 							end;
-						end;
+						end;*/
 					end;
 					ORr.RebCode = CUr.RebCode;
 					ORr.CustCode = Cur.Code;
