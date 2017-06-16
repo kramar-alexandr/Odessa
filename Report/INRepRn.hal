@@ -222,6 +222,7 @@ begin
 		OutString(420,0,"В ящ.",false);	
 		OutString(450,0,"В упак.",false);
 		OutString(470,0,"Мин. заказ",false);
+		OutString(1,0,"Ссылка",true);
 	EndFormat;
 	
 
@@ -290,6 +291,7 @@ begin
 					end;
 					
 					OutVal(470,0,minorder,M41Val,false);
+					OutString(470,0,"https://www.rybray.com.ua/get-image.php?sku=" & INr.Code,true);
 					
 				EndFormat;
 		end;
