@@ -115,6 +115,8 @@ begin
 	Setting("Настройки синхронизации с Magento",SoapTClass,modSO);// Edit ************************** Monday, 14 November 2016 10:17:45
 	Setting("Ваучеры с процентной скидкой",RebateVoucherLClass,modSL); //Edit***************************Sasha2,16:56 23.11.2016
 	Setting("Настройки ваучеров с процентной скидкой",RebateVoucherTClass,modSL); //Edit***************************Sasha2,17:38 23.11.2016
+	Setting("Настройки Privat Bank",PrivatBankBlockTClass,modTC); //Edit***************************Sasha2,17:38 23.11.2016
+
 	Setting("Акции",PromotionLClass,modSL); //Edit***************************Sasha2,17:58 23.01.2017
   Setting("История изменений - Счета клиентов",ORHistoryLClass,modSO);//Edit-------------------Vitalii 16:52 27.02.2017
   Setting("Альтернативная скидка",AlternativeRebateLClass,modDI); //Edit***************************Sasha2,17:58 23.01.2017
@@ -337,7 +339,10 @@ begin
 	Maintenance("Проверить перемещения по товарам",MyVClass,StockMovErrormn,modDBMain);
 	
 	Maintenance("Fix Prepayment",MyVClass,FixPrepaymentMn,modDBMain);	//Edit----------------------Dima  24.03.2015
-
+	
+	Maintenance("Авторизация Private Bank",MyVClass,PrivateGetID,modTC);
+	Maintenance("Выписка Private Bank",MyVClass,PrivateGetReport,modTC);
+	
 	Maintenance("Заполнить товары поставщиков",MyVClass,UpdateinAllPIrMn,modDBMain);	//Edit----------------------Dima  24.03.2015
 
 	Maintenance("Заменить таблицу скидок для категории",ChangeCUCategoryVClass,ChangeCUCategoryMn,modSL);	//Edit----------------------Dima  27.03.2015

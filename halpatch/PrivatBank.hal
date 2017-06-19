@@ -1,0 +1,352 @@
+external function Boolean LoggedInTest();
+external procedure ExtractObjWithSeparator(string,string,Boolean,var Integer,var string);
+external function string 255 StrReplace(string,string,string);
+external function boolean MySendRawWebRequest(string, string, boolean, string, string, string, string, boolean, area, var area, integer);
+
+
+global webpublic updating procedure WebPrivateGetReportCallBack()
+begin
+	area a_reply,replyarea;
+	xml sopaxml;
+	string 200 session,path;
+	boolean check;
+	json jobj;
+	record PrivatBankBlock PBb;
+	string 100 node;
+	
+	blockload(PBb);
+	webgetpostdata(a_reply);
+	/*jobj = parsejsonarea(a_reply);
+	
+	node = "roles";
+	
+	logtext(0,JSONCountChildren(jobj,"roles"));
+	logtext(0,JSONGetChildNAME(jobj,"roles[0]",0));
+
+	
+	if(JSONNodeExists(jobj,node))then begin
+		logtext(0,JSONGet(jobj,node));
+		PBb.Roles = JSONGet(jobj,node);
+	end;
+	node = "message";
+	if(JSONNodeExists(jobj,node))then begin
+		logtext(0,JSONGet(jobj,node));
+		PBb.Roles = JSONGet(jobj,node);
+	end;
+	node = "roles[1]";
+	if(JSONNodeExists(jobj,node))then begin
+		logtext(0,JSONGet(jobj,node));
+		PBb.Roles = PBb.Roles & "," & JSONGet(jobj,node);
+	end;
+	node = "roles[2]";
+	if(JSONNodeExists(jobj,node))then begin
+		logtext(0,JSONGet(jobj,node));
+		PBb.Roles = PBb.Roles & "," & JSONGet(jobj,node);
+	end;
+	blockstore(PBb);*/
+	
+	writeareatofile(a_reply,"WebPrivateGetReportCallBack.txt",0);
+	
+
+	
+return;
+end;
+
+global procedure PrivateGetReport()
+begin
+	record PrivatBankBlock PBb;
+	string 50 host,port,path;
+	area a_req,replyarea;
+	integer i;	
+	string 10 ssl; 
+  
+  blockload(PBb);
+		
+		if(PBb.UseNode)then begin
+
+			ssl = "true";
+			path = "/api/p24b/statements?stdate=15.06.2017&endate=15.06.2017&showInf";
+			
+			
+			//PBb.Host = "z8farsqgafir.runscope.net";
+			//path = "/";
+		
+			addtexttoarea("host: 127.0.0.1" & chr(13) & chr(10),a_req);
+			addtexttoarea("Content-Type: application/xml" & chr(13) & chr(10),a_req);
+			AddTextToArea("" & chr(13) & chr(10),a_req);
+		
+			AddTextToArea("{\"host\" : \"" & PBb.Host & "\"," & chr(13),a_req);
+			AddTextToArea("\"port\" : " & PBb.Port & "," & chr(13),a_req);
+			AddTextToArea("\"https\" : " & ssl & "," & chr(13),a_req);
+			AddTextToArea("\"page\" : \"" & path & "\"," & chr(13),a_req);
+			AddTextToArea("\"method\" : \"" & "GET" & "\"," & chr(13),a_req);
+			AddTextToArea("\"callbackhost\" : \"" & "127.0.0.1" & "\"," & chr(13),a_req);
+			AddTextToArea("\"callbackport\" : \"" & "1080" & "\"," & chr(13),a_req);
+			AddTextToArea("\"callbackpage\" : \"" & "/WebPrivateGetReportCallBack.hal" & "\"," & chr(13),a_req);
+			AddTextToArea("\"contenttype\" : \"" & "application/json" & "\"," & chr(13),a_req);
+			AddTextToArea("\"Authorization\" : \"" & "Token " & PBb.SessionID & "\"," & chr(13),a_req);
+			AddTextToArea("\"Accept\" : \"" & "application/json" & "\"" & chr(13),a_req);
+			/*AddTextToArea("\"xmldata\" : ",a_req);
+			AddTextToArea("\"{",a_req);
+			AddTextToArea("\\\"clientId\\\": \\\"" & PBb.clientId & "\\\",",a_req);
+			AddTextToArea("\\\"clientSecret\\\": \\\"" & PBb.clientSecret & "\\\"",a_req);
+			AddTextToArea("}\"",a_req);*/
+			AddTextToArea("}" & chr(13),a_req);
+		
+			writeareatofile(a_req,"SoapRequest.txt",0);
+		
+		
+			logtext(0,"PrivateGetID " & currenttime & "  " & getarealength(replyarea));
+			if(MySendRawWebRequest("127.0.0.1","1070",false,"POST","/getProxyRequest","application/json","",false,a_req,replyarea,3))then begin  //WORK! 
+				logtext(0,"EndRequest");				
+			end else begin
+				logtext(0,"Hansa World: No Connection to NODE!!!");
+			end;
+		end;
+
+
+return;
+end;
+
+global webpublic updating procedure WebPrivateGetIDBusCallBack()
+begin
+	area a_reply,replyarea;
+	xml sopaxml;
+	string 200 session,path;
+	boolean check;
+	json jobj;
+	record PrivatBankBlock PBb;
+	string 100 node;
+	
+	blockload(PBb);
+	webgetpostdata(a_reply);
+	jobj = parsejsonarea(a_reply);
+	
+	node = "roles";
+	
+	logtext(0,JSONCountChildren(jobj,"roles"));
+	logtext(0,JSONGetChildNAME(jobj,"roles[0]",0));
+
+	
+	if(JSONNodeExists(jobj,node))then begin
+		logtext(0,JSONGet(jobj,node));
+		PBb.Roles = JSONGet(jobj,node);
+	end;
+	node = "message";
+	if(JSONNodeExists(jobj,node))then begin
+		logtext(0,JSONGet(jobj,node));
+		PBb.Roles = JSONGet(jobj,node);
+	end;
+	node = "roles[1]";
+	if(JSONNodeExists(jobj,node))then begin
+		logtext(0,JSONGet(jobj,node));
+		PBb.Roles = PBb.Roles & "," & JSONGet(jobj,node);
+	end;
+	node = "roles[2]";
+	if(JSONNodeExists(jobj,node))then begin
+		logtext(0,JSONGet(jobj,node));
+		PBb.Roles = PBb.Roles & "," & JSONGet(jobj,node);
+	end;
+	blockstore(PBb);
+	
+	writeareatofile(a_reply,"WebPrivateGetIDBusCallBack.txt",0);
+	
+
+	
+return;
+end;
+
+
+global webpublic updating procedure WebPrivateGetIDCallBack()
+begin
+	area a_reply,replyarea,a_req;
+	xml sopaxml;
+	string 200 session,path,ssl;
+	boolean check;
+	json jobj;
+	record PrivatBankBlock PBb;
+	string 100 node;
+	
+	blockload(PBb);
+	webgetpostdata(a_reply);
+	
+	writeareatofile(a_reply,"PrivateGetIDReply.txt",0);	
+	
+	jobj = parsejsonarea(a_reply);
+	node = "id";
+	if(JSONNodeExists(jobj,node))then begin
+		PBb.SessionID = JSONGet(jobj,node);
+		blockstore(PBb);
+	end;
+	node = "expiresIn";
+	if(JSONNodeExists(jobj,node))then begin
+		PBb.expiresIn = JSONGet(jobj,node);
+		blockstore(PBb);
+	end;
+	
+	ssl = "true";
+	
+	writeareatofile(a_reply,"WebPrivateGetIDCallBack.txt",0);
+	
+	
+	
+	path = "/api/p24BusinessAuth/createSession";
+				
+	setareazerosize(a_req);
+	addtexttoarea("host: 127.0.0.1" & chr(13) & chr(10),a_req);
+	addtexttoarea("Content-Type: application/xml" & chr(13) & chr(10),a_req);
+	AddTextToArea("" & chr(13) & chr(10),a_req);
+
+	AddTextToArea("{\"host\" : \"" & PBb.Host & "\"," & chr(13),a_req);
+	AddTextToArea("\"port\" : " & PBb.Port & "," & chr(13),a_req);
+	AddTextToArea("\"https\" : " & ssl & "," & chr(13),a_req);
+	AddTextToArea("\"page\" : \"" & path & "\"," & chr(13),a_req);
+	AddTextToArea("\"callbackhost\" : \"" & "127.0.0.1" & "\"," & chr(13),a_req);
+	AddTextToArea("\"callbackport\" : \"" & "1080" & "\"," & chr(13),a_req);
+	AddTextToArea("\"callbackpage\" : \"" & "/WebPrivateGetIDBusCallBack.hal" & "\"," & chr(13),a_req);
+	AddTextToArea("\"contenttype\" : \"" & "application/json" & "\"," & chr(13),a_req);
+
+	AddTextToArea("\"xmldata\" : ",a_req);
+	AddTextToArea("\"{",a_req);
+	AddTextToArea("\\\"sessionId\\\": \\\"" & PBb.SessionID & "\\\",",a_req);
+	AddTextToArea("\\\"login\\\": \\\"" & PBb.Login & "\\\",",a_req);
+	AddTextToArea("\\\"password\\\": \\\"" & PBb.Password & "\\\"",a_req);
+	AddTextToArea("}\"",a_req);
+	AddTextToArea("}" & chr(13),a_req);
+
+	writeareatofile(a_req,"WebPrivateGetIDCallBackRequest.txt",0);
+	
+	//millisleep(2000);
+	logtext(0,"PrivateGetID " & currenttime & "  " & getarealength(replyarea));
+	if(MySendRawWebRequest("127.0.0.1","1070",false,"POST","/getProxyRequest","application/json","",false,a_req,replyarea,3))then begin  //WORK! 
+		logtext(0,"EndRequest");
+	end;
+
+	
+return;
+end;
+
+global procedure PrivateGetIDOld()
+begin
+	record PrivatBankBlock PBb;
+	string 50 host,port,path,ssl;
+	area a_req,replyarea;
+	integer i;	
+		
+		blockload(PBb);
+		ssl = "true";
+		path = "link.privatbank.ua/api/auth/createSession";
+		
+		AddTextToArea("{",a_req);
+		AddTextToArea("\"clientId\": \"" & PBb.clientId & "\",",a_req);
+		AddTextToArea("\"clientSecret\": \"" & PBb.clientSecret & "\"",a_req);
+		AddTextToArea("}",a_req);
+				
+		logtext(0,"PrivateGetIDOld " & currenttime);
+		writeareatofile(a_req,"PrivateGetIDOld.txt",0);
+		SendAsyncWebRequest(PBb.Host,PBb.Port,PBb.Port,true,"POST",path,"application/json","",a_req,"PrivateGetIDReply",20);
+
+return;
+end;
+
+global procedure PrivateGetID()
+begin
+	record PrivatBankBlock PBb;
+	string 50 host,port,path;
+	area a_req,replyarea;
+	integer i;	
+	string 10 ssl; 
+  
+  blockload(PBb);
+		
+		if(PBb.UseNode)then begin
+
+			ssl = "true";
+			path = "/api/auth/createSession";
+		
+		
+			addtexttoarea("host: 127.0.0.1" & chr(13) & chr(10),a_req);
+			addtexttoarea("Content-Type: application/xml" & chr(13) & chr(10),a_req);
+			AddTextToArea("" & chr(13) & chr(10),a_req);
+		
+			AddTextToArea("{\"host\" : \"" & PBb.Host & "\"," & chr(13),a_req);
+			AddTextToArea("\"port\" : " & PBb.Port & "," & chr(13),a_req);
+			AddTextToArea("\"https\" : " & ssl & "," & chr(13),a_req);
+			AddTextToArea("\"page\" : \"" & path & "\"," & chr(13),a_req);
+			AddTextToArea("\"callbackhost\" : \"" & "127.0.0.1" & "\"," & chr(13),a_req);
+			AddTextToArea("\"callbackport\" : \"" & "1080" & "\"," & chr(13),a_req);
+			AddTextToArea("\"callbackpage\" : \"" & "/WebPrivateGetIDCallBack.hal" & "\"," & chr(13),a_req);
+			AddTextToArea("\"contenttype\" : \"" & "application/json" & "\"," & chr(13),a_req);
+		
+			AddTextToArea("\"xmldata\" : ",a_req);
+			AddTextToArea("\"{",a_req);
+			AddTextToArea("\\\"clientId\\\": \\\"" & PBb.clientId & "\\\",",a_req);
+			AddTextToArea("\\\"clientSecret\\\": \\\"" & PBb.clientSecret & "\\\"",a_req);
+			AddTextToArea("}\"",a_req);
+			AddTextToArea("}" & chr(13),a_req);
+		
+			writeareatofile(a_req,"SoapRequest.txt",0);
+		
+		
+			logtext(0,"PrivateGetID " & currenttime & "  " & getarealength(replyarea));
+			if(MySendRawWebRequest("127.0.0.1","1070",false,"POST","/getProxyRequest","application/json","",false,a_req,replyarea,3))then begin  //WORK! 
+				logtext(0,"EndRequest");				
+			end else begin
+				PrivateGetIDOld;
+				logtext(0,"Hansa World: No Connection to NODE!!!");
+			end;
+		end else begin
+			PrivateGetIDOld;
+		end;
+
+
+return;
+end;
+
+
+global updating procedure PrivateGetIDReply(Area a_reply,Area a_replyheader,boolean timeout)
+begin
+	xml sopaxml;
+	string 200 session;
+	boolean check;
+	json jobj;
+	record PrivatBankBlock PBb;
+	string 100 node;
+	
+	blockload(PBb);
+	
+	logtext(0,"PrivateGetIDReply");
+	writeareatofile(a_reply,"PrivateGetIDReply.txt",0);	
+	
+	jobj = parsejsonarea(a_reply);
+	node = "id";
+	if(JSONNodeExists(jobj,node))then begin
+		PBb.SessionID = JSONGet(jobj,node);
+		blockstore(PBb);
+	end;
+	
+	/*if(getarealength(a_reply)>0)then begin	
+		check = getstringfromarea(a_reply,0,18)=="<?xml version=\"1.0";
+		if(check)then begin
+			sopaxml = ParseXMLArea(a_reply);
+			//logtext(0,xmlget(sopaxml,"SOAP-ENV:Envelope/SOAP-ENV:Body/ns1:loginResponse/loginReturn"));
+			session = xmlget(sopaxml,"SOAP-ENV:Envelope/SOAP-ENV:Body/ns1:loginResponse/loginReturn");
+			if(nonblank(session))then begin
+				logtext(0,"HANSA SOAP session " & session);
+				blockload(Soap);
+					PBb.Session = session;
+					PBb.LastSesDate = currentdate;
+					PBb.LastSesTime = currenttime;
+				blockstore(Soap);
+			end else begin
+				logtext(0,"error session");
+			end;
+		end else begin
+			logtext(0,"error check " & getstringfromarea(a_reply,0,18));
+		end;
+	end else begin
+		logtext(0,"Error length");
+	end;*/
+	
+return;
+end;

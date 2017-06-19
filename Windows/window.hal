@@ -3214,6 +3214,29 @@ begin
   EndWindow;
 end;
 
+
+window PrivatBankBlockTClass:1 //Edit***************************Sasha2,17:27 23.11.2016
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  real h,v,vs;
+  WindowBegin("Настройки Privat Bank",PrivatBankBlockTClass,CGSbl,-);
+  SetBlid(PrivatBankBlock);
+  SetWRect(64,80,500,300);
+  v=6;vs = 20; h = 100;
+  EditField(h,v,-20,"Host",Normal,Host,false,0);
+  EditField(h,v+=vs,-20,"Port",Normal,Port,false,0);
+  EditField(h,v+=vs,-20,"ClientID",Normal,clientId,false,0);
+  EditField(h,v+=vs,-20,"ClientSecret",Normal,clientSecret,false,0);
+  EditField(h,v+=vs,-20,"SessionID",Normal,SessionID,false,0);
+  EditField(h,v+=vs,-20,"expiresIn",Normal,expiresIn,false,0);
+  EditField(h,v+=vs,-20,"Login",Normal,Login,false,0);
+  EditField(h,v+=vs,-20,"Password",Normal,Password,false,0);
+  EditField(h,v+=vs,-20,"Account",Normal,Account,false,0);
+  EditField(h,v+=vs,-20,"Roles",Normal,Roles,false,0);
+  CheckBox(h,v+=vs,0,"Node Js",UseNode);
+  EndWindow;
+end;
+
 window DoLoginKassirRCLass:1
   wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
 begin
