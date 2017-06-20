@@ -1269,19 +1269,21 @@ begin
           end;
         end;
         if (nonblank(ORrw.ArtCode)) then begin
-          if (Blank(ORr.OrderClass) and ORrw.MinOrderedQuant>0) then begin //Edit***************************Sasha2,11:33 10.05.2017 {
-          	ISr.Code = ORrw.ArtCode;
-          	ISr.Location = ORr.Location;
-          	if(readfirstmain(ISr,2,true))then begin
-          		if(ORrw.Quant>0)then begin
-								if (ORrw.Quant<ORrw.MinOrderedQuant and ORrw.MinOrderedQuant<=ISr.Instock-ISr.RsrvQty) then begin
-									RecordCheckError(12053,USetStr(20111),i,"Quant");
-									res = -1; 
-									goto LORVcRecordCheck;
+        	if(usercanaction("DoMinOrderQtyOR",false)==false)then begin
+						if (Blank(ORr.OrderClass) and ORrw.MinOrderedQuant>0) then begin //Edit***************************Sasha2,11:33 10.05.2017 {
+							ISr.Code = ORrw.ArtCode;
+							ISr.Location = ORr.Location;
+							if(readfirstmain(ISr,2,true))then begin
+								if(ORrw.Quant>0)then begin
+									if (ORrw.Quant<ORrw.MinOrderedQuant and ORrw.MinOrderedQuant<=ISr.Instock-ISr.RsrvQty) then begin
+										RecordCheckError(12053,USetStr(20111),i,"Quant");
+										res = -1; 
+										goto LORVcRecordCheck;
+									end;
 								end;
 							end;
-            end;
-          end; //Edit***************************Sasha2,11:33 10.05.2017 }
+						end; //Edit***************************Sasha2,11:33 10.05.2017 }
+          end;
           if (HasLocalization("PRT")) then begin
             if (ORrw.vRebate<0) then begin
               RecordCheckError(22034,"",i,"vRebate");      

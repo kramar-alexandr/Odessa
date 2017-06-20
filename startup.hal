@@ -723,6 +723,7 @@ begin
   StrSetText(UnOKOR,"Снимать OK со счетов");
   StrSetText(UnOKPO,"Снимать OK с заказов поставщикам");
   StrSetText(UnOKRevBud,"Снимать OK с прогнозов");
+  StrSetText(DoMinOrderQtyOR,"Сохранять счета клиентов с минимальным количеством");
   StrSetText(UpdatePOSEvent,"Разрешить обновлять сессии POS");
   StrSetText(AllowUsingAddonBarTab,"Использовать кнопку Добавить на счете ресторана");
   StrSetText(AllowUsingBookingsonBarTab,"Использовать кнопку 'Резерв.' на счете ресторана");
