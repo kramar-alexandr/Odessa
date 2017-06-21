@@ -556,6 +556,34 @@ Integer i;
   EndWindow;
 end;
 
+window ImportRawItemsIClass:1		// added ************ Dima, 19.11.2014
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+real h,v,vs;
+Integer i;
+  WindowBegin("Импорт товаров RAW",ImportRawItemsIClass,CGIcW,-);	//INImportIn()
+  SetWRect(20,80,470,300);
+  i=1; //номер колонки
+  h=10;  v=15;
+  StaticText(h,v,"Формат импорта",false);
+  h=20;  v=40;
+  StaticText(h,v,"Список колонок:",false);
+  v=v+30; vs=25;
+  StaticText(h,v, 	i & ". Код товара",false);
+	 StaticText(h+150,v,"Обязательное поле",false);
+	 i=i+1;
+	StaticText(h,v+=vs,i & ". Конвертация 1",false);
+	 StaticText(h+150,v,"Необязательное поле",false);
+	 i=i+1;
+  StaticText(h,v+=vs,i & ". Название товара",false);
+	 StaticText(h+150,v,"Необязательное поле",false);
+	 i=i+1;
+
+  StaticText(h,v+=40,"Примечание:   Все столбцы разделены <Tab>",false);
+
+  EndWindow;
+end;
+
 window INDIImportIClass:1	//Edit***************************Sasha2,17:17 06.01.2016 {
   wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
 begin

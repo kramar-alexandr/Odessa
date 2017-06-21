@@ -297,25 +297,27 @@ record INVc INr;
 			coef = evaltoval(coeftext);
 		end;
 		
-		INr.Code = artcode;
-		if(readfirstmain(INr,1,true)==false)then begin
-			recordNew(INr);
-			INr.Code = artcode;
-			INr.Conversion1 = coef;
-			INr.Name = name;
-			INr.Reference = name;
-			recordstore(INr,true);
-		end else begin
-			if(INr.Conversion1<coef)then begin
-				INr.Conversion1=coef;
-			end;
-			if(nonblank(name))then begin
-				INr.Name = name;
-				INr.Reference = name;
-			end;
-			recordStore(INr,true);
+		if (NonBlank(artcode)) then begin
+  		INr.Code = artcode;
+  		if(readfirstmain(INr,1,true)==false)then begin
+  			recordNew(INr);
+  			INr.Code = artcode;
+  			INr.Conversion1 = coef;
+  			INr.Name = name;
+  			INr.Reference = name;
+  			recordstore(INr,true);
+  		end else begin
+  			if(nonblank(coeftext) and INr.Conversion1<coef)then begin
+  				INr.Conversion1=coef;
+  			end;
+  			if(nonblank(name))then begin
+  				INr.Name = name;
+  				INr.Reference = name;
+  			end;
+  			recordStore(INr,true);
+  		end;
 		end;
-		
+
 		if (NextImportLine(true)) then begin end;
 	end;
 return;
