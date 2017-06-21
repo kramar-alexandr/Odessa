@@ -573,7 +573,14 @@ begin
   integer nameLen;
   boolean ifBegin;
   record PLVc PLr;
-
+	record WebShopSettingsBlock WSSB;
+	
+	blockload(WSSB);
+	if(blank(WSSB.AdressDelimeter))then begin
+		WSSB.AdressDelimeter = "###";
+	end;
+	
+	
   res = 0;
   insertmode = 1;//Rs_insert
   updatemode = 2;//Rs_update
@@ -1589,7 +1596,8 @@ LORVcRecordRowCheck:;
 		
 		NPWarehouser.City = ORr.NPCityRecipient;
 		NPWarehouser.Number = ORr.NPWarehouse;
-		if(FindSubString("###",ORr.ShipAddr3)==false and ORr.NPAdresDeliv==0)then begin
+		//### -> WSSB.AdressDelimeter
+		if(FindSubString(WSSB.AdressDelimeter,ORr.ShipAddr3)==false and ORr.NPAdresDeliv==0)then begin
 			if (ReadFirstKey("City",NPWarehouser,2,true)==false) then begin
 					 RecordCheckError(31049,"",-1,"NPWarehouse"); 
 					 res = -1; 
