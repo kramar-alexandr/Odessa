@@ -423,8 +423,8 @@ begin
   //Import("‡аменить группу товара",INReplaceGroupIClass,INReplaceGroupIn,modIN); The same as "€мпорт Item/Group" //Added********************Dima 21.11.2014
   Import("€мпорт поступлений на склад",PUImportIClass,PUImportIn,modIN);//Added********************Dima 24.12.2014
   Import("€мпорт перемещений",SMImportIClass,SMImportIn,modIN);
- 	Import("€мпорт товаров RAW",ImportRawItemsIClass,ImportRawItems,modDBMain);//Added********************Dima 20.11.2014
- 	Import("€мпорт товаров RAW",ImportRawItemsIClass,ImportRawItems,modSL);//Added********************Dima 20.11.2014
+ 	Import("Ћбновить название товаров и описание",ImportRawItemsIClass,ImportRawItems,modDBMain);//Added********************Dima 20.11.2014
+ 	Import("Ћбновить название товаров и описание",ImportRawItemsIClass,ImportRawItems,modIN);//Added********************Dima 20.11.2014
  	Import("€мпорт товаров RAW2",INImportIClass,OdessaIn,modDBMain);//Added********************Dima 20.11.2014
  	Import("€мпорт классификаций товаров",INImportIClass,ImportVEClassIn,modDBMain);//Added********************Dima 20.11.2014
  	Import("€мпорт цен",INImportIClass,ImportItemPricesIn,modDBMain);//Added********************Dima 20.11.2014

@@ -572,10 +572,10 @@ Integer i;
   StaticText(h,v, 	i & ". Код товара",false);
 	 StaticText(h+150,v,"Обязательное поле",false);
 	 i=i+1;
-	StaticText(h,v+=vs,i & ". Конвертация 1",false);
+  StaticText(h,v+=vs,i & ". Название товара",false);
 	 StaticText(h+150,v,"Необязательное поле",false);
 	 i=i+1;
-  StaticText(h,v+=vs,i & ". Название товара",false);
+	StaticText(h,v+=vs,i & ". Описание товара",false);
 	 StaticText(h+150,v,"Необязательное поле",false);
 	 i=i+1;
 

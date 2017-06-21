@@ -280,41 +280,38 @@ end;
 
 global updating procedure ImportRawItems()
 begin
-string 200 artcode,name,coeftext;
+string 255 artcode,name,description;
 integer coef;
 record INVc INr;
+Boolean saveF;
 	
 	while (TestEOF()==false) begin
 		artcode = "";
-		coeftext = "";
 		name = "";
-		coef = 0;
+		description = "";
+		//coef = 0;
 		
 		artcode = ImportField;
-		coeftext = ImportField;
 		name = ImportField;
-		if(nonblank(coeftext))then begin
-			coef = evaltoval(coeftext);
-		end;
+		description = ImportField;
 		
 		if (NonBlank(artcode)) then begin
   		INr.Code = artcode;
-  		if(readfirstmain(INr,1,true)==false)then begin
-  			recordNew(INr);
-  			INr.Code = artcode;
-  			INr.Conversion1 = coef;
-  			INr.Name = name;
-  			INr.Reference = name;
-  			recordstore(INr,true);
-  		end else begin
-  			if(nonblank(coeftext) and INr.Conversion1<coef)then begin
-  				INr.Conversion1=coef;
-  			end;
+  		if(readfirstmain(INr,1,true))then begin
+  			saveF = false;
   			if(nonblank(name))then begin
   				INr.Name = name;
-  				INr.Reference = name;
+  				//INr.Reference = name;
+  				saveF = true;
   			end;
-  			recordStore(INr,true);
+  			if (NonBlank(description)) then begin
+  			  AddToText(Chr(13) & Chr(10),INr);
+  			  AddToText(description,INr);
+  			  saveF = true;
+  			end;
+  			if (saveF) then begin
+  			  recordStore(INr,true);
+  			end;
   		end;
 		end;
 
