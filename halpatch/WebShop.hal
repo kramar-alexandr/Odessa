@@ -842,7 +842,7 @@ begin
 							if(FindSubString(WSSB.AdressDelimeter,ORr.ShipAddr3))then begin
 								ORr.NPAdresDeliv = 1;						
 								if(nonblank(ORr.ShipAddr3))then begin
-									if(len(ORr.ShipAddr3)>12)then begin
+									if(len(ORr.ShipAddr3)>len(WSSB.AdressDelimeter)*4)then begin
 										lenth = len(ORr.ShipAddr3);
 										street = "";
 										build = "";
