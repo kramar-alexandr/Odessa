@@ -198,7 +198,8 @@ begin
 				for(i=0;i<positions.length;i=i+1) begin
 					PISr.ArtCode = INr.Code;
 					PISr.Position = positions[i];
-					if (ReadFirstMain(PISr,2,true)) then begin
+					PISr.Location = ItemStatusr.Location;
+					if (ReadFirstMain(PISr,3,true)) then begin
 						if(i==0)then begin
 							OutString(410+stepPos*i,0,PISr.Instock - ItemStatusr.RsrvQty,false);
 						end else begin
