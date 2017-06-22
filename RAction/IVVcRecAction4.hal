@@ -1254,7 +1254,7 @@ begin
   IVr.LastRemDate = blankd;
   IVr.OurContact = USr.CurOurContact;
   IVr.Location = USr.Location;
-  if (UserCanAction("DoNotSetSalesManInOR",false)==false) then begin // Edit ************************** Friday, 7 April 2017 13:28:39
+  if (UserCanAction("DoNotSetSalesManInOR",false)==false or CurrentUser=="EXPO" or CurrentUser=="KV_1" or CurrentUser=="KV_2" or CurrentUser=="RAY_1" or CurrentUser=="RAY_2") then begin // Edit ************************** Friday, 7 April 2017 13:28:39
 		IVr.Objects = USr.PersObjx;
 		IVr.SalesMan = USr.Code;
   	GetSalesGroup(IVr.SalesMan,tstr);
