@@ -894,8 +894,8 @@ begin
 					if(FindSubString("Наложенный платеж",payment))then begin
 						ORr.NPPaymentType = 1;
 					end;
-					if(FindSubString(WSSB.AdressDelimeter & "AUTO" & WSSB.AdressDelimeter,ORr.Comment))then begin// Edit ************************** Friday, 19 May 2017 11:31:32
-						logtext(0,WSSB.AdressDelimeter & "AUTO" & WSSB.AdressDelimeter);
+					if(FindSubString("###AUTO###",ORr.Comment))then begin// Edit ************************** Friday, 19 May 2017 11:31:32
+						logtext(0,"###AUTO###");
 						ORr.AutoCreation = 1;
 					end;
 					
