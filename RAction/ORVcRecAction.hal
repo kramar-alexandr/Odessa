@@ -746,6 +746,11 @@ begin
   if(blankdate(ORr.DebtUpdateDate) and nonblank(ORr.CustCode))then begin
   	CalcCustBalrem(ORr);// Edit ************************** Friday, 22 July 2016 11:20:19
   end;
+  if(stat==updatemode)then begin
+  	if(ORr.CustCode!=OR2r.CustCode)then begin
+  		CalcCustBalrem(ORr);// Edit ************************** Friday, 22 July 2016 11:20:19
+  	end;
+  end;
   
   if (blank(ORr.CustCode)) then begin
     RecordCheckError(1058,"",-1,"CustCode");      
