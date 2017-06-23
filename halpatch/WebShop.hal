@@ -762,6 +762,7 @@ begin
 					ORr.ShipAddr1 = XmlGetAttribute(xmlPost,"orders/order" & i ,"delivery");
 					delcity = XmlGetAttribute(xmlPost,"orders/order" & i ,"city");
 					ORr.ShipAddr2 = XmlGetAttribute(xmlPost,"orders/order" & i ,"country") & ", " & delcity;
+					
 					ORr.ShipAddr3 = XmlGetAttribute(xmlPost,"orders/order" & i ,"address");
 					ORr.Comment = XmlGetAttribute(xmlPost,"orders/order" & i ,"ordercomment");
 					payment = XmlGetAttribute(xmlPost,"orders/order" & i ,"payment");
@@ -782,7 +783,7 @@ begin
 					
 					ORr.NPPhone = CUr.Phone;
 					
-					ORr.NPAdresDeliv = 0;
+					ORr.NPAdresDeliv = 0;	
 					
 					
 					if((FindSubString("Новая почта",ORr.ShipAddr1) or FindSubString("Нова почта",ORr.ShipAddr1)))then begin
@@ -899,6 +900,9 @@ begin
 						ORr.AutoCreation = 1;
 					end;
 					
+					
+					
+					
 					ORr.OrderClass = "WEB";
 					ORr.SalesGroup = "WEB";
 					ORr.SalesMan  = CurrentUser;
@@ -920,7 +924,6 @@ begin
 						ORr.SelfDelivery = 1;
 					end;
 					ORr.Advance = 0; //Edit----------------------Dima  18.12.2015			
-			
 
 					nodeRowCnt = XmlCountChildren(xmlPost,"orders/order" & i );
 					rowNr = 0;
@@ -1051,8 +1054,20 @@ LWebGetOrderExist:;
 			end;
 	
 		LWebGetOrder:;	
-		
+			
 			if (Blank(errors)) then begin
+				
+				
+				If(nonblank(CUr.Phone))then begin
+					ORr.ShipAddr1 = CUr.Phone;
+				end;
+				If(nonblank(payment))then begin
+					ORr.ShipAddr2 = ORr.ShipAddr3;
+				end;
+				If(nonblank(payment))then begin
+					ORr.ShipAddr3 = payment;
+				end;
+				
 				weboutstring("Successful import"); //Edit***************************Sasha2,15:18 04.07.2014
 			end else begin
 				weboutstring(errors); //Edit***************************Sasha2,15:18 04.07.2014
