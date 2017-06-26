@@ -51,10 +51,26 @@ begin
 	custcode = "NONAME";
 	
 	if(len(ordnum)==9 or len(ordnum)==11)then begin
-		ORr.CustOrdNr = StringToLongInt(ordnum);
+		
+		ORr.CustOrdNr = ordnum;
 		logtext(0,"******************************FindOrder " & ORr.CustOrdNr);
 		if(readfirstkey("CustOrdNr",ORr,1,true))then begin
 			custcode = ORr.CustCode;
+		end else begin
+			if(len(ordnum)==11)then begin
+				ORr.CustOrdNr = StringToLongInt(left(ordnum,9));
+				if(readfirstkey("CustOrdNr",ORr,1,true))then begin
+					custcode = ORr.CustCode;
+				end else begin
+					if(len(ordnum)==9)then begin
+						ordnum = ordnum & "-1";
+						ORr.CustOrdNr = ordnum;
+						if(readfirstkey("CustOrdNr",ORr,1,true))then begin
+							custcode = ORr.CustCode;
+						end;
+					end;
+				end;
+			end;
 		end;
 	end;
 	
