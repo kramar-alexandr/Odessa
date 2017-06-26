@@ -5934,6 +5934,24 @@ RecordBegin(IPVc,-,"");
   	RecordField(Roles,M4Str,225,0);
   EndBlock;
   
+  RecordBegin(PrivatBankReportsVc,-,""); //Edit***************************Sasha2,17:21 20.06.2017 {
+  RecordField(PBNumber,M4Code,20,0);
+  RecordField(TransDate,M4Date,0,0);
+  RecordField(TransTime,M4Time,0,0);
+  RecordField(RawFilePath,M4Str,255,0);
+  RecordField(Sum,M4Val,0,0);
+  RecordField(Purpose,M4Str,255,0);
+  RecordField(Name,M4Str,255,0); 
+  RecordField(State,M4Str,255,0);
+  RecordField(FlInfo,M4Str,255,0);
+  RecordField(DocType,M4Str,255,0);
+  //RecordField(Math,M4Matrix,0,0);
+  //ArrayBegin(Math,-,1);
+  //EndArray;
+  MainKeyBegin(PBNumber,0);
+  KeySegment(PBNumber);
+  EndRecord; //Edit***************************Sasha2,17:21 20.06.2017 }
+  
 return;
 end;
 

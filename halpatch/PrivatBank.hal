@@ -3,69 +3,167 @@ external procedure ExtractObjWithSeparator(string,string,Boolean,var Integer,var
 external function string 255 StrReplace(string,string,string);
 external function boolean MySendRawWebRequest(string, string, boolean, string, string, string, string, boolean, area, var area, integer);
 
+procedure ParseRootChilds(string SearchKey,area rawJson,var array LongInt rootChildLen,var area rootChildsArea)
+begin
+  LongInt keyPosition,i,arLen,squareBracketsOcassions,bracesOcassions,areaLen;
+  string 1 c,prevC;
+  Boolean openSqBr,closeSqBr,openBr,closeBr,skipCommand;
+  area childArea;
+  
+    keyPosition = FindStringInArea(SearchKey,rawJson);
+    if (keyPosition>-1) then begin
+      SETAREAZEROSIZE(rootChildsArea);
+      arLen = GetAreaLength(rawJson);
+      squareBracketsOcassions = 0;
+      bracesOcassions = 0;
+      for (i=(keyPosition + len(SearchKey));i<arLen;i=i+1) begin
+        c = GetStringFromArea(rawJson,i,1);
+        switch (c) begin
+          case "\"":
+            if (skipCommand==false) then begin
+              skipCommand = true;
+            end else begin
+              if (prevC!="\\") then begin
+                skipCommand = false;
+              end;
+            end;
+        end;
+        if (skipCommand==false) then begin
+          switch (c) begin
+            case "[":
+              if (openSqBr==false) then begin
+                openSqBr = true;
+              end;
+              squareBracketsOcassions = squareBracketsOcassions + 1;
+            case "]":
+              if (openSqBr and squareBracketsOcassions==1) then begin
+                closeSqBr = true;
+              end;
+              if (openSqBr) then begin
+                squareBracketsOcassions = squareBracketsOcassions - 1;
+              end;
+            case "{":
+              if (openBr==false) then begin
+                openBr = true;
+              end;
+              bracesOcassions = bracesOcassions + 1;
+            case "}":
+              if (openBr and bracesOcassions==1) then begin
+                closeBr = true;
+              end;
+              if (openBr) then begin
+                bracesOcassions = bracesOcassions - 1;
+              end;
+          end;
+        end;
+        prevC = c;
+        if (openSqBr and closeSqBr) then begin
+          i = arLen;
+        end;
+        if (openBr) then begin
+          ADDTEXTTOAREA(c,childArea);
+        end;
+        if (openBr and closeBr) then begin
+          openBr = false;
+          closeBr = false;
+          areaLen = GetAreaLength(childArea);
+          if (areaLen>0) then begin
+            rootChildLen[rootChildLen.length] = areaLen;
+            AddAreaToArea(childArea,rootChildsArea);
+            SETAREAZEROSIZE(childArea);
+          end;
+        end;
+      end;
+    end;
+  
+  return;
+end;
 
 global webpublic updating procedure WebPrivateGetReportCallBack()
 begin
-	area a_reply,replyarea;
+	record PrivatBankReportsVc PBReportsr;
+	record PrivatBankBlock PBb;
+	area a_reply,replyarea,tArea,rootChildsArea;
 	xml sopaxml;
-	string 200 session,path;
+	string 200 session,path,transNumber;
 	boolean check;
 	json jobj;
-	record PrivatBankBlock PBb;
-	string 100 node;
+	string 100 node,tstr;
+	LongInt jsonNodeCnt,i,fromPos;
+	array LongInt rootChildLen;
 	
 	blockload(PBb);
 	webgetpostdata(a_reply);
-	/*jobj = parsejsonarea(a_reply);
+	//AddFileToArea	("WebPrivateGetReportCallBack.txt",a_reply,false);
 	
-	node = "roles";
-	
-	logtext(0,JSONCountChildren(jobj,"roles"));
-	logtext(0,JSONGetChildNAME(jobj,"roles[0]",0));
+	if (GetAreaLength(a_reply)>0) then begin
+    CreateFolder("PrivatBankReports");
+    ADDTEXTTOAREA("{\"root\":",tArea);
+    ADDTEXTTOAREA("}",a_reply);
+    INSERTAREABEFOREAREA(tArea,a_reply);
 
-	
-	if(JSONNodeExists(jobj,node))then begin
-		logtext(0,JSONGet(jobj,node));
-		PBb.Roles = JSONGet(jobj,node);
+    jobj = parsejsonarea(a_reply);
+    if (JSONNodeExists(jobj,"root")) then begin
+      jsonNodeCnt = JSONCountChildren(jobj,"root");
+      ParseRootChilds("\"root\":",a_reply,rootChildLen,rootChildsArea);
+      if (jsonNodeCnt==rootChildLen.length) then begin
+        fromPos = 0;
+        for (i=0;i<jsonNodeCnt;i=i+1) begin
+          transNumber = JSONGet(jobj,"root[0]/["  & i & "]/info/@number");
+          PBReportsr.PBNumber = transNumber;
+          if (NonBlank(transNumber) and not ReadFirstMain(PBReportsr,1,true)) then begin
+            path = "PrivatBankReports/" & transNumber & ".txt";
+            GetAreaFromArea(rootChildsArea,fromPos,rootChildLen[i],tArea);
+            fromPos = fromPos + rootChildLen[i];
+            writeareatofile(tArea,path,0);
+            SETAREAZEROSIZE(tArea);
+            RECORDNEW(PBReportsr);
+            PBReportsr.PBNumber = transNumber;
+            tstr = JSONGet(jobj,"root[0]/["  & i & "]/info/@postdate");
+            PBReportsr.TransDate = StringToDate(mid(tstr,6,2) & "/" & mid(tstr,4,2) & "/" & mid(tstr,0,4));
+            PBReportsr.TransTime = StringToTime(mid(tstr,9,2) & ":" & mid(tstr,12,2) & ":" & mid(tstr,15,2));
+            PBReportsr.RawFilePath = path;
+            PBReportsr.Sum = StringToVal(JSONGet(jobj,"root[0]/["  & i & "]/amount/@amt"),M4Val);
+            PBReportsr.Purpose = JSONGet(jobj,"root[0]/["  & i & "]/purpose");
+            PBReportsr.Name = JSONGet(jobj,"root[0]/["  & i & "]/debet/account/@name");
+            PBReportsr.State = JSONGet(jobj,"root[0]/["  & i & "]/info/@state");
+            PBReportsr.FlInfo = JSONGet(jobj,"root[0]/["  & i & "]/info/@flinfo");
+            PBReportsr.DocType = JSONGet(jobj,"root[0]/["  & i & "]/info/@doctype");
+            //LogText(0,PBReportsr.PBNumber & " : " & PBReportsr.TransDate & " : " & PBReportsr.TransTime & " : " & PBReportsr.RawFilePath
+            //& " : " & PBReportsr.Sum & " : " & PBReportsr.Purpose & " : " & PBReportsr.Name & " : " & PBReportsr.State & " : " & PBReportsr.FlInfo
+            //& " : " & PBReportsr.DocType);
+            RECORDSTORE(PBReportsr,false);
+          end;
+        end;
+      end;
+    end;
+
 	end;
-	node = "message";
-	if(JSONNodeExists(jobj,node))then begin
-		logtext(0,JSONGet(jobj,node));
-		PBb.Roles = JSONGet(jobj,node);
-	end;
-	node = "roles[1]";
-	if(JSONNodeExists(jobj,node))then begin
-		logtext(0,JSONGet(jobj,node));
-		PBb.Roles = PBb.Roles & "," & JSONGet(jobj,node);
-	end;
-	node = "roles[2]";
-	if(JSONNodeExists(jobj,node))then begin
-		logtext(0,JSONGet(jobj,node));
-		PBb.Roles = PBb.Roles & "," & JSONGet(jobj,node);
-	end;
-	blockstore(PBb);*/
-	
 	writeareatofile(a_reply,"WebPrivateGetReportCallBack.txt",0);
-	
 
-	
 return;
 end;
 
-global procedure PrivateGetReport()
+global procedure PrivateGetReport(record RcVc RepSpec)
 begin
 	record PrivatBankBlock PBb;
 	string 50 host,port,path;
 	area a_req,replyarea;
 	integer i;	
-	string 10 ssl; 
+	string 10 ssl,forDate; 
   
   blockload(PBb);
 		
 		if(PBb.UseNode)then begin
 
+			if (BlankDate(RepSpec.d1)) then begin
+			  forDate = DateToString(CurrentDate,"DD.MM.YYYY");
+			end else begin
+			  forDate = DateToString(RepSpec.d1,"DD.MM.YYYY");;
+			end;
+			
 			ssl = "true";
-			path = "/api/p24b/statements?stdate=15.06.2017&endate=15.06.2017&showInf";
+			path = "/api/p24b/statements?stdate=" & forDate & "&endate=" & forDate & "&showInf";
 			
 			
 			//PBb.Host = "z8farsqgafir.runscope.net";

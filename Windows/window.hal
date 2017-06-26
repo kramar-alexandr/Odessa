@@ -390,7 +390,7 @@ WindowBegin("Maintenance",MyVClass,CGMnt,RcType);
 end;
 
 window UpdateORWebStatusesVClass:1 // Edit ************************** Friday, 17 October 2014 11:47:19
- wtag("language","UKR"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+ wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
  begin
 WindowBegin("Maintenance",UpdateORWebStatusesVClass,CGMnt,RcType);
   SetWRect(20,120,360,220);
@@ -4601,5 +4601,16 @@ begin
   SpecialMenu("Выгрузить таблицу в буфер обмена",'',1,"ExportToExcelSHDsm"); // edit ----------Dima 26.11.2014, 23.01.2015
 
   end;
+  EndWindow;
+end;
+
+window PrivateGetReportVClass:1 // Edit ************************** Friday, 17 October 2014 11:47:19
+ wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+ begin
+  real h,h2,h3,h4,v,v1,vm,vs;
+WindowBegin("Выписка Private Bank",PrivateGetReportVClass,CGMnt,RcType);
+  SetWRect(20,120,360,220);
+    h = 100; v = 16; vm = 20;
+    EditField(h,v,80,"На дату",Normal,d1,false,PasteCurDate);
   EndWindow;
 end;

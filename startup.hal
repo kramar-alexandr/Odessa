@@ -341,7 +341,7 @@ begin
 	Maintenance("Fix Prepayment",MyVClass,FixPrepaymentMn,modDBMain);	//Edit----------------------Dima  24.03.2015
 	
 	Maintenance("Авторизация Private Bank",MyVClass,PrivateGetID,modTC);
-	Maintenance("Выписка Private Bank",MyVClass,PrivateGetReport,modTC);
+	Maintenance("Выписка Private Bank",PrivateGetReportVClass,PrivateGetReport,modTC);
 	
 	Maintenance("Заполнить товары поставщиков",MyVClass,UpdateinAllPIrMn,modDBMain);	//Edit----------------------Dima  24.03.2015
 
