@@ -1409,7 +1409,7 @@ begin
   While(LoopKey("TransDate",IPr,1,TrHs)) begin
 		if (IPr.TransDate>CurrentDate) then begin TrHs = false; end;
 		
-		if ((IPr.CollectPayments > 0) and (IPr.OKFlag==0)) then begin			
+		if ((IPr.CollectPayments==1) and (IPr.OKFlag==0)) then begin			
 			exist = true;
 			TrHs = false;
 			RecordCopy(oldIPr,IPr);
