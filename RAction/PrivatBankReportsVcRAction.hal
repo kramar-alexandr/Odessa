@@ -74,7 +74,7 @@ begin
 	MatRowPut(IPr,rwcnt,IPrw);
 	IPVc_PasteRecVal(IPr,rwcnt);
 	MatRowGet(IPr,rwcnt,IPrw);
-	RecordAction_raExpandAllPayments(IPr);// Edit ************************** Thursday, 12 January 2017 11:58:59
+	//RecordAction_raExpandAllPayments(IPr);// Edit ************************** Thursday, 12 January 2017 11:58:59
 	
 	IPr.PayMode = DCBlb.DefCredCashPayDeal;
 	IPPastePayMode(IPr);
