@@ -59,16 +59,38 @@ begin
 		end else begin
 			if(len(ordnum)==11)then begin
 				ORr.CustOrdNr = StringToLongInt(left(ordnum,9));
-				if(readfirstkey("CustOrdNr",ORr,1,true))then begin
-					custcode = ORr.CustCode;
-				end else begin
-					if(len(ordnum)==9)then begin
-						ordnum = ordnum & "-1";
+			end;
+			if(readfirstkey("CustOrdNr",ORr,1,true))then begin
+				custcode = ORr.CustCode;
+			end else begin
+				if(len(ordnum)==9)then begin
+					ordnum = ordnum & "-1";
+					ORr.CustOrdNr = ordnum;
+					if(readfirstkey("CustOrdNr",ORr,1,true))then begin
+						custcode = ORr.CustCode;
+					end;
+					if(blank(custcode))then begin
+						ordnum = ordnum & "-2";
 						ORr.CustOrdNr = ordnum;
 						if(readfirstkey("CustOrdNr",ORr,1,true))then begin
 							custcode = ORr.CustCode;
 						end;
 					end;
+					if(blank(custcode))then begin
+						ordnum = ordnum & "-3";
+						ORr.CustOrdNr = ordnum;
+						if(readfirstkey("CustOrdNr",ORr,1,true))then begin
+							custcode = ORr.CustCode;
+						end;
+					end;
+					if(blank(custcode))then begin
+						ordnum = ordnum & "-4";
+						ORr.CustOrdNr = ordnum;
+						if(readfirstkey("CustOrdNr",ORr,1,true))then begin
+							custcode = ORr.CustCode;
+						end;
+					end;
+					
 				end;
 			end;
 		end;
