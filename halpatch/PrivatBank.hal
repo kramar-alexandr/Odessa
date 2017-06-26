@@ -132,7 +132,7 @@ begin
             //LogText(0,PBReportsr.PBNumber & " : " & PBReportsr.TransDate & " : " & PBReportsr.TransTime & " : " & PBReportsr.RawFilePath
             //& " : " & PBReportsr.Sum & " : " & PBReportsr.Purpose & " : " & PBReportsr.Name & " : " & PBReportsr.State & " : " & PBReportsr.FlInfo
             //& " : " & PBReportsr.DocType);
-            RECORDSTORE(PBReportsr,false);
+            RECORDSTORE(PBReportsr,true);
           end;
         end;
       end;
@@ -144,13 +144,20 @@ begin
 return;
 end;
 
-global procedure PrivateGetReport(record RcVc RepSpec)
+global updating procedure PrivateGetReport(record RcVc RepSpec)
 begin
 	record PrivatBankBlock PBb;
 	string 50 host,port,path;
 	area a_req,replyarea;
 	integer i;	
 	string 10 ssl,forDate; 
+  
+  record PrivatBankReportsVc PBReportsr;
+  
+  while(loopmain(PBReportsr,1,true))begin
+  	recorddelete(PBReportsr);
+  	stepback(PBReportsr);
+  end;
   
   blockload(PBb);
 		
@@ -164,7 +171,9 @@ begin
 			
 			ssl = "true";
 			path = "/api/p24b/statements?stdate=" & forDate & "&endate=" & forDate & "&showInf";
-			
+			if(nonblank(PBb.Account))then begin
+				path = "/api/p24b/statements?stdate=" & forDate & "&endate=" & forDate & "&acc=" & PBb.Account & "&showInf";
+			end;
 			
 			//PBb.Host = "z8farsqgafir.runscope.net";
 			//path = "/";

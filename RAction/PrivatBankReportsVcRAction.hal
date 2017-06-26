@@ -13,19 +13,19 @@ external procedure RecordAction_raExpandAllPayments(var record IPVc);// Edit ***
 
 global updating procedure FillIPVcPayment(record PrivatBankReportsVc PBRr, var record IPVc IPr)
 begin
-  record IPVc IPr,oldIPr;
+  record IPVc oldIPr;
   row IPVc IPrw;
   record IVVc IVr;
   record ORVc ORr;
-  integer rwcnt,i;
+  integer rwcnt;
   boolean TrHs,exist;
   Boolean installmentf;
   val chk;  
   record IPrsVc IPrsr;
 	record DefCashBlock DCBlb;
-	string 255 tstr,ordnum,temordnum,custcode;
+	string 255 tstr,ordnum,temordnum,custcode,c;
 	integer i,length;
-	record ORVc ORr;
+	longint error;
   
   BlockLoad(DCBlb);
   	
@@ -33,24 +33,26 @@ begin
 	
 	tstr = PBRr.Purpose;
 	length = len(tstr);
-	if(len(length)>9)then begin
+	if(length>9)then begin
 		For(i=0;i<length;i=i+1) begin
 			c = mid(tstr,i,1);
-	  	if(asc(c)>47 and asc(c)<58)then begin
+	  	if((asc(c)>47 and asc(c)<58) or c=="-")then begin
 	  		temordnum = temordnum & c;
 	  	end else begin
-	  		if(len(temordnum)==9)then begin
-	  			ordnum = temordnum;
-	  		end;
 	  		temordnum = "";
 	  	end;
+	  	if(len(temordnum)==9 or len(temordnum)==11)then begin
+				ordnum = temordnum;
+			end;
+	  	
 		end; 
 	end;
 	
 	custcode = "NONAME";
 	
-	if(len(ordnum)==9)then begin
-		ORr.CustOrdNr = StringToLongInt(tstr);
+	if(len(ordnum)==9 or len(ordnum)==11)then begin
+		ORr.CustOrdNr = StringToLongInt(ordnum);
+		logtext(0,"******************************FindOrder " & ORr.CustOrdNr);
 		if(readfirstkey("CustOrdNr",ORr,1,true))then begin
 			custcode = ORr.CustCode;
 		end;
@@ -59,29 +61,29 @@ begin
 	ClearRow(IPr,IPrw,kReceiptRowTypeNormal);
 	IPrw.CustCode = custcode;
 	MatRowPut(IPr,rwcnt,IPrw);
-	IPVc_PasteCustCode(IPr,cnt,error);
+	IPVc_PasteCustCode(IPr,rwcnt,error);
 	MatRowGet(IPr,rwcnt,IPrw);
 	IPrw.RecCurncy = "UAH_R";
 	MatRowPut(IPr,rwcnt,IPrw);
-	IPVc_PasteRecCurncy(IPr,cnt);
+	IPVc_PasteRecCurncy(IPr,rwcnt);
 	MatRowGet(IPr,rwcnt,IPrw);
 	IPrw.RecVal = PBRr.Sum;
+	logtext(0,PBRr.Sum);
+	IPrw.CustName = left(PBRr.Name & " " & PBRr.Purpose & " " & PBRr.TransTime,200);
+	logtext(0,IPrw.CustName);
 	MatRowPut(IPr,rwcnt,IPrw);
-	IPVc_PasteRecVal(IPr,cnt);
+	IPVc_PasteRecVal(IPr,rwcnt);
 	MatRowGet(IPr,rwcnt,IPrw);
 	RecordAction_raExpandAllPayments(IPr);// Edit ************************** Thursday, 12 January 2017 11:58:59
 	
 	IPr.PayMode = DCBlb.DefCredCashPayDeal;
 	IPPastePayMode(IPr);
-	IPr.Comment = PBRr.Name & " " & PBRr.Purpose;
+	
 	//IPr.OKFlag = 1;
 	IPSumup(IPr);
 	//IPVcRecordCheck(IPr,IP2r,1,0); //for MakeTransFromIP
-	
-	RecordStore(IPr,true);
-	
-	end; 
-       
+	IPr.Comment = "Privat Bank Import";
+	RecordStore(IPr,true);      
 
 return;
 end;
@@ -100,11 +102,12 @@ BEGIN
   
   IPr.TransDate = PBRr.TransDate;
   
+  logtext(0,"PrivatBankReportsVcRecordSaveAfter");
   
-  if(PBRr.State=="r" and PBRr.Flinfo=="r")then begin
+  if(PBRr.State=="r" and PBRr.FlInfo=="r")then begin
 		foundf = false;
 		TrHs = true;
-		while(loopkey("TransDate"),IPr,1,TrHs)begin
+		while(loopkey("TransDate",IPr,1,TrHs))begin
 			testf = true;
 			if(IPr.TransDate!=PBRr.TransDate)then begin TrHs = false; testf = false; end;
 			if(IPr.OKFlag==1)then begin testf = false; end;
@@ -113,14 +116,17 @@ BEGIN
 		
 			if(testf)then begin
 				foundf = true;
-				FillIPVcPayment(PBRr,IPr);  		
+				FillIPVcPayment(PBRr,IPr); 
+				TrHs = false; 		
 			end;
 		
 		end;
 	
 		if(foundf==false)then begin
 			recordnew(IPr);
+			IPr.Comment = "Privat Bank Import";
 			IPr.SerNr = NextSerNr("IPVc",CurrentDate,-1,false,"");		
+			logtext(0,"IPr.SerNr " & IPr.SerNr);
 			IPr.CollectPayments = 2;
 			IPr.TransDate = PBRr.TransDate;	 
 			FillIPVcPayment(PBRr,IPr);
