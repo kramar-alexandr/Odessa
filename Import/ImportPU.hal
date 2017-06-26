@@ -280,7 +280,7 @@ end;
 
 global updating procedure ImportRawItems()
 begin
-string 255 artcode,name,description;
+string 255 artcode,name,description,barcode;
 integer coef;
 record INVc INr;
 Boolean saveF;
@@ -294,6 +294,7 @@ Boolean saveF;
 		artcode = ImportField;
 		name = ImportField;
 		description = ImportField;
+		barcode = ImportField;
 		
 		if (NonBlank(artcode)) then begin
   		INr.Code = artcode;
@@ -309,6 +310,11 @@ Boolean saveF;
   			  AddToText(description,INr);
   			  saveF = true;
   			end;
+  			if (NonBlank(barcode)) then begin
+  			  INr.BarCode = barcode;
+  			  saveF = true;
+  			end;
+
   			if (saveF) then begin
   			  recordStore(INr,true);
   			end;
