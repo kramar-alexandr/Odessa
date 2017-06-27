@@ -1913,10 +1913,10 @@ BEGIN
 	//Monday, 29 May 2017 14:30:59
 	
   RepSpec.sStartDate = currentdate;
-  RepSpec.sEndDate = currentdate;
+  RepSpec.sEndDate = addday(currentdate,-7);
   RepSpec.Period2Str = currentdate;
   RepSpec.Period2Str = currentdate & ":";
-  RepSpec.Period2Str = RepSpec.Period2Str & currentdate;
+  RepSpec.Period2Str = RepSpec.Period2Str & addday(currentdate,-7);
   
 	// Edit End ---------------------------------------------- Edit End
 	
