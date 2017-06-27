@@ -418,6 +418,7 @@ begin
   Maintenance("Область в карточках контактов",MyVClass,OblastInCUMn,modDBMain);// Edit ************************** Friday, 9 June 2017 15:05:37
   
   Maintenance("Обновить статусы WEB заказов",UpdateORWebStatusesVClass,UpdateORWebStatusesMn,modSO); //Edit***************************Sasha2,13:33 13.02.2017
+  Maintenance("Обновить последние WEB заказы",MyVClass,UpdateLastORWebStatusesBySequenceMn,modSO); //Edit***************************Sasha2,13:33 13.02.2017
   //Maintenance("Заполнить ORHistoryVc",MyVClass,FillORHistoryVcMn,modSO);//Edit-------------------Vitalii 15:57 27.02.2017
 
   Import("Импорт цен",PLImportIClass,PLImportIn,modDI); //Added********************Dima 20.11.2014

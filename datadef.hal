@@ -1545,6 +1545,7 @@ RecordBegin(INVc,-,"artikel5");
   RecordField(UseNode,M4Int,0,0);
   RecordField(LocationQuer,M4Str,250,0);// Edit ************************** Friday, 14 April 2017 11:18:53
   RecordField(AdressDelimeter,M4Str,10,0);
+  RecordField(LastSequence,M4Long,0,0);
   EndBlock; //Edit***************************Sasha2,10:19 14.07.2014 }
   
   RecordBegin(ORVc,-,"ORVc2");

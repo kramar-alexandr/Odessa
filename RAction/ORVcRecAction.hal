@@ -258,6 +258,45 @@ begin
 return;
 end;
 
+global updating procedure UpdateLastORWebStatusesBySequenceMn(record RcVc RepSpec)
+begin
+	record ORvc ORr;
+	boolean TrHs,testf,found;
+	longint seq;
+	record WebShopSettingsBlock WSb;
+	
+	
+	blockload(WSb);
+	
+	seq = WSb.LastSequence;
+	
+	if(seq==0)then begin
+		seq = ReadLastSequence("ORVc") - 1000;
+	end;
+	
+	WSb.LastSequence = ReadLastSequence("ORVc");
+	blockstore(WSb);
+	
+	TrHs = true;
+	if(seq>0)then begin
+		while (LoopSequence(ORr,seq,TrHs)) begin
+			testf = true;
+			if(ORr.OrderClass!="WEB")then begin testf = false; end;
+			
+			if(testf)then begin
+				logtext(0,"SetNewORCustomStatusFlagOnWeb " & ORr.SerNr);
+				SetNewORCustomStatusFlagOnWeb(ORr);
+			end;
+		end;
+	end;
+
+return;
+end;
+
+
+
+
+
 procedure SetORAcceptanceFlag(var record ORVc ORr,record ORVc prevORr,LongInt stat)
 begin
   val bc1v;

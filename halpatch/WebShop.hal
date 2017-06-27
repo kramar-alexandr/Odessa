@@ -26,7 +26,7 @@ external procedure ORDUpdatePrices(var record ORVc,Boolean);// Edit ************
 external function string 255 LookUpPromotionCode(date,string); //Edit***************************Sasha2,15:31 24.01.2017
 external procedure CreateORHistoryVcFromORVc(record ORVc,record ORVc,boolean);// Edit ************************** Wednesday, 1 March 2017 10:54:05
 external updating procedure AddOrderForStockMove(var record StockMovVc,var record ORVc,boolean);// Edit ************************** Monday, 6 March 2017 11:29:42
-
+external updating procedure UpdateLastORWebStatusesBySequenceMn();
 SetLangMode(LangRussian,"RUS",0);
 
 
@@ -114,7 +114,8 @@ begin
     //if (curtnew==t1 or curtnew==t2 or curtnew==t3 or curtnew==t4 or curtnew==t5 or curtnew==t6 or curtnew==t7 or curtnew==t8 or curtnew==t9) then begin
     if(right(curtnew.minute,1)=="0")then begin
     	LogText(0,"SOAPLogin at planned time: " & curtnew);
-    	SOAPLogin;
+    	SOAPLogin;    	
+    	UpdateLastORWebStatusesBySequenceMn;
     end;
     
     if(curtnew>=StringToTime("8:00") and curtnew.minute==0)then begin
