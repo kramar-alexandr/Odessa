@@ -14,3 +14,22 @@ BEGIN
   RETURN;
 END;
 
+global
+procedure UpdateORWebStatusesVClassReportDefaults(Integer wn)
+BEGIN
+  record RcVc RepSpec;
+  
+  DeselectWindow(wn,false);
+  GetWindowRecord(wn,RepSpec);
+  ReportDefaults(RepSpec,"UpdateORWebStatusesVClass");  
+  RepSpec.sStartDate = currentdate;
+  RepSpec.sEndDate = currentdate;
+  RepSpec.Period2Str = currentdate;
+  RepSpec.Period2Str = currentdate & ":";
+  RepSpec.Period2Str = RepSpec.Period2Str & currentdate;
+  PutWindowRecord(wn,RepSpec);
+  SelectWindow(wn);
+  RETURN;
+END;
+
+
