@@ -949,7 +949,7 @@ LPasteOrdInShipLimitMes:
     remn = ORrw.Quant - ORrw.Shipd1;
     
     if(userCanAction("SHBeforeIV",true))then begin
-			if (ORrw.Invd==0) then begin
+			if (ORrw.Invd==0 and nonblank(ORrw.ArtCode)) then begin
 					res = 31167;
 					goto LPasteOrdInShip;
 			end;
