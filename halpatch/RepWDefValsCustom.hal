@@ -22,10 +22,10 @@ BEGIN
   DeselectWindow(wn,false);
   GetWindowRecord(wn,RepSpec);
   ReportDefaults(RepSpec,"UpdateORWebStatusesVClass");  
-  RepSpec.sStartDate = currentdate;
+  RepSpec.sStartDate = addday(currentdate,-7);
   RepSpec.sEndDate = currentdate;
-  RepSpec.Period2Str = currentdate;
-  RepSpec.Period2Str = currentdate & ":";
+  RepSpec.Period2Str = addday(currentdate,-7);
+  RepSpec.Period2Str = addday(currentdate,-7) & ":";
   RepSpec.Period2Str = RepSpec.Period2Str & currentdate;
   PutWindowRecord(wn,RepSpec);
   SelectWindow(wn);
