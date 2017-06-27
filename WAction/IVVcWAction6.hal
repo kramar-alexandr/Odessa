@@ -83,11 +83,40 @@ begin
   record LocalMachineBlock LMb;
   record INVc INr;
   Integer i,rwcnt;
+  record ORVc ORr;// Edit ************************** Tuesday, 27 June 2017 09:54:42
+  row ORVc ORrw;// Edit ************************** Tuesday, 27 June 2017 09:54:51
 
   res = true;
-
+	
+	
+	
   if (WindowState(wn)==Rs_update) then begin
     GetPrevWindowRecord(wn,IVr);    
+    // Edit Start ---------------------------------------------- Edit Start
+	//Tuesday, 27 June 2017 09:58:20
+	
+    
+    if(usercanaction("DelIVBeforeSH",true))then begin
+			if(IVr.OrderNr>-1)then begin
+				ORr.SerNr = IVr.OrderNr;
+				if(readfirstmain(ORr,1,true))then begin
+					rwcnt = matrowcnt(ORr);
+					For(i=0;i<rwcnt;i=i+1) begin
+	  				matrowget(ORr,i,ORrw);
+	  				if(ORrw.Shipd1>0)then begin
+	  					res = false;
+	  				end;
+					end; 
+					if(res==false)then begin
+						messagebox(31168,"");
+					end;
+				end;
+			end;
+		end;
+    
+	// Edit End ---------------------------------------------- Edit End
+	
+    
     if (IVr.OKFlag!=0) then begin res = false; end;
     if (HasLocalization("ARG")) then begin
       if (ArgEInvLock(IVr,wn)!=kArgentinianInvoiceLockNone) then begin res = false; end;

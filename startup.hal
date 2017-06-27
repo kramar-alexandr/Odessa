@@ -304,6 +304,8 @@ begin
 	 SString(31164,"Заказ должен быть категории WEB");
 	 SString(31165,"Галочка ОК должна быть снята");
 	 SString(31166,"Галочка Резерв должна быть снята");
+	 SString(31167,"Сч/ф пред отгрузкой");
+	 SString(31168,"Есть отгрузка по счету клиента");
 	 
 	Maintenance("Проставить склад первой покупки клиента",MyVClass,FillFirstDateByeCUMn,modSL);
   Maintenance("Экспорт склада CSV",ExportStockCSVClass,ExportStockCSVMn,modSY);
@@ -680,6 +682,8 @@ begin
   StrSetText(POQTToPO,"Заказ поставщику из предложения на покупку");
   StrSetText(SVOToPO,"Заказ постащику из заказа на обсл.");
   StrSetText(WSToPO,"Заказ постащику из таблицы работ");
+  StrSetText(SHBeforeIV,"Запрет отгрузки до сч/ф (запретить)");// Edit ************************** Tuesday, 27 June 2017 09:51:09
+  StrSetText(DelIVBeforeSH,"Запрет удалить сч/ф до отгрузки (запретить)");// Edit ************************** Tuesday, 27 June 2017 09:51:09
   StrSetText(StockMovOK,"Получение перемещения товара");
   StrSetText(AllowNPTSReprint," Перепечатать строки сч/ф (сенсорный экран)");
   StrSetText(AllowChangeTerms,"Разрешить менять условия сч/ф (сенсорный экран)");// Edit ************************** Wednesday, 4 February 2015 14:51:00

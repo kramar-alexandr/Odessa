@@ -11,7 +11,7 @@ external procedure RecordAction_raExpandAllPayments(var record IPVc);// Edit ***
 
 
 
-global updating procedure FillIPVcPayment(record PrivatBankReportsVc PBRr, var record IPVc IPr)
+global updating procedure FillIPVcPayment(record PrivatBankReportsVc PBRr, var record IPVc IPr,string custcode,boolean noname)
 begin
   record IPVc oldIPr;
   row IPVc IPrw;
@@ -23,7 +23,7 @@ begin
   val chk;  
   record IPrsVc IPrsr;
 	record DefCashBlock DCBlb;
-	string 255 tstr,ordnum,temordnum,custcode,c;
+	string 255 tstr,ordnum,temordnum,c;
 	integer i,length;
 	longint error;
   
@@ -31,7 +31,60 @@ begin
   	
 	rwcnt = MatRowCnt(IPr);
 	
-	tstr = PBRr.Purpose;
+	
+	
+	ClearRow(IPr,IPrw,kReceiptRowTypeNormal);
+	IPrw.CustCode = custcode;
+	MatRowPut(IPr,rwcnt,IPrw);
+	IPVc_PasteCustCode(IPr,rwcnt,error);
+	MatRowGet(IPr,rwcnt,IPrw);
+	IPrw.RecCurncy = "UAH_R";
+	MatRowPut(IPr,rwcnt,IPrw);
+	IPVc_PasteRecCurncy(IPr,rwcnt);
+	MatRowGet(IPr,rwcnt,IPrw);
+	IPrw.RecVal = PBRr.Sum;
+	logtext(0,PBRr.Sum);
+	IPrw.CustName = left(PBRr.Name & " " & PBRr.Purpose & " " & PBRr.TransTime,200);
+	logtext(0,IPrw.CustName);
+	MatRowPut(IPr,rwcnt,IPrw);
+	IPVc_PasteRecVal(IPr,rwcnt);
+	MatRowGet(IPr,rwcnt,IPrw);
+	if(noname==false)then begin
+		RecordAction_raExpandAllPayments(IPr);// Edit ************************** Thursday, 12 January 2017 11:58:59
+	end;
+	
+	IPr.PayMode = DCBlb.DefCredCashPayDeal;
+	IPPastePayMode(IPr);
+	
+	//IPr.OKFlag = 1;
+	IPSumup(IPr);
+	//IPVcRecordCheck(IPr,IP2r,1,0); //for MakeTransFromIP
+	IPr.Comment = "Privat Bank Import";
+	RecordStore(IPr,true);      
+
+return;
+end;
+
+
+
+
+global
+updating function LongInt PrivatBankReportsVcRecordSaveAfter(var record PrivatBankReportsVc PBRr,record PrivatBankReportsVc PBR2r,LongInt stat,LongInt long4)
+BEGIN
+  LongInt res;
+	record IPVc IPr;
+  boolean TrHs,testf,foundf;
+  integer i,mtrw;
+  string 255 ordnum,tstr,temordnum,c,custcode;
+  longint length;
+  record ORVc ORr;
+  
+  IPr.TransDate = PBRr.TransDate;
+  
+  logtext(0,"PrivatBankReportsVcRecordSaveAfter");
+  
+  
+  tstr = PBRr.Purpose;
 	length = len(tstr);
 	if(length>9)then begin
 		For(i=0;i<length;i=i+1) begin
@@ -51,7 +104,6 @@ begin
 	custcode = "NONAME";
 	
 	if(len(ordnum)==9 or len(ordnum)==11)then begin
-		
 		ORr.CustOrdNr = ordnum;
 		logtext(0,"******************************FindOrder " & ORr.CustOrdNr);
 		if(readfirstkey("CustOrdNr",ORr,1,true))then begin
@@ -89,52 +141,6 @@ begin
 			end;
 		end;
 	end;
-	
-	ClearRow(IPr,IPrw,kReceiptRowTypeNormal);
-	IPrw.CustCode = custcode;
-	MatRowPut(IPr,rwcnt,IPrw);
-	IPVc_PasteCustCode(IPr,rwcnt,error);
-	MatRowGet(IPr,rwcnt,IPrw);
-	IPrw.RecCurncy = "UAH_R";
-	MatRowPut(IPr,rwcnt,IPrw);
-	IPVc_PasteRecCurncy(IPr,rwcnt);
-	MatRowGet(IPr,rwcnt,IPrw);
-	IPrw.RecVal = PBRr.Sum;
-	logtext(0,PBRr.Sum);
-	IPrw.CustName = left(PBRr.Name & " " & PBRr.Purpose & " " & PBRr.TransTime,200);
-	logtext(0,IPrw.CustName);
-	MatRowPut(IPr,rwcnt,IPrw);
-	IPVc_PasteRecVal(IPr,rwcnt);
-	MatRowGet(IPr,rwcnt,IPrw);
-	//RecordAction_raExpandAllPayments(IPr);// Edit ************************** Thursday, 12 January 2017 11:58:59
-	
-	IPr.PayMode = DCBlb.DefCredCashPayDeal;
-	IPPastePayMode(IPr);
-	
-	//IPr.OKFlag = 1;
-	IPSumup(IPr);
-	//IPVcRecordCheck(IPr,IP2r,1,0); //for MakeTransFromIP
-	IPr.Comment = "Privat Bank Import";
-	RecordStore(IPr,true);      
-
-return;
-end;
-
-
-
-
-global
-updating function LongInt PrivatBankReportsVcRecordSaveAfter(var record PrivatBankReportsVc PBRr,record PrivatBankReportsVc PBR2r,LongInt stat,LongInt long4)
-BEGIN
-  LongInt res;
-	record IPVc IPr;
-  boolean TrHs,testf,foundf;
-  integer i,mtrw;
-  
-  
-  IPr.TransDate = PBRr.TransDate;
-  
-  logtext(0,"PrivatBankReportsVcRecordSaveAfter");
   
   if(PBRr.State=="r" and PBRr.FlInfo=="r")then begin
 		foundf = false;
@@ -143,12 +149,16 @@ BEGIN
 			testf = true;
 			if(IPr.TransDate!=PBRr.TransDate)then begin TrHs = false; testf = false; end;
 			if(IPr.OKFlag==1)then begin testf = false; end;
-			if(IPr.Comment!="Privat Bank Import")then begin testf = false; end;
+			if(custcode=="NONAME")then begin
+				if(IPr.Comment!="Privat Bank Import NONAME")then begin testf = false; end;
+			end else begin
+				if(IPr.Comment!="Privat Bank Import")then begin testf = false; end;
+			end;
 			if(IPr.CollectPayments!=2)then begin testf = false; end;
 		
 			if(testf)then begin
 				foundf = true;
-				FillIPVcPayment(PBRr,IPr); 
+				FillIPVcPayment(PBRr,IPr,custcode,custcode=="NONAME"); 
 				TrHs = false; 		
 			end;
 		
@@ -156,12 +166,16 @@ BEGIN
 	
 		if(foundf==false)then begin
 			recordnew(IPr);
-			IPr.Comment = "Privat Bank Import";
+			if(custcode=="NONAME")then begin
+				IPr.Comment = "Privat Bank Import NONAME";
+			end else begin
+				IPr.Comment = "Privat Bank Import";
+			end;
 			IPr.SerNr = NextSerNr("IPVc",CurrentDate,-1,false,"");		
 			logtext(0,"IPr.SerNr " & IPr.SerNr);
 			IPr.CollectPayments = 2;
 			IPr.TransDate = PBRr.TransDate;	 
-			FillIPVcPayment(PBRr,IPr);
+			FillIPVcPayment(PBRr,IPr,custcode,custcode=="NONAME");
 		end;
   end;
     

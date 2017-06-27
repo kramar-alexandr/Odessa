@@ -5540,18 +5540,18 @@ begin
     SpecialMenu("Статус товара",'I',2,"ItemStatusORDsm");
     SpecialMenu("Создать отгрузку",'L',0,"SHFromORDsm");
     SpecialMenu("Создать сч/ф",'F',1,"IVFromORDsm");
-    SpecialMenu("Добавить итого",' ',14,"SubtotalORDsm");
+   // SpecialMenu("Добавить итого",' ',14,"SubtotalORDsm");
 /*
 email not working yet
     SpecialMenu("Создать e-mail",'m',11,"CreateMailFromORDsm");
 */
   end else begin
-  SpecialMenu("Добавить строку заголовка",' ',13,"ORAddHeaderLine");
-  SpecialMenu("Добавить скрытую строку",' ',13,"ORAddHidLine");
-  SpecialMenu("Добавить итого",' ',14,"SubtotalORDsm");
+  //SpecialMenu("Добавить строку заголовка",' ',13,"ORAddHeaderLine");
+  //SpecialMenu("Добавить скрытую строку",' ',13,"ORAddHidLine");
+  //SpecialMenu("Добавить итого",' ',14,"SubtotalORDsm");
   SpecialMenu("Пересчитать скидку",' ',11,"RecalcDiscountORDsm");
   if (StandardHansa==false) then begin
-    SpecialMenu("Пересчитать вес и объем",' ',10,"RecalculateWeightORDsm");
+    //SpecialMenu("Пересчитать вес и объем",' ',10,"RecalculateWeightORDsm");
   end;
   SpecialMenu("Проверить наличие на складах товаров из счета",' ',7,"CheckItemsOnStockORDsm"); //Edit***************************Sasha2,15:20 12.08.2015
   SpecialMenu("Обновить товары валютного прейскуранта",' ',7,"UpdatePricesORDsm");
@@ -5585,8 +5585,8 @@ email not working yet
   /*if (GuiType==kGuiiPhone) then begin
     SpecialMenu("Подписать",' ',10,"SignORDsm");
   end;*/
-  SpecialMenu("Создать возврат товаров",'B',6,"RetFromORsm");
-  SpecialMenu("Создать перемещение по складу",' ',8,"StockMovFromORDsm");
+  //SpecialMenu("Создать возврат товаров",'B',6,"RetFromORsm");
+  //SpecialMenu("Создать перемещение по складу",' ',8,"StockMovFromORDsm");
   /*if (HasTaxMatrix) then begin
     SpecialMenu("Открыть матрицу налогов",' ',25,"OpenVatMatrixORDsm");
   end;*/
