@@ -1501,7 +1501,7 @@ end; //Edit***************************Sasha2,10:52 29.04.2016 }
 global updating procedure DeleteOrdRowFromSMHardDsm()
 begin
 	record ORVc ORr;
-	record StockMovVc SMr;
+	record StockMovVc SMr,oldSMr;
 	row StockMovVc SMrw;
 	row ORVc ORrw;
 	record RcVc RepSpec;
@@ -1544,8 +1544,10 @@ begin
   if (rownr<0 or blank(SMrw.ArtCode)) then begin
 		MessageBox(0,"‚ыберите строку, которую нужно удалить");
 	end else begin
+		
+		recordcopy(oldSMr,SMr);
 		MatRowDelete(SMr,rownr);
-		recordstore(SMr,true);
+		recordupdate(oldSMr,SMr,true);
 		PutWindowRecord(wn,SMr);
 		
 	end;
