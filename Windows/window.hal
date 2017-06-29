@@ -3334,6 +3334,16 @@ WindowBegin("MagentoTestMn",MagentoTestVClass,CGMnt,RcType);
   EndWindow;
 end;
 
+
+window DeleteCUVcVClass:1 //Edit-------------------Vitalii 15:29 01.12.2016
+ wtag("language","UKR"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+ begin
+WindowBegin("Удалить карточку контакта",DeleteCUVcVClass,CGMnt,RcType);
+  SetWRect(20,120,360,220);
+  EditField(100,6,100,"Код контакта",Normal,f1,false,0);
+  EndWindow;
+end;
+
 window PromotionDClass:1		//Edit----------------------Dima  27.08.2015
   wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
 begin

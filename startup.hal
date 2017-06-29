@@ -420,6 +420,9 @@ begin
   Maintenance("Обновить статусы WEB заказов",UpdateORWebStatusesVClass,UpdateORWebStatusesMn,modSO); //Edit***************************Sasha2,13:33 13.02.2017
   Maintenance("Обновить последние WEB заказы",MyVClass,UpdateLastORWebStatusesBySequenceMn,modSO); //Edit***************************Sasha2,13:33 13.02.2017
   //Maintenance("Заполнить ORHistoryVc",MyVClass,FillORHistoryVcMn,modSO);//Edit-------------------Vitalii 15:57 27.02.2017
+  
+  Maintenance("Удалить карточку контакта",DeleteCUVcVClass,DeleteCUVcMn,modSY); //Edit***************************Sasha2,13:33 13.02.2017
+
 
   Import("Импорт цен",PLImportIClass,PLImportIn,modDI); //Added********************Dima 20.11.2014
   Import("Импорт товаров",INImportIClass,INImportIn,modIN);//Added********************Dima 20.11.2014

@@ -3765,3 +3765,16 @@ begin
 
 return;
 end;
+
+
+global updating procedure DeleteCUVcMn(record RcVc RepSpec)
+begin
+	record CUVc CUr;
+	
+	CUr.Code = RepSpec.f1;
+	if(readfirstmain(CUr,1,true))then begin
+		recorddelete(CUr);
+	end;
+	
+return;
+end;
