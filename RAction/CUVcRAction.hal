@@ -475,7 +475,7 @@ BEGIN
   if (CUr.CUType!=0) then begin
     if (CSVcExists(CUr.Code,true)) then begin
       if (long3>0) then begin
-        MessageBox(1121,"");
+        MessageBox(1121,"CSVcExists");
       end;
       res = 0;
       goto LCUVcRecordRemoveTest;
@@ -493,7 +493,7 @@ BEGIN
   if (nonblank(CUr.Code)) then begin
     if (ActVcExists(CUr.Code)) then begin
       if (long3>0) then begin
-        MessageBox(1121,"");
+        MessageBox(1121,"ActVcExists");
       end;
       res = 0;
       goto LCUVcRecordRemoveTest;
@@ -501,7 +501,7 @@ BEGIN
   end;
   if (QTVcExists(CUr.Code)) then begin
     if (long3>0) then begin
-      MessageBox(1121,"");
+      MessageBox(1121,"QTVcExists");
     end;
     res = 0;
     goto LCUVcRecordRemoveTest;
@@ -1475,7 +1475,7 @@ BEGIN
   if (stat==updatemode) then begin
     if ((CUr.CUType==0) and (CU2r.CUType!=0)) then begin
       if (CSVcExists(CUr.Code,false)) then begin
-        RecordCheckError(1121," " & CUr.Code,-1,"Code");      
+        RecordCheckError(1121," CSVcExists " & CUr.Code,-1,"Code");      
         res = -1; 
         goto LCUVcRecordCheck;
       end;
