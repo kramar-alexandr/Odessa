@@ -890,7 +890,7 @@ begin
 									end;
 								end;
 								if(blank(ORr.NPAdresStreet))then begin
-									ORr.DeliveryNewPost = 0;
+									ORr.NPAdresDeliv = 0;
 								end;
 							end;
 						//end;

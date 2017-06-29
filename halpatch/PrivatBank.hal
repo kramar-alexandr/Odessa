@@ -113,10 +113,10 @@ begin
           PBReportsr.PBNumber = transNumber;
           if (NonBlank(transNumber) and not ReadFirstMain(PBReportsr,1,true)) then begin
             path = "PrivatBankReports/" & transNumber & ".txt";
+            SETAREAZEROSIZE(tArea);
             GetAreaFromArea(rootChildsArea,fromPos,rootChildLen[i],tArea);
             fromPos = fromPos + rootChildLen[i];
             writeareatofile(tArea,path,0);
-            SETAREAZEROSIZE(tArea);
             RECORDNEW(PBReportsr);
             PBReportsr.PBNumber = transNumber;
             tstr = JSONGet(jobj,"root[0]/["  & i & "]/info/@postdate");
