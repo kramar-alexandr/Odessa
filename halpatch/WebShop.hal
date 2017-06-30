@@ -29,6 +29,7 @@ external updating procedure AddOrderForStockMove(var record StockMovVc,var recor
 external updating procedure UpdateLastORWebStatusesBySequenceMn();
 external updating procedure PrivateGetID();
 external updating procedure PrivateGetReport(record RcVc);
+external function string 255 ChangeCaseStr(string, integer); //Edit-------------------Vitalii 11:34 14.09.2016
 
 SetLangMode(LangRussian,"RUS",0);
 
@@ -451,10 +452,15 @@ begin
 	//Cur.Name = XmlGetAttribute(xmlMessage,"orders/order" & i,"lastname") & " " & XmlGetAttribute(xmlMessage,"orders/order" & i,"firstname") & " " & XmlGetAttribute(xmlMessage,"orders/order" & i,"middlename");
 	//if(blank(Cur.Name) or Cur.Name=="  ")then begin
 		Cur.Name = XmlGetAttribute(xmlMessage,"orders/order" & i,"name") & " " & XmlGetAttribute(xmlMessage,"orders/order" & i,"name2");
+		Cur.Name = ChangeCaseStr(Cur.Name,4);
 	//end;
 	firsname = XmlGetAttribute(xmlMessage,"orders/order" & i,"firstname");
 	lastname = XmlGetAttribute(xmlMessage,"orders/order" & i,"lastname");
 	middlename = XmlGetAttribute(xmlMessage,"orders/order" & i,"middlename");
+	firsname = ChangeCaseStr(firsname,4);
+	lastname = ChangeCaseStr(lastname,4);
+	middlename = ChangeCaseStr(middlename,4);
+	
 	resstr = firsname & lastname & middlename;
 	if(nonblank(resstr) and len(resstr)>3)then begin
 		Cur.Name = lastname & " " & firsname & " " & middlename;
@@ -774,12 +780,16 @@ begin
 					ORr.Comment = XmlGetAttribute(xmlPost,"orders/order" & i ,"ordercomment");
 					payment = XmlGetAttribute(xmlPost,"orders/order" & i ,"payment");
 					ORr.NPLastName = XmlGetAttribute(xmlPost,"orders/order" & i,"lastname");
+					ORr.NPLastName = ChangeCaseStr(ORr.NPLastName,4);
 					ORr.NPFirstName = XmlGetAttribute(xmlPost,"orders/order" & i,"firstname");
+					ORr.NPFirstName = ChangeCaseStr(ORr.NPFirstName,4);
 					ORr.NPMiddleName = XmlGetAttribute(xmlPost,"orders/order" & i,"middlename");
+					ORr.NPMiddleName = ChangeCaseStr(ORr.NPMiddleName,4);
 					
 					if(blank(ORr.NPLastName))then begin
 						ORr.NPLastName = XmlGetAttribute(xmlPost,"orders/order" & i,"name");
 						resstr = StripExcessSpacesInString(XmlGetAttribute(xmlPost,"orders/order" & i,"name2"));
+						resstr = ChangeCaseStr(resstr,4);
 						resstr = StrReplace(resstr," ",":");
 						
 						if(nonblank(resstr))then begin
