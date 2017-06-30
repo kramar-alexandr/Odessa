@@ -1065,6 +1065,9 @@ LWebGetOrderExist:;
 	
 		LWebGetOrder:;	
 			
+			
+			
+			
 			if (Blank(errors)) then begin
 				
 				
@@ -1077,6 +1080,7 @@ LWebGetOrderExist:;
 				If(nonblank(payment))then begin
 					ORr.ShipAddr3 = payment;
 				end;
+				recordstore(ORr,true);
 				
 				weboutstring("Successful import"); //Edit***************************Sasha2,15:18 04.07.2014
 			end else begin
