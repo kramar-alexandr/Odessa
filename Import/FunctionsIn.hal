@@ -128,9 +128,9 @@ begin
   string 15 volume, weight,unit4, coef4, unit2, coef2, unit3, coef3, unit5, coef5;
   string 200 name;
   
- if (SetImportCodepage("WINDOWS-1251")==false) then begin
+ /*if (SetImportCodepage("WINDOWS-1251")==false) then begin
   LogText(0,"***  Load Codepage ISO-8859-5. FAIL****	");
-  End;
+  End;*/
 
 	while (TestEOF()==false) begin
 	code = ImportField;
