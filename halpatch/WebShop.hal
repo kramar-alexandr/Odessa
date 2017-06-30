@@ -1083,17 +1083,19 @@ LWebGetOrderExist:;
 			
 			if (Blank(errors)) then begin
 				
-				
-				If(nonblank(CUr.Phone))then begin
-					ORr.ShipAddr1 = CUr.Phone;
+				ORr.SerNr = ORr.SerNr;
+				if(readfirstmain(ORr,1,true))then begin
+					If(nonblank(CUr.Phone))then begin
+						ORr.ShipAddr1 = CUr.Phone;
+					end;
+					If(nonblank(payment))then begin
+						ORr.ShipAddr2 = ORr.ShipAddr3;
+					end;
+					If(nonblank(payment))then begin
+						ORr.ShipAddr3 = payment;
+					end;
+					recordstore(ORr,true);
 				end;
-				If(nonblank(payment))then begin
-					ORr.ShipAddr2 = ORr.ShipAddr3;
-				end;
-				If(nonblank(payment))then begin
-					ORr.ShipAddr3 = payment;
-				end;
-				recordstore(ORr,true);
 				
 				weboutstring("Successful import"); //Edit***************************Sasha2,15:18 04.07.2014
 			end else begin
