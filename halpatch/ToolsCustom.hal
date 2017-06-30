@@ -3778,3 +3778,14 @@ begin
 	
 return;
 end;
+
+
+global updating procedure ORHistBackDsmRemote(record ORVc ORr)
+begin
+	record ORVc OR2r;
+	
+	recordcopy(OR2r,ORr);
+	recordstore(ORr,true);
+	
+return;
+end;

@@ -5559,6 +5559,10 @@ email not working yet
   SpecialMenu("Поиск товара",'',1,"ItemSearchDsm");
   SpecialMenu("Поиск в текущей таблице",'f',1,"TableSearchDsm"); // edit ----------Dima 25.11.2014
   SpecialMenu("Статус счета",'r',5,"ORInfoRnORDsm");
+  
+  if(currentuser=="SA")then begin
+  	SpecialMenu("Вернуть из истории",'',5,"ORHistBackDsm");
+  end;
   /*if (StandardHansa==false) then begin
     SpecialMenu("Цены предыдущей продажи",' ',12,"ORLastSPrsm");
     SpecialMenu("Распечатать внутренний заказ",' ',4,"Or2FormORDsm");
