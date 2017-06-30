@@ -781,13 +781,16 @@ begin
 					payment = XmlGetAttribute(xmlPost,"orders/order" & i ,"payment");
 					ORr.NPLastName = XmlGetAttribute(xmlPost,"orders/order" & i,"lastname");
 					ORr.NPLastName = ChangeCaseStr(ORr.NPLastName,4);
+					
 					ORr.NPFirstName = XmlGetAttribute(xmlPost,"orders/order" & i,"firstname");
 					ORr.NPFirstName = ChangeCaseStr(ORr.NPFirstName,4);
+					
 					ORr.NPMiddleName = XmlGetAttribute(xmlPost,"orders/order" & i,"middlename");
 					ORr.NPMiddleName = ChangeCaseStr(ORr.NPMiddleName,4);
 					
 					if(blank(ORr.NPLastName))then begin
 						ORr.NPLastName = XmlGetAttribute(xmlPost,"orders/order" & i,"name");
+						ORr.NPLastName = ChangeCaseStr(ORr.NPLastName,4);
 						resstr = StripExcessSpacesInString(XmlGetAttribute(xmlPost,"orders/order" & i,"name2"));
 						resstr = ChangeCaseStr(resstr,4);
 						resstr = StrReplace(resstr," ",":");
