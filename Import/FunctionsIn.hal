@@ -127,6 +127,7 @@ begin
   string 70 code, bar, alterCode,group, manufact;
   string 15 volume, weight,unit4, coef4, unit2, coef2, unit3, coef3, unit5, coef5;
   string 200 name;
+  Boolean updateF;
   
  /*if (SetImportCodepage("WINDOWS-1251")==false) then begin
   LogText(0,"***  Load Codepage ISO-8859-5. FAIL****	");
@@ -136,27 +137,26 @@ begin
 	code = ImportField;
 	name = ImportField;
 	
-		if (nonblank(code) and nonblank(name)) then begin
-		INr.Code = code;
-		INr.Name = name;
+	if (nonblank(code) and nonblank(name)) then begin
+  	INr.Code = code;
+  	INr.Name = name;
+  	bar = ImportField;
+  	alterCode = ImportField;
+  	manufact = ImportField;
+  	group = ImportField;
+  	volume = ImportField;
+  	weight = ImportField;
+  	unit2 = ImportField;
+  	coef2 = ImportField;
+  	unit3 = ImportField;
+  	coef3 = ImportField;
+  	unit4 = ImportField;
+  	coef4 = ImportField;
+  	unit5 = ImportField;
+  	coef5 = ImportField;
 		
 		if (ReadFirstMain(INr,1,true)==false) then begin			
-			bar = ImportField;
-			alterCode = ImportField;
-			manufact = ImportField;
-			group = ImportField;
-			volume = ImportField;
-			weight = ImportField;
-			unit2 = ImportField;
-			coef2 = ImportField;
-			unit3 = ImportField;
-			coef3 = ImportField;
-			unit4 = ImportField;
-			coef4 = ImportField;
-			unit5 = ImportField;
-			coef5 = ImportField;
-			
-          	RecordNew(INr);
+      RecordNew(INr);
 			INr.Code = code;
 			INr.Name = name;
 			INr.BarCode = bar;
@@ -174,8 +174,72 @@ begin
 			INr.AddUnittext5 = unit5;
 			INr.AddUnitCoef5 = StringToVal(coef5,M4UVal);
 			RecordInsert(INr,true);
-			end;
+		end else begin
+		  if (nonblank(name) and INr.Name!=name) then begin
+		    INr.Name = name;
+		    updateF = true;
+		  end;
+		  if (nonblank(bar) and INr.BarCode!=bar) then begin
+		    INr.BarCode = bar;
+		    updateF = true;
+		  end;
+		  if (nonblank(alterCode) and INr.AlternativeCode!=alterCode) then begin
+		    INr.AlternativeCode = alterCode;
+		    updateF = true;
+		  end;
+		  if (nonblank(manufact) and INr.EUCodex!=manufact) then begin
+		    INr.EUCodex = manufact;
+		    updateF = true;
+		  end;
+		  if (nonblank(group) and INr.Group!=group) then begin
+		    INr.Group = group;
+		    updateF = true;
+		  end;
+		  if (nonblank(volume) and INr.Volume!=StringToVal(volume,M45Val)) then begin
+		    INr.Volume = StringToVal(volume,M45Val);
+		    updateF = true;
+		  end;
+		  if (nonblank(weight) and INr.Weight!=StringToVal(weight,M45Val)) then begin
+		    INr.Weight = StringToVal(weight,M45Val);
+		    updateF = true;
+		  end;
+		  if (nonblank(unit2) and INr.AddUnittext2!=unit2) then begin
+		    INr.AddUnittext2 = unit2;
+		    updateF = true;
+		  end;
+		  if (nonblank(coef2) and INr.AddUnitCoef2!=StringToVal(coef2,M45Val)) then begin
+		    INr.AddUnitCoef2 = StringToVal(coef2,M45Val);
+		    updateF = true;
+		  end;
+		  if (nonblank(unit3) and INr.AddUnittext3!=unit3) then begin
+		    INr.AddUnittext3 = unit3;
+		    updateF = true;
+		  end;
+		  if (nonblank(coef3) and INr.AddUnitCoef3!=StringToVal(coef3,M45Val)) then begin
+		    INr.AddUnitCoef3 = StringToVal(coef3,M45Val);
+		    updateF = true;
+		  end;
+		  if (nonblank(unit4) and INr.AddUnittext4!=unit4) then begin
+		    INr.AddUnittext4 = unit4;
+		    updateF = true;
+		  end;
+		  if (nonblank(coef4) and INr.AddUnitCoef4!=StringToVal(coef4,M45Val)) then begin
+		    INr.AddUnitCoef4 = StringToVal(coef4,M45Val);
+		    updateF = true;
+		  end;
+		  if (nonblank(unit5) and INr.AddUnittext5!=unit5) then begin
+		    INr.AddUnittext5 = unit5;
+		    updateF = true;
+		  end;
+		  if (nonblank(coef5) and INr.AddUnitCoef5!=StringToVal(coef5,M45Val)) then begin
+		    INr.AddUnitCoef5 = StringToVal(coef5,M45Val);
+		    updateF = true;
+		  end;
+		  if (updateF) then begin
+		    RECORDSTORE(INr,true);
+		  end;
 		end;
+	end;
 		
 	if (NextImportLine(true)) then begin end;
 	end;
