@@ -407,7 +407,10 @@ begin
   integer j,chrcode;
   string 1 char;
   string 200 firsname,lastname,middlename,resstr;
-  
+  record NPCityVc NPCityr;
+	record PLVc PLr;
+	record NPAreaVc NPArear;
+	string 50 oblast,city;
 	
 	Cur.Code = XmlGetAttribute(xmlMessage,"orders/order" & i,"clientid");
 	if(blank(Cur.Code))then begin
@@ -448,6 +451,26 @@ begin
 	end;
 	Cur.CountryCode = XmlGetAttribute(xmlMessage,"orders/order" & i,"country");
 	Cur.Ethnicity = XmlGetAttribute(xmlMessage,"orders/order" & i,"city");
+	
+	NPCityr.City = CUr.Ethnicity;
+	if (ReadFirstMain(NPCityr,1,true)) then begin
+		NPArear.Ref = NPCityr.NPArea;
+		if(readfirstkey("Ref",NPArear,1,true))then begin
+			oblast = NPArear.Area;
+		end;
+	end else begin
+		NPCityr.CityRU = CUr.Ethnicity;
+		if(readfirstkey("CityRU",NPCityr,1,true))then begin
+			NPArear.Ref = NPCityr.NPArea;
+			if(readfirstkey("Ref",NPArear,1,true))then begin
+				oblast = NPArear.Area;
+			end;
+		end;
+	end;
+	if(nonblank(oblast))then begin
+		CUr.AddInvAddr1 = "αλ. " & oblast;
+	end;
+	
 	Cur.InvAddr0 = XmlGetAttribute(xmlMessage,"orders/order" & i,"address");
 	//Cur.Name = XmlGetAttribute(xmlMessage,"orders/order" & i,"lastname") & " " & XmlGetAttribute(xmlMessage,"orders/order" & i,"firstname") & " " & XmlGetAttribute(xmlMessage,"orders/order" & i,"middlename");
 	//if(blank(Cur.Name) or Cur.Name=="  ")then begin
@@ -683,6 +706,8 @@ begin
 	record NPCityVc NPCityr;
 	record NPWarehouseVc NPWarehouser;
 	record PLVc PLr;
+	record NPAreaVc NPArear;
+	string 50 oblast;
 	
 	blockload(ESCb);
 	
@@ -827,10 +852,18 @@ begin
 														
 							NPCityr.City = ORr.NPCityRecipient;
 							if (ReadFirstMain(NPCityr,1,true)) then begin
+								NPArear.Ref = NPCityr.NPArea;
+								if(readfirstkey("Ref",NPArear,1,true))then begin
+									oblast = NPArear.Area;
+								end;
 								//NPCr.CityRef = NPCityr.Ref;
 							end else begin
 								NPCityr.CityRU = ORr.NPCityRecipient;
 								if(readfirstkey("CityRU",NPCityr,1,true))then begin
+									NPArear.Ref = NPCityr.NPArea;
+									if(readfirstkey("Ref",NPArear,1,true))then begin
+										oblast = NPArear.Area;
+									end;
 									ORr.NPCityRecipient = NPCityr.City;
 								end else begin
 									ORr.NPCityRecipient = "!!!" & ORr.NPCityRecipient;
@@ -1101,6 +1134,10 @@ LWebGetOrderExist:;
 						if(nonblank(ORr.NPCityRecipient))then begin
 							ORr.ShipAddr2 = ORr.NPCityRecipient & ", " & ORr.ShipAddr2;
 						end;
+						if(nonblank(oblast))then begin
+							ORr.ShipAddr2 = "αλ. " & oblast & ", " & ORr.ShipAddr2;
+						end;
+						
 					end;
 					If(nonblank(payment))then begin
 						ORr.ShipAddr3 = payment;
