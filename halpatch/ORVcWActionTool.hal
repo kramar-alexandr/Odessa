@@ -1650,6 +1650,7 @@ begin
 	val processingQty,prevQty;
 	boolean TrHs,res;
 	integer i,rwcnt;
+	boolean mustreserved;
 	
 	MatRowGet(ORr,rownr,ORrw);
 	//prevQty = ORrw.ProcessingQuant;
@@ -1665,9 +1666,13 @@ begin
 			for(i=0;i<rwcnt;i=i+1) begin
 				MatRowGet(SMr,i,SMrw);
 				if (SMrw.ORRowUID==ORrw.UID and SMrw.ArtCode==ORrw.ArtCode and SMrw.ORSerial==ORr.SerNr) then begin
-					RecordCopy(oldSMr,SMr);
-						SMr.Reserved = 0;
-					RecordUpdate(oldSMr,SMr,true);
+					mustreserved = false;
+					if(SMr.Reserved>0)then begin
+						RecordCopy(oldSMr,SMr);
+							SMr.Reserved = 0;
+							mustreserved = true;
+						RecordUpdate(oldSMr,SMr,true);
+					end;
 					RecordCopy(oldSMr,SMr);
 					processingQty = SMrw.OrderProcessing;
 					
@@ -1680,7 +1685,9 @@ begin
 					end;
 					i = rwcnt;
 					
-					SMr.Reserved = 1;
+					if(mustreserved)then begin
+						SMr.Reserved = 1;
+					end;
 					if (RecordUpdate(oldSMr,SMr,true)==0) then begin	
 						ORrw.ProcessingQuant = ORrw.ProcessingQuant - processingQty;
 						ORrw.OrderQuant = ORrw.OrderQuant - processingQty;

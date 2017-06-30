@@ -1292,6 +1292,7 @@ begin
 	boolean addrow;
 	record ORVc oldORr;
 	record PISVc PISr;
+	boolean mustreserv;
 	
 	
 	j=0;
@@ -1324,9 +1325,11 @@ begin
 		end;
 	end;
 	
+	mustreserv = false;
 	if(inser==false)then begin
 		recordcopy(oldSMr,SMr);
 		if(SMr.Reserved>0)then begin
+			mustreserv = true;
 			SMr.Reserved = 0;
 			recordupdate(oldSMr,SMr,true);
 		end;
@@ -1369,7 +1372,9 @@ begin
 		
 		recordcopy(oldSMr,SMr);
 		if(SMr.Reserved==0)then begin
-			SMr.Reserved = 1;
+			if(mustreserv)then begin
+				SMr.Reserved = 1;
+			end;
 			SMr.TransDate = Currentdate;
 			recordupdate(oldSMr,SMr,true);
 			CreateRecordLink(SMr,CurrentCompany,ORr,CurrentCompany);
@@ -1378,7 +1383,9 @@ begin
 		recordupdate(oldORr,ORr,true);
 	end else begin
 		//recordupdate(oldORr,ORr,true);
-		SMr.Reserved = 1;
+		if(mustreserv)then begin
+			SMr.Reserved = 1;
+		end;
 		recordinsert(SMr,true);
 	end;
 end;
