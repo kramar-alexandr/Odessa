@@ -4278,6 +4278,30 @@ RecordBegin(IPVc,-,"");
   KeySegment(City);
   EndRecord;
   
+  
+  
+  RecordBegin(NPAreaVc,-,"");
+  RecordField(Area,M4Str,255,0);
+  RecordField(Ref,M4Str,100,0);
+  RecordField(CityRef,M4Str,100,0);
+  RecordField(synchFlag,M4Int,0,0); 
+
+  MainKeyBegin(Area,0);
+  KeySegment(Area);
+  
+  KeyBegin(Ref);
+  KeySegment(Ref);
+  KeySegment(Area);
+  
+  KeyBegin(CityRef);
+  KeySegment(CityRef);
+  KeySegment(Area);
+  
+  KeyBegin(synchFlag);
+  KeySegment(synchFlag);
+  KeySegment(Area);
+  EndRecord;
+  
       	  	
   RecordBegin(NPDescripVc,-,"");
   RecordField(Description,M4Str,100,0);

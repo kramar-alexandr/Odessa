@@ -792,6 +792,104 @@ begin
   return;
 end;
 
+
+
+global updating
+procedure NPGetAreasRequestMn(record RcVc RepSpec)
+begin
+  area request,replyarea,mainRequest;
+  boolean TrHs;
+  string 200 getParam,host,page,webaddr,path;
+  area basestring;
+  xml xdata;
+  string 255 xpath, nparea,errors;
+  longint i;
+  record NPAreaVc NPArear;
+  record NPSettingsBlock NPSettingsb;
+  
+	BlockLoad(NPSettingsb); 
+  
+  if (blank(NPSettingsb.APIkey)) then begin
+  	goto LNPGetAreasRequestMn;
+  end;
+   
+  host = "api.novaposhta.ua";
+  page = "/v2.0/xml/";
+   
+	CreateAddressRequest(host, page, NPSettingsb.APIkey, "Address","getAreas", "", mainRequest); //get status
+	
+		
+	writeareatofile(mainRequest,"mainRequest.txt",0);
+	
+  if(MySendRawWebRequest(host,"443",true,"POST",page & getParam,"text/xml","",false,mainRequest,replyarea,5))then begin  //WORK! 
+    writeareatofile(replyarea,"1getStatusReplyAreas.txt",0);
+
+    
+    GetXMLArea(replyarea);
+  	if (GetAreaLength(replyarea)==0) then begin
+  		goto LNPGetAreasRequestMn;
+  	end;    
+    
+		xdata = ParseXMLArea(replyarea);
+
+		i = 0;  
+		
+		NPParseErrors(xdata,errors);
+		if (nonblank(errors)) then begin
+			LogText(0," Error:" & errors);
+			goto LNPGetAreasRequestMn;
+		end;
+		
+		
+		if(CountRecords("NPAreaVc") > 0) then begin
+			NPArear.Area = "";
+			while (LoopMain(NPArear,1,true)) begin
+				NPArear.synchFlag = 0;
+				if (RecordStore(NPArear,true)) then begin		end;
+			end;
+		end;
+		
+		while(XmlNodeExists(xdata,"root/data/item[" & i & "]/Description"))begin
+			nparea = XmlGet(xdata,"root/data/item[" & i & "]/Description");
+			NPArear.Area = nparea;
+			if(ReadFirstMain(NPArear, 1, true))then begin //existing city
+				NPArear.synchFlag = 1;
+				NPArear.Area = nparea;
+				NPArear.Ref = XmlGet(xdata,"root/data/item[" & i & "]/Ref");
+				NPArear.CityRef = XmlGet(xdata,"root/data/item[" & i & "]/AreasCenter");
+							
+				if (RecordStore(NPArear,true)) then begin		end;
+			end else begin	//new city
+				RecordNew(NPArear);
+					NPArear.synchFlag = 1;
+					NPArear.Area = nparea;
+					NPArear.Ref = XmlGet(xdata,"root/data/item[" & i & "]/Ref");
+					NPArear.CityRef = XmlGet(xdata,"root/data/item[" & i & "]/AreasCenter");
+				if (RecordStore(NPArear,true)) then begin		end;
+			end;		
+			i = i + 1;
+		end;
+	
+		ResetLoop	(NPArear);
+
+		TrHs = true;
+		NPArear.synchFlag = 0;
+		while (LoopKey("synchFlag",NPArear,1,TrHs)) begin
+			if (NPArear.synchFlag!=0) then begin TrHs = false; end;
+			if (TrHs) then begin
+				RecordDelete(NPArear);
+				StepBack(NPArear);
+			end;
+		end;
+    
+    end else begin
+ 		logtext(0,"Hansa World: No Connection to api.novaposhta.ua");
+  end;
+ 
+	LNPGetAreasRequestMn:;
+  return;
+end;
+
 procedure CreateCommonRequest(string aWeb, string aPage, string aKey,string aModel,string aMethod,string aParam, var area aRequest)
 begin
   area request,replyarea,test;
@@ -3378,4 +3476,5 @@ begin
 	NPGetWarehouseMn(RepSpec);
 	NPUpdateENstatusMn(RepSpec);
 	NPUpdateENstatus1Mn(RepSpec);
+	NPGetAreasRequestMn(RepSpec);
 end;

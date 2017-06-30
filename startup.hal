@@ -7,6 +7,7 @@ begin
 		//Module("Управление складом","",730,modWHM);
 	Module("Новая почта","",730,modNPost);
 	Register("Города","Города",NPCityVc,modNPost);
+	Register("Области","Области",NPAreaVc,modNPost);
 	Register("Отделения","Отделения",NPWarehouseVc,modNPost);
 	Register("Стандартные коробки","Стандартные коробки",StandBoxesVc,modNPost);
 
@@ -355,6 +356,7 @@ begin
 	Maintenance("FIX StockMovVc",MyVClass,FixStockMovMn,modDBMain);				//Edit----------------------Dima  03.06.2015
 
 	Maintenance("Обновить список городов",RequestNPVClass,NPGetCytiesRequestMn,modNPost);//Edit by Victor 20.03.15
+	Maintenance("Обновить список областей",RequestNPVClass,NPGetAreasRequestMn,modNPost);//Edit by Victor 20.03.15
 	Maintenance("Обновить список городов Proxy",RequestNPVClass,NPGetCytiesRequestProxyMn,modNPost);// Edit ************************** Thursday, 9 March 2017 14:16:44
 	Maintenance("Обновить описания грузов",RequestNPVClass,NPGetDescriptionRequestMn,modNPost);//Edit by Victor 06.04.15
 	Maintenance("Обновить типы груза",RequestNPVClass,NPGetCargoTypeRequestMn,modNPost);//Edit by Victor 06.04.15

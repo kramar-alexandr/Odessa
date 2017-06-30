@@ -1247,6 +1247,24 @@ begin
   EndWindow;
 end;
 
+
+  window NPAreaDClass:2	//**************************** Edit by Victor 02.04.15
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+	real h6,v,vm;
+  WindowBegin("Новая почта - Город",NPAreaDClass,CGview,-);
+  //Sizeable(-1,-1,0,0);
+  UseView(NPAreaVc);
+  ActiveFieldOnNew("Area");
+  //SetWRect(20,80,250,250);
+  SetWRect(20,100,530,200);
+  CommunicateButton;
+  EditField(75,vm=(v=6),110,"Область",Normal,Area,false,0);
+  EditField(75,v+=20,110,"Город",Normal,CityRef,false,0);
+  EditField(75,v+=20,190,"Reference",Normal,Ref,false,0);
+  EndWindow;
+end;
+
 window NPCityLClass:1
   wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
 begin
@@ -1258,6 +1276,22 @@ begin
   RecordList(4,17,-21,-39);
   RlColKey(4,4,"Город",City,false,City);
   RlColKey(120,120,"Город (Rus)",CityRU,false,CityRU);
+  RlColKey(220,220,"Ref",Ref,false,Ref);
+  SearchField("Найти");
+  EndWindow;
+end;
+
+window NPAreaLClass:1
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  WindowBegin("Новая почта - Области",NPAreaLClass,CGmlist,SHView);
+  SpawnClass(NPAreaDClass);
+  SetWRect(20,80,560,298);
+  Sizeable(-1,-1,0,0);
+  UseView(NPAreaVc);
+  RecordList(4,17,-21,-39);
+  RlColKey(4,4,"Область",Area,false,Area);
+  RlColKey(120,120,"Город",CityRef,false,CityRef);
   RlColKey(220,220,"Ref",Ref,false,Ref);
   SearchField("Найти");
   EndWindow;
