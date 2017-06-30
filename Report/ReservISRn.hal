@@ -6,7 +6,13 @@ global procedure  ReservISRn(record RcVc RepSpec)
 begin
 record ItemStatusVc ISr;
 boolean TrHs,testf;
-integer diff,pos;
+integer diff,pos,dif2,i,mtrw;
+record StockMovVc SMr;
+row StockMovVc SMrw;
+record ORVc ORr;
+row ORVc ORrw;
+vector val itemlocres;
+
 
   StartReportnoheaderJob("„исбаланс статуса зарезер.товара");
   
@@ -22,12 +28,49 @@ integer diff,pos;
   
   TrHs = true;
   ISr.Code = "";
+  
+  SMr.TransDate = stringtodate("1/1/2017");
+  while(loopkey("TransDate",SMr,1,true))begin
+  	testf = true;
+  	if(SMr.Reserved==0)then begin testf = false; end;
+  	if(SMr.OKFlag==0 and SMr.SentOKFlag==0)then begin testf = false; end;
+  	
+  	if(testf)then begin
+  		mtrw = matrowcnt(SMr);
+  		For(i=0;i<mtrw;i=i+1) begin
+				matrowget(SMr,i,SMrw);
+				if(nonblank(SMrw.ArtCode))then begin
+					itemlocres[SMrw.ArtCode & ";;;" & SMr.FrLocation] = itemlocres[SMrw.ArtCode & ";;;" & SMr.FrLocation] + SMrw.OrdQuant;
+				end;
+			end; 
+  	end;
+  end;
+  
+  ORr.OrdDate = stringtodate("1/1/2017");
+  while(loopkey("OrdDate",ORr,1,true))begin
+  	testf = true;
+  	if(ORr.Reserved==0)then begin testf = false; end;
+  	
+  	if(testf)then begin
+  		mtrw = matrowcnt(ORr);
+  		For(i=0;i<mtrw;i=i+1) begin
+				matrowget(ORr,i,ORrw);
+				if(nonblank(ORrw.ArtCode))then begin
+					if((ORrw.Quant - ORrw.Shipd2)>0)then begin
+						itemlocres[ORrw.ArtCode & ";;;" & ORr.Location] = itemlocres[ORrw.ArtCode & ";;;" & ORr.Location] + ORrw.Quant - ORrw.Shipd2;
+					end;
+				end;
+			end; 
+  	end;
+  end;
+  
   while(loopmain(ISr,1,TrHs)) begin
     testf = true;
     if (ISr.Location==";;;") then begin testf = false; end;
     if(testf)then begin
       diff = ISr.Instock - ISr.RsrvQty;
-      if(diff<0 or ISr.RsrvQty<0)then begin
+      dif2 = ISr.RsrvQty - itemlocres[ISr.Code & ";;;" & ISr.Location];
+      if(diff<0 or ISr.RsrvQty<0 or dif2!=0)then begin
         StartFormat(15)
           pos = 0;
           OutString(pos,0,ISr.Code,false); //ArtCode
@@ -36,6 +79,8 @@ integer diff,pos;
           OutString(pos+=70,0,ISr.RsrvQty,false); //In reserv
           OutString(pos+=70,0,diff,false); //Difference
           OutString(pos+=70,0,ISr.Location,false); //Stock
+          OutString(pos+=70,0,dif2,false); //Stock
+          OutString(pos+=70,0,itemlocres[ISr.Code & ";;;" & ISr.Location],false); //Stock
         endformat;
       end;
     end;    

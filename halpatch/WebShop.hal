@@ -1098,6 +1098,9 @@ LWebGetOrderExist:;
 					end;
 					If(nonblank(payment))then begin
 						ORr.ShipAddr2 = ORr.ShipAddr3;
+						if(nonblank(ORr.NPCityRecipient))then begin
+							ORr.ShipAddr2 = ORr.NPCityRecipient & ", " & ORr.ShipAddr2;
+						end;
 					end;
 					If(nonblank(payment))then begin
 						ORr.ShipAddr3 = payment;
