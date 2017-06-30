@@ -154,10 +154,10 @@ begin
   
   record PrivatBankReportsVc PBReportsr;
   
-  while(loopmain(PBReportsr,1,true))begin
+  /*while(loopmain(PBReportsr,1,true))begin
   	recorddelete(PBReportsr);
   	stepback(PBReportsr);
-  end;
+  end;*/
   
   blockload(PBb);
 		
