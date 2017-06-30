@@ -60,6 +60,9 @@ begin
 	IPSumup(IPr);
 	//IPVcRecordCheck(IPr,IP2r,1,0); //for MakeTransFromIP
 	IPr.Comment = "Privat Bank Import";
+	if(noname)then begin
+		IPr.Comment = "Privat Bank Import NONAME";
+	end;
 	RecordStore(IPr,true);      
 
 return;
