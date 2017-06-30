@@ -682,6 +682,7 @@ begin
 	record ExportStockCSVBlock ESCb;
 	record NPCityVc NPCityr;
 	record NPWarehouseVc NPWarehouser;
+	record PLVc PLr;
 	
 	blockload(ESCb);
 	
@@ -959,6 +960,14 @@ begin
 								if (ReadFirstMain(INr,1,true)) then begin
 									artspec = XmlGetAttribute(xmlPost,"orders/order" & i & "/row" & j,"Name");
 									price = StringToVal(XmlGetAttribute(xmlPost,"orders/order" & i & "/row" & j,"PriceInitial"),M423Val);
+									PLr.PLCode = "RRP";
+									PLr.ArtCode = INr.Code;
+									if(readfirstmain(PLr,2,true))then begin
+										if(price!=PLr.ExVatPrice)then begin
+											price = PLr.ExVatPrice;
+										end;
+									end;
+									
 									qty = StringToVal(XmlGetAttribute(xmlPost,"orders/order" & i & "/row" & j,"Qty"),M4UVal);
 									sum = StringToVal(XmlGetAttribute(xmlPost,"orders/order" & i & "/row" & j ,"PriceTotal"),M4Val);
 									ORrw.ArtCode = artcode;
@@ -987,7 +996,6 @@ begin
 										if (chsum) then begin
 											chsumConfirm = true;
 										end;
-								
 										MatRowGet(ORr,rowNr,ORrw);   
 									ORrw.Price = price;
 									MatRowPut(ORr,rowNr,ORrw);
