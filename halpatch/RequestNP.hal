@@ -1465,7 +1465,137 @@ LNPGetWarehouseMn:;
 end;
 
 
+global updating
+procedure NPGetStreetMn(record RcVc RepSpec)
+begin
+  area request,replyarea,mainRequest;
+  boolean TrHs;
+  string 200 getParam,host,page,webaddr,path;
+  area basestring;
+  xml xdata;
+  string 60 cityRef, cityName,number;
+  string 255 xpath, descr, descrRU,errors;
+  longint i;
+  integer repeat;
+  record NPStreetVc NPStrr;
+  record NPCityVc NPCr;
+  record NPSettingsBlock NPSettingsb;
+  Boolean notSynchronize;
+  boolean testf,ssl;
+  string 20 port;
+  
+	BlockLoad(NPSettingsb);  
+  if (blank(NPSettingsb.APIkey)) then begin
+  	goto LNPGetStreetMn;
+  end;
+  
+  repeat = 0;
+  host = "api.novaposhta.ua";
+  page = "/v2.0/xml/";
+  port = "443";
+  ssl = true;
+    
+		if(blank(RepSpec.f1))then begin
+			if(CountRecords("NPWarehouseVc") > 0) then begin
+				NPStrr.CityRef = "";
+				while (LoopMain(NPStrr,1,true)) begin
+					NPStrr.synchFlag = 0;
+					if (RecordStore(NPStrr,true)) then begin		end;
+				end;
+			end;   
+		end;
+  
+  
+  	NPCr.City = "";
+  	
+  	if(nonblank(RepSpec.f1))then begin
+  		NPCr.City = firstinrange(RepSpec.f1,20);
+  	end;
+  	TrHs = true;
+		while (LoopMain(NPCr,1,TrHs)) begin
+			testf = true;
+			if(NPCr.City>lastinrange(RepSpec.f1,20) and nonblank(RepSpec.f1))then begin TrHs = false; testf = false; end;
+			if(NPCr.City<firstinrange(RepSpec.f1,20) and nonblank(RepSpec.f1))then begin testf = false; end;
+			
+			
+			if(TrHs and testf)then begin
+				cityRef = NPCr.Ref;
+				cityName = NPCr.City;
+				
+				LsendRequestAgainGet1:;
+				SetAreaZeroSize(mainRequest);
+						
+				CreateWarehouseRequest(host, page, NPSettingsb.APIkey, "Address","getStreet", cityRef, mainRequest); 
+				writeareatofile(mainRequest,"2getStreetRequest.txt",0);		
+				
+				if(MySendRawWebRequest(host,port,ssl,"POST",page & getParam,"text/xml","",false,mainRequest,replyarea,5))then begin 
+					logtext(0,"Hansa World: GetStreet - " & cityName);
+					writeareatofile(replyarea,"1getWarehousesReply.txt",0);
+					GetXMLArea(replyarea);
+					if (GetAreaLength(replyarea)==0) then begin	notSynchronize = true;  LogText(0,cityName);  goto Lxxx; 	end;
+					xdata = ParseXMLArea(replyarea);
+					NPParseErrors(xdata,errors);
+					if (nonblank(errors)) then begin
+						LogText(0,"Error " & errors);
+						goto Lxxx;// Edit ************************** Friday, 15 April 2016 09:42:41
+					end;				
+					i = 0;
+					while(XmlNodeExists(xdata,"root/data/item[" & i & "]/Description")) begin
+						RecordNew(NPStrr);
+						descr = XmlGet(xdata,"root/data/item[" & i & "]/Description");
+							NPStrr.Description = descr;
+							NPStrr.Ref = XmlGet(xdata,"root/data/item[" & i & "]/Ref"); 
+							NPStrr.StreetsType = XmlGet(xdata,"root/data/item[" & i & "]/StreetsType"); 
+							NPStrr.StreetsTypeRef = XmlGet(xdata,"root/data/item[" & i & "]/StreetsTypeRef"); 
+							NPStrr.CityRef = cityRef; 
+							NPStrr.City = cityName;
+							NPStrr.synchFlag = 1;
+							if (RecordStore(NPStrr,true)) then begin		end;
+						i = i + 1;
+					end;
+				end else begin
+					repeat = repeat + 1;
+					if(repeat < 3) then begin
+						millisleep(100);
+						
+						if(repeat==2)then begin
+							host = "api.novaposhta.ua";
+							page = "/v2.0/xml/AddressGeneral/getWarehouses";
+							ssl = false;
+							port = "80";
+						end;
+						goto LsendRequestAgainGet1;
+					end;
+					if (repeat>=3) then begin notSynchronize = true;LogText(0,cityName);	  end;
+					repeat = 0;
+					logtext(0,"Hansa World: No Connection to api.novaposhta.ua. There is no "  & cityName);
+				end;				
+Lxxx:;
 
+			end;
+		end;
+		
+		if(blank(RepSpec.f1))then begin
+			if (notSynchronize==false) then begin
+				TrHs = true;
+				Resetloop(NPStrr);
+				NPStrr.synchFlag = 0;
+				i = 0;
+				while (LoopKey("synchFlag",NPStrr,1,TrHs)) begin
+					if (NPStrr.synchFlag!=0) then begin TrHs = false; end;
+					if (TrHs) then begin
+						RecordDelete(NPStrr);
+						StepBack(NPStrr);
+						i=i+1;
+					end;
+				end;
+				LogText(0,"deleted " & i);
+			end;
+		end;
+		
+LNPGetStreetMn:;
+  return;
+end;
 
 
 procedure CreateDescriptRequestWithMethod(string aWeb, string aPage, string aKey,string aModel,string aMethod,string aParam, var area aRequest)
@@ -3474,6 +3604,7 @@ begin
 	NPGetTraysListMn(RepSpec);
 	NPGetTypesOfPayersForRedeliveryMn(RepSpec);
 	NPGetWarehouseMn(RepSpec);
+	NPGetStreetMn(RepSpec);
 	NPUpdateENstatusMn(RepSpec);
 	NPUpdateENstatus1Mn(RepSpec);
 	NPGetAreasRequestMn(RepSpec);

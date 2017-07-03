@@ -1996,6 +1996,23 @@ begin
   EndWindow;
 end;
 
+window NPStreetDClass:1
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+	real h, v, vm;
+  WindowBegin("Новая почта - Отделение",NPStreetDClass,CGview,-);
+  UseView(NPStreetVc);
+  SetWRect(20,100,400,200);
+  h = 100;
+  EditField(h,40,300,"Description",Normal,Description,false,0);
+  EditField(h,80,200,"StreetsType",Normal,StreetsType,false,0);
+  EditField(h,100,200,"City",Normal,City,false,NPCitySClass);
+  EditField(h,120,200,"CityRef",Normal,CityRef,false,NPCitySClass);
+  EditField(h,140,110,"StreetsTypeRef",Normal,StreetsTypeRef,false,0);
+  EditField(155,20,200,"Ref",Normal,Ref,false,0);
+  EndWindow;
+end;
+
 window NPWarehouseLClass:1
   wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
 begin
@@ -2009,6 +2026,21 @@ begin
   RlColKey(70,70,"Город",City,false,City);
   RlColKey(200,200,"Description",Description,false,Description);
   RlColKey(400,400,"DescriptionRu",DescriptionRu,false,DescriptionRu);
+  SearchField("Group");
+  EndWindow;
+end;
+
+window NPStreetLClass:1
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  WindowBegin("Новая почта - Отделения",NPStreetLClass,CGmlist,SHView);
+  SpawnClass(NPStreetDClass);
+  SetWRect(20,80,560,298);
+  Sizeable(-1,-1,0,0);
+  UseView(NPStreetVc);
+  RecordList(4,17,-21,-39);
+  RlColKey(4,4,"Город",City,false,City);
+  RlColKey(200,200,"Description",Description,false,Description);
   SearchField("Group");
   EndWindow;
 end;
@@ -2028,6 +2060,21 @@ begin
   RlColKey(4,4,"Номер",Number,false,WarehouseInCity);
   RlCol(70,70,"Город",City,false);
   RlCol(-250,-250,"Название",Description,false);
+  SearchField("Поиск");
+  EndWindow;
+end;
+
+window NPStreetSClass:1
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  WindowBegin("Новая почта - выберите отделение",NPStreetSClass,CGslist,-);
+  SpawnClass(NPStreeetDClass);
+  SetWRect(20,80,500,298);
+  Sizeable(-1,-1,0,0);
+  UseView(NPStreetVc);
+  RecordList(4,17,-21,-39);
+  RlCol(4,4,"Улица",Description,false);
+  RlCol(200,200,"Город",City,false);
   SearchField("Поиск");
   EndWindow;
 end;
