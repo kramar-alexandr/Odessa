@@ -640,6 +640,8 @@ begin
 											SMr.AutoCompliteFlag = 1;
 											SMr.SerNr = NextSerNr("StockMovVc",CurrentDate,-1,false,"");
 											SMr.Comment = "Ђторезервирование товаров интернет магазина";
+											SMr.Reserved = 1;
+											recordstore(SMr,true);
 										end;
 										logtext(0,"Ђторезервирование товаров интернет магазина " & tstr);
 										AddOrderForStockMove(SMr,ORr,inserflag);
