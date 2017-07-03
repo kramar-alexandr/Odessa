@@ -2769,7 +2769,7 @@ begin
   
 	// Edit End ---------------------------------------------- Edit End
 	
-  if (ORr.NPPaymentType == 0 and ORr.PrepaymentReceived == 1 and OR2r.PrepaymentReceived == 0 ) then begin
+  if (ORr.NPPaymentType == 0 and ORr.PrepaymentReceived == 1 and OR2r.PrepaymentReceived == 0 and ORr.PrivatePaymentRec==0) then begin
   	invoiceAccepted = AcceptIVVcFromORVcweb(ORr);		//if invoice isn't accepted, we will not add invoice to IPVc (AddPaymentToIPFromSH)
   end;
   
@@ -2781,7 +2781,7 @@ begin
 				
 				//if SHr.Assembly == 1 already, RecordUpdate will not start,because nothing is changed
 				//so we run  AddPaymentToIPFromSH, but only first time
-				if (SHr.Assembly == 1 and OR2r.PrepaymentReceived == 0) then begin	//Edit----------------------Dima  28.10.2015
+				if (SHr.Assembly == 1 and OR2r.PrepaymentReceived == 0 and ORr.PrivatePaymentRec==0) then begin	//Edit----------------------Dima  28.10.2015
 					AddPaymentToIPFromSH(SHr);			
 				end;
 				SHr.Assembly = 1;
@@ -3246,6 +3246,7 @@ begin
   ORr.SyncFlag = 0; //Edit***************************Sasha2,13:50 15.07.2014
   ORr.CustomStatusFlag = 0; //Edit***************************Sasha2,13:50 15.07.2014
   ORr.PrepaymentReceived = 0;
+  ORr.PrivatePaymentRec = 0;
   ORr.WaitingForItemsDate = "";
   ORr.WaitingForItemsTime = "";//Edit----------------------Dima  17.12.2015
   

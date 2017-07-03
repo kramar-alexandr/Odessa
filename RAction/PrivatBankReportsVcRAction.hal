@@ -16,7 +16,7 @@ begin
   record IPVc oldIPr;
   row IPVc IPrw;
   record IVVc IVr;
-  record ORVc ORr;
+  record ORVc ORr,oldORr;
   integer rwcnt;
   boolean TrHs,exist;
   Boolean installmentf;
@@ -69,6 +69,13 @@ begin
 		if(readfirstmain(ORr,1,true))then begin
 			createrecordlink(ORr,currentcompany,IPr,currentcompany);
 			createrecordlink(IPr,currentcompany,ORr,currentcompany);
+			ORr.PrivatePaymentRec = 1;
+			recordstore(ORr,true);
+			if(ORr.InvFlag==1 and ORr.Sum4<=PBRr.Sum)then begin
+				recordcopy(oldORr,ORr);
+				ORr.PrepaymentReceived = 1;
+				recordupdate(oldORr,ORr,true);
+			end;
 		end;
 	end;
 

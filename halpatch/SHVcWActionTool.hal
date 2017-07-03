@@ -1670,7 +1670,7 @@ begin
 	ORr.SerNr = SHr.OrderNr;
 	if (ReadFirstMain(ORr,1,true)) then begin
 	
-		if (ORr.NPPaymentType == cashOnDelivery or (ORr.NPPaymentType == prepayment and ORr.PrepaymentReceived) or blank(ORr.OrderClass)) then begin	// Edit ************************** Thursday, 1 June 2017 10:19:57
+		if (ORr.NPPaymentType == cashOnDelivery or (ORr.NPPaymentType==prepayment and ORr.PrepaymentReceived==1) or blank(ORr.OrderClass)) then begin	// Edit ************************** Thursday, 1 June 2017 10:19:57
 			res = true;
 		end else begin
 			res = false;

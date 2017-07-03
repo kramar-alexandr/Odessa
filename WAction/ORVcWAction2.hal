@@ -1855,6 +1855,17 @@ BEGIN
   RETURN;
 END;
 
+global
+function Boolean ORDClassPrivatePaymentRecButtonAction(Integer wn,Integer value)
+BEGIN
+  Boolean res;
+
+  res = false;
+
+  ORDClassPrivatePaymentRecButtonAction = res;
+  RETURN;
+END;
+
 
 
 global

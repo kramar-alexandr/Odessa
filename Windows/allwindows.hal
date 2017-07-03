@@ -5520,6 +5520,7 @@ begin
   RadioButton(h1,v+=20,1,0,"Наложенный платеж",NPPaymentType);
 
 	CheckBox(h2,v-20,0,"Предоплата получена",PrepaymentReceived);
+	CheckBox(h2,v,0,"Автоплатеж Приват",PrivatePaymentRec);
   EditField(h1,v+40,70,"Аванс",Normal,Advance,false,0);	
   EditField(h1,v+64,70,"Оплата доставки",Normal,NPPayer,false,NPTypesOfPayersSClass);// Edit ************************** Monday, 17 October 2016 14:56:35
   CheckBox(h1,v+200,0,"Доставка Новой почтой",DeliveryNewPost);
