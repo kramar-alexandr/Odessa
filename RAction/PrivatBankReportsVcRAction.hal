@@ -11,7 +11,7 @@ external procedure RecordAction_raExpandAllPayments(var record IPVc);// Edit ***
 
 
 
-global updating procedure FillIPVcPayment(record PrivatBankReportsVc PBRr, var record IPVc IPr,string custcode,boolean noname)
+global updating procedure FillIPVcPayment(record PrivatBankReportsVc PBRr, var record IPVc IPr,string custcode,boolean noname,longint ordnum)
 begin
   record IPVc oldIPr;
   row IPVc IPrw;
@@ -23,7 +23,7 @@ begin
   val chk;  
   record IPrsVc IPrsr;
 	record DefCashBlock DCBlb;
-	string 255 tstr,ordnum,temordnum,c;
+	string 255 tstr,temordnum,c;
 	integer i,length;
 	longint error;
   
@@ -64,6 +64,13 @@ begin
 		IPr.Comment = "Privat Bank Import NONAME";
 	end;
 	RecordStore(IPr,true);      
+	if(ordnum>0)then begin
+		ORr.SerNr = ordnum;
+		if(readfirstmain(ORr,1,true))then begin
+			createrecordlink(ORr,currentcompany,IPr,currentcompany);
+			createrecordlink(IPr,currentcompany,ORr,currentcompany);
+		end;
+	end;
 
 return;
 end;
@@ -81,6 +88,7 @@ BEGIN
   string 255 ordnum,tstr,temordnum,c,custcode;
   longint length;
   record ORVc ORr;
+  longint ordnumlong;
   
   IPr.TransDate = PBRr.TransDate;
   
@@ -111,32 +119,38 @@ BEGIN
 		logtext(0,"******************************FindOrder " & ORr.CustOrdNr);
 		if(readfirstkey("CustOrdNr",ORr,1,true))then begin
 			custcode = ORr.CustCode;
+			ordnumlong = ORr.SerNr;
 		end else begin
 			ORr.CustOrdNr = StringToLongInt(left(ordnum,9));
 			if(readfirstkey("CustOrdNr",ORr,1,true))then begin
 				custcode = ORr.CustCode;
+				ordnumlong = ORr.SerNr;
 			end else begin
 				if(len(ordnum)==9)then begin
 					ORr.CustOrdNr = ordnum & "-1";
 					if(readfirstkey("CustOrdNr",ORr,1,true))then begin
 						custcode = ORr.CustCode;
+						ordnumlong = ORr.SerNr;
 					end;
 					if(custcode=="NONAME")then begin
 						ORr.CustOrdNr = ordnum & "-2";
 						if(readfirstkey("CustOrdNr",ORr,1,true))then begin
 							custcode = ORr.CustCode;
+							ordnumlong = ORr.SerNr;
 						end;
 					end;
 					if(custcode=="NONAME")then begin
 						ORr.CustOrdNr = ordnum & "-3";
 						if(readfirstkey("CustOrdNr",ORr,1,true))then begin
 							custcode = ORr.CustCode;
+							ordnumlong = ORr.SerNr;
 						end;
 					end;
 					if(custcode=="NONAME")then begin
 						ORr.CustOrdNr = ordnum & "-4";
 						if(readfirstkey("CustOrdNr",ORr,1,true))then begin
 							custcode = ORr.CustCode;
+							ordnumlong = ORr.SerNr;
 						end;
 					end;
 					
@@ -161,7 +175,7 @@ BEGIN
 		
 			if(testf)then begin
 				foundf = true;
-				FillIPVcPayment(PBRr,IPr,custcode,custcode=="NONAME"); 
+				FillIPVcPayment(PBRr,IPr,custcode,custcode=="NONAME",ordnumlong); 
 				TrHs = false; 		
 			end;
 		
@@ -178,7 +192,7 @@ BEGIN
 			logtext(0,"IPr.SerNr " & IPr.SerNr);
 			IPr.CollectPayments = 2;
 			IPr.TransDate = PBRr.TransDate;	 
-			FillIPVcPayment(PBRr,IPr,custcode,custcode=="NONAME");
+			FillIPVcPayment(PBRr,IPr,custcode,custcode=="NONAME",ordnumlong);
 		end;
   end;
     

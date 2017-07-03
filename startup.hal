@@ -1,3 +1,8 @@
+//  list: aws s3 ls s3://rr-hansa-archives/full/ - просмотр списка файлов на сервре
+//  cd /tmp
+// 	aws s3 cp s3://rr-hansa-archives/full/TB170703.TXT.gz . копирование файлов с сервера бэкапов
+//	gunzip TB170703.TXT.gz
+
 
 event startup
 begin
