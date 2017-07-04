@@ -695,13 +695,13 @@ begin
   record WebShopSettingsBlock WSSB;
   area aPost;
   xml xmlPost;
-  integer nodeORCnt,nodeRowCnt,i,j,rowNr,ORCnt,k,lenth,fin;
+  integer nodeORCnt,nodeRowCnt,i,j,rowNr,ORCnt,k,lenth,fin,r;
   val qty,price,sum;
   string 255 artcode,artspec,inwarning,warning,errors;
   Boolean chsum, chsumConfirm;
   string 10 rebgroup;
   record RebVc Rebr,Reb2r;
-  boolean updateflag,recordSaved,testf;
+  boolean updateflag,recordSaved,testf,foundfrow;
 	string 20 IPaddr;
   string 255 firsname,lastname,middlename,resstr,payment,delcity,tempadr,street,build,float,tempadr1;
 	record ExportStockCSVBlock ESCb;
@@ -830,7 +830,6 @@ begin
 					end;
 					
 					ORr.NPPhone = CUr.Phone;
-					
 					ORr.NPAdresDeliv = 0;	
 					
 					
@@ -992,71 +991,102 @@ begin
 							if (NonBlank(artcode)) then begin
 								chsumConfirm = false;
 								INr.Code = artcode;
-								if (ReadFirstMain(INr,1,true)) then begin
-									artspec = XmlGetAttribute(xmlPost,"orders/order" & i & "/row" & j,"Name");
-									price = StringToVal(XmlGetAttribute(xmlPost,"orders/order" & i & "/row" & j,"PriceInitial"),M423Val);
-									PLr.PLCode = "RRP";
-									PLr.ArtCode = INr.Code;
-									if(readfirstmain(PLr,2,true))then begin
-										if(price!=PLr.ExVatPrice)then begin
-											price = PLr.ExVatPrice;
-										end;
-									end;
-									
-									qty = StringToVal(XmlGetAttribute(xmlPost,"orders/order" & i & "/row" & j,"Qty"),M4UVal);
-									sum = StringToVal(XmlGetAttribute(xmlPost,"orders/order" & i & "/row" & j ,"PriceTotal"),M4Val);
-									ORrw.ArtCode = artcode;
-									MatRowPut(ORr,rowNr,ORrw);
-									ORVc_PasteArtCode(ORr,rowNr,inwarning,warning,false);
-									if (nonblank(inwarning)) then begin
-										//if (Blank(errors)) then begin errors = "Error8"; end else begin errors = errors & ",Error8"; end;
-											logtext(0,"Order #" & ORr.SerNr & ", Artcode #" & ORrw.ArtCode & ": " & inwarning);
-										end;
-										if (nonblank(warning)) then begin
-											//if (Blank(errors)) then begin errors = "Error8"; end else begin errors = errors & ",Error8"; end;
-											logtext(0,"Order #" & ORr.SerNr & ", Artcode #" & ORrw.ArtCode & ": " & warning);
-										end;
-									MatRowGet(ORr,rowNr,ORrw);
-									if (Blank(ORrw.Spec)) then begin
-										ORrw.Spec = artspec;
-									end;
-									ORrw.Quant = qty;
-									ORrw.NecessaryQuant = qty;
-									MatRowPut(ORr,rowNr,ORrw);
-									if (OptFeature.NoQtyDepPrices==0) then begin
-											ORVc_PasteQuant(ORr,rowNr,true,chsum);
-										end else begin
-											chsum = ORDchrsum(ORr,rowNr);
-										end; 
-										if (chsum) then begin
-											chsumConfirm = true;
-										end;
-										MatRowGet(ORr,rowNr,ORrw);   
-									ORrw.Price = price;
-									MatRowPut(ORr,rowNr,ORrw);
-									ORVc_PastePrice(ORr,rowNr,chsum);
-										if (chsum) then begin
-										chsumConfirm = true;
-										end;
-										MatRowGet(ORr,rowNr,ORrw);
-									ORrw.Sum = sum;
-									MatRowPut(ORr,rowNr,ORrw);
+								if(rowNr>0)then begin
+									foundfrow = false;
+									For(r=0;r<rowNr;r=r+1) begin
+	  								MatRowGet(ORr,r,ORrw);
+	  								if(ORrw.ArtCode==INr.Code)then begin
+	  									foundfrow = true;
+	  									qty = StringToVal(XmlGetAttribute(xmlPost,"orders/order" & i & "/row" & j,"Qty"),M4UVal);
+											sum = StringToVal(XmlGetAttribute(xmlPost,"orders/order" & i & "/row" & j ,"PriceTotal"),M4Val);
+	  									ORrw.Quant = ORrw.Quant + qty;
+											ORrw.NecessaryQuant = ORrw.NecessaryQuant + qty;
+											MatRowPut(ORr,r,ORrw);
+											ORrw.Sum = ORrw.Sum + sum;
+											MatRowPut(ORr,r,ORrw);
 							
-									ORVc_PasteSum(ORr,rowNr,chsum);
-									if (chsum) then begin
+											ORVc_PasteSum(ORr,r,chsum);
+											if (chsum) then begin
+												chsumConfirm = true;
+											end;
+											if (chsumConfirm) then begin      
+												ORDchsum(ORr,r);
+												ORSumup(ORr);
+											end;
+	  								end;
+									end; 
+								end;
+								
+								if(foundfrow==false)then begin
+									if (ReadFirstMain(INr,1,true)) then begin
+										artspec = XmlGetAttribute(xmlPost,"orders/order" & i & "/row" & j,"Name");
+										price = StringToVal(XmlGetAttribute(xmlPost,"orders/order" & i & "/row" & j,"PriceInitial"),M423Val);
+										PLr.PLCode = "RRP";
+										PLr.ArtCode = INr.Code;
+										if(readfirstmain(PLr,2,true))then begin
+											if(price!=PLr.ExVatPrice)then begin
+												price = PLr.ExVatPrice;
+											end;
+										end;
+									
+										qty = StringToVal(XmlGetAttribute(xmlPost,"orders/order" & i & "/row" & j,"Qty"),M4UVal);
+										sum = StringToVal(XmlGetAttribute(xmlPost,"orders/order" & i & "/row" & j ,"PriceTotal"),M4Val);
+									
+									
+									
+										ORrw.ArtCode = artcode;
+										MatRowPut(ORr,rowNr,ORrw);
+										ORVc_PasteArtCode(ORr,rowNr,inwarning,warning,false);
+										if (nonblank(inwarning)) then begin
+											//if (Blank(errors)) then begin errors = "Error8"; end else begin errors = errors & ",Error8"; end;
+												logtext(0,"Order #" & ORr.SerNr & ", Artcode #" & ORrw.ArtCode & ": " & inwarning);
+											end;
+											if (nonblank(warning)) then begin
+												//if (Blank(errors)) then begin errors = "Error8"; end else begin errors = errors & ",Error8"; end;
+												logtext(0,"Order #" & ORr.SerNr & ", Artcode #" & ORrw.ArtCode & ": " & warning);
+											end;
+										MatRowGet(ORr,rowNr,ORrw);
+										if (Blank(ORrw.Spec)) then begin
+											ORrw.Spec = artspec;
+										end;
+										ORrw.Quant = qty;
+										ORrw.NecessaryQuant = qty;
+										MatRowPut(ORr,rowNr,ORrw);
+										if (OptFeature.NoQtyDepPrices==0) then begin
+												ORVc_PasteQuant(ORr,rowNr,true,chsum);
+											end else begin
+												chsum = ORDchrsum(ORr,rowNr);
+											end; 
+											if (chsum) then begin
+												chsumConfirm = true;
+											end;
+											MatRowGet(ORr,rowNr,ORrw);   
+										ORrw.Price = price;
+										MatRowPut(ORr,rowNr,ORrw);
+										ORVc_PastePrice(ORr,rowNr,chsum);
+											if (chsum) then begin
+											chsumConfirm = true;
+											end;
+											MatRowGet(ORr,rowNr,ORrw);
+										ORrw.Sum = sum;
+										MatRowPut(ORr,rowNr,ORrw);
+							
+										ORVc_PasteSum(ORr,rowNr,chsum);
+										if (chsum) then begin
 											chsumConfirm = true;
 										end;
 										if (chsumConfirm) then begin      
 											ORDchsum(ORr,rowNr);
 											ORSumup(ORr);
 										end;
-								end else begin
-									ORrw.Spec = "Товар с кодом " & artcode & " не существует";
-									//if (Blank(errors)) then begin errors = "Error7"; end else begin errors = errors & ",Error7"; end;
-									logtext(0,"artcode " & artcode & " is not exists");
-									MatRowPut(ORr,rowNr,ORrw);
+									end else begin
+										ORrw.Spec = "Товар с кодом " & artcode & " не существует";
+										//if (Blank(errors)) then begin errors = "Error7"; end else begin errors = errors & ",Error7"; end;
+										logtext(0,"artcode " & artcode & " is not exists");
+										MatRowPut(ORr,rowNr,ORrw);
+									end;
+									rowNr = rowNr + 1;
 								end;
-								rowNr = rowNr + 1;
 							end;
 						end;
 					end;
