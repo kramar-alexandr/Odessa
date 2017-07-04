@@ -75,6 +75,10 @@ begin
 				recordcopy(oldORr,ORr);
 				ORr.PrepaymentReceived = 1;
 				recordupdate(oldORr,ORr,true);
+			end else begin
+				logtext(0,"ERROR!!!! FillIPVcPayment " & ORr.SerNr);
+				logtext(0,ORr.InvFlag==1);
+				logtext(0,ORr.Sum4<=PBRr.Sum);
 			end;
 		end;
 	end;
