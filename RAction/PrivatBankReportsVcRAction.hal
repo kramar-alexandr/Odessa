@@ -31,7 +31,7 @@ begin
   	
 	rwcnt = MatRowCnt(IPr);
 	
-	
+	logtext(0,"FillIPVcPayment for order " & ordnum);
 	
 	ClearRow(IPr,IPrw,kReceiptRowTypeNormal);
 	IPrw.CustCode = custcode;
@@ -71,13 +71,14 @@ begin
 			createrecordlink(IPr,currentcompany,ORr,currentcompany);
 			ORr.PrivatePaymentRec = 1;
 			recordstore(ORr,true);
-			if(ORr.InvFlag==1 and ORr.Sum4<=PBRr.Sum)then begin
+			if(ORr.InvFlag==2 and ORr.Sum4<=PBRr.Sum)then begin
 				recordcopy(oldORr,ORr);
 				ORr.PrepaymentReceived = 1;
 				recordupdate(oldORr,ORr,true);
 			end else begin
 				logtext(0,"ERROR!!!! FillIPVcPayment " & ORr.SerNr);
-				logtext(0,ORr.InvFlag==1);
+				logtext(0,ORr.InvFlag==2);
+				logtext(0,ORr.InvFlag);
 				logtext(0,ORr.Sum4<=PBRr.Sum);
 			end;
 		end;
@@ -208,5 +209,127 @@ BEGIN
   end;
     
   PrivatBankReportsVcRecordSaveAfter = res;
+  RETURN;
+END;
+
+global
+updating function LongInt PrivatBankReportsVcRecordUpdateAfter(var record PrivatBankReportsVc PBRr,record PrivatBankReportsVc PBR2r,LongInt stat,LongInt long4)
+BEGIN
+  LongInt res;
+	record IPVc IPr;
+  boolean TrHs,testf,foundf;
+  integer i,mtrw;
+  string 255 ordnum,tstr,temordnum,c,custcode;
+  longint length;
+  record ORVc ORr;
+  longint ordnumlong;
+  
+  IPr.TransDate = PBRr.TransDate;
+  
+  logtext(0,"PrivatBankReportsVcRecordUpdateAfter");
+  
+  
+  tstr = PBRr.Purpose;
+	length = len(tstr);
+	if(length>9)then begin
+		For(i=0;i<length;i=i+1) begin
+			c = mid(tstr,i,1);
+	  	if((asc(c)>47 and asc(c)<58) or c=="-")then begin
+	  		temordnum = temordnum & c;
+	  	end else begin
+	  		temordnum = "";
+	  	end;
+	  	if(len(temordnum)==9 or len(temordnum)==11)then begin
+				ordnum = temordnum;
+			end;
+	  	
+		end; 
+	end;
+	
+	custcode = "NONAME";
+	
+	if(len(ordnum)==9 or len(ordnum)==11)then begin
+		ORr.CustOrdNr = ordnum;
+		logtext(0,"******************************FindOrder " & ORr.CustOrdNr);
+		if(readfirstkey("CustOrdNr",ORr,1,true))then begin
+			custcode = ORr.CustCode;
+			ordnumlong = ORr.SerNr;
+		end else begin
+			ORr.CustOrdNr = StringToLongInt(left(ordnum,9));
+			if(readfirstkey("CustOrdNr",ORr,1,true))then begin
+				custcode = ORr.CustCode;
+				ordnumlong = ORr.SerNr;
+			end else begin
+				if(len(ordnum)==9)then begin
+					ORr.CustOrdNr = ordnum & "-1";
+					if(readfirstkey("CustOrdNr",ORr,1,true))then begin
+						custcode = ORr.CustCode;
+						ordnumlong = ORr.SerNr;
+					end;
+					if(custcode=="NONAME")then begin
+						ORr.CustOrdNr = ordnum & "-2";
+						if(readfirstkey("CustOrdNr",ORr,1,true))then begin
+							custcode = ORr.CustCode;
+							ordnumlong = ORr.SerNr;
+						end;
+					end;
+					if(custcode=="NONAME")then begin
+						ORr.CustOrdNr = ordnum & "-3";
+						if(readfirstkey("CustOrdNr",ORr,1,true))then begin
+							custcode = ORr.CustCode;
+							ordnumlong = ORr.SerNr;
+						end;
+					end;
+					if(custcode=="NONAME")then begin
+						ORr.CustOrdNr = ordnum & "-4";
+						if(readfirstkey("CustOrdNr",ORr,1,true))then begin
+							custcode = ORr.CustCode;
+							ordnumlong = ORr.SerNr;
+						end;
+					end;
+					
+				end;
+			end;
+		end;
+	end;
+  
+  if(PBRr.State=="r" and PBRr.FlInfo=="r")then begin
+		foundf = false;
+		TrHs = true;
+		while(loopkey("TransDate",IPr,1,TrHs))begin
+			testf = true;
+			if(IPr.TransDate!=PBRr.TransDate)then begin TrHs = false; testf = false; end;
+			if(IPr.OKFlag==1)then begin testf = false; end;
+			if(custcode=="NONAME")then begin
+				if(IPr.Comment!="Privat Bank Import NONAME")then begin testf = false; end;
+			end else begin
+				if(IPr.Comment!="Privat Bank Import")then begin testf = false; end;
+			end;
+			if(IPr.CollectPayments!=2)then begin testf = false; end;
+		
+			if(testf)then begin
+				foundf = true;
+				FillIPVcPayment(PBRr,IPr,custcode,custcode=="NONAME",ordnumlong); 
+				TrHs = false; 		
+			end;
+		
+		end;
+	
+		if(foundf==false)then begin
+			recordnew(IPr);
+			if(custcode=="NONAME")then begin
+				IPr.Comment = "Privat Bank Import NONAME";
+			end else begin
+				IPr.Comment = "Privat Bank Import";
+			end;
+			IPr.SerNr = NextSerNr("IPVc",CurrentDate,-1,false,"");		
+			logtext(0,"IPr.SerNr " & IPr.SerNr);
+			IPr.CollectPayments = 2;
+			IPr.TransDate = PBRr.TransDate;	 
+			FillIPVcPayment(PBRr,IPr,custcode,custcode=="NONAME",ordnumlong);
+		end;
+  end;
+    
+  PrivatBankReportsVcRecordUpdateAfter = res;
   RETURN;
 END;

@@ -11652,3 +11652,41 @@ begin
   EndWindow;
 end;
 
+window PrivatBankReportsLClass:1
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  real hoff,pos;
+  WindowBegin("Платежи Privat",PrivatBankReportsLClass,CGmlist,-);
+  SetWRect(20,80,760,291);
+  Sizeable(-1,-1,0,0);
+  SpawnClass(PrivatBankReportsDClass);
+  UseView(PrivatBankReportsVc);
+  RecordList(4,17,-21,-39);
+	RlColKey(4,4,"PBNumber",PBNumber,false,PBNumber); pos = 70;
+	RlCol(pos,pos,"Purpose",Purpose,false); pos = pos + 70;
+	RlCol(pos,pos,"Name",Name,false); pos = pos + 70;
+  
+  EndWindow;
+end;
+
+window PrivatBankReportsDClass:1
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  real h1,h2,v,vs;
+  WindowBegin("Платеж Privat",PrivatBankReportsDClass,CGview,DIView);
+  SetWRect(64,80,540,200);
+//  Sizeable(-1,-1,0,0);
+  UseView(PrivatBankReportsVc);
+  vs = 20; h1 = 100; h2 = 260;
+  EditField(h1,v=6,40,"PBNumber",Normal,PBNumber,false,0);
+  EditField(h1,v+=vs,200,"TransDate",Normal,TransDate,false,0);
+  EditField(h1,v+=vs,200,"RawFilePath",Normal,RawFilePath,false,0);
+  EditField(h1,v+=vs,200,"Sum",Normal,Sum,false,0);
+  EditField(h1,v+=vs,200,"Purpose",Normal,Purpose,false,0);
+  EditField(h1,v+=vs,200,"Name",Normal,Name,false,0);
+  EditField(h1,v+=vs,200,"State",Normal,State,false,0);
+  EditField(h1,v+=vs,200,"FlInfo",Normal,FlInfo,false,0);
+  EditField(h1,v+=vs,200,"DocType",Normal,DocType,false,0);
+  
+  EndWindow;
+end;
