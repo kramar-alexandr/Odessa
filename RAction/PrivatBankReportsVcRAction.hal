@@ -11,7 +11,7 @@ external procedure RecordAction_raExpandAllPayments(var record IPVc);// Edit ***
 
 
 
-global updating procedure FillIPVcPayment(record PrivatBankReportsVc PBRr, var record IPVc IPr,string custcode,boolean noname,longint ordnum)
+global updating procedure FillIPVcPayment(record PrivatBankReportsVc PBRr, var record IPVc IPr,string custcode,boolean PRIVATE,longint ordnum)
 begin
   record IPVc oldIPr;
   row IPVc IPrw;
@@ -49,7 +49,7 @@ begin
 	MatRowPut(IPr,rwcnt,IPrw);
 	IPVc_PasteRecVal(IPr,rwcnt);
 	MatRowGet(IPr,rwcnt,IPrw);
-	if(noname==false)then begin
+	if(PRIVATE==false)then begin
 		RecordAction_raExpandAllPayments(IPr);// Edit ************************** Thursday, 12 January 2017 11:58:59
 	end;
 	
@@ -60,8 +60,8 @@ begin
 	IPSumup(IPr);
 	//IPVcRecordCheck(IPr,IP2r,1,0); //for MakeTransFromIP
 	IPr.Comment = "Privat Bank Import";
-	if(noname)then begin
-		IPr.Comment = "Privat Bank Import NONAME";
+	if(PRIVATE)then begin
+		IPr.Comment = "Privat Bank Import PRIVATE";
 	end;
 	RecordStore(IPr,true);      
 	if(ordnum>0)then begin
@@ -77,9 +77,6 @@ begin
 				recordupdate(oldORr,ORr,true);
 			end else begin
 				logtext(0,"ERROR!!!! FillIPVcPayment " & ORr.SerNr);
-				logtext(0,ORr.InvFlag==2);
-				logtext(0,ORr.InvFlag);
-				logtext(0,ORr.Sum4<=PBRr.Sum);
 			end;
 		end;
 	end;
@@ -106,7 +103,6 @@ BEGIN
   
   logtext(0,"PrivatBankReportsVcRecordSaveAfter");
   
-  
   tstr = PBRr.Purpose;
 	length = len(tstr);
 	if(length>9)then begin
@@ -124,7 +120,7 @@ BEGIN
 		end; 
 	end;
 	
-	custcode = "NONAME";
+	custcode = "PRIVATE";
 	
 	if(len(ordnum)==9 or len(ordnum)==11)then begin
 		ORr.CustOrdNr = ordnum;
@@ -144,21 +140,21 @@ BEGIN
 						custcode = ORr.CustCode;
 						ordnumlong = ORr.SerNr;
 					end;
-					if(custcode=="NONAME")then begin
+					if(custcode=="PRIVATE")then begin
 						ORr.CustOrdNr = ordnum & "-2";
 						if(readfirstkey("CustOrdNr",ORr,1,true))then begin
 							custcode = ORr.CustCode;
 							ordnumlong = ORr.SerNr;
 						end;
 					end;
-					if(custcode=="NONAME")then begin
+					if(custcode=="PRIVATE")then begin
 						ORr.CustOrdNr = ordnum & "-3";
 						if(readfirstkey("CustOrdNr",ORr,1,true))then begin
 							custcode = ORr.CustCode;
 							ordnumlong = ORr.SerNr;
 						end;
 					end;
-					if(custcode=="NONAME")then begin
+					if(custcode=="PRIVATE")then begin
 						ORr.CustOrdNr = ordnum & "-4";
 						if(readfirstkey("CustOrdNr",ORr,1,true))then begin
 							custcode = ORr.CustCode;
@@ -178,8 +174,8 @@ BEGIN
 			testf = true;
 			if(IPr.TransDate!=PBRr.TransDate)then begin TrHs = false; testf = false; end;
 			if(IPr.OKFlag==1)then begin testf = false; end;
-			if(custcode=="NONAME")then begin
-				if(IPr.Comment!="Privat Bank Import NONAME")then begin testf = false; end;
+			if(custcode=="PRIVATE")then begin
+				if(IPr.Comment!="Privat Bank Import PRIVATE")then begin testf = false; end;
 			end else begin
 				if(IPr.Comment!="Privat Bank Import")then begin testf = false; end;
 			end;
@@ -187,7 +183,7 @@ BEGIN
 		
 			if(testf)then begin
 				foundf = true;
-				FillIPVcPayment(PBRr,IPr,custcode,custcode=="NONAME",ordnumlong); 
+				FillIPVcPayment(PBRr,IPr,custcode,custcode=="PRIVATE",ordnumlong); 
 				TrHs = false; 		
 			end;
 		
@@ -195,8 +191,8 @@ BEGIN
 	
 		if(foundf==false)then begin
 			recordnew(IPr);
-			if(custcode=="NONAME")then begin
-				IPr.Comment = "Privat Bank Import NONAME";
+			if(custcode=="PRIVATE")then begin
+				IPr.Comment = "Privat Bank Import PRIVATE";
 			end else begin
 				IPr.Comment = "Privat Bank Import";
 			end;
@@ -204,7 +200,7 @@ BEGIN
 			logtext(0,"IPr.SerNr " & IPr.SerNr);
 			IPr.CollectPayments = 2;
 			IPr.TransDate = PBRr.TransDate;	 
-			FillIPVcPayment(PBRr,IPr,custcode,custcode=="NONAME",ordnumlong);
+			FillIPVcPayment(PBRr,IPr,custcode,custcode=="PRIVATE",ordnumlong);
 		end;
   end;
     
@@ -246,7 +242,7 @@ BEGIN
 		end; 
 	end;
 	
-	custcode = "NONAME";
+	custcode = "PRIVATE";
 	
 	if(len(ordnum)==9 or len(ordnum)==11)then begin
 		ORr.CustOrdNr = ordnum;
@@ -266,21 +262,21 @@ BEGIN
 						custcode = ORr.CustCode;
 						ordnumlong = ORr.SerNr;
 					end;
-					if(custcode=="NONAME")then begin
+					if(custcode=="PRIVATE")then begin
 						ORr.CustOrdNr = ordnum & "-2";
 						if(readfirstkey("CustOrdNr",ORr,1,true))then begin
 							custcode = ORr.CustCode;
 							ordnumlong = ORr.SerNr;
 						end;
 					end;
-					if(custcode=="NONAME")then begin
+					if(custcode=="PRIVATE")then begin
 						ORr.CustOrdNr = ordnum & "-3";
 						if(readfirstkey("CustOrdNr",ORr,1,true))then begin
 							custcode = ORr.CustCode;
 							ordnumlong = ORr.SerNr;
 						end;
 					end;
-					if(custcode=="NONAME")then begin
+					if(custcode=="PRIVATE")then begin
 						ORr.CustOrdNr = ordnum & "-4";
 						if(readfirstkey("CustOrdNr",ORr,1,true))then begin
 							custcode = ORr.CustCode;
@@ -300,8 +296,8 @@ BEGIN
 			testf = true;
 			if(IPr.TransDate!=PBRr.TransDate)then begin TrHs = false; testf = false; end;
 			if(IPr.OKFlag==1)then begin testf = false; end;
-			if(custcode=="NONAME")then begin
-				if(IPr.Comment!="Privat Bank Import NONAME")then begin testf = false; end;
+			if(custcode=="PRIVATE")then begin
+				if(IPr.Comment!="Privat Bank Import PRIVATE")then begin testf = false; end;
 			end else begin
 				if(IPr.Comment!="Privat Bank Import")then begin testf = false; end;
 			end;
@@ -309,7 +305,7 @@ BEGIN
 		
 			if(testf)then begin
 				foundf = true;
-				FillIPVcPayment(PBRr,IPr,custcode,custcode=="NONAME",ordnumlong); 
+				FillIPVcPayment(PBRr,IPr,custcode,custcode=="PRIVATE",ordnumlong); 
 				TrHs = false; 		
 			end;
 		
@@ -317,8 +313,8 @@ BEGIN
 	
 		if(foundf==false)then begin
 			recordnew(IPr);
-			if(custcode=="NONAME")then begin
-				IPr.Comment = "Privat Bank Import NONAME";
+			if(custcode=="PRIVATE")then begin
+				IPr.Comment = "Privat Bank Import PRIVATE";
 			end else begin
 				IPr.Comment = "Privat Bank Import";
 			end;
@@ -326,7 +322,7 @@ BEGIN
 			logtext(0,"IPr.SerNr " & IPr.SerNr);
 			IPr.CollectPayments = 2;
 			IPr.TransDate = PBRr.TransDate;	 
-			FillIPVcPayment(PBRr,IPr,custcode,custcode=="NONAME",ordnumlong);
+			FillIPVcPayment(PBRr,IPr,custcode,custcode=="PRIVATE",ordnumlong);
 		end;
   end;
     
