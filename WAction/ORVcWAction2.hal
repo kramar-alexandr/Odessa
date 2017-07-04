@@ -1860,7 +1860,7 @@ function Boolean ORDClassPrivatePaymentRecButtonAction(Integer wn,Integer value)
 BEGIN
   Boolean res;
 
-  res = false;
+  res = true;
 
   ORDClassPrivatePaymentRecButtonAction = res;
   RETURN;
