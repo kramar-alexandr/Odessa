@@ -1845,7 +1845,7 @@ BEGIN
 
   res = true;
 	GetWindowRecord(wn,ORr);
-	if (ORr.InvFlag==0) then begin		//not invoiced
+	if (ORr.InvFlag!=2) then begin		//not invoiced
 		res = false;
 		MessageBox(31140,"");
 	end;
