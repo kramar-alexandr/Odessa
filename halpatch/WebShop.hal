@@ -896,7 +896,7 @@ begin
 						end;
 												
 						//if(ORr.DeliveryNewPost==1)then begin						
-							if(FindSubString(WSSB.AdressDelimeter,ORr.ShipAddr3))then begin
+							if(FindSubString(WSSB.AdressDelimeter,ORr.ShipAddr3) and len(ORr.ShipAddr3)>len(WSSB.AdressDelimeter)*4)then begin
 								ORr.NPAdresDeliv = 1;						
 								if(nonblank(ORr.ShipAddr3))then begin
 									if(len(ORr.ShipAddr3)>len(WSSB.AdressDelimeter)*4)then begin
