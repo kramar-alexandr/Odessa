@@ -261,6 +261,10 @@ begin
 		Counterpartyr.FirstName = SHr.NPRecipientFirstName;
 		Counterpartyr.Phone = RecipientsPhone;
 		Counterpartyr.CityRef = CityRecipient;
+		Logtext(0,"NPRecipientLastName " & SHr.NPRecipientLastName);
+		Logtext(0,"NPRecipientFirstName " & SHr.NPRecipientFirstName);
+Logtext(0,"RecipientsPhone " & SHr.RecipientsPhone);
+Logtext(0,"CityRecipient " & SHr.CityRecipient);
 		if(ReadFirstMain(Counterpartyr,4,true))then begin
 			Recipient = Counterpartyr.Ref;
 			matrowget(Counterpartyr, 0, Counterpartyrw);
