@@ -1793,7 +1793,7 @@ begin
 	end;
 
   if (SHr.Assembly>0 and SH2r.Assembly==0) then begin	//Edit----------------------Dima  16.07.2015
-  	if ((ORr.NPPaymentType == 0) and ORr.PrepaymentReceived) then begin
+  	if ((ORr.NPPaymentType == 0) and ORr.PrepaymentReceived==1 and ORr.PrivatePaymentRec==0) then begin
 			AddPaymentToIPFromSH(SHr);
 		end;
 	end;
