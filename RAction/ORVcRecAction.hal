@@ -1608,6 +1608,11 @@ LORVcRecordRowCheck:;
   	end; 
   end; 
   
+  if (ORr.DeliveryNewPost and ORr.NPAdresDeliv==0) then begin	// Edit ************************** Tuesday, 4 July 2017 10:58:53
+  	if(NPWarehouser.Number<=0)then begin
+  		ORr.DeliveryNewPost = 0;
+  	end;
+  end;
   
   if (ORr.DeliveryNewPost) then begin					//Edit-------------------------------------Dima  15.04.2015
   	if (blank(ORr.NPFirstName) or blank(ORr.NPLastName)) then begin
