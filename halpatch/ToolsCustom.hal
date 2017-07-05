@@ -52,7 +52,7 @@ begin
   	BlockLoad(SMSOb);
   	
   	//logtext(0,"RemoveReservedMarkMn");
-    mindate = AddDay(CurrentDate,-31);
+    mindate = AddDay(CurrentDate,-61);
     sendTime = StringToTime("10:00:00");
     TrHs = true;
     ORr.OrdDate = mindate;
@@ -60,7 +60,7 @@ begin
     while (LoopKey("OrdDate",ORr,1,TrHs)) begin
       testf = true;
       //logtext(0,"RemoveReservedMarkMn " & ORr.SerNr);
-      if (ORr.Reserved!=1 or ORr.OrdDate<mindate or blankdate(ORr.ReservToDate) or ORr.Closed==1) then begin testf = false; /*logtext(0,"RemoveReservedMarkMn false1");*/ end;
+      if (ORr.Reserved!=1 or ORr.OrdDate<mindate or (blankdate(ORr.ReservToDate) and ORr.AutoCreation==0) or ORr.Closed==1) then begin testf = false; /*logtext(0,"RemoveReservedMarkMn false1");*/ end;
       if (NonBlank(ORr.ReservToDate) and ORr.ReservToDate>CurrentDate) then begin testf = false;/*logtext(0,"RemoveReservedMarkMn false2");*/ end;
       if (ORr.OrderClass!="WEB" and ORr.OrderClass!="RETAI") then begin testf = false;/*logtext(0,"RemoveReservedMarkMn false3");*/ end;// Edit ************************** Saturday, 29 August 2015 08:53:18
       if (ORr.NPPaymentType!=0 or ORr.PrepaymentReceived!=0) then begin testf = false;/*logtext(0,"RemoveReservedMarkMn false4");*/ end;			//Edit----------------------Dima  23.09.2015
