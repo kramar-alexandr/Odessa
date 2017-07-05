@@ -102,7 +102,7 @@ begin
     
     t10 = StringToTime("3:00");//Nowa poshta
 
-		t11 = StringToTime("00:30");//TextBackupToBackupServer
+		t11 = StringToTime("00:45");//TextBackupToBackupServer
 		
 		t12 = StringToTime("4:00");//GIFT
     
