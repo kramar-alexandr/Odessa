@@ -76,6 +76,7 @@ BEGIN
 	string 20 code;
 	boolean TrHs;
 	string 200 response;
+	record NPStreetVc NPSr;
 
   BlockLoad(AutoActionRec);
   if (AutoActionRec.Or2Printing==2) then begin
@@ -85,7 +86,17 @@ BEGIN
     RecordActionOR_Print(ORp,"",false);
   end;
   res = 1;
-
+	
+	if(ORp.DeliveryNewPost>0 and ORp.NPAdresDeliv)then begin
+		if(nonblank(ORp.NPCityRecipient) and nonblank(ORp.NPAdresStreet))then begin
+			NPSr.Description = ORp.NPAdresStreet;
+			NPSr.City = ORp.NPCityRecipient;
+			if(readfirstkey("DescriptionCity",NPSr,2,true)==false)then begin
+				MessageBox(31169,"");
+			end;
+		end;
+	end;
+	
 	if (ifCustomerWithCurrentPhoneExist(ORp.CustCode,code)) then begin		//Edit----------------------Dima  12.02.2015
 			MessageBox(31030,code);
 	end;

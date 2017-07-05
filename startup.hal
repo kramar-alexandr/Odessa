@@ -315,6 +315,7 @@ begin
 	 SString(31166,"Галочка Резерв должна быть снята");
 	 SString(31167,"Сч/ф пред отгрузкой");
 	 SString(31168,"Есть отгрузка по счету клиента");
+	 SString(31169,"Несоответствие города и улицы. Проверьте данные!");
 	 
 	Maintenance("Проставить склад первой покупки клиента",MyVClass,FillFirstDateByeCUMn,modSL);
   Maintenance("Экспорт склада CSV",ExportStockCSVClass,ExportStockCSVMn,modSY);
