@@ -380,9 +380,9 @@ RecordNew(ISr);
    end;	   
 
    OutString(360,0,"‡аказ подпис.",false);
-   OutString(370,0,"",false);				//VendorsListOK
+   //OutString(370,0,"",false);				//VendorsListOK
    OutString(400,0,"‡аказ не подпис.",false);
-   OutString(370,0,"",false); 			//VendorsListUnOK
+   //OutString(370,0,"",false); 			//VendorsListUnOK
    OutString(440,0,"Ћстаток с заказом",false);
    
        
@@ -518,19 +518,19 @@ RecordNew(ISr);
   					POUnOkQty = PO2rw.Shipd2;
 					//POQty = POQty - PO2rw.Shipd2;
   					POQty = PO2rw.Shipd1;//Edit----------------------Dima  20.03.2015
-  					VendorsListOK = SumupAllValuesByCode(PO2rw.Comment);		//Edit----------------------Dima  13.03.2015
-  					VendorsListUnOK = SumupAllValuesByCode(PO2rw.Spec);			
+  					//VendorsListOK = SumupAllValuesByCode(PO2rw.Comment);		//Edit----------------------Dima  13.03.2015
+  					//VendorsListUnOK = SumupAllValuesByCode(PO2rw.Spec);			
 						nofindf = false;
   				end;
   			end; 			
   			OrdQtyInt = 0;
 				OrdQtyInt = POQty;
   			OutStringID(360,"DblOpenRepRn",OrdQtyInt,false,INr.Code);
-  			OutString(368,0,VendorsListOK,false);
+  			//OutString(368,0,VendorsListOK,false);
   			OrdQtyInt = 0;
 				OrdQtyInt = POUnOkQty;
   			OutStringID(400,"DblOpenRepRn",OrdQtyInt,false,INr.Code);
-  			OutString(410,0,VendorsListUnOK,false);									//Edit----------------------Dima  13.03.2015
+  			//OutString(410,0,VendorsListUnOK,false);									//Edit----------------------Dima  13.03.2015
 				
 				restok = restok + curRest + POQty + POUnOkQty;
 				restunok = restunok + curRest + POUnOkQty;
