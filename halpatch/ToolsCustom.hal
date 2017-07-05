@@ -45,8 +45,9 @@ begin
   record SMSTextBlock SMSb;
   record SMSTextOptBlock SMSOb;
   string 200 newtext;
-  integer i,mtrw;
+  integer i,mtrw,additionalday;
   boolean statusflag;
+  record IVVc IVr;
   
   	BlockLoad(SMSb);
   	BlockLoad(SMSOb);
@@ -60,7 +61,26 @@ begin
     while (LoopKey("OrdDate",ORr,1,TrHs)) begin
       testf = true;
       //logtext(0,"RemoveReservedMarkMn " & ORr.SerNr);
+      if(ORr.AutoCreation==1 and blankdate(ORr.ReservToDate))then begin
+      	IVr.OrderNr = ORr.SerNr;
+      	if(readfirstkey("OrderNr",IVr,1,true))then begin
+      		additionalday = 0;
+					if (GetDateId(AddDay(IVr.InvDate,1))==7) then begin
+						additionalday = 1;
+					end else begin
+						if (GetDateId(AddDay(IVr.InvDate,2))==7) then begin
+							additionalday = 2;
+						end else begin
+							if (GetDateId(AddDay(IVr.InvDate,3))==7 or GetDateId(AddDay(IVr.InvDate,3))==6) then begin
+								additionalday = 2;
+							end;
+						end;
+					end;
+					ORr.ReservToDate = addday(IVr.InvDate,3 + additionalday);
+      	end;
+      end;
       if (ORr.Reserved!=1 or ORr.OrdDate<mindate or (blankdate(ORr.ReservToDate) and ORr.AutoCreation==0) or ORr.Closed==1) then begin testf = false; /*logtext(0,"RemoveReservedMarkMn false1");*/ end;
+      
       if (NonBlank(ORr.ReservToDate) and ORr.ReservToDate>CurrentDate) then begin testf = false;/*logtext(0,"RemoveReservedMarkMn false2");*/ end;
       if (ORr.OrderClass!="WEB" and ORr.OrderClass!="RETAI") then begin testf = false;/*logtext(0,"RemoveReservedMarkMn false3");*/ end;// Edit ************************** Saturday, 29 August 2015 08:53:18
       if (ORr.NPPaymentType!=0 or ORr.PrepaymentReceived!=0) then begin testf = false;/*logtext(0,"RemoveReservedMarkMn false4");*/ end;			//Edit----------------------Dima  23.09.2015

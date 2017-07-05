@@ -565,24 +565,7 @@ begin
     		end;
     		foundf = true;
     		if (foundf) then begin
-    		  ORr.Reserved = 1;
-    		  
-    		  if(BlankDate(ORr.ReservToDate)) then begin //Edit***************************Sasha2,15:57 28.08.2015 {
-						additionalday = 0;
-						if (GetDateId(AddDay(CurrentDate,1))==7) then begin
-							additionalday = 1;
-						end else begin
-							if (GetDateId(AddDay(CurrentDate,2))==7) then begin
-								additionalday = 2;
-							end else begin
-								if (GetDateId(AddDay(CurrentDate,3))==7 or GetDateId(AddDay(CurrentDate,3))==6) then begin
-									additionalday = 2;
-								end;
-							end;
-						end;
-						ORr.ReservToDate = AddDay(CurrentDate,3 + additionalday);
-					end;
-    		  
+    		  ORr.Reserved = 1;    		  
     		end;
     		RecordUpdate(OR2r,ORr,true);
     		

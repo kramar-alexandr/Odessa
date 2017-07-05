@@ -2596,8 +2596,25 @@ begin
 	record NPCounterparty1Vc NPCounterpartyr1;
 	record ORVc oldORr;
 	row ORVc ORrw;
-	integer rwcnt;
-
+	integer rwcnt,additionalday;
+	
+	
+	if (ORr.CustomStatusFlag == 2 and ORr.AutoCreation!=0 and blankdate(ORr.ReservToDate) and ORr.Reserved>0) then begin// Edit ************************** Wednesday, 5 July 2017 16:32:58
+  	additionalday = 0;
+		if (GetDateId(AddDay(currentdate,1))==7) then begin
+			additionalday = 1;
+		end else begin
+			if (GetDateId(AddDay(currentdate,2))==7) then begin
+				additionalday = 2;
+			end else begin
+				if (GetDateId(AddDay(currentdate,3))==7 or GetDateId(AddDay(currentdate,3))==6) then begin
+					additionalday = 2;
+				end;
+			end;
+		end;
+		ORr.ReservToDate = addday(currentdate,3 + additionalday);
+  end;    
+	
   ORr.Prntdf = 0;
   HandlePromotionObjectsIV(ORr,OR2r,2); //Edit***************************Sasha2,10:31 25.01.2017
   AutDelNonStockItem(ORr);
