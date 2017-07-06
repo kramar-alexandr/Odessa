@@ -5079,7 +5079,7 @@ begin
   RadioButton(h4-150,v+=16,12,0,"В ожидании товаров",CustomStatusFlag);
   RadioButton(h4-150,v+=16,13,0,"Не достаточно тов-в",CustomStatusFlag);
   
-  RadioButton(h4-5,v=25,11,0,"В ожидании опл.",CustomStatusFlag);
+  RadioButton(h4-5,v=25,11,0,"В ожид. опл.",CustomStatusFlag);
   RadioButton(h4-5,v+=16,5,0,"В сборке",CustomStatusFlag);
   RadioButton(h4-5,v+=16,6,0,"Собран",CustomStatusFlag);
   RadioButton(h4-5,v+=16,7,0,"Отправлен",CustomStatusFlag);
