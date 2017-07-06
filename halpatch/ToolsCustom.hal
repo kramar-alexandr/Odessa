@@ -53,7 +53,7 @@ begin
   	BlockLoad(SMSOb);
   	
   	//logtext(0,"RemoveReservedMarkMn");
-    mindate = AddDay(CurrentDate,-61);
+    mindate = AddDay(CurrentDate,-200);
     sendTime = StringToTime("10:00:00");
     TrHs = true;
     ORr.OrdDate = mindate;
@@ -61,7 +61,7 @@ begin
     while (LoopKey("OrdDate",ORr,1,TrHs)) begin
       testf = true;
       //logtext(0,"RemoveReservedMarkMn " & ORr.SerNr);
-      if(ORr.AutoCreation==1 and blankdate(ORr.ReservToDate))then begin
+      if(ORr.AutoCreation==1 and blankdate(ORr.ReservToDate) and ORr.OrderClass=="WEB")then begin
       	IVr.OrderNr = ORr.SerNr;
       	if(readfirstkey("OrderNr",IVr,1,true))then begin
       		additionalday = 0;
@@ -77,6 +77,7 @@ begin
 						end;
 					end;
 					ORr.ReservToDate = addday(IVr.InvDate,3 + additionalday);
+					recordstore(ORr,true);
       	end;
       end;
       if (ORr.Reserved!=1 or ORr.OrdDate<mindate or (blankdate(ORr.ReservToDate) and ORr.AutoCreation==0) or ORr.Closed==1) then begin testf = false; /*logtext(0,"RemoveReservedMarkMn false1");*/ end;
@@ -118,12 +119,12 @@ begin
       	if(nonblank(ORr.OrderClass))then begin
 					if (nonblank(SMSb.Text41)) then begin
 						newtext = ParseSMStext(SMSb.Text41,ORr);
-						smsNr = AddSMStoStack(ORr.NPPhone,SMSb.Title4,newtext,ORr.CustCode,"ORVc",ORr.SerNr,ORr.OrderClass,CurrentDate,sendTime);
+						//smsNr = AddSMStoStack(ORr.NPPhone,SMSb.Title4,newtext,ORr.CustCode,"ORVc",ORr.SerNr,ORr.OrderClass,CurrentDate,sendTime);
 					end;
         end else begin
         	if (nonblank(SMSOb.Text41)) then begin
 						newtext = ParseSMStext(SMSOb.Text41,ORr);
-						smsNr = AddSMStoStack(ORr.NPPhone,SMSOb.Title4,newtext,ORr.CustCode,"ORVc",ORr.SerNr,ORr.OrderClass,CurrentDate,sendTime);
+						//smsNr = AddSMStoStack(ORr.NPPhone,SMSOb.Title4,newtext,ORr.CustCode,"ORVc",ORr.SerNr,ORr.OrderClass,CurrentDate,sendTime);
 					end;
         end;
         testf = false;//logtext(0,"RemoveReservedMarkMn false6");
@@ -145,12 +146,12 @@ begin
           		if(nonblank(ORr.OrderClass))then begin
 								if(nonblank(SMSb.Text42) and ORr.CustomStatusFlag==11) then begin
 									newtext = ParseSMStext(SMSb.Text42,ORr);  
-									AddSMStoStack(ORr.NPPhone,SMSb.Title4,newtext,ORr.CustCode,"ORVc",ORr.SerNr,ORr.OrderClass,CurrentDate,sendTime);
+									//AddSMStoStack(ORr.NPPhone,SMSb.Title4,newtext,ORr.CustCode,"ORVc",ORr.SerNr,ORr.OrderClass,CurrentDate,sendTime);
 								end;	
             	end else begin
             		if(nonblank(SMSOb.Text42) and ORr.CustomStatusFlag==11) then begin
 									newtext = ParseSMStext(SMSOb.Text42,ORr);  
-									AddSMStoStack(ORr.NPPhone,SMSOb.Title4,newtext,ORr.CustCode,"ORVc",ORr.SerNr,ORr.OrderClass,CurrentDate,sendTime);
+									//AddSMStoStack(ORr.NPPhone,SMSOb.Title4,newtext,ORr.CustCode,"ORVc",ORr.SerNr,ORr.OrderClass,CurrentDate,sendTime);
 								end;
             	end;
             res = 0;
