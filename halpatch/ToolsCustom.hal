@@ -53,7 +53,7 @@ begin
   	BlockLoad(SMSOb);
   	
   	//logtext(0,"RemoveReservedMarkMn");
-    mindate = AddDay(CurrentDate,-200);
+    mindate = AddDay(CurrentDate,-90);
     sendTime = StringToTime("10:00:00");
     TrHs = true;
     ORr.OrdDate = mindate;
