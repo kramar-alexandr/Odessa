@@ -322,7 +322,9 @@ begin
   Maintenance("Копирование ежедневного бэкапа на FTP",ExportStockCSVClass,SenBackuptoFTP,modSY);
   Maintenance("Экспорт CSV для мобильного",MyVClass,ExportAllItems,modSY);	//Edit----------------------Dima  24.03.2015
   Maintenance("FIXIHR",MyVClass,FixItemHistMn,modDBMain);	//Edit----------------------Dima  24.03.2015
-
+	
+	Maintenance("RemoveReservedMarkMn",MyVClass,RemoveReservedMarkMn,modDBMain);
+	
   Maintenance("FixIHCostSM",MyVClass,FixIHCostSM,modDBMain);  //Edit**********Dima, 28.01.2014
   
   Maintenance("FixSomeCostSM",MyVClass,FixSomeIHCostSM,modDBMain);  //Edit**********Dima, 28.01.2014

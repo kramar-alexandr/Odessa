@@ -112,7 +112,9 @@ begin
       end;
       
       if (testf and NonBlank(ORr.ReservToDate) and ORr.ReservToDate==CurrentDate and ORr.CustomStatusFlag==11) then begin// Edit ************************** Saturday, 29 August 2015 08:57:08
-      	
+      
+      
+      logtext(0,"RemoveReservedMarkMn 1 " & ORr.SerNr);
       	if(nonblank(ORr.OrderClass))then begin
 					if (nonblank(SMSb.Text41)) then begin
 						newtext = ParseSMStext(SMSb.Text41,ORr);
@@ -127,6 +129,7 @@ begin
         testf = false;//logtext(0,"RemoveReservedMarkMn false6");
       end;
       if (testf) then begin
+      logtext(0,"RemoveReservedMarkMn 2 " & ORr.SerNr);
         res = 0;
         okedf = false;
         if (ORr.OKFlag!=0) then begin
