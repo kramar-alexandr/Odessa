@@ -4722,3 +4722,20 @@ WindowBegin("Выписка Private Bank",PrivateGetReportVClass,CGMnt,RcType);
     EditField(h,v,80,"На дату",Normal,d1,false,PasteCurDate);
   EndWindow;
 end;
+
+window AddPModeMnVClass:1
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  real h,v,vs;
+  WindowBegin("Добавить способ оплаты",AddPModeMnVClass,CGMnt,RcType);
+  SetWRect(20,80,400,240);
+  vs = 20;h = 130; v = 26;
+  	EditField(h,v, -10,"Код",Normal,f1,false,0);
+  	EditField(h,v+=16, -10,"Счет",Normal,f2,false,AccSClass);
+  	EditField(h,v+=16, -10,"Коммент.",Normal,f3,false,0);
+  	EditField(h,v+=16, -10,"Объекты",Normal,f4,false,0);
+  	/*EditField(h,v, -10,"Код",Normal,f1,false,0);
+  	EditField(h,v, -10,"Код",Normal,f1,false,0);
+  	EditField(h,v, -10,"Код",Normal,f1,false,0);*/
+  EndWindow;
+end;

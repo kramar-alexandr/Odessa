@@ -7107,6 +7107,7 @@ begin
     end;
     SpecialMenu("Cортировать таблицу по имени клиента",'',20,"TableSortIPbyNameDsm");//Edit----------------------Dima  27.07.2015
     SpecialMenu("Cортировать таблицу по времени",'',20,"TableSortIPbyTimeDsm");//Edit----------------------Dima  12.08.2015
+    SpecialMenu("Cash Back 1%",'',20,"IPCashBackDsm");
   end;
   EndWindow;
 end;

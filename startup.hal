@@ -324,6 +324,7 @@ begin
   Maintenance("FIXIHR",MyVClass,FixItemHistMn,modDBMain);	//Edit----------------------Dima  24.03.2015
 	
 	Maintenance("RemoveReservedMarkMn",MyVClass,RemoveReservedMarkMn,modDBMain);
+	Maintenance("Добавить способ оплаты",AddPModeMnVClass,AddPModeMn,modSL);
 	
   Maintenance("FixIHCostSM",MyVClass,FixIHCostSM,modDBMain);  //Edit**********Dima, 28.01.2014
   

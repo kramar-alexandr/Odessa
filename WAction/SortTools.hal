@@ -1,3 +1,14 @@
+external function Boolean IPVc_PasteCustCode(var record IPVc,Integer,var LongInt); //Edit***************************Sasha2,14:55 18.02.2015
+external procedure IPVc_PasteRecCurncy(var record IPVc,Integer); //Edit***************************Sasha2,14:59 18.02.2015
+external procedure IPVc_PasteRecVal(var record IPVc,Integer); //Edit***************************Sasha2,15:03 18.02.2015
+external procedure IPSumup(var record IPVc); //Edit***************************Sasha2,15:00 18.02.2015
+external function LongInt IPVcRecordCheck(var record IPVc,record IPVc,LongInt,LongInt); //Edit***************************Sasha2,15:56 18.02.2015
+external procedure IPPastePayMode(var record IPVc); //Edit***************************Sasha2,16:12 18.02.2015
+external function longint NextCUPNumber(); //Edit***************************Sasha2,9:45 19.02.2015
+external procedure IPVc_PasteBankCurncy(var record IPVc,Integer); //Edit***************************Sasha2,10:19 19.02.2015
+external procedure RecordAction_raExpandAllPayments(var record IPVc);// Edit ************************** Thursday, 12 January 2017 11:54:55
+
+
   SetLangMode(LangRussian,"RUS",0); 
 
 //----------------------------------------------OR  Sorting----------------------------------------------------//
@@ -368,3 +379,86 @@ BEGIN
 	LTableSortIPbyTimeDsm:;
   RETURN;
 END;
+
+global  //Edit----------------------Dima  12.08.2015
+procedure IPCashBackDsm()
+BEGIN
+	record IPVc IPr,IP2r;
+	row IPVc IPrw;
+  Integer wn,rwcnt,i,k,j;
+  vector string 20 custcur,cust;
+  vector val custval;
+  vector boolean custcurf;
+  array string 100 findstr;
+  LongInt error;
+
+  wn = CurWindow;
+	DeselectWindow(wn,false);
+	GetWindowRecord(wn,IPr);
+	
+	recordnew(IP2r);
+	
+	IP2r.TransDate = CurrentDate;	 
+	rwcnt = matrowcnt(IPr);
+	For(i=0;i<rwcnt;i=i+1) begin
+	  matrowget(IPr,i,IPrw);
+	  if(nonblank(IPrw.CustCode))then begin
+			custval[IPrw.CustCode & ";;;" & IPrw.RecCurncy] = custval[IPrw.CustCode & ";;;" & IPrw.RecCurncy] + IPrw.RecVal*0.01;
+			if(custcurf[IPrw.CustCode & ";;;" & IPrw.RecCurncy]==false)then begin
+				custcurf[IPrw.CustCode & ";;;" & IPrw.RecCurncy] = true;
+				custcur[IPrw.CustCode & ";;;" & IPrw.RecCurncy] = IPrw.RecCurncy;
+				cust[IPrw.CustCode & ";;;" & IPrw.RecCurncy] = IPrw.CustCode;
+				findstr[k] = IPrw.CustCode & ";;;" & IPrw.RecCurncy;
+				k=k+1;
+			end; 
+	  end;
+	end; 
+	
+	For(i=0;i<k;i=i+1) begin
+	  ClearRow(IP2r,IPrw,kReceiptRowTypeNormal);
+	  IPrw.CustCode = cust[findstr[i]];
+	  matrowput(IP2r,i,IPrw);
+	  IPVc_PasteCustCode(IP2r,i,error);
+	  MatRowGet(IP2r,i,IPrw);
+		IPrw.RecCurncy = custcur[findstr[i]];
+		MatRowPut(IP2r,i,IPrw);
+		IPVc_PasteRecCurncy(IP2r,i);
+		MatRowGet(IP2r,i,IPrw);
+		IPrw.RecVal = custval[findstr[i]];
+		MatRowPut(IP2r,i,IPrw);
+		IPVc_PasteRecVal(IP2r,i);
+		IP2r.PayMode = "CB";
+		IPPastePayMode(IP2r);
+		IPSumup(IP2r);
+	end; 
+	IP2r.Comment = "Возврат 1% по наложенным платежам";
+	OpenWindow("IPDClass",1,0,"","",IP2r);
+
+  RETURN;
+END;
+
+
+global updating procedure AddPModeMn(record RcVc RepSpec)
+begin
+	record PMBlock PMb;
+	row PMBlock PMrw;
+	integer i,mtrw;
+	
+	blockload(PMb);
+	
+	mtrw = matrowcnt(PMb);
+	
+	if(nonblank(RepSpec.f1) and nonblank(RepSpec.f2))then begin
+		PMrw.Code = RepSpec.f1;
+		PMrw.AccNr = RepSpec.f2;
+		PMrw.Comment = RepSpec.f3;
+		PMrw.Objects = RepSpec.f4;
+		messagebox(0,mtrw);
+		matrowput(PMb,mtrw,PMrw);
+		blockstore(PMb);
+		messagebox(0,matrowcnt(PMb));
+	end;
+	
+	
+return;
+end;
