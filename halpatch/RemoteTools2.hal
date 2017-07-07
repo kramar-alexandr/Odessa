@@ -1469,3 +1469,54 @@ BEGIN
 LSalesmanStats_IVCashVc:;
   RETURN;
 END;
+
+
+
+global procedure CashBackRemote(record IPVc IPr,var record IPVc IP2r)
+begin
+	row IPVc IPrw;
+  Integer wn,rwcnt,i,k,j;
+  vector string 20 custcur,cust;
+  vector val custval;
+  vector boolean custcurf;
+  array string 100 findstr;
+  LongInt error;
+  
+  IP2r.TransDate = CurrentDate;	 
+	rwcnt = matrowcnt(IPr);
+	For(i=0;i<rwcnt;i=i+1) begin
+	  matrowget(IPr,i,IPrw);
+	  if(nonblank(IPrw.CustCode))then begin
+			custval[IPrw.CustCode & ";;;" & IPrw.RecCurncy] = custval[IPrw.CustCode & ";;;" & IPrw.RecCurncy] + IPrw.RecVal*0.01;
+			if(custcurf[IPrw.CustCode & ";;;" & IPrw.RecCurncy]==false)then begin
+				custcurf[IPrw.CustCode & ";;;" & IPrw.RecCurncy] = true;
+				custcur[IPrw.CustCode & ";;;" & IPrw.RecCurncy] = IPrw.RecCurncy;
+				cust[IPrw.CustCode & ";;;" & IPrw.RecCurncy] = IPrw.CustCode;
+				findstr[k] = IPrw.CustCode & ";;;" & IPrw.RecCurncy;
+				k=k+1;
+			end; 
+	  end;
+	end; 
+  
+  For(i=0;i<k;i=i+1) begin
+	  ClearRow(IP2r,IPrw,kReceiptRowTypeNormal);
+	  IPrw.CustCode = cust[findstr[i]];
+	  matrowput(IP2r,i,IPrw);
+	  IPVc_PasteCustCode(IP2r,i,error);
+	  MatRowGet(IP2r,i,IPrw);
+		IPrw.RecCurncy = custcur[findstr[i]];
+		MatRowPut(IP2r,i,IPrw);
+		IPVc_PasteRecCurncy(IP2r,i);
+		MatRowGet(IP2r,i,IPrw);
+		IPrw.RecVal = custval[findstr[i]];
+		MatRowPut(IP2r,i,IPrw);
+		IPVc_PasteRecVal(IP2r,i);
+		IP2r.PayMode = "CB";
+		IPPastePayMode(IP2r);
+		IPSumup(IP2r);
+	end; 
+	IP2r.Comment = "Возврат 1% по наложенным платежам";
+  
+
+return;
+end;

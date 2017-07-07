@@ -7,7 +7,7 @@ external procedure IPPastePayMode(var record IPVc); //Edit**********************
 external function longint NextCUPNumber(); //Edit***************************Sasha2,9:45 19.02.2015
 external procedure IPVc_PasteBankCurncy(var record IPVc,Integer); //Edit***************************Sasha2,10:19 19.02.2015
 external procedure RecordAction_raExpandAllPayments(var record IPVc);// Edit ************************** Thursday, 12 January 2017 11:54:55
-
+remote procedure CashBackRemote(record IPVc,var record IPVc);
 
   SetLangMode(LangRussian,"RUS",0); 
 
@@ -397,41 +397,10 @@ BEGIN
 	GetWindowRecord(wn,IPr);
 	
 	recordnew(IP2r);
+		
+	CashBackRemote(IPr,IP2r);
 	
-	IP2r.TransDate = CurrentDate;	 
-	rwcnt = matrowcnt(IPr);
-	For(i=0;i<rwcnt;i=i+1) begin
-	  matrowget(IPr,i,IPrw);
-	  if(nonblank(IPrw.CustCode))then begin
-			custval[IPrw.CustCode & ";;;" & IPrw.RecCurncy] = custval[IPrw.CustCode & ";;;" & IPrw.RecCurncy] + IPrw.RecVal*0.01;
-			if(custcurf[IPrw.CustCode & ";;;" & IPrw.RecCurncy]==false)then begin
-				custcurf[IPrw.CustCode & ";;;" & IPrw.RecCurncy] = true;
-				custcur[IPrw.CustCode & ";;;" & IPrw.RecCurncy] = IPrw.RecCurncy;
-				cust[IPrw.CustCode & ";;;" & IPrw.RecCurncy] = IPrw.CustCode;
-				findstr[k] = IPrw.CustCode & ";;;" & IPrw.RecCurncy;
-				k=k+1;
-			end; 
-	  end;
-	end; 
 	
-	For(i=0;i<k;i=i+1) begin
-	  ClearRow(IP2r,IPrw,kReceiptRowTypeNormal);
-	  IPrw.CustCode = cust[findstr[i]];
-	  matrowput(IP2r,i,IPrw);
-	  IPVc_PasteCustCode(IP2r,i,error);
-	  MatRowGet(IP2r,i,IPrw);
-		IPrw.RecCurncy = custcur[findstr[i]];
-		MatRowPut(IP2r,i,IPrw);
-		IPVc_PasteRecCurncy(IP2r,i);
-		MatRowGet(IP2r,i,IPrw);
-		IPrw.RecVal = custval[findstr[i]];
-		MatRowPut(IP2r,i,IPrw);
-		IPVc_PasteRecVal(IP2r,i);
-		IP2r.PayMode = "CB";
-		IPPastePayMode(IP2r);
-		IPSumup(IP2r);
-	end; 
-	IP2r.Comment = "Возврат 1% по наложенным платежам";
 	OpenWindow("IPDClass",1,0,"","",IP2r);
 
   RETURN;
