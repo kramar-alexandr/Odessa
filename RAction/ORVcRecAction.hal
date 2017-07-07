@@ -640,6 +640,9 @@ begin
 			end;
 			ORr.ReservToDate = addday(ORr.OrdDate,3 + additionalday);
     end else begin
+    	if (blankdate(ORr.ReservToDate)) then begin
+    		ORr.ReservToDate = addday(ORr.OrdDate,7);
+    	end;
       if (DateDiff(ORr.ReservToDate,ORr.OrdDate)>31) then begin
         RecordCheckError(32702,". " & UsetStr(14642) & "31 " & LowerCase(UsetStr(9640)),-1,"ReservToDate");      
         res = -1;
