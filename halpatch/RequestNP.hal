@@ -2269,7 +2269,7 @@ begin
   res = true;
   
 	CreateCounterpartyRequest(host, page, NPSettingsb.APIkey, "Counterparty","save", "",NPCounterpartyr, mainRequest);
-
+	writeareatofile(mainRequest,"1CounterpatyCreationRequest.txt",0);
   if(MySendRawWebRequest(host,"443",true,"POST",page & getParam,"text/xml","",false,mainRequest,replyarea,5)) then begin  
     //messagebox(0,"Connection on!");
     writeareatofile(replyarea,"1CounterpatyCreationReply.txt",0);
