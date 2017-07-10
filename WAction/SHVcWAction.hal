@@ -75,12 +75,10 @@ begin
 	if (CheckEN(SHr,wn)) then begin		//Edit----------------------Dima  06.05.2015  	
 	  	if(nonblank(SHr.NPDocumentRef)) then begin
 	  		BlockLoad(NPSettingsb);
-				if(nonblank(SHr.NPIntDocNumber) and (SHr.NPPrinted==0)) then begin
-					ORr.SerNr = SHr.OrderNr;
-					readfirstmain(ORr,1,true);
+	  		ORr.SerNr = SHr.OrderNr;
+				readfirstmain(ORr,1,true);
+				if(nonblank(SHr.NPIntDocNumber) and (SHr.NPPrinted==0)) then begin	
 					NPCreateRequestMn(SHr, errors, ORr.OrderClass);															//update before printing if necessary
-					//PutWindowRecord(wn,SHr);
-					//GetWindowRecord(wn,SHr);
 				end;	  		
 	  		if(ORr.OrderClass=="WEB")then begin
 					www = "http://my.novaposhta.ua/orders/printDocument/orders[]/" & SHr.NPDocumentRef & "/type/html/apiKey/" & NPSettingsb.APIkey;
@@ -116,9 +114,9 @@ begin
 	if (CheckEN(SHr,wn)) then begin
 	  	if(nonblank(SHr.NPDocumentRef))then begin
 	  		BlockLoad(NPSettingsb);
+	  		ORr.SerNr = SHr.OrderNr;
+				readfirstmain(ORr,1,true);
 				if(nonblank(SHr.NPIntDocNumber) and nonblank(SHr.NPDocumentRef) and blank(SHr.NPPrinted))then begin
-					ORr.SerNr = SHr.OrderNr;
-					readfirstmain(ORr,1,true);
 					NPCreateRequestMn(SHr, errors, ORr.OrderClass);															//update before printing if necessary
 				end;	  		 
 				if(ORr.OrderClass=="WEB")then begin
@@ -154,9 +152,9 @@ begin
 	if (CheckEN(SHr,wn)) then begin
 	  	if(nonblank(SHr.NPDocumentRef))then begin
 	  		BlockLoad(NPSettingsb);
+	  		ORr.SerNr = SHr.OrderNr;
+				readfirstmain(ORr,1,true);
 				if(nonblank(SHr.NPIntDocNumber) and nonblank(SHr.NPDocumentRef) and blank(SHr.NPPrinted))then begin
-					ORr.SerNr = SHr.OrderNr;
-					readfirstmain(ORr,1,true);
 					NPCreateRequestMn(SHr, errors, ORr.OrderClass);															//update before printing if necessary
 				end;	  		 
 				if(ORr.OrderClass=="WEB")then begin
