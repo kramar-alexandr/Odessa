@@ -67,8 +67,8 @@ string 50 backupfile,month,year,day;
 	
 	//logtext(0,"u89212.your-backup.de 21 u89212 IzPMg0l408IXkf7D / Backup/" & backupfile);
  	//RunProgram("Backup/ftptransfer.sh","u89212.your-backup.de 21 u89212 IzPMg0l408IXkf7D / Backup/" & backupfile);
-	//	RunProgram("./archive_s3.sh",backupfile);
-	//	RunProgram("./archive_cleanup.sh","");
+	RunProgram("./archive_s3.sh",backupfile);
+	RunProgram("./archive_cleanup.sh","");
 	RunProgram("Scripts/test.sh","");
 	
 return;
