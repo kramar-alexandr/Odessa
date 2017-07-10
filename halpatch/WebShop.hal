@@ -69,7 +69,7 @@ string 50 backupfile,month,year,day;
  	//RunProgram("Backup/ftptransfer.sh","u89212.your-backup.de 21 u89212 IzPMg0l408IXkf7D / Backup/" & backupfile);
 	//	RunProgram("./archive_s3.sh",backupfile);
 	//	RunProgram("./archive_cleanup.sh","");
-	RunProgram("Backup/test.sh","");
+	RunProgram("Scripts/test.sh","");
 	
 return;
 end;
