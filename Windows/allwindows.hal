@@ -5289,18 +5289,20 @@ begin
   MatCol(t,94,"Кол-во",0,Quant,true,0);
   MatCol(t,144,"Описание",0,Spec,false,0);
   MatCol(t,-315,"Ед.",0,UnitCode,false,UnitSClass);
-  MatCol(t,-260,"Кол-во ед.",0,UnitFactQuant,true,0);
+  MatCol(t,-260,"SMReserved",0,SMReserved,true,0);// Edit ************************** Tuesday, 11 July 2017 13:28:45
+  /*MatCol(t,-260,"Кол-во ед.",0,UnitFactQuant,true,0);
   MatCol(t,-200,"Ширина",0,UnitXval,true,0);
   MatCol(t,-160,"Высота",0,UnitYval,true,0);
   MatCol(t,-120,"Глубина",0,UnitZval,true,0);
-  MatCol(t,-80,"Цена ед.",0,UnitFactPrice,true,0);
+  MatCol(t,-80,"Цена ед.",0,UnitFactPrice,true,0);*/
   MatCol(t=kInvoiceRowTypeStructuredItemComponent,144,"Описание",0,Spec,false,0);
   MatCol(t,-315,"Ед.",0,UnitCode,false,UnitSClass);
-  MatCol(t,-260,"Кол-во ед.",0,UnitFactQuant,true,0);
+  MatCol(t,-260,"SMReserved",0,SMReserved,true,0);// Edit ************************** Tuesday, 11 July 2017 13:28:48
+  /*MatCol(t,-260,"Кол-во ед.",0,UnitFactQuant,true,0);// Edit ************************** Tuesday, 11 July 2017 13:21:55
   MatCol(t,-200,"Ширина",0,UnitXval,true,0);
   MatCol(t,-160,"Высота",0,UnitYval,true,0);
   MatCol(t,-120,"Глубина",0,UnitZval,true,0);
-  MatCol(t,-80,"Цена ед.",0,UnitFactPrice,true,0);
+  MatCol(t,-80,"Цена ед.",0,UnitFactPrice,true,0);*/
   Flip(flipnr); flipnr = flipnr + 1; //Edit***************************Sasha2,12:11 28.01.2015  {
   MatCol(t=1,32,"Товар",0,ArtCode,false,ForSaleINSClass);
   MatCol(t,94,"Кол-во",0,Quant,true,0);

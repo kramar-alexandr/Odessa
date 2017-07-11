@@ -325,7 +325,7 @@ end;
 
 
 global updating
- procedure WriteProcessQtyBackToORVc(row StockMovVc SMrw2,var row StockMovVc SMrw,boolean found)//Edit----------------------Dima  04.09.2015
+ procedure WriteProcessQtyBackToORVc(row StockMovVc SMrw2,var row StockMovVc SMrw,boolean found,record StockMovVc SMr)//Edit----------------------Dima  04.09.2015
 begin
   integer rwcnt,j;
   row ORVc ORrw;
@@ -353,6 +353,7 @@ begin
 								MatRowGet(ORr,j,ORrw);
 								SMrw.OrderProcessing = Min(ORrw.OrderQuant - ORrw.ProcessingQuant,SMrw.OrdQuant);
 								ORrw.ProcessingQuant = ORrw.ProcessingQuant + SMrw.OrderProcessing;
+								ORrw.SMReserved = ORrw.SMReserved & SMr.SerNr & ",";// Edit ************************** Tuesday, 11 July 2017 13:19:57
 								LogText(0,"new quant  " & ORr.SerNr & " " & j & ORrw.ProcessingQuant);
 								MatRowPut(ORr,j,ORrw);
 								j = rwcnt;
@@ -371,7 +372,7 @@ end;
 
 
 global updating
- procedure CalculateProcessQtyForOrders(var vector record ORVc orders,var vector record ORVc oldorders,var array longint orderNumbers,row StockMovVc SMrw2,var row StockMovVc SMrw,boolean found)	//Edit----------------------Dima  04.09.2015
+ procedure CalculateProcessQtyForOrders(var vector record ORVc orders,var vector record ORVc oldorders,var array longint orderNumbers,row StockMovVc SMrw2,var row StockMovVc SMrw,boolean found,record StockMovVc SMr)	//Edit----------------------Dima  04.09.2015
 begin
   integer rwcnt,j;
   row ORVc ORrw;
@@ -418,6 +419,7 @@ begin
 								MatRowGet(ORr,j,ORrw);
 								SMrw.OrderProcessing = Min(ORrw.OrderQuant - ORrw.ProcessingQuant,SMrw.OrdQuant);
 								ORrw.ProcessingQuant = ORrw.ProcessingQuant + SMrw.OrderProcessing;
+								ORrw.SMReserved = ORrw.SMReserved & SMr.SerNr & ",";// Edit ************************** Tuesday, 11 July 2017 13:19:57
 								LogText(0,"new quant  " & ORr.SerNr & "   row " & j & "     " &  ORrw.ProcessingQuant);
 								MatRowPut(ORr,j,ORrw);
 								j = rwcnt;
@@ -482,7 +484,7 @@ begin
 						diff = -SMrw2.OrdQuant;
 				end;
 				if (diff!=0) then begin		
-					CalculateProcessQtyForOrders(orders,oldorders,orderNumbers,SMrw2,SMrw,found);
+					CalculateProcessQtyForOrders(orders,oldorders,orderNumbers,SMrw2,SMrw,found,StockMovr);
 					if (found) then begin
 						MatRowPut(StockMovr,put,SMrw);
 					end;

@@ -48,7 +48,7 @@ external procedure GetFullCurncyRateText(Boolean,var string,val,val,val,val,val)
 external procedure GetFullCurncyRate (var string,Date,var val,var val,var val,var val,var val);
 external updating procedure UnOk_StockMovVc(var record StockMovVc, boolean);
 external  function boolean CheckRemoveLogistics(record StockMovVc,var longint);
-external updating procedure WriteProcessQtyBackToORVc(row StockMovVc,var row StockMovVc,boolean);
+external updating procedure WriteProcessQtyBackToORVc(row StockMovVc,var row StockMovVc,boolean,record StockMovVc);
 external updating procedure CreateLinksToOrders(record StockMovVc);
 external updating procedure ReserveReceivedItems(record StockMovVc);
 external updating procedure CheckDifferenceForWritingToORVc(var record StockMovVc,record StockMovVc);
