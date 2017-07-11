@@ -53,10 +53,9 @@ begin
 	BlockLoad(SMSb);
 	BlockLoad(SMSOb);
 	
-	logtext(0,ORr.SerNr);
+	logtext(0,"Unreserve OPT OR " & ORr.SerNr);
 	
 	if (NonBlank(ORr.ReservToDate) and ORr.ReservToDate<=CurrentDate) then begin
-		logtext(0,ORr.SerNr);
 		if(ORr.Reserved>0)then begin
 			res = 0;
 			if (ORr.OKFlag!=0) then begin
@@ -65,7 +64,6 @@ begin
 				res = RecordUpdate(OR2r,ORr,true);
 				okedf = true;
 			end;
-			logtext(0,res);
 			if (res==0) then begin    
 				RecordCopy(OR2r,ORr);
 				ORr.Reserved = 0;
