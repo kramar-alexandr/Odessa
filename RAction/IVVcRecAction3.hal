@@ -708,7 +708,7 @@ begin
           end;
         end;  
         if (nonblank(IVrw.SalesAcc)) then begin
-          VerifyRowObjects("SL",IVp.Objects,IVrw.Objects,IVrw.SalesAcc,errcode,errstr,initotcheckf,otcheckaccs,otcheckobjtyps,otcheckcnt);
+          //VerifyRowObjects("SL",IVp.Objects,IVrw.Objects,IVrw.SalesAcc,errcode,errstr,initotcheckf,otcheckaccs,otcheckobjtyps,otcheckcnt); //Edit***************************Sasha2,13:17 11.07.2017 Turned off cause of Promotions
           if (errcode!=0) then begin
             RecordCheckError(errcode,errstr,i,"Objects");      
             res = -1; 
@@ -1512,7 +1512,7 @@ not needed any more
             goto L99;
           end;
           if (nonblank(IVrw.SalesAcc)) then begin
-            VerifyRowObjects("SL",IVp.Objects,IVrw.Objects,IVrw.SalesAcc,errcode,errstr,initotcheckf,otcheckaccs,otcheckobjtyps,otcheckcnt);
+            //VerifyRowObjects("SL",IVp.Objects,IVrw.Objects,IVrw.SalesAcc,errcode,errstr,initotcheckf,otcheckaccs,otcheckobjtyps,otcheckcnt); //Edit***************************Sasha2,13:17 11.07.2017 Turned off cause of Promotions
             if (errcode!=0) then begin
               RecordCheckError(errcode,errstr,i,"Objects");      
               res = -1; 

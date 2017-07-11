@@ -750,9 +750,9 @@ begin
   BlockLoad(LMb);  
   if (blank(IVr.Location)) then begin
     IVr.Location = LMb.DefLocation;
-    IVr.PromotionCode = LookUpPromotionCode(IVr.InvDate,IVr.Location); //Edit***************************Sasha2,15:32 24.01.2017
+    IVr.PromotionCode2 = LookUpPromotionCode(IVr.InvDate,IVr.Location); //Edit***************************Sasha2,15:32 24.01.2017
   end else begin
-		IVr.PromotionCode = LookUpPromotionCode(IVr.InvDate,IVr.Location);// Edit ************************** Tuesday, 21 February 2017 18:47:28
+		IVr.PromotionCode2 = LookUpPromotionCode(IVr.InvDate,IVr.Location);// Edit ************************** Tuesday, 21 February 2017 18:47:28
   end;
   IVr.BranchID = LMb.BranchID;
   IVr.Objects = AddBranchObjectToObjectList(LMb.BranchID,IVr.Objects);

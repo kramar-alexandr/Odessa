@@ -3453,7 +3453,7 @@ if (HasTouchScreenLook==false) then begin
   EditField(h2,v+=vs,135,"Объекты",Normal,Objects,false,ObjSClass);
   EditField(h2,v+=vs,135,"Ответственный",Normal,RefStr,false,0);
   EditField(h2,v+=vs,135,"№ счета клиенту",Normal,CustOrdNr,false,0);
-  EditField(h3,v,160,"Акция",Normal,PromotionCode,false,PromotionSClass); //Edit***************************Sasha2,15:01 24.01.2017
+  EditField(h3,v,160,"Акция",Normal,PromotionCode2,false,PromotionSClass); //Edit***************************Sasha2,15:01 24.01.2017
   EditField(h3,v=vm,80,"Продавец",Normal,SalesMan,false,UserSClass);
   if (StandardHansa) then begin
     EditField(h3,v+=vs,80,"Склад",Normal,Location,false,LocationSClass);
@@ -5380,7 +5380,7 @@ begin
   EditField(h2,v+=vs,80,"Итого вес",ViewOnly,TotWeight,true,0);
   EditField(h2,v+=vs,80,"Итого объем",ViewOnly,TotVolume,true,0);
   EditField(h2,v+=vs,80,"Фрахт",Normal,FrPrice,true,0);
-  EditField(h3,v,160,"Акция",Normal,PromotionCode,false,PromotionSClass); //Edit***************************Sasha2,15:01 24.01.2017
+  EditField(h3,v,160,"Акция",Normal,PromotionCode2,false,PromotionSClass); //Edit***************************Sasha2,15:01 24.01.2017
   EditField(h2,v+=vs,80,"Код интрастата",Normal,IntrastatTransCode,true,IntrastatTransCodeSClass);
   if (StandardHansa==false) then begin
     EditField(h3,v,80,"Код НДС фрахта",Normal,FrVATCode,true,VATCodeSClass);

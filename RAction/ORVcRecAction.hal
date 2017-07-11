@@ -100,6 +100,7 @@ external procedure SOAPUpdateStatus(string,string);// Edit *********************
 external function string 255 LookUpPromotionCode(date,string); //Edit***************************Sasha2,15:31 24.01.2017
 external procedure NoDupObjs(string,var string); //Edit***************************Sasha2,16:04 24.01.2017
 external function Boolean FindSubString(string,string);// Edit ************************** Wednesday, 24 May 2017 15:21:31
+external procedure ExtractObjWithSeparator(string,string,Boolean,var Integer,var string); 
 
 global
 updating procedure CreateORHistoryVcFromORVc(record ORVc ORr, record ORVc OR2r, boolean UpdateFlag)
@@ -146,59 +147,77 @@ end;
 
 
 global //Edit***************************Sasha2,9:51 25.01.2017 {
-procedure HandlePromotionObjectsIV(var record ORVc ORr,record ORVc OR2r,LongInt mode)
+procedure HandlePromotionObjectsOR(var record ORVc ORr,record ORVc OR2r,LongInt mode)
 begin
   record PromotionVc Promotionr;
-  string 255 tstr,objStr;
-  integer pos;
+  string 255 tstr,curProm,objStr,oldObjStr;
+  integer pos,pos1;
     
     if (mode==Rs_insert) then begin
-      if (NonBlank(ORr.PromotionCode)) then begin
-        Promotionr.Code = ORr.PromotionCode;
-        if (ReadFirstMain(Promotionr,1,true) and NonBlank(Promotionr.Objects)) then begin
-          if (Blank(ORr.Objects)) then begin
-            ORr.Objects = Promotionr.Objects;
-          end else begin
-          	if(!setinset(Promotionr.Objects,ORr.Objects))then begin
-							ORr.Objects = ORr.Objects & "," & Promotionr.Objects;
-            end;
-          end;
-        end;
-      end;
-    end;
-    if (mode==Rs_update) then begin
-      if (ORr.PromotionCode!=OR2r.PromotionCode) then begin
-        if (NonBlank(OR2r.PromotionCode)) then begin
-          Promotionr.Code = OR2r.PromotionCode;
-          if (ReadFirstMain(Promotionr,1,true) and NonBlank(Promotionr.Objects)) then begin
-            NoDupObjs(OR2r.Objects & "," & ORr.Objects,tstr);
-            OR2r.Objects = tstr;
-            pos = 0;
-            objStr = "";
-            ExtractObj(OR2r.Objects,pos,tstr);
-            while (nonblank(tstr)) begin
-              if (SetInSet(tstr,Promotionr.Objects)==false) then begin
-                objStr = objStr & tstr & ",";
-              end;
-              ExtractObj(OR2r.Objects,pos,tstr);
-            end;
-            if (NonBlank(objStr)) then begin
-              objStr = Left(objStr,len(objStr)-1);
-              ORr.Objects = objStr;
-            end;
-          end;
-        end;
-        if (NonBlank(ORr.PromotionCode)) then begin
-          Promotionr.Code = ORr.PromotionCode;
+      if (NonBlank(ORr.PromotionCode2)) then begin
+        pos1 = 0;
+        ExtractObjWithSeparator(",",ORr.PromotionCode2,true,pos1,curProm);
+        while (nonblank(curProm)) begin
+          Promotionr.Code = curProm;
           if (ReadFirstMain(Promotionr,1,true) and NonBlank(Promotionr.Objects)) then begin
             if (Blank(ORr.Objects)) then begin
               ORr.Objects = Promotionr.Objects;
             end else begin
             	if(!setinset(Promotionr.Objects,ORr.Objects))then begin
-								ORr.Objects = ORr.Objects & "," & Promotionr.Objects;
+  							ORr.Objects = ORr.Objects & "," & Promotionr.Objects;
               end;
             end;
           end;
+          ExtractObjWithSeparator(",",ORr.PromotionCode2,true,pos1,curProm);;
+        end;
+        NoDupObjs(ORr.Objects,tstr);
+        ORr.Objects = tstr;
+      end;
+    end;
+    if (mode==Rs_update) then begin
+      if (ORr.PromotionCode2!=OR2r.PromotionCode2) then begin
+        if (NonBlank(OR2r.PromotionCode2)) then begin
+          objStr = "";
+          pos1 = 0;
+          NoDupObjs(OR2r.Objects & "," & ORr.Objects,oldObjStr);
+          ExtractObjWithSeparator(",",OR2r.PromotionCode2,true,pos1,curProm);
+          while (nonblank(curProm)) begin
+            Promotionr.Code = curProm;
+            if (ReadFirstMain(Promotionr,1,true) and NonBlank(Promotionr.Objects)) then begin
+              pos = 0;
+              ExtractObj(oldObjStr,pos,tstr);
+              while (nonblank(tstr)) begin
+                if (SetInSet(tstr,Promotionr.Objects)==false) then begin
+                  objStr = objStr & tstr & ",";
+                end;
+                ExtractObj(oldObjStr,pos,tstr);
+              end;
+              oldObjStr = objStr;
+              objStr = "";
+            end;
+            ExtractObjWithSeparator(",",OR2r.PromotionCode2,true,pos1,curProm);
+          end;
+          oldObjStr = Left(oldObjStr,len(oldObjStr)-1);
+          ORr.Objects = oldObjStr;
+        end;
+        if (NonBlank(ORr.PromotionCode2)) then begin
+          pos1 = 0;
+          ExtractObjWithSeparator(",",ORr.PromotionCode2,true,pos1,curProm);
+          while (nonblank(curProm)) begin
+            Promotionr.Code = curProm;
+            if (ReadFirstMain(Promotionr,1,true) and NonBlank(Promotionr.Objects)) then begin
+              if (Blank(ORr.Objects)) then begin
+                ORr.Objects = Promotionr.Objects;
+              end else begin
+              	if(!setinset(Promotionr.Objects,ORr.Objects))then begin
+  								ORr.Objects = ORr.Objects & "," & Promotionr.Objects;
+                end;
+              end;
+            end;
+            ExtractObjWithSeparator(",",ORr.PromotionCode2,true,pos1,curProm);
+          end;
+          NoDupObjs(ORr.Objects,tstr);
+          ORr.Objects = tstr;
         end;
       end;
     end;
@@ -1069,7 +1088,7 @@ begin
         end;
       end;
   end;
-  errcode = CheckObjs("",ORr.Objects,errstr);
+  //errcode = CheckObjs("",ORr.Objects,errstr); //Edit***************************Sasha2,11:40 11.07.2017 Turned off cause of Promotions
   if (errcode!=0) then begin
     RecordCheckError(errcode,errstr,-1,"Objects");      
     res = -1;
@@ -1506,7 +1525,7 @@ begin
             goto LORVcRecordCheck;
           end;
 //          if (nonblank(ORrw.Objects)) then begin//this check must run even if this field is blank
-          VerifyRowObjects("SL",ORr.Objects,ORrw.Objects,ORrw.SalesAcc,errcode,errstr,initotcheckf,otcheckaccs,otcheckobjtyps,otcheckcnt);
+          //VerifyRowObjects("SL",ORr.Objects,ORrw.Objects,ORrw.SalesAcc,errcode,errstr,initotcheckf,otcheckaccs,otcheckobjtyps,otcheckcnt); //Edit***************************Sasha2,11:40 11.07.2017 Turned off cause of Promotions
           if (errcode!=0) then begin
             RecordCheckError(errcode,errstr,i,"Objects");      
             res = -1;
@@ -2615,7 +2634,7 @@ begin
 	integer rwcnt,additionalday;
 		
   ORr.Prntdf = 0;
-  HandlePromotionObjectsIV(ORr,OR2r,2); //Edit***************************Sasha2,10:31 25.01.2017
+  HandlePromotionObjectsOR(ORr,OR2r,2); //Edit***************************Sasha2,10:31 25.01.2017
   AutDelNonStockItem(ORr);
   UpdateOrdOut(OR2r,false,true);
   UpdateOrdOut(ORr,true,true);
@@ -2971,7 +2990,7 @@ begin
   if (blanktime(ORr.RegTime)) then begin
     ORr.RegTime = CurrentTime;
   end;
-  HandlePromotionObjectsIV(ORr,OR2r,1); //Edit***************************Sasha2,10:31 25.01.2017
+  HandlePromotionObjectsOR(ORr,OR2r,1); //Edit***************************Sasha2,10:31 25.01.2017
   AutDelNonStockItem(ORr);
   UpdateOrdOut(ORr,true,true);
   UpdatePRSO(ORr,true);
@@ -3138,7 +3157,7 @@ begin
   end else begin
   	ORr.NPPayer = NPSettingsb.DefPayer1;// Edit ************************** Monday, 17 October 2016 15:03:50
   end;
-  ORr.PromotionCode = LookUpPromotionCode(ORr.OrdDate,ORr.Location); //Edit***************************Sasha2,15:32 24.01.2017
+  ORr.PromotionCode2 = LookUpPromotionCode(ORr.OrdDate,ORr.Location); //Edit***************************Sasha2,15:32 24.01.2017
   
   ORVcRecordDefaults = res;  
   return;

@@ -722,10 +722,10 @@ begin
 	 while(loopkey("InvDate",IVr,1,TrHs))begin
 	 	if(IVr.InvDate>stringtodate("21/02/2017"))then begin TrHs = false; end;
 	 	
-	 	if(TrHs and IVr.Location=="6-KV" and blank(IVr.PromotionCode))then begin
-	 		IVr.PromotionCode = "20%_Ñê_äàÖÇ2017";
-	 		if (NonBlank(IVr.PromotionCode)) then begin
-        Promotionr.Code = IVr.PromotionCode;
+	 	if(TrHs and IVr.Location=="6-KV" and blank(IVr.PromotionCode2))then begin
+	 		IVr.PromotionCode2 = "20%_Ñê_äàÖÇ2017";
+	 		if (NonBlank(IVr.PromotionCode2)) then begin
+        Promotionr.Code = IVr.PromotionCode2;
         if (ReadFirstMain(Promotionr,1,true) and NonBlank(Promotionr.Objects)) then begin
           if (Blank(IVr.Objects)) then begin
             IVr.Objects = Promotionr.Objects;

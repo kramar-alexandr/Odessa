@@ -972,7 +972,7 @@ begin
 					//ORr.BaseRate1 = 100;
 					//ORr.BaseRate2 = 100;
 					ORr.Location = WSSB.Location;
-					ORr.PromotionCode = LookUpPromotionCode(ORr.OrdDate,ORr.Location); //Edit***************************Sasha2,11:31 25.01.2017
+					ORr.PromotionCode2 = LookUpPromotionCode(ORr.OrdDate,ORr.Location); //Edit***************************Sasha2,11:31 25.01.2017
 					ORr.PayDeal = WSSB.PayDeal;
 					ORr.ShipDeal = WSSB.ShipDeal;
 					ORr.CustomStatusFlag = 0;
