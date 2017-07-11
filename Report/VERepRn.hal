@@ -361,9 +361,10 @@ RecordNew(ISr);
    OutString(240,0,"Получено",false);
    OutString(260,0,"Списано",false);
    OutString(280,0,"Остаток",false);
-   OutString(300,0,"К отгрузке клиентам",false);
+   OutString(300,0,"Остаток на складе Брак",false);
+   /*OutString(300,0,"К отгрузке клиентам",false);
    OutString(310,0,"К отгрузке клиентам 1-KOC",false);
-   OutString(320,0,"К отгрузке клиентам RYBRAY",false);
+   OutString(320,0,"К отгрузке клиентам RYBRAY",false);*/
 
    step=(360-320)/(locationsBal.length + positionsBal.length);
    startPos = 320;
@@ -494,8 +495,10 @@ RecordNew(ISr);
 				OutString(260,0,-(retPU+SDqty),false);
 				OutString(280,0,curRest,false);
 				OutString(300,0,OrdQty,false);
+				//OrdQty - ostatki na sklade brak
+				/*OutString(300,0,OrdQty,false);
 				OutString(310,0,OrdQty1K,false);
-				OutString(320,0,OrdQtyRR,false);
+				OutString(320,0,OrdQtyRR,false);*/
 
 
   			for(i = 0; i < locationsBal.length; i = i+1) begin
