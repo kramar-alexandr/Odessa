@@ -31,6 +31,61 @@ remote procedure IVVc_PasteRebCode(var record IVVc);
 
 SetLangMode(LangRussian,"RUS",0);
 
+
+global // Edit ************************** Tuesday, 11 July 2017 13:00:35
+updating procedure RemoveReservedMarkOPTMn(var record ORVc ORr)
+begin
+  record ORVc OR2r;
+  row ORVc ORrw;
+  boolean TrHs,testf,okedf;
+  date mindate;
+  LongInt res;
+  record SMSstackVc SMSr;
+  longint smsNr;
+  time sendTime;
+  record SMSTextBlock SMSb;
+  record SMSTextOptBlock SMSOb;
+  string 200 newtext;
+  integer i,mtrw,additionalday;
+  boolean statusflag;
+  record IVVc IVr;
+  
+	BlockLoad(SMSb);
+	BlockLoad(SMSOb);
+	
+	logtext(0,ORr.SerNr);
+	
+	if (NonBlank(ORr.ReservToDate) and ORr.ReservToDate<=CurrentDate) then begin
+		logtext(0,ORr.SerNr);
+		if(ORr.Reserved>0)then begin
+			res = 0;
+			if (ORr.OKFlag!=0) then begin
+				RecordCopy(OR2r,ORr);
+				ORr.OKFlag = 0;
+				res = RecordUpdate(OR2r,ORr,true);
+				okedf = true;
+			end;
+			logtext(0,res);
+			if (res==0) then begin    
+				RecordCopy(OR2r,ORr);
+				ORr.Reserved = 0;
+				if (RecordUpdate(OR2r,ORr,true)==0) then begin 
+					res = 0;
+					if (okedf) then begin
+						RecordCopy(OR2r,ORr);
+						ORr.OKFlag = 1;
+						ORr.Comment = USetStr(31101) & ORr.Comment;
+						res = RecordUpdate(OR2r,ORr,true);
+					end;
+				end;
+			end;
+		end;
+	end;
+  	
+return;
+end;
+
+
 global //Edit***************************Sasha2,17:05 14.08.2015 {
 updating procedure RemoveReservedMarkMn()
 begin
@@ -80,6 +135,11 @@ begin
 					recordstore(ORr,true);
       	end;
       end;
+      
+      if(blank(ORr.OrderClass))then begin
+      	RemoveReservedMarkOPTMn(ORr);
+      end;
+      
       if (ORr.Reserved!=1 or ORr.OrdDate<mindate or (blankdate(ORr.ReservToDate) and ORr.AutoCreation==0) or ORr.Closed==1) then begin testf = false; /*logtext(0,"RemoveReservedMarkMn false1");*/ end;
       
       if (NonBlank(ORr.ReservToDate) and ORr.ReservToDate>CurrentDate) then begin testf = false;/*logtext(0,"RemoveReservedMarkMn false2");*/ end;
