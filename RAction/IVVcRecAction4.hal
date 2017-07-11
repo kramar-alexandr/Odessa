@@ -1335,7 +1335,7 @@ begin
 			IVr.Position = Locr.DefaultCashierPosCode;
 		end;
 	end;  
-	IVr.PromotionCode = LookUpPromotionCode(IVr.InvDate,IVr.Location); //Edit***************************Sasha2,15:32 24.01.2017
+	IVr.PromotionCode2 = LookUpPromotionCode(IVr.InvDate,IVr.Location); //Edit***************************Sasha2,15:32 24.01.2017
 	
   IVVcRecordDefaults = res;  
   RETURN;

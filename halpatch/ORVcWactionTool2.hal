@@ -400,7 +400,7 @@ begin
   row LocationAccBlock LAbrw;
   
   if (rownr<0) then begin
-    ORr.PromotionCode = LookUpPromotionCode(ORr.OrdDate,ORr.Location); //Edit***************************Sasha2,11:31 25.01.2017
+    ORr.PromotionCode2 = LookUpPromotionCode(ORr.OrdDate,ORr.Location); //Edit***************************Sasha2,11:31 25.01.2017
     rwcnt = MatRowCnt(ORr);
     for (i=0;i<rwcnt;i=i+1) begin
       MatRowGet(ORr,i,ORrw);

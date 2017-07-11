@@ -1308,7 +1308,7 @@ L20PasteOrdInInv:;
   IVp.ClientContact = ORp.CustContact;
   IVp.OurContact = ORp.OurContact;
   IVp.BankCode = ORp.BankCode;
-  IVp.PromotionCode = ORp.PromotionCode; //Edit***************************Sasha2,16:50 24.01.2017
+  IVp.PromotionCode2 = ORp.PromotionCode2; //Edit***************************Sasha2,16:50 24.01.2017
   //Edit-------------------Vitalii 14:47 28.11.2016
   //GetCurUser(USr);
   USr.Code = currentuser;

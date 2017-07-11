@@ -1347,7 +1347,7 @@ L12:;
     if (ARAccb.ARUseObj==0) then begin
 //      location = "";//what the ? 
     end;
-    errcode = CheckObjs(tstr,location,errstr);
+    //errcode = CheckObjs(tstr,location,errstr); //Edit***************************Sasha2,13:16 11.07.2017 Turned off cause of Promotions
     if (errcode!=0) then begin
       if ((errcode==1083) and (ARAccb.ARUseObj==0)) then begin
         errcode = 2275;

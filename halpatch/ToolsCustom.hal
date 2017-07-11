@@ -3878,3 +3878,29 @@ begin
 	
 return;
 end;
+
+
+global //Edit***************************Sasha2,10:32 11.07.2017 {
+updating procedure MovePromotionsToNewFieldMn()
+begin 
+	record ORVc ORr;
+	record IVVc IVr;
+	
+	ORr.OrdDate = StringToDate("1/1/2017");
+	while(LoopKey("OrdDate",ORr,1,true)) begin
+		if(nonblank(ORr.PromotionCode))then begin
+			ORr.PromotionCode2 = ORr.PromotionCode;
+		  recordstore(ORr,true);
+		end;
+	end;
+	
+	IVr.InvDate = StringToDate("1/1/2017");
+	while(LoopKey("InvDate",IVr,1,true)) begin
+		if(nonblank(IVr.PromotionCode))then begin
+			IVr.PromotionCode2 = IVr.PromotionCode;
+		  recordstore(IVr,true);
+		end;
+	end;
+	
+return;
+end; //Edit***************************Sasha2,10:32 11.07.2017 }

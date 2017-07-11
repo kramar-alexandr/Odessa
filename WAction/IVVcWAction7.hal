@@ -287,7 +287,7 @@ begin
 	getwindowrecord(wn,RepSpec);	
 	getwindowrecord(mwn,IVr);	
 	if(nonblank(RepSpec.f1))then begin
-		IVr.PromotionCode = RepSpec.f1;
+		IVr.PromotionCode2 = RepSpec.f1;
 		putwindowrecord(mwn,IVr);
 		//PutWindowString(wn,"rebateserf","");
 		closewindow(wn);

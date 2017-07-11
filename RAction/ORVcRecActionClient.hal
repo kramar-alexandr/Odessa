@@ -16,7 +16,7 @@ begin
   BlockLoad(LMb);  
   if (blank(ORr.Location)) then begin
     ORr.Location = LMb.DefLocation;
-    ORr.PromotionCode = LookUpPromotionCode(ORr.OrdDate,ORr.Location); //Edit***************************Sasha2,15:32 24.01.2017
+    ORr.PromotionCode2 = LookUpPromotionCode(ORr.OrdDate,ORr.Location); //Edit***************************Sasha2,15:32 24.01.2017
   end;
   ORr.BranchID = LMb.BranchID;
   ORr.Objects = AddBranchObjectToObjectList(LMb.BranchID,ORr.Objects);

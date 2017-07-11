@@ -1176,8 +1176,8 @@ begin
     tstr = "Телефон: " & phone;
     StaticText(h2+60,(v+=20)-60,tstr,false);
   end;
-  if (nonblank(IVr.PromotionCode)) then begin 
-    tstr = "Акция: " & IVr.PromotionCode;
+  if (nonblank(IVr.PromotionCode2)) then begin 
+    tstr = "Акция: " & IVr.PromotionCode2;
     StaticText(h2+60,(v+=20)-60,tstr,false);
   end;
   
