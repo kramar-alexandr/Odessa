@@ -1376,7 +1376,7 @@ L12:;
         if (IsDoingManagerOverride) then begin
 //          IVp.SalesMan = OriginalLogin; //why would u want to store Manger overriding as salesman ? 
         end else begin
-          if (blank(IVp.SalesMan)) then begin
+          if (blank(IVp.SalesMan) and UserCanAction("DoNotSetSalesManInOR",false)==false) then begin
             IVp.SalesMan = CurrentUser;
           end;
           IVp.MachineName = CurMachineName;

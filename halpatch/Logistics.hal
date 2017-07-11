@@ -527,9 +527,15 @@ begin
 						MatRowGet(ORr,j,ORrw);
 						if (ORrw.UID == SMrw.ORRowUID) then begin	
 							receive = Min(SMrw.Quant,SMrw.OrderProcessing);
+							logtext(0,"SMrw.OrderProcessing " & SMrw.OrderProcessing);
+							logtext(0,"SMrw.Quant " & SMrw.Quant);
+							logtext(0,"ORrw.ProcessingQuant " & ORrw.ProcessingQuant);
+							logtext(0,"ORrw.OrderQuant " & ORrw.OrderQuant);
+							logtext(0,"ORrw.Quant " & ORrw.Quant);
 							ORrw.ProcessingQuant = ORrw.ProcessingQuant - SMrw.OrderProcessing;
 							ORrw.OrderQuant = ORrw.OrderQuant - receive;
 							ORrw.Quant = ORrw.Quant + receive;
+							
 							MatRowPut(ORr,j,ORrw);
 							ORVc_PasteQuant(ORr,j,true,chsum);
 							j = rwcnt2;
