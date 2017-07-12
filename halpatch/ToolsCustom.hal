@@ -3888,7 +3888,7 @@ begin
 	
 	ORr.OrdDate = StringToDate("1/1/2017");
 	while(LoopKey("OrdDate",ORr,1,true)) begin
-		if(nonblank(ORr.PromotionCode))then begin
+		if(nonblank(ORr.PromotionCode) and blank(ORr.PromotionCode2))then begin
 			ORr.PromotionCode2 = ORr.PromotionCode;
 		  recordstore(ORr,true);
 		end;
@@ -3896,7 +3896,7 @@ begin
 	
 	IVr.InvDate = StringToDate("1/1/2017");
 	while(LoopKey("InvDate",IVr,1,true)) begin
-		if(nonblank(IVr.PromotionCode))then begin
+		if(nonblank(IVr.PromotionCode) and blank(IVr.PromotionCode2))then begin
 			IVr.PromotionCode2 = IVr.PromotionCode;
 		  recordstore(IVr,true);
 		end;
