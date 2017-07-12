@@ -29,7 +29,7 @@ remote function string 255 NPGetDocumentStatusRequest(string,string);//Edit-----
 remote updating procedure NPCreateRequestMn(var record SHVc,var string,string);
 remote function boolean NPDeleteDocumentRequest(string,string);//Edit----------------------Dima  06.05.2015
 remote function boolean CheckENremote(record SHVc, var longint,var string);
-remote updating function boolean CheckCounterpartySH(var record SHVc);
+remote updating function boolean CheckCounterpartySH(var record SHVc,var string);
 remote function string 200 SendSMSNewPost(record SHVc);	//Edit----------------------Dima  30.06.2015
 
 function boolean CheckEN(record SHVc SHr,integer wn)	//Edit----------------------Dima  07.05.2015
@@ -182,13 +182,14 @@ begin
 	record ORVc ORr;
   string 255 errors, www;
   record NPSettingsBlock NPSettingsb;
+  string 255 error;
   
   
   wn = CurWindow;
   GetWindowRecord(wn,SHr);
 	if (blank(SHr.NPIntDocNumber)) then begin
-			if(CheckCounterpartySH(SHr)==false) then begin
-				MessageBox(31047,0);
+			if(CheckCounterpartySH(SHr,error)==false) then begin
+				MessageBox(31047,error);
 				goto LBreakNPCreateENDsm;
 			end;
 	end;

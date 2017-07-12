@@ -2244,7 +2244,7 @@ end;
 
 
 global updating
-function boolean NPCreateCounterparty(record NPCounterpartyVc NPCounterpartyr)
+function boolean NPCreateCounterparty(record NPCounterpartyVc NPCounterpartyr,var string error)
 begin
   area request,replyarea,mainRequest;
   boolean res;
@@ -2283,6 +2283,8 @@ begin
 		resStr = XmlGet(xdata,"root/success");
 		if (resStr=="false") then begin
 			res = false;
+			error = XmlGet(xdata,"root/errors/item");
+			
 			goto LNPCreateCounterparty;
 		end;
 
@@ -2339,7 +2341,7 @@ end;
 
 
 global updating
-function boolean NPCreateCounterparty1(record NPCounterparty1Vc NPCounterpartyr)
+function boolean NPCreateCounterparty1(record NPCounterparty1Vc NPCounterpartyr,var string error)
 begin
   area request,replyarea,mainRequest;
   boolean res;
@@ -2378,6 +2380,7 @@ begin
 		resStr = XmlGet(xdata,"root/success");
 		if (resStr=="false") then begin
 			res = false;
+			error = XmlGet(xdata,"root/errors/item");
 			goto LNPCreateCounterparty1;
 		end;
 

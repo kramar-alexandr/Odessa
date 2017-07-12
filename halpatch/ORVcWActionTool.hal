@@ -58,8 +58,8 @@ external function string 20 FindCustRoute(string,string,string);
 external function Boolean FindItemVAR(string,var string,var string,var string,var string);
 
 forward procedure ORVc_PasteQuant(var record ORVc,Integer,Boolean,var Boolean);
-external updating function boolean NPCreateCounterparty(record NPCounterpartyVc);	//Edit----------------------Dima  15.04.2015
-external updating function boolean NPCreateCounterparty1(record NPCounterparty1Vc);	//Edit----------------------Dima  15.04.2015
+external updating function boolean NPCreateCounterparty(record NPCounterpartyVc,var string);	//Edit----------------------Dima  15.04.2015
+external updating function boolean NPCreateCounterparty1(record NPCounterparty1Vc,var string);	//Edit----------------------Dima  15.04.2015
 
 external updating procedure GetRecipientContactPerson(string ,string );	//Edit----------------------Dima  05.05.2015
 external function val HoursDifference(Date,Time,Date,Time);			//Edit----------------------Dima  14.12.2015
@@ -1325,7 +1325,7 @@ end;
 
 
 global updating
-function boolean CheckCounterparty(var record ORVc ORr) 	//Edit----------------------Dima  16.04.2015
+function boolean CheckCounterparty(var record ORVc ORr,var string error) 	//Edit----------------------Dima  16.04.2015
 begin
 	record NPCounterpartyVc NPCr;
 	record NPCounterparty1Vc NPC1r;
@@ -1356,7 +1356,7 @@ begin
 			NPCr.Email = ORr.NPEmail;
 			NPCr.CounterpartyType = "PrivatePerson";
 			NPCr.CounterpartyProperty = "Recipient";
-			res = NPCreateCounterparty(NPCr);
+			res = NPCreateCounterparty(NPCr,error);
 		end else begin
 			if (MatRowCnt(NPCr)==0) then begin					//if connection crashed during updating and Counterparty doesn't have Contact person
 				switch(ORr.OrderClass)begin
@@ -1385,7 +1385,7 @@ begin
 			NPC1r.Email = ORr.NPEmail;
 			NPC1r.CounterpartyType = "PrivatePerson";
 			NPC1r.CounterpartyProperty = "Recipient";
-			res = NPCreateCounterparty1(NPC1r);
+			res = NPCreateCounterparty1(NPC1r,error);
 		end else begin
 			if (MatRowCnt(NPC1r)==0) then begin					//if connection crashed during updating and Counterparty doesn't have Contact person
 				switch(ORr.OrderClass)begin
@@ -1404,7 +1404,7 @@ end;
 
 
 global updating
-function boolean CheckCounterpartySH(var record SHVc SHr) 	//Edit----------------------Dima  16.04.2015
+function boolean CheckCounterpartySH(var record SHVc SHr,var string error) 	//Edit----------------------Dima  16.04.2015
 begin
 	record NPCounterpartyVc NPCr;
 	record NPCounterparty1Vc NPC1r;
@@ -1436,7 +1436,7 @@ begin
 			NPCr.CityRef = NPCityr.Ref;
 			NPCr.CounterpartyType = "PrivatePerson";
 			NPCr.CounterpartyProperty = "Recipient";
-			res = NPCreateCounterparty(NPCr);
+			res = NPCreateCounterparty(NPCr,error);
 		end else begin
 			if (MatRowCnt(NPCr)==0) then begin	
 								//if connection crashed during updating and Counterparty doesn't have Contact person
@@ -1465,7 +1465,7 @@ begin
 			NPC1r.CityRef = NPCityr.Ref;
 			NPC1r.CounterpartyType = "PrivatePerson";
 			NPC1r.CounterpartyProperty = "Recipient";
-			res = NPCreateCounterparty1(NPC1r);
+			res = NPCreateCounterparty1(NPC1r,error);
 		end else begin
 			if (MatRowCnt(NPCr)==0) then begin	
 								//if connection crashed during updating and Counterparty doesn't have Contact person

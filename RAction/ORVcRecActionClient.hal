@@ -3,7 +3,7 @@ remote updating procedure SMSWhenOR(record ORVc,Integer);
 external updating procedure RecordActionOR_Print(var record ORVc,string,Boolean);
 external procedure RecordActionOR_Print2(record ORVc);
 remote function Boolean ifCustomerWithCurrentPhoneExist(string,var string );
-remote updating function boolean CheckCounterparty(var record ORVc);
+remote updating function boolean CheckCounterparty(var record ORVc,var string);
 remote updating function string 200 SendPaymentSMS(record ORVc);	//Edit----------------------Dima  14.12.2015
 remote function string 255 LookUpPromotionCode(date,string); //Edit***************************Sasha2,15:31 24.01.2017
 
@@ -45,6 +45,7 @@ updating function LongInt ORVcRecordSaveClient(LongInt wn,var record ORVc ORp,re
 BEGIN
   LongInt res;
   record AutoActionBlock AutoActionRec;
+  string 255 error;
 
 
   BlockLoad(AutoActionRec);
@@ -58,8 +59,8 @@ BEGIN
   res = 1;
   
   if (ORp.DeliveryNewPost!=0) then begin	//Edit----------------------Dima  27.04.2015
-		if (CheckCounterparty(ORp)==false) then begin						
-			MessageBox(31047,"");
+		if (CheckCounterparty(ORp,error)==false) then begin						
+			MessageBox(31047,error);
 		end;
 	end;
   
@@ -77,6 +78,7 @@ BEGIN
 	boolean TrHs;
 	string 200 response;
 	record NPStreetVc NPSr;
+	string 255 error;
 
   BlockLoad(AutoActionRec);
   if (AutoActionRec.Or2Printing==2) then begin
@@ -102,8 +104,8 @@ BEGIN
 	end;
 	
 	if ((ORp.DeliveryNewPost!=0) and (OR2p.DeliveryNewPost==0)) then begin	//Edit----------------------Dima  27.04.2015
-		if (CheckCounterparty(ORp)==false) then begin						
-			MessageBox(31047,"");
+		if (CheckCounterparty(ORp,error)==false) then begin						
+			MessageBox(31047,error);
 		end;
 	end;
 
