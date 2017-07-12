@@ -1376,7 +1376,20 @@ procedure OpenAllOrdersSHVc()	//Edit----------------------Dima  25.09.2015
 begin
 	record SHVc SHr;
 	integer nwn,wn;
-	RecordNew(SHr);
-	nwn = OpenWindow("SHGeneralLClass",0,CurWindow,"","",SHr);
+	record UserVc Userr;
+	
+	RecordNew(SHr);	
+	
+	if(UserCanAction("VievAllSalesGroupDocuments", true)==false) then begin
+		Userr.Code = CurrentUser;
+		if(readFirstMain(Userr, 1, true))then begin
+			if(nonblank(Userr.SalesGroup))then begin
+				nwn = OpenWindow("SHGeneralLClass",0,CurWindow,Userr.SalesGroup,"",SHr);
+			end;
+		end;  
+	end else begin
+		nwn = OpenWindow("SHGeneralLClass",0,CurWindow,"","",SHr);
+	end;
+	
 end;
 
