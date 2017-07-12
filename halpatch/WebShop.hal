@@ -988,14 +988,15 @@ begin
 
 					nodeRowCnt = XmlCountChildren(xmlPost,"orders/order" & i );
 					rowNr = 0;
+					
 					for (j=0;j<nodeRowCnt;j=j+1) begin
 						if (XmlNodeExists( xmlPost,"orders/order" & i & "/row" & j )) then begin
+							foundfrow = false;
 							artcode = XmlGetAttribute(xmlPost,"orders/order" & i & "/row" & j,"SKU");
 							if (NonBlank(artcode)) then begin
 								chsumConfirm = false;
 								INr.Code = artcode;
 								if(rowNr>0)then begin
-									foundfrow = false;
 									For(r=0;r<rowNr;r=r+1) begin
 	  								MatRowGet(ORr,r,ORrw);
 	  								if(ORrw.ArtCode==INr.Code)then begin
