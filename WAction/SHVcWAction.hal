@@ -1385,6 +1385,8 @@ begin
 		if(readFirstMain(Userr, 1, true))then begin
 			if(nonblank(Userr.SalesGroup))then begin
 				nwn = OpenWindow("SHGeneralLClass",0,CurWindow,Userr.SalesGroup,"",SHr);
+			end else begin
+				nwn = OpenWindow("SHGeneralLClass",0,CurWindow,"","",SHr);
 			end;
 		end;  
 	end else begin
