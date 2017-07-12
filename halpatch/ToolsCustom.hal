@@ -54,26 +54,39 @@ begin
 	BlockLoad(SMSOb);
 	
 	logtext(0,"Unreserve OPT OR " & ORr.SerNr);
+	testf = true;
 	
-	if (NonBlank(ORr.ReservToDate) and ORr.ReservToDate<=CurrentDate) then begin
-		if(ORr.Reserved>0)then begin
-			res = 0;
-			if (ORr.OKFlag!=0) then begin
-				RecordCopy(OR2r,ORr);
-				ORr.OKFlag = 0;
-				res = RecordUpdate(OR2r,ORr,true);
-				okedf = true;
+	if(testf)then begin
+		mtrw = matrowcnt(ORr);
+		For(i=0;i<mtrw;i=i+1) begin
+			matrowget(ORr,i,ORrw);
+			if(ORrw.Invd>0 or ORrw.Shipd1>0)then begin
+				testf = false;
 			end;
-			if (res==0) then begin    
-				RecordCopy(OR2r,ORr);
-				ORr.Reserved = 0;
-				if (RecordUpdate(OR2r,ORr,true)==0) then begin 
-					res = 0;
-					if (okedf) then begin
-						RecordCopy(OR2r,ORr);
-						ORr.OKFlag = 1;
-						ORr.Comment = USetStr(31101) & ORr.Comment;
-						res = RecordUpdate(OR2r,ORr,true);
+		end; 
+	end;
+	
+	if(testf)then begin
+		if (NonBlank(ORr.ReservToDate) and ORr.ReservToDate<=CurrentDate) then begin
+			if(ORr.Reserved>0)then begin
+				res = 0;
+				if (ORr.OKFlag!=0) then begin
+					RecordCopy(OR2r,ORr);
+					ORr.OKFlag = 0;
+					res = RecordUpdate(OR2r,ORr,true);
+					okedf = true;
+				end;
+				if (res==0) then begin    
+					RecordCopy(OR2r,ORr);
+					ORr.Reserved = 0;
+					if (RecordUpdate(OR2r,ORr,true)==0) then begin 
+						res = 0;
+						if (okedf) then begin
+							RecordCopy(OR2r,ORr);
+							ORr.OKFlag = 1;
+							ORr.Comment = USetStr(31101) & ORr.Comment;
+							res = RecordUpdate(OR2r,ORr,true);
+						end;
 					end;
 				end;
 			end;
