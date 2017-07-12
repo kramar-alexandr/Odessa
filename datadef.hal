@@ -1734,6 +1734,7 @@ RecordBegin(INVc,-,"artikel5");
 	RecordField(AddAddr5,M4Str,255,0);// Edit ************************** Wednesday, 7 June 2017 16:43:33
 	RecordField(PrivatePaymentRec,M4Mark,0,0);// Edit ************************** Monday, 3 July 2017 11:57:27
   RecordField(PromotionCode2,M4UStr,255,0); //Edit***************************Sasha2,10:23 11.07.2017
+  RecordField(SeqCustomStatusFlag,M4Int,0,0);// Edit ************************** Wednesday, 12 July 2017 11:03:09
   ArrayBegin(Math,-,1);
   ArrayField(stp,M4Int,0,0);
   ArrayField(ArtCode,M4Code,20,INVc);
