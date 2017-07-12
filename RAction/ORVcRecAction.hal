@@ -284,7 +284,6 @@ begin
 	longint seq;
 	record WebShopSettingsBlock WSb;
 	
-	
 	blockload(WSb);
 	
 	seq = WSb.LastSequence;
@@ -293,8 +292,12 @@ begin
 		seq = ReadLastSequence("ORVc") - 1000;
 	end;
 	
-	WSb.LastSequence = ReadLastSequence("ORVc");
-	blockstore(WSb);
+	
+	if(ReadLastSequence("ORVc")>WSb.LastSequence)then begin
+		WSb.LastSequence = ReadLastSequence("ORVc");
+		blockstore(WSb);
+	end;
+	
 	
 	TrHs = true;
 	if(seq>0)then begin
