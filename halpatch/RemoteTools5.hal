@@ -1184,6 +1184,7 @@ BEGIN
   array string 40 aserialnr;
   array val aqty;
   Integer acnt;
+  record SHVc oldSHr;
   
   res = -1;
   RecordNew(SHp);
@@ -1221,7 +1222,16 @@ BEGIN
       goto LRecordAction_raPasteOrdInShip;
     end;
   end;
-
+	
+	
+	if(usercanaction("AllowMultySH",false)==false)then begin
+		oldSHr.OrderNr = ordnr;
+		if(readfirstkey("OrderKey",oldSHr,1,true))then begin
+			res = 31170;
+      goto LRecordAction_raPasteOrdInShip;
+		end;
+	end;
+	
   res = PasteOrdInShip(aStockMovr,asmcnt,ORr,SHp,true,"",0,"","",aincode,aloc,aserialnr,aqty,acnt);
   if (EarlierReservationsExists(ORr)) then begin
     warning = USetStr(20562);
