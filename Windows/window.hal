@@ -2785,6 +2785,21 @@ begin
   EndWindow;
 end;
 
+
+window ItemLocationStatusRClass:1		//Edit----------------------Dima  23.12.2015
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  real vs,h,v;
+  WindowBegin("Статус товара по складу",ItemLocationStatusRClass,CGRcW,RcType);
+  SetWRect(20,80,400,320);
+  vs = 20; h = 120;
+	
+	EditFieldTL(h,v+=vs,120,"Товар",M4Code,Normal,41,f1,false,INSClass);
+  EditFieldTL(h,v+=vs,120,"Склад",M4Code,Normal,41,f2,false,LocationSClass);
+
+  EndWindow;
+end;
+
 window TovTestRClass:1
   wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
 begin
