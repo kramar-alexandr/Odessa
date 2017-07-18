@@ -17,7 +17,7 @@ BEGIN
   	if(nonblank(Userr.Location) and !setinset(Userr.Location,Promotionr.Locations))then begin testf = false; end;
   	
   	if(testf)then begin
-			astr[acnt] = Left(Promotionr.Code & "                         ",20);
+			astr[acnt] = Left(Promotionr.Code & "                                                            ",50);
 			astr[acnt] = astr[acnt] & Promotionr.Description;
 			acnt = acnt + 1;
     end;
