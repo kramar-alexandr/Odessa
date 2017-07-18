@@ -353,7 +353,13 @@ begin
 								MatRowGet(ORr,j,ORrw);
 								SMrw.OrderProcessing = Min(ORrw.OrderQuant - ORrw.ProcessingQuant,SMrw.OrdQuant);
 								ORrw.ProcessingQuant = ORrw.ProcessingQuant + SMrw.OrderProcessing;
-								ORrw.SMReserved = ORrw.SMReserved & SMr.SerNr & ",";// Edit ************************** Tuesday, 11 July 2017 13:19:57
+								if(nonblank(ORrw.SMReserved))then begin
+									if(setinset(SMr.SerNr,ORrw.SMReserved)==false)then begin
+										ORrw.SMReserved = ORrw.SMReserved & SMr.SerNr & ",";
+									end;
+								end else begin
+									ORrw.SMReserved = ORrw.SMReserved & SMr.SerNr & ",";
+								end;// Edit ************************** Tuesday, 11 July 2017 13:19:57
 								LogText(0,"new quant  " & ORr.SerNr & " " & j & ORrw.ProcessingQuant);
 								MatRowPut(ORr,j,ORrw);
 								j = rwcnt;
@@ -419,7 +425,13 @@ begin
 								MatRowGet(ORr,j,ORrw);
 								SMrw.OrderProcessing = Min(ORrw.OrderQuant - ORrw.ProcessingQuant,SMrw.OrdQuant);
 								ORrw.ProcessingQuant = ORrw.ProcessingQuant + SMrw.OrderProcessing;
-								ORrw.SMReserved = ORrw.SMReserved & SMr.SerNr & ",";// Edit ************************** Tuesday, 11 July 2017 13:19:57
+								if(nonblank(ORrw.SMReserved))then begin
+									if(setinset(SMr.SerNr,ORrw.SMReserved)==false)then begin
+										ORrw.SMReserved = ORrw.SMReserved & SMr.SerNr & ",";
+									end;
+								end else begin
+									ORrw.SMReserved = ORrw.SMReserved & SMr.SerNr & ",";
+								end;	
 								LogText(0,"new quant  " & ORr.SerNr & "   row " & j & "     " &  ORrw.ProcessingQuant);
 								MatRowPut(ORr,j,ORrw);
 								j = rwcnt;

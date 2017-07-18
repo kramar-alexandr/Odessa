@@ -1432,6 +1432,7 @@ begin
 	smrows = matrowcnt(SMr);
 	rwcnt = MatRowCnt(ORr);
 	addrow = false;
+	recordcopy(oldSMr,SMr);
 	for(i=0;i<rwcnt;i=i+1)  begin
 		MatRowGet(ORr,i,ORrw);
 		if (ORrw.OrderQuant - ORrw.ProcessingQuant > 0 and artcodeinstock[ORrw.ArtCode]>0) then begin
@@ -1439,11 +1440,15 @@ begin
 			LogText(0,"Auto logistics creation: " & SMr.SerNr & "  OR:" & ORr.SerNr & "  code " & ORrw.ArtCode & "  ord:" & ORrw.OrderQuant & "  proc:" & ORrw.ProcessingQuant);
 		
 			SMrw.ArtCode = ORrw.ArtCode;
+			MatRowPut(SMr,smrows,SMrw);
+			StockMovVc_PasteArtCode(SMr,smrows,1,aWarning);
+			MatRowGet(SMr,smrows,SMrw);
 			if((ORrw.OrderQuant - ORrw.ProcessingQuant)<=artcodeinstock[ORrw.ArtCode])then begin
 				SMrw.OrdQuant = ORrw.OrderQuant - ORrw.ProcessingQuant;
 				if(inser==false)then begin
 					SMrw.OrderProcessing = ORrw.OrderQuant - ORrw.ProcessingQuant;
 					ORrw.ProcessingQuant = SMrw.OrdQuant;
+					ORrw.SMReserved = ORrw.SMReserved & SMr.SerNr & ",";
 					matrowput(ORr,i,ORrw);
 				end;
 			end else begin
@@ -1451,21 +1456,26 @@ begin
 				if(inser==false)then begin
 					SMrw.OrderProcessing = artcodeinstock[ORrw.ArtCode];
 					ORrw.ProcessingQuant = SMrw.OrdQuant;
+					if(nonblank(ORrw.SMReserved))then begin
+						if(setinset(SMr.SerNr,ORrw.SMReserved)==false)then begin
+							ORrw.SMReserved = ORrw.SMReserved & SMr.SerNr & ",";
+						end;
+					end else begin
+						ORrw.SMReserved = ORrw.SMReserved & SMr.SerNr & ",";
+					end;
 					matrowput(ORr,i,ORrw);
 				end;
 			end;
 			SMrw.ORSerial = ORr.SerNr;
 			SMrw.ORRowUID = ORrw.UID;
 			MatRowPut(SMr,smrows,SMrw);
-			StockMovVc_PasteArtCode(SMr,smrows,1,aWarning);
+			
 			smrows=smrows+1;
 			addrow = true;
 		end;			
 	end;
 	
-	if(inser==false and addrow)then begin
-		
-		recordcopy(oldSMr,SMr);
+	if(inser==false and addrow)then begin		
 		if(SMr.Reserved==0)then begin
 			if(mustreserv)then begin
 				SMr.Reserved = 1;

@@ -647,7 +647,7 @@ begin
 											recordstore(SMr,true);
 										end;
 										logtext(0,"Ђторезервирование товаров интернет магазина " & tstr);
-										AddOrderForStockMove(SMr,ORr,inserflag);
+										AddOrderForStockMove(SMr,ORr,false);
 									end;
 								end;
 								ExtractObjWithSeparator(",",WSb.LocationQuer,true,pos,tstr);
