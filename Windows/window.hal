@@ -2863,6 +2863,8 @@ begin
   SetWRect(74,80,480,150);
 
   CheckBox(50,30,0,"Разрешать вручную изменять поля-ссылки для логистики",AllowChangeFields);
+  CheckBox(50,55,0,"Автснятие резервово ОПТ",UnReserveOpt);
+  CheckBox(50,70,0,"Автснятие резервово WEB и RETAI",UnReserveWEB);
 
   EndWindow;
 end;

@@ -4883,6 +4883,8 @@ RecordBegin(IPVc,-,"");
   
   BlockBegin(LogisticsBlock,-,"LogisticsBlock");					//Edit----------------------Dima  25.01.2016
   	RecordField(AllowChangeFields,M4Mark,0,0);
+  	RecordField(UnReserveOpt,M4Mark,0,0);
+  	RecordField(UnReserveWEB,M4Mark,0,0);
   EndBlock;
   
 
