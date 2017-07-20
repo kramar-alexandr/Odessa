@@ -247,6 +247,14 @@ begin
 	record BarcodeVc Barcoder;
 	record LetVc Letr;// Edit ************************** Tuesday, 12 July 2016 15:52:10
   string 50 tstr;
+  record UserVc User;
+  
+  User.Code = currentuser;
+  if(readfirstmain(User,1,true))then begin
+  	if(nonblank(User.Location))then begin
+  		RepSpec.f2 = User.Location;
+  	end;
+  end;
 
 	searchStr = RepSpec.f1;
 	BlockLoad(LMb); //Edit***************************Sasha2,10:14 23.01.2015
