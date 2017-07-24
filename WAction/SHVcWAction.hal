@@ -1270,6 +1270,14 @@ BEGIN
 				case "Sorting":	res = true;
       end;
    end;
+   
+   
+   if(fieldname=="ShipDate")then begin
+    if(usercanaction("AllowShipDateChange",false)==false)then begin
+			res = false;
+   	end;
+   end;
+   
      //Edit-------------------Vitalii 10:43 25.12.2015
 	 if (currentuser=="SAUNOK") then begin
 		res = true;

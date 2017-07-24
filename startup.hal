@@ -711,6 +711,7 @@ begin
   StrSetText(AllowMultySH,"Разрешить несколько отгрузок из счета");// Edit ************************** Thursday, 13 July 2017 11:14:43
   StrSetText(AllowChangeTerms,"Разрешить менять условия сч/ф (сенсорный экран)");// Edit ************************** Wednesday, 4 February 2015 14:51:00
   StrSetText(AllowOKInvoicesWithZeroSum,"Разрешить утверждать счет-фактуры с нулевой ценой");		//Edit----------------------Dima  02.04.2015
+  StrSetText(AllowShipDateChange,"Разрешить менять дату отгрузки");
   StrSetText(JobCheckOut,"Резервирование - Выезд");
   StrSetText(JobAddItem,"Резервирование - Добавить товар");
   StrSetText(JobChargeStay,"Резервирование - Оплатить пребывание");
