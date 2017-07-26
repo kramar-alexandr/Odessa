@@ -73,6 +73,8 @@ external function Boolean HasModNL();
 external function Boolean HasIncomeAndExpenseBook();
 external updating function Boolean DoXMLExport_IVVc(var record IVVc);
 
+SetLangMode(LangRussian,"RUS",0);	
+
 global
 function string 20 GetCustomOfficialSerNr()
 begin
@@ -1993,6 +1995,11 @@ BEGIN
   Date lasttrdate;
   Boolean found;
   LongInt clin;
+  record IPrsVc IPrsr;// Edit ************************** Wednesday, 26 July 2017 13:46:19
+  boolean foundfpay;// Edit ************************** Wednesday, 26 July 2017 13:46:20
+  record IPVc IPr;// Edit ************************** Wednesday, 26 July 2017 13:46:21
+  row IPVc IPrw;// Edit ************************** Wednesday, 26 July 2017 13:46:22
+  integer i,rwcnt;
   
   res = 1;
   BlockLoad(DBLockRec);
@@ -2006,6 +2013,40 @@ BEGIN
         res = 0;
         goto LIVVcRecordRemoveTest;
       end;  
+    end;
+    if(IVr.InvType==kInvoiceTypeCredit and IVr.CredInv>0)then begin
+    	
+    	IPrsr.IVNr = IVr.CredInv;
+    	foundfpay = false;
+    	found = true;
+    	while (LoopKey("IVKey",IPrsr,1,found)) begin
+    		if (IPrsr.IVNr!=IVr.CredInv) then begin found = false; end;
+    		
+    		if (found) then begin
+    			switch (IPrsr.TransType) begin
+						case kIPrsTransTypeReceipt:
+						IPr.SerNr = IPrsr.TransNr;
+						if (ReadFirstMain(IPr,1,true)) then begin 
+							rwcnt = MatRowCnt(IPr);
+							for (i=0;i<rwcnt;i=i+1) begin
+								MatRowGet(IPr,i,IPrw);
+								if(IPrw.InvoiceNr==IVr.CredInv)then begin
+									if(IPrw.InvVal<0)then begin
+										foundfpay = true;
+									end;
+								end;
+							end;
+						end;
+					end;
+    		end;
+    	end;
+    	
+    	if(foundfpay)then begin
+    		messagebox(0,"Найден возвратный платеж по сч/ф №" & IVr.CredInv);
+    		res = 0;
+    	 	goto LIVVcRecordRemoveTest;
+    	end;
+       
     end;
   end;
   if (IVr.OKFlag!=0) then begin

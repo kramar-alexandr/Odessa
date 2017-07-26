@@ -1031,6 +1031,28 @@ begin
   EndWindow;
 end;
 
+window NewINManRClass:2
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  real h,h2,h3,h4,v,v1,vm,vs,v2,temp;
+  WindowBegin("Определите отчет по складу для менеджеров",NewINManRClass,CGRcW,RcType);
+  h = 160; v = 6; vs = 20; h2 = 30; h3 = 180; h4 = 330;
+
+  if (IsEnterprise) then begin
+  SetWRect(20,80,/*580*/400,470);
+    h4 = 330;
+  end else begin
+    SetWRect(20,80,400,470);
+    h4 = 227;
+    h = 120;
+  end;
+  EditFieldTL(h,v,150,"Товар",M4UStr,Normal,50,f1,false,INSClass);
+  EditFieldTL(h,v+=vs,150,"Классификация товара", M4UStr,Normal,100,f4,false,DISClass);
+  EditFieldTL(h,v+=vs,100,"Склад",M4Code,Normal,10,f2,false,LocationSClass);
+  EditFieldTL(h,v+=vs,100,"Место",M4Code,Normal,30,f6,false,PosSClass);
+  EndWindow;
+end;
+
 
 window ExpSalesStatClass:1
   wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")

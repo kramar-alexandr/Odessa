@@ -77,6 +77,8 @@ external function LongInt GetCurUserLastNr(string);
 remote procedure MyCreateCreditPayment(record IVVc); //Edit***************************Sasha2,15:20 18.02.2015
 external updating procedure UnOk_RetVc(var record RetVc);//Edit----------------------Dima  21.01.2016
 
+SetLangMode(LangRussian,"RUS",0);
+
 function Integer ValidateBulkSerialNoRow(record SerNrTrackBlock SNrb,record RetVc Retr,row RetVc Retrw,Integer currow,var string gotofield,var Integer gotorow)
 begin
   Integer res;
@@ -1478,8 +1480,26 @@ function LongInt RetVcRecordRemoveTest(var record RetVc Retr,record RetVc Ret2r,
 BEGIN
   LongInt res;
   record DBLockBlock DBLockRec;
+  record RLinkVc RLr;
+  integer cnt;
+  record IVVc IVr;
+  
 
   res = 1;
+  // Edit Start ---------------------------------------------- Edit Start
+	//Wednesday, 26 July 2017 11:37:22
+	
+  cnt = 1;
+  while(ReadRecordLink(Retr,cnt,IVr,RLr)) begin
+		cnt = cnt+1;
+		if(IVr.SerNr>0)then begin
+			MessageBox(0,"Нельзя удалить. Есть сч/ф");
+			res = 0;
+		end;
+	end;
+  
+	// Edit End ---------------------------------------------- Edit End
+	
   BlockLoad(DBLockRec);
   if (Retr.TransDate<=DBLockRec.DeleteBeforeDate) then begin
     res = 1;
