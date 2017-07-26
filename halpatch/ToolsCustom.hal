@@ -1453,7 +1453,7 @@ begin
 				SMrw.OrdQuant = ORrw.OrderQuant - ORrw.ProcessingQuant;
 				if(inser==false)then begin
 					SMrw.OrderProcessing = ORrw.OrderQuant - ORrw.ProcessingQuant;
-					ORrw.ProcessingQuant = SMrw.OrdQuant;
+					ORrw.ProcessingQuant = ORrw.ProcessingQuant + SMrw.OrdQuant;
 					ORrw.SMReserved = ORrw.SMReserved & SMr.SerNr & ",";
 					matrowput(ORr,i,ORrw);
 				end;
@@ -1461,7 +1461,7 @@ begin
 				SMrw.OrdQuant = artcodeinstock[ORrw.ArtCode];
 				if(inser==false)then begin
 					SMrw.OrderProcessing = artcodeinstock[ORrw.ArtCode];
-					ORrw.ProcessingQuant = SMrw.OrdQuant;
+					ORrw.ProcessingQuant = ORrw.ProcessingQuant + SMrw.OrdQuant;
 					if(nonblank(ORrw.SMReserved))then begin
 						if(setinset(SMr.SerNr,ORrw.SMReserved)==false)then begin
 							ORrw.SMReserved = ORrw.SMReserved & SMr.SerNr & ",";
