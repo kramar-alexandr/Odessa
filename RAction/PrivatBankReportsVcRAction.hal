@@ -191,6 +191,7 @@ BEGIN
 	
 		if(foundf==false)then begin
 			recordnew(IPr);
+			IPr.SalesGroup = "WEB";
 			if(custcode=="PRIVATE")then begin
 				IPr.Comment = "Privat Bank Import PRIVATE";
 			end else begin
@@ -313,6 +314,7 @@ BEGIN
 	
 		if(foundf==false)then begin
 			recordnew(IPr);
+			IPr.SalesGroup = "WEB";
 			if(custcode=="PRIVATE")then begin
 				IPr.Comment = "Privat Bank Import PRIVATE";
 			end else begin

@@ -981,6 +981,21 @@ begin
   return;
 end;
 
+global
+function Boolean IP1LClassOnOpenWindow(Integer wn)	//Edit----------------------Dima  17.07.2015
+begin
+  date dt;
+  record UserVc Userr;
+  
+  Userr.Code = CurrentUser;
+  if(readFirstMain(Userr, 1, true))then begin
+   	SetWindowSubset(wn,Userr.SalesGroup);
+  end;  
+    
+  IP1LClassOnOpenWindow = false;
+  return;
+end;
+
 
 
 global
