@@ -512,6 +512,7 @@ begin
   Cur.Phone = phone;
 	Cur.PayDeal = "3";
 	Cur.CustCat = "WEB";	//Edit--------------------Dima 08.01.2015
+	Cur.SalesGroup = "WEB";
 	Cur.CUType = 1;
 	Cur.CurncyCode = "UAH_R";
 	Cur.PLCode = "RRP";

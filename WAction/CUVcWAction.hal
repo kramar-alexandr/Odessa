@@ -1192,6 +1192,49 @@ begin
   return;
 end;
 
+
+global
+function Boolean CULClassOnOpenWindow(Integer wn)
+begin
+  record UserVc User;
+  
+  User.Code = currentuser;
+  readfirstmain(User,1,true);
+  if(nonblank(User.SalesGroup))then begin
+  	switch(User.SalesGroup)begin
+  		case "WEB":setwindowsubset(wn,"WEB");
+  		case "SALES":setwindowsubset(wn,"WEB");
+  		case "OPT":setwindowsubset(wn,"OPT");
+  		otherwise
+  			setwindowsubset(wn,"WEB");
+  	end;
+  end;
+  
+  CULClassOnOpenWindow = false;
+  return;
+end;
+
+global
+function Boolean CUSClassOnOpenWindow(Integer wn)
+begin
+  record UserVc User;
+  
+  User.Code = currentuser;
+  readfirstmain(User,1,true);
+  if(nonblank(User.SalesGroup))then begin
+  	switch(User.SalesGroup)begin
+  		case "WEB":setwindowsubset(wn,"WEB");
+  		case "SALES":setwindowsubset(wn,"WEB");
+  		case "OPT":setwindowsubset(wn,"OPT");
+  		otherwise
+  			setwindowsubset(wn,"WEB");
+  	end;
+  end;
+  
+  CUSClassOnOpenWindow = false;
+  return;
+end;
+
 global
 procedure CUDClassOnWindowRecordChange(Integer wn)
 begin

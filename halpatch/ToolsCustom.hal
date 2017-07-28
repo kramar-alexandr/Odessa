@@ -3933,3 +3933,28 @@ begin
 	
 return;
 end; //Edit***************************Sasha2,10:32 11.07.2017 }
+
+global updating procedure UpdateCUSalesGroupMn(record RcVc RepSpec)
+begin	
+	record CUVc CUr;
+	
+	while(loopmain(CUr,1,true))begin
+		if(CUr.CUType>0)then begin
+			if(CUr.CustCat=="WEB")then begin
+				CUr.SalesGroup = "WEB";
+				recordstore(CUr,true);
+			end;
+			if(CUr.CustCat=="RETAI")then begin
+				CUr.SalesGroup = "WEB";
+				recordstore(CUr,true);
+			end;
+			if(CUr.CustCat=="CUST")then begin
+				CUr.SalesGroup = "OPT";
+				recordstore(CUr,true);
+			end;
+			
+		end;
+	end;
+
+return;
+end;

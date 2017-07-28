@@ -442,7 +442,8 @@ begin
   Maintenance("Удалить карточку контакта",DeleteCUVcVClass,DeleteCUVcMn,modSY); //Edit***************************Sasha2,13:33 13.02.2017
   Maintenance("Перенести коды акций в другое поле (IVVc,ORVc)",MyVClass,MovePromotionsToNewFieldMn,modDBMain); //Edit***************************Sasha2,10:32 11.07.2017
 
-
+	 Maintenance("ГРуппы продаж клиентам",MyVClass,UpdateCUSalesGroupMn,modDBMain);
+	
   Import("Импорт цен",PLImportIClass,PLImportIn,modDI); //Added********************Dima 20.11.2014
   Import("Импорт товаров",INImportIClass,INImportIn,modIN);//Added********************Dima 20.11.2014
   //Import("Заменить группу товара",INReplaceGroupIClass,INReplaceGroupIn,modIN); The same as "Импорт Item/Group" //Added********************Dima 21.11.2014
