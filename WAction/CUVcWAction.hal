@@ -797,8 +797,8 @@ BEGIN
       if (UserCanAction("ViewCostPrice",true)==false) then begin
         res = false;
       end;
-      if(UserCanAction("AllowChangeRabateinCU",true)==false)then begin
-      	res = false;
+      if(UserCanAction("AllowChangeRabateinCU",false)==true)then begin
+      	res = true;
       end;
     /*case "PayDeal": // Edit ************************** Wednesday, 9 November 2016 11:19:28
       if (UserCanAction("ViewCostPrice",true)==false) then begin
