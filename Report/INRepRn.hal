@@ -309,7 +309,7 @@ begin
 					EndFormat;
 				end;
 					
-				if(RepSpec.flags[0]==0)then begin
+				if(RepSpec.flags[0]==1)then begin
 					StartFormat(15);
 						OutString(0,0,INr.Code,false);
 						OutString(50,0,INr.Name,false);
