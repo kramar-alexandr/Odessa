@@ -501,6 +501,7 @@ begin
   StrSetText(AllowQTBranchIDChange,"Change Branch Code on Quotation");
   StrSetText(AllowJobBranchIDChange,"Change Branch Code on Reservation");
   StrSetText(AllowORBranchIDChange,"Change Branch Code on Sales Order");
+  StrSetText(AllowChangeRabateinCU,"Изменить скидку в карточке контакта");// Edit ************************** Monday, 31 July 2017 10:36:20
   StrSetText(IgnoreSHCreditLimit,"Игнорировать лимит кредита при отгрузке");// Edit ************************** Wednesday, 12 October 2016 11:04:34
   StrSetText(UpdateCashEvent,"Изменение событий кассы");
   StrSetText(AllowCashierCountChange,"Изменение даты в остатках по кассе");
