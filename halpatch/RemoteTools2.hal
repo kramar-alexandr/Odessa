@@ -1516,7 +1516,7 @@ begin
 		IPSumup(IP2r);
 	end; 
 	IP2r.Comment = "Возврат 1% по наложенным платежам";
-	IP2r.AdditionalObjects = "НОВАЯ_ПОЧТА_ОПТ,ПОЧТА";
+	IP2r.AdditionalObjects = "НОВАЯ_ПОЧТА_ОПТ,ПОЧТА,ДОСТАВКА_ЗА_НАШ_СЧЕТ";
   
 
 return;
