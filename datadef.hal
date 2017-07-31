@@ -3104,7 +3104,9 @@ RecordBegin(INVc,-,"artikel5");
       
   MainKeyBegin(SerNr,1);	// Edit by Victor 25.11.14 begin
   StoreInBaseKey;
-  AppendListFieldToKeyName(SalesGroup);
+  AppendListFieldToKeyName(FrLocation);
+  AppendListFieldToKeyName(ToLocation);
+  AppendListFieldToKeyName(ThrouLocation);
   KeySegment(SerNr);
   
   KeyBegin(ExportedFlag);
@@ -3112,25 +3114,33 @@ RecordBegin(INVc,-,"artikel5");
   KeySegment(SerNr);
   SubsetKeyBegin2(OKFlag);// Edit by Victor 25.11.14 begin
   StoreInBaseKey;
-  AppendListFieldToKeyName(SalesGroup);
+  AppendListFieldToKeyName(FrLocation);
+  AppendListFieldToKeyName(ToLocation);
+  AppendListFieldToKeyName(ThrouLocation);
   KeySegment(OKFlag);
   KeySegment(SerNr);
   
   SubsetKeyBegin2(TransDate);// Edit by Victor 25.11.14 begin
   StoreInBaseKey;
-  AppendListFieldToKeyName(SalesGroup);
+  AppendListFieldToKeyName(FrLocation);
+  AppendListFieldToKeyName(ToLocation);
+  AppendListFieldToKeyName(ThrouLocation);
   KeySegment(TransDate);
   KeySegment(SerNr);
   
   SubsetKeyBegin2(Comment);// Edit by Victor 25.11.14 begin
   StoreInBaseKey;
-  AppendListFieldToKeyName(SalesGroup);
+  AppendListFieldToKeyName(FrLocation);
+  AppendListFieldToKeyName(ToLocation);
+  AppendListFieldToKeyName(ThrouLocation);
   KeySegment(Comment);
   KeySegment(SerNr);
   
   SubsetKeyBegin2(FrLocOK);// Edit by Victor 25.11.14 begin
   StoreInBaseKey;
-  AppendListFieldToKeyName(SalesGroup);
+  AppendListFieldToKeyName(FrLocation);
+  AppendListFieldToKeyName(ToLocation);
+  AppendListFieldToKeyName(ThrouLocation);
   KeySegment(FrLocation);
   KeySegment(OKFlag);
   KeySegment(TransDate);
@@ -3138,7 +3148,9 @@ RecordBegin(INVc,-,"artikel5");
   
   SubsetKeyBegin2(ToLocOK);// Edit by Victor 25.11.14 begin
   StoreInBaseKey;
-  AppendListFieldToKeyName(SalesGroup);
+  AppendListFieldToKeyName(FrLocation);
+  AppendListFieldToKeyName(ToLocation);
+  AppendListFieldToKeyName(ThrouLocation);
   KeySegment(ToLocation);
   KeySegment(OKFlag);
   KeySegment(TransDate);
@@ -3202,7 +3214,9 @@ RecordBegin(INVc,-,"artikel5");
   
   SubsetKeyBegin2(ToThrouLocOK);// Edit by Victor 25.11.14 begin
   StoreInBaseKey;
-  AppendListFieldToKeyName(SalesGroup);
+  AppendListFieldToKeyName(FrLocation);
+  AppendListFieldToKeyName(ToLocation);
+  AppendListFieldToKeyName(ThrouLocation);
   KeySegment(ThrouLocation);
   KeySegment(SentOKFlag);
   KeySegment(SentTransDate);
