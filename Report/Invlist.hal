@@ -594,7 +594,14 @@ begin
   val vatv,t1;
   string 255 frin,toin;
   time timeFrom, timeTo;//Edit----------------------Dima  12.08.2015
-
+	record UserVc User;// Edit ************************** Monday, 31 July 2017 13:45:11
+	
+	User.Code = currentuser;
+	readfirstmain(User,1,true);
+	if(nonblank(User.Location))then begin
+		RepSpec.LastAcc = User.Location;// Edit ************************** Monday, 31 July 2017 13:46:28
+	end;
+	
   RepSpec.sStartDate2 = FirstInRange(RepSpec.Period2Str2,10);
   RepSpec.sEndDate2 = LastInRange(RepSpec.Period2Str2,10);
   totinv = 0;
