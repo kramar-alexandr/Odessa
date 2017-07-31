@@ -208,22 +208,35 @@ begin
 
   frin = FirstInRange(RepSpec.f2,20);
   toin = LastInRange(RepSpec.f2,20);
-
-	StartFormat(15);
-		OutString(0,0,"Код товара",false);
-		OutString(50,0,"Наименование",false);
-		OutString(120,0,"Себестоимость",false);		
-		For(i=0;i<k;i=i+1) begin
-	  	OutString(pos,0,PLCode[i],false);
-	  	pos = pos + step;
-		end; 
-		OutString(350,0,"На скл.",false);
-		OutString(380,0,"Группа",false);
-		OutString(420,0,"В ящ.",false);	
-		OutString(450,0,"В упак.",false);
-		OutString(470,0,"Мин. заказ",false);
-		OutString(1,0,"Ссылка",true);
-	EndFormat;
+	
+	if(RepSpec.flags[0]==0)then begin
+		StartFormat(15);
+			OutString(0,0,"Код товара",false);
+			OutString(50,0,"Наименование",false);
+			OutString(120,0,"Себестоимость",false);		
+			For(i=0;i<k;i=i+1) begin
+				OutString(pos,0,PLCode[i],false);
+				pos = pos + step;
+			end; 
+			OutString(350,0,"На скл.",false);
+			OutString(380,0,"Группа",false);
+			OutString(420,0,"В ящ.",false);	
+			OutString(450,0,"В упак.",false);
+			OutString(470,0,"Мин. заказ",false);
+			OutString(1,0,"Ссылка",true);
+		EndFormat;
+	end;
+	if(RepSpec.flags[0]==1)then begin
+		StartFormat(15);
+			OutString(0,0,"Код товара",false);
+			OutString(50,0,"Наименование",false);
+			OutString(150,0,"RRP",false);
+			OutString(350,0,"На скл.",false);
+			OutString(420,0,"В ящ.",false);	
+			OutString(450,0,"В упак.",false);
+			OutString(1,0,"Ссылка",true);
+		EndFormat;
+	end;
 	
 
 
@@ -259,41 +272,59 @@ begin
 					qty = ISr.Instock;
 				end;
 				
-				StartFormat(15);
-					OutString(0,0,INr.Code,false);
-					OutString(50,0,INr.Name,false);
-					OutVal(120,0,INr.InPrice,M4Val,false);
-					pos = 160;
-					For(i=0;i<k;i=i+1) begin
-						PLr.ArtCode = INr.Code;
-						PLr.PLCode = PLCode[i];
-						readfirstmain(PLr,2,true);
-						OutVal(pos,0,PLr.ExVatPrice,M4Val,false);
-						pos = pos + step;
-					end; 
-					OutString(350,0,qty,false);
-					OutString(380,0,INr.Group,false);
-					OutString(420,0,INr.AddUnitCoef2,false);	//Edit by Victor 30.01.15
-					OutString(450,0,INr.AddUnitCoef3,false);	//Edit by Victor 30.01.15
+				if(RepSpec.flags[0]==0)then begin
+					StartFormat(15);
+						OutString(0,0,INr.Code,false);
+						OutString(50,0,INr.Name,false);
+						OutVal(120,0,INr.InPrice,M4Val,false);
+						pos = 160;
+						For(i=0;i<k;i=i+1) begin
+							PLr.ArtCode = INr.Code;
+							PLr.PLCode = PLCode[i];
+							readfirstmain(PLr,2,true);
+							OutVal(pos,0,PLr.ExVatPrice,M4Val,false);
+							pos = pos + step;
+						end; 
+						OutString(350,0,qty,false);
+						OutString(380,0,INr.Group,false);
+						OutString(420,0,INr.AddUnitCoef2,false);	//Edit by Victor 30.01.15
+						OutString(450,0,INr.AddUnitCoef3,false);	//Edit by Victor 30.01.15
 
-					minorder = blankval;
-					if(INr.AddUnittext2=="МИН")then begin
-						minorder = INr.AddUnitCoef2;
-					end;
-					if(INr.AddUnittext3=="МИН")then begin
-						minorder = INr.AddUnitCoef3;
-					end;
-					if(INr.AddUnittext4=="МИН")then begin
-						minorder = INr.AddUnitCoef4;
-					end;
-					if(INr.AddUnittext5=="МИН")then begin
-						minorder = INr.AddUnitCoef5;
-					end;
+						minorder = blankval;
+						if(INr.AddUnittext2=="МИН")then begin
+							minorder = INr.AddUnitCoef2;
+						end;
+						if(INr.AddUnittext3=="МИН")then begin
+							minorder = INr.AddUnitCoef3;
+						end;
+						if(INr.AddUnittext4=="МИН")then begin
+							minorder = INr.AddUnitCoef4;
+						end;
+						if(INr.AddUnittext5=="МИН")then begin
+							minorder = INr.AddUnitCoef5;
+						end;
 					
-					OutVal(470,0,minorder,M41Val,false);
-					OutString(470,0,"https://www.rybray.com.ua/get-image.php?sku=" & INr.Code,true);
+						OutVal(470,0,minorder,M41Val,false);
+						OutString(470,0,"https://www.rybray.com.ua/get-image.php?sku=" & INr.Code,true);
+					EndFormat;
+				end;
 					
-				EndFormat;
+				if(RepSpec.flags[0]==0)then begin
+					StartFormat(15);
+						OutString(0,0,INr.Code,false);
+						OutString(50,0,INr.Name,false);
+						PLr.ArtCode = INr.Code;
+						PLr.PLCode = "RRP";
+						readfirstmain(PLr,2,true);
+						OutVal(150,0,PLr.ExVatPrice,M4Val,false);
+						OutString(350,0,qty,false);
+						OutString(420,0,INr.AddUnitCoef2,false);	//Edit by Victor 30.01.15
+						OutString(450,0,INr.AddUnitCoef3,false);	//Edit by Victor 30.01.15
+						OutString(470,0,"https://www.rybray.com.ua/get-image.php?sku=" & INr.Code,true);
+					EndFormat;
+					
+				end;
+					
 		end;
 	
 	end;	
@@ -301,6 +332,17 @@ begin
 		
 return;
 end;
+
+
+global updating procedure PricesRepCutRn(record RcVc RepSpec)
+begin
+	
+	RepSpec.flags[0]=1;
+	PricesRepRn(RepSpec);
+
+return;
+end;
+
 
 
 

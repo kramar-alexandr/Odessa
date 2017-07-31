@@ -50,6 +50,7 @@ begin
   Report("Отчет по складам",LocationsRClass,LocationsRn,0,modIN);
 
   Report("Отчет по ценам",PricesRepRClass,PricesRepRn,0,modDI);
+  Report("Отчет по ценам розница",PricesRepCutRClass,PricesRepCutRn,0,modDI);
 	Report("Поиск товаров",ReportForINItemSearchRClass,INItemReportForSearchRn,0,modIN);//Edit----------------------------------Dima
 	Report("Поиск среди товаров",ReportForItemSearchRClass,INItemReportForSearchRn,0,modIN);//Edit----------------------------------Dima
 	Report("Журнал суточных возмещений",DAJRClass,DAJRn,0,modCL);
