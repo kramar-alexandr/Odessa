@@ -4310,7 +4310,7 @@ end else begin
     end;
     SoftEditField(2000,-22,200,""  ,Normal ,"ivcashcommandlastitemsernrf",false,0,M4Str,255);
     BottomBar;
-
+	SpecialMenu("Печать нефискального чека",'',26,"PrintNonFiscalReceipt");// Edit ************************** Tuesday, 1 August 2017 16:54:58
 	SpecialMenu("Печать фискальный чек",'p',26,"PrintFiscalReceipt");	//Edit----------------------Dima  10.06.2015
 	SpecialMenu("Создать карту лояльности",'',27,"CreateLoyCardfrIV");	//Edit----------------------Dima  10.06.2015
 end;
