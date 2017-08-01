@@ -30,6 +30,7 @@ begin
   Setting("Локальные настройки фискального принтера",FiscalSetLocalTClass,modPOS);//Edit----------------------Dima  10.06.2015
   Setting("Печать на фискальном принтере",FiscalPrintingTClass,modPOS);				//Edit----------------------Dima  10.06.2015
   Setting("Перепечатать чек",ReprintingFiscalReceiptTClass,modPOS);					//Edit----------------------Dima  07.07.2015
+  Setting("Перепечатать чек",ReprintingNOFiscalReceiptTClass,modPOS);					//Edit----------------------Dima  07.07.2015
   Setting("Настройки Zebra",ZebraPrinterTClass,modIN); //Edit***************************Sasha2,16:35 25.09.2014
 	
 	Setting("Платежи Privat",PrivatBankReportsLClass,modTC);

@@ -1346,7 +1346,7 @@ begin
 
     case kPOSCommandsTypeReprintReceipt:
       if (IVr.OKFlag!=0) then begin
-//        IVPrintReceipt(wn,IVr,prevIVr,-1,false,false,0,WindowState(wn));
+        IVPrintReceipt(wn,IVr,prevIVr,-1,false,false,0,WindowState(wn));
       end;
       goto LIVDClassivcashcommandOnEnterKey1;
     otherwise
@@ -2354,6 +2354,25 @@ begin
         IVr.FiscalFlag = 1;
         RECORDSTORE(IVr,true);
       end;
+	end;	
+	
+end;
+
+global 
+updating procedure ReprintNOFiscalReceipt()		//Edit----------------------Dima  07.07.2015
+begin
+	integer wn;
+	record RcVc RepSpec;
+	record IVVc IVr,prevIVr;
+	boolean res;
+	
+	wn = CurWindow;
+	DeselectWindow(wn,false);	
+	GetWindowRecord(wn,RepSpec);
+	
+	IVr.SerNr = RepSpec.long1;
+	if (ReadFirstMain(IVr,1,true)) then begin
+			IVPrintReceipt(wn,IVr,prevIVr,-1,false,true,0,WindowState(wn));
 	end;	
 	
 end;

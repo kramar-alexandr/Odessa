@@ -2644,6 +2644,21 @@ begin
   EndWindow;
 end;
 
+window ReprintingNOFiscalReceiptTClass:1		//Edit----------------------Dima  07.07.2015
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  real h,h2,v,vs;
+  WindowBegin("Перепечатать чек",ReprintingFiscalReceiptTClass,CGother,RcType);
+  SetWRect(64,80,600,300);
+  v=20;vs = 20; h = 120; h2 = -150;
+  UseView(RcVc);
+  statictext(40,v,"Введите номер счет-фактуры, для которой нужно перепечатать чек",false);
+  EditField(h,v+=vs,150,"№ с/фактуры",Normal,long1,false,0);
+  v=v+30;
+  ColourPushButton(h2,v,h2+100,v+30,"ReprintNOFiscalReceipt","Напечатать",8);
+  EndWindow;
+end;
+
 
 
 
