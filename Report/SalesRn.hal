@@ -1255,6 +1255,13 @@ vector val Turnover;
 record CUVc CUr;
 longint previnv,prevrow;
 record UserVc User;
+record CountryRegionVc CRr;
+vector string 100 oblast;
+
+
+	while(loopmain(CRr,1,true))begin
+		oblast[CRr.Code] = CRr.Comment;
+	end;
 
 	separator = "^";
 
@@ -1393,7 +1400,11 @@ record UserVc User;
 				OutString(0,0,CUr.Code,false);
 				OutString(0,0,CUr.Name,false);
 				OutString(20,0,CUr.CountryCode,false);
-				OutString(40,0,CUr.Region,false);
+				if(nonblank(oblast[CUr.Region]))then begin
+					OutString(40,0,oblast[CUr.Region],false);
+				end else begin
+					OutString(40,0,CUr.Region,false);
+				end;
 				OutString(60,0,CUr.Ethnicity,false);
 				if(CUr.AgeStatus==0 or CUr.AgeStatus==2)then begin
 					OutString(90,0,"Да",false);
