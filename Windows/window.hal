@@ -1272,6 +1272,7 @@ begin
   EditField(75,v+=20,110,"Город (Rus)",Normal,CityRU,false,0);
   EditField(75,v+=20,190,"Reference",Normal,Ref,false,0);
   EditField(75,v+=20,190,"Area",Normal,NPArea,false,0);
+  EditField(75,v+=20,190,"Type",Normal,TypeOfWarehouse,false,0);
   StaticText(380,v=20,"Дни доставки",true);
   CheckBox(h6=300,v+=4,0,"Понедельник",Delivery1);
   CheckBox(h6,v+=16,0,"Вторник",Delivery2);

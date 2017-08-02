@@ -78,6 +78,8 @@ external updating procedure UpdateSalesData(record IVVc);	//Edit----------------
 external procedure SetNewORCustomStatusFlagOnWeb(record ORVc);// Edit ************************** Friday, 18 November 2016 09:45:15
 external procedure CreateORHistoryVcFromORVc(record ORVc,record ORVc,boolean);
 
+SetLangMode(LangRussian,"RUS",0);
+
 function Boolean StockMovOKedForSH(LongInt shnr,var LongInt stmovnr)
 begin
   Boolean res;
@@ -2026,4 +2028,89 @@ begin
 
   SHVcRecordInIndex = res;
   return;
+end;
+
+function string 100 RusifyOblast(string oblast)
+begin
+	string 100 res;
+	
+	
+	switch(oblast)begin
+		case "Київська": res = " Киевская";
+		case "Луганська": res = "Луганская";
+		case "Львівська": res = "Львовская";
+		case "Миколаївська": res = "Николаевская";
+		case "Одеська": res = "Одесская";
+		case "Полтавська": res = "Полтавская";
+		case "Рівненська": res = "Ровненская";
+		case "Сумська": res = "Сумская";
+		case "Тернопільська": res = "Тернопольская";
+		case "Харківська": res = "Харьковская";
+		case "Херсонська": res = "Херсонская";
+		case "Хмельницька": res = "Хмельницкая";
+		case "Черкаська": res = "Черкаская";
+		case "Чернівецька": res = "Черновицкая";
+		case "Чернігівська": res = "Черниговская";
+		case "Івано-Франківська": res = "Ивано-Франковская";
+		case "АРК": res = "АРК";
+		case "Вінницька": res = "Винницкая";
+		case "Волинська": res = "Волынская";
+		case "Дніпропетровська": res = "Днепропетровская ";
+		case "Донецька": res = "Донецкая";
+		case "Житомирська": res = "Житомирская";
+		case "Закарпатська": res = "Закарпатская";
+		case "Запорізька": res = "Запорожская";
+		case "Кіровоградська": res = "Кировоградская";
+	end;
+	
+	
+	RusifyOblast = res;
+return;
+end;
+
+global updating procedure AddCURegionFromSH(record SHVc SHr)
+begin
+	record CUVc CUr;
+	record NPCityVc NPCr;
+	record NPAreaVc NPAr;
+	string 100 oblast;
+	vector string 100 oblv;
+	
+	while(loopmain(NPAr,1,true))begin
+		oblv[NPAr.Ref] = RusifyOblast(NPAr.Area);
+	end;
+	
+	CUr.Code = SHr.CustCode;
+	if(readfirstmain(CUr,1,true))then begin
+		if(CUr.CustCat=="WEB" or CUr.CustCat=="RETAI")then begin
+			if(blank(CUr.AddInvAddr1) or blank(CUr.InvAddr0))then begin
+				if(nonblank(SHr.NPCityRecipient))then begin
+					if(blank(CUr.AddInvAddr1))then begin
+						NPCr.City = SHr.NPCityRecipient;
+						if(readfirstmain(NPCr,1,true))then begin
+							NPAr.Ref = NPCr.NPArea;
+							if(readfirstkey("Ref",NPAr,1,true))then begin
+								oblast = NPAr.Area;
+								logtext(0,"Обл." & oblast & ",");
+							end;
+						end else begin
+							NPCr.CityRU = SHr.NPCityRecipient;
+							if(readfirstkey("CityRU",NPCr,1,true))then begin
+								NPAr.Ref = NPCr.NPArea;
+								if(readfirstkey("Ref",NPAr,1,true))then begin
+									oblast = NPAr.Area;
+									logtext(0,"Обл." & oblast & ",");
+								end;
+							end;
+						end;
+					end;
+					
+					logtext(0,"г" & SHr.NPCityRecipient);
+					
+				end;
+			end;
+		end;
+	end;
+	
+return;
 end;
