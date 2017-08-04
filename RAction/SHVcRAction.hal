@@ -2068,17 +2068,19 @@ begin
 return;
 end;
 
-global updating procedure AddCURegionFromSH(record SHVc SHr)
+global updating procedure AddCURegionFromSH(record SHVc SHr,vector string oblv)
 begin
 	record CUVc CUr;
 	record NPCityVc NPCr;
 	record NPAreaVc NPAr;
 	string 100 oblast;
-	vector string 100 oblv;
+	/*vector string 100 oblv;
 	
 	while(loopmain(NPAr,1,true))begin
 		oblv[NPAr.Ref] = RusifyOblast(NPAr.Area);
-	end;
+	end;*/
+	
+	//logtext(0,"AddCURegionFromSH");
 	
 	CUr.Code = SHr.CustCode;
 	if(readfirstmain(CUr,1,true))then begin
@@ -2087,20 +2089,18 @@ begin
 				if(nonblank(SHr.NPCityRecipient))then begin
 					if(blank(CUr.AddInvAddr1))then begin
 						NPCr.City = SHr.NPCityRecipient;
+						
 						if(readfirstmain(NPCr,1,true))then begin
-							NPAr.Ref = NPCr.NPArea;
-							if(readfirstkey("Ref",NPAr,1,true))then begin
-								oblast = NPAr.Area;
-								logtext(0,"αλ." & oblast & ",");
-							end;
+							NPAr.Ref = oblv[NPCr.NPArea];
+							logtext(0,NPCr.NPArea);
+							oblast = oblv[NPCr.NPArea];
+							logtext(0,"αλ. " & oblast & ",");
 						end else begin
 							NPCr.CityRU = SHr.NPCityRecipient;
 							if(readfirstkey("CityRU",NPCr,1,true))then begin
-								NPAr.Ref = NPCr.NPArea;
-								if(readfirstkey("Ref",NPAr,1,true))then begin
-									oblast = NPAr.Area;
-									logtext(0,"αλ." & oblast & ",");
-								end;
+								NPAr.Ref = oblv[NPCr.NPArea];
+								oblast = oblv[NPCr.NPArea];
+								logtext(0,"αλ. " & oblast & ",");
 							end;
 						end;
 					end;
@@ -2112,5 +2112,34 @@ begin
 		end;
 	end;
 	
+return;
+end;
+
+
+global updating procedure UpdateCURegionsMn(record RcVc RepSpec)
+begin
+	record SHVc SHr;
+	boolean TrHs;
+	integer counter;
+	record NPAreaVc NPAr;
+	string 100 oblast;
+	vector string 100 oblv;
+	
+	while(loopmain(NPAr,1,true))begin
+		oblv[NPAr.Ref] = RusifyOblast(NPAr.Area);
+	end;
+	
+	
+	TrHs = true;
+	SHr.SerNr = 99999999;
+	while(loopbackkey("SerNr",SHr,1,TrHs))begin
+	
+		counter = counter + 1;
+		AddCURegionFromSH(SHr,oblv);
+		if(counter>1000)then begin
+			TrHs = false;
+		end;
+	end;
+
 return;
 end;

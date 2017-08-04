@@ -933,6 +933,15 @@ begin
   			POrw.Volume = INr.Volume * POrw.Quant;// Edit ************************** Wednesday, July 9, 2014 at 11:37:02
 				POrw.Weight = INr.Weight * POrw.Quant;// Edit ************************** Wednesday, July 9, 2014 at 11:37:01
 				POrw.NetWeight = INr.NetWeight * POrw.Quant; //Edit***************************Sasha2,15:19 19.01.2017
+				if(INr.AddUnittext3=="MOQ")then begin
+					POrw.MOQ = INr.AddUnitCoef3;
+				end;
+				if(INr.AddUnittext4=="MOQ")then begin
+					POrw.MOQ = INr.AddUnitCoef4;
+				end;
+				if(INr.AddUnittext5=="MOQ")then begin
+					POrw.MOQ = INr.AddUnitCoef5;
+				end;
   		end;
   	MatRowPut(POr,i,POrw);
 	end; 
