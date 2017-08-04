@@ -2092,15 +2092,18 @@ begin
 						
 						if(readfirstmain(NPCr,1,true))then begin
 							NPAr.Ref = oblv[NPCr.NPArea];
-							logtext(0,NPCr.NPArea);
 							oblast = oblv[NPCr.NPArea];
-							logtext(0,"αλ. " & oblast & ",");
+							//logtext(0,"αλ. " & oblast & ",");
+							CUr.AddInvAddr1 = "αλ. " & oblast & ",";
+							recordstore(CUr,true);
 						end else begin
 							NPCr.CityRU = SHr.NPCityRecipient;
 							if(readfirstkey("CityRU",NPCr,1,true))then begin
 								NPAr.Ref = oblv[NPCr.NPArea];
 								oblast = oblv[NPCr.NPArea];
-								logtext(0,"αλ. " & oblast & ",");
+								//logtext(0,"αλ. " & oblast & ",");
+								CUr.AddInvAddr1 = "αλ. " & oblast & ",";
+								recordstore(CUr,true);
 							end;
 						end;
 					end;
@@ -2137,7 +2140,7 @@ begin
 		counter = counter + 1;
 		AddCURegionFromSH(SHr,oblv);
 		if(counter>1000)then begin
-			TrHs = false;
+			//TrHs = false;
 		end;
 	end;
 
