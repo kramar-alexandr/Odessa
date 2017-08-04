@@ -80,6 +80,96 @@ external procedure CreateORHistoryVcFromORVc(record ORVc,record ORVc,boolean);
 
 SetLangMode(LangRussian,"RUS",0);
 
+
+function string 100 RusifyOblast(string oblast)
+begin
+	string 100 res;
+	
+	
+	switch(oblast)begin
+		case "Київська": res = " Киевская";
+		case "Луганська": res = "Луганская";
+		case "Львівська": res = "Львовская";
+		case "Миколаївська": res = "Николаевская";
+		case "Одеська": res = "Одесская";
+		case "Полтавська": res = "Полтавская";
+		case "Рівненська": res = "Ровненская";
+		case "Сумська": res = "Сумская";
+		case "Тернопільська": res = "Тернопольская";
+		case "Харківська": res = "Харьковская";
+		case "Херсонська": res = "Херсонская";
+		case "Хмельницька": res = "Хмельницкая";
+		case "Черкаська": res = "Черкаская";
+		case "Чернівецька": res = "Черновицкая";
+		case "Чернігівська": res = "Черниговская";
+		case "Івано-Франківська": res = "Ивано-Франковская";
+		case "АРК": res = "АРК";
+		case "Вінницька": res = "Винницкая";
+		case "Волинська": res = "Волынская";
+		case "Дніпропетровська": res = "Днепропетровская ";
+		case "Донецька": res = "Донецкая";
+		case "Житомирська": res = "Житомирская";
+		case "Закарпатська": res = "Закарпатская";
+		case "Запорізька": res = "Запорожская";
+		case "Кіровоградська": res = "Кировоградская";
+	end;
+	
+	
+	RusifyOblast = res;
+return;
+end;
+
+global updating procedure AddCURegionFromSH(record SHVc SHr,vector string oblv)
+begin
+	record CUVc CUr;
+	record NPCityVc NPCr;
+	record NPAreaVc NPAr;
+	string 100 oblast;
+	/*vector string 100 oblv;
+	
+	while(loopmain(NPAr,1,true))begin
+		oblv[NPAr.Ref] = RusifyOblast(NPAr.Area);
+	end;*/
+	
+	//logtext(0,"AddCURegionFromSH");
+	
+	CUr.Code = SHr.CustCode;
+	if(readfirstmain(CUr,1,true))then begin
+		if(CUr.CustCat=="WEB" or CUr.CustCat=="RETAI")then begin
+			if(blank(CUr.AddInvAddr1) or blank(CUr.InvAddr0))then begin
+				if(nonblank(SHr.NPCityRecipient))then begin
+					if(blank(CUr.AddInvAddr1))then begin
+						NPCr.City = SHr.NPCityRecipient;
+						
+						if(readfirstmain(NPCr,1,true))then begin
+							NPAr.Ref = oblv[NPCr.NPArea];
+							oblast = oblv[NPCr.NPArea];
+							//logtext(0,"Обл. " & oblast & ",");
+							CUr.AddInvAddr1 = "Обл. " & oblast & ",";
+							recordstore(CUr,true);
+						end else begin
+							NPCr.CityRU = SHr.NPCityRecipient;
+							if(readfirstkey("CityRU",NPCr,1,true))then begin
+								NPAr.Ref = oblv[NPCr.NPArea];
+								oblast = oblv[NPCr.NPArea];
+								//logtext(0,"Обл. " & oblast & ",");
+								CUr.AddInvAddr1 = "Обл. " & oblast & ",";
+								recordstore(CUr,true);
+							end;
+						end;
+					end;
+					
+					logtext(0,"г" & SHr.NPCityRecipient);
+					
+				end;
+			end;
+		end;
+	end;
+	
+return;
+end;
+
+
 function Boolean StockMovOKedForSH(LongInt shnr,var LongInt stmovnr)
 begin
   Boolean res;
@@ -1851,6 +1941,14 @@ begin
   record AutoActionBlock AAb;
   record ORVc ORr,oldORr;
 	record PackListVc PcLr;
+  record NPAreaVc NPAr;
+	string 100 oblast;
+	vector string 100 oblv;
+	
+	while(loopmain(NPAr,1,true))begin
+		oblv[NPAr.Ref] = RusifyOblast(NPAr.Area);
+	end;
+  
   
   ihef = ItemHistExists("SHVc",SHr.SerNr);
   if ((SHr.OKFlag!=0) and (SH2r.OKFlag==0)) then begin
@@ -1925,7 +2023,8 @@ begin
       DeleteOffSerNr(SH2r.SerNr,"SHVc");
     end;
   end; 
-   
+     
+  AddCURegionFromSH(SHr,oblv);// Edit ************************** Friday, 4 August 2017 10:41:25
   
   SHVcRecordUpdateAfter = res; 
   return;
@@ -2028,94 +2127,6 @@ begin
 
   SHVcRecordInIndex = res;
   return;
-end;
-
-function string 100 RusifyOblast(string oblast)
-begin
-	string 100 res;
-	
-	
-	switch(oblast)begin
-		case "Київська": res = " Киевская";
-		case "Луганська": res = "Луганская";
-		case "Львівська": res = "Львовская";
-		case "Миколаївська": res = "Николаевская";
-		case "Одеська": res = "Одесская";
-		case "Полтавська": res = "Полтавская";
-		case "Рівненська": res = "Ровненская";
-		case "Сумська": res = "Сумская";
-		case "Тернопільська": res = "Тернопольская";
-		case "Харківська": res = "Харьковская";
-		case "Херсонська": res = "Херсонская";
-		case "Хмельницька": res = "Хмельницкая";
-		case "Черкаська": res = "Черкаская";
-		case "Чернівецька": res = "Черновицкая";
-		case "Чернігівська": res = "Черниговская";
-		case "Івано-Франківська": res = "Ивано-Франковская";
-		case "АРК": res = "АРК";
-		case "Вінницька": res = "Винницкая";
-		case "Волинська": res = "Волынская";
-		case "Дніпропетровська": res = "Днепропетровская ";
-		case "Донецька": res = "Донецкая";
-		case "Житомирська": res = "Житомирская";
-		case "Закарпатська": res = "Закарпатская";
-		case "Запорізька": res = "Запорожская";
-		case "Кіровоградська": res = "Кировоградская";
-	end;
-	
-	
-	RusifyOblast = res;
-return;
-end;
-
-global updating procedure AddCURegionFromSH(record SHVc SHr,vector string oblv)
-begin
-	record CUVc CUr;
-	record NPCityVc NPCr;
-	record NPAreaVc NPAr;
-	string 100 oblast;
-	/*vector string 100 oblv;
-	
-	while(loopmain(NPAr,1,true))begin
-		oblv[NPAr.Ref] = RusifyOblast(NPAr.Area);
-	end;*/
-	
-	//logtext(0,"AddCURegionFromSH");
-	
-	CUr.Code = SHr.CustCode;
-	if(readfirstmain(CUr,1,true))then begin
-		if(CUr.CustCat=="WEB" or CUr.CustCat=="RETAI")then begin
-			if(blank(CUr.AddInvAddr1) or blank(CUr.InvAddr0))then begin
-				if(nonblank(SHr.NPCityRecipient))then begin
-					if(blank(CUr.AddInvAddr1))then begin
-						NPCr.City = SHr.NPCityRecipient;
-						
-						if(readfirstmain(NPCr,1,true))then begin
-							NPAr.Ref = oblv[NPCr.NPArea];
-							oblast = oblv[NPCr.NPArea];
-							//logtext(0,"Обл. " & oblast & ",");
-							CUr.AddInvAddr1 = "Обл. " & oblast & ",";
-							recordstore(CUr,true);
-						end else begin
-							NPCr.CityRU = SHr.NPCityRecipient;
-							if(readfirstkey("CityRU",NPCr,1,true))then begin
-								NPAr.Ref = oblv[NPCr.NPArea];
-								oblast = oblv[NPCr.NPArea];
-								//logtext(0,"Обл. " & oblast & ",");
-								CUr.AddInvAddr1 = "Обл. " & oblast & ",";
-								recordstore(CUr,true);
-							end;
-						end;
-					end;
-					
-					logtext(0,"г" & SHr.NPCityRecipient);
-					
-				end;
-			end;
-		end;
-	end;
-	
-return;
 end;
 
 
