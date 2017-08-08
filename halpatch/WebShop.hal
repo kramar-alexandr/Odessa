@@ -187,7 +187,7 @@ begin
 	addtexttoarea("websites;type;sku;price;qty;in_stock;dop_ostatok;special_price",importar);
 	addtexttoarea(chr(13) & chr(10),importar);
 	
-	addtexttoarea("websites;type;sku;price;qty;in_stock;dop_ostatok;group_price:ος 0%;group_price:ος 5%;group_price:ος 10%;group_price:ος 15%",importoptar);
+	addtexttoarea("websites;type;sku;price;qty;in_stock;dop_ostatok;tier_price:ος 0%;tier_price:ος -5%;tier_price:ος -10%;tier_price:ος -15%",importoptar);
 	addtexttoarea(chr(13) & chr(10),importoptar);
 	
 	pos = 0;
@@ -345,10 +345,10 @@ begin
 				
 		if (testf==true) then begin
 		  //price = ValToString(PLr.ExVatPrice,M4Val,"",".",0);
-			addtexttoarea("base;simple;" & INr.Code & ";" & price & ";" & qty & ";" & inStock & ";" & dop_ostatok & ";" & acprice,importar);
+			addtexttoarea("opt;simple;" & INr.Code & ";" & price & ";" & qty & ";" & inStock & ";" & dop_ostatok & ";" & acprice,importar);
 			addtexttoarea(chr(13) & chr(10),importar);
 			
-			addtexttoarea("base;simple;" & INr.Code & ";" & price & ";" & qty & ";" & inStock & ";" & dop_ostatok & ";" & optprice & ";" & optprice5 & ";" & optprice10 & ";" & optprice15,importoptar);
+			addtexttoarea("opt;simple;" & INr.Code & ";" & price & ";" & qty & ";" & inStock & ";" & dop_ostatok & ";" & optprice & ";" & optprice5 & ";" & optprice10 & ";" & optprice15,importoptar);
 			addtexttoarea(chr(13) & chr(10),importoptar);
 			
 		end;
