@@ -190,8 +190,8 @@ begin
 				PISr.Location = "1-KOC";
 				PISr.Position = "ŠŽ‘_2";
 				if(ReadFirstMain(PISr,3,true))then begin
-					PISr.Instock = PISr.Instock - vect[InArr[i] & ":Ž‘’_3"];
-					PISr.LeftQty = PISr.LeftQty - vect[InArr[i] & ":Ž‘’_3"];
+					PISr.Instock = PISr.Instock + vect[InArr[i] & ":Ž‘’_3"];
+					PISr.LeftQty = PISr.LeftQty + vect[InArr[i] & ":Ž‘’_3"];
 					recordstore(PISr,true);
 				end;
 				PISr.ArtCode = InArr[i];
@@ -216,8 +216,28 @@ begin
 				PISr.Location = "1-KOC";
 				PISr.Position = "Ž‘’_3";
 				if(ReadFirstMain(PISr,3,true))then begin
-					PISr.Instock = PISr.Instock - vect[InArr[i] & ":ŠŽ‘_2"];
-					PISr.LeftQty = PISr.LeftQty - vect[InArr[i] & ":ŠŽ‘_2"];
+					PISr.Instock = PISr.Instock + vect[InArr[i] & ":ŠŽ‘_2"];
+					PISr.LeftQty = PISr.LeftQty + vect[InArr[i] & ":ŠŽ‘_2"];
+					recordstore(PISr,true);
+				end;
+			end;
+			if(vect[InArr[i] & ":Ž‘’_3"]>0 and vect[InArr[i] & ":ŠŽ‘_2"]==0)then begin
+				PISr.ArtCode = InArr[i];
+				PISr.Location = "1-KOC";
+				PISr.Position = "Ž‘’_3";
+				if(ReadFirstMain(PISr,3,true))then begin
+					PISr.Instock = vect[InArr[i]];
+					PISr.LeftQty = vect[InArr[i]];
+					recordstore(PISr,true);
+				end;
+			end;
+			if(vect[InArr[i] & ":Ž‘’_3"]==0 and vect[InArr[i] & ":ŠŽ‘_2"]>0)then begin
+				PISr.ArtCode = InArr[i];
+				PISr.Location = "1-KOC";
+				PISr.Position = "ŠŽ‘_2";
+				if(ReadFirstMain(PISr,3,true))then begin
+					PISr.Instock = vect[InArr[i]];
+					PISr.LeftQty = vect[InArr[i]];
 					recordstore(PISr,true);
 				end;
 			end;
