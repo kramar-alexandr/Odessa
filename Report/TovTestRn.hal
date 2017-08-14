@@ -79,7 +79,7 @@ begin
 
 end;
 
-global procedure TovTestRn(record RcVc RepSpec)
+global updating procedure TovTestRn(record RcVc RepSpec)
 begin
 	record PISVc PISr;
 	record ItemStatusVc ISr;
@@ -185,8 +185,59 @@ begin
 			OutString(210,0,vect[InArr[i] & ":ŠŽ‘_2"],false);
 			OutString(280,0,vect[InArr[i] & ":Ž‘’_3"],false);
 			endformat;
+			if(vect[InArr[i] & ":Ž‘’_3"]<0)then begin
+				PISr.ArtCode = InArr[i];
+				PISr.Location = "1-KOC";
+				PISr.Position = "ŠŽ‘_2";
+				if(ReadFirstMain(PISr,3,true))then begin
+					PISr.Instock = PISr.Instock - vect[InArr[i] & ":Ž‘’_3"];
+					PISr.LeftQty = PISr.LeftQty - vect[InArr[i] & ":Ž‘’_3"];
+					recordstore(PISr,true);
+				end;
+				PISr.ArtCode = InArr[i];
+				PISr.Location = "1-KOC";
+				PISr.Position = "Ž‘’_3";
+				if(ReadFirstMain(PISr,3,true))then begin
+					PISr.Instock = PISr.Instock - vect[InArr[i] & ":Ž‘’_3"];
+					PISr.LeftQty = PISr.LeftQty - vect[InArr[i] & ":Ž‘’_3"];
+					recordstore(PISr,true);
+				end;
+			end;
+			if(vect[InArr[i] & ":ŠŽ‘_2"]<0)then begin
+				PISr.ArtCode = InArr[i];
+				PISr.Location = "1-KOC";
+				PISr.Position = "ŠŽ‘_2";
+				if(ReadFirstMain(PISr,3,true))then begin
+					PISr.Instock = PISr.Instock - vect[InArr[i] & ":ŠŽ‘_2"];
+					PISr.LeftQty = PISr.LeftQty - vect[InArr[i] & ":ŠŽ‘_2"];
+					recordstore(PISr,true);
+				end;
+				PISr.ArtCode = InArr[i];
+				PISr.Location = "1-KOC";
+				PISr.Position = "Ž‘’_3";
+				if(ReadFirstMain(PISr,3,true))then begin
+					PISr.Instock = PISr.Instock - vect[InArr[i] & ":ŠŽ‘_2"];
+					PISr.LeftQty = PISr.LeftQty - vect[InArr[i] & ":ŠŽ‘_2"];
+					recordstore(PISr,true);
+				end;
+			end;
+			
 		end;
 	end;
+	
+	resetloop(ISr);
+	while loopmain(ISr,1,true) begin
+
+		if(ISr.Instock<0)then begin
+			startformat(15);
+			OutString(0,"DblOpenINrsRn",ISr.Code,false);
+			OutString(140,0,ISr.Code,false);
+			OutString(210,0,ISr.Location,false);
+			OutString(280,0,ISr.Instock,false);
+			endformat;
+		end;
+	end;
+	
 	EndJob;
 
   
