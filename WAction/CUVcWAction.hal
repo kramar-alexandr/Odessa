@@ -1212,6 +1212,12 @@ begin
   			setwindowsubset(wn,"WEB");
   	end;
   end;
+	if(usercanaction("VievOnlyWorldVE",false))then begin
+  	setwindowsubset(wn,"WORLD");
+  end;
+  if(usercanaction("VievOnlyUKRVE",false))then begin
+  	setwindowsubset(wn,"UKR");
+  end;
   
   CULClassOnOpenWindow = false;
   return;
