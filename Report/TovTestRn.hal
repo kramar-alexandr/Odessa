@@ -246,8 +246,8 @@ begin
 	end;
 	
 	resetloop(ISr);
-	while loopmain(ISr,1,true) begin
-
+	ISr.Code = "";
+	while(loopmain(ISr,1,true)) begin
 		if(ISr.Instock<0)then begin
 			startformat(15);
 			OutString(0,"DblOpenINrsRn",ISr.Code,false);
