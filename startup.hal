@@ -445,6 +445,7 @@ begin
   Maintenance("Перенести коды акций в другое поле (IVVc,ORVc)",MyVClass,MovePromotionsToNewFieldMn,modDBMain); //Edit***************************Sasha2,10:32 11.07.2017
 
 	 Maintenance("ГРуппы продаж клиентам",MyVClass,UpdateCUSalesGroupMn,modDBMain);
+	 Maintenance("ГРуппы продаж Поставшикам",MyVClass,UpdateVESalesGroupMn,modDBMain);
 	
   Import("Импорт цен",PLImportIClass,PLImportIn,modDI); //Added********************Dima 20.11.2014
   Import("Импорт товаров",INImportIClass,INImportIn,modIN);//Added********************Dima 20.11.2014
@@ -648,6 +649,8 @@ begin
   StrSetText(AllowNegOP,"Отрицательные значения на платеже поставщику");
   StrSetText(AllowNegIP,"Отрицательные значения на платеже клиента");
   StrSetText(AllowPOSIVNegQty,"Отрицательное количество в сч/ф кассового терминала");
+  StrSetText(VievOnlyWorldVE,"Просмотр только иностранных поставщиков");//++++++++++
+  StrSetText(VievOnlyUKRVE,"Просмотр только украинских поставщиков");//+++++++++++++++
   StrSetText(AllowNegativePriceonIV,"Negative Unit Price on an SL Invoice");
   StrSetText(SMToTrans,"Запись операций из симуляций");
   StrSetText(ActOK,"Утвержение активностей");

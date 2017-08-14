@@ -47,3 +47,36 @@ begin
   PromotionSClassOnOKWindow = false;
   return;
 end;
+
+global
+function Boolean VESClassOnOpenWindow(Integer wn)
+begin
+  Array string 255 astr;
+  Integer i,acnt;
+  
+  if(usercanaction("VievOnlyWorldVE",false))then begin
+  	setwindowsubset(wn,"WORLD");
+  end;
+  if(usercanaction("VievOnlyUKRVE",false))then begin
+  	setwindowsubset(wn,"UKR");
+  end;
+  VESClassOnOpenWindow = false;
+  return;
+end;
+
+global
+function Boolean AllVESClassOnOpenWindow(Integer wn)
+begin
+  Array string 255 astr;
+  Integer i,acnt;
+  
+  if(usercanaction("VievOnlyWorldVE",false))then begin
+  	setwindowsubset(wn,"WORLD");
+  end;
+  if(usercanaction("VievOnlyUKRVE",false))then begin
+  	setwindowsubset(wn,"UKR");
+  end;
+  	
+  AllVESClassOnOpenWindow = false;
+  return;
+end;

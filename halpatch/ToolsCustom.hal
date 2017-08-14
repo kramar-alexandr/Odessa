@@ -3958,3 +3958,25 @@ begin
 
 return;
 end;
+
+global updating procedure UpdateVESalesGroupMn(record RcVc RepSpec)
+begin	
+	record CUVc CUr;
+	
+	while(loopmain(CUr,1,true))begin
+		if(CUr.VEType>0)then begin
+			if(CUr.VECat=="UKR")then begin
+				CUr.SalesGroup = "UKR";
+				recordstore(CUr,true);
+			end;
+			if(CUr.VECat=="WORLD")then begin
+				CUr.SalesGroup = "WORLD";
+				recordstore(CUr,true);
+			end;
+			
+		end;
+	end;
+
+return;
+end;
+
