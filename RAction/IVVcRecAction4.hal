@@ -1329,7 +1329,8 @@ begin
   IVr.Status = kRecordStatusNone;
   
   
-  if (CashierDefb.PutPositionForPOS != 0) then begin
+  //if (CashierDefb.PutPositionForPOS != 0) then begin
+  if(true)then begin
   	Locr.Code = IVr.Location;				//Edit----------------------Dima  12.01.2016
   	if (ReadFirstMain(Locr,1,true)) then begin
 			IVr.Position = Locr.DefaultCashierPosCode;

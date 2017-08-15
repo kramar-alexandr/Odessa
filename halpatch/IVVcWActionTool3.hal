@@ -1464,7 +1464,8 @@ begin
       end;
       
       IVr.Position = "";										//Edit----------------------Dima  26.01.2016
-  		if (CashierDefb.PutPositionForPOS != 0) then begin
+  		//if (CashierDefb.PutPositionForPOS != 0) then begin
+  		if (true) then begin
   			Locr.Code = IVr.Location;				
   			if (ReadFirstMain(Locr,1,true)) then begin
 					IVr.Position = Locr.DefaultCashierPosCode;

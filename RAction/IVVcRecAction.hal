@@ -303,7 +303,8 @@ begin
 
   BlockLoad(CashierDefb);
   
-  if (CashierDefb.PutPositionForPOS != 0 and blank(IVp.Position)) then begin
+  //if (CashierDefb.PutPositionForPOS != 0 and blank(IVp.Position)) then begin
+  if (true and blank(IVp.Position)) then begin
   	if (nonblank(IVp.Location)) then begin  	
   		Locr.Code = IVp.Location;				//Edit----------------------Dima  12.01.2016
   		if (ReadFirstMain(Locr,1,true)) then begin
