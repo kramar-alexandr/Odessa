@@ -322,6 +322,8 @@ begin
 	 SString(31168,"Есть отгрузка по счету клиента");
 	 SString(31169,"Несоответствие города и улицы. Проверьте данные!");
 	 SString(31170,"Отгрузка уже создана");
+	 SString(31171,"Готується до відправлення");
+	 SString(31172,"Замовлення в обробці");
 	 
 	Maintenance("Проставить склад первой покупки клиента",MyVClass,FillFirstDateByeCUMn,modSL);
   Maintenance("Экспорт склада CSV",ExportStockCSVClass,ExportStockCSVMn,modSY);

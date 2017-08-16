@@ -77,6 +77,7 @@ external updating procedure UpdateSalesDataFromSH(record SHVc);//Edit-----------
 external updating procedure UpdateSalesData(record IVVc);	//Edit----------------------Dima  10.03.2016
 external procedure SetNewORCustomStatusFlagOnWeb(record ORVc);// Edit ************************** Friday, 18 November 2016 09:45:15
 external procedure CreateORHistoryVcFromORVc(record ORVc,record ORVc,boolean);
+external function string 200 SendSMSNewPost(record SHVc);// Edit ************************** Wednesday, 16 August 2017 15:58:13
 
 SetLangMode(LangRussian,"RUS",0);
 
@@ -1828,7 +1829,7 @@ begin
   record SMSTextBlock SMSb;
   record SMSTextOptBlock SMSOb;
   record CUVc CUr;
-  string 255 newtext;
+  string 255 newtext,response;// Edit ************************** Wednesday, 16 August 2017 15:57:40
   integer i;
   row SHVc SHrw;
 
@@ -1898,7 +1899,20 @@ begin
 		end;
 	end;
 	
-		  
+// Edit Start ---------------------------------------------- Edit Start
+	//Wednesday, 16 August 2017 15:57:35
+	
+	if(blank(ORr.OrderClass))then begin
+		if (nonblank(SHr.NPIntDocNumber) and (SHr.OKFlag>0)) then begin
+			if(nonblank(SHr.NPStatus) and SHr.NPStatus!=USetStr(31171) and SHr.NPStatus!=SH2r.NPStatus)then begin
+				response = SendSMSNewPost(SHr);
+			end;
+		end;  
+	end;
+	
+	
+	// Edit End ---------------------------------------------- Edit End
+	
   SHVcRecordUpdate = res; 
   return;
 end;

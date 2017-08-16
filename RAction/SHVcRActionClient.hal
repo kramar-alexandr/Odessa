@@ -64,7 +64,8 @@ BEGIN
   Integer nwn;
   string 200 response;
   record SMSstackVc SMSr;
-  longint smsNr;  
+  longint smsNr;
+  record ORVc ORr;  
 
   if ((SHp.OKFlag!=0) and (SH2p.OKFlag==0)) then begin
     BlockLoad(OSb);
@@ -87,12 +88,25 @@ BEGIN
   if ((SHp.OKFlag!=0) and (SH2p.OKFlag!=0)) then begin
     SHVcRecordUpdateClientRemote(SHp,SH2p,SHp.TaxAdminServSeal);
   end;
-	if (((nonblank(SHp.NPIntDocNumber) or nonblank(SHp.TransportNumber)) and (SHp.OKFlag>0)) and  ((blank(SH2p.NPIntDocNumber) and blank(SH2p.TransportNumber)) or (SH2p.OKFlag==0) ) ) then begin
-			response = SendSMSNewPost(SHp);
-			if (nonblank(response)) then begin
-				MessageBox(0,response);
-			end;			
-	end;  
+  ORr.SerNr = SHp.OrderNr;// Edit ************************** Wednesday, 16 August 2017 15:49:09
+  if(readfirstmain(ORr,1,true))then begin
+  	if(ORr.OrderClass=="WEB" or ORr.OrderClass=="RETAI")then begin
+			if (((nonblank(SHp.NPIntDocNumber) or nonblank(SHp.TransportNumber)) and (SHp.OKFlag>0)) and  ((blank(SH2p.NPIntDocNumber) and blank(SH2p.TransportNumber)) or (SH2p.OKFlag==0) ) ) then begin
+				response = SendSMSNewPost(SHp);
+				if (nonblank(response)) then begin
+					MessageBox(0,response);
+				end;			
+			end;  
+		end;
+		if(blank(ORr.OrderClass))then begin
+			if ((nonblank(SHp.TransportNumber) and (SHp.OKFlag>0)) and  (blank(SH2p.TransportNumber) or (SH2p.OKFlag==0))) then begin
+				response = SendSMSNewPost(SHp);
+				if (nonblank(response)) then begin
+					MessageBox(0,response);
+				end;			
+			end;  
+		end;
+	end;
 
   ShowUnOkWarn("SHVc",SHp.OKFlag);
   res = 1;  
