@@ -1228,6 +1228,8 @@ BEGIN
   record INVc INr;
   Integer nwn;
   record LogisticsBlock Logisticsb;	//Edit----------------------Dima  25.01.2016
+  record IVVc IVr;
+  record SHVc SHr;
   
   BlockLoad(Logisticsb);
 
@@ -1358,6 +1360,24 @@ BEGIN
       end;
     case "PromotionCode": res = true;
   end;
+  
+  if(res)then begin// Edit ************************** Wednesday, 16 August 2017 10:03:43
+  	switch (fieldname) begin
+			case "ArtCode":
+				IVr.OrderNr = ORr.SerNr;
+				res = Readfirstkey("OrderNr",IVr,1,true)==false;
+				if(res)then begin
+					SHr.OrderNr = ORr.SerNr;
+					res = Readfirstkey("OrderKey",SHr,1,true)==false;
+				end;     
+    end;     
+  end;
+  if(res==false)then begin
+  	goto LORDClassActiveEditField;
+  end;
+  
+  
+  
   if (ORShipdTest(ORr)==false) then begin goto LORDClassActiveEditField; end;
   if (wnst==Rs_update) then begin
     if (OR2r.OKFlag!=0) then begin
