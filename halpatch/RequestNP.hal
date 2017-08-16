@@ -3618,7 +3618,7 @@ begin
 	NPGetTypesOfPayersForRedeliveryMn(RepSpec);
 	NPGetWarehouseMn(RepSpec);
 	NPGetStreetMn(RepSpec);
-	NPUpdateENstatusMn(RepSpec);
-	NPUpdateENstatus1Mn(RepSpec);
+	//NPUpdateENstatusMn(RepSpec);
+	//NPUpdateENstatus1Mn(RepSpec);
 	NPGetAreasRequestMn(RepSpec);
 end;
