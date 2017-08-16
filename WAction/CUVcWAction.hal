@@ -1223,6 +1223,22 @@ begin
   return;
 end;
 
+
+global
+function Boolean POLClassOnOpenWindow(Integer wn)
+begin
+  
+	if(usercanaction("VievOnlyWorldVE",false))then begin
+  	setwindowsubset(wn,"WORLD");
+  end;
+  if(usercanaction("VievOnlyUKRVE",false))then begin
+  	setwindowsubset(wn,"UKR");
+  end;
+  
+  POLClassOnOpenWindow = false;
+  return;
+end;
+
 global
 function Boolean CUSClassOnOpenWindow(Integer wn)
 begin

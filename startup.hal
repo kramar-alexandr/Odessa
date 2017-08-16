@@ -344,6 +344,8 @@ begin
 	Maintenance("Генерировать скидочные ваучеры",MyVClass,GenerateRebateVouchersMn,modSL);  //Edit**********Dima, 28.01.2014
 	Maintenance("Заполнить области контактов",MyVClass,UpdateCURegionsMn,modSL);
 	
+	Maintenance("Заполнить SG POVc",MyVClass,FillGFPOVcMn,modPO);
+	
   Maintenance("Пересчитать значение объема в карточке товара",RecalcINVolumeClass,RecalcINVolumeMn,modDBMain);//Edit***************************Sasha2,13:50 24.06.2014
   Maintenance("Gigient to IN",MyVClass,FillINFromGigieneMn,modDBMain); //Edit***************************Sasha2,16:21 20.10.2014
   Maintenance("Удалить накопительные карточки",MyVClass,DelLoyaltyCardMn,modDBMain); //Edit***************************Sasha2,16:21 20.10.2014
