@@ -30,6 +30,8 @@ external updating procedure UpdateLastORWebStatusesBySequenceMn();
 external updating procedure PrivateGetID();
 external updating procedure PrivateGetReport(record RcVc);
 external function string 255 ChangeCaseStr(string, integer); //Edit-------------------Vitalii 11:34 14.09.2016
+external updating procedure NPUpdateENstatus1Mn(record RcVc);// Edit ************************** Wednesday, 16 August 2017 16:54:09
+external updating procedure NPUpdateENstatusMn(record RcVc);// Edit ************************** Wednesday, 16 August 2017 16:54:09
 
 SetLangMode(LangRussian,"RUS",0);
 
@@ -133,6 +135,8 @@ begin
     	ExportStockCSVMn(RepSpec);
     	if(hr=="8" or hr=="12" or hr=="16" or hr=="20")then begin
 				ExportAllItems(RepSpec);
+				NPUpdateENstatusMn(RepSpec);
+				NPUpdateENstatus1Mn(RepSpec);
     	end;
     	//NPUpdateENstatusMn(RepSpec);// Edit ************************** Wednesday, 26 October 2016 17:21:47
     end;
