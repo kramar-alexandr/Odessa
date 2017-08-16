@@ -1401,7 +1401,7 @@ begin
 	real h,h2,v,vm;
   WindowBegin("Новая почта - Контрагент",NPCounterpartyDClass,CGview,-);
   Sizeable(520,400,0,0);
-  UseView(NPCounterpartyVc);
+  UseView(NPCounterparty2Vc);
   ActiveFieldOnNew("Имя");
   SetWRect(20,100,530,600);
   h=75; h2 = 230;
@@ -1485,7 +1485,7 @@ begin
   SpawnClass(NPCounterpartyDClass);
   SetWRect(20,80,560,600);
   Sizeable(-1,-1,0,0);
-  UseView(NPCounterpartyVc);
+  UseView(NPCounterparty2Vc);
   RecordList(4,17,-21,-39);
   RlColKey(4,4,"Фамилия",LastName,false,LastName);
   RlCol(80,80,"Имя",FirstName,false);

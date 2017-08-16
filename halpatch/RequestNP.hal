@@ -162,8 +162,8 @@ begin
 	integer dd, mm, yyyy;
 	record NPCityVc Cityr;
 	record NPWarehouseVc Warehouser;
-	record NPCounterpartyVc Counterpartyr;
-	row NPCounterpartyVc Counterpartyrw;
+	record NPCounterparty2Vc Counterpartyr;
+	row NPCounterparty2Vc Counterpartyrw;
 	record NPCounterparty1Vc Counterpartyr1;// Edit ************************** Wednesday, 17 May 2017 15:10:51
 	row NPCounterparty1Vc Counterparty1rw;// Edit ************************** Wednesday, 17 May 2017 15:10:51
 	record NPBackDelivCargoTypeVc BackCargoTyper;
@@ -2176,7 +2176,7 @@ end;
 
 
 
-procedure CreateCounterpartyRequest(string aWeb, string aPage, string aKey,string aModel,string aMethod,string aParam,record NPCounterpartyVc NPCr, var area aRequest)
+procedure CreateCounterpartyRequest(string aWeb, string aPage, string aKey,string aModel,string aMethod,string aParam,record NPCounterparty2Vc NPCr, var area aRequest)
 begin
   string 200 getParam, host, page, webAddr;
   area basestring;
@@ -2244,7 +2244,7 @@ end;
 
 
 global updating
-function boolean NPCreateCounterparty(record NPCounterpartyVc NPCounterpartyr,var string error)
+function boolean NPCreateCounterparty(record NPCounterparty2Vc NPCounterpartyr,var string error)
 begin
   area request,replyarea,mainRequest;
   boolean res;
@@ -2254,8 +2254,8 @@ begin
   xml xdata;
   string 255 xpath, descr;
   longint i,j;
-  record NPCounterpartyVc NPCr;
-  row NPCounterpartyVc NPCrw;
+  record NPCounterparty2Vc NPCr;
+  row NPCounterparty2Vc NPCrw;
   record NPCityVc NPCityr;
   record NPSettingsBlock NPSettingsb;
   
@@ -2438,7 +2438,7 @@ end;
 
 //*******
 
-procedure deleteCounterpartyRequest(string aWeb, string aPage, string aKey,string aModel,string aMethod,string aParam,record NPCounterpartyVc NPCr, var area aRequest)
+procedure deleteCounterpartyRequest(string aWeb, string aPage, string aKey,string aModel,string aMethod,string aParam,record NPCounterparty2Vc NPCr, var area aRequest)
 begin
   string 200 getParam, host, page, webAddr;
   area basestring;
@@ -2473,7 +2473,7 @@ return;
 end;
 
 global updating
-function boolean NPDeleteCounterparty(var record NPCounterpartyVc NPCounterpartyr)
+function boolean NPDeleteCounterparty(var record NPCounterparty2Vc NPCounterpartyr)
 begin
   area request,replyarea,mainRequest;
   boolean res;
@@ -2483,8 +2483,8 @@ begin
   xml xdata;
   string 255 xpath, descr;
   longint i,j;
-  record NPCounterpartyVc NPCr;
-  row NPCounterpartyVc NPCrw;
+  record NPCounterparty2Vc NPCr;
+  row NPCounterparty2Vc NPCrw;
   record NPCityVc NPCityr;
   record NPSettingsBlock NPSettingsb;
   
@@ -2533,8 +2533,8 @@ begin
   xml xdata;
   string 255 xpath, descr;
   longint i,j;
-  record NPCounterpartyVc NPCr;
-  row NPCounterpartyVc NPCrw;
+  record NPCounterparty2Vc NPCr;
+  row NPCounterparty2Vc NPCrw;
   record NPCityVc NPCityr;
   record NPSettingsBlock NPSettingsb;
   
@@ -2631,7 +2631,7 @@ begin
   xml xdata;
   string 255 xpath;
   longint i;
-  record NPCounterpartyVc NPCr;
+  record NPCounterparty2Vc NPCr;
   record NPCounterparty1Vc NPC1r;
   record NPAddressesVc NPAr;
   record NPSettingsBlock NPSettingsb;
@@ -2735,7 +2735,7 @@ begin
 end;	
 
 
-//adds addresses of all counterparties from NPCounterpartyVc
+//adds addresses of all counterparties from NPCounterparty2Vc
 //register NPAddressesVc would be cleaned
 global updating
 procedure NPRefreshAddressesOfCounterpartiesMn(record RcVc RepSpec)
@@ -2746,7 +2746,7 @@ begin
   longint i;
   string 100 counterpartyRef;
   string 10 result;
-  record NPCounterpartyVc NPCr;
+  record NPCounterparty2Vc NPCr;
   record NPAddressesVc NPAr;
   record NPSettingsBlock NPSettingsb;
   integer repeat;
@@ -2932,8 +2932,8 @@ begin
   string 200 getParam,host,page,path,properties;
   xml xdata;
   longint i,j;
-  record NPCounterpartyVc NPCr,oldNPCr;
-  row NPCounterpartyVc NPCrw; 
+  record NPCounterparty2Vc NPCr,oldNPCr;
+  row NPCounterparty2Vc NPCrw; 
   integer repeat;
   
   host = "api.novaposhta.ua";
@@ -3076,7 +3076,7 @@ end;
 
 
 global updating
-procedure NPRefreshCounterparties(record NPCounterpartyVc NPCounterpartyr)
+procedure NPRefreshCounterparties(record NPCounterparty2Vc NPCounterpartyr)
 begin
   area replyarea,mainRequest;
   boolean TrHs;
@@ -3085,7 +3085,7 @@ begin
   xml xdata;
   string 255 xpath, descr;
   longint i,j;
-  record NPCounterpartyVc NPCr,oldNPCr;
+  record NPCounterparty2Vc NPCr,oldNPCr;
   record NPCounterpartySenderVc NPCSr, oldNPCSr;
   record NPCityVc NPCityr;
   record NPSettingsBlock NPSettingsb;
@@ -3216,7 +3216,7 @@ end;
 
 
 global updating
-procedure NPRefreshSenderCounterparties(record NPCounterpartyVc NPCounterpartyr)
+procedure NPRefreshSenderCounterparties(record NPCounterparty2Vc NPCounterpartyr)
 begin
   area replyarea,mainRequest;
   boolean TrHs;

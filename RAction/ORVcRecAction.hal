@@ -78,11 +78,11 @@ external function Boolean ORCheckForSalesmanPrice(record ORVc,Integer,string,str
 external function Boolean INVc_AllowSales(record INVc,var LongInt);
 external function string 30 GetCustomOfficialSerNr(); //Edit***************************Sasha2,11:42 08.01.2015
 external function Boolean GetForeignCurncyRate(string,var val,var val,var val,Date,var Date);//Edit---------------------Dima 29.01.2015
-//external updating function boolean NPCreateCounterparty(record NPCounterpartyVc);	//Edit----------------------Dima  15.04.2015
+//external updating function boolean NPCreateCounterparty(record NPCounterparty2Vc);	//Edit----------------------Dima  15.04.2015
 //external updating procedure GetRecipientContactPerson(string ,string );
 external function Boolean IsLetter(string);
 external procedure TableSortOR2(var record ORVc);//Edit----------------------Dima  07.07.2015
-external updating function boolean NPDeleteCounterparty(record NPCounterpartyVc);
+external updating function boolean NPDeleteCounterparty(record NPCounterparty2Vc);
 external updating function boolean NPDeleteCounterparty1(record NPCounterparty1Vc);
 remote updating function boolean CheckCounterparty(var record ORVc,var string);
 external function LongInt DateDiff(Date,Date); //Edit***************************Sasha2,11:26 18.08.2015
@@ -2634,7 +2634,7 @@ begin
   LongInt res;
 	val fr,to1,to2;//Edit---------------------------Dima 29.01.2015
 	Date edt;	//Edit--------------------------------Dima 29.01.2015
-	record NPCounterpartyVc NPCounterpartyr;
+	record NPCounterparty2Vc NPCounterpartyr;
 	record NPCounterparty1Vc NPCounterpartyr1;
 	record ORVc oldORr;
 	row ORVc ORrw;
