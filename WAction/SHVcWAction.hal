@@ -849,6 +849,35 @@ begin
   return;
 end;
 
+function Boolean SHDClassNPContactSenderEFAfter(Integer wn,Boolean changedf)	//Edit----------------------Dima  24.04.2015
+begin  
+  record SHVc SHr;
+	record NPCounterpartySenderVc NPCSr;
+	row NPCounterpartySenderVc NPCSrw;
+	integer i,rwcnt;
+	
+  if (changedf) then begin  
+    GetWindowRecord(wn,SHr);
+    
+    NPCSr.Description = SHr.NPSender;
+		if (ReadFirstKey("Description",NPCSr,1,true)) then begin
+			rwcnt = MatRowCnt(NPCSr);
+			if (rwcnt>0) then begin
+				For(i=0;i<rwcnt;i=i+1) begin
+					MatRowGet(NPCSr,i,NPCSrw);
+					if(NPCSrw.Description==SHr.NPContactSender)then begin
+						SHr.NPSendersPhone = NPCSrw.Phones;
+					end;
+				end;
+			end;
+		end;
+    
+    
+    PutWindowRecord(wn,SHr);
+  end;
+  SHDClassNPContactSenderEFAfter = true;
+  return;
+end;
 
 global
 function Boolean SHDClassAfterEditField(Integer wn,string fieldname,Integer fn, Integer rownr,Integer changed)
@@ -904,6 +933,7 @@ BEGIN
 		case "NPSender" : res = SHDClassNPSenderEFAfter(wn,changed);
 		case "NPSenderWarehouse" : res = SHDClassSenderWarehouseEFAfter(wn,changed);
 		case "NPRecipientWarehouse" : res = SHDClassRecipientWarehouseEFAfter(wn,changed);		//Edit----------------------Dima  20.04.2015
+		case "NPContactSender" : res = SHDClassNPContactSenderEFAfter(wn,changed);// Edit ************************** Wednesday, 16 August 2017 14:07:06
 	end;
   end else begin //Edit-------------------Vitalii 10:44 25.12.2015
 	res = true;
@@ -1238,7 +1268,7 @@ BEGIN
         if (UserCanAction("AllowEditSHNewPost",false)==false) then begin res = false; end;
       case "NPContactSender":
       	res = true;
-        if (UserCanAction("AllowEditSHNewPost",false)==false) then begin res = false; end;
+        //if (UserCanAction("AllowEditSHNewPost",false)==false) then begin res = false; end;// Edit ************************** Wednesday, 16 August 2017 13:56:05
       case "NPSendersPhone":
         if (UserCanAction("AllowEditSHNewPost",false)==false) then begin res = false; end;
       case "NPPayer":

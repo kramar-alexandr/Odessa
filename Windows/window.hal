@@ -3567,6 +3567,18 @@ begin
   EndWindow;
 end;
 
+window NPSenderContSClass:1
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer,iPad")
+begin
+  WindowBegin("Выберите контакт отправителя",NPSenderContSClass,CGother,HBlRecType);
+  SetWRect(240,80,640,298);
+  Modality(kModalityAboveParent);
+  Sizeable(-1,-1,-1,0);
+  StringList(9,9,-23,-10);
+  SearchField("Найти");
+  EndWindow;
+end;
+
 
 window RebDClass:2
   wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
@@ -4592,7 +4604,7 @@ begin
     EditField(h1,v+=5,190,"Название",Normal,NPSender,false,NPCounterpartySenderSClass);
     EditField(h2,v,100,"Город",Normal,NPCitySender,false,0);
     EditField(h3,v,120,"Отделение НП",Normal,NPSenderWarehouse,false,NPWarehouseSClass);
-    EditField(h1,v+=vs,190,"Контактное лицо",Normal,NPContactSender,false,0);
+    EditField(h1,v+=vs,190,"Контактное лицо",Normal,NPContactSender,false,NPSenderContSClass);
     EditField(h2,v,100,"Телефон",Normal,NPSendersPhone,false,0);
     EditField(h3,v,120,"",ViewOnly,NPSenderWarehouseDesc,false,0);
     //EditField(h2,v,150,"Адрес",Normal,NPSenderAddress,false,0);

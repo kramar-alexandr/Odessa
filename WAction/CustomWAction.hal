@@ -26,6 +26,8 @@ BEGIN
   RETURN;
 END;
 
+
+
 global
 function Boolean PromotionSClassOnOpenWindow(Integer wn)
 begin
@@ -40,11 +42,67 @@ begin
   return;
 end;
 
+
+global
+procedure NPSenderContSClassArrayOnOpen(var Array string astr,var Integer acnt,string orderclass,string NPCitySender)
+BEGIN
+  record NPCounterpartySenderVc NPCSr;
+	row NPCounterpartySenderVc NPCSrw;
+  boolean testf;
+  integer rwcnt,i;
+  
+  
+  NPCSr.Description = orderclass;
+  NPCSr.CityDescription = NPCitySender;
+	if (ReadFirstKey("Description",NPCSr,2,true)) then begin
+		rwcnt = MatRowCnt(NPCSr);
+		if (rwcnt>0) then begin
+			For(i=0;i<rwcnt;i=i+1) begin
+				MatRowGet(NPCSr,i,NPCSrw);
+				astr[acnt] = Left(NPCSrw.Description & "                                                            ",50);
+				astr[acnt] = astr[acnt] & NPCSrw.Phones;
+				acnt = acnt + 1;
+			end;
+		end;
+	end;  
+  
+  RETURN;
+END;
+
+
+global
+function Boolean NPSenderContSClassOnOpenWindow(Integer wn)
+begin
+  Array string 255 astr;
+  Integer i,acnt;
+  record SHVc SHr;
+  integer mwn;
+  
+  mwn = motherwindow(wn);
+  getwindowrecord(mwn,SHr);
+  
+  NPSenderContSClassArrayOnOpen(astr,acnt,SHr.NPSender,SHr.NPCitySender);
+  for (i=0;i<acnt;i=i+1) begin
+    SetListString(wn,len(astr[i]),astr[i],false);    
+  end;
+  NPSenderContSClassOnOpenWindow = false;
+  return;
+end;
+
+
 global
 function Boolean PromotionSClassOnOKWindow(Integer wn)
 begin
   PasteFromSysList(wn,-2);
   PromotionSClassOnOKWindow = false;
+  return;
+end;
+
+global
+function Boolean NPSenderContSClassOnOKWindow(Integer wn)
+begin
+  PasteFromSysList(wn,50);
+  NPSenderContSClassOnOKWindow = false;
   return;
 end;
 

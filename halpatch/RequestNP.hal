@@ -147,7 +147,7 @@ begin
 	string 255 SendersPhone, CityRecipient, Recipient, RecipientAddress, ContactRecipient, RecipientsPhone;
 	string 255 CitySender,BackDeliveryType,BackDeliveryPayer;
 	val Volume, Weight;
-	integer SeatsAmount,i;
+	integer SeatsAmount,i,rwcnt,j;
 	val Cost,CostCOD;
 	record NPTypesOfPayersVc TypeOfPayerr;
 	record NPPaymentFormsVc PaymentFormr;
@@ -247,11 +247,16 @@ begin
   
   CounterpartySenderr.Description = SHr.NPSender;
   CounterpartySenderr.CityDescription = SHr.NPCitySender;
- // CounterpartySenderr.Phone = SHr.NPSendersPhone;
   if(ReadFirstKey("Description",CounterpartySenderr, 2, true))then begin
   	Sender = CounterpartySenderr.Ref;
-  	matrowget(CounterpartySenderr, 0, Senderrw);
-  		ContactSender = Senderrw.Ref; 
+  	rwcnt = matrowcnt(CounterpartySenderr);
+  	For(j=0;j<rwcnt;j=j+1) begin
+	  	matrowget(CounterpartySenderr,j,Senderrw);
+	  	if(Senderrw.Description==SHr.NPContactSender)then begin
+  			ContactSender = Senderrw.Ref; 
+  		end;
+		end; 
+  	
   end;
   
   ORr.SerNr = SHr.OrderNr;
@@ -2911,6 +2916,7 @@ begin
   AddTextToArea("   <calledMethod>" & ConvertXml(aMethod) & "</calledMethod>" & chr(13),aRequest);
   AddTextToArea("		<methodProperties>"& chr(13),aRequest);
   AddTextToArea("				<CounterpartyProperty>" & ConvertXml(counterpartyProperty) & "</CounterpartyProperty>" & chr(13),aRequest);
+  AddTextToArea("				<Page>1</Page>" & chr(13),aRequest);
   AddTextToArea("		</methodProperties>" & chr(13),aRequest);
   AddTextToArea("</file>" & chr(13),aRequest);
   
