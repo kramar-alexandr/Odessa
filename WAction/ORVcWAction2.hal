@@ -1361,7 +1361,7 @@ BEGIN
     case "PromotionCode": res = true;
   end;
   
-  if(res)then begin// Edit ************************** Wednesday, 16 August 2017 10:03:43
+  if(res and ORr.SerNr>0)then begin// Edit ************************** Wednesday, 16 August 2017 10:03:43
   	switch (fieldname) begin
 			case "ArtCode":
 				IVr.OrderNr = ORr.SerNr;
