@@ -309,7 +309,6 @@ begin
 	OutString(5,0,"Штрих-код",false);
 	OutString(6,0,"Альтернативный код",false);
 	OutString(7,0,"Остатки на складах",false);
-	EndFormat;
    step=(480-400)/locations.length;
    startPos = 400;
    for(i=0; i < locations.length; i=i+1) begin
