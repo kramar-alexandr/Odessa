@@ -233,7 +233,7 @@ begin
 	record INVc INr;
 	record ItemStatusVc ISr;
 	integer rw,TotalQuantity,lmflag;
-	boolean continue,check,found;
+	boolean continue,check,found,TrHs;
 	string 100 searchStr ;
 	string 20 keySort;
 	record LocalMachineBlock LMb; //Edit***************************Sasha2,10:14 23.01.2015
@@ -248,6 +248,8 @@ begin
 	record LetVc Letr;// Edit ************************** Tuesday, 12 July 2016 15:52:10
   string 50 tstr;
   record UserVc User;
+  record PISVc PISr;
+  record PosVc Posr;
   
   User.Code = currentuser;
   if(readfirstmain(User,1,true))then begin
@@ -291,6 +293,18 @@ begin
   while(nonblank(loc))begin	
   	locations[i] = loc;
   	i = i + 1;  	
+  	
+  	POSr.Location = loc;
+  	TrHS = true;
+  	while(loopkey("Location",POSr,1,TrHs))begin
+  		if(POSr.Location!=loc)then begin TrHs = false; end;
+  		
+  		if(TrHs)then begin
+  			locations[i] = POSr.Code;
+  			i = i + 1;  
+  		end;
+  	end;
+  	
   	ExtractObj(RepSpec.f2,pos,loc);
   end;	
 

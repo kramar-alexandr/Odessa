@@ -955,6 +955,9 @@ begin
       goto L99PUVcRecordCheck;
     end;
   end;
+  
+  PUr.SalesGroup = VEr.SalesGroup;// Edit ************************** Friday, 18 August 2017 11:35:36
+
   if (nonblank(PUr.Objects)) then begin     
     errcode = CheckObjs("",PUr.Objects,errstr);
     if (errcode!=0) then begin

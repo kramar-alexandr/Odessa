@@ -1022,6 +1022,9 @@ begin
     res = 1205; 
     goto LPOVcRecordCheck;
   end;
+  
+  POr.SalesGroup = VEr.SalesGroup;// Edit ************************** Friday, 18 August 2017 11:35:36
+  
   if (VEr.blockedFlag!=0) then begin
     if (disperrf) then begin
       RecordCheckError(20872,POr.VECode,-1,"VECode");      
