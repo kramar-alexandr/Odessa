@@ -238,7 +238,7 @@ begin
 	string 20 keySort;
 	record LocalMachineBlock LMb; //Edit***************************Sasha2,10:14 23.01.2015
   string 20 loc;
-  Array string 20 locations;
+  Array string 20 locations,alocpos;
   Array Integer LocPos;
   vector val LocBalValues;
   val step;
@@ -250,6 +250,7 @@ begin
   record UserVc User;
   record PISVc PISr;
   record PosVc Posr;
+  array boolean isPOs;
   
   User.Code = currentuser;
   if(readfirstmain(User,1,true))then begin
@@ -292,6 +293,8 @@ begin
   ExtractObj(RepSpec.f2,pos,loc);
   while(nonblank(loc))begin	
   	locations[i] = loc;
+  	alocpos[i] = loc;
+  	isPOs[i] = false;
   	i = i + 1;  	
   	
   	POSr.Location = loc;
@@ -301,6 +304,8 @@ begin
   		
   		if(TrHs)then begin
   			locations[i] = POSr.Code;
+  			alocpos[i] = loc;
+  			isPOs[i] = true;
   			i = i + 1;  
   		end;
   	end;
@@ -327,9 +332,16 @@ begin
    startPos = 400;
    for(i=0; i < locations.length; i=i+1) begin
 		LocPos[i] = startPos+step*i;
-		Locr.Code = locations[i];
-		ReadFirstMain(Locr,1,true);
-   	OutString(LocPos[i],0,Locr.Name,false);	
+		if(isPOs[i]==false)then begin
+			Locr.Code = locations[i];
+			ReadFirstMain(Locr,1,true);
+			OutString(LocPos[i],0,Locr.Name,false);	
+   	end else begin
+   		POSr.Code = locations[i];
+   		if(readfirstmain(POSr,1,true))then begin
+   			OutString(LocPos[i],0,"[" & POSr.Code & "]",false);
+   		end;
+   	end;
    end;	
 
 	EndFormat;
@@ -353,10 +365,21 @@ begin
 		if (ReadFirstMain(INr,1,true)) then begin
     	
 				for(i = 0; i < locations.length; i = i+1) begin
-					ISr.Code = INr.Code;
-					ISr.Location = locations[i];
-					if (ReadFirstMain(ISr,2,true)) then begin
-						LocBalValues[locations[i]] = ISr.Instock;
+					if(isPOs[i]==false)then begin
+						ISr.Code = INr.Code;
+						ISr.Location = locations[i];
+						if (ReadFirstMain(ISr,2,true)) then begin
+							LocBalValues[locations[i]] = ISr.Instock;
+						end;
+					end else begin
+						PISr.Location = alocpos[i];
+						PISr.ArtCode = INr.Code;
+						PISr.Position = locations[i];
+						if(readfirstmain(PISr,3,true))then begin
+							LocBalValues["[" & locations[i] & "]"] = PISr.Instock;
+						end else begin
+							LocBalValues["[" & locations[i] & "]"] = blankval;
+						end;
 					end;
 				end;
 			
@@ -368,7 +391,11 @@ begin
 				OutString(6,0,INr.AlternativeCode,false);
     	
 				for(i = 0; i < locations.length; i = i+1) begin
-					OutString(LocPos[i],0,LocBalValues[locations[i]],false);		//Edit----------------------Dima  12.02.2015
+					if(isPOs[i]==false)then begin
+						OutString(LocPos[i],0,LocBalValues[locations[i]],false);		//Edit----------------------Dima  12.02.2015
+					end else begin
+						OutString(LocPos[i],0,LocBalValues["[" & locations[i] & "]"],false);
+					end;
 				end;
 				ClearVector(LocBalValues);
     	
@@ -414,10 +441,21 @@ begin
 		if (check) then begin
 
 			for(i = 0; i < locations.length; i = i+1) begin
-				ISr.Code = INr.Code;
-				ISr.Location = locations[i];
-				if (ReadFirstMain(ISr,2,true)) then begin
-					LocBalValues[locations[i]] = ISr.Instock;
+				if(isPOs[i]==false)then begin
+					ISr.Code = INr.Code;
+					ISr.Location = locations[i];
+					if (ReadFirstMain(ISr,2,true)) then begin
+						LocBalValues[locations[i]] = ISr.Instock;
+					end;
+				end else begin
+					PISr.Location = alocpos[i];
+					PISr.ArtCode = INr.Code;
+					PISr.Position = locations[i];
+					if(readfirstmain(PISr,3,true))then begin
+						LocBalValues["[" & locations[i] & "]"] = PISr.Instock;
+					end else begin
+						LocBalValues["[" & locations[i] & "]"] = blankval;
+					end;
 				end;
 			end;
 		
@@ -429,7 +467,11 @@ begin
 			OutString(6,0,INr.AlternativeCode,false);
 
 			for(i = 0; i < locations.length; i = i+1) begin
-				OutString(LocPos[i],0,LocBalValues[locations[i]],false);		//Edit----------------------Dima  12.02.2015
+				if(isPOs[i]==false)then begin
+					OutString(LocPos[i],0,LocBalValues[locations[i]],false);		//Edit----------------------Dima  12.02.2015
+				end else begin
+					OutString(LocPos[i],0,LocBalValues["[" & locations[i] & "]"],false);
+				end;
 			end;
 			ClearVector(LocBalValues);
 
