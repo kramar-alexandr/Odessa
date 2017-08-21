@@ -5232,7 +5232,8 @@ begin
   MatCol(t,-236,"Отгруж.",0,Shipd1,true,0);
   MatCol(t,-184,"Отгруж. Ок",0,Shipd2,true,0);
   MatCol(t,-132,"Отфактурир.",0,Invd,true,0);
-  MatCol(t,-80,"Структура",0,Recepy,false,RecSClass);
+  //MatCol(t,-80,"Структура",0,Recepy,false,RecSClass);// Edit ************************** Monday, 21 August 2017 16:14:16
+  MatCol(t,-80,"НДС",0,VATCode,false,VATCodeSClass);// Edit ************************** Monday, 21 August 2017 16:14:20
   MatCol(t=kInvoiceRowTypeStructuredItemComponent,144,"Описание",0,Spec,false,0);
   MatCol(t,-290,"Предвар.",0,Shipd1,true,0);
   MatCol(t,-220,"Отгрузка",0,Shipd2,true,0);

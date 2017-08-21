@@ -322,6 +322,8 @@ BEGIN
   record TaxMatrixVc TMr;
   Integer IPBookVAT;
   boolean certificatef;
+  val tvatcur;// Edit ************************** Monday, 21 August 2017 16:59:19
+  string 255 objstrmy;
                                           
   nilv = -1;
   errstrno = 1085;// Transactions could not be generated, please check settings 
@@ -913,6 +915,7 @@ LkInvoiceTypeCash:;
         tax1curval = tax1val;
         vatbase = VATrw.DebVal;
         RoundVATSum(IVp.CurncyCode,IVp.PayDeal,"IVVc",tvat);
+        tvatcur = tvat;// Edit ************************** Monday, 21 August 2017 16:59:04
         tvat = MulRateToBase1(IVp.CurncyCode,tvat,frrate,torate1,torate2,baserate1,baserate2,DefaultCurRoundOff);
         tax1val = MulRateToBase1(IVp.CurncyCode,tax1val,frrate,torate1,torate2,baserate1,baserate2,DefaultCurRoundOff);
         vatbase = MulRateToBase1(IVp.CurncyCode,vatbase,frrate,torate1,torate2,baserate1,baserate2,DefaultCurRoundOff);
@@ -976,8 +979,11 @@ LkInvoiceTypeCash:;
               goto LMakeTransFromIV;
             end;
             if (CheckTTRPerRow("IVVc",SalesVATAcc,objstr,dc2,taccnumber,0)) then begin end;
-            AddEuroTrRow(gTRp,SalesVATAcc,objstr,AddVATCodeToVATAccRows(VATCoderw.VATCode),tstr,tvat,baserate1,baserate2,true,dc2,TotSum,NegativeAmountsOnIVTrans(IVp.InvType,tvat),
-            taccnumber,"","");
+            /*AddEuroTrRow(gTRp,SalesVATAcc,objstr,AddVATCodeToVATAccRows(VATCoderw.VATCode),tstr,tvat,baserate1,baserate2,true,dc2,TotSum,NegativeAmountsOnIVTrans(IVp.InvType,tvat),
+            taccnumber,"","");*/// Edit ************************** Monday, 21 August 2017 16:55:06
+            //messagebox(0,tvatcur);
+            AddEuroCurncyTrRow(gTRp,SalesVATAcc,objstr,AddVATCodeToVATAccRows(VATCoderw.VATCode),tstr,tvat,true,dc2,TotSum,
+                               IVp.CurncyCode,frrate,torate1,torate2,baserate1,baserate2,tvatcur,nilv,-1,NegativeAmountsOnIVTrans(IVp.InvType,tvat),"");
           end;
         end;
         if (tax1val!=0) then begin
