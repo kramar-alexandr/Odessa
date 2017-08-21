@@ -43,7 +43,7 @@ BEGIN
   record INVc INr;
   row StockMovVc SMrw;
   Integer i,rwcnt;
-  val totqty,t,totsentqty;
+  val totqty,t,totsentqty,totordqty;// Edit ************************** Monday, 21 August 2017 11:47:23
 
   SMp.TotQty = 0;
   SMp.TotWeight = 0;
@@ -53,6 +53,7 @@ BEGIN
     MatRowGet(SMp,i,SMrw);
     totqty = totqty + SMrw.Quant;
     totsentqty = totsentqty + SMrw.SentQuant;
+    totordqty = totordqty + SMrw.OrdQuant;// Edit ************************** Monday, 21 August 2017 11:47:34
     INr.Code = SMrw.ArtCode;
     if  (ReadFirstMain(INr,1,true)) then begin
       SMrw.Volume = INr.Volume * SMrw.OrdQuant; //Edit***************************Sasha2,13:36 11.02.2015
@@ -66,6 +67,7 @@ BEGIN
   end;
   SMp.TotQty = Round(totqty,SetRoundModeD(2));
   SMp.TotSentQty = Round(totsentqty,SetRoundModeD(2));
+  SMp.TotOrdQty = Round(totordqty,SetRoundModeD(2));// Edit ************************** Monday, 21 August 2017 11:47:49
   if (SMp.TotVolume==0) then begin SMp.TotVolume = blankval; end;
   if (SMp.TotWeight==0) then begin SMp.TotWeight = blankval; end;
   RETURN;

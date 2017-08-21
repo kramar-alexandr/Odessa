@@ -3064,6 +3064,7 @@ RecordBegin(INVc,-,"artikel5");
   RecordField(MoveIncludingReserve,M4Mark,0,0);	//Edit----------------------Dima  18.06.2015
   RecordField(StopAutoComplite,M4Int,0,0);// Edit ************************** Monday, 6 March 2017 11:01:04
   RecordField(AutoCompliteFlag,M4Int,0,0);// Edit ************************** Monday, 6 March 2017 11:01:04
+  RecordField(TotOrdQty,M4Qty,0,0);// Edit ************************** Monday, 21 August 2017 11:46:01
   ArrayBegin(Math,-,1);
   ArrayField(ArtCode,M4Code,20,INVc);
   ArrayField(Quant,M4UVal,0,0);
