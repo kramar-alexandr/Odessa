@@ -140,6 +140,7 @@ begin
 				SalesData.Kassir = IVr.Kassir;// Edit ************************** Wednesday, 30 November 2016 14:30:39
 				SalesData.BirthDayVaucher = IVr.BirthDayVaucher;// Edit ************************** Monday, 12 December 2016 14:41:28
 				NoDupObjs(IVr.Objects & "," & IVrw.Objects,tstr); //Edit***************************Sasha2,12:16 13.02.2017
+				SalesData.VATCode = IVrw.VATCode;
 				if (NonBlank(tstr)) then begin
 				  SalesData.Objects = tstr; //Edit***************************Sasha2,12:17 13.02.2017
 				end;

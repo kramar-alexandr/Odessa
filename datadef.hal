@@ -5053,6 +5053,7 @@ RecordBegin(IPVc,-,"");
   RecordField(BirthDayVaucher,M4Long,0,0);// Edit ************************** Monday, 12 December 2016 14:41:07
   RecordField(Objects,M4UStr,100,ObjVc); //Edit***************************Sasha2,11:55 13.02.2017
   RecordField(MinOrder,M4Val,0,0);
+  RecordField(VATCode,M4Code,10,0);// Edit ************************** Tuesday, 22 August 2017 09:51:04
   MainKeyBegin(InvNr,0);
   KeySegment(InvNr);
   KeySegment(RowNr);
