@@ -140,6 +140,7 @@ begin
       OutString(305,0,"Цена продажи",false);
     end;
 		OutString(310,0,"Сумма",false);
+		OutString(310,0,"ROZETKA",false);		
 		OutString(320,0,"Себес-ть за ед.",false);
 		OutString(340,0,"Себестоимость",false);
 		OutString(360,0,"Рент.",false);
@@ -313,6 +314,11 @@ separator = "^";
 									OutString(270,0,qty,false);
 									OutVal(300,0,salesum/qty,M4Val,false);						//Price
 									OutVal(310,0,salesum,M4Val,false);
+									if(prevSalesData.VATCode=="15%")then begin//ROZETKA
+										OutVal(310,0,salesum/100*15,M4Val,false);// Edit ************************** Tuesday, 22 August 2017 10:06:36
+									end else begin
+										OutVal(310,0,blankval,M4Val,false);
+									end;
 									if (viewcost) then begin
 										OutVal(320,0,cost/qty,M4Val,false);						
 										OutVal(340,0,cost,M4Val,false);
@@ -425,6 +431,11 @@ separator = "^";
 							OutVal(300,0,SalesData.Price,M45Val,false);
               OutVal(305,0,SalesData.Sum/SalesData.Quant,M45Val,false);//Edit-------------------Vitalii 13:48 05.09.2016
 							OutVal(310,0,SalesData.Sum,M45Val,false);
+							if(SalesData.VATCode=="15%")then begin//ROZETKA
+								OutVal(310,0,SalesData.Sum/100*15,M4Val,false);// Edit ************************** Tuesday, 22 August 2017 10:06:36
+							end else begin
+								OutVal(310,0,blankval,M4Val,false);
+							end;
 							if (viewcost) then begin
 								OutVal(320,0,SalesData.UnitCost,M4Val,false);
 								OutVal(340,0,SalesData.Cost,M4Val,false);
@@ -479,6 +490,11 @@ separator = "^";
 							OutString(270,0,qty,false);
 							OutVal(300,0,salesum/qty,M4Val,false);						//Price
 							OutVal(310,0,salesum,M4Val,false);
+							if(SalesData.VATCode=="15%")then begin//ROZETKA
+								OutVal(310,0,salesum/100*15,M4Val,false);// Edit ************************** Tuesday, 22 August 2017 10:06:36
+							end else begin
+								OutVal(310,0,blankval,M4Val,false);
+							end;
 							if (viewcost) then begin
 								OutVal(320,0,cost/qty,M4Val,false);						//Cost per one
 								OutVal(340,0,cost,M4Val,false);
