@@ -534,7 +534,9 @@ separator = "^";
 	//OutString(300,0,"",false);
 	OutString(300,0,"",false);
 	OutString(300,0,totalSum,false);
+	
  if (UserCanAction("ViewCostPrice",true)) then begin
+ 		OutString(310,0,"",false);
 		OutString(320,0,"",false);
 		OutString(340,0,totalCost,false);
 		OutString(360,0,totalRent,false);
