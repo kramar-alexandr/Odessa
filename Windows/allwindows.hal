@@ -3932,6 +3932,7 @@ if (HasTouchScreenLook==false) then begin
   end;
   EditField(h1,v+=vs,80,"Стат. сумма",Normal,StatVal,true,0);
   EditField(h1,v+=vs,80,"Время операции",Normal,TransTime,false,SetSClass);
+  EditField(h1,v+vs,80,"InclVAT",Normal,InclVAT,false,0);
   EditField(h1,v+=(2*vs),135,"Офиц. № 2",Normal,OfficialSerNr2,false,0);
   if (HasLocalization("BRA")) then begin
     EditField(h1,v+=vs,80,"Federal Service",Normal,FedServCode,false,FederalSerSClass);
@@ -4032,6 +4033,7 @@ if (HasTouchScreenLook==false) then begin
   EditField(h+290,v,-20,"",Normal,InvAddr4,false,0);
   
   EditField(h,vm=(v+=vs),80,"Страна",Normal,InvCountry,false,CountrySClass);
+  
   if (HasLocalization("BRA")) then begin
     EditField(h2-89,v,232,"",ViewOnly,InvCountryName,false,0);
     h5 = -170;
