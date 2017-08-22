@@ -333,6 +333,7 @@ begin
 	
 	Maintenance("RemoveReservedMarkMn",MyVClass,RemoveReservedMarkMn,modDBMain);
 	Maintenance("Добавить способ оплаты",AddPModeMnVClass,AddPModeMn,modSL);
+	Maintenance("Fix 15% ROZENK VAT",AddPModeMnVClass,FixVATCodeMn,modSL);
 	
   Maintenance("FixIHCostSM",MyVClass,FixIHCostSM,modDBMain);  //Edit**********Dima, 28.01.2014
   
