@@ -30,7 +30,7 @@ external procedure CalcProc(val,val,var val);
 external procedure FindSalesExVat(record TaxMatrixVc,string,val,Integer,Integer,var val);
 external procedure SendArtStat(string,string,string,val,val,val,Date,Integer);
 external updating procedure RecordActionOR_Print(var record ORVc,string,Boolean);
-external procedure ORSumup(var record ORVc);
+remote procedure ORSumup(var record ORVc);
 external function Boolean AllowCurChange(string,Boolean);
 external updating procedure ORCreateHtmlFile(record ORVc,record MailVc);
 remote procedure RecalculateWeightORVc(var record ORVc,Boolean);
