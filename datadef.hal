@@ -1722,7 +1722,7 @@ RecordBegin(INVc,-,"artikel5");
 	RecordField(NPPayer,M4Str,30,0);// Edit ************************** Monday, 17 October 2016 14:50:58
 	RecordField(TransportNumber,M4Str,20,0);// Edit ************************** Monday, 12 December 2016 15:02:59
 	RecordField(Packages,M4Qty,0,0);// Edit ************************** Monday, 12 December 2016 15:03:00
-	RecordField(PromotionCode,M4Code,20,0); //Edit***************************Sasha2,14:55 24.01.2017
+	RecordField(PromotionCode,M4Code,20,0); //Edit***************************Sasha2,14:55 24.01.2017 // NOT USED!!!!!!!!!!!!
 	RecordField(NPAdresDeliv,M4Int,0,0);
 	RecordField(NPAdresStreet,M4Str,200,0);
 	RecordField(NPAdresBuild,M4Str,200,0);

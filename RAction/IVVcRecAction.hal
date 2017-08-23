@@ -322,7 +322,25 @@ begin
 
 end;
 
+global // Edit ************************** Wednesday, 23 August 2017 10:24:21
+procedure AddRozetkaVATIV(var record IVVc IVp)
+begin
+	row IVVc IVrw;
+	integer i,mtrw;
+	
+	if(setinset("ROZETKA",IVp.Objects) or setinset("ROZETKA",IVp.PromotionCode2))then begin
+		mtrw = matrowcnt(IVp);
+		IVp.InclVAT = 1;
+		For(i=0;i<mtrw;i=i+1) begin
+			matrowget(IVp,i,IVrw);
+				IVrw.VATCode = "15%";
+			matrowput(IVp,i,IVrw);
+		end; 
+		IVSumup(IVp,true);
+	end;
 
+return;
+end;
 
 global
 updating function LongInt IVVcRecordCheck(record IVVc IVp,record IVVc IV2p,LongInt stat,LongInt long4)
@@ -1372,6 +1390,8 @@ L12:;
   if (blank(IVp.BranchID))  then begin
     IVp.BranchID = CurBranchID;
   end;
+  
+  AddRozetkaVATIV(IVp);
   
   if (check) then begin
     if (stat==Rs_update) then begin
