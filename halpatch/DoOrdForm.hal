@@ -321,7 +321,7 @@ LkInvoiceRowTypeNormal:;
         end;
       end;
       if (FIELDINFORM("F_BASPRIS")) then begin
-        if (ORr.InclVAT==0) then begin
+        /*if (ORr.InclVAT==0) then begin
           MulVATIV(ORrw.VATCode,ORrw.Price,t,t2,0,0);
           t = t + ORrw.Price;
         end else begin
@@ -331,7 +331,8 @@ LkInvoiceRowTypeNormal:;
           t = vatval/ORrw.Quant;
           t = v - t;
         end;
-        PrintValue("F_BASPRIS",t,M423Val,LangNrr,SysFormatRec,false);
+        PrintValue("F_BASPRIS",t,M423Val,LangNrr,SysFormatRec,false);*/
+        PrintValue("F_BASPRIS",ORrw.Price,M423Val,LangNrr,SysFormatRec,false);
       end;
       
       OUTFORMFIELD("F_COMMODITYCODE",INr.EUCodex);
