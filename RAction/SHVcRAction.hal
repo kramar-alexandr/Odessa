@@ -1903,8 +1903,8 @@ begin
 	//Wednesday, 16 August 2017 15:57:35
 	
 	if(blank(ORr.OrderClass))then begin
-		if (nonblank(SHr.NPIntDocNumber) and (SHr.OKFlag>0)) then begin
-			if(nonblank(SHr.NPStatus) and SHr.NPStatus!=USetStr(31171) and SHr.NPStatus!=SH2r.NPStatus)then begin
+		if (nonblank(SHr.NPIntDocNumber)) then begin
+			if(nonblank(SHr.NPStatus) and SHr.NPStatus==USetStr(31171) and SHr.NPStatus!=SH2r.NPStatus)then begin
 				response = SendSMSNewPost(SHr);
 			end;
 		end;  

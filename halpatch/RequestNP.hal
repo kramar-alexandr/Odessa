@@ -3566,6 +3566,9 @@ begin
 								if (status == USetStr(31063)) then begin
 									SHr.NPStatusCode = 1;
 								end;
+								if (status==USetStr(31171) and SHr.OKFlag==0) then begin// Edit ************************** Wednesday, 23 August 2017 16:59:49
+									SHr.OKFlag = 1;
+								end;
 								RecordUpdate(oldSHr,SHr,false);
 								UpdateORVcNewPostStatuses(SHr);
 							end;
