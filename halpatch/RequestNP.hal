@@ -3568,6 +3568,7 @@ begin
 								end;
 								if (status==USetStr(31171) and SHr.OKFlag==0) then begin// Edit ************************** Wednesday, 23 August 2017 16:59:49
 									SHr.OKFlag = 1;
+									SHr.Sorting = "’ƒ“†…";
 								end;
 								RecordUpdate(oldSHr,SHr,false);
 								UpdateORVcNewPostStatuses(SHr);
