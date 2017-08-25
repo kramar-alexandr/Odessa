@@ -6,6 +6,8 @@ external procedure HT2Per(Date, Date , var string);
 external procedure GetCurRateText(var string,val,val,val);
 external procedure ExtractObj(string,var Integer,var string);// Edit ************************** Wednesday, 13 July 2016 09:57:55
 
+SetLangMode(LangRussian,"RUS",0);
+
 global
 procedure StockMovJRn(record RcVc RepSpec)
 begin
@@ -120,13 +122,15 @@ begin
       OutString(0,0,USetStr(5243),false);
       OutString(330,0,USetStr(5246),false);   // Currency
       OutString(400,0,USetStr(5247),false);   // Rate
+      OutString(450,0,"Собрал",false);
+      OutString(500,0,"Получил",false);
       EndFormat;
       Gray_Divider(0,1);
   end;
   if (RepSpec.ArtMode==0) then begin         //Overview
       StartFormat(15);
       OutString(0,0,USetStr(5241),false);    //Ser.No
-      OutString(65,0,USetStr(5242),false);   //Trans. Date
+      OutString(45,0,USetStr(5242),false);   //Trans. Date
       OutString(135,0,USetStr(5243),false);  //Comment
       OutString(225,0,USetStr(5244),false);  //From Stock
       OutString(275,0,USetStr(5239),false);  //Via Stock
@@ -139,6 +143,8 @@ begin
         case 1: OutStringAdjustBiDi(1,0,USetStr(5267),true,M4Val,510);
         case 2: OutStringAdjustBiDi(1,0,USetStr(5253),true,M4Val,510);
       end;
+      OutString(450,0,"Собрал",false);
+      OutString(500,0,"Получил",false);
       EndFormat;
       Gray_Divider(0,1);
   end;
@@ -295,6 +301,8 @@ begin
            OutString(330,0,SMr.CurncyCode,false);
            GetCurRateText(tstr,SMr.FrRate,SMr.ToRateB1,SMr.ToRateB2);
            OutString(400,0,tstr,false);
+           OutString(450,0,SMr.SendUser,false);//25/08/2017 Alexandr
+					 OutString(500,0,SMr.ReceiveUser,false);//25/08/2017 Alexandr
            EndFormat;
            sumqty = 0;
            sumqty1 = 0;// Edit ************************** Thursday, 5 February 2015 18:06:49
@@ -406,7 +414,7 @@ begin
            end;
            StartFormat(15);
            OutLongInt(0,"DblStockMov",SMr.SerNr,false);
-           OutDate(65,0,SMr.TransDate,false);
+           OutDate(45,0,SMr.TransDate,false);
            OutString(135,0,Left(SMr.Comment,20),false);
            OutString(225,0,SMr.FrLocation,false);
            OutString(275,0,SMr.ThrouLocation,false);
@@ -414,6 +422,8 @@ begin
            OutValBiDi(375,0,sumqty1,M4Qty,true,455);// Edit ************************** Thursday, 5 February 2015 18:05:29
            OutValBiDi(415,0,sumqty,M4Qty,true,455);
            OutValBiDi(1,0,rowsum,M4Val,true,510);
+						OutString(450,0,SMr.SendUser,false);//25/08/2017 Alexandr
+						OutString(500,0,SMr.ReceiveUser,false);//25/08/2017 Alexandr
            EndFormat;
            totqty = totqty + sumqty;
            totqty1 = totqty1 + sumqty1;

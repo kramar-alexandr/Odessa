@@ -6204,7 +6204,9 @@ t=1;
   CheckBox(20,-52,0,"Подтверждено",OrdFlag);
   CheckBox(20,-36,0,"Отправлено",SentOKFlag);
   CheckBox(20,-20,0,"Получено",OKFlag);
+  EditField(200,-40,62,"Сборщик",Normal,SendUser,true,UserSClass);
   EditField(150,-20,62,"Зак. к-во",Normal,TotOrdQty,true,0);// Edit ************************** Monday, 21 August 2017 11:52:09
+  EditField(350,-40,62,"Получил",Normal,ReceiveUser,true,UserSClass);
   EditField(300,-20,62,"Отпр. к-во",Normal,TotSentQty,true,0);
   EditField(450,-20,62,"Получ. к-во",Normal,TotQty,true,0);
   if (HasLocalization("PRT")) then begin

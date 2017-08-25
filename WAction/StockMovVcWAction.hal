@@ -925,6 +925,11 @@ BEGIN
 				case "ORRowUID" : res = false;
 			end;
 	 end;     
+	 
+	  switch (fieldname) begin
+			case "SendUser" : res = true;
+			case "ReceiveUser" : res = true;
+		end;
      
 	 if (currentuser=="SAUNOK") then begin
 		res = true;
