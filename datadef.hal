@@ -2666,6 +2666,7 @@ RecordBegin(INVc,-,"artikel5");
 	RecordField(NPAdresStreet,M4Str,200,0);
 	RecordField(NPAdresBuild,M4Str,200,0);
 	RecordField(NPAdresFloat,M4Str,200,0);
+	RecordField(PackMan,M4Code,50,UserVc);//=============Alexandr 26/08/2017
 
   ArrayBegin(Math,-,1);
   ArrayField(OrdRow,M4Long,0,0);
