@@ -4026,7 +4026,7 @@ end;
 
 global updating procedure FixUNOkSH(record RcVc RepSpec)
 begin
-	record SHVc SHr;
+	record SHVc SHr,oldSHr;
 	boolean TrHs,testf;
 	
 	SHr.OKFlag = 1;
@@ -4040,6 +4040,11 @@ begin
 		
 		if(testf)then begin
 			logtext(0,SHr.SerNr & " " & SHr.CustCode);
+			SHr.OKFlag = 0;
+			recordstore(SHr,true);
+			RecordCopy(oldSHr,SHr);
+				SHr.OKFlag = 1;
+			RecordUpdate(oldSHr,SHr,true);
 		end;
 	end;
 	
