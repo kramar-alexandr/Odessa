@@ -3570,7 +3570,7 @@ begin
 									SHr.OKFlag = 1;
 									SHr.Sorting = "’ƒ“†…";
 								end;
-								RecordUpdate(oldSHr,SHr,false);
+								RecordUpdate(oldSHr,SHr,true);
 								UpdateORVcNewPostStatuses(SHr);
 							end;
 						end;
