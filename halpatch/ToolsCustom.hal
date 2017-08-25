@@ -4036,6 +4036,7 @@ begin
 		testf = true;
 		if(SHr.OKFlag!=1)then begin TrHs = false; testf = false; end;
 		if(!blankdate(SHr.ShipOkDate))then begin testf = false; end;
+		if(SHr.ShipDate<stringtodate("22/08/2017"))then begin testf = false; end;
 		
 		if(testf)then begin
 			logtext(0,SHr.SerNr & " " & SHr.CustCode);
