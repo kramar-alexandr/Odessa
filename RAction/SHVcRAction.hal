@@ -1903,7 +1903,10 @@ begin
 	//Wednesday, 16 August 2017 15:57:35
 	
 	if(blank(ORr.OrderClass))then begin
+		logtext(0,"SH UPD SMS1 " & SHr.SerNr);
 		if (nonblank(SHr.NPIntDocNumber)) then begin
+			logtext(0,"SH UPD SMS2 " & SHr.SerNr);
+			logtext(0,"SH UPD SMS1 NPStatus " & SHr.NPStatus);
 			if(nonblank(SHr.NPStatus) and SHr.NPStatus==USetStr(31171) and SHr.NPStatus!=SH2r.NPStatus)then begin
 				response = SendSMSNewPost(SHr);
 			end;
