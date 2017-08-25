@@ -5631,29 +5631,29 @@ begin
   
   RecordList(4,50,-21,-39);
   RlColKey(4,4,"Но.",SerNr,false,ActFinishSerNr);
-  RlColKey(79,79,"ОК",OKFlag,false,ActFinishOKFlag);
-  RlColKey(111,111,"Дата",ShipDate,false,ActFinishShipDate);
+  RlColKey(59,59,"ОК",OKFlag,false,ActFinishOKFlag);
+  RlColKey(91,19,"Дата",ShipDate,false,ActFinishShipDate);
   if (HasMultiLocations) then begin
-    RlCol(191,191,"Склад",Location,false);
-    RlColKey(251,251,"Счет Но.",OrderNr,false,ActFinishOrderKey);
+    RlCol(151,151,"Склад",Location,false);
+    RlColKey(211,211,"Счет Но.",OrderNr,false,ActFinishOrderKey);
   end else begin
-    RlColKey(191,191,"Заказ Но.",OrderNr,false,ActFinishOrderKey);
+    RlColKey(151,151,"Заказ Но.",OrderNr,false,ActFinishOrderKey);
   end;
-  RlColKey(321,321,"Офиц.No.",OfficialSerNr,false,ActFinishOfficialSerNr);
-  RlColKey(411,411,"Клиент",CustCode,false,ActFinishCustCode);
-  RlColKey(471,471,"Дата ОК",ShipOkDate,false,ActFinishShipOkDate); //Edit***************************Sasha2,13:48 06.02.2015
-  RlColKey(541,541,"Наим.",Addr0,false,ActFinishCustName); //Edit***************************Sasha2,13:48 06.02.2015
+  RlColKey(281,281,"Офиц.No.",OfficialSerNr,false,ActFinishOfficialSerNr);
+  RlColKey(371,371,"Клиент",CustCode,false,ActFinishCustCode);
+  RlColKey(431,431,"Дата ОК",ShipOkDate,false,ActFinishShipOkDate); //Edit***************************Sasha2,13:48 06.02.2015
+  RlColKey(501,501,"Наим.",Addr0,false,ActFinishCustName); //Edit***************************Sasha2,13:48 06.02.2015
   if (IsEnterprise) then begin
-    RlCol(-270,-270,"Коммент.",Comment,false); //Edit***************************Sasha2,12:43 28.01.2015
+    RlCol(-310,-310,"Коммент.",Comment,false); //Edit***************************Sasha2,12:43 28.01.2015
     //RlColKey(-180,-180,"Трансп. Но.",TransportNumber,false,TransportNumber); //Edit***************************Sasha2,12:43 28.01.2015
     //RlColKey(-80,-80,"Способ отгрузки",ShipMode,false,ShipMode); //Edit***************************Sasha2,12:45 28.01.2015
-    RlColKey(-170,-170,"Маршрут",Sorting,false,ActFinishSorting); //Edit***************************Sasha2,12:45 28.01.2015
+    RlColKey(-210,-210,"Маршрут",Sorting,false,ActFinishSorting); //Edit***************************Sasha2,12:45 28.01.2015
   end else begin
-    RlCol(-270,-270,"Коммент.",Comment,false);
+    RlCol(-310,-310,"Коммент.",Comment,false);
   end;
-  RlCol(-120,-120,"Зборка",Assembly,false);
-  RlCol(-90,-90,"ЭН",NPPrinted,false);
-  RlColKey(-60,-60,"Статус",NPStatus,false,ActFinishNPStatus);
+  RlCol(-160,-160,"Зборка",Assembly,false);
+  RlCol(-130,-130,"ЭН",NPPrinted,false);
+  RlColKey(-100,-100,"Статус",NPStatus,false,ActFinishNPStatus);
   SearchField("Найти");
   if (GuiType==kGuiMetro) then begin
     RowMenuBegin("");
