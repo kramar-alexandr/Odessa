@@ -4323,6 +4323,7 @@ begin
     EditField(h3,v+=vs,80,"Вид счёта",Normal,SHClass,false,OrderClassSClass);
     EditField(h3,v+=vs,80,"Менеджер",ViewOnly,Manager,false,0); //Edit***************************Sasha2,15:30 27.01.2015
     EditField(h3,v+=vs,80,"Сборщик",Normal,Collector,false,UserNPTSSClass); //Edit***************************Sasha2,15:30 27.01.2015
+    EditField(h3+160,v,80,"Упаковщик",Normal,PackMan,false,UserNPTSSClass); //Edit***************************Alexandr,15:30 25.08.2017
     CheckBox(h4,v=6,0,"Сообщение",Check1);
   end;
   if (IsEnterprise==false) then begin

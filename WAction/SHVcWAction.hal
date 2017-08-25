@@ -1297,6 +1297,7 @@ BEGIN
    		res = false;
    		switch (fieldname) begin
 				case "Collector":	res = true;
+				case "PackMan":	res = true;
 				case "Sorting":	res = true;
       end;
    end;
