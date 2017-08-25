@@ -4024,3 +4024,25 @@ begin
 return;
 end;
 
+global updating procedure FixUNOkSH(record RcVc RepSpec)
+begin
+	record SHVc SHr;
+	boolean TrHs,testf;
+	
+	SHr.OKFlag = 1;
+	SHr.SerNr = 58505;
+	TrHs = true;
+	while(loopkey("OKFlag",SHr,1,TrHs))begin
+		if(SHr.OKFlag!=1)then begin TrHs = false; testf = false; end;
+		if(!blankdate(SHr.ShipOkDate))then begin testf = false; end;
+		
+		if(testf)then begin
+			logtext(0,SHr.SerNr & " " & SHr.CustCode);
+		end;
+	end;
+	
+	
+	
+return;
+end;
+

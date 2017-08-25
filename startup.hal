@@ -331,6 +331,7 @@ begin
   Maintenance("Экспорт CSV для мобильного",MyVClass,ExportAllItems,modSY);	//Edit----------------------Dima  24.03.2015
   Maintenance("FIXIHR",MyVClass,FixItemHistMn,modDBMain);	//Edit----------------------Dima  24.03.2015
 	
+	Maintenance("FIXOkedSH",MyVClass,FixUNOkSH,modDBMain);
 	Maintenance("RemoveReservedMarkMn",MyVClass,RemoveReservedMarkMn,modDBMain);
 	Maintenance("Добавить способ оплаты",AddPModeMnVClass,AddPModeMn,modSL);
 	Maintenance("Fix 15% ROZENK VAT",AddPModeMnVClass,FixVATCodeMn,modSL);
