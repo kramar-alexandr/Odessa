@@ -4033,6 +4033,7 @@ begin
 	SHr.SerNr = 58505;
 	TrHs = true;
 	while(loopkey("OKFlag",SHr,1,TrHs))begin
+		testf = true;
 		if(SHr.OKFlag!=1)then begin TrHs = false; testf = false; end;
 		if(!blankdate(SHr.ShipOkDate))then begin testf = false; end;
 		
