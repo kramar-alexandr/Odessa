@@ -324,6 +324,7 @@ begin
 	 SString(31170,"Отгрузка уже создана");
 	 SString(31171,"Готується до відправлення");
 	 SString(31172,"Замовлення в обробці");
+	 SString(31173,"Відмова");
 	 
 	Maintenance("Проставить склад первой покупки клиента",MyVClass,FillFirstDateByeCUMn,modSL);
   Maintenance("Экспорт склада CSV",ExportStockCSVClass,ExportStockCSVMn,modSY);

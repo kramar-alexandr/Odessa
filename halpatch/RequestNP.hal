@@ -3431,7 +3431,7 @@ begin
 						if (SHr.NPStatus != status) then begin
 							RecordCopy(oldSHr,SHr);
 							SHr.NPStatus = status;
-							if (status == USetStr(31063)) then begin
+							if (status == USetStr(31063) or status == USetStr(31173)) then begin
 								SHr.NPStatusCode = 1;
 							end;
 							RecordUpdate(oldSHr,SHr,true);
@@ -3442,7 +3442,7 @@ begin
 						if (SHr.NPStatus != status) then begin
 							RecordCopy(oldSHr,SHr);
 							SHr.NPStatus = status;
-							if (status == USetStr(31063)) then begin
+							if (status == USetStr(31063) or status == USetStr(31173)) then begin
 								SHr.NPStatusCode = 1;
 							end;
 							if (status==USetStr(31171) and SHr.OKFlag==0) then begin// Edit ************************** Wednesday, 23 August 2017 16:59:49
