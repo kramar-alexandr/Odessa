@@ -3492,6 +3492,8 @@ begin
   page = "/v2.0/xml/";
   port = "443";
   ssl = true;
+  
+  
   i = 0;
   TrHs = true;
   
@@ -3518,7 +3520,10 @@ begin
   	SetAreaZeroSize(mainRequest);
 		CreateDescriptRequestDocumentTrackig(host, page, NPSettingsb.APIkey, tempArray, mainRequest); 
 		writeareatofile(mainRequest,"1NPUpdateENstatusMnReq " & k & ".txt",0);
-  	
+  	host = "127.0.0.1";
+		page = "/getProxyRequest";
+		port = "1070";
+		ssl = false;
   	if(MySendRawWebRequest(host,port,ssl,"POST",page & getParam,"text/xml","",false,mainRequest,replyarea,5)) then begin  
   	  /*writeareatofile(replyarea,"1statusesReply.txt",0);
   	  
@@ -3630,6 +3635,10 @@ begin
   	SetAreaZeroSize(mainRequest);
 		CreateDescriptRequestDocumentTrackig(host, page, NPSettingsb.APIkey1, tempArray, mainRequest); 
   	writeareatofile(mainRequest,"1NPUpdateENstatus1MnReq " & k & ".txt",0);
+  	host = "127.0.0.1";
+		page = "/getProxyRequest";
+		port = "1070";
+		ssl = false;
   	if(MySendRawWebRequest(host,port,ssl,"POST",page & getParam,"text/xml","",false,mainRequest,replyarea,5)) then begin  
   	  /*writeareatofile(replyarea,"1statusesReply.txt",0);
   	  
