@@ -3387,7 +3387,7 @@ integer i,j;
 return;
 end;
 
-global updating
+global webpublic updating
 procedure WebNPUpdateENstatusMn()
 begin
   area request,replyarea,mainRequest;
