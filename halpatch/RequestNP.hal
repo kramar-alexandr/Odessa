@@ -1665,7 +1665,7 @@ begin
  	AddTextToArea("\"callbackport\" : \"" & "1080" & "\",",aRequest);
  	AddTextToArea("\"callbackpage\" : \"" & "/WebNPUpdateENstatusMn.hal" & "\",",aRequest);
  	AddTextToArea("\"xmldata\" : \"",aRequest);
- 	AddTextToArea("<?xml version=""1.0"" encoding=""UTF-8""?>",aRequest);
+ 	AddTextToArea("<?xml version=\\\"1.0\\\" encoding=\\\"UTF-8\\\"?>",aRequest);
   AddTextToArea("<file>",aRequest);
   AddTextToArea("   <apiKey>" & ConvertXml(aKey) & "</apiKey>",aRequest);
   AddTextToArea("   <modelName>" & ConvertXml("InternetDocument") & "</modelName>",aRequest);
