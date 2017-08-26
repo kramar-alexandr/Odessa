@@ -1657,10 +1657,10 @@ begin
  	addtexttoarea("host: " & aWeb & chr(13) & chr(10),aRequest);
  	AddTextToArea("" & chr(13) & chr(10),aRequest);*/
 	
-	AddTextToArea("{\"host\" : \"" & aPage & "\"," & chr(13),aRequest);
+	AddTextToArea("{\"host\" : \"" & aWeb & "\"," & chr(13),aRequest);
  	AddTextToArea("\"port\" : 443," & chr(13),aRequest);
  	AddTextToArea("\"https\" : true," & chr(13),aRequest);
- 	AddTextToArea("\"page\" : \"" & aWeb & "\"," & chr(13),aRequest);
+ 	AddTextToArea("\"page\" : \"" & aPage & "\"," & chr(13),aRequest);
  	AddTextToArea("\"callbackhost\" : \"" & "127.0.0.1" & "\"," & chr(13),aRequest);
  	AddTextToArea("\"callbackport\" : \"" & "1080" & "\"," & chr(13),aRequest);
  	AddTextToArea("\"callbackpage\" : \"" & "/WebNPUpdateENstatusMn.hal" & "\"," & chr(13),aRequest);
@@ -3519,7 +3519,7 @@ begin
 
   	SetAreaZeroSize(mainRequest);
 		CreateDescriptRequestDocumentTrackig(host, page, NPSettingsb.APIkey, tempArray, mainRequest); 
-		writeareatofile(mainRequest,"1NPUpdateENstatusMnReq " & k & ".txt",0);
+		writeareatofile(mainRequest,"1NPUpdateENstatusMnReq" & k & ".txt",0);
   	host = "127.0.0.1";
 		page = "/getProxyRequest";
 		port = "1070";
@@ -3634,7 +3634,7 @@ begin
 
   	SetAreaZeroSize(mainRequest);
 		CreateDescriptRequestDocumentTrackig(host, page, NPSettingsb.APIkey1, tempArray, mainRequest); 
-  	writeareatofile(mainRequest,"1NPUpdateENstatus1MnReq " & k & ".txt",0);
+  	writeareatofile(mainRequest,"1NPUpdateENstatus1MnReq" & k & ".txt",0);
   	host = "127.0.0.1";
 		page = "/getProxyRequest";
 		port = "1070";
