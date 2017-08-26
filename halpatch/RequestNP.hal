@@ -3488,10 +3488,7 @@ begin
   if (blank(NPSettingsb.APIkey)) then begin
   	goto LNPUpdateENstatusMn;
   end;	 
-  host = "api.novaposhta.ua";
-  page = "/v2.0/xml/";
-  port = "443";
-  ssl = true;
+  
   
   
   i = 0;
@@ -3516,7 +3513,10 @@ begin
 		
 		ArrayFromArray(documents,tempArray,k*10,(k+1)*10-1);
 		LsendRequestAgainGet2:;
-
+		host = "api.novaposhta.ua";
+		page = "/v2.0/xml/";
+		port = "443";
+		ssl = true;
   	SetAreaZeroSize(mainRequest);
 		CreateDescriptRequestDocumentTrackig(host, page, NPSettingsb.APIkey, tempArray, mainRequest); 
 		writeareatofile(mainRequest,"1NPUpdateENstatusMnReq" & k & ".txt",0);
@@ -3605,10 +3605,6 @@ begin
   if (blank(NPSettingsb.APIkey1)) then begin
   	goto LNPUpdateENstatus1Mn;
   end;	 
-  host = "api.novaposhta.ua";
-  page = "/v2.0/xml/";
-  port = "443";
-  ssl = true;
   i = 0;
   TrHs = true;
   
@@ -3633,6 +3629,10 @@ begin
 		LsendRequestAgainGet12:;
 
   	SetAreaZeroSize(mainRequest);
+  	host = "api.novaposhta.ua";
+		page = "/v2.0/xml/";
+		port = "443";
+		ssl = true;
 		CreateDescriptRequestDocumentTrackig(host, page, NPSettingsb.APIkey1, tempArray, mainRequest); 
   	writeareatofile(mainRequest,"1NPUpdateENstatus1MnReq" & k & ".txt",0);
   	host = "127.0.0.1";
