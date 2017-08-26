@@ -1667,18 +1667,18 @@ begin
  	AddTextToArea("\"xmldata\" : \"",aRequest);
  	AddTextToArea("<?xml version=\\\"1.0\\\" encoding=\\\"UTF-8\\\"?>",aRequest);
   AddTextToArea("<file>",aRequest);
-  AddTextToArea("   <apiKey>" & ConvertXml(aKey) & "</apiKey>",aRequest);
-  AddTextToArea("   <modelName>" & ConvertXml("InternetDocument") & "</modelName>",aRequest);
-  AddTextToArea("   <calledMethod>" & ConvertXml("documentsTracking") & "</calledMethod>",aRequest);
-  AddTextToArea("		<methodProperties>",aRequest);
-  AddTextToArea("		  <Documents>",aRequest);
+  AddTextToArea("<apiKey>" & ConvertXml(aKey) & "</apiKey>",aRequest);
+  AddTextToArea("<modelName>" & ConvertXml("InternetDocument") & "</modelName>",aRequest);
+  AddTextToArea("<calledMethod>" & ConvertXml("documentsTracking") & "</calledMethod>",aRequest);
+  AddTextToArea("<methodProperties>",aRequest);
+  AddTextToArea("<Documents>",aRequest);
   
   for(i=0;i<documents.length;i=i+1) begin
-		AddTextToArea("		  <item>" & documents[i] & "</item>",aRequest);
+		AddTextToArea("<item>" & documents[i] & "</item>",aRequest);
 	end;
   
-  AddTextToArea("		  </Documents>",aRequest); 
-  AddTextToArea("		</methodProperties>",aRequest);
+  AddTextToArea("</Documents>",aRequest); 
+  AddTextToArea("</methodProperties>",aRequest);
   AddTextToArea("</file>",aRequest);
   AddTextToArea("\"}",aRequest);
   
