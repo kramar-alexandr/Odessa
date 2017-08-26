@@ -1657,13 +1657,13 @@ begin
  	addtexttoarea("host: " & aWeb & chr(13) & chr(10),aRequest);
  	AddTextToArea("" & chr(13) & chr(10),aRequest);*/
 	
-	AddTextToArea("{\"host\" : \"" & aWeb & "\"," & chr(13),aRequest);
- 	AddTextToArea("\"port\" : 443," & chr(13),aRequest);
- 	AddTextToArea("\"https\" : true," & chr(13),aRequest);
- 	AddTextToArea("\"page\" : \"" & aPage & "\"," & chr(13),aRequest);
- 	AddTextToArea("\"callbackhost\" : \"" & "127.0.0.1" & "\"," & chr(13),aRequest);
- 	AddTextToArea("\"callbackport\" : \"" & "1080" & "\"," & chr(13),aRequest);
- 	AddTextToArea("\"callbackpage\" : \"" & "/WebNPUpdateENstatusMn.hal" & "\"," & chr(13),aRequest);
+	AddTextToArea("{\"host\" : \"" & aWeb & "\",",aRequest);
+ 	AddTextToArea("\"port\" : 443,",aRequest);
+ 	AddTextToArea("\"https\" : true,",aRequest);
+ 	AddTextToArea("\"page\" : \"" & aPage & "\",",aRequest);
+ 	AddTextToArea("\"callbackhost\" : \"" & "127.0.0.1" & "\",",aRequest);
+ 	AddTextToArea("\"callbackport\" : \"" & "1080" & "\",",aRequest);
+ 	AddTextToArea("\"callbackpage\" : \"" & "/WebNPUpdateENstatusMn.hal" & "\",",aRequest);
  	AddTextToArea("\"xmldata\" : \"",aRequest);
  	AddTextToArea("<?xml version=""1.0"" encoding=""UTF-8""?>",aRequest);
   AddTextToArea("<file>",aRequest);
@@ -1680,7 +1680,7 @@ begin
   AddTextToArea("		  </Documents>",aRequest); 
   AddTextToArea("		</methodProperties>",aRequest);
   AddTextToArea("</file>",aRequest);
-  AddTextToArea("\"}" & chr(13),aRequest);
+  AddTextToArea("\"}",aRequest);
   
 	AddTextToArea("" & chr(13) & chr(10),aRequest);
 
