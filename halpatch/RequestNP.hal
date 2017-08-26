@@ -1648,31 +1648,42 @@ begin
   string 20 timed;
   area basestring;
   integer i;   
-
-	addtexttoarea("POST " & aPage & " HTTP/1.1" & chr(13) & chr(10),aRequest);
+	
+	addtexttoarea("host: 127.0.0.1" & chr(13) & chr(10),aRequest);
+	addtexttoarea("Content-Type: application/xml" & chr(13) & chr(10),aRequest);
+	AddTextToArea("" & chr(13) & chr(10),aRequest);
+	
+	/*addtexttoarea("POST " & aPage & " HTTP/1.1" & chr(13) & chr(10),aRequest);
  	addtexttoarea("host: " & aWeb & chr(13) & chr(10),aRequest);
- 	AddTextToArea("" & chr(13) & chr(10),aRequest);
-
- 	AddTextToArea("<?xml version=""1.0"" encoding=""UTF-8""?>" & chr(13),aRequest);
-  AddTextToArea("<file>"& chr(13),aRequest);
-  AddTextToArea("   <apiKey>" & ConvertXml(aKey) & "</apiKey>" & chr(13),aRequest);
-  AddTextToArea("   <modelName>" & ConvertXml("InternetDocument") & "</modelName>" & chr(13),aRequest);
-  AddTextToArea("   <calledMethod>" & ConvertXml("documentsTracking") & "</calledMethod>" & chr(13),aRequest);
-  AddTextToArea("		<methodProperties>"& chr(13),aRequest);
-  AddTextToArea("		  <Documents>"& chr(13),aRequest);
+ 	AddTextToArea("" & chr(13) & chr(10),aRequest);*/
+	
+	AddTextToArea("{\"host\" : \"" & aPage & "\"," & chr(13),aRequest);
+ 	AddTextToArea("\"port\" : 443," & chr(13),aRequest);
+ 	AddTextToArea("\"https\" : true," & chr(13),aRequest);
+ 	AddTextToArea("\"page\" : \"" & aWeb & "\"," & chr(13),aRequest);
+ 	AddTextToArea("\"callbackhost\" : \"" & "127.0.0.1" & "\"," & chr(13),aRequest);
+ 	AddTextToArea("\"callbackport\" : \"" & "1080" & "\"," & chr(13),aRequest);
+ 	AddTextToArea("\"callbackpage\" : \"" & "/WebNPUpdateENstatusMn.hal" & "\"," & chr(13),aRequest);
+ 	AddTextToArea("\"xmldata\" : \"",aRequest);
+ 	AddTextToArea("<?xml version=""1.0"" encoding=""UTF-8""?>",aRequest);
+  AddTextToArea("<file>",aRequest);
+  AddTextToArea("   <apiKey>" & ConvertXml(aKey) & "</apiKey>",aRequest);
+  AddTextToArea("   <modelName>" & ConvertXml("InternetDocument") & "</modelName>",aRequest);
+  AddTextToArea("   <calledMethod>" & ConvertXml("documentsTracking") & "</calledMethod>",aRequest);
+  AddTextToArea("		<methodProperties>",aRequest);
+  AddTextToArea("		  <Documents>",aRequest);
   
   for(i=0;i<documents.length;i=i+1) begin
-		AddTextToArea("		  <item>" & documents[i] & "</item>"& chr(13),aRequest);
+		AddTextToArea("		  <item>" & documents[i] & "</item>",aRequest);
 	end;
   
-  AddTextToArea("		  </Documents>"& chr(13),aRequest); 
-  AddTextToArea("		</methodProperties>" & chr(13),aRequest);
-  AddTextToArea("</file>" & chr(13),aRequest);
+  AddTextToArea("		  </Documents>",aRequest); 
+  AddTextToArea("		</methodProperties>",aRequest);
+  AddTextToArea("</file>",aRequest);
+  AddTextToArea("\"}" & chr(13),aRequest);
   
 	AddTextToArea("" & chr(13) & chr(10),aRequest);
-	AddTextToArea("" & chr(13) & chr(10),aRequest);
-	AddTextToArea("" & chr(13) & chr(10),aRequest);
-	AddTextToArea("" & chr(13) & chr(10),aRequest);
+
 	
 	writeareatofile(aRequest,"1STATUSESRequest.txt",0);
   
@@ -3377,6 +3388,82 @@ return;
 end;
 
 global updating
+procedure WebNPUpdateENstatusMn()
+begin
+  area request,replyarea,mainRequest;
+  boolean TrHs;
+  string 200 getParam,host,page;
+  xml xdata;
+  longint i,k;
+  record NPSettingsBlock NPSettingsb;
+  record SHVc SHr,oldSHr;
+  array string 50 documents,tempArray;
+  array longint deliveries;
+  vector string 50 statuses;
+  string 200 docNumber,status;
+  integer steps;
+  integer repeat;
+	boolean testf,ssl;
+  string 20 port;
+  record ORVc ORr;
+  
+  webgetpostdata(replyarea);
+	logtext(0,"WebGetNPGetCytiesRequestProxy");
+	writeareatofile(replyarea,"1getStatusReplyCyties.txt",0);
+
+  if(GetAreaLength(replyarea)>0)then begin 
+		writeareatofile(replyarea,"1statusesReply.txt",0);
+		GetXMLArea(replyarea);
+		xdata = ParseXMLArea(replyarea);
+		i = 0;
+
+		while(XmlNodeExists(xdata,"root/data/item[" & i & "]/Barcode")) begin
+		
+			docNumber = XmlGet(xdata,"root/data/item[" & i & "]/Barcode");
+			status = XmlGet(xdata,"root/data/item[" & i & "]/StateName");
+			
+			logtext(0,"Update EN status for sh " & docNumber & " status =  " & status);
+			SHr.NPIntDocNumber = docNumber;
+			if (ReadFirstKey("NPIntDocNumber",SHr,1,true)) then begin
+					ORr.SerNr = SHr.OrderNr;
+					readfirstmain(ORr,1,true);
+					if(ORr.OrderClass=="WEB")then begin
+						if (SHr.NPStatus != status) then begin
+							RecordCopy(oldSHr,SHr);
+							SHr.NPStatus = status;
+							if (status == USetStr(31063)) then begin
+								SHr.NPStatusCode = 1;
+							end;
+							RecordUpdate(oldSHr,SHr,true);
+							UpdateORVcNewPostStatuses(SHr);
+						end;
+					end;
+					if(ORr.OrderClass!="WEB")then begin
+						if (SHr.NPStatus != status) then begin
+							RecordCopy(oldSHr,SHr);
+							SHr.NPStatus = status;
+							if (status == USetStr(31063)) then begin
+								SHr.NPStatusCode = 1;
+							end;
+							if (status==USetStr(31171) and SHr.OKFlag==0) then begin// Edit ************************** Wednesday, 23 August 2017 16:59:49
+								SHr.OKFlag = 1;
+								SHr.Sorting = "éíÉêìÜÖçé";
+							end;
+							RecordUpdate(oldSHr,SHr,true);
+							UpdateORVcNewPostStatuses(SHr);
+						end;
+					end;
+			end;			
+			i = i + 1;
+		end;
+	end else begin
+		logtext(0,"WebNPUpdateENstatusMn blank data get!!!!!!");
+	end;
+  
+return;
+end;
+
+global updating
 procedure NPUpdateENstatusMn(record RcVc RepSpec)
 begin
   area request,replyarea,mainRequest;
@@ -3430,9 +3517,10 @@ begin
 
   	SetAreaZeroSize(mainRequest);
 		CreateDescriptRequestDocumentTrackig(host, page, NPSettingsb.APIkey, tempArray, mainRequest); 
+		writeareatofile(mainRequest,"1NPUpdateENstatusMnReq " & k & ".txt",0);
   	
   	if(MySendRawWebRequest(host,port,ssl,"POST",page & getParam,"text/xml","",false,mainRequest,replyarea,5)) then begin  
-  	  writeareatofile(replyarea,"1statusesReply.txt",0);
+  	  /*writeareatofile(replyarea,"1statusesReply.txt",0);
   	  
   	  GetXMLArea(replyarea);
   	  
@@ -3461,9 +3549,9 @@ begin
 						end;
 				end;			
 				i = i + 1;
-			end;
+			end;*/
 			
-		end else begin
+		end;/* else begin
 			repeat = repeat + 1;
 			if(repeat < 3) then begin
 				millisleep(100);
@@ -3479,7 +3567,7 @@ begin
 			end;
 			repeat = 0;					
 			logtext(0,"Hansa World: No Connection to api.novaposhta.ua");
-  	end;
+  	end;*/
   
   end;
   
@@ -3541,9 +3629,9 @@ begin
 
   	SetAreaZeroSize(mainRequest);
 		CreateDescriptRequestDocumentTrackig(host, page, NPSettingsb.APIkey1, tempArray, mainRequest); 
-  	
+  	writeareatofile(mainRequest,"1NPUpdateENstatus1MnReq " & k & ".txt",0);
   	if(MySendRawWebRequest(host,port,ssl,"POST",page & getParam,"text/xml","",false,mainRequest,replyarea,5)) then begin  
-  	  writeareatofile(replyarea,"1statusesReply.txt",0);
+  	  /*writeareatofile(replyarea,"1statusesReply.txt",0);
   	  
   	  GetXMLArea(replyarea);
   	  
@@ -3576,9 +3664,9 @@ begin
 						end;
 				end;			
 				i = i + 1;
-			end;
+			end;*/
 			
-		end else begin
+		end;/* else begin
 			repeat = repeat + 1;
 			if(repeat < 3) then begin
 				millisleep(100);
@@ -3594,7 +3682,7 @@ begin
 			end;
 			repeat = 0;					
 			logtext(0,"Hansa World: No Connection to api.novaposhta.ua");
-  	end;
+  	end;*/
   
   end;
   

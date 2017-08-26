@@ -404,6 +404,7 @@ begin
 	//Maintenance("Add address for counterparty",RequestNPVClass,NPAddAddressForCounterpartyMn,modNPost);
 	Maintenance("Обновить регистры Новой почты",RequestNPVClass,RefreshAllInnerRegistersNP,modNPost);
 	Maintenance("Обновить статусы электронных накладных",RequestNPVClass,NPUpdateENstatusMn,modNPost);
+	Maintenance("Обновить статусы электронных накладных OPT",RequestNPVClass,NPUpdateENstatus1Mn,modNPost);
 
 	Maintenance("Установить группы продаж в регистр Платежи",MyVClass,SetSalesGroupToIPVcMn,modDBMain);	//Edit----------------------Dima  17.07.2015
 	Maintenance("Отменить статус синхронизации счетов клиентов старше 10 дней",CancelSyncFlORVcVClass,CancelSyncFlORVcMn,modDBMain);//Edit---------------Vitalii 11:25 28.07.2015
