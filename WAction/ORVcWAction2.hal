@@ -1964,7 +1964,7 @@ BEGIN
 	end;
 	
 	
-	if (Currentuser=="SA" ot usercanaction("UnOkAll",false)==true) then begin
+	if (Currentuser=="SA" or usercanaction("UnOkAll",false)==true) then begin
 		res = true;
 	end;
 
