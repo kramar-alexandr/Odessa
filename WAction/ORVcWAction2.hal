@@ -1958,10 +1958,16 @@ BEGIN
     res = false;
   end;
 
-   GetPrevWindowRecord(wn,ORr);		//Edit----------------------Dima  27.03.2015
+  GetPrevWindowRecord(wn,ORr);		//Edit----------------------Dima  27.03.2015
   if (ORr.Closed!=0 ) then begin
 		res = false;
 	end;
+	
+	
+	if (Currentuser=="SA" ot usercanaction("UnOkAll",false)==true) then begin
+		res = true;
+	end;
+
 
   ORDClassClosedButtonAction = res;
   RETURN;
