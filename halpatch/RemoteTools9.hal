@@ -881,8 +881,17 @@ begin
   Array val avra2;
   Array val avra3;
   Integer acnt;
+  record CUVc CUr;
 
   RecordNew(Rebr);
+  
+  CUr.Code = ORp.CustCode;
+  if(readfirstmain(CUr,1,true))then begin
+  	if(ORp.RebCode!=CUr.RebCode)then begin 
+  		ORp.RebCode = CUr.RebCode;
+  	end;
+  end;
+  
   Rebr.Code = ORp.RebCode;
   if (ReadFirstMain(Rebr,1,true)) then begin
     CreateITHandle(Rebr,aCodeType,aITCode,aStaffCode,avra0,avra1,avra2,avra3,acnt);
