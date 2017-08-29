@@ -26,7 +26,10 @@ external procedure NextOfficialSerNr(string,LongInt,Date,string,var string);
 external function string 50 NextLegalSerNr(string,LongInt,Date,string,string,string);
 external procedure IVVc_PasteRebCode(var record IVVc); //Edit--------------------Dima 29.01.2015
 external procedure GetLocationReb(record INVc,string,val,var val,record RebVc,Integer,var val,var Boolean);// Edit ************************** Tuesday, 14 February 2017 13:01:05
-
+external function Boolean GetItemPriceDiscount3(string,val,var record INVc,string,val,val,val,val,val,string,string,string,string,
+                                                var val,var string,var val,var string,var val,var string,Integer,var Boolean,Date,Time,
+                                                string,Boolean,var Boolean,string,var string,var val,string,string,var string);
+                                                
 function string 255 GetInvoiceFormCode(record IVVc IVr)
 begin
   string 255 res;
@@ -803,7 +806,7 @@ BEGIN
   rwcnt = MatRowCnt(ORp);
   for (i=0;i<rwcnt;i=i+1) begin
     MatRowGet(ORp,i,ORrw);
-    if (ReadFirstItem(ORrw.ArtCode,INr,true,true)) then begin     
+    if (ReadFirstItem(ORrw.ArtCode,INr,true,true)) then begin  
       if (CheckIfItemDiscountExists(INr.Code,aCodeType,aITCode,aStaffCode,avra0,avra1,avra2,avra3,-1)==false) then begin
         if ((INr.Group==itcode) or (blank(itcode))) then begin
           ORrw.vRebate = rebvp;
@@ -882,7 +885,16 @@ begin
   Array val avra3;
   Integer acnt;
   record CUVc CUr;
-
+  integer i,mtrw;
+  row ORVc ORrw;
+  string 255 tstr,tax2code,location,itemtaxtemplatecode,dummystr;
+	val t,s,price,vreb,baseprice,tax2prc;
+	record INVc INr;
+	Boolean calcprice;
+  Integer exportflag;
+  Boolean dummyf;
+  Time blankt;
+	 
   RecordNew(Rebr);
   
   CUr.Code = ORp.CustCode;
@@ -892,12 +904,34 @@ begin
   	end;
   end;
   
-  Rebr.Code = ORp.RebCode;
+  
+  
+  mtrw = matrowcnt(ORp);
+  For(i=0;i<mtrw;i=i+1) begin
+		matrowget(ORp,i,ORrw);
+		if(nonblank(ORrw.ArtCode))then begin
+			if (GetItemPriceDiscount3(ORrw.ArtCode,ORrw.Quant,INr,ORp.CurncyCode,
+                            ORp.FrRate,ORp.ToRateB1,ORp.ToRateB2,ORp.BaseRate1,ORp.BaseRate2,
+                            ORp.LangCode,ORp.CustCat,ORp.PriceList,ORp.RebCode,
+                            price,tstr,vreb,dummystr,baseprice,dummystr,
+                            exportflag,calcprice,ORp.OrdDate,blankt,ORp.CustCode,true,dummyf,ORp.PayDeal,
+                            tax2code,tax2prc,ORp.Region,location,itemtaxtemplatecode)) then begin
+				ORrw.vRebate = vreb;
+        MatRowPut(ORp,i,ORrw);
+				
+        if (ORDchrsum(ORp,i)) then begin
+          ORDchsum(ORp,i);
+        end;
+      end;
+		end;  
+	end; 
+  
+  /*Rebr.Code = ORp.RebCode;
   if (ReadFirstMain(Rebr,1,true)) then begin
     CreateITHandle(Rebr,aCodeType,aITCode,aStaffCode,avra0,avra1,avra2,avra3,acnt);
     AddORToITHandle(ORp,aCodeType,aITCode,aStaffCode,avra0,avra1,avra2,avra3,acnt);
     RecalcORITHandle(ORp,Rebr,aCodeType,aITCode,aStaffCode,avra0,avra1,avra2,avra3,acnt);
-  end;   
+  end; */  
   ORSumup(ORp);   
   return;
 end;    

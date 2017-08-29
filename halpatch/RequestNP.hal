@@ -3494,17 +3494,16 @@ begin
   i = 0;
   TrHs = true;
   
-  SHr.NPIntDocNumber= "000";
-  While(LoopKey("NPIntDocNumber",SHr,1,TrHs)) begin
-  	if (blank(SHr.NPIntDocNumber)) then begin TrHs = false; end;
+  SHr.NPStatusCode = 0;
+  While(LoopKey("NPStatusCode",SHr,1,TrHs)) begin
 		if (TrHs and (SHr.NPStatusCode==0)) then begin
-				ORr.SerNr = SHr.OrderNr;
-				readfirstmain(ORr,1,true);
-				if(ORr.OrderClass=="WEB")then begin
-					documents[i] = SHr.NPIntDocNumber;
-					i=i+1;
-				end;
-			end;  
+			ORr.SerNr = SHr.OrderNr;
+			readfirstmain(ORr,1,true);
+			if(ORr.OrderClass=="WEB")then begin
+				documents[i] = SHr.NPIntDocNumber;
+				i=i+1;
+			end;
+		end;  
   end;
    
 	steps = documents.length / 10;
@@ -3608,17 +3607,16 @@ begin
   i = 0;
   TrHs = true;
   
-  SHr.NPIntDocNumber= "000";
+  SHr.NPIntDocNumber = "000";
   While(LoopKey("NPIntDocNumber",SHr,1,TrHs)) begin
-  	if (blank(SHr.NPIntDocNumber)) then begin TrHs = false; end;
 		if (TrHs and (SHr.NPStatusCode==0)) then begin
-				ORr.SerNr = SHr.OrderNr;
-				readfirstmain(ORr,1,true);
-				if(ORr.OrderClass!="WEB")then begin
-					documents[i] = SHr.NPIntDocNumber;
-					i=i+1;
-				end;
-			end;  
+			ORr.SerNr = SHr.OrderNr;
+			readfirstmain(ORr,1,true);
+			if(ORr.OrderClass!="WEB")then begin
+				documents[i] = SHr.NPIntDocNumber;
+				i=i+1;
+			end;
+		end;  
   end;
    
 	steps = documents.length / 10;
