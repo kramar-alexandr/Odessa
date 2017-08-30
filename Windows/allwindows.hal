@@ -5622,7 +5622,7 @@ begin
 //все записи показаны в SHGeneralLClass
   WindowBegin("Отгрузки)",SHLClass,CGmlist,SHView);
   SpawnClass(SHDClass);
-  SetWRect(20,80,1100,500); //Edit***************************Sasha2,13:46 06.02.2015
+  SetWRect(20,80,1300,500); //Edit***************************Sasha2,13:46 06.02.2015
   Sizeable(-1,-1,0,0);
   UseView(SHVc);
   FormName(PrintSHL);
@@ -5643,6 +5643,7 @@ begin
   RlColKey(355,355,"Клиент",CustCode,false,ActFinishCustCode);
   RlColKey(415,415,"Дата ОК",ShipOkDate,false,ActFinishShipOkDate); //Edit***************************Sasha2,13:48 06.02.2015
   RlColKey(485,485,"Наим.",Addr0,false,ActFinishCustName); //Edit***************************Sasha2,13:48 06.02.2015
+  RlColKey(-425,-425,"Сп. отгр.",ShipModeText,false,ActShipModeText);
   if (IsEnterprise) then begin
     RlCol(-325,-325,"Коммент.",Comment,false); //Edit***************************Sasha2,12:43 28.01.2015
     //RlColKey(-180,-180,"Трансп. Но.",TransportNumber,false,TransportNumber); //Edit***************************Sasha2,12:43 28.01.2015
