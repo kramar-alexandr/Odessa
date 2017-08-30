@@ -49,6 +49,8 @@ remote function Boolean ORVc_AllowSales(record ORVc,var Integer,var LongInt);
 external function Boolean UserCanChangePendingRecord(Integer);
 remote procedure GetFullCurncyRate (var string,Date,var val,var val,var val,var val,var val);// Edit ************************** Friday, 14 August 2015 15:52:58
 
+SetLangMode(LangRussian,"RUS",0);
+
 global
 procedure RoundBelCash(string curncycode,var val rsum)
 BEGIN
@@ -479,6 +481,10 @@ BEGIN
             MessageBox(20054,"");
             testf = false;
           end;
+        end;
+        if(blank(ORr.OrderClass) and blank(ORr.ShipMode))then begin// Edit ************************** Wednesday, 30 August 2017 10:45:56
+        	MessageBox(0,"Перед отгрузкой укажите Метод отгрузки на вкладке Условия");
+          testf = false;
         end;
 /*JJDS
         if (ORr.OrderType!=kOrderTypeNormal) then begin
