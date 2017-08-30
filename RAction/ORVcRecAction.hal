@@ -1068,6 +1068,17 @@ begin
       goto LORVcRecordCheck;
     end;
   end;
+  // Edit Start ---------------------------------------------- Edit Start
+	//Wednesday, 30 August 2017 10:27:13
+	
+  if(blank(ORr.ShipMode))then begin
+		if(ORr.DeliveryNewPost>0)then begin
+			ORr.ShipMode = "çè";
+		end;
+	end;
+  
+	// Edit End ---------------------------------------------- Edit End
+	
   if (nonblank(ORr.ShipMode)) then begin
     DMr.Code = ORr.ShipMode;
     if (ReadFirstMain(DMr,1,true)==false) then begin
