@@ -11343,6 +11343,7 @@ begin
     EditField(h2,v+=vs,80,"Группа продаж",Normal,SalesGroup,false,SalesGroupSClass);
   end;
   EditField(h2,v+=vs,80,"До след.скидки",Normal,MinOrdSum,false,0); //Edit***************************Sasha2,15:41 10.03.2017
+  EditField(h2,v+=vs,80,"Доп. группы продаж",Normal,AddKeySG1,false,SalesGroupSClass);// Edit ************************** Wednesday, 30 August 2017 09:54:16
   ButtonFrame(h5,v=24,150,3,"Цена основана на");
   RadioButton(h5,v,0,0,"на дату счета",PriceBasedOn);
   RadioButton(h5,v+=16,1,0,"на дату заплан. отгрузки",PriceBasedOn);
