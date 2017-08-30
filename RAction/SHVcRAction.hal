@@ -389,23 +389,6 @@ begin
       goto LSHVcRecordCheck;
     end;
   end;
-  // Edit Start ---------------------------------------------- Edit Start
-	//Tuesday, 29 August 2017 09:47:24
-	
-  
-  if (nonblank(SHp.ShipMode)) then begin
-    DMr.Code = SHp.ShipMode;
-    if (ReadFirstMain(DMr,1,true)==false) then begin
-      RecordCheckError(1290,"",-1,"ShipMode");      
-      res = -1;
-      goto LSHVcRecordCheck;
-    end else begin
-    	SHp.ShipModeText = DMr.Comment;
-    end;
-  end;
-  
-	// Edit End ---------------------------------------------- Edit End
-	
   
   if (transf) then begin //Edit***************************Sasha2,11:20 12.04.2017 {
     if (Blank(SHp.PackMan)) then begin
@@ -877,6 +860,33 @@ begin
 
   ORr.SerNr = SHp.OrderNr;
   orfound = ReadFirstMain(ORr,1,true);
+  
+  
+  // Edit Start ---------------------------------------------- Edit Start
+	//Tuesday, 29 August 2017 09:47:24
+	
+	if(blank(SHp.ShipMode))then begin
+		if(ORr.DeliveryNewPost>0)then begin
+			SHp.ShipMode = "çè";
+		end;
+	end;
+  
+  if (nonblank(SHp.ShipMode)) then begin
+    DMr.Code = SHp.ShipMode;
+    if (ReadFirstMain(DMr,1,true)==false) then begin
+      RecordCheckError(1290,"",-1,"ShipMode");      
+      res = -1;
+      goto LSHVcRecordCheck;
+    end else begin
+    	SHp.ShipModeText = DMr.Comment;
+    end;
+  end;
+  
+	// Edit End ---------------------------------------------- Edit End
+	
+  
+  
+  
   if (nonblank(ORr.PRCode)) then begin
     PRr.Code = ORr.PRCode;
     if (ReadFirstMain(PRr,1,true)==false) then begin
