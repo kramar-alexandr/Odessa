@@ -102,6 +102,8 @@ external procedure NoDupObjs(string,var string); //Edit*************************
 external function Boolean FindSubString(string,string);// Edit ************************** Wednesday, 24 May 2017 15:21:31
 external procedure ExtractObjWithSeparator(string,string,Boolean,var Integer,var string); 
 
+SetLangMode(LangRussian,"RUS",0);
+
 global
 updating procedure CreateORHistoryVcFromORVc(record ORVc ORr, record ORVc OR2r, boolean UpdateFlag)
 begin
