@@ -4017,7 +4017,10 @@ begin
 				CUr.SalesGroup = "WORLD";
 				recordstore(CUr,true);
 			end;
-			
+			if(blank(CUr.VECat))then begin
+				CUr.AddKeySG1 = "UKR,WORLD";
+				recordstore(CUr,true);
+			end;
 		end;
 	end;
 
