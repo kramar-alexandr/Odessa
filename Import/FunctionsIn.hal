@@ -125,7 +125,7 @@ updating procedure INImportIn()//   Edit-----------------------Dima    20.11.201
 begin
   record INVc INr;
   string 70 code, bar, alterCode,group, manufact;
-  string 15 volume, weight,unit4, coef4, unit2, coef2, unit3, coef3, unit5, coef5;
+  string 15 volume, weight,unit4, coef4, unit2, coef2, unit3, coef3, unit5, coef5, netto;
   string 200 name;
   Boolean updateF;
   
@@ -146,6 +146,7 @@ begin
   	group = ImportField;
   	volume = ImportField;
   	weight = ImportField;
+  	netto = ImportField;
   	unit2 = ImportField;
   	coef2 = ImportField;
   	unit3 = ImportField;
@@ -165,6 +166,7 @@ begin
 			INr.EUCodex = manufact;
 			INr.Volume = StringToVal(volume,M45Val);
 			INr.Weight = StringToVal(weight,M45Val);
+			INr.NetWeight = StringToVal(weight,M45Val);
 			INr.AddUnittext2 = unit2;
 			INr.AddUnitCoef2 = StringToVal(coef2,M4UVal);
 			INr.AddUnittext3 = unit3;
