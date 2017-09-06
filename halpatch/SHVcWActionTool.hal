@@ -1348,15 +1348,36 @@ procedure NP_PasteSender(var record SHVc SHr)	//Edit----------------------Dima  
 begin
 	record NPCounterpartySenderVc NPCSr;
 	row NPCounterpartySenderVc NPCSrw;
-	integer rwcnt;
+	record NPActiveContSndBlock NPActCSBlr;
+  row NPActiveContSndBlock NPActCSBlrw;
+  vector Boolean NPActCSDecriptions;
+	integer i,rwcnt,blrwcnt;
+	Boolean foundf;
 		
-		logtext(0,"NP_PasteSender " & SHr.NPSender);
+		//logtext(0,"NP_PasteSender " & SHr.NPSender);
 		NPCSr.Ref = SHr.NPSender;
 		if (ReadFirstKey("Ref",NPCSr,1,true)) then begin
 			SHr.NPCitySender = NPCSr.CityDescription;
 			rwcnt = MatRowCnt(NPCSr);
 			if (rwcnt>0) then begin
-				MatRowGet(NPCSr,0,NPCSrw);
+			  BlockLoad(NPActCSBlr);
+			  blrwcnt = MatRowCnt(NPActCSBlr);
+			  if (blrwcnt>0) then begin
+			    for (i=0;i<blrwcnt;i=i+1) begin
+			      MatRowGet(NPActCSBlr,i,NPActCSBlrw);
+			      NPActCSDecriptions[NPActCSBlrw.DescriptionSender] = true;
+			    end;
+			    for (i=0;i<rwcnt;i=i+1) begin
+			      MatRowGet(NPCSr,i,NPCSrw);
+			      if (NPActCSDecriptions[NPCSrw.Description]) then begin
+			        i = rwcnt;
+			        foundf = true;
+			      end;
+			    end;
+			  end;
+			  if (foundf==false) then begin
+			    MatRowGet(NPCSr,0,NPCSrw);
+			  end;
 				SHr.NPContactSender = NPCSrw.Description;
 				SHr.NPSendersPhone = NPCSrw.Phones;
 			end;

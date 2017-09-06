@@ -74,14 +74,36 @@ global
 function Boolean NPSenderContSClassOnOpenWindow(Integer wn)
 begin
   Array string 255 astr;
-  Integer i,acnt;
+  Integer i,acnt,actrow;
   record SHVc SHr;
+  record NPActiveContSndBlock NPActiveContSndBlockr;
+  row NPActiveContSndBlock NPActiveContSndBlockrw;
   integer mwn;
+  String 255 sender,citySender;
+  Boolean foundf;
   
   mwn = motherwindow(wn);
-  getwindowrecord(mwn,SHr);
+  switch (GetWindowFileName(mwn)) begin
+    case "SHVc":
+      getwindowrecord(mwn,SHr);   
+      sender = SHr.NPSender;
+      citySender = SHr.NPCitySender;
+      foundf = true;
+    case "NPActiveContSndBlock":
+      GetWindowRecord(mwn,NPActiveContSndBlockr); 
+      actrow = WindowActiveRow(mwn);
+      if (actrow>=0) then begin
+        MatRowGet(NPActiveContSndBlockr,actrow,NPActiveContSndBlockrw);
+        sender = NPActiveContSndBlockrw.DescriptionAgent;
+        citySender = NPActiveContSndBlockrw.CityDescriptionAgent;
+        foundf = true;
+      end;
+  end;
   
-  NPSenderContSClassArrayOnOpen(astr,acnt,SHr.NPSender,SHr.NPCitySender);
+  if (foundf) then begin
+    NPSenderContSClassArrayOnOpen(astr,acnt,sender,citySender);
+  end;
+  
   for (i=0;i<acnt;i=i+1) begin
     SetListString(wn,len(astr[i]),astr[i],false);    
   end;
@@ -138,3 +160,41 @@ begin
   AllVESClassOnOpenWindow = false;
   return;
 end;
+
+//Edit***************************Sasha2,19:37 05.09.2017 {
+function Boolean NPActiveContSenderTClassRefAgentEFAfter(Integer wn, Integer rownr,Integer changed,Integer fn)
+BEGIN
+  Boolean res;
+  record NPActiveContSndBlock NPActiveContSndBlockr;
+  row NPActiveContSndBlock NPActiveContSndBlockrw;
+  record NPCounterpartySenderVc NPCounterpartySenderr;
+
+  res = true;
+  if (changed!=0) then begin
+    GetWindowRecord(wn,NPActiveContSndBlockr);
+    if (rownr>-1) then begin
+      MatRowGet(NPActiveContSndBlockr,rownr,NPActiveContSndBlockrw);
+      NPCounterpartySenderr.Ref = NPActiveContSndBlockrw.RefAgent;
+      ReadFirstKey("Ref",NPCounterpartySenderr,1,true);
+      NPActiveContSndBlockrw.DescriptionAgent = NPCounterpartySenderr.Description;
+      NPActiveContSndBlockrw.CityDescriptionAgent = NPCounterpartySenderr.CityDescription;
+      MatRowPUt(NPActiveContSndBlockr,rownr,NPActiveContSndBlockrw);
+      PutWindowRecord(wn,NPActiveContSndBlockr);
+    end;
+  end;
+  NPActiveContSenderTClassRefAgentEFAfter = res;
+  RETURN;
+END; //Edit***************************Sasha2,19:37 05.09.2017 }
+
+global //Edit***************************Sasha2,19:37 05.09.2017 {
+function Boolean NPActiveContSenderTClassAfterEditField(Integer wn,string fieldname,Integer fn, Integer rownr,Integer changed)
+BEGIN
+  Boolean res;
+
+  switch (fieldname) begin
+    case "RefAgent": res = NPActiveContSenderTClassRefAgentEFAfter(wn,rownr,changed,fn);
+
+  end;
+  NPActiveContSenderTClassAfterEditField = res;
+  RETURN;
+END; //Edit***************************Sasha2,19:37 05.09.2017 }

@@ -4787,7 +4787,7 @@ begin
 
   WindowBegin("Счета клиентам (в обработке)",ORLClass,CGmlist,-);
   SpawnClass(ORDClass);
-  SetWRect(20,80,1060,500); //Edit***************************Sasha2,14:12 08.01.2015
+  SetWRect(20,80,1100,500); //Edit***************************Sasha2,14:12 08.01.2015
   Sizeable(-1,-1,0,0);
   UseView(ORVc);
 
@@ -4848,7 +4848,7 @@ begin
   end else begin
     RlColKey(-115,-115,"ИТОГО",Sum4,true,ActShipSum4);
   end;
-  RlColKey(-60,-60,"Статус",CustomStatusFlagText,true,ActShipCustomStatusFlagText);
+  RlColKey(-100,-100,"Статус",CustomStatusFlagText,true,ActShipCustomStatusFlagText);
   //RlCol(-60,-60,"Статус",CustomStatusFlagText,true);
   if (HasLimitedAccess) then begin
     BrowseSubsetButton(-40,-15);
