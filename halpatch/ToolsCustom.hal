@@ -4056,3 +4056,22 @@ begin
 return;
 end;
 
+global //Edit***************************Sasha2,14:39 06.09.2017 {
+updating procedure SetSelfBillingFlagInCUMn(record RcVc RepSpec)
+begin
+	record CUVc CUr;
+	boolean TrHs,testf;
+	
+	TrHs = true;
+	while(loopmain(CUr,1,TrHs))begin
+		if(CUr.SelfBilling==0)then begin
+			CUr.SelfBilling = 1;
+			if (RecordStore(CUr,true)) then begin
+			  LogText(0,CUr.Code & " had SelfBilling == 0");
+			end;
+		end;
+	end;
+	
+return;
+end; //Edit***************************Sasha2,14:39 06.09.2017 }
+
