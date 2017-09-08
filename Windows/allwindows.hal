@@ -5148,7 +5148,6 @@ begin
   end else begin
     MatCol(t,94,"Кол-во",0,Quant,true,0);
   end;
-  EnterSkip(ArtCode);
   MatText(t=10,32,"Эта и нижележащие строки не будут печататься",false);
   MatText(t=kInvoiceRowTypePerceptionTax,32,"Налоговый сбор",true);
   MatCol(t,132,"",0,Region,false,0);
@@ -5160,6 +5159,7 @@ begin
 //  MatCol(t=1,194,"Description",0,Spec,false,0);
   t = 1;
   MatCol(t,95,"Кол-во",0,Quant,true,0);
+  EnterSkip(ArtCode);
   MatCol(t,155,"Необходимо",0,NecessaryQuant,true,0);
   MatCol(t,215,"Доступно",0,AvailableQuant,true,0);
   MatColTL(t,275,"Мин.заказ",0,M4UVal,ViewOnly,0,MinOrderedQuant,true,0);  //Edit***************************Sasha2,10:51 10.05.2017
