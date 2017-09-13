@@ -6210,6 +6210,17 @@ RecordBegin(IPVc,-,"");
   KeySegment(PBNumber);
   EndRecord; //Edit***************************Sasha2,17:21 20.06.2017 }
   
+  BlockBegin(NPActiveContSndBlock,-,""); //Edit***************************Sasha2,16:15 05.09.2017 {
+  RecordField(Math,M4Matrix,0,0);
+  ArrayBegin(Math,-,1);
+  ArrayField(RefAgent,M4Str,50,0);
+  ArrayField(DescriptionAgent,M4Str,200,0);
+  ArrayField(CityDescriptionAgent,M4Str,100,0);
+  ArrayField(DescriptionSender,M4Str,200,0);
+  //ArrayField(RefSender,M4Str,100,0);
+  EndArray;
+  EndBlock; //Edit***************************Sasha2,16:15 05.09.2017 }
+  
 return;
 end;
 

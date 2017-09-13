@@ -4787,7 +4787,7 @@ begin
 
   WindowBegin("Счета клиентам (в обработке)",ORLClass,CGmlist,-);
   SpawnClass(ORDClass);
-  SetWRect(20,80,1060,500); //Edit***************************Sasha2,14:12 08.01.2015
+  SetWRect(20,80,1100,500); //Edit***************************Sasha2,14:12 08.01.2015
   Sizeable(-1,-1,0,0);
   UseView(ORVc);
 
@@ -4848,7 +4848,7 @@ begin
   end else begin
     RlColKey(-115,-115,"ИТОГО",Sum4,true,ActShipSum4);
   end;
-  RlColKey(-60,-60,"Статус",CustomStatusFlagText,true,ActShipCustomStatusFlagText);
+  RlColKey(-100,-100,"Статус",CustomStatusFlagText,true,ActShipCustomStatusFlagText);
   //RlCol(-60,-60,"Статус",CustomStatusFlagText,true);
   if (HasLimitedAccess) then begin
     BrowseSubsetButton(-40,-15);
@@ -5143,7 +5143,7 @@ begin
     MatCol(t,94,"Кол-во",0,Quant,true,0);
   end;
 */
-  EnterSkip(ArtCode);
+  //EnterSkip(ArtCode);
   MatCol(t=kInvoiceRowTypeStructuredItemComponent,32,"Товар",0,ArtCode,false,ForSaleINSClass);
 //  MatCol(t,94,"Var",0,VARList,true,VARSClass);
 //  MatCol(t,144,"Qty",0,Quant,true,0);
@@ -5164,6 +5164,7 @@ begin
 //  MatCol(t=1,194,"Description",0,Spec,false,0);
   t = 1;
   MatCol(t,95,"Кол-во",0,Quant,true,0);
+  EnterSkip(ArtCode);
   MatCol(t,155,"Необходимо",0,NecessaryQuant,true,0);
   MatCol(t,215,"Доступно",0,AvailableQuant,true,0);
   MatColTL(t,275,"Мин.заказ",0,M4UVal,ViewOnly,0,MinOrderedQuant,true,0);  //Edit***************************Sasha2,10:51 10.05.2017

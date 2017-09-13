@@ -134,6 +134,7 @@ begin
 	Setting("Акции",PromotionLClass,modSL); //Edit***************************Sasha2,17:58 23.01.2017
   Setting("История изменений - Счета клиентов",ORHistoryLClass,modSO);//Edit-------------------Vitalii 16:52 27.02.2017
   Setting("Альтернативная скидка",AlternativeRebateLClass,modDI); //Edit***************************Sasha2,17:58 23.01.2017
+  Setting("Оправители контрагентов по умолчанию",NPActiveContSenderTClass,modNPost); //Edit***************************Sasha2,19:11 05.09.2017
 
   //Report("Статистика НДС по аванс. отчетам",ExpVATRClass,ExpVATRn,0,modCL);
   //Report("Журнал путевых листов",WLJRClass,WLJRn,0,modCL);
@@ -455,6 +456,7 @@ begin
 
 	 Maintenance("ГРуппы продаж клиентам",MyVClass,UpdateCUSalesGroupMn,modDBMain);
 	 Maintenance("ГРуппы продаж Поставшикам",MyVClass,UpdateVESalesGroupMn,modDBMain);
+  Maintenance("Поставить \"Счет себе\" в карточках Контакта",MyVClass,SetSelfBillingFlagInCUMn,modDBMain); //Edit***************************Sasha2,14:43 06.09.2017
 	
   Import("Импорт цен",PLImportIClass,PLImportIn,modDI); //Added********************Dima 20.11.2014
   Import("Импорт товаров",INImportIClass,INImportIn,modIN);//Added********************Dima 20.11.2014

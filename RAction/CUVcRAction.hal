@@ -163,6 +163,8 @@ BEGIN
     end;
   end;
   CUr.CUType = 1;
+  CUr.SelfBilling = 1; //Edit***************************Sasha2,15:30 12.09.2017
+  
   CUVcRecordDefaults = res; 
   RETURN;
 END;
