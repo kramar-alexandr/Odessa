@@ -160,7 +160,7 @@ begin
 			
 				if (NonBlank(ORr.ReservToDate) and ORr.ReservToDate>CurrentDate) then begin testf = false;/*logtext(0,"RemoveReservedMarkMn false2");*/ end;
 				if (ORr.OrderClass!="WEB" and ORr.OrderClass!="RETAI") then begin testf = false;/*logtext(0,"RemoveReservedMarkMn false3");*/ end;// Edit ************************** Saturday, 29 August 2015 08:53:18
-				if (ORr.NPPaymentType!=0 or ORr.PrepaymentReceived!=0) then begin testf = false;/*logtext(0,"RemoveReservedMarkMn false4");*/ end;			//Edit----------------------Dima  23.09.2015
+				if (/*ORr.NPPaymentType!=0 or */ORr.PrepaymentReceived!=0) then begin testf = false;/*logtext(0,"RemoveReservedMarkMn false4");*/ end;			//Edit----------------------Dima  23.09.2015
 				//if (ORr.CustomStatusFlag!=11) then begin testf = false;/*logtext(0,"RemoveReservedMarkMn false5");*/ end;// Edit ************************** Saturday, 29 August 2015 08:53:19      
 			
 				statusflag = false;

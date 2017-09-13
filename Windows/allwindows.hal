@@ -5048,7 +5048,11 @@ begin
   EditField(h1,v+=vs,82,"Заплан. отгрузка",Normal,PlanShip,false,PasteCurDate);
   EditField(h1,v+=vs,82,"Дата отправки",Normal,DespatchDate,false,PasteCurDate);
   EditField(h1,v+=vs,82,"Время отправки",Normal,DespatchTime,false,PasteCurTime);
-  EditField(h1,v+=vs,82,"Дата резерв-ния",Normal,ReservToDate,false,PasteCurDate); //Edit***************************Sasha2,14:50 14.08.2015
+  if(usercanaction("UnOKAll",false))then begin
+  	EditField(h1,v+=vs,82,"Дата резерв-ния",Normal,ReservToDate,false,PasteCurDate); 
+  end else begin
+  	EditField(h1,v+=vs,82,"Дата резерв-ния",ViewOnly,ReservToDate,false,PasteCurDate); 
+  end;//Edit***************************Sasha2,14:50 14.08.2015
   EditField(h1,v+=vs,100,"Трансп. №",Normal,TransportNumber,false,0);// Edit ************************** Monday, 12 December 2016 15:08:02
   
   EditField(h2,v=vm,135,"Ответственный",Normal,OurContact,false,0);// Edit ************************** Monday, 12 December 2016 15:08:02
