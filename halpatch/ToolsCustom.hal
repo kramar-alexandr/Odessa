@@ -3480,6 +3480,7 @@ begin
 					blockload(RebVchB);
 					if (NonBlank(custCode) and CUr.Code!=custCode) then begin TrHs = false; testf = false; end;
 					if (BlankDate(CUr.BirthDate)) then begin testf = false; end;
+					if (CUr.DateCreated>addday(currentdate,-1)) then begin testf = false; end;// Edit ************************** Thursday, 14 September 2017 09:54:05
 					if (curDate<AddDay(nextCUDR,-RebVchB.GenVauchersBeforeDays)) then begin testf = false; end;
 					if (curDate>AddDay(nextCUDR,workdayto)) then begin testf = false; end;
 										

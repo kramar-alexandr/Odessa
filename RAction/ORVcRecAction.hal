@@ -778,6 +778,16 @@ begin
         end else begin
           closingf = true;
         end;
+        
+        For(i=0;i<rwcnt;i=i+1) begin
+	  			matrowget(ORr,i,ORrw);
+	  			if(ORrw.Shipd1>0 or ORrw.Invd>0)then begin
+	  				RecordCheckError(31174,"",-1,"CustCode");      
+						res = -1;
+						goto LORVcRecordCheck;  
+	  			end;
+				end; 
+        
       end;
     end;
   end;
