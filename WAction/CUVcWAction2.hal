@@ -203,6 +203,7 @@ begin
     RecordNew(CUr);
     CUVcRecordDefaultsClient(wn,CUr,CU2r,Rs_insert,0);
     CUr.RebCode = "0%";
+    CUr.SelfBilling = 1;// Edit ************************** Friday, 15 September 2017 16:52:09
     nwn = OpenWindow("CUNPTDSClass",1,mwn,"","",CUr);
     WindowFieldGoto(nwn,CUr,-1,"Name",true);
   end else begin
