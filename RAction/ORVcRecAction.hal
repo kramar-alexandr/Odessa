@@ -749,6 +749,20 @@ begin
 	//ORr.Reserved = 0;
 	//end;	   
   
+  
+  if (stat==updatemode) then begin
+		if (ORr.CustomStatusFlag==10 and OR2r.CustomStatusFlag!=10) then begin	     
+			For(i=0;i<rwcnt;i=i+1) begin
+				matrowget(ORr,i,ORrw);
+				if(ORrw.Shipd1>0 or ORrw.Invd>0)then begin
+					RecordCheckError(31174,"",-1,"CustCode");      
+					res = -1;
+					goto LORVcRecordCheck;  
+				end;
+			end; 
+		end;
+  end;
+  
   if (ORr.OKFlag==0) then begin
     if (stat==updatemode) then begin
       if (OR2r.OKFlag==1) then begin unokf = true; end;
@@ -778,16 +792,6 @@ begin
         end else begin
           closingf = true;
         end;
-        
-        For(i=0;i<rwcnt;i=i+1) begin
-	  			matrowget(ORr,i,ORrw);
-	  			if(ORrw.Shipd1>0 or ORrw.Invd>0)then begin
-	  				RecordCheckError(31174,"",-1,"CustCode");      
-						res = -1;
-						goto LORVcRecordCheck;  
-	  			end;
-				end; 
-        
       end;
     end;
   end;
