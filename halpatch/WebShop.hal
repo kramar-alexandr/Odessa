@@ -407,7 +407,7 @@ return;
 end;
 
 
-updating Procedure CreateCUFromXML(var record CUVc Cur,xml xmlMessage,integer i,var string errors)
+updating Procedure CreateCUFromXML(var record CUVc Cur,xml xmlMessage,integer i,var string errors,string storeidtag)
 begin
 	integer loopName;
 	string 255 CCode,newcode,tstr,phone;
@@ -515,8 +515,10 @@ begin
 	end;
   Cur.Phone = phone;
 	Cur.PayDeal = "3";
-	Cur.CustCat = "WEB";	//Edit--------------------Dima 08.01.2015
-	Cur.SalesGroup = "WEB";
+	if(storeidtag!="7")then begin
+		Cur.CustCat = "WEB";	//Edit--------------------Dima 08.01.2015
+		Cur.SalesGroup = "WEB";
+	end;
 	Cur.CUType = 1;
 	Cur.CurncyCode = "UAH_R";
 	Cur.PLCode = "RRP";
@@ -717,7 +719,7 @@ begin
 	record NPWarehouseVc NPWarehouser;
 	record PLVc PLr;
 	record NPAreaVc NPArear;
-	string 50 oblast;
+	string 50 oblast,storeidtag;
 	
 	blockload(ESCb);
 	
@@ -729,6 +731,8 @@ begin
 			logText(0,"WebGetOrder");
 			webgetpostdata(aPost); //Edit***************************Sasha2,15:18 04.07.2014
 			WRITEAREATOFILE(aPost,"post.txt",0);///////////////////////////////
+			
+			WRITEAREATOFILE(aPost,"MagentaMSG/" & currentdate & ":" & currenttime & "post.txt",1);///////////////////////////////
 		
 			xmlPost = PARSEXMLAREA(aPost);
 			if (!XmlNodeExists(xmlPost,"messagestart")) then begin
@@ -748,11 +752,19 @@ begin
 			end;
 			nodeORCnt = XmlCountChildren(xmlPost,"orders");
 			ORCnt = 0;
+			logtext(0,"dsfgsdfgsd");
 			for (i=0;i<nodeORCnt;i=i+1) begin 
+				logtext(0,i);
 				rebgroup = "";
 				if (XmlNodeExists(xmlPost,"orders/order" & i)) then begin
+					logtext(0,i);
 					ORCnt = ORCnt + 1;
 					ORr.CustOrdNr = XmlGetAttribute(xmlPost,"orders/order" & i,"orderno"); 
+					storeidtag = XmlGetAttribute(xmlPost,"orders/order" & i,"storeid");
+					logtext(0,storeidtag); 
+					if(storeidtag=="7")then begin
+						ORr.CustOrdNr = "7:" & ORr.CustOrdNr;
+					end;
 					if(readfirstkey("CustOrdNr",ORr,1,true))then begin
 						updateflag = true;
 						goto LWebGetOrderExist;
@@ -760,8 +772,12 @@ begin
 						recordNew(ORr);
 						ORr.SerNr = NextSerNr("ORVc",CurrentDate,-1,false,"");
 						ORr.CustOrdNr = XmlGetAttribute(xmlPost,"orders/order" & i,"orderno"); 
+						if(storeidtag=="7")then begin
+							ORr.CustOrdNr = "7:" & ORr.CustOrdNr;
+						end;
 						updateflag = false;
 					end;
+					logtext(0,"orsernt " & ORr.SerNr);
 					ORr.OrdDate = CurrentDate;
 					CUr.eMail = XmlGetAttribute(xmlPost,"orders/order" & i,"email");
 					if(blank(CUr.eMail))then begin
@@ -770,7 +786,9 @@ begin
 					rebgroup = XmlGetAttribute(xmlPost,"orders/order" & i,"group_id");
 			
 					if (!ReadFirstKey("eMail",Cur,1,true)) then begin
-						CreateCUFromXML(CUr,xmlPost,i,errors);
+						if(storeidtag!="7")then begin
+							CreateCUFromXML(CUr,xmlPost,i,errors,storeidtag);
+						end;
 					end else begin
 						/*if(nonblank(CUr.RebCode))then begin
 							if(CUr.CustCat=="WEB")then begin
@@ -803,10 +821,7 @@ begin
 					ORr.RebCode = CUr.RebCode;
 					ORr.CustCode = Cur.Code;
 					ORr.Addr0 = Cur.Name;
-					//ORr.ShipAddr0 = XmlGetAttribute(xmlPost,"orders/order" & i,"lastname") & " " & XmlGetAttribute(xmlPost,"orders/order" & i,"firstname") & " " & XmlGetAttribute(xmlPost,"orders/order" & i,"middlename");
-					//if(blank(ORr.ShipAddr0) or ORr.ShipAddr0==" ")then begin
-						ORr.ShipAddr0 = Cur.Name;
-					//end;
+					ORr.ShipAddr0 = Cur.Name;
 					
 					ORr.ShipAddr1 = XmlGetAttribute(xmlPost,"orders/order" & i ,"delivery");
 					delcity = XmlGetAttribute(xmlPost,"orders/order" & i ,"city");
@@ -865,7 +880,6 @@ begin
 								if(readfirstkey("Ref",NPArear,1,true))then begin
 									oblast = NPArear.Area;
 								end;
-								//NPCr.CityRef = NPCityr.Ref;
 							end else begin
 								NPCityr.CityRU = ORr.NPCityRecipient;
 								if(readfirstkey("CityRU",NPCityr,1,true))then begin
@@ -968,24 +982,36 @@ begin
 					
 					
 					
-					
-					ORr.OrderClass = "WEB";
-					ORr.SalesGroup = "WEB";
+					if(storeidtag!="7")then begin
+						ORr.OrderClass = "WEB";
+						ORr.SalesGroup = "WEB";
+						ORr.CurncyCode = "UAH_R";
+						ORVc_PasteCurncyCode(ORr,"USD");		//Edit--------------------Dima 23.01.2015
+						ORr.PriceList = "RRP";
+						ORr.Location = WSSB.Location;
+						ORr.PromotionCode2 = LookUpPromotionCode(ORr.OrdDate,ORr.Location); //Edit***************************Sasha2,11:31 25.01.2017
+						ORr.PayDeal = WSSB.PayDeal;
+						ORr.ShipDeal = WSSB.ShipDeal;
+					end;
+					if(storeidtag=="7")then begin
+						ORr.OrderClass = "";
+						ORr.SalesGroup = "OPT";
+						ORr.CurncyCode = "USD";
+						ORr.PriceList = "OPT";
+						ORr.Location = "1-KOC";
+						ORr.PayDeal = CUr.PayDeal;
+						ORr.ShipDeal = CUr.ShipDeal;
+					end;
 					ORr.SalesMan  = CurrentUser;
-					ORr.CurncyCode = "UAH_R";
-					ORr.PriceList = "RRP";
-					//ORr.BaseRate1 = 100;
-					//ORr.BaseRate2 = 100;
-					ORr.Location = WSSB.Location;
-					ORr.PromotionCode2 = LookUpPromotionCode(ORr.OrdDate,ORr.Location); //Edit***************************Sasha2,11:31 25.01.2017
-					ORr.PayDeal = WSSB.PayDeal;
-					ORr.ShipDeal = WSSB.ShipDeal;
+
+					
+					
 					ORr.CustomStatusFlag = 0;
 					ORr.TransDate = CurrentDate;
 					ORr.TransTime = CurrentTime;
 					ORr.SyncFlag = 0;					
 					
-					ORVc_PasteCurncyCode(ORr,"USD");		//Edit--------------------Dima 23.01.2015
+					
 					if (FindSubString("‘àìîâûâîç",ORr.ShipAddr1)) then begin
 						ORr.SelfDelivery = 1;
 					end;
@@ -1031,6 +1057,9 @@ begin
 										artspec = XmlGetAttribute(xmlPost,"orders/order" & i & "/row" & j,"Name");
 										price = StringToVal(XmlGetAttribute(xmlPost,"orders/order" & i & "/row" & j,"PriceInitial"),M423Val);
 										PLr.PLCode = "RRP";
+										if(storeidtag=="7")then begin
+											PLr.PLCode = "OPT";
+										end;
 										PLr.ArtCode = INr.Code;
 										if(readfirstmain(PLr,2,true))then begin
 											if(price!=PLr.ExVatPrice)then begin
@@ -1040,8 +1069,9 @@ begin
 									
 										qty = StringToVal(XmlGetAttribute(xmlPost,"orders/order" & i & "/row" & j,"Qty"),M4UVal);
 										sum = StringToVal(XmlGetAttribute(xmlPost,"orders/order" & i & "/row" & j ,"PriceTotal"),M4Val);
-									
-									
+										if(storeidtag=="7")then begin
+											sum = price * qty;
+										end;
 									
 										ORrw.ArtCode = artcode;
 										MatRowPut(ORr,rowNr,ORrw);
@@ -1104,7 +1134,7 @@ begin
 						logtext(0,"no rows in order #" & ORr.SerNr);
 					end;	
 					
-					if(currentdate<=stringtodate("31/12/2016") and rowNr>0)then begin// Edit ************************** Monday, 19 December 2016 11:17:40
+					/*if(currentdate<=stringtodate("31/12/2016") and rowNr>0)then begin// Edit ************************** Monday, 19 December 2016 11:17:40
 						ORr.RebCode = CUr.RebCode;
 						if(blank(ORr.RebCode))then begin
 							ORr.RebCode = "0%";
@@ -1114,10 +1144,8 @@ begin
 	  						ORrw.vRebate = blankval;
 	  					matrowput(ORr,j,ORrw);
 						end; 
-						
-						
 						ORDUpdatePrices(ORr,false);
-					end;
+					end;*/
 										
 					if(ORr.SerNr>-1)then begin
 						if(updateflag)then begin
@@ -1146,6 +1174,9 @@ begin
 					if (recordSaved) then begin //Edit***************************Sasha2,17:49 05.12.2016 {
 					  testf = true;
 					  if (ORr.SelfDelivery==1 and FindSubString("Šˆ…‚",UpperCase(ORr.ShipAddr1))) then begin testf = false; end;
+					  if (storeidtag=="7") then begin testf = false; end;
+					  
+					  
 					  if(testf) then begin
 					    MakeReserveFromOrder(ORr.SerNr);
 					  end;
