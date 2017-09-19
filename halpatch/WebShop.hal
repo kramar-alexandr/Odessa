@@ -234,26 +234,26 @@ begin
 		r2f = readfirstmain(IS2r,2,true);
 		r3f = readfirstmain(IS3r,2,true);
 		
-		if(ISr.OrddOut<0)then begin
-			ISr.OrddOut = 0;
+		if(ISr.RsrvQty<0)then begin
+			ISr.RsrvQty = 0;
 		end;
-		if(IS2r.OrddOut<0)then begin
-			IS2r.OrddOut = 0;
+		if(IS2r.RsrvQty<0)then begin
+			IS2r.RsrvQty = 0;
 		end;
-		if(IS3r.OrddOut<0)then begin
-			IS3r.OrddOut = 0;
+		if(IS3r.RsrvQty<0)then begin
+			IS3r.RsrvQty = 0;
 		end;
 		
-		if((r1f and (ISr.Instock-ISr.OrddOut)>0) or (r2f and (IS2r.Instock-IS2r.OrddOut)>0) or (r3f and (IS3r.Instock-IS3r.OrddOut)>0)) then begin dop_ostatok = dop_ostatok + 1; end;
+		if((r1f and (ISr.Instock-ISr.RsrvQty)>0) or (r2f and (IS2r.Instock-IS2r.RsrvQty)>0) or (r3f and (IS3r.Instock-IS3r.RsrvQty)>0)) then begin dop_ostatok = dop_ostatok + 1; end;
 		
-		if((ISr.Instock-ISr.OrddOut)>0)then begin
-			realqty = realqty +  ISr.Instock-ISr.OrddOut;
+		if((ISr.Instock-ISr.RsrvQty)>0)then begin
+			realqty = realqty +  ISr.Instock-ISr.RsrvQty;
 		end;
-		if((IS2r.Instock-IS2r.OrddOut)>0)then begin
-			realqty = realqty +  IS2r.Instock-IS2r.OrddOut;
+		if((IS2r.Instock-IS2r.RsrvQty)>0)then begin
+			realqty = realqty +  IS2r.Instock-IS2r.RsrvQty;
 		end;
-		if((IS3r.Instock-IS3r.OrddOut)>0)then begin
-			realqty = realqty +  IS3r.Instock-IS3r.OrddOut;
+		if((IS3r.Instock-IS3r.RsrvQty)>0)then begin
+			realqty = realqty +  IS3r.Instock-IS3r.RsrvQty;
 		end;
 		
 		//realqty = realqty + ISr.Instock-ISr.OrddOut + IS2r.Instock-IS2r.OrddOut + IS3r.Instock-IS3r.OrddOut;
@@ -309,26 +309,26 @@ begin
 		r2f = readfirstmain(IS2r,2,true);
 		r3f = readfirstmain(IS3r,2,true);
 		
-		if(ISr.OrddOut<0)then begin
-			ISr.OrddOut = 0;
+		if(ISr.RsrvQty<0)then begin
+			ISr.RsrvQty = 0;
 		end;
-		if(IS2r.OrddOut<0)then begin
-			IS2r.OrddOut = 0;
+		if(IS2r.RsrvQty<0)then begin
+			IS2r.RsrvQty = 0;
 		end;
-		if(IS3r.OrddOut<0)then begin
-			IS3r.OrddOut = 0;
+		if(IS3r.RsrvQty<0)then begin
+			IS3r.RsrvQty = 0;
 		end;
 		
-		if((r1f and (ISr.Instock-ISr.OrddOut)>0) or (r2f and (IS2r.Instock-IS2r.OrddOut)>0) or (r3f and (IS3r.Instock-IS3r.OrddOut)>0)) then begin dop_ostatok = dop_ostatok + 2; end;
+		if((r1f and (ISr.Instock-ISr.RsrvQty)>0) or (r2f and (IS2r.Instock-IS2r.RsrvQty)>0) or (r3f and (IS3r.Instock-IS3r.RsrvQty)>0)) then begin dop_ostatok = dop_ostatok + 2; end;
 		
-		if((ISr.Instock-ISr.OrddOut)>0)then begin
-			realqty = realqty + ISr.Instock-ISr.OrddOut;
+		if((ISr.Instock-ISr.RsrvQty)>0)then begin
+			realqty = realqty + ISr.Instock-ISr.RsrvQty;
 		end;
-		if((IS2r.Instock-IS2r.OrddOut)>0)then begin
-			realqty = realqty + IS2r.Instock-IS2r.OrddOut;
+		if((IS2r.Instock-IS2r.RsrvQty)>0)then begin
+			realqty = realqty + IS2r.Instock-IS2r.RsrvQty;
 		end;
-		if((IS3r.Instock-IS3r.OrddOut)>0)then begin
-			realqty = realqty + IS3r.Instock-IS3r.OrddOut;
+		if((IS3r.Instock-IS3r.RsrvQty)>0)then begin
+			realqty = realqty + IS3r.Instock-IS3r.RsrvQty;
 		end;
 		
 		//realqty = realqty + ISr.Instock-ISr.OrddOut + IS2r.Instock-IS2r.OrddOut;
@@ -752,16 +752,12 @@ begin
 			end;
 			nodeORCnt = XmlCountChildren(xmlPost,"orders");
 			ORCnt = 0;
-			logtext(0,"dsfgsdfgsd");
 			for (i=0;i<nodeORCnt;i=i+1) begin 
-				logtext(0,i);
 				rebgroup = "";
 				if (XmlNodeExists(xmlPost,"orders/order" & i)) then begin
-					logtext(0,i);
 					ORCnt = ORCnt + 1;
 					ORr.CustOrdNr = XmlGetAttribute(xmlPost,"orders/order" & i,"orderno"); 
 					storeidtag = XmlGetAttribute(xmlPost,"orders/order" & i,"storeid");
-					logtext(0,storeidtag); 
 					if(storeidtag=="7")then begin
 						ORr.CustOrdNr = "7:" & ORr.CustOrdNr;
 					end;
@@ -777,14 +773,31 @@ begin
 						end;
 						updateflag = false;
 					end;
-					logtext(0,"orsernt " & ORr.SerNr);
 					ORr.OrdDate = CurrentDate;
 					CUr.eMail = XmlGetAttribute(xmlPost,"orders/order" & i,"email");
 					if(blank(CUr.eMail))then begin
 						CUr.eMail = "UnknownEMail";
 					end;
 					rebgroup = XmlGetAttribute(xmlPost,"orders/order" & i,"group_id");
-			
+					
+					
+					/*function boolean FoundWebCustCode(var record CUVc CUr,string email, string phone)
+					begin
+						boolean res;
+						res = false;
+							
+							
+						
+						FoundWebCustCode = res;
+					return;
+					end;
+					
+					if(FoundWebCustCode(CUr)==false)then begin
+						if(storeidtag!="7")then begin
+							CreateCUFromXML(CUr,xmlPost,i,errors,storeidtag);
+						end;
+					end;*/
+					
 					if (!ReadFirstKey("eMail",Cur,1,true)) then begin
 						if(storeidtag!="7")then begin
 							CreateCUFromXML(CUr,xmlPost,i,errors,storeidtag);
