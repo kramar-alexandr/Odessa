@@ -576,7 +576,7 @@ begin
     		end;
     		RecordUpdate(OR2r,ORr,true);
     		
-    		if(WSb.AutoRes1KOC>0 and nonblank(WSb.LocationQuer))then begin
+    		if(WSb.AutoRes1KOC>0 and nonblank(WSb.LocationQuer) and ORr.OrderClass=="WEB")then begin
 					if(foundf)then begin
 						pos = 0;
 						ExtractObjWithSeparator(",",WSb.LocationQuer,true,pos,tstr);
@@ -1188,7 +1188,6 @@ begin
 					if (recordSaved) then begin //Edit***************************Sasha2,17:49 05.12.2016 {
 					  testf = true;
 					  if (ORr.SelfDelivery==1 and FindSubString("Šˆ…‚",UpperCase(ORr.ShipAddr1))) then begin testf = false; end;
-					  if (storeidtag=="7") then begin testf = false; end;
 					  
 					  
 					  if(testf) then begin
