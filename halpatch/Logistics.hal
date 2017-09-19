@@ -647,3 +647,60 @@ begin
 
 return;
 end;
+
+
+
+global updating procedure UpdateOrdersOrdFlag(record StockMovVc SMr,boolean addf)
+begin
+	record ORVc ORr;
+	row ORVc ORrw;
+	row StockMovVc SMrw;
+	integer i,mtrw,j,k,mtrw1,ii,jj;
+	vector string 50 vordArtCode,vordID;
+	vector boolean vord,vart;
+	array longint aordSerNr,aItemSer;
+	array string 50 aItemArt;
+	array val aItemId,aItemquant;
+	
+	
+	mtrw = matrowcnt(SMr);
+	For(i=0;i<mtrw;i=i+1) begin
+	  matrowget(SMr,i,SMrw);
+	  if(SMrw.ORSerial>0)then begin
+	  	if(vord[SMrw.ORSerial]==false)then begin
+	  		vord[SMrw.ORSerial] = true;
+	  		aordSerNr[k] = SMrw.ORSerial;
+	  		k = k+1;
+	  	end;	
+	  		aItemSer[j] = SMrw.ORSerial;
+	  		aItemArt[j] = SMrw.ArtCode;
+	  		aItemId[j] = SMrw.ORRowUID;
+	  		aItemquant[j] = SMrw.OrdQuant;
+	  		j=j+1;
+	  end;
+	end; 
+	
+	
+	For(i=0;i<k;i=i+1)begin
+		ORr.SerNr = aordSerNr[i];
+		if(readfirstmain(ORr,1,true))then begin
+			mtrw1 = matrowcnt(ORr);
+			For(ii=0;ii<mtrw1;ii=ii+1) begin
+	  		matrowget(ORr,ii,ORrw);
+	  		For(jj=0;jj<j;jj=jj+1) begin
+	  			if(aItemSer[jj]==ORr.SerNr and aItemArt[jj]==ORrw.ArtCode and aItemId[jj]==ORrw.UID)then begin
+	  				if(addf)then begin
+	  					ORrw.SMOrdered = ORrw.SMOrdered + aItemquant[jj];
+	  				end else begin
+	  					ORrw.SMOrdered = ORrw.SMOrdered - aItemquant[jj];
+	  				end;
+	  				matrowput(ORr,ii,ORrw);
+					end;
+				end; 
+			end; 
+			recordstore(ORr,true);
+		end;
+	end;
+	
+return;
+end;

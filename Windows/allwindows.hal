@@ -5344,10 +5344,10 @@ begin
   //MatCol(t,-120,"Заказано",0,OrderQuant,true,0);
   
   MatColTL(t,-245,"Доступно",0,M4UVal,editability,0,AvailableQuant,true,0);
-  MatColTL(t,-185,"На складах",0,M4UVal,editability,0,StockQuant,true,0);
-  MatCol(t,-120,"Заказано",0,OrderQuant,true,0);  
-  MatColTL(t,-60,"В обработке",0,M4UVal,editability,0,ProcessingQuant,true,0);	//Edit----------------------Dima  25.01.2016
- // MatColTL(t,-50,"UID",0,M4UVal,ViewOnly,0,UID,true,0);
+  MatColTL(t,-185,"На скл-х",0,M4UVal,editability,0,StockQuant,true,0);
+  MatCol(t,-150,"Зак-но",0,OrderQuant,true,0);  
+  MatColTL(t,-115,"В обр-ке",0,M4UVal,editability,0,ProcessingQuant,true,0);	//Edit----------------------Dima  25.01.2016
+  MatColTL(t,-60,"Подтвр.",0,M4UVal,ViewOnly,0,SMOrdered,true,0);
   InsertRowTest;
   DeleteRowTest;
   EndMatrix;

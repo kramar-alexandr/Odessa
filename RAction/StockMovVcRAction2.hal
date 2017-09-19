@@ -54,6 +54,8 @@ external updating procedure ReserveReceivedItems(record StockMovVc);
 external updating procedure CheckDifferenceForWritingToORVc(var record StockMovVc,record StockMovVc);
 external updating procedure UnOk_StockMovVc(var record StockMovVc, boolean);
 external procedure FoundUniqueOrdersFromStockMov(record StockMovVc,var array longint);//Edit----------------------Dima  28.12.2015
+external updating procedure UpdateOrdersOrdFlag(record StockMovVc,boolean);// Edit ************************** Tuesday, 19 September 2017 15:13:49
+
 
 global
 function LongInt StockMovVcRecordDefaults(var record StockMovVc StockMovr,record StockMovVc StockMov2r,LongInt stat,LongInt long4)
@@ -904,6 +906,9 @@ BEGIN
     ReserveReceivedItems(StockMovr);
   end; 	
 	
+	if(StockMovr.OrdFlag>0)then begin// Edit ************************** Tuesday, 19 September 2017 15:11:24
+		UpdateOrdersOrdFlag(StockMovr,true);
+	end;
 	//***
   
   StockMovVcRecordSaveAfter = res;

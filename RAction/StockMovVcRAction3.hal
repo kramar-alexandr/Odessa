@@ -45,6 +45,7 @@ external procedure GetFullCurncyRateText(Boolean,var string,val,val,val,val,val)
 external procedure GetFullCurncyRate (var string,Date,var val,var val,var val,var val,var val);
 external updating procedure ReserveReceivedItems(record StockMovVc);
 external updating procedure UpdateLinksToOrders(record StockMovVc,record StockMovVc);
+external updating procedure UpdateOrdersOrdFlag(record StockMovVc,boolean);// Edit ************************** Tuesday, 19 September 2017 15:13:49
 
 
 global
@@ -266,7 +267,14 @@ BEGIN
 	if ((StockMovr.OKFlag!=0) and (StockMov2r.OKFlag==0)) then begin
     ReserveReceivedItems(StockMovr);
   end;   
-
+	
+	
+	if(StockMovr.OrdFlag>0 and StockMov2r.OrdFlag==0)then begin// Edit ************************** Tuesday, 19 September 2017 15:11:24
+		UpdateOrdersOrdFlag(StockMovr,true);
+	end;
+	if(StockMovr.OrdFlag==0 and StockMov2r.OrdFlag>0)then begin// Edit ************************** Tuesday, 19 September 2017 15:11:24
+		UpdateOrdersOrdFlag(StockMovr,false);
+	end;
   
   StockMovVcRecordUpdateAfter = res;
   RETURN;
