@@ -434,6 +434,7 @@ begin
 	Maintenance("WEB-классификации записать отдельно в карте товара",MyVClass,TransferDispsToWebDispsMn,modDBMain); //Edit***************************Sasha2,13:28 08.04.2016
 	
   Maintenance("CityVcFromNPCityVcVClass",CityVcFromNPCityVcVClass,CityVcFromNPCityVcMn,modDBMain);//Edit-------------------Vitalii 11:27 23.05.2016
+  Maintenance("Close Old Reserves",MyVClass,UnreservOldORMn,modDBMain);// Edit ************************** Tuesday, 19 September 2017 16:14:49
   Maintenance("Export RHist",MyVClass,RhistvcExportMn,modDBMain);	//Edit----------------------Dima  30.05.2016
   Maintenance("Import RHist",MyVClass,RhistvcImportMn,modDBMain);	//Edit----------------------Dima  30.05.2016
   Maintenance("Delete RHist",MyVClass,RhistvcCleanMn,modDBMain);

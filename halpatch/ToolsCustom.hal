@@ -4076,3 +4076,60 @@ begin
 return;
 end; //Edit***************************Sasha2,14:39 06.09.2017 }
 
+global updating procedure UnreservOldORMn(record RcVc RepSpec)
+begin
+	record ORVc ORr;
+	row ORVc ORrw;
+	boolean TrHs,testf,foundf;
+	integer i,mtrw;
+	record ItemStatusVc ISr;
+	
+	TrHs = true;
+	ORr.Reserved = 1;
+	while(loopkey("Reserved",ORr,1,TrHs))begin
+		testf = true;
+		if(ORr.Reserved==0)then begin TrHs = false; testf = false; end;
+		if(ORr.OrdDate>addmonth(currentdate,-1))then begin testf = false; end;
+		if(ORr.Closed>0)then begin testf = false; end;
+		
+		if(testf)then begin
+			mtrw = matrowcnt(ORr);
+			foundf = false;
+			For(i=0;i<mtrw;i=i+1) begin
+	  		matrowget(ORr,i,ORrw);
+	  		if((ORrw.Quant-ORrw.Shipd2)>0)then begin
+	  			logtext(0,ORr.SerNr & "	" & ORrw.ArtCode & "	" & ORrw.Quant-ORrw.Shipd2);
+	  			
+	  			ISr.Location = ORr.Location;
+	  			ISr.Code = ORrw.ArtCode;
+	  			if(readfirstmain(ISr,2,true))then begin
+	  				if(ISr.RsrvQty>=(ORrw.Quant-ORrw.Shipd2))then begin
+	  					logtext(0,"ISr.RsrvQty1 " & ISr.RsrvQty);
+	  					ISr.RsrvQty = ISr.RsrvQty - (ORrw.Quant-ORrw.Shipd2);
+	  					logtext(0,"ISr.RsrvQty2 " & ISr.RsrvQty);
+	  				end;
+	  			end;
+	  			recordstore(ISr,true);
+	  			ISr.Location = ";;;";
+	  			ISr.Code = ORrw.ArtCode;
+	  			if(readfirstmain(ISr,2,true))then begin
+	  				if(ISr.RsrvQty>=(ORrw.Quant-ORrw.Shipd2))then begin
+	  					logtext(0,"ISr.RsrvQty1 " & ISr.RsrvQty);
+	  					ISr.RsrvQty = ISr.RsrvQty - (ORrw.Quant-ORrw.Shipd2);
+	  					logtext(0,"ISr.RsrvQty2 " & ISr.RsrvQty);
+	  				end;
+	  			end;
+	  			recordstore(ISr,true);
+	  			
+	  			foundf = true;
+	  		end;
+			end; 
+			if(foundf)then begin
+				ORr.Reserved = 0;
+				recordstore(ORr,true);
+			end;
+		end;
+	end;
+
+return;
+end;
