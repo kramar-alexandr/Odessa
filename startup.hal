@@ -458,6 +458,7 @@ begin
 	 Maintenance("ГРуппы продаж клиентам",MyVClass,UpdateCUSalesGroupMn,modDBMain);
 	 Maintenance("ГРуппы продаж Поставшикам",MyVClass,UpdateVESalesGroupMn,modDBMain);
   Maintenance("Поставить \"Счет себе\" в карточках Контакта",MyVClass,SetSelfBillingFlagInCUMn,modDBMain); //Edit***************************Sasha2,14:43 06.09.2017
+  Maintenance("Кредитная сч/ф обновляет счет",MyVClass,ChangeORdSetBlockMn,modDBMain);
 	
   Import("Импорт цен",PLImportIClass,PLImportIn,modDI); //Added********************Dima 20.11.2014
   Import("Импорт товаров",INImportIClass,INImportIn,modIN);//Added********************Dima 20.11.2014

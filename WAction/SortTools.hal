@@ -432,6 +432,19 @@ begin
 return;
 end;
 
+global updating procedure ChangeORdSetBlockMn(record RcVc RepSpec)
+begin
+  record OrdSettBlock OSb;
+
+	blockload(OSb);
+		OSb.CredIVUpdateOR = 1;
+	blockstore(OSb);
+
+	
+	
+return;
+end;
+
 global updating procedure FixVATCodeMn(record RcVc RepSpec)
 begin
 	record VATCodeBlock VATb;
