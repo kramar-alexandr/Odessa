@@ -695,7 +695,7 @@ begin
     return;
 end; //Edit***************************Sasha2,10:17 20.12.2016 }
 
-function boolean FoundWebCustCode(var record CUVc CUr,string email, string phone)
+function boolean FoundWebCustCode(var record CUVc CUr,string email, string phone,string storeidtag)
 begin
 	boolean res;
 	string 100 tstr,nrmphone,char;
@@ -734,6 +734,14 @@ begin
 					if(readfirstkey("Phone",CUr,1,true))then begin
 						res = true;
 					end;
+					
+					if(res==false)then begin
+						CUr.Phone = "+38" & nrmphone;
+						if(readfirstkey("Phone",CUr,1,true))then begin
+							res = true;
+						end;
+					end;
+					
 				end;
 			end;
 		end;
@@ -830,7 +838,7 @@ begin
 					end;
 					rebgroup = XmlGetAttribute(xmlPost,"orders/order" & i,"group_id");
 					
-					if (FoundWebCustCode(CUr,email,phone)==false) then begin
+					if (FoundWebCustCode(CUr,email,phone,storeidtag)==false) then begin
 						if(storeidtag!="7")then begin
 							CreateCUFromXML(CUr,xmlPost,i,errors,storeidtag);
 						end;
