@@ -695,6 +695,54 @@ begin
     return;
 end; //Edit***************************Sasha2,10:17 20.12.2016 }
 
+function boolean FoundWebCustCode(var record CUVc CUr,string email, string phone)
+begin
+	boolean res;
+	string 100 tstr,nrmphone,char;
+	integer j,chrcode;
+	
+	
+	res = false;
+
+		if(nonblank(email))then begin
+			CUr.eMail = email;
+			if(readfirstkey("eMail",CUr,1,true))then begin
+				res = true;
+			end;
+		end;
+		if(res==false)then begin
+			if(nonblank(phone))then begin
+				CUr.Phone = phone;
+				if(readfirstkey("Phone",CUr,1,true))then begin
+					res = true;
+				end;
+				
+				if(res==false)then begin
+					tstr = phone;
+					nrmphone = "";
+					for (j=0;j<len(tstr);j=j+1) begin
+						char = mid(tstr,j,1);
+						chrcode = asc(char);
+						if ((chrcode>=48) and (chrcode<=57)) then begin
+							nrmphone = nrmphone & char;
+						end;
+					end;
+					if(left(nrmphone,2)=="38")then begin
+						nrmphone = right(nrmphone,len(nrmphone)-2);
+					end;
+					CUr.Phone = nrmphone;
+					if(readfirstkey("Phone",CUr,1,true))then begin
+						res = true;
+					end;
+				end;
+			end;
+		end;
+		
+	
+	FoundWebCustCode = res;
+return;
+end;
+
 global webpublic updating Procedure WebGetOrder() //Edit***************************Sasha2,15:18 04.07.2014
 begin
   record ORVc ORr,oldORr;
@@ -719,7 +767,7 @@ begin
 	record NPWarehouseVc NPWarehouser;
 	record PLVc PLr;
 	record NPAreaVc NPArear;
-	string 50 oblast,storeidtag;
+	string 50 oblast,storeidtag,email,phone;
 	
 	blockload(ESCb);
 	
@@ -774,62 +822,18 @@ begin
 						updateflag = false;
 					end;
 					ORr.OrdDate = CurrentDate;
-					CUr.eMail = XmlGetAttribute(xmlPost,"orders/order" & i,"email");
+					email = XmlGetAttribute(xmlPost,"orders/order" & i,"email");
+					CUr.eMail = email;
+					phone = XmlGetAttribute(xmlPost,"orders/order" & i,"phone");
 					if(blank(CUr.eMail))then begin
 						CUr.eMail = "UnknownEMail";
 					end;
 					rebgroup = XmlGetAttribute(xmlPost,"orders/order" & i,"group_id");
 					
-					
-					/*function boolean FoundWebCustCode(var record CUVc CUr,string email, string phone)
-					begin
-						boolean res;
-						res = false;
-							
-							
-						
-						FoundWebCustCode = res;
-					return;
-					end;
-					
-					if(FoundWebCustCode(CUr)==false)then begin
+					if (FoundWebCustCode(CUr,email,phone)==false) then begin
 						if(storeidtag!="7")then begin
 							CreateCUFromXML(CUr,xmlPost,i,errors,storeidtag);
 						end;
-					end;*/
-					
-					if (!ReadFirstKey("eMail",Cur,1,true)) then begin
-						if(storeidtag!="7")then begin
-							CreateCUFromXML(CUr,xmlPost,i,errors,storeidtag);
-						end;
-					end else begin
-						/*if(nonblank(CUr.RebCode))then begin
-							if(CUr.CustCat=="WEB")then begin
-								Rebr.Code = CUr.RebCode;
-								readfirstmain(Rebr,1,true);
-								switch(rebgroup)begin
-									case"6":Reb2r.Code = "5%";
-													readfirstmain(Reb2r,1,true);// Edit ************************** Thursday, 22 October 2015 10:08:00
-													if(Rebr.vra0<Reb2r.vra0)then begin CUr.RebCode = "5%"; end;
-									case"5":Reb2r.Code = "10%";
-													readfirstmain(Reb2r,1,true);// Edit ************************** Thursday, 22 October 2015 10:07:59
-													if(Rebr.vra0<Reb2r.vra0)then begin CUr.RebCode = "10%"; end;
-									case"4":Reb2r.Code = "15%";
-													readfirstmain(Reb2r,1,true);// Edit ************************** Thursday, 22 October 2015 10:07:58
-													if(Rebr.vra0<Reb2r.vra0)then begin CUr.RebCode = "15%"; end;
-								end;
-								recordStore(CUr,true);
-							end;
-						end else begin
-							if(CUr.CustCat=="WEB")then begin
-								switch(rebgroup)begin
-									case"6":CUr.RebCode = "5%";
-									case"5":CUr.RebCode = "10%";
-									case"4":CUr.RebCode = "15%";
-								end;
-								recordStore(CUr,true);
-							end;
-						end;*/
 					end;
 					ORr.RebCode = CUr.RebCode;
 					ORr.CustCode = Cur.Code;
@@ -969,9 +973,6 @@ begin
 												end;
 											end;
 										end; 
-										logtext(0,"street " & street);
-										logtext(0,"build " & build);
-										logtext(0,"float " & float);
 										ORr.NPAdresStreet = street;
 										ORr.NPAdresBuild = build;
 										ORr.NPFlat = float;

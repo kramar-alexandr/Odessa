@@ -381,9 +381,7 @@ BEGIN
   record RPCUTaxVc RPCUTaxr;
   Boolean calcperceppercuf;
 	val fr,to;	//Edit-----------Dima  29.01.2015
-	
-	logtext(0,222);
-	
+		
   if (UseTaxTemplatesforTaxCalc) then begin
     ORSumup_TaxTemplate(ORp);
     goto LORSumup;
@@ -402,7 +400,6 @@ BEGIN
   for (i = 0 ; i<rwcnt ;i=i+1) begin
     MatRowGet(ORp,i,ORrw);
     if (ORrw.stp!=kInvoiceRowTypeSubtotal) and (ORrw.stp!=kInvoiceRowTypePerceptionTax) then begin
-    	logtext(0,1);
       tax1reb = ORrw.TAX1Reb;
 //      tax1reb = 0;
 //      Tax1Rebr.Code = ORrw.VATCode;
