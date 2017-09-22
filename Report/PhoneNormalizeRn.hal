@@ -76,6 +76,8 @@ begin
 	  						a5[unic] = lastordate;
 	  						if(avnrmphone[i]==CUr.Phone)then begin
 									a6[unic] = "Original";
+								end else begin
+									a6[unic] = "";
 								end;
 	  						unic = unic + 1;
 	  					end;
