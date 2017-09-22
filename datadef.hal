@@ -7,6 +7,7 @@ SourceFile("halcust\\WAction",0);
 SourceFile("halcust\\RAction",0);
 SourceFile("halcust\\Web",0);
 SourceFile("halcust\\LabelPrint",0)
+SourceFile("halcust\\Lib",0)
 
 procedure DefineIVVcRecordType_Header(Boolean fieldsisf)		// Edit by Victor 10.11.14
 begin

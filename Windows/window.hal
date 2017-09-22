@@ -2870,6 +2870,20 @@ begin
 
 end;
 
+window PhoneNormalizeRClass:1
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  real h,v,vs;
+
+  WindowBegin("Дублиакты телефонов",PhoneNormalizeRClass,CGRcW,RcType);
+  SetWRect(20,80,400,200);
+  h = 110; v = 15; vs = 20;
+  CheckBox(h,v,0,"Не показывать те, что с 0 заказов",flags[0]);
+
+  EndWindow;
+
+end;
+
 window OneKocBlankPosRClass:1
   wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
 begin
