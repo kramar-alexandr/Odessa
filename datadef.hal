@@ -1812,6 +1812,8 @@ RecordBegin(INVc,-,"artikel5");
   ArrayField(MinOrderedQuant,M4UVal,0,0); //Edit***************************Sasha2,10:48 10.05.2017
   ArrayField(SMReserved,M4Str,255,0);// Edit ************************** Tuesday, 11 July 2017 13:17:54
   ArrayField(SMOrdered,M4Val,0,0);// Edit ************************** Tuesday, 19 September 2017 15:17:17
+  ArrayField(AltRebTargFlag,M4Str,50,0);// Edit ************************** Thursday, 4 May 2017 12:07:07
+  ArrayField(AltRebDiscFlag,M4Str,50,0);// Edit ************************** Thursday, 4 May 2017 12:07:07
   EndArray;
   MainKeyBegin(SerNr,1);
   StoreInBaseKey;

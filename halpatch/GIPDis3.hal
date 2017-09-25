@@ -1422,6 +1422,16 @@ boolean trigtestf,targtestf;
 	mtrw = matrowcnt(IVr);
 	For(i=0;i<mtrw;i=i+1) begin
 	  matrowget(IVr,i,IVrw);
+		if(blank(IVrw.ArtCode) and IVrw.stp==kInvoiceRowTypeNormal)then begin
+			matrowdelete(IVr,i);
+			i=i-1;
+			mtrw = mtrw - 1;
+		end;
+	end;
+	
+	mtrw = matrowcnt(IVr);
+	For(i=0;i<mtrw;i=i+1) begin
+	  matrowget(IVr,i,IVrw);
 	  	if(nonblank(IVrw.AltRebDiscFlag))then begin
 	  		IVrw.Sum = IVrw.Price * IVrw.Quant;
 	  		IVrw.vRebate = blankval;
@@ -1565,9 +1575,176 @@ boolean trigtestf,targtestf;
 			 
 		end;
 	end;
-	
-	
-	
+return;
+end;
 
+global procedure AlternativeRebateORVc(var record ORVc ORr)begin
+row ORVc ORrw;
+record AlternativeRebateVc AlRebr;
+row AlternativeRebateVc AlRebrw;
+boolean foundf,TrHs,testf,trfoundf;
+integer mtrw,i,trmtrw,j,trqtyi;
+record INVc INr;
+val trqtyval,AkcQty,AkcSum,newquant;
+boolean trigtestf,targtestf;
+	
+	logtext(0,"AlternativeRebateORVc");
+	
+	mtrw = matrowcnt(ORr);
+	For(i=0;i<mtrw;i=i+1) begin
+	  matrowget(ORr,i,ORrw);
+		if(blank(ORrw.ArtCode))then begin
+			matrowdelete(ORr,i);
+			i=i-1;
+			mtrw = mtrw - 1;
+		end;
+	end;
+	
+	mtrw = matrowcnt(ORr);
+	For(i=0;i<mtrw;i=i+1) begin
+	  matrowget(ORr,i,ORrw);
+	  	if(nonblank(ORrw.AltRebDiscFlag))then begin
+	  		ORrw.Sum = ORrw.Price * ORrw.Quant;
+	  		ORrw.vRebate = blankval;
+	  	end;
+	  	ORrw.AltRebTargFlag = "";
+	  	ORrw.AltRebDiscFlag = "";
+	  matrowput(ORr,i,ORrw);
+	end; 
+	
+	TrHs = true;
+	foundf = false;
+	while(loopmain(AlRebr,1,TrHs))begin	
+		testf = true;
+		if(AlRebr.PromStrDate>ORr.OrdDate or AlRebr.PromEndDate<ORr.OrdDate)then begin testf = false; logtext(0,"tf1"); end;
+		if(AlRebr.IsActiveFlag==0)then begin testf = false; logtext(0,"tf2"); end;
+		if(nonblank(AlRebr.Locations) and !setinset(ORr.Location,AlRebr.Locations))then begin testf = false; logtext(0,"tf3"); end;
+		
+		logtext(0,"AlternativeRebateORVc testf " & testf);
+		logtext(0,"AlternativeRebateORVc TrHs " & TrHs);
+		if(testf and TrHs)then begin
+			foundf = true;
+			TrHs = false;
+			
+			AkcQty = 0;
+			AkcSum = 0;
+			trqtyi = 0;
+			trqtyval = 0;
+			
+			trmtrw = matrowcnt(AlRebr);
+			mtrw = matrowcnt(ORr);
+			trfoundf = false;
+			
+			For(i=0;i<mtrw;i=i+1) begin
+				matrowget(ORr,i,ORrw);
+				if(nonblank(ORrw.ArtCode) and ORrw.stp==kInvoiceRowTypeNormal)then begin
+					INr.Code = ORrw.ArtCode;
+					if(readfirstmain(INr,1,true))then begin
+						For(j=0;j<trmtrw;j=j+1) begin
+							matrowget(AlRebr,j,AlRebrw);
+							if(blank(ORrw.AltRebTargFlag))then begin
+								trigtestf = false;
+								if(nonblank(AlRebrw.TriggerCategory) and setinset(AlRebrw.TriggerCategory,INr.DispGroups))then begin trigtestf = true; end;
+								if(nonblank(AlRebrw.TriggerBrand) and setinset(AlRebrw.TriggerBrand,INr.DispGroups))then begin trigtestf = true; end;
+								if(nonblank(AlRebrw.TriggerArtCode) and AlRebrw.TriggerArtCode==INr.Code)then begin trigtestf = true; end;
+								
+								if(trigtestf)then begin
+									if(AlRebrw.PriceFrom!=0 and ORrw.Price<AlRebrw.PriceFrom)then begin trigtestf = false; end;
+								end;
+								
+								if(trigtestf)then begin
+									AkcSum = AkcSum + ORrw.Quant * ORrw.Quant;
+									AkcQty = AkcQty + ORrw.Quant;
+									trqtyval = trqtyval + ORrw.Quant/AlRebrw.QuantFrom;
+									trqtyi = trqtyval;
+									ORrw.AltRebTargFlag = AlRebr.Code;
+									trfoundf = true;
+									logtext(0,"AlternativeRebateORVc AltRebTargFlag==== " & ORrw.AltRebTargFlag);
+									matrowput(ORr,i,ORrw);
+								end;
+							end;
+						end; 
+					end;
+				end;
+			end;
+			
+			if(trfoundf)then begin
+				For(i=0;i<mtrw;i=i+1) begin
+					matrowget(ORr,i,ORrw);
+					if(nonblank(ORrw.ArtCode) and ORrw.stp==kInvoiceRowTypeNormal)then begin
+						INr.Code = ORrw.ArtCode;
+						if(readfirstmain(INr,1,true))then begin
+							For(j=0;j<trmtrw;j=j+1) begin
+								matrowget(AlRebr,j,AlRebrw);
+								logtext(0,"ORrw.AltRebDiscFlag" & ORrw.AltRebDiscFlag);
+								if(blank(ORrw.AltRebDiscFlag))then begin
+									targtestf = false;
+									logtext(0,"targtestf1 " & targtestf & INr.Code);
+									if(nonblank(AlRebrw.DiscountedCategory) and setinset(AlRebrw.DiscountedCategory,INr.DispGroups))then begin targtestf = true; end;
+									if(nonblank(AlRebrw.DiscountedBrand) and setinset(AlRebrw.DiscountedBrand,INr.DispGroups))then begin targtestf = true; end;
+									if(nonblank(AlRebrw.DiscountedArtCode) and AlRebrw.DiscountedArtCode==INr.Code)then begin targtestf = true; end;
+									
+									logtext(0,"targtestf2 " & targtestf);
+									if(targtestf)then begin
+										if(AkcSum>=AlRebrw.SumFrom and AlRebrw.SumFrom>0)then begin trigtestf = true; end;
+									end;
+									
+									if(targtestf)then begin
+										logtext(0,"trqtyi " & trqtyi);
+										if(trqtyi>0)then begin
+											logtext(0,"trqtyi " & trqtyi);
+											if(ORrw.Quant<=trqtyi)then begin
+												trqtyi = trqtyi - ORrw.Quant;
+												if(AlRebrw.absRebate!=0)then begin
+													ORrw.Sum = ORrw.Quant*ORrw.Price - AlRebrw.absRebate * ORrw.Quant;
+													ORrw.vRebate = (ORrw.Quant*ORrw.Price - ORrw.Sum)/(ORrw.Quant*ORrw.Price)*100;
+													//IVDchsum(ORr,i);
+													logtext(0,"absRebate" & ORrw.Sum);
+												end;
+												if(AlRebrw.perRebate!=0)then begin
+													ORrw.Sum = ORrw.Quant*ORrw.Price*(1-AlRebrw.absRebate/100);
+													ORrw.vRebate = AlRebrw.perRebate;
+													logtext(0,"perRebate" & ORrw.Sum);
+												end;
+												ORrw.AltRebDiscFlag = AlRebr.Code;
+												logtext(0,"AlternativeRebateORVc AltRebDiscFlag " & ORrw.AltRebDiscFlag);
+												matrowput(ORr,i,ORrw);
+											end else begin
+												newquant = ORrw.Quant - trqtyi;
+												ORrw.Quant = newquant;
+												ORrw.Sum = ORrw.Quant*ORrw.Price;
+												matrowput(ORr,mtrw,ORrw);
+												//IVDchsum(ORr,mtrw);
+												mtrw = mtrw + 1;
+												ORrw.Quant = trqtyi;
+												trqtyi = trqtyi - ORrw.Quant;
+												if(AlRebrw.absRebate!=0)then begin
+													ORrw.Sum = ORrw.Quant*ORrw.Price - AlRebrw.absRebate * ORrw.Quant;
+													ORrw.vRebate = (ORrw.Quant*ORrw.Price - ORrw.Sum)/(ORrw.Quant*ORrw.Price)*100;
+													//IVDchsum(ORr,i);
+													logtext(0,"absRebate" & ORrw.Sum);
+												end;
+												if(AlRebrw.perRebate!=0)then begin
+													ORrw.Sum = ORrw.Quant*ORrw.Price*(1-AlRebrw.absRebate/100);
+													ORrw.vRebate = AlRebrw.perRebate;
+													logtext(0,"perRebate" & ORrw.Sum);
+												end;
+												ORrw.AltRebDiscFlag = AlRebr.Code;
+												logtext(0,"AlternativeRebateORVc AltRebDiscFlag " & ORrw.AltRebDiscFlag);
+												matrowput(ORr,i,ORrw);
+											end;
+											
+											
+										end;
+									end;
+								end;
+							end; 
+						end;
+					end;
+				end;
+			end;
+			 
+		end;
+	end;
 return;
 end;

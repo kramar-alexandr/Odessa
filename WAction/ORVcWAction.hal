@@ -77,6 +77,7 @@ remote procedure CalcCustBalrem(var record ORVc);
 remote procedure SOAPUpdateStatus(string,string);
 remote updating procedure MakeReserveFromOrder(longint);// Edit ************************** Friday, 10 March 2017 13:38:29
 remote updating procedure ORHistBackDsmRemote(record ORVc);
+remote procedure AlternativeRebateORVc(var record ORVc);//==============Alexandr 25/09/2015
 
 global //Edit***************************Sasha2,15:51 04.02.2015 {
 function Integer ORLClassRowColor(record ORVc ORr)
@@ -381,7 +382,10 @@ BEGIN
   record RPCUTaxVc RPCUTaxr;
   Boolean calcperceppercuf;
 	val fr,to;	//Edit-----------Dima  29.01.2015
-		
+	
+	AlternativeRebateORVc(ORp);//=================================Alexandr 25/09/2017
+
+	
   if (UseTaxTemplatesforTaxCalc) then begin
     ORSumup_TaxTemplate(ORp);
     goto LORSumup;
