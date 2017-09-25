@@ -1478,7 +1478,7 @@ boolean trigtestf,targtestf;
 									trqtyi = trqtyval;
 									IVrw.AltRebTargFlag = AlRebr.Code;
 									trfoundf = true;
-									logtext(0,"AlternativeRebateIVVc AltRebTargFlag " & IVrw.AltRebTargFlag);
+									logtext(0,"AlternativeRebateIVVc AltRebTargFlag==== " & IVrw.AltRebTargFlag);
 									matrowput(IVr,i,IVrw);
 								end;
 							end;
@@ -1495,6 +1495,7 @@ boolean trigtestf,targtestf;
 						if(readfirstmain(INr,1,true))then begin
 							For(j=0;j<trmtrw;j=j+1) begin
 								matrowget(AlRebr,j,AlRebrw);
+								logtext(0,"IVrw.AltRebDiscFlag" & IVrw.AltRebDiscFlag);
 								if(blank(IVrw.AltRebDiscFlag))then begin
 									targtestf = false;
 									logtext(0,"targtestf1 " & targtestf & INr.Code);
@@ -1508,7 +1509,7 @@ boolean trigtestf,targtestf;
 									end;
 									
 									if(targtestf)then begin
-										
+										logtext(0,"trqtyi " & trqtyi);
 										if(trqtyi>0)then begin
 											logtext(0,"trqtyi " & trqtyi);
 											if(IVrw.Quant<=trqtyi)then begin
@@ -1516,7 +1517,7 @@ boolean trigtestf,targtestf;
 												if(AlRebrw.absRebate!=0)then begin
 													IVrw.Sum = IVrw.Quant*IVrw.Price - AlRebrw.absRebate * IVrw.Quant;
 													IVrw.vRebate = (IVrw.Quant*IVrw.Price - IVrw.Sum)/(IVrw.Quant*IVrw.Price)*100;
-													IVDchsum(IVr,i);
+													//IVDchsum(IVr,i);
 													logtext(0,"absRebate" & IVrw.Sum);
 												end;
 												if(AlRebrw.perRebate!=0)then begin
@@ -1532,14 +1533,14 @@ boolean trigtestf,targtestf;
 												IVrw.Quant = newquant;
 												IVrw.Sum = IVrw.Quant*IVrw.Price;
 												matrowput(IVr,mtrw,IVrw);
-												IVDchsum(IVr,mtrw);
+												//IVDchsum(IVr,mtrw);
 												mtrw = mtrw + 1;
 												IVrw.Quant = trqtyi;
 												trqtyi = trqtyi - IVrw.Quant;
 												if(AlRebrw.absRebate!=0)then begin
 													IVrw.Sum = IVrw.Quant*IVrw.Price - AlRebrw.absRebate * IVrw.Quant;
 													IVrw.vRebate = (IVrw.Quant*IVrw.Price - IVrw.Sum)/(IVrw.Quant*IVrw.Price)*100;
-													IVDchsum(IVr,i);
+													//IVDchsum(IVr,i);
 													logtext(0,"absRebate" & IVrw.Sum);
 												end;
 												if(AlRebrw.perRebate!=0)then begin

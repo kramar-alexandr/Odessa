@@ -1,0 +1,1431 @@
+external procedure PrepareOfficialSerialNrBlock_IVVc(var record LegalInvNrBlock);
+external function Boolean TestNextOfficialSerialNr_IVVc(row LegalInvNrBlock,string,record IVVc,Boolean);
+external function string 100 FindNumberAfterSymbol(string,integer,string,boolean);
+external procedure WindowFieldGotoForTouchScreen(Integer,Integer,string,Boolean);
+external procedure IVDClass_RefreshStringList(Integer,record IVVc);
+external procedure RowCalculateTaxMatrix_IVVc(var record IVVc,Integer,row IVVc);
+external procedure DisplayIVThankYouAction();
+external function roundmode SetRoundModeD(Integer);
+external function roundmode DefaultRoundMode();
+external procedure SubCashRows_IVVc(record IVVc,Boolean,var val,var val);
+external procedure CalcPrice(val,val,val,var val,Integer);
+external procedure ReverseString(string,var string);
+remote function Boolean ReadFirstItem(string,var record INVc,Boolean,Boolean);
+external procedure RoundBelCash(string,var val);
+external function Integer GetVATLaw();
+external procedure CalcProc(val,val,var val);
+external procedure SendArtStat(string,string,string,val,val,val,Date,Integer);
+external procedure CalcSum(val,val,val,val,var val,Integer);
+external procedure RoundRowSum(string,string,string,var val);
+external function val MulRateToBase1(var string,val,val,val,val,val,val,roundmode);
+external procedure FindSalesExVat(record TaxMatrixVc,string,val,Integer,Integer,var val);
+remote function string 40 IVITDefaultRemote(string,string);
+external function Boolean TestForMATVARINS(Integer);
+remote updating function LongInt IVCheckIfSaveAllowed(var record IVVc,record IVVc,LongInt,LongInt);
+external function Boolean TouchScreenLook();
+external procedure ToolKeyPad_Numbers(string);
+external function Boolean IVVc_PasteQuantity(var record IVVc,Integer);
+external procedure IVVc_PasteItem(record IVVc,Integer,Integer);
+remote procedure IVSumup(var record IVVc,Boolean);
+external procedure SplitEclass(string,var Array string);
+external function Boolean IVDClassInsertRowTest(Integer, Integer);
+remote procedure IVVc_PasteInvDate(var record IVVc,record LocalMachineBlock,var Integer,var Integer);
+remote function string 255 CurDrawerCode(string);
+remote external procedure AlternativeRebateIVVc(var record IVVc);// Edit ************************** Monday, 25 September 2017 16:54:53
+
+global
+function Boolean IVDClassInvalidButtonAction(Integer wn,Integer value)
+BEGIN
+  Boolean res;
+  record IVVc IVr;
+  Integer normalmode,updatemode;
+ 
+  res = true;
+  normalmode = 0;//Rs_normal
+  updatemode = 2;//Rs_update
+  if (WindowState(wn)==normalmode) then begin
+    GetWindowRecord(wn,IVr);
+    if (IVr.Invalid!=0) then begin
+      res = false;
+    end;
+  end;  
+  if (WindowState(wn)==updatemode) then begin
+    GetPrevWindowRecord(wn,IVr);
+    if (IVr.Invalid!=0) then begin
+      res = false;
+    end;
+  end;  
+  IVDClassInvalidButtonAction = res;
+  RETURN;
+END;
+
+global
+function Boolean IVDClassCreditedRowEFAfter(Integer wn,Integer rownr,Boolean changedf)
+begin  
+  Integer res;
+  record IVVc IVr;
+  row IVVc IVrw;
+  record IVVc orgIVr;
+  Integer credrow;
+
+  if (changedf) then begin  
+    GetWindowRecord(wn,IVr);
+    if (IVr.InvType==kInvoiceTypeCredit or IVr.InvType==kInvoiceTypeCreditSpecialSales) then begin
+      if (IVr.CredInv>0) then begin
+        MatRowGet(IVr,rownr,IVrw);
+        if (IVrw.CreditedRow>=0) then begin
+          orgIVr.SerNr = IVr.CredInv;
+          if (ReadFirstMain(orgIVr,1,true)) then begin
+            credrow = IVrw.CreditedRow;
+            MatRowGet(orgIVr,credrow,IVrw);
+            IVrw.CreditedRow = credrow;
+            MatRowPut(IVr,rownr,IVrw);
+          end;
+          PutWindowRecord(wn,IVr);
+        end;
+      end;
+    end;
+  end;
+  IVDClassCreditedRowEFAfter = true;
+  return;
+end;
+
+global
+function string 255 FindTaxAuthID(string TaxAuthID,record IVVc IVr)
+begin
+  record CUVc CUr;
+  record LegalInvNrBlock LegalInvNrBlb;
+  row LegalInvNrBlock LegalInvNrBlbrw;
+  Integer i,rwcnt;
+  string 255 res,invserie,invnumber;
+  Boolean testf;
+ 
+  if nonblank(TaxAuthID) then begin
+    res = TaxAuthID;
+  end else begin
+    CUr.Code = IVr.CustCode;
+    ReadFirstMain(CUr,1,true);
+    invnumber = FindNumberAfterSymbol(IVr.OfficialSerNr,2,"-",false);
+    invserie = Left(IVr.OfficialSerNr,Len(IVr.OfficialSerNr)-Len(invnumber));
+    BlockLoad(LegalInvNrBlb);
+    PrepareOfficialSerialNrBlock_IVVc(LegalInvNrBlb);
+    rwcnt = MatRowCnt(LegalInvNrBlb);
+    for (i=0;i<rwcnt;i=i+1) begin
+      MatRowGet(LegalInvNrBlb,i,LegalInvNrBlbrw);
+      testf = true;   
+      testf = TestNextOfficialSerialNr_IVVc(LegalInvNrBlbrw,CUr.Classification,IVr,false);
+      if (invserie!=LegalInvNrBlbrw.Serie) then begin
+        testf = false;
+      end;
+      if (invnumber<LegalInvNrBlbrw.TSerStart) or (invnumber>LegalInvNrBlbrw.TSerEnd) then begin
+        testf = false;
+      end;
+      if (DateInRange(IVr.TransDate,LegalInvNrBlbrw.PurchDate,LegalInvNrBlbrw.EndDate)==false) then begin
+        testf = false;
+      end;
+      if (testf) then begin
+        res = LegalInvNrBlbrw.TaxAuthID;
+        goto LFindTaxAuthID;
+      end;
+    end;
+  end;
+LFindTaxAuthID:;
+  FindTaxAuthID = res;
+  return;
+end;
+
+global
+function Date FindTaxAuthIDToDate(record IVVc IVr)
+begin
+  record CUVc CUr;
+  record LegalInvNrBlock LegalInvNrBlb;
+  row LegalInvNrBlock LegalInvNrBlbrw;
+  Integer i,rwcnt;
+  string 255 res,invserie,invnumber;
+  Boolean testf;
+ 
+  BlockLoad(LegalInvNrBlb);
+  
+  rwcnt = MatRowCnt(LegalInvNrBlb);
+  for (i=0;i<rwcnt;i=i+1) begin
+    MatRowGet(LegalInvNrBlb,i,LegalInvNrBlbrw);
+    CUr.Code = IVr.CustCode;
+    ReadFirstMain(CUr,1,true);
+    invnumber = FindNumberAfterSymbol(IVr.OfficialSerNr,2,"-",false);
+    invserie = Left(IVr.OfficialSerNr,Len(IVr.OfficialSerNr)-Len(invnumber));
+    BlockLoad(LegalInvNrBlb);
+    PrepareOfficialSerialNrBlock_IVVc(LegalInvNrBlb);
+    rwcnt = MatRowCnt(LegalInvNrBlb);
+    for (i=0;i<rwcnt;i=i+1) begin
+      MatRowGet(LegalInvNrBlb,i,LegalInvNrBlbrw);
+      testf = true;   
+      testf = TestNextOfficialSerialNr_IVVc(LegalInvNrBlbrw,CUr.Classification,IVr,false);
+      if (invserie!=LegalInvNrBlbrw.Serie) then begin
+        testf = false;
+      end;
+      if (invnumber<LegalInvNrBlbrw.TSerStart) or (invnumber>LegalInvNrBlbrw.TSerEnd) then begin
+        testf = false;
+      end;
+     if (DateInRange(IVr.TransDate,LegalInvNrBlbrw.PurchDate,LegalInvNrBlbrw.EndDate)==false) then begin
+        testf = false;
+      end;
+      if (testf) then begin
+        res = LegalInvNrBlbrw.EndDate;
+        goto LFindTaxAuthIDToDate;
+      end;  
+    end;
+  end;
+LFindTaxAuthIDToDate:;
+  FindTaxAuthIDToDate = res;
+  return;
+end;
+
+global
+function string 255 FindTaxAuthIDDosageKey(string TaxAuthID,record IVVc IVr)
+begin
+  record CUVc CUr;
+  record LegalInvNrBlock LegalInvNrBlb;
+  row LegalInvNrBlock LegalInvNrBlbrw;
+  Integer i,rwcnt;
+  string 255 res,invserie,invnumber;
+  Boolean testf;
+  
+  BlockLoad(LegalInvNrBlb);
+
+  if nonblank(TaxAuthID) then begin
+    rwcnt = MatRowCnt(LegalInvNrBlb);
+    for (i=0;i<rwcnt;i=i+1) begin
+      MatRowGet(LegalInvNrBlb,i,LegalInvNrBlbrw);
+      if (LegalInvNrBlbrw.TaxAuthID==TaxAuthID) then begin
+        if (DateInRange(IVr.TransDate,LegalInvNrBlbrw.PurchDate,LegalInvNrBlbrw.EndDate)==true) then begin
+          res = LegalInvNrBlbrw.DosageKey;
+          goto LFindTaxAuthIDDosageKey;
+         end;  
+      end;
+    end;  
+  end else begin
+    CUr.Code = IVr.CustCode;
+    ReadFirstMain(CUr,1,true);
+    invnumber = FindNumberAfterSymbol(IVr.OfficialSerNr,2,"-",false);
+    invserie = Left(IVr.OfficialSerNr,Len(IVr.OfficialSerNr)-Len(invnumber));
+    PrepareOfficialSerialNrBlock_IVVc(LegalInvNrBlb);
+    rwcnt = MatRowCnt(LegalInvNrBlb);
+    for (i=0;i<rwcnt;i=i+1) begin
+      MatRowGet(LegalInvNrBlb,i,LegalInvNrBlbrw);
+      testf = true;   
+      testf = TestNextOfficialSerialNr_IVVc(LegalInvNrBlbrw,CUr.Classification,IVr,false);
+      if (invserie!=LegalInvNrBlbrw.Serie) then begin
+        testf = false;
+      end;
+      if (invnumber<LegalInvNrBlbrw.TSerStart) or (invnumber>LegalInvNrBlbrw.TSerEnd) then begin
+        testf = false;
+      end;
+      if (DateInRange(IVr.TransDate,LegalInvNrBlbrw.PurchDate,LegalInvNrBlbrw.EndDate)==false) then begin
+        testf = false;
+      end;
+      if (testf) then begin
+        res = LegalInvNrBlbrw.DosageKey;
+        goto LFindTaxAuthIDDosageKey;
+      end;
+    end;
+  end;
+LFindTaxAuthIDDosageKey:;
+  FindTaxAuthIDDosageKey = res;
+  return;
+end;
+
+procedure InitVerhoeffD(Array Integer Djk)
+begin
+  Djk[0] = 0; Djk[1] = 1; Djk[2] = 2; Djk[3] = 3; Djk[4] = 4; Djk[5] = 5; Djk[6] = 6; Djk[7] = 7; Djk[8] = 8; Djk[9] = 9;
+  Djk[10] = 1; Djk[11] = 2; Djk[12] = 3; Djk[13] = 4; Djk[14] = 0; Djk[15] = 6; Djk[16] = 7; Djk[17] = 8; Djk[18] = 9; Djk[19] = 5;  
+  Djk[20] = 2; Djk[21] = 3; Djk[22] = 4; Djk[23] = 0; Djk[24] = 1; Djk[25] = 7; Djk[26] = 8; Djk[27] = 9; Djk[28] = 5; Djk[29] = 6;
+  Djk[30] = 3; Djk[31] = 4; Djk[32] = 0; Djk[33] = 1; Djk[34] = 2; Djk[35] = 8; Djk[36] = 9; Djk[37] = 5; Djk[38] = 6; Djk[39] = 7; 
+  Djk[40] = 4; Djk[41] = 0; Djk[42] = 1; Djk[43] = 2; Djk[44] = 3; Djk[45] = 9; Djk[46] = 5; Djk[47] = 6; Djk[48] = 7; Djk[49] = 8;  
+  Djk[50] = 5; Djk[51] = 9; Djk[52] = 8; Djk[53] = 7; Djk[54] = 6; Djk[55] = 0; Djk[56] = 4; Djk[57] = 3; Djk[58] = 2; Djk[59] = 1;  
+  Djk[60] = 6; Djk[61] = 5; Djk[62] = 9; Djk[63] = 8; Djk[64] = 7; Djk[65] = 1; Djk[66] = 0; Djk[67] = 4; Djk[68] = 3; Djk[69] = 2;  
+  Djk[70] = 7; Djk[71] = 6; Djk[72] = 5; Djk[73] = 9; Djk[74] = 8; Djk[75] = 2; Djk[76] = 1; Djk[77] = 0; Djk[78] = 4; Djk[79] = 3;  
+  Djk[80] = 8; Djk[81] = 7; Djk[82] = 6; Djk[83] = 5; Djk[84] = 9; Djk[85] = 3; Djk[86] = 2; Djk[87] = 1; Djk[88] = 0; Djk[89] = 4;
+  Djk[90] = 9; Djk[91] = 8; Djk[92] = 7; Djk[93] = 6; Djk[94] = 5; Djk[95] = 4; Djk[96] = 3; Djk[97] = 2; Djk[98] = 1; Djk[99] = 0;
+  return;
+end;
+
+procedure InitVerhoeffP(Array Integer Pposnum)
+begin
+  Pposnum[0] = 0; Pposnum[1] = 1; Pposnum[2] = 2; Pposnum[3] = 3; Pposnum[4] = 4; Pposnum[5] = 5; Pposnum[6] = 6; Pposnum[7] = 7; Pposnum[8] = 8; Pposnum[9] = 9;
+  Pposnum[10] = 1; Pposnum[11] = 5; Pposnum[12] = 7; Pposnum[13] = 6; Pposnum[14] = 2; Pposnum[15] = 8; Pposnum[16] = 3; Pposnum[17] = 0; Pposnum[18] = 9; Pposnum[19] = 4;  
+  Pposnum[20] = 5; Pposnum[21] = 8; Pposnum[22] = 0; Pposnum[23] = 3; Pposnum[24] = 7; Pposnum[25] = 9; Pposnum[26] = 6; Pposnum[27] = 1; Pposnum[28] = 4; Pposnum[29] = 2;
+  Pposnum[30] = 8; Pposnum[31] = 9; Pposnum[32] = 1; Pposnum[33] = 6; Pposnum[34] = 0; Pposnum[35] = 4; Pposnum[36] = 3; Pposnum[37] = 5; Pposnum[38] = 2; Pposnum[39] = 7; 
+  Pposnum[40] = 9; Pposnum[41] = 4; Pposnum[42] = 5; Pposnum[43] = 3; Pposnum[44] = 1; Pposnum[45] = 2; Pposnum[46] = 6; Pposnum[47] = 8; Pposnum[48] = 7; Pposnum[49] = 0;  
+  Pposnum[50] = 4; Pposnum[51] = 2; Pposnum[52] = 8; Pposnum[53] = 6; Pposnum[54] = 5; Pposnum[55] = 7; Pposnum[56] = 3; Pposnum[57] = 9; Pposnum[58] = 0; Pposnum[59] = 1;  
+  Pposnum[60] = 2; Pposnum[61] = 7; Pposnum[62] = 9; Pposnum[63] = 3; Pposnum[64] = 8; Pposnum[65] = 0; Pposnum[66] = 6; Pposnum[67] = 4; Pposnum[68] = 1; Pposnum[69] = 5;  
+  Pposnum[70] = 7; Pposnum[71] = 0; Pposnum[72] = 4; Pposnum[73] = 6; Pposnum[74] = 9; Pposnum[75] = 1; Pposnum[76] = 3; Pposnum[77] = 2; Pposnum[78] = 5; Pposnum[79] = 8;  
+  return;
+end;
+
+procedure InitVerhoeffJ(Array Integer jinv)
+begin
+  jinv[0] = 0; jinv[1] = 4; jinv[2] = 3; jinv[3] = 2; jinv[4] = 1; jinv[5] = 5; jinv[6] = 6; jinv[7] = 7; jinv[8] = 8; jinv[9] = 9;
+  return;
+end;
+
+function Integer VerhoeffCheck(string l)
+begin
+  string 255 tstr;
+  Array Integer Djk;
+  Array Integer Pposnum;
+  Array Integer jinv;
+  Array Integer la;
+  Integer i,c,p,x;
+  
+  InitVerhoeffD(Djk);
+  InitVerhoeffP(Pposnum);
+  InitVerhoeffJ(jinv);
+  
+  ReverseString(l,tstr);
+  for (i=0;i<len(tstr);i=i+1) begin
+    la[i] = StringToInt(Mid(tstr,i,1));
+  end;
+  c = 0;
+  x = 1;
+  for (i=0;i<len(tstr);i=i+1) begin
+    p = Pposnum[la[i] + (Mod(i,8)*10)];    
+    x = x*jinv[p];    
+    c = Djk[p + (c*10)];
+  end;  
+  VerhoeffCheck = c;
+  return;
+end;
+
+function Integer VerhoeffCheckDigit(string l)
+begin
+  string 255 tstr;
+  Array Integer Djk;
+  Array Integer Pposnum;
+  Array Integer jinv;
+  Array Integer la;
+  Integer i,c,p,x;
+  
+  InitVerhoeffD(Djk);
+  InitVerhoeffP(Pposnum);
+  InitVerhoeffJ(jinv);
+  ReverseString(l & "0",tstr);
+  for (i=0;i<len(tstr);i=i+1) begin
+    la[i] = StringToInt(Mid(tstr,i,1));
+  end;
+  c = 0;
+  for (i=0;i<len(tstr);i=i+1) begin
+    x = StringToInt(Mid(tstr,i,1));
+    p = Pposnum[x + mod(i,8)*10];       
+    c = Djk[p + (c*10)];
+  end;
+  c = jinv[c];
+  VerhoeffCheckDigit = c;
+  return;
+end;
+
+function val Modulus(val v1,val v2)
+begin
+  val res;
+  LongInt l;
+  
+  l = v1/v2;
+  res = v1 - l*v2;
+  Modulus = res;
+  return;
+end;
+
+procedure Base64Dict(Array string D)
+begin
+  D[0]="0"; D[1]="1"; D[2]="2"; D[3]="3"; D[4]="4"; D[5]="5"; D[6]="6"; D[7]="7"; D[8]="8"; D[9]="9"; 
+  D[10]="A"; D[11]="B"; D[12]="C"; D[13]="D"; D[14]="E"; D[15]="F"; D[16]="G"; D[17]="H"; D[18]="I"; 
+  D[19]="J"; D[20]="K"; D[21]="L"; D[22]="M"; D[23]="N"; D[24]="O"; D[25]="P"; D[26]="Q"; D[27]="R"; D[28]="S";
+  D[29]="T"; D[30]="U"; D[31]="V"; D[32]="W"; D[33]="X"; D[34]="Y"; D[35]="Z"; D[36]="a"; D[37]="b"; D[38]="c";
+  D[39]="d"; D[40]="e"; D[41]="f"; D[42]="g"; D[43]="h"; D[44]="i"; D[45]="j"; D[46]="k"; D[47]="l"; D[48]="m";
+  D[49]="n"; D[50]="o"; D[51]="p"; D[52]="q"; D[53]="r"; D[54]="s"; D[55]="t"; D[56]="u"; D[57]="v"; D[58]="w";
+  D[59]="x"; D[60]="y"; D[61]="z"; D[62]="+"; D[63]="/";
+  return;
+end;
+
+function string 255 Base64(LongInt number)
+begin
+  string 255 res;
+  Array string 1 D;
+  LongInt lnumber;
+  
+  lnumber = number;
+  Base64Dict(D);
+  while(lnumber>0)begin
+  	res = D[Mod(lnumber,64)] & res; 
+    lnumber = lnumber/64;
+  end;
+  Base64 = res;    
+  return;
+end;
+
+procedure NumToHex(string instr,var string res)
+begin
+  string 16 hexs;
+  LongInt l,i;
+  string 255 tstr;
+  
+  res = "";
+  l = FirstInRange(instr,10);
+  hexs = "0123456789ABCDEF";
+  for (i=0;i<2;i=i+1) begin
+    tstr = tstr & Mid(hexs,BitAnd(l,15),1);
+    l = l/16;
+  end;
+  for (i=len(tstr);i>=0;i=i-1) begin
+    res = res & Mid(tstr,i,1);
+  end;  
+  return;
+end;
+
+function string 255 RC4(Array Integer key,Integer keylen,Array Integer tstr,Integer datalen)
+begin
+  string 255 res;
+  Array Integer resi;
+  Array Integer S;
+  Integer i,a,b,j,k;
+  Integer x,y;
+  string 255 t1;
+    
+  for (i=0;i<256;i=i+1) begin
+    S[i] = i;
+  end;
+  j = 0; k = 0;
+  for (i=0;i<256;i=i+1) begin    
+    a = S[i];
+    j = Mod(j + a + key[k],256);
+    S[i] = S[j]; S[j] = a;    
+    k = k + 1;
+    if (k>=keylen) then begin k = 0; end;            
+  end;
+  
+  x = 0; y = 0;
+  for (i=0;i<datalen;i=i+1) begin
+    x = x + 1;
+    a = S[x];
+    y = Mod(y + a,256);
+    b = S[y];
+    S[x] = S[y];
+    S[y] = a;
+    resi[i] = BITXOR(S[Mod(a+b,256)],tstr[i]);
+  end;
+  for (i=0;i<datalen;i=i+1) begin
+    NumToHex(resi[i],t1);
+    res = res & t1;
+  end;
+  RC4 = res;
+  return;
+end;
+
+global
+function string 255 FindTaxAuthIDControlCode(string deftaxauthidcc,record IVVc IVr)
+begin
+  string 255 res,tstr;
+  string 255 taxauthid,invno,vatnr,dates,sums,vs,dosagekey;
+  val v,t;
+  Array Integer keyi;
+  Array Integer vsi;
+  Integer i,dk1l,dk2l,dk3l,dk4l,dk5l;
+  string 255 dk1,dk2,dk3,dk4,dk5;
+  string 255 VD;
+  LongInt tot,pa1,pa2,pa3,pa4,pa5;
+  
+  if (nonblank(deftaxauthidcc)) then begin
+    res = deftaxauthidcc;
+  end else begin
+    tot = 0; pa1 = 0; pa2 = 0; pa3 = 0; pa4 = 0; pa5 = 0;
+    taxauthid = FindTaxAuthID(IVr.TaxAuthID,IVr);
+    dosagekey = FindTaxAuthIDDosageKey(IVr.TaxAuthID,IVr);
+    tstr = FindNumberAfterSymbol(IVr.OfficialSerNr,2,"-",true);
+    
+    invno = tstr & VerhoeffCheckDigit(tstr);
+    invno = invno & VerhoeffCheckDigit(invno);//2 Verhoef digits
+    
+    vatnr = IVr.VATNr & VerhoeffCheckDigit(IVr.VATNr);
+    vatnr = vatnr & VerhoeffCheckDigit(vatnr);//2 Verhoef digits
+
+    dates = DateToString(IVr.TransDate,"YYYYMMDD");
+    dates = dates & VerhoeffCheckDigit(dates);
+    dates = dates & VerhoeffCheckDigit(dates);//2 Verhoef digits
+    
+    t = MulRateToBase1(IVr.CurncyCode,IVr.Sum1,IVr.FrRate,IVr.ToRateB1,IVr.ToRateB2,IVr.BaseRate1,IVr.BaseRate2,DefaultCurRoundOff);
+    sums = ValToString(Round(t,SetRoundModeD(0)),M40Val,"","",0);//net 
+    sums = sums & VerhoeffCheckDigit(sums);
+    sums = sums & VerhoeffCheckDigit(sums);//2 Verhoef digits
+
+    v = 0;
+    v = v + StringToVal(invno,M4Val);
+    v = v + StringToVal(vatnr,M4Val);
+    v = v + StringToVal(dates,M4Val);
+    v = v + StringToVal(sums,M4Val);
+
+    vs = ValToString(v,M40Val,"","",0);
+
+    for (i=0;i<5;i=i+1) begin
+      vs = vs & VerhoeffCheckDigit(vs);
+    end;
+
+    VD = Right(vs,5);
+
+    dk1l = StringToInt(Mid(VD,0,1)) + 1;
+    dk2l = StringToInt(Mid(VD,1,1)) + 1;
+    dk3l = StringToInt(Mid(VD,2,1)) + 1;
+    dk4l = StringToInt(Mid(VD,3,1)) + 1;
+    dk5l = StringToInt(Mid(VD,4,1)) + 1;
+
+    dk1 = Mid(dosagekey,0,dk1l); i = dk1l;
+    dk2 = Mid(dosagekey,i,dk2l); i = i + dk2l;
+    dk3 = Mid(dosagekey,i,dk3l); i = i + dk3l;
+    dk4 = Mid(dosagekey,i,dk4l); i = i + dk4l;
+    dk5 = Mid(dosagekey,i,dk5l);
+
+    taxauthid = taxauthid & dk1;
+    invno = invno & dk2;
+    vatnr = vatnr & dk3;
+    dates = dates & dk4;
+    sums = sums & dk5;
+    
+    dosagekey = dosagekey & VD;
+    vs = taxauthid & invno & vatnr & dates & sums;
+    
+    for (i=0;i<len(dosagekey);i=i+1) begin
+      keyi[i] = asc(Mid(dosagekey,i,1));
+    end;
+
+    for (i=0;i<len(vs);i=i+1) begin
+      vsi[i] = asc(Mid(vs,i,1));
+    end;
+    
+    tstr = RC4(keyi,len(dosagekey),vsi,len(vs));
+    
+    for (i=0;i<len(tstr);i=i+1) begin
+      tot = tot + asc(Mid(tstr,i,1));
+    end;
+    
+    i = 1;
+    while (i<=len(tstr)) begin
+      pa1 = pa1 + asc(Mid(tstr,i-1,1));
+      i = i + 5;
+    end;
+    i = 2;
+    while (i<=len(tstr)) begin
+      pa2 = pa2 + asc(Mid(tstr,i-1,1));
+      i = i + 5;
+    end;
+    i = 3;
+    while (i<=len(tstr)) begin
+      pa3 = pa3 + asc(Mid(tstr,i-1,1));
+      i = i + 5;
+    end;
+    i = 4;
+    while (i<=len(tstr)) begin
+      pa4 = pa4 + asc(Mid(tstr,i-1,1));
+      i = i + 5;
+    end;
+    i = 5;
+    while (i<=len(tstr)) begin
+      pa5 = pa5 + asc(Mid(tstr,i-1,1));
+      i = i + 5;
+    end;  
+
+    pa1 = pa1*tot/dk1l;
+    pa2 = pa2*tot/dk2l;
+    pa3 = pa3*tot/dk3l;
+    pa4 = pa4*tot/dk4l;
+    pa5 = pa5*tot/dk5l;
+
+    tot = pa1 + pa2 + pa3 + pa4 + pa5;  
+    vs = Base64(tot);
+      
+    for (i=0;i<len(vs);i=i+1) begin
+      vsi[i] = asc(Mid(vs,i,1));
+    end;
+
+    tstr = RC4(keyi,len(dosagekey),vsi,len(vs));
+
+    res = Left(tstr,2) & "-";
+    res = res & Mid(tstr,2,2);
+    if (len(tstr)>4) then begin
+      res = res & "-";
+    end;    
+    res = res & Mid(tstr,4,2);
+    if (len(tstr)>6) then begin
+      res = res & "-";
+    end;  
+    res = res & Mid(tstr,6,2);
+    if (len(tstr)>8) then begin
+      res = res & "-";
+    end;  
+    res = res & Mid(tstr,8,2);
+  end;
+  FindTaxAuthIDControlCode = res;
+  return;
+end;
+
+global
+procedure IVDClassTileItems()
+begin
+  WindowDeactivateField(CurWindow);
+  ActivateTile(CurWindow,1);
+  return;
+end;
+
+global
+procedure IVDClassTileItemsSet1()
+begin
+  WindowDeactivateField(CurWindow);
+  ActivateTile(CurWindow,1);
+  return;
+end;
+
+global
+procedure IVDClassTileItemsSet2()
+begin
+  WindowDeactivateField(CurWindow);
+  ActivateTile(CurWindow,2);
+  return;
+end;
+
+global
+procedure IVDClassTileItemsSet3()
+begin
+  WindowDeactivateField(CurWindow);
+  ActivateTile(CurWindow,3);
+  return;
+end;
+
+global
+procedure IVDClassTileItemsSet4()
+begin
+  WindowDeactivateField(CurWindow);
+  ActivateTile(CurWindow,4);
+  return;
+end;
+
+global
+procedure IVDClassTileItemsSet5()
+begin
+  WindowDeactivateField(CurWindow);
+  ActivateTile(CurWindow,5);
+  return;
+end;
+
+global
+procedure IVDClassTileItemsSet6()
+begin
+  WindowDeactivateField(CurWindow);
+  ActivateTile(CurWindow,6);
+  return;
+end;
+
+global
+procedure IVDClassTileItemsSet7()
+begin
+  WindowDeactivateField(CurWindow);
+  ActivateTile(CurWindow,7);
+  return;
+end;
+
+global
+procedure IVDClassTileMoreItems()
+begin
+  WindowDeactivateField(CurWindow);
+  ActivateTile(CurWindow,8);
+  return;
+end;
+
+global
+procedure IVDClassTileTerms()
+begin
+  WindowDeactivateField(CurWindow);
+  ActivateTile(CurWindow,9);
+  return;
+end;
+
+global
+procedure IVDClassAddressTile()
+begin
+  WindowDeactivateField(CurWindow);
+  ActivateTile(CurWindow,12);
+  return;
+end;
+
+global
+procedure IVDClassTileCurrency()
+begin
+  WindowDeactivateField(CurWindow);
+  ActivateTile(CurWindow,10);
+  return;
+end;
+
+global
+procedure IVDClassTileCash()
+begin
+  WindowDeactivateField(CurWindow);
+  ActivateTile(CurWindow,11);//?
+  return;
+end;
+
+global
+procedure IVDClassTileButtons()
+begin
+  WindowDeactivateField(CurWindow);
+  ActivateTile(CurWindow,11);
+  return;
+end;
+
+global
+procedure IVDClassToolKeyPadDelete()
+BEGIN
+  KeyPadSelectAll(CurWindow);
+  KeyPadDelete(CurWindow);
+  RETURN;
+END;  
+
+global
+function string 40 IVITDefault(string tstr)
+BEGIN
+  string 40 lsubset;
+  record LocalMachineBlock LMr;
+  record DIVc DIr;
+      
+// What, looping over DIVc in client?
+//  lsubset = IVITDefaultRemote(tstr,CurMachineName);
+  BlockLoad(LMr);
+  if (nonblank(LMr.DefRestDisp)) then begin
+    lsubset = LMr.DefRestDisp;
+  end else begin
+    DIr.Code = "";
+    if (LoopMain(DIr,1,true)) then begin
+      lsubset = DIr.Code;
+    end;
+  end;
+  IVITDefault = lsubset;
+  RETURN;
+END;  
+ 
+/*JAJ, remote*/ 
+procedure slIVHAL(Integer wn)
+BEGIN
+  record IVVc IVr;
+  record DIVc DIr;
+  Boolean found;
+  string 255 ckey,t2,tstr;
+
+  ClearStringList(wn);
+  found = true;
+  ckey = "DICode:" & GetWindowSubset(wn);
+  while (LoopKey(ckey,DIr,1,found)) begin
+    tstr = DIr.Name & " ";
+    tstr = tstr & DIr.colnr;
+    SetListString(wn,len(tstr),tstr,false);
+  end;
+  PutWindowRecord(wn,IVr);
+  RETURN;
+END;          
+
+global
+procedure IVDClassToolUp()
+BEGIN
+  record IVVc IVr;
+  record DIVc DIr;
+  Array string 20 ac;
+  string 255 lsubset;
+  Integer wn;
+
+  wn = CurWindow;
+  GetWindowRecord(wn,IVr);
+  DIr.Code = GetWindowSubset(wn);
+  if (ReadFirstMain(DIr,1,true)) then begin
+    SplitEclass(DIr.DispGroups,ac);
+    SetWindowSubset(wn,ac[0]);
+    if (blank(GetWindowSubset(wn))) then begin
+      lsubset = IVITDefault("");
+      SetWindowSubset(wn,lsubset);      
+    end;
+  end;
+  slIVHAL(wn);
+  UpdateBrowses("INVc");
+  PutWindowRecord(wn,IVr);
+  RETURN;
+END;  
+
+global
+procedure IVDClassToolFileDesktop()
+BEGIN
+  record IVVc IVr;
+  Integer wn;
+  string 255 lsubset;
+
+  wn = CurWindow;
+  GetWindowRecord(wn,IVr);
+  lsubset = IVITDefault("");
+  SetWindowSubset(wn,lsubset);      
+  slIVHAL(wn);
+  UpdateBrowses("INVc");
+  PutWindowRecord(wn,IVr);
+  RETURN;
+END;  
+
+procedure IVDClassToolKeyPadAdd()
+BEGIN
+  Integer wn,rownr;
+  record INVc INr;
+  record IVVc IVr;
+  row IVVc IVrw;
+  Boolean testf;
+  Integer i,rwcnt;
+  
+  wn = CurWindow;
+  if (WindowActiveField(wn)=="Quant") then begin testf = true; end;
+  if (WindowActiveField(wn)=="Price") then begin testf = true; end;
+  DeselectWindow(wn,false);
+  if (ReadMarkedRecord(wn,INr)) then begin 
+  end;
+  WindowDeactivateField(wn);
+  if (testf) then begin
+    rownr = WindowActiveRow(wn);
+    if (rownr>=0) then begin
+      GetWindowRecord(wn,IVr);  
+      MatRowGet(IVr,rownr,IVrw);
+      if (nonblank(INr.Code)) then begin
+        if (INr.Code!=IVrw.ArtCode) then begin
+          testf = false;
+        end;
+      end;
+      if (testf) then begin
+        IVrw.Quant = IVrw.Quant + 1;
+        MatRowPut(IVr,rownr,IVrw);
+        IVVc_PasteQuantity(IVr,rownr);
+        PutWindowRecord(wn,IVr);  
+        goto LIVToolKeyPadAdd;
+      end;
+    end;
+  end;
+  if (nonblank(INr.Code)) then begin
+    GetWindowRecord(wn,IVr);  
+    rwcnt = MatRowCnt(IVr);
+    for (i=0;i<rwcnt;i=i+1) begin
+      MatRowGet(IVr,i,IVrw);
+      if (IVrw.ArtCode==INr.Code) then begin
+        rownr = i;
+        goto L55IVToolKeyPadAdd;
+      end;
+    end;
+    rownr = rwcnt;
+L55IVToolKeyPadAdd:;  
+    if (rownr==rwcnt) then begin
+      ClearRow(IVr,IVrw,1);
+      IVrw.ArtCode = INr.Code;
+      MatRowPut(IVr,rownr,IVrw);
+      PutWindowRecord(wn,IVr);  
+      IVVc_PasteItem(IVr,rownr,wn);
+    end else begin
+      MatRowGet(IVr,rownr,IVrw);
+      IVrw.Quant = IVrw.Quant + 1;
+      MatRowPut(IVr,rownr,IVrw);
+      IVVc_PasteQuantity(IVr,rownr);
+      PutWindowRecord(wn,IVr);
+    end;
+    WindowFieldGotoForTouchScreen(wn,rownr,"Quant",true);
+  end;
+LIVToolKeyPadAdd:;  
+  RETURN;
+END;  
+
+global
+function Boolean IVDClassRLClick(Integer wn,Integer rownr)
+begin
+  record IVVc IVr;
+  
+  if (TouchScreenLook and IVDClassInsertRowTest(wn,0)) then begin // 030830, kyb, ugly fix
+    IVDClassToolKeyPadAdd;
+  end;
+  
+  IVDClassRLClick = true;
+  return;
+end;
+
+global
+procedure IVDClassToolKeyPad1()
+BEGIN
+  ToolKeyPad_Numbers("1");
+  RETURN;
+END;  
+
+global
+procedure IVDClassToolKeyPad2()
+BEGIN
+  ToolKeyPad_Numbers("2");
+  RETURN;
+END;  
+
+global
+procedure IVDClassToolKeyPad3()
+BEGIN
+  ToolKeyPad_Numbers("3");
+  RETURN;
+END;  
+
+global
+procedure IVDClassToolKeyPad4()
+BEGIN
+  ToolKeyPad_Numbers("4");
+  RETURN;
+END;  
+
+global
+procedure IVDClassToolKeyPad5()
+BEGIN
+  ToolKeyPad_Numbers("5");
+  RETURN;
+END;  
+
+global
+procedure IVDClassToolKeyPad6()
+BEGIN
+  ToolKeyPad_Numbers("6");
+  RETURN;
+END;  
+
+global
+procedure IVDClassToolKeyPad7()
+BEGIN
+  ToolKeyPad_Numbers("7");
+  RETURN;
+END;  
+
+global
+procedure IVDClassToolKeyPad8()
+BEGIN
+  ToolKeyPad_Numbers("8");
+  RETURN;
+END;  
+
+global
+procedure IVDClassToolKeyPad9()
+BEGIN
+  ToolKeyPad_Numbers("9");
+  RETURN;
+END;  
+
+global
+procedure IVDClassToolKeyPad0()
+BEGIN
+  ToolKeyPad_Numbers("0");
+  RETURN;
+END;  
+
+global
+procedure IVDClassToolKeyPad00()
+BEGIN
+  ToolKeyPad_Numbers("00");
+  RETURN;
+END;  
+
+global
+procedure IVDClassToolKeyPadPoint()
+BEGIN
+  ToolKeyPad_Numbers(DECIMALSEPARATOR); //## international
+  RETURN;
+END;  
+
+global
+procedure IVDClassToolKeyPadEnter()
+BEGIN
+  KeyPadEnter(CurWindow);
+  RETURN;
+END;  
+
+global
+procedure IVDClassToolKeyPadExact()
+BEGIN
+  Integer wn;
+  record IVVc IVr;
+  
+  wn = CurWindow;
+  KeyPadEnter(wn);
+  GetWindowRecord(wn,IVr);
+  WindowDeactivatefield(wn);
+  IVSumup(IVr,true);  
+  PutWindowRecord(wn,IVr);
+  RETURN;
+END;  
+
+global
+function Boolean IVDClassBeforeEditField(Integer wn,string fieldname,Integer fn, Integer rownr)
+BEGIN
+  Boolean res;
+  Integer nwn;
+  record IVVc IVr;
+  row IVVc IVrw;
+  record INVc INr;
+
+  switch (fieldname) begin  
+    case "Quant": 
+      GetWindowRecord(wn,IVr);      
+      MatRowGet(IVr,rownr,IVrw);
+      if (IVrw.Quant==0) then begin
+        if (TestForMATVARINS(wn)) then begin end;
+      end;
+    case "ArtCode": ;
+    case "CustCode": 
+      if (TouchScreenLook and GuiType!=kGuiiPhone and GuiType!=kGuiAndroid) then begin      
+        GetWindowRecord(wn,IVr);      
+        if (WindowState(wn)!=0) then begin
+          nwn = OpenPasteWindow(wn,GetWindowPasteName(wn,fieldname),IVr.CustCode);
+        end;
+      end;
+    case "SerialNr": 
+      if (TouchScreenLook) then begin      
+        if (WindowState(wn)!=0) then begin
+          if (rownr>=0) then begin
+            GetWindowRecord(wn,IVr);      
+            MatRowGet(IVr,rownr,IVrw);
+            if (ReadFirstItem(IVrw.ArtCode,INr,true,false)) then begin
+              if (INr.SerNrf>0) then begin
+                nwn = OpenPasteWindow(wn,GetWindowPasteName(wn,fieldname),"");
+              end;
+            end;
+          end;
+        end;
+      end;
+    otherwise
+//      if (WindowActiveButton(wn)==0) then begin
+/*
+        if (TouchScreenLook and GuiType!=kGuiiPhone) then begin      
+          if (WindowState(wn)!=0) then begin
+            nwn = OpenPasteWindow(wn,GetWindowPasteName(wn,fieldname),IVr.CustCode);
+          end;
+        end;
+*/
+//      end;
+  end;
+  IVDClassBeforeEditField = res;
+  RETURN;
+END;
+
+global
+procedure IVDClassOpenCalendar()
+BEGIN
+  Integer nwn;
+  record RcVc RepSpec;
+  Date td;
+  
+  RepSpec.f1 = CurrentUser;
+  td = CurrentDate;
+  td.day = 1;
+  RepSpec.sStartDate = td;
+  td.day = DaysInMonth(td.year,td.month);
+  RepSpec.sEndDate = td;
+  nwn = OpenWindow("MonthWClass",0,0,"","",RepSpec);
+  RETURN;
+END;
+
+global
+procedure IVDClassNewActivity()
+BEGIN
+  record ActVc Actr;
+  row ActVc Actrw;
+  record IVVc IVr;
+  row IVVc IVrw;
+  Integer wn,nwn;
+  Integer i,rwcnt;
+    
+  wn = CurWindow;
+  if (WindowState(wn)!=0) then begin goto LIVDClassNewActivity; end;
+  GetWindowRecord(wn,IVr);
+  RecordNew(Actr);
+  rwcnt = MatRowCnt(IVr);
+  for (i=0;i<rwcnt;i=i+1) begin
+    MatRowGet(IVr,i,IVrw);
+    Actrw.Text = IVrw.ArtCode;
+    MatRowPut(Actr,MatRowCnt(Actr),Actrw);
+  end;
+  nwn = OpenWindow("ActDClass",0,0,"","",Actr);
+LIVDClassNewActivity:;  
+  RETURN;
+END;
+
+global
+procedure IVDClassToolIVReturn()
+BEGIN
+  record IVVc IVr;
+  record IVVc newIVr;
+  row IVVc cashIVrw;
+  row IVVc newIVrw;
+  row IVVc IVrw;
+  Integer i,rwcnt;
+  Integer wn,nwn;
+  Boolean foundcashf;
+  val credcardv;
+  val t,t2;
+  integer err1,err2;
+  record TaxMatrixVc TMr;
+  record LocalMachineBlock LMb;
+
+  wn = CurWindow;
+  DeselectWindow(wn,true);
+  GetWindowRecord(wn,IVr);
+  
+  SubCashRows_IVVc(IVr,true,t,t2);
+/*
+why not to return smthing on account ? 
+  if (IVr.InvType!=kInvoiceTypeCash) and (t!=0) then begin 
+    goto LIVDClassToolIVReturn; 
+  end;
+*/  
+  if (IVr.OrderNr>0) then begin
+    goto LIVDClassToolIVReturn; 
+  end;
+  if (IVr.OKFlag==0) then begin
+    BlockLoad(LMb);
+    if (GetVATLaw==vatPolish) then begin
+      IVr.FiscalFlag = 0;
+    end;
+    rwcnt = MatRowCnt(IVr);
+    for (i=0;i<rwcnt;i=i+1) begin
+      MatRowGet(IVr,i,IVrw);
+      if (IVrw.stp==kInvoiceRowTypeNormal) or (IVrw.stp==kInvoiceRowTypeStructuredItemComponent) then begin
+        IVrw.Quant = -IVrw.Quant;
+        IVrw.Sum = -IVrw.Sum;
+        IVrw.rowGP = -IVrw.rowGP;
+        RowCalculateTaxMatrix_IVVc(IVr,i,IVrw);
+        MatRowPut(IVr,i,IVrw);
+      end;
+      if ((IVrw.stp==kInvoiceRowTypeGiftVoucherSold) or (IVrw.stp==kInvoiceRowTypeGiftVoucherPayment)) then begin
+        MatRowDelete(IVr,i);
+        rwcnt = MatRowCnt(IVr);
+      end;
+      if (IVrw.stp==kInvoiceRowTypeCreditCardPayment) then begin
+        credcardv = credcardv + IVrw.Sum;
+        IVrw.Sum = -IVrw.Sum;
+        MatRowPut(IVr,i,IVrw);
+      end;
+
+      if (foundcashf==false) then begin
+        if ((IVrw.stp==kInvoiceRowTypeCashPayment) or (IVrw.stp==kInvoiceRowTypeLoyaltyPointsPayment)) then begin
+          CopyRow(IVr,IVrw,cashIVrw);
+          cashIVrw.Sum = -t;
+          MatRowDelete(IVr,i);
+          rwcnt = MatRowCnt(IVr);
+          i = i -1;
+          foundcashf = true;
+        end;
+      end;
+    end;
+//    if (foundcashf) or (credcardv!=0) then begin //what if new window with just item created ? 
+    if (true) then begin
+      if (foundcashf) then begin
+        cashIVrw.Sum = cashIVrw.Sum + credcardv;
+        MatRowPut(IVr,MatRowCnt(IVr),cashIVrw);
+      end;
+      IVSumup(IVr,true);
+      PutWindowRecord(wn,IVr);
+      IVDClass_RefreshStringList(wn,IVr);
+      WindowFieldGotoForTouchScreen(wn,-1,"ivcashcommand",true);
+    end else begin
+      MessageBox(2074,"");
+    end;
+  end else begin
+    RecordNew(newIVr);
+    RecordCopy(newIVr,IVr);
+    if (GetVATLaw==vatPolish) then begin
+      newIVr.FiscalFlag = 0;
+    end;
+    newIVr.OKFlag = 0;
+    newIVr.SerNr = -1;
+    newIVr.InvDate = CurrentDate;
+    newIVr.MachineName = CurMachineName;
+    newIVr.DrawerCode = CurDrawerCode(newIVr.MachineName);
+//    newIVr.InvType = kInvoiceTypeCredit;
+    IVVc_PasteInvDate(newIVr,LMb,err1,err2);
+    
+    rwcnt = MatRowCnt(newIVr);
+    for (i=0;i<rwcnt;i=i+1) begin
+      MatRowDelete(newIVr,i);
+      rwcnt = MatRowCnt(newIVr);
+      i = i - 1;
+    end;
+    rwcnt = MatRowCnt(IVr);
+    for (i=0;i<rwcnt;i=i+1) begin
+      MatRowGet(IVr,i,newIVrw);
+      if (newIVrw.stp==kInvoiceRowTypeNormal) or (newIVrw.stp==kInvoiceRowTypeStructuredItemComponent) then begin
+        newIVrw.Quant = -newIVrw.Quant;
+        newIVrw.Sum = -newIVrw.Sum;
+        newIVrw.rowGP = -newIVrw.rowGP;
+        RowCalculateTaxMatrix_IVVc(newIVr,i,newIVrw);
+        MatRowPut(newIVr,MatRowCnt(newIVr),newIVrw);
+      end;
+/*
+      if (newIVrw.stp==kInvoiceRowTypeCreditCardPayment) then begin
+        credcardv = credcardv + newIVrw.Sum;
+        newIVrw.Sum = -newIVrw.Sum;
+        MatRowPut(newIVr,MatRowCnt(newIVr),newIVrw);
+      end;
+      if (foundcashf==false) then begin
+        if (newIVrw.stp==kInvoiceRowTypeCashPayment) then begin
+          CopyRow(newIVr,newIVrw,cashIVrw);
+          cashIVrw.Sum = -t;
+          foundcashf = true;
+        end;
+      end;
+*/
+    end;
+/*
+    if (foundcashf) then begin
+      cashIVrw.Sum = cashIVrw.Sum + credcardv;
+      MatRowPut(newIVr,MatRowCnt(newIVr),cashIVrw);
+    end;
+*/
+    
+    if (MatRowCnt(newIVr)>0) then begin
+      if (IVr.SerNr!=newIVr.SerNr) then begin
+        ClearRow(newIVr,newIVrw,kInvoiceRowTypeCredit);    
+        newIVrw.OrdRow = IVr.SerNr;
+        MatRowPut(newIVr,MatRowCnt(newIVr),newIVrw);
+      end;
+    end;
+    
+    IVSumup(newIVr,true);
+    CloseWindow(wn);
+    if (SingleUserMode) then begin 
+      newIVr.SerNr = NextSerNr("IVVc",newIVr.TransDate,"",true,newIVr.LangCode);
+    end;
+    nwn = OpenWindow("IVDClass",1,0,"","",newIVr);
+    IVDClass_RefreshStringList(nwn,newIVr);
+    WindowFieldGotoForTouchScreen(nwn,-1,"ivcashcommand",true);
+  end;
+LIVDClassToolIVReturn:;  
+  RETURN;
+END;
+
+global
+procedure IVDClassIVLCLASS()
+BEGIN
+  Integer nwn;
+  record IVVc IVr;
+  
+  nwn = OpenWindow("IVLClass",0,0,"","",IVr);
+  RETURN;
+END;
+
+global
+procedure IVDchsum(var record IVVc IVp,Integer rownr)
+BEGIN
+  row IVVc IVrw;
+  val t,s,rowsum,tproc,unitprdisc;
+  val qty,sum;
+  string 255 location;
+  record TaxMatrixVc TMr;
+
+	AlternativeRebateIVVc(IVp);// Edit ************************** Monday, 25 September 2017 16:54:38
+	
+  if (rownr>=0) then begin
+    MatRowGet(IVp,rownr,IVrw);
+  end;
+  location = IVrw.Location;
+  if (blank(location)) then begin
+    location = IVp.Location;
+  end;
+  qty = IVrw.Quant;
+  if ((IVrw.stp==kInvoiceRowTypeNormal) or (IVrw.stp==kInvoiceRowTypeStructuredItemComponent) or (IVrw.stp==kInvoiceRowTypeInterest) or (IVrw.stp==kInvoiceRowTypeCorrection) or (IVrw.stp==kInvoiceRowTypeMultiBuyDiscount)) then begin
+    if (nonblank(IVrw.ArtCode)) then begin
+      t = qty * IVrw.BasePrice;
+      if (IVrw.PriceFactor!=0) then begin
+        t = t/IVrw.PriceFactor;
+      end;
+      sum = IVrw.Sum;
+      s = MulRateToBase1(IVp.CurncyCode,sum,IVp.FrRate,IVp.ToRateB1,IVp.ToRateB2,IVp.BaseRate1,IVp.BaseRate2,DefaultCurRoundOff);
+      UnpackRowFieldMatrix(IVrw,"TaxMatrix",TMr);
+      FindSalesExVat(TMr,IVrw.VATCode,s,IVp.InclVAT,IVp.NoTAXonVAT,rowsum);      
+      IVrw.rowGP = rowsum - t;
+    end else begin
+      IVrw.rowGP = 0;
+      IVrw.BasePrice = 0;
+    end;
+    if (rownr>=0) then begin
+      MatRowPut(IVp,rownr,IVrw);
+    end;
+  end;
+  if (rownr>=0) then begin
+    MatRowGet(IVp,rownr,IVrw);
+  end;
+  CalcProc(rowsum,IVrw.rowGP,tproc);  
+  unitprdisc = Round(IVrw.Sum / IVrw.Quant,DefaultRoundMode);
+  if (rownr>=0) then begin
+    MatRowPut(IVp,rownr,IVrw);
+  end;
+  SendArtStat(IVrw.ArtCode,location,IVrw.Recepy,IVrw.rowGP,tproc,unitprdisc,IVp.TransDate,0);
+  RETURN;
+END;
+
+global
+function Boolean IVDchrsum(var record IVVc IVp,Integer rownr)
+BEGIN
+  row IVVc IVrw;
+  val s,p,frv;
+  Boolean res,frvchangedf,sumchangedf;
+  record GeneralOptionBlock GOb;
+  record BelRusCashBlock BelRusCashr;
+  
+  BlockLoad(GOb);
+  MatRowGet(IVp,rownr,IVrw);
+  if ((IVrw.stp==kInvoiceRowTypeNormal) or (IVrw.stp==kInvoiceRowTypeStructuredItemComponent) or (IVrw.stp==kInvoiceRowTypeInterest) or (IVrw.stp==kInvoiceRowTypeCorrection)) then begin
+    p = IVrw.Price; 
+    CalcPrice(IVrw.BasePrice,IVrw.PriceFactor,IVrw.vRebate,p,GOb.UseDiscount);
+    IVrw.Price = p;  
+    CalcSum(IVrw.Quant,IVrw.Price,IVrw.PriceFactor,IVrw.vRebate,s,GOb.UseDiscount);  
+    if (GetVatLaw==46) then begin
+      BlockLoad(BelRusCashr);
+      if (SetInSet(IVp.PayDeal,BelRusCashr.CashPayTerm)) then begin
+        RoundBelCash(IVp.CurncyCode,s);
+      end else begin
+        RoundRowSum(IVp.CurncyCode,IVp.PayDeal,"IVVc",s);
+      end;
+    end else begin
+      RoundRowSum(IVp.CurncyCode,IVp.PayDeal,"IVVc",s);
+    end;
+    if (s!=IVrw.Sum) or ((s==0.00) and (blank(IVrw.Sum))) then begin
+      sumchangedf = true;
+    end;
+    if (IVp.OrderNr>0) then begin
+      if (IVrw.OrdRow>=0) then begin
+        frv = IVrw.Quant*IVrw.FIFO;
+        if (frv!=IVrw.FIFORowVal) then begin
+          frvchangedf = true;
+        end;
+      end;
+    end;
+    if (sumchangedf) then begin
+      IVrw.Sum = s;
+      res = true;        
+      RowCalculateTaxMatrix_IVVc(IVp,rownr,IVrw);
+    end;
+    if (frvchangedf) then begin
+      IVrw.FIFORowVal = frv;
+    end;
+    if (frvchangedf or sumchangedf) then begin
+      MatRowPut(IVp,rownr,IVrw);
+    end;
+  end;
+  if (IVrw.Price==0) then begin res = true; end;
+  IVDchrsum = res;
+  RETURN;
+END;
+
+global
+function Boolean IVDClassActiveFieldOnNew(Integer wn)
+begin
+  Boolean res;
+  record CashierDefBlock CDb;
+  record IVVc IVr;
+
+  if (CompileType==ctiPhone or CompileType==ctiPad or CompileType==ctAndroidPhone or CompileType==ctAndroidTab) then begin
+    res = true;
+    goto LIVDClassActiveFieldOnNew;
+  end;
+  
+  GetWindowRecord(wn,IVr);
+  BlockLoad(CDb);
+  switch (CDb.DefInvoiceField) begin
+    case 0:
+      if (TouchScreenLook) then begin    
+/*
+        if (nonblank(IVr.CustCode)) then begin
+          WindowFieldGoto(wn,IVr,0,"ArtCode",true);
+          res = true;
+        end;
+*/
+        WindowFieldGotoForTouchScreen(wn,-1,"ivcashcommand",true);
+        res = true;
+      end;
+    case 1:
+      WindowFieldGoto(wn,IVr,0,"ArtCode",true);
+      res = true;
+    case 2:
+      WindowFieldGoto(wn,IVr,0,"SerialNr",true);
+      res = true;
+  end;
+  
+LIVDClassActiveFieldOnNew:;
+  IVDClassActiveFieldOnNew = res;
+  return;
+end;
+
+global
+function Boolean IVDClassBasePriceEFAfter(Integer wn,Integer fn,Integer rownr,Integer changed)
+begin  
+  record IVVc IVr;
+  row IVVc IVrw;
+
+  if (changed!=0) and (rownr>=0) then begin  
+    GetWindowRecord(wn,IVr);
+    DeselectWindow(wn,false);
+    MatRowGet(IVr,rownr,IVrw);
+    switch (IVrw.stp) begin
+      case 4: 
+        if (IVDchrsum(IVr,rownr)) then begin
+        end;
+        IVDchsum(IVr,rownr);
+      case kInvoiceRowTypeStructuredItemComponent:
+        goto LkInvoiceRowTypeNormal1;
+      case kInvoiceRowTypeNormal:
+LkInvoiceRowTypeNormal1:;
+        if (IVDchrsum(IVr,rownr)) then begin
+        end;
+        IVDchsum(IVr,rownr);
+      case 11: 
+        if (IVDchrsum(IVr,rownr)) then begin
+        end;
+        IVDchsum(IVr,rownr);
+    end;
+    IVSumup(IVr,true);
+    PutWindowRecord(wn,IVr);
+  end;  
+  IVDClassBasePriceEFAfter = true;
+  return;
+end;
+
+global
+function Boolean IVDClassvRebateEFAfter(Integer wn,Integer fn,Integer rownr,Integer changed)
+begin  
+  record IVVc IVr;
+  row IVVc IVrw;
+
+  if (changed!=0) and (rownr>=0) then begin  
+    GetWindowRecord(wn,IVr);
+    DeselectWindow(wn,false);
+    MatRowGet(IVr,rownr,IVrw);
+    if (IVrw.vRebate>100.00) then begin
+      IVrw.vRebate = blankval;
+      MatRowPut(IVr,rownr,IVrw);
+      MessageBox(1019,"");
+    end;
+    switch (IVrw.stp) begin
+      case kInvoiceRowTypeInterest: 
+        if (IVDchrsum(IVr,rownr)) then begin
+          IVDchsum(IVr,rownr);
+        end;
+      case kInvoiceRowTypeStructuredItemComponent:
+        goto LkInvoiceRowTypeNormal2;
+      case kInvoiceRowTypeNormal:
+LkInvoiceRowTypeNormal2:;
+        if (IVDchrsum(IVr,rownr)) then begin
+          IVDchsum(IVr,rownr);
+        end;
+      case kInvoiceRowTypeCorrection: 
+        if (IVDchrsum(IVr,rownr)) then begin
+          IVDchsum(IVr,rownr);
+        end;
+    end;
+    IVSumup(IVr,true);
+    PutWindowRecord(wn,IVr);
+  end;  
+LIVDClassvRebateEFAfter:;  
+  IVDClassvRebateEFAfter = true;
+  return;
+end;
