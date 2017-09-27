@@ -939,6 +939,19 @@ begin
   Error = OutComPort(1,s & chr(10)); s =""; L2 ="";
   
   PrintLongLine;
+  
+  if (currentdate>=stringtodate("1/10/2017") and currentdate<=stringtodate("31/10/2017")) then begin
+  	if(LMr.Code=="RR1" or LMr.Code=="RR2")then begin 
+			s = USetStr(31175);
+			Error = OutComPort(1,s & chr(10)); s ="";// Edit ************************** Wednesday, 27 September 2017 13:59:52
+  	end;
+  	if(LMr.Code=="KV1" or LMr.Code=="KV2")then begin 
+			s = USetStr(31176);
+			Error = OutComPort(1,s & chr(10)); s ="";// Edit ************************** Wednesday, 27 September 2017 13:59:52
+  	end;
+  end;
+  
+  PrintLongLine;
   if (LMr.Code!="EXPO") then begin
   	s = USetStr(31009);
   	Error = OutComPort(1,s & chr(10)); s =""; //Edit -----------------Dima  09.01.2015

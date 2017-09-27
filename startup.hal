@@ -329,6 +329,8 @@ begin
 	 SString(31172,"Замовлення в обробці");
 	 SString(31173,"Відмова");
 	 SString(31174,"Нельзя закрыть. Есть отгрузка или сч/ф");
+	 SString(31175,"Акция 'КАЛИПСОмания' Торговая точка №1001");
+	 SString(31176,"Акция 'КАЛИПСОмания' Торговая точка №1002");
 	 
 	Maintenance("Проставить склад первой покупки клиента",MyVClass,FillFirstDateByeCUMn,modSL);
   Maintenance("Экспорт склада CSV",ExportStockCSVClass,ExportStockCSVMn,modSY);
