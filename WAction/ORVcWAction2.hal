@@ -1182,6 +1182,10 @@ begin
   end;
   if (res) then begin
     MatRowGet(ORr,rownr,ORrw);
+    if(ORrw.ProcessingQuant>0)then begin// Edit ************************** Thursday, 28 September 2017 13:17:50
+    	res = false;
+    	messagebox(31035,"");
+    end;
     if (ORrw.Quant!=0) then begin
       if (ReadFirstItem(ORrw.ArtCode,INr,false,false)) then begin
         if (INr.ItemType==kItemTypeStructured) then begin
