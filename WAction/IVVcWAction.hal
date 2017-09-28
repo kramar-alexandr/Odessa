@@ -1413,7 +1413,7 @@ begin
   end;
 LIVDClassivcashcommandOnEnterKey1:;
 
-	HighlightRow(wn,IVr,input);						//Edit----------------------------------------------Dima  10.03.2015  
+	//HighlightRow(wn,IVr,input);						//Edit----------------------------------------------Dima  10.03.2015  
   DeselectWindow(wn,false);
   //WindowFieldGoto(wn,IVr,-1,"ivcashcommand",false);
   WindowFieldGotoForTouchScreen(wn,-1,"ivcashcommand",false);

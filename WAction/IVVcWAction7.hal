@@ -597,7 +597,15 @@ begin
     	IVrw.Quant = IVrw.Quant + 1;
     	rownr = ivrwnr;
     end; //Edit***************************Sasha2,14:46 07.11.2014 }
-    MatRowPut(IVr,rownr,IVrw);
+    
+    if(equalf)then begin
+    	Matrowdelete(IVr,rownr);
+    	MatRowPut(IVr,matrowcnt(IVr),IVrw);
+    	rownr = matrowcnt(IVr)-1;
+    end else begin
+    	MatRowPut(IVr,rownr,IVrw);
+    end;
+    
     if (GetWindowString(wn,"ivcashcommandlastitemsernrf")=="true") then begin
       if (IVVc_PasteSerialNr(IVr,rownr,TouchScreenLook)) then begin
         MatRowGet(IVr,rownr,IVrw);
