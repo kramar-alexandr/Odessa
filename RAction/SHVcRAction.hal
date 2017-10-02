@@ -1278,7 +1278,7 @@ begin
           if (SHp.OKFlag!=0 or UnOKedCheckSerialf) then begin
             if (LocRec.RequirePos!=0) then begin
               FindStockValueAtPosition(SHrw.ArtCode,loc2,SHrw.PosCode,PISr);
-              if (SHrw.Ship>PISr.Instock) then begin
+              if (SHrw.Ship>PISr.Instock) then begin// Edit ************************** Monday, 2 October 2017 14:52:36 ????
               //if (SHrw.Ship>PISr.LeftQty) then begin
               	logtext(1397,SHrw.ArtCode & " " & SHrw.Ship & " " & PISr.LeftQty & " " & SHrw.PosCode);
                 error = 1397;
