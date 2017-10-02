@@ -1279,6 +1279,7 @@ begin
             if (LocRec.RequirePos!=0) then begin
               FindStockValueAtPosition(SHrw.ArtCode,loc2,SHrw.PosCode,PISr);
               if (SHrw.Ship>PISr.LeftQty) then begin
+              	logtext(1397,SHrw.ArtCode & " " & SHrw.Ship & " " & PISr.LeftQty & " " & SHrw.PosCode);
                 error = 1397;
                 errorstr = "";
                 rownr = i;
