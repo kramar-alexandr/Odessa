@@ -1,0 +1,68 @@
+remote procedure RecalcDiscountORD(var record ORVc);
+
+global
+procedure ChngePasswordClassCancel()
+BEGIN
+  Integer wn;
+  record RcVc RepSpec;
+  
+  wn = CurWindow;
+  GetWindowRecord(wn,RepSpec);
+  if (RepSpec.f1!="DontQuiteOnCancel") then begin 
+    QuitApplication(0,false);
+  end;
+  CloseWindow(wn);
+  RETURN;
+END;
+
+global
+procedure ChngeDiscPasswordClassCancel()
+begin
+  Integer wn;
+  
+  wn = CurWindow;
+  CloseWindow(wn);
+  return;
+end;
+
+global
+procedure NewSysMessClassCancel()
+BEGIN
+  Integer wn;
+  
+  wn = CurWindow;
+  CloseWindow(wn);
+  RETURN;
+END;
+
+global
+procedure MgrsDiscOverrideOClassCancel()
+begin
+  Integer wn;
+  
+  wn = CurWindow;
+  CloseWindow(wn);
+  return;
+end;
+
+global 
+procedure RecalcDiscountORDsm()
+BEGIN
+  record ORVc ORr;
+  Integer wn;
+  record IVVc IVr;// Edit ************************** Tuesday, 3 October 2017 10:42:44
+  
+  wn = CurWindow;
+  DeselectWindow(wn,false);
+  GetWindowRecord(wn,ORr);
+  if (ORr.OKFlag==0) then begin
+  	IVr.OrderNr = ORr.SerNr;
+  	if(readfirstkey("OrderNr",IVr,1,true)==false)then begin// Edit ************************** Tuesday, 3 October 2017 10:42:43
+			RecalcDiscountORD(ORr);
+			PutWindowRecord(wn,ORr);
+    end else begin
+    	messagebox(31174,"");// Edit ************************** Tuesday, 3 October 2017 10:42:46
+    end;
+  end;
+  RETURN;
+END;
