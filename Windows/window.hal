@@ -4863,3 +4863,16 @@ begin
   
   EndWindow;
 end; //Edit***************************Sasha2,16:58 05.09.2017 }
+
+window GivenCardsRecordRClass:1  // added ************ Dima, 04.12.2014
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  real h,v,vs;
+
+  WindowBegin("Отчет по отданным картам.",GivenCardsRecordRClass,CGRcW,RcType);
+  SetWRect(20,80,400,200);
+  UseView(RcVc);
+
+  EndWindow;
+
+end; // 04/01/17

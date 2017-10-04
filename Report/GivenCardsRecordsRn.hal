@@ -1,0 +1,108 @@
+SetLangMode(LangRussian,"RUS",0);
+
+global
+procedure  GivenCardsRecordsRn(record RcVc RepSpec)
+begin
+  integer           rw, counter, i, j, bb;
+  record            GCSVc GCSr;
+  boolean           loop, showCurrentDate;
+
+  date              ExpireDateVal;
+  date              TransDateVal;
+  integer           SerNrVal;
+  string 20         BarCodeVal;
+  string 100        CommentVal;
+  val               BalanceVaL;
+
+  array integer     SerNrs;
+  array string 100  Comments;
+  array string 20   BarCodes;
+  array date        ExpireDates;
+  array date        TransDates;
+  array val         Balances;
+	//check correctness...
+
+	StartReportJob("Данные карт с истечением срока");
+	rw=1;
+	Header(rw,"",1);
+	EndHeader;
+
+  loop    = true;
+  counter = 0;
+  while (LoopMain(GCSr,1,loop)) begin
+    if (GCSr.Closed==0 and GCSr.Amount==GCSr.Balance) then begin
+      SerNrs[counter] = GCSr.SerNr;
+      Comments[counter] = GCSr.Comment;
+      ExpireDates[counter] = GCSr.ExpiryDate;
+      Balances[counter] = GCSr.Balance;
+      BarCodes[counter] = GCSr.BarCode;
+      TransDates[counter] = GCSr.TransDate;
+      counter=counter+1;
+    end;
+  end;
+
+  StartFormat(15);
+    OutString(0,0, "Sum of cards" ,false);
+    OutString(40,0, counter ,false);
+  EndFormat;
+
+  StartFormat(15);
+  OutString(0,0, "Номер карты" ,false);
+  OutString(80,0,"Комментарий",false);
+  OutString(160,0,"Дата истечения",false);
+  OutString(240,0,"Дата выдачи",false);
+  OutString(320,0,"Баланс",false);
+  OutString(400,0,"Код товара",false);
+  EndFormat;
+
+  for (i = 1; i < counter; i=i+1) begin
+    ExpireDateVal = ExpireDates[i];
+    SerNrVal = SerNrs[i];
+    CommentVal = Comments[i];
+    BalanceVal = Balances[i];
+
+    BarCodeVal = BarCodes[i];
+    TransDateVal = TransDates[i];
+
+    for (j = i - 1; j >= 0 and ExpireDates[j] > ExpireDateVal; j= j - 1) begin
+      ExpireDates[j + 1] = ExpireDates[j];
+      SerNrs[j + 1] = SerNrs[j];
+      Comments[j + 1] = Comments[j];
+      Balances[j + 1] = Balances[j];
+
+      BarCodes[j + 1] = BarCodes[j];
+      TransDates[j + 1] = TransDates[j];
+    end;
+
+    ExpireDates[j + 1] = ExpireDateVal;
+    SerNrs[j + 1] = SerNrVal;
+    Comments[j + 1] = CommentVal;
+    Balances[j + 1] = BalanceVal;
+
+    BarCodes[j + 1] = BarCodeVal;
+    TransDates[j + 1] = TransDateVal;
+
+  end;
+
+  showCurrentDate = true;
+  for (i = 0; i < counter; i=i+1) begin
+    if (CurrentDate <= ExpireDates[i] and showCurrentDate == true) then begin
+      StartFormat(15);
+      OutString(250,0, "Current Date" ,false);
+      EndFormat;
+      Gray_Divider(0,1);
+      showCurrentDate = false;
+    end;
+    StartFormat(15);
+    OutString(0,0, SerNrs[i] ,false);
+    OutString(80,0,Comments[i],false);
+    OutString(160,0,ExpireDates[i],false);
+    OutString(240,0,TransDates[i],false);
+    OutString(320,0,Balances[i],false);
+    OutString(400,0,BarCodes[i],false);
+    EndFormat;
+  end;
+
+	EndJob;
+  return;
+end;
