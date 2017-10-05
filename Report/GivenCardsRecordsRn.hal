@@ -21,6 +21,8 @@ begin
   array date        TransDates;
   array val         Balances;
 	//check correctness...
+	record IVVc IVr;
+	vector string 30 vlocation;
 
 	StartReportJob("Данные карт с истечением срока");
 	rw=1;
@@ -30,13 +32,17 @@ begin
   loop    = true;
   counter = 0;
   while (LoopMain(GCSr,1,loop)) begin
-    if (GCSr.Closed==0 and GCSr.Amount==GCSr.Balance) then begin
+    if (GCSr.Closed==0) then begin
       SerNrs[counter] = GCSr.SerNr;
       Comments[counter] = GCSr.Comment;
       ExpireDates[counter] = GCSr.ExpiryDate;
       Balances[counter] = GCSr.Balance;
       BarCodes[counter] = GCSr.BarCode;
       TransDates[counter] = GCSr.TransDate;
+      IVr.SerNr = GCSr.InvSerNr;
+      if(readfirstmain(IVr,1,true))then begin
+      	vlocation[GCSr.SerNr] = IVr.Location;
+      end;
       counter=counter+1;
     end;
   end;
@@ -52,7 +58,7 @@ begin
   OutString(160,0,"Дата истечения",false);
   OutString(240,0,"Дата выдачи",false);
   OutString(320,0,"Баланс",false);
-  OutString(400,0,"Код товара",false);
+  OutString(1,0,"Штрихкод",true);
   EndFormat;
 
   for (i = 1; i < counter; i=i+1) begin
@@ -99,7 +105,8 @@ begin
     OutString(160,0,ExpireDates[i],false);
     OutString(240,0,TransDates[i],false);
     OutString(320,0,Balances[i],false);
-    OutString(400,0,BarCodes[i],false);
+    OutString(370,0,vlocation[SerNrs[i]],false);
+    OutString(1,0,BarCodes[i],true);
     EndFormat;
   end;
 
