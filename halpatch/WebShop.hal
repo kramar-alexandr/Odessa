@@ -167,7 +167,7 @@ SetLangMode(LangRussian,"RUS",0);
 
 global procedure ExportStockCSVMn(record RcVc RepSpec)
 begin
-	record ItemStatusVc ISr,IS2r,IS3r;
+	record ItemStatusVc ISr,IS2r,IS3r,IS4r,IS5r;
 	record INVc INr;
 	record PLVc PLr;
 	record ExportStockCSVBlock ExportStockCSVb;
@@ -179,7 +179,7 @@ begin
 	boolean testf,foudnf;
 	integer inStock,dop_ostatok,pos;
 	integer realqty;
-	boolean r1f,r2f,r3f;
+	boolean r1f,r2f,r3f,r4f,r5f;
 	val varpriceopt;
 	
 	BlockLoad(ExportStockCSVb);
@@ -228,11 +228,19 @@ begin
 		IS3r.Code = INr.Code;
 		IS3r.Location = loc3;
 		
+		IS4r.Code = INr.Code;
+		IS4r.Location = loc4;
+		IS5r.Code = INr.Code;
+		IS5r.Location = loc6;
+		
 		
 		
 		r1f = readfirstmain(ISr,2,true);
 		r2f = readfirstmain(IS2r,2,true);
 		r3f = readfirstmain(IS3r,2,true);
+		
+		r4f = readfirstmain(IS4r,2,true);
+		r5f = readfirstmain(IS5r,2,true);
 		
 		if(ISr.RsrvQty<0)then begin
 			ISr.RsrvQty = 0;
@@ -244,7 +252,15 @@ begin
 			IS3r.RsrvQty = 0;
 		end;
 		
-		if((r1f and (ISr.Instock-ISr.RsrvQty)>0) or (r2f and (IS2r.Instock-IS2r.RsrvQty)>0) or (r3f and (IS3r.Instock-IS3r.RsrvQty)>0)) then begin dop_ostatok = dop_ostatok + 1; end;
+		if(IS4r.RsrvQty<0)then begin
+			IS4r.RsrvQty = 0;
+		end;
+		
+		if(IS5r.RsrvQty<0)then begin
+			IS5r.RsrvQty = 0;
+		end;
+		
+		if((r1f and (ISr.Instock-ISr.RsrvQty)>0) or (r2f and (IS2r.Instock-IS2r.RsrvQty)>0) or (r3f and (IS3r.Instock-IS3r.RsrvQty)>0) or (r4f and (IS4r.Instock-IS4r.RsrvQty)>0) or (r5f and (IS5r.Instock-IS5r.RsrvQty)>0)) then begin dop_ostatok = dop_ostatok + 1; end;
 		
 		if((ISr.Instock-ISr.RsrvQty)>0)then begin
 			realqty = realqty +  ISr.Instock-ISr.RsrvQty;
@@ -255,11 +271,16 @@ begin
 		if((IS3r.Instock-IS3r.RsrvQty)>0)then begin
 			realqty = realqty +  IS3r.Instock-IS3r.RsrvQty;
 		end;
+		if((IS4r.Instock-IS4r.RsrvQty)>0)then begin
+			realqty = realqty +  IS4r.Instock-IS4r.RsrvQty;
+		end;
+		if((IS5r.Instock-IS5r.RsrvQty)>0)then begin
+			realqty = realqty +  IS5r.Instock-IS5r.RsrvQty;
+		end;
 		
 		//realqty = realqty + ISr.Instock-ISr.OrddOut + IS2r.Instock-IS2r.OrddOut + IS3r.Instock-IS3r.OrddOut;
 		
-		ISr.Code = INr.Code;
-		ISr.Location = loc4;	
+		
 					
 		PLr.ArtCode = INr.Code;
 		PLr.PLCode = ExportStockCSVb.PLCode;
@@ -298,38 +319,41 @@ begin
 		optprice15 = ValToString(round(varpriceopt*0.85,SetRoundModeD(0)),M4Val,"",".",0);
 		
 	// Edit End ---------------------------------------------- Edit End
-	
+		
+		/*ISr.Code = INr.Code;
+		ISr.Location = loc4;	*/
+		
 		IS2r.Code = INr.Code;
 		IS2r.Location = loc5;
 		
-		IS3r.Code = INr.Code;
-		IS3r.Location = loc6;
+		/*IS3r.Code = INr.Code;
+		IS3r.Location = loc6;*/
 		
-		r1f = readfirstmain(ISr,2,true);
+		//r1f = readfirstmain(ISr,2,true);
 		r2f = readfirstmain(IS2r,2,true);
-		r3f = readfirstmain(IS3r,2,true);
+		//r3f = readfirstmain(IS3r,2,true);
 		
-		if(ISr.RsrvQty<0)then begin
+		/*if(ISr.RsrvQty<0)then begin
 			ISr.RsrvQty = 0;
-		end;
+		end;*/
 		if(IS2r.RsrvQty<0)then begin
 			IS2r.RsrvQty = 0;
 		end;
-		if(IS3r.RsrvQty<0)then begin
+		/*if(IS3r.RsrvQty<0)then begin
 			IS3r.RsrvQty = 0;
-		end;
+		end;*/
 		
-		if((r1f and (ISr.Instock-ISr.RsrvQty)>0) or (r2f and (IS2r.Instock-IS2r.RsrvQty)>0) or (r3f and (IS3r.Instock-IS3r.RsrvQty)>0)) then begin dop_ostatok = dop_ostatok + 2; end;
+		if((r2f and (IS2r.Instock-IS2r.RsrvQty)>0)) then begin dop_ostatok = dop_ostatok + 2; end;
 		
-		if((ISr.Instock-ISr.RsrvQty)>0)then begin
+		/*if((ISr.Instock-ISr.RsrvQty)>0)then begin
 			realqty = realqty + ISr.Instock-ISr.RsrvQty;
-		end;
+		end;*/
 		if((IS2r.Instock-IS2r.RsrvQty)>0)then begin
 			realqty = realqty + IS2r.Instock-IS2r.RsrvQty;
 		end;
-		if((IS3r.Instock-IS3r.RsrvQty)>0)then begin
+		/*if((IS3r.Instock-IS3r.RsrvQty)>0)then begin
 			realqty = realqty + IS3r.Instock-IS3r.RsrvQty;
-		end;
+		end;*/
 		
 		//realqty = realqty + ISr.Instock-ISr.OrddOut + IS2r.Instock-IS2r.OrddOut;
 		loc5 = loc5t;
