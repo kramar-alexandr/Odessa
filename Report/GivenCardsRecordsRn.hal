@@ -5,7 +5,7 @@ procedure  GivenCardsRecordsRn(record RcVc RepSpec)
 begin
   integer           rw, counter, i, j, bb;
   record            GCSVc GCSr;
-  boolean           loop, showCurrentDate;
+  boolean           loop, showCurrentDate,testf;
 
   date              ExpireDateVal;
   date              TransDateVal;
@@ -23,6 +23,12 @@ begin
 	//check correctness...
 	record IVVc IVr;
 	vector string 30 vlocation;
+	record USerVc USr;
+	
+	USr.Code = currentuser;
+	if(readfirstmain(USr,1,true))then begin
+	
+	end;
 
 	StartReportJob("Данные карт с истечением срока");
 	rw=1;
@@ -93,22 +99,29 @@ begin
 
   showCurrentDate = true;
   for (i = 0; i < counter; i=i+1) begin
-    if (CurrentDate <= ExpireDates[i] and showCurrentDate == true) then begin
-      StartFormat(15);
-      OutString(250,0, "Current Date" ,false);
-      EndFormat;
-      Gray_Divider(0,1);
-      showCurrentDate = false;
+  	testf = true;
+  	
+  	if(nonblank(USr.Location) and USr.Location!=vlocation[SerNrs[i]])then begin testf = false; end;
+  	
+  	if(testf)then begin
+			if (CurrentDate <= ExpireDates[i] and showCurrentDate == true) then begin
+				StartFormat(15);
+				OutString(250,0, "Current Date" ,false);
+				EndFormat;
+				Gray_Divider(0,1);
+				showCurrentDate = false;
+			end;
+			StartFormat(15);
+			OutString(0,0, SerNrs[i] ,false);
+			OutString(80,0,Comments[i],false);
+			OutString(160,0,ExpireDates[i],false);
+			OutString(240,0,TransDates[i],false);
+			OutString(320,0,Balances[i],false);
+			OutString(370,0,vlocation[SerNrs[i]],false);
+			OutString(1,0,BarCodes[i],true);
+			EndFormat;
+			gray_divider(0,1);
     end;
-    StartFormat(15);
-    OutString(0,0, SerNrs[i] ,false);
-    OutString(80,0,Comments[i],false);
-    OutString(160,0,ExpireDates[i],false);
-    OutString(240,0,TransDates[i],false);
-    OutString(320,0,Balances[i],false);
-    OutString(370,0,vlocation[SerNrs[i]],false);
-    OutString(1,0,BarCodes[i],true);
-    EndFormat;
   end;
 
 	EndJob;
