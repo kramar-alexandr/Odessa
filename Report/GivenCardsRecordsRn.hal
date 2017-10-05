@@ -58,6 +58,7 @@ begin
   OutString(160,0,"Дата истечения",false);
   OutString(240,0,"Дата выдачи",false);
   OutString(320,0,"Баланс",false);
+  OutString(370,0,"Склад",false);
   OutString(1,0,"Штрихкод",true);
   EndFormat;
 
