@@ -75,7 +75,7 @@ remote function LongInt HoursDiffWithoutRestDays(Date,Time,Date,Time);
 remote updating function boolean CancelLogisticsOrderFromStocMove(var record  ORVc, integer);//Edit----------------------Dima  25.01.2016
 remote procedure CalcCustBalrem(var record ORVc);
 remote procedure SOAPUpdateStatus(string,string);
-remote updating procedure MakeReserveFromOrder(longint);// Edit ************************** Friday, 10 March 2017 13:38:29
+remote updating procedure MakeReserveFromOrder(longint,string);// Edit ************************** Friday, 10 March 2017 13:38:29
 remote updating procedure ORHistBackDsmRemote(record ORVc);
 remote procedure AlternativeRebateORVc(var record ORVc);//==============Alexandr 25/09/2015
 
@@ -2791,7 +2791,7 @@ begin
 		end;
 		
 		if(testf)then begin
-			MakeReserveFromOrder(ORr.SerNr);
+			MakeReserveFromOrder(ORr.SerNr,ORr.Location);
 			UpdateBrowses("ORVc");
 		end else begin
 			messagebox(31161,"");
