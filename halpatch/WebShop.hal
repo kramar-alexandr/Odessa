@@ -638,12 +638,12 @@ begin
 										end;
 									end;
 									if(process)then begin
-										SMr.TransDate = currentdate;
+										SMr.SerNr = 99999999;
 										TrHs = true;
 										inserflag = true;
-										while(loopbackkey("TransDate",SMr,1,TrHs))begin
+										while(loopbackkey("SerNr",SMr,1,TrHs))begin
 											testf = true;
-											if(SMr.TransDate<addday(SMr.TransDate,-1))then begin TrHs = false; testf = false; end;
+											if(SMr.OrdTransDate<addday(SMr.OrdTransDate,-1))then begin TrHs = false; testf = false; end;
 											if(SMr.StopAutoComplite>0)then begin testf = false; end;
 											if(SMr.AutoCompliteFlag<1)then begin testf = false; end;
 											if(SMr.OrdFlag>0)then begin testf = false; end;
@@ -665,7 +665,7 @@ begin
 										if(inserflag)then begin
 											recordnew(SMr);
 											SMr.OrdTransDate = currentdate;
-											SMr.TransDate = currentdate;
+											//SMr.TransDate = currentdate;
 											SMr.FrLocation = tstr;
 											if(SMr.FrLocation=="1-KOC")then begin
 												SMr.FrPos = "ŠŽ‘_2";
