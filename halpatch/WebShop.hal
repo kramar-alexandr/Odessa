@@ -560,7 +560,7 @@ return;
 end;
 
 global //Edit***************************Sasha2,17:49 05.12.2016 {
-updating procedure MakeReserveFromOrder(LongInt OrSerNr)
+updating procedure MakeReserveFromOrder(LongInt OrSerNr,string orlocation)
 begin
   record ORVc ORr,OR2r;
   row ORVc ORrw;
@@ -651,6 +651,9 @@ begin
 											if(SMr.OKFlag>0)then begin testf = false; end;
 											if(SMr.FrLocation!=tstr)then begin testf = false; end;
 											if(SMr.FrPos!=apos[j] and nonblank(apos[j]))then begin testf = false; end;// Edit ************************** Wednesday, 10 May 2017 10:37:13
+											if(SMr.ToLocation!=orlocation)then begin testf = false; end;
+											
+											
 						
 											if(testf)then begin
 												inserflag = false;
@@ -670,7 +673,7 @@ begin
 												SMr.FrPos = apos[j];
 											end;
 											SMr.ThrouLocation = "00";
-											SMr.ToLocation = "RYBRAY";
+											SMr.ToLocation = orlocation;
 											SMr.AutoCompliteFlag = 1;
 											SMr.SerNr = NextSerNr("StockMovVc",CurrentDate,-1,false,"");
 											SMr.Comment = "Ђторезервирование товаров интернет магазина";
@@ -1223,7 +1226,7 @@ begin
 					  
 					  
 					  if(testf) then begin
-					    MakeReserveFromOrder(ORr.SerNr);
+					    MakeReserveFromOrder(ORr.SerNr,ORr.Location);
 					  end;
 					end; //Edit***************************Sasha2,17:49 05.12.2016 }
 				end;
