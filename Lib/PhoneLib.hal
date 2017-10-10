@@ -147,6 +147,16 @@ procedure SimpleNormPhoneNumber(string inPhone, var string phones) begin
 	end;
 	
 	if(left(phone,3)=="+38")then begin
+		phone = mid(phone,3,len(tstr)-3);
+	end;
+	if(left(phone,1)=="8" and len(phone)==11)then begin
+		phone = mid(phone,1,len(tstr)-1);
+	end;
+	if(left(phone,2)=="38" and len(phone)==12)then begin
+		phone = mid(phone,2,len(tstr)-2);
+	end;
+	
+	/*if(left(phone,3)=="+38")then begin	
 		//phone = mid(phone,3,len(tstr)-3);
 	end;
 	if(left(phone,1)=="8" and len(phone)==11)then begin
@@ -160,7 +170,7 @@ procedure SimpleNormPhoneNumber(string inPhone, var string phones) begin
 	if(left(phone,1)=="0" and len(phone)==10)then begin
 		//phone = mid(phone,2,len(tstr)-2);
 		phone = "+38" & phone;
-	end;
+	end;*/
 	
 	phones = phone;
 	
