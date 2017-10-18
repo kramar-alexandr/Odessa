@@ -314,11 +314,8 @@ separator = "^";
 									OutString(270,0,qty,false);
 									OutVal(300,0,salesum/qty,M4Val,false);						//Price
 									OutVal(310,0,salesum,M4Val,false);
-									if(prevSalesData.VATCode=="15%")then begin//ROZETKA
-										OutVal(310,0,salesumrozetka,M4Val,false);// Edit ************************** Tuesday, 22 August 2017 10:06:36
-									end else begin
-										OutVal(310,0,blankval,M4Val,false);
-									end;
+									OutVal(310,0,salesumrozetka,M4Val,false);// Edit ************************** Tuesday, 22 August 2017 10:06:36
+
 									if (viewcost) then begin
 										OutVal(320,0,cost/qty,M4Val,false);						
 										OutVal(340,0,cost,M4Val,false);
@@ -496,11 +493,7 @@ separator = "^";
 							OutString(270,0,qty,false);
 							OutVal(300,0,salesum/qty,M4Val,false);						//Price
 							OutVal(310,0,salesum,M4Val,false);
-							if(SalesData.VATCode=="15%")then begin//ROZETKA
-								OutVal(310,0,salesumrozetka,M4Val,false);// Edit ************************** Tuesday, 22 August 2017 10:06:36
-							end else begin
-								OutVal(310,0,blankval,M4Val,false);
-							end;
+							OutVal(310,0,salesumrozetka,M4Val,false);// Edit ************************** Tuesday, 22 August 2017 10:06:36
 							if (viewcost) then begin
 								OutVal(320,0,cost/qty,M4Val,false);						//Cost per one
 								OutVal(340,0,cost,M4Val,false);
