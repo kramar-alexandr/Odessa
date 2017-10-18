@@ -176,7 +176,7 @@ Boolean nonprinted;
 val cred;
 boolean viewcost,consolidatedReport;
 val rowPrice,rowSum,rowCostUnit,rwGPpercent,salaryPrice,salarySum,rentSal,rentSalPercent,rowsalary;
-val salesum,cost,rent,salary,rentsalary;
+val salesum,cost,rent,salary,rentsalary,salesrozetka;
 longint qty;
 longint tick,tick2,tick3;
 time timeFrom, timeTo;
@@ -315,7 +315,7 @@ separator = "^";
 									OutVal(300,0,salesum/qty,M4Val,false);						//Price
 									OutVal(310,0,salesum,M4Val,false);
 									if(prevSalesData.VATCode=="15%")then begin//ROZETKA
-										OutVal(310,0,salesum/100*15,M4Val,false);// Edit ************************** Tuesday, 22 August 2017 10:06:36
+										OutVal(310,0,salesrozetka,M4Val,false);// Edit ************************** Tuesday, 22 August 2017 10:06:36
 									end else begin
 										OutVal(310,0,blankval,M4Val,false);
 									end;
@@ -339,7 +339,8 @@ separator = "^";
 									EndFormat;
 									
 									qty = 0;		salesum = 0;			cost = 0;
-									rent = 0;		salary = 0;				rentsalary = 0;							
+									rent = 0;		salary = 0;				rentsalary = 0;	
+									salesrozetka = 0;						
 									
 									nonprinted = false;	
 					end;										
@@ -461,6 +462,9 @@ separator = "^";
 							//Суммируем данные для консолидированного отчета
 							qty = qty + SalesData.Quant;
 							salesum = salesum + SalesData.Sum;
+							if(SalesData.VATCode=="15%")then begin
+								salesrozetka = salesrozetka + SalesData.Sum/100*15;
+							end;
 							cost = cost + SalesData.Cost;
 							rent = rent + SalesData.rowGP;
 							salary = salary + salarySum;
@@ -491,7 +495,7 @@ separator = "^";
 							OutVal(300,0,salesum/qty,M4Val,false);						//Price
 							OutVal(310,0,salesum,M4Val,false);
 							if(SalesData.VATCode=="15%")then begin//ROZETKA
-								OutVal(310,0,salesum/100*15,M4Val,false);// Edit ************************** Tuesday, 22 August 2017 10:06:36
+								OutVal(310,0,salesrozetka,M4Val,false);// Edit ************************** Tuesday, 22 August 2017 10:06:36
 							end else begin
 								OutVal(310,0,blankval,M4Val,false);
 							end;
