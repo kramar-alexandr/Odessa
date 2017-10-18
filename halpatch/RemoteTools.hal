@@ -52,6 +52,7 @@ external procedure GetObjs(string,string,var string);//Edit-------------------Vi
 external function string 255 StrReplace(string,string,string);
 external procedure GetCurUser(var record UserVc);
 external updating procedure RecalcORMn(record RcVc); //Edit***************************Sasha2,14:27 19.04.2017
+external procedure NormalizeObjstr(var string);//Edit-------------------Vitalii 13:53 12.10.2017
 
 global
 procedure GetItemSalesAccFromOR(record ORVc ORr,var string salesacc)
@@ -1330,7 +1331,7 @@ L20PasteOrdInInv:;
 		end;
 	
 		IVp.SalesMan = ORp.SalesMan;
-		if (maintf==false) then begin
+    if (maintf==false) then begin
 			IVp.Objects = ORp.Objects;
 		end;//Edit-------------------Vitalii 15:14 28.11.2016
   end;
@@ -1355,6 +1356,12 @@ L20PasteOrdInInv:;
   IVp.ToRateB2 = ORp.ToRateB2;
   IVp.BaseRate1 = ORp.BaseRate1;
   IVp.BaseRate2 = ORp.BaseRate2;
+  if nonblank(IVp.Objects) then begin //Edit-------------------Vitalii 13:58 12.10.2017
+    IVp.Objects = IVp.Objects & "," ORp.Objects;
+    NormalizeObjstr(IVp.Objects);
+  end else begin
+    IVp.Objects = ORp.Objects;
+  end;
   switch (IVTb.IVFromORRate) begin
     case kIVRateFromOrder:
 //        above;
@@ -1961,7 +1968,6 @@ begin
       goto LRecordAction_raPasteOrdInInv;
     end;
   end;
-  
   testf = PasteOrdInInv(IVp,ORr,false,"-1",RepSpec,t,true,true,NLCostOnShipTestf,res,false,aXSrsr,axsrscnt);
   if (IVp.SerNr==-1) then begin
     BlockLoad(SRRec);

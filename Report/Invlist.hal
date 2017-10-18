@@ -595,6 +595,8 @@ begin
   string 255 frin,toin;
   time timeFrom, timeTo;//Edit----------------------Dima  12.08.2015
 	record UserVc User;// Edit ************************** Monday, 31 July 2017 13:45:11
+  integer rozi;
+  boolean rozetkaf;
 	
 	User.Code = currentuser;
 	readfirstmain(User,1,true);
@@ -736,10 +738,11 @@ begin
       end;
       StartFormat(15);
       OutString(0,0,USetStr(2352),false);//0
-      OutString(30,0,USetStr(5100),false);//Edit----------------------Dima  12.08.2015
-      OutString(60,0,USetStr(2353),false);//60
-      OutString(90,0,"%",false);//90 //Edit***************************Sasha2,9:36 03.06.2015
-      OutString(120,0,USetStr(2354),false);//110
+      OutString(30,0,"",false);//Edit-------------------Vitalii 17:53 12.10.2017
+      OutString(60,0,USetStr(5100),false);//Edit----------------------Dima  12.08.2015
+      OutString(90,0,USetStr(2353),false);//60
+      OutString(120,0,"%",false);//90 //Edit***************************Sasha2,9:36 03.06.2015
+      OutString(150,0,USetStr(2354),false);//110
       if (overviewpervatcodef) then begin
         OutString(170,0,USetStr(2358),false);//280
       end else begin
@@ -770,10 +773,11 @@ begin
     if (RepSpec.PocketPC == 0) then begin
       StartFormat(15);
       OutString(0,0,USetStr(2352),false);//0
-      OutString(30,0,USetStr(5100),false);//Edit----------------------Dima  12.08.2015
-      OutString(60,0,USetStr(2353),false);//60
-      OutString(90,0,"%",false);//90 //Edit***************************Sasha2,9:36 03.06.2015
-      OutString(120,0,USetStr(2354),false);//110
+      OutString(30,0,"",false);//Edit-------------------Vitalii 17:54 12.10.2017
+      OutString(60,0,USetStr(5100),false);//Edit----------------------Dima  12.08.2015
+      OutString(90,0,USetStr(2353),false);//60
+      OutString(120,0,"%",false);//90 //Edit***************************Sasha2,9:36 03.06.2015
+      OutString(150,0,USetStr(2354),false);//110
       OutString(280,0,USetStr(2358),false);
       if (RepSpec.flags[15]!=0) then begin
         OutStringAdjust(5,0,USetStr(2328),true,M4Val);
@@ -1224,6 +1228,17 @@ begin
       end;
 */
       if (testf) then begin
+        rwcnt = MatRowCnt(IVr);
+        rozetkaf = false;
+        for (rozi=0;rozi<rwcnt;rozi=rozi+1) begin
+          MatRowGet(IVr,rozi,IVrw);
+          if (IVrw.stp==kInvoiceRowTypeNormal) then begin
+            if (IVrw.VATCode=="15%") then begin
+              rozetkaf = true;
+              rozi = rwcnt;
+            end;
+          end;
+        end;
         if ((RepSpec.ArtMode==0) or (RepSpec.ArtMode==4)) then begin
           switch (GCSr.FileName) begin
             case "IVVc":
@@ -1397,9 +1412,14 @@ LkInvoiceTypeCredit1:;
                   end else begin
                     OutStringOvst(0,"DblCustPS2",CreateInvoiceNumber(IVr.SerNr,IVr.OfficialSerNr),false,IVr.Invalid);
                   end;
-                  OutString(30,0,IVr.TransTime,false);//Edit----------------------Dima  12.08.2015
-                  OutDate(60,0,IVr.InvDate,false);
-                  OutString(90,0,CUr.RebCode,false); //Edit***************************Sasha2,9:30 03.06.2015
+                  if (rozetkaf) then begin
+                    OutString(30,0,"Rozetka",false);
+                  end else begin
+                    OutString(30,0,"",false);
+                  end;
+                  OutString(60,0,IVr.TransTime,false);//Edit----------------------Dima  12.08.2015
+                  OutDate(90,0,IVr.InvDate,false);
+                  OutString(120,0,CUr.RebCode,false); //Edit***************************Sasha2,9:30 03.06.2015
                   OutString(150,"DblCUVc",CUr.Code,false);// Edit ************************** Thursday, 11 May 2017 11:42:06
                   OutStringCut(200,170,0,IVr.Addr0,false,0);//Edit***************************Sasha2,9:30 03.06.2015
                   tstr = "";
@@ -1444,9 +1464,14 @@ LkInvoiceTypeCredit1:;
               end else begin
                 OutStringOvst(0,"DblCustPS2",CreateInvoiceNumber(IVr.SerNr,IVr.OfficialSerNr),false,IVr.Invalid);
               end;
-              OutString(30,0,IVr.TransTime,false);//Edit----------------------Dima  12.08.2015
-              OutDate(60,0,IVr.InvDate,false);
-              OutString(90,0,CUr.RebCode,false); //Edit***************************Sasha2,9:30 03.06.2015
+              if (rozetkaf) then begin
+                OutString(30,0,"Rozetka",false);
+              end else begin
+                OutString(30,0,"",false);
+              end;
+              OutString(60,0,IVr.TransTime,false);//Edit----------------------Dima  12.08.2015
+              OutDate(90,0,IVr.InvDate,false);
+              OutString(120,0,CUr.RebCode,false); //Edit***************************Sasha2,9:30 03.06.2015
               OutString(150,"DblCUVc",CUr.Code,false);// Edit ************************** Thursday, 11 May 2017 11:42:06
               OutStringCut(200,220,0,IVr.Addr0,false,0); //Edit***************************Sasha2,9:34 03.06.2015
               tstr = "";
@@ -1503,9 +1528,14 @@ LkInvoiceTypeCredit1:;
           if (RepSpec.ArtMode==4) then begin
             StartFormat(15);
             OutString(0,"DblCustPS2",CreateInvoiceNumber(IVr.SerNr,IVr.OfficialSerNr),false);
-            OutString(30,0,IVr.TransTime,false);//Edit----------------------Dima  12.08.2015
-            OutDate(60,0,IVr.InvDate,false);
-            OutString(90,0,CUr.RebCode,false); //Edit***************************Sasha2,9:30 03.06.2015
+            if (rozetkaf) then begin
+              OutString(30,0,"Rozetka",false);
+            end else begin
+              OutString(30,0,"",false);
+            end;
+            OutString(60,0,IVr.TransTime,false);//Edit----------------------Dima  12.08.2015
+            OutDate(90,0,IVr.InvDate,false);
+            OutString(120,0,CUr.RebCode,false); //Edit***************************Sasha2,9:30 03.06.2015
             OutString(150,"DblCUVc",CUr.Code,false);// Edit ************************** Thursday, 11 May 2017 11:42:06
             OutStringCut(200,275,0,IVr.Addr0,false,0); //Edit***************************Sasha2,9:35 03.06.2015
             tstr = "";
@@ -1563,9 +1593,14 @@ LkInvoiceTypeCredit1:;
         if (RepSpec.ArtMode==3) then begin
           StartFormat(15);
           OutString(0,"DblCustPS2",CreateInvoiceNumber(IVr.SerNr,IVr.OfficialSerNr),false);
-          OutString(30,0,IVr.TransTime,false);//Edit----------------------Dima  12.08.2015
-          OutDate(60,0,IVr.InvDate,false);
-          OutString(90,0,CUr.RebCode,false); //Edit***************************Sasha2,9:30 03.06.2015
+          if (rozetkaf) then begin
+            OutString(30,0,"Rozetka",false);
+          end else begin
+            OutString(30,0,"",false);
+          end;
+          OutString(60,0,IVr.TransTime,false);//Edit----------------------Dima  12.08.2015
+          OutDate(90,0,IVr.InvDate,false);
+          OutString(120,0,CUr.RebCode,false); //Edit***************************Sasha2,9:30 03.06.2015
           OutString(150,"DblCUVc",CUr.Code,false);// Edit ************************** Thursday, 11 May 2017 11:42:06
           OutString(200,0,IVr.Addr0,false);
 //          OpM44o(120,295,0,&IVr.Addr0,M4Str,false,false);
