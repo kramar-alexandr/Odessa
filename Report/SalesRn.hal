@@ -398,11 +398,18 @@ separator = "^";
 					totalSum = totalSum + SalesData.Sum;
 
 					if (viewcost) then begin
-						
-						rwGPpercent = AbsoluteVal(SalesData.rowGP*100/SalesData.Cost);
 						totalCost = totalCost + SalesData.Cost;
 						totalRent = totalRent + SalesData.rowGP;				
-
+						
+						if(SalesData.VATCode=="15%")then begin//ROZETKA
+							totalRent = totalRent - SalesData.Sum/100*15;
+							rent = rent - SalesData.Sum/100*15;
+							rwGPpercent = AbsoluteVal((SalesData.rowGP-SalesData.Sum/100*15)*100/SalesData.Cost);
+							totalSum = totalSum - SalesData.Sum/100*15;
+						end else begin
+							rwGPpercent = AbsoluteVal(SalesData.rowGP*100/SalesData.Cost);
+						end;
+						
 						salaryPrice = SalesData.SalaryPrice;
 						salarySum = salaryPrice*SalesData.Quant/cred;
 						rentSal = SalesData.Sum - salarySum;						
@@ -438,7 +445,11 @@ separator = "^";
 							if (viewcost) then begin
 								OutVal(320,0,SalesData.UnitCost,M4Val,false);
 								OutVal(340,0,SalesData.Cost,M4Val,false);
-								OutVal(360,0,SalesData.rowGP,M4Val,false);
+								if(SalesData.VATCode=="15%")then begin//ROZETKA
+									OutVal(360,0,SalesData.rowGP-SalesData.Sum/100*15,M4Val,false);
+								end else begin
+									OutVal(360,0,SalesData.rowGP,M4Val,false);
+								end;
 								OutVal(380,0,rwGPpercent,M4Val,false);
 								OutVal(400,0,salaryPrice,M4Val,false);
 								OutVal(420,0,salarySum,M4Val,false);	
@@ -460,12 +471,14 @@ separator = "^";
 							//Суммируем данные для консолидированного отчета
 							qty = qty + SalesData.Quant;
 							salesum = salesum + SalesData.Sum;
+							cost = cost + SalesData.Cost;
+							rent = rent + SalesData.rowGP;
 							if(SalesData.VATCode=="15%")then begin//ROZETKA
 								salesumrozetka = salesumrozetka + SalesData.Sum/100*15;// Edit ************************** Wednesday, 18 October 2017 10:49:53
 								salesum = salesum - SalesData.Sum/100*15;
+								rent = rent - SalesData.Sum/100*15;
 							end;
-							cost = cost + SalesData.Cost;
-							rent = rent + SalesData.rowGP;
+							
 							salary = salary + salarySum;
 							rentsalary = rentsalary + rentSal;
 							nonprinted = true;
