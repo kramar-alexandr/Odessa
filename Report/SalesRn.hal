@@ -322,6 +322,7 @@ separator = "^";
 									if (viewcost) then begin
 										OutVal(320,0,cost/qty,M4Val,false);						
 										OutVal(340,0,cost,M4Val,false);
+										if(prevSalesData.VATCode=="15%")then begin//ROZETKA
 										OutVal(360,0,rent,M4Val,false);
 										OutVal(380,0,rent*100/cost,M4Val,false);				//profit %
 										//OutVal(400,0,prevSalesData.SalaryPrice,M4Val,false);
@@ -405,15 +406,20 @@ separator = "^";
 						
 						rwGPpercent = AbsoluteVal(SalesData.rowGP*100/SalesData.Cost);
 						totalCost = totalCost + SalesData.Cost;
-						totalRent = totalRent + SalesData.rowGP;				
-
+						totalRent = totalRent + SalesData.rowGP;
 						salaryPrice = SalesData.SalaryPrice;
 						salarySum = salaryPrice*SalesData.Quant/cred;
 						rentSal = SalesData.Sum - salarySum;						
 						rentSalPercent = rentSal*100/salarySum;		//(IVrw.Sum/fr*to - PLr.ExVatPrice*IVrw.Quant)/(PLr.ExVatPrice*IVrw.Quant)*100
 						totalSalary = totalSalary + salarySum;
 						totalRentSalary = totalRentSalary + rentSal;			
-
+						
+						if(SalesData.VATCode=="15%")then begin//ROZETKA
+							rwGPpercent = AbsoluteVal((SalesData.rowGP-SalesData.Sum/100*15)*100/SalesData.Cost);
+							totalRent = totalRent - SalesData.Sum/100*15;
+							totalSum = totalSum - SalesData.Sum/100*15;
+						end;
+						
 					end;
 					if (consolidatedReport == false) then begin			//Detailed report
 							StartFormat(15);
@@ -430,18 +436,25 @@ separator = "^";
 							//OutString(175,0,SalesData.MinOrder,false);// Edit ************************** Wednesday, 10 May 2017 12:47:46							
 							OutString(270,0,SalesData.Quant,false);
 							OutVal(300,0,SalesData.Price,M45Val,false);
-              OutVal(305,0,SalesData.Sum/SalesData.Quant,M45Val,false);//Edit-------------------Vitalii 13:48 05.09.2016
-							OutVal(310,0,SalesData.Sum,M45Val,false);
+							OutVal(305,0,SalesData.Sum/SalesData.Quant,M45Val,false);//Edit-------------------Vitalii 13:48 05.09.2016
+
 							if(SalesData.VATCode=="15%")then begin//ROZETKA
+								OutVal(310,0,SalesData.Sum-SalesData.Sum/100*15,M45Val,false);
 								OutVal(310,0,SalesData.Sum/100*15,M4Val,false);// Edit ************************** Tuesday, 22 August 2017 10:06:36
 							end else begin
+								OutVal(310,0,SalesData.Sum,M45Val,false);
 								OutVal(310,0,blankval,M4Val,false);
 							end;
 							if (viewcost) then begin
 								OutVal(320,0,SalesData.UnitCost,M4Val,false);
 								OutVal(340,0,SalesData.Cost,M4Val,false);
-								OutVal(360,0,SalesData.rowGP,M4Val,false);
-								OutVal(380,0,rwGPpercent,M4Val,false);
+								if(SalesData.VATCode=="15%")then begin//ROZETKA
+									OutVal(360,0,SalesData.rowGP-SalesData.Sum/100*15,M4Val,false);
+									OutVal(380,0,rwGPpercent,M4Val,false);
+								end else begin
+									OutVal(360,0,SalesData.rowGP,M4Val,false);
+									OutVal(380,0,rwGPpercent,M4Val,false);
+								end;
 								OutVal(400,0,salaryPrice,M4Val,false);
 								OutVal(420,0,salarySum,M4Val,false);	
 								OutVal(440,0,rentSal,M4Val,false);
@@ -462,11 +475,13 @@ separator = "^";
 							//Суммируем данные для консолидированного отчета
 							qty = qty + SalesData.Quant;
 							salesum = salesum + SalesData.Sum;
-							if(SalesData.VATCode=="15%")then begin
-								salesrozetka = salesrozetka + SalesData.Sum/100*15;
-							end;
 							cost = cost + SalesData.Cost;
 							rent = rent + SalesData.rowGP;
+							if(SalesData.VATCode=="15%")then begin
+								salesrozetka = salesrozetka + SalesData.Sum/100*15;
+								salesum = salesum - SalesData.Sum/100*15;
+								rent = rent - SalesData.Sum/100*15;
+							end;
 							salary = salary + salarySum;
 							rentsalary = rentsalary + rentSal;
 							nonprinted = true;
@@ -516,13 +531,6 @@ separator = "^";
 							EndFormat;
 	end;	
 	
-	
-	
-	
-//	tick3 = GetCurTick;
-//	LogText(0,"loop  " & tick3-tick2);	
-	
-	
 	StartFormat(15);
 	if (RepSpec.ArtMode==0) then begin
 		OutString(0,0,"",false);
@@ -552,17 +560,12 @@ separator = "^";
 	end;
 	OutString(480,0,"",false);		
 	EndFormat;	
-	
 
-
-	//tick2 = GetCurTick;
-	//LogText(0,"totals  " & tick2-tick3);	
-		
-	
 	EndJob;
 
 end;
-
+return;
+end;
 
 global
 procedure  Sales1Rn(record RcVc RepSpec)
