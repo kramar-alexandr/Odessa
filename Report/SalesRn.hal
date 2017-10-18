@@ -448,7 +448,7 @@ separator = "^";
 								OutVal(320,0,SalesData.UnitCost,M4Val,false);
 								OutVal(340,0,SalesData.Cost,M4Val,false);
 								if(SalesData.VATCode=="15%")then begin//ROZETKA
-									OutVal(360,0,(SalesData.rowGP-SalesData.Sum/100*15),M4Val,false);
+									OutVal(360,0,0,M4Val,false);
 								end else begin
 									OutVal(360,0,SalesData.rowGP,M4Val,false);
 								end;
