@@ -176,7 +176,7 @@ Boolean nonprinted;
 val cred;
 boolean viewcost,consolidatedReport;
 val rowPrice,rowSum,rowCostUnit,rwGPpercent,salaryPrice,salarySum,rentSal,rentSalPercent,rowsalary;
-val salesum,cost,rent,salary,rentsalary,salesumrozetka;
+val salesum,cost,rent,salary,rentsalary,salesumrozetka,fasternt;
 longint qty;
 longint tick,tick2,tick3;
 time timeFrom, timeTo;
@@ -448,9 +448,8 @@ separator = "^";
 								OutVal(320,0,SalesData.UnitCost,M4Val,false);
 								OutVal(340,0,SalesData.Cost,M4Val,false);
 								if(SalesData.VATCode=="15%")then begin//ROZETKA
-									OutVal(360,0,(SalesData.rowGP-SalesData.Sum/100*15),M4Val,false);
-									OutVal(360,0,(SalesData.rowGP),M4Val,false);
-									OutVal(360,0,(SalesData.Sum/100*15),M4Val,false);
+									fasternt = SalesData.rowGP-SalesData.Sum/100*15;
+									OutVal(360,0,fasternt,M4Val,false);
 								end else begin
 									OutVal(360,0,SalesData.rowGP,M4Val,false);
 								end;
