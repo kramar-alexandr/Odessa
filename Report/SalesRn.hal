@@ -176,7 +176,7 @@ Boolean nonprinted;
 val cred;
 boolean viewcost,consolidatedReport;
 val rowPrice,rowSum,rowCostUnit,rwGPpercent,salaryPrice,salarySum,rentSal,rentSalPercent,rowsalary;
-val salesum,cost,rent,salary,rentsalary;
+val salesum,cost,rent,salary,rentsalary,salesumrozetka;
 longint qty;
 longint tick,tick2,tick3;
 time timeFrom, timeTo;
@@ -315,7 +315,7 @@ separator = "^";
 									OutVal(300,0,salesum/qty,M4Val,false);						//Price
 									OutVal(310,0,salesum,M4Val,false);
 									if(prevSalesData.VATCode=="15%")then begin//ROZETKA
-										OutVal(310,0,salesum/100*15,M4Val,false);// Edit ************************** Tuesday, 22 August 2017 10:06:36
+										OutVal(310,0,salesumrozetka,M4Val,false);// Edit ************************** Tuesday, 22 August 2017 10:06:36
 									end else begin
 										OutVal(310,0,blankval,M4Val,false);
 									end;
@@ -340,7 +340,7 @@ separator = "^";
 									
 									qty = 0;		salesum = 0;			cost = 0;
 									rent = 0;		salary = 0;				rentsalary = 0;							
-									
+									salesumrozetka = 0;
 									nonprinted = false;	
 					end;										
 						
@@ -430,10 +430,12 @@ separator = "^";
 							OutString(270,0,SalesData.Quant,false);
 							OutVal(300,0,SalesData.Price,M45Val,false);
               OutVal(305,0,SalesData.Sum/SalesData.Quant,M45Val,false);//Edit-------------------Vitalii 13:48 05.09.2016
-							OutVal(310,0,SalesData.Sum,M45Val,false);
+							
 							if(SalesData.VATCode=="15%")then begin//ROZETKA
+								OutVal(310,0,SalesData.Sum-SalesData.Sum/100*15,M45Val,false);
 								OutVal(310,0,SalesData.Sum/100*15,M4Val,false);// Edit ************************** Tuesday, 22 August 2017 10:06:36
 							end else begin
+								OutVal(310,0,SalesData.Sum,M45Val,false);
 								OutVal(310,0,blankval,M4Val,false);
 							end;
 							if (viewcost) then begin
@@ -461,6 +463,10 @@ separator = "^";
 							//Суммируем данные для консолидированного отчета
 							qty = qty + SalesData.Quant;
 							salesum = salesum + SalesData.Sum;
+							if(SalesData.VATCode=="15%")then begin//ROZETKA
+								salesumrozetka = salesumrozetka + SalesData.Sum/100*15;// Edit ************************** Wednesday, 18 October 2017 10:49:53
+								salesum = salesum - SalesData.Sum/100*15;
+							end;
 							cost = cost + SalesData.Cost;
 							rent = rent + SalesData.rowGP;
 							salary = salary + salarySum;
@@ -491,7 +497,7 @@ separator = "^";
 							OutVal(300,0,salesum/qty,M4Val,false);						//Price
 							OutVal(310,0,salesum,M4Val,false);
 							if(SalesData.VATCode=="15%")then begin//ROZETKA
-								OutVal(310,0,salesum/100*15,M4Val,false);// Edit ************************** Tuesday, 22 August 2017 10:06:36
+								OutVal(310,0,salesumrozetka,M4Val,false);// Edit ************************** Tuesday, 22 August 2017 10:06:36
 							end else begin
 								OutVal(310,0,blankval,M4Val,false);
 							end;
