@@ -403,7 +403,6 @@ separator = "^";
 						
 						if(SalesData.VATCode=="15%")then begin//ROZETKA
 							totalRent = totalRent - SalesData.Sum/100*15;
-							rent = rent - SalesData.Sum/100*15;
 							rwGPpercent = AbsoluteVal((SalesData.rowGP-SalesData.Sum/100*15)*100/SalesData.Cost);
 							totalSum = totalSum - SalesData.Sum/100*15;
 						end else begin
@@ -547,6 +546,7 @@ separator = "^";
 	OutString(120,0,"Всего:",false);
 	OutString(270,0,totalQty,false);
 	//OutString(300,0,"",false);
+	OutString(300,0,"",false);
 	OutString(300,0,"",false);
 	OutString(300,0,totalSum,false);
 	
