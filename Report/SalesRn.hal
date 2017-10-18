@@ -547,7 +547,9 @@ separator = "^";
 	OutString(270,0,totalQty,false);
 	//OutString(300,0,"",false);
 	OutString(300,0,"",false);
-	OutString(300,0,"",false);
+	if(consolidatedReport==false)then begin
+		OutString(300,0,"",false);
+	end;
 	OutString(300,0,totalSum,false);
 	
  if (UserCanAction("ViewCostPrice",true)) then begin
