@@ -336,8 +336,18 @@ end;
 
 global updating procedure PricesRepCutRn(record RcVc RepSpec)
 begin
+	record UserVc User;
 	
+	User.Code = currentuser;
+	if(readfirstmain(User,1,true))then begin
+		if(nonblank(User.Location))then begin
+			RepSpec.f1 = User.Location;
+		end;
+	end;
 	RepSpec.flags[0]=1;
+	
+	
+	
 	PricesRepRn(RepSpec);
 
 return;
