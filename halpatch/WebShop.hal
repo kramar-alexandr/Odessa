@@ -735,14 +735,30 @@ begin
 		if(nonblank(email))then begin
 			CUr.eMail = email;
 			if(readfirstkey("eMail",CUr,1,true))then begin
-				res = true;
+				if(storeidtag!="7" and CUr.CustCat=="CUST")then begin
+					res = false;
+				end else begin
+					if(storeidtag=="7" and CUr.CustCat!="CUST")then begin
+						res = false;
+					end else begin	
+						res = true;
+					end;
+				end;
 			end;
 		end;
 		if(res==false)then begin
 			if(nonblank(phone))then begin
 				CUr.Phone = phone;
 				if(readfirstkey("Phone",CUr,1,true))then begin
-					res = true;
+					if(storeidtag!="7" and CUr.CustCat=="CUST")then begin
+						res = false;
+					end else begin
+						if(storeidtag=="7" and CUr.CustCat!="CUST")then begin
+							res = false;
+						end else begin	
+							res = true;
+						end;
+					end;
 				end;
 				
 				if(res==false)then begin
@@ -760,13 +776,29 @@ begin
 					end;
 					CUr.Phone = nrmphone;
 					if(readfirstkey("Phone",CUr,1,true))then begin
-						res = true;
+						if(storeidtag!="7" and CUr.CustCat=="CUST")then begin
+							res = false;
+						end else begin
+							if(storeidtag=="7" and CUr.CustCat!="CUST")then begin
+								res = false;
+							end else begin	
+								res = true;
+							end;
+						end;
 					end;
 					
 					if(res==false)then begin
 						CUr.Phone = "+38" & nrmphone;
 						if(readfirstkey("Phone",CUr,1,true))then begin
-							res = true;
+							if(storeidtag!="7" and CUr.CustCat=="CUST")then begin
+								res = false;
+							end else begin
+								if(storeidtag=="7" and CUr.CustCat!="CUST")then begin
+									res = false;
+								end else begin	
+									res = true;
+								end;
+							end;
 						end;
 					end;
 					
