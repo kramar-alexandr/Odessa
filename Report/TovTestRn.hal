@@ -733,7 +733,7 @@ return;
 end;
 
 
-global procedure SRCheckHistRn(record RcVc RepSpec)
+global updating procedure SRCheckHistRn(record RcVc RepSpec)
 begin
 	record SRVc SRr;
 	record ItemHistVc IHr,IHsr;
@@ -806,9 +806,24 @@ begin
 						outstring(400,0,actcost/actqty,false);
 						outstring(1,0,SRrw.NewFIFO/(actcost/actqty),true);
 					endformat;
+					
+					if(SRrw.Qty==remqty)then begin
+						SRrw.NewFIFORowVal = SRrw.NewFIFO * SRrw.Qty;
+						IHr.FileName = "SRVc";
+						IHr.TransNr = SRr.SerNr;
+						IHr.Row = i;
+						if(readfirstkey("FNTransNr",IHr,3,true))then begin
+							IHr.TotCostPrice = SRrw.NewFIFORowVal;
+							IHr.RemCostPrice = SRrw.NewFIFORowVal;
+							recordstore(IHr,true);
+						end;
+						SRrw.DiffFIFORowVal = SRrw.NewFIFORowVal - SRrw.FIFORowVal;
+						matrowput(SRr,i,SRrw);
+					end;
+					
 				end;
 			end; 
-			
+			recordstore(SRr,true);
 			gray_divider(0,1);
 			startformat(15);
 				outstring(150,0,sumtot,false);
