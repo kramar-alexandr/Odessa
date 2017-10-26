@@ -736,11 +736,12 @@ end;
 global procedure SRCheckHistRn(record RcVc RepSpec)
 begin
 	record SRVc SRr;
-	record ItemHistVc IHr;
+	record ItemHistVc IHr,IHsr;
 	integer mtrw,i;
 	row SRVc SRrw;
-	boolean TrHs,testf;
-	val remcost,remqty,totremcost,totremqty,sumtot;
+	boolean TrHs,testf,TrHss,testfs;
+	val remcost,remqty,totremcost,totremqty,sumtot,actqty,actcost;
+	
 	
 	logtext(0,"SRCheckHistRn");
 	
@@ -769,20 +770,41 @@ begin
 						if(IHr.RemQty==0)then begin testf = true; end;
 						
 						if(testf)then begin
-							remcost = remcost + IHr.RemQty;
-							remqty = remqty + IHr.RemCostPrice;
+							remqty = remqty + IHr.RemQty;
+							remcost = remcost + IHr.RemCostPrice;
 							totremqty = totremqty + IHr.RemQty;
 							totremcost = totremcost + IHr.RemCostPrice;
 						end;
 					end;
 					resetloop(IHr);
+					
+					actqty = blankval;
+					actcost = blankval;
+					IHsr.ArtCode = SRrw.ArtCode;
+					TrHss = true;
+					while(loopkey("ActiveQty",IHsr,1,TrHss))begin
+						testfs = true;
+						if(IHsr.ArtCode!=SRrw.ArtCode)then begin TrHss = false; end;
+					
+						if(TrHss)then begin
+							actqty = actqty + IHsr.RemQty;
+							actcost = actcost + IHsr.RemCostPrice;
+						end;
+					
+					end;
+					resetloop(IHsr);
+					
 					sumtot = sumtot + SRrw.NewFIFO * SRrw.Qty - SRrw.NewFIFORowVal;
 					startformat(15);
 						outstring(0,0,SRrw.ArtCode,false);
 						outstring(100,0,SRrw.Qty,false);
 						outstring(150,0,SRrw.NewFIFO * SRrw.Qty - SRrw.NewFIFORowVal,false);
-						outstring(200,0,remcost,false);
-						outstring(250,0,remqty,false);
+						outstring(200,0,remqty,false);
+						outstring(250,0,remcost,false);
+						outstring(300,0,actqty,false);
+						outstring(350,0,actcost,false);
+						outstring(400,0,actcost/actqty,false);
+						outstring(1,0,SRrw.NewFIFO/(actcost/actqty),true);
 					endformat;
 				end;
 			end; 
