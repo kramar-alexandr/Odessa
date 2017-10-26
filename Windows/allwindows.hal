@@ -12010,8 +12010,6 @@ begin
     SpecialMenu("Открыть запись операции",'t',1,"OpenTRFromSR");
   end;
   SpecialMenu("Поиск товара",'f',1,"ItemSearchDsm");
-  if(currentuser=="SA")then begin
-		SpecialMenu("Проверить историю",'',0,"SRCheckHistDsm");
-  end;
+	SpecialMenu("Проверить историю",'',0,"SRCheckHistDsm");
   EndWindow;
 end;
