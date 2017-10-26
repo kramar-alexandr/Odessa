@@ -871,7 +871,7 @@ begin
 					resetloop(IHsr);
 					
 					sumtot = sumtot + SRrw.NewFIFO * SRrw.Qty - SRrw.NewFIFORowVal;
-						if(SRrw.NewFIFO/(actcost/actqty)!=1)then begin
+						if(SRrw.NewFIFO/(actcost/actqty)<0.9 or SRrw.NewFIFO/(actcost/actqty)>1.1)then begin
 							startformat(15);
 								outstring(0,0,SRrw.ArtCode,false);
 								outstring(25,0,outcost/outqty,false);
@@ -884,6 +884,7 @@ begin
 								outstring(300,0,actqty,false);
 								outstring(350,0,actcost,false);
 								outstring(400,0,actcost/actqty,false);
+								outstring(420,0,SRrw.Location & "_" & SRrw.PosCode,false);
 								outstring(1,0,SRrw.NewFIFO/(actcost/actqty),true);
 							endformat;
 						end;
