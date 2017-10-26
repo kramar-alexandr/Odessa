@@ -1,0 +1,605 @@
+external procedure SortStrArray(var array string);
+
+global
+procedure MySortStringArray(var array string astr,integer cnt)
+begin
+	integer i,j;
+	string 100 tmp1,tmp2;
+	
+	if(cnt>1)then begin
+		for(j=0;j<cnt;j=j+1)begin
+			for(i=0;i<cnt-1;i=i+1)begin
+				if(uppercase(astr[i])>uppercase(astr[i+1]))then begin
+					tmp1 = astr[i];
+					tmp2 = astr[i+1];
+					astr[i] = tmp2;
+					astr[i+1] = tmp1;
+				end;
+			end;
+		end;
+	end;
+		
+
+return;
+end;
+
+global
+updating function LongInt ConsignationVcRecordCheck(var record ConsignationVc Consignationr,record ConsignationVc Consignation2r,LongInt stat,LongInt long4)
+BEGIN
+  LongInt res;
+  Integer cnt;  
+  string 255 tstr,errstr;
+  record AccVc Accr;
+  record LocGrVc LocGrr;
+  record PISVc PISr;
+  record CUUserLabelBlock CUUerLb;
+  record CountryVc Countryr;
+
+  res = 0;
+	
+	if(Consignationr.SerNr<0)then begin
+		Consignationr.SerNr = NextSerNr("ConsignationVc",CurrentDate,-1,false,"");
+	end;
+	
+	if(blankdate(Consignationr.TransDate))then begin
+		RecordCheckError(1058,"",-1,"TransDate");      
+    res = -1; 
+    goto LConsignationVcRecordCheck;
+	end;
+	
+  if (blank(Consignationr.Location)) then begin
+    RecordCheckError(1058,"",-1,"Location");      
+    res = -1; 
+    goto LConsignationVcRecordCheck;
+  end;
+    
+   
+LConsignationVcRecordCheck:;
+  ConsignationVcRecordCheck = res;
+  RETURN;
+END;
+
+
+global updating procedure ConsignationVcUpdateIH(record ConsignationVc Consignationr, boolean addflag)
+begin
+	record ItemHistVc IHr;
+	row ConsignationVc Consignationrw;
+	boolean testf,TrHs;
+	integer mtrw,i;
+	
+	if(addflag==false)then begin
+		IHr.FileName = "ConsignationVc";
+		IHr.TransNr = Consignationr.SerNr;
+		TrHs = true;
+		while(loopkey("FNTransNr",IHr,2,TrHs))begin
+			if(IHr.FileName!="ConsignationVc")then begin TrHs = false; end;
+			if(IHr.TransNr!=Consignationr.SerNr)then begin TrHs = false; end;
+			
+			if(TrHs)then begin
+				recorddelete(IHr);
+				stepback(IHr);
+			end;
+		end;
+	end else begin
+		mtrw = matrowcnt(Consignationr);
+		For(i=0;i<mtrw;i=i+1) begin
+	  	matrowget(Consignationr,i,Consignationrw);
+	  	IHr.SerNr = NextSerNr("ItemHistVc",CurrentDate,-1,false,"");
+	  	IHr.FileName = "ConsignationVc";
+	  	IHr.TransNr = Consignationr.SerNr;
+	  	IHr.TransDate = Consignationr.TransDate;
+	  	IHr.FIFODate = Consignationr.TransDate;
+	  	IHr.Location = Consignationr.Location;
+	  	IHr.StockAffectf = 0;
+	  	
+	  	IHr.ArtCode = Consignationrw.ArtCode;
+	  	IHr.Qty = Consignationrw.Qty;
+	  	IHr.Row = i;
+	  	recordstore(IHr,false);
+	  	
+		end; 
+	end;
+return;
+end;
+
+
+global updating procedure ConsInVcUpdateIH(record ConsInVc Consignationr, boolean addflag)
+begin
+	record ItemHistVc IHr;
+	row ConsInVc Consignationrw;
+	boolean testf,TrHs;
+	integer mtrw,i;
+	
+	if(addflag==false)then begin
+		IHr.FileName = "ConsInVc";
+		IHr.TransNr = Consignationr.SerNr;
+		TrHs = true;
+		while(loopkey("FNTransNr",IHr,2,TrHs))begin
+			if(IHr.FileName!="ConsInVc")then begin TrHs = false; end;
+			if(IHr.TransNr!=Consignationr.SerNr)then begin TrHs = false; end;
+			
+			if(TrHs)then begin
+				recorddelete(IHr);
+				stepback(IHr);
+			end;
+		end;
+	end else begin
+		mtrw = matrowcnt(Consignationr);
+		For(i=0;i<mtrw;i=i+1) begin
+	  	matrowget(Consignationr,i,Consignationrw);
+	  	IHr.SerNr = NextSerNr("ItemHistVc",CurrentDate,-1,false,"");
+	  	IHr.FileName = "ConsInVc";
+	  	IHr.TransNr = Consignationr.SerNr;
+	  	IHr.TransDate = Consignationr.TransDate;
+	  	IHr.FIFODate = Consignationr.TransDate;
+	  	IHr.Location = Consignationr.Location;
+	  	IHr.StockAffectf = 0;
+	  	
+	  	IHr.ArtCode = Consignationrw.ArtCode;
+	  	IHr.Qty = Consignationrw.Qty;
+	  	IHr.Row = i;
+	  	recordstore(IHr,false);
+	  	
+		end; 
+	end;
+return;
+end;
+
+global updating procedure ConsSaleVcUpdateIH(record ConsSaleVc Consignationr, boolean addflag)
+begin
+	record ItemHistVc IHr;
+	row ConsSaleVc Consignationrw;
+	boolean testf,TrHs;
+	integer mtrw,i;
+	
+	if(addflag==false)then begin
+		IHr.FileName = "ConsSaleVc";
+		IHr.TransNr = Consignationr.SerNr;
+		TrHs = true;
+		while(loopkey("FNTransNr",IHr,2,TrHs))begin
+			if(IHr.FileName!="ConsSaleVc")then begin TrHs = false; end;
+			if(IHr.TransNr!=Consignationr.SerNr)then begin TrHs = false; end;
+			
+			if(TrHs)then begin
+				recorddelete(IHr);
+				stepback(IHr);
+			end;
+		end;
+	end else begin
+		mtrw = matrowcnt(Consignationr);
+		For(i=0;i<mtrw;i=i+1) begin
+	  	matrowget(Consignationr,i,Consignationrw);
+	  	IHr.SerNr = NextSerNr("ItemHistVc",CurrentDate,-1,false,"");
+	  	IHr.FileName = "ConsSaleVc";
+	  	IHr.TransNr = Consignationr.SerNr;
+	  	IHr.TransDate = Consignationr.TransDate;
+	  	IHr.FIFODate = Consignationr.TransDate;
+	  	IHr.Location = Consignationr.Location;
+	  	IHr.StockAffectf = 0;
+	  	
+	  	IHr.ArtCode = Consignationrw.ArtCode;
+	  	IHr.Qty = Consignationrw.Qty;
+	  	IHr.Row = i;
+	  	recordstore(IHr,false);
+	  	
+		end; 
+	end;
+return;
+end;
+
+global updating procedure ConsBrakVcUpdateIH(record ConsBrakVc Consignationr, boolean addflag)
+begin
+	record ItemHistVc IHr;
+	row ConsBrakVc Consignationrw;
+	boolean testf,TrHs;
+	integer mtrw,i;
+	
+	if(addflag==false)then begin
+		IHr.FileName = "ConsBrakVc";
+		IHr.TransNr = Consignationr.SerNr;
+		TrHs = true;
+		while(loopkey("FNTransNr",IHr,2,TrHs))begin
+			if(IHr.FileName!="ConsBrakVc")then begin TrHs = false; end;
+			if(IHr.TransNr!=Consignationr.SerNr)then begin TrHs = false; end;
+			
+			if(TrHs)then begin
+				recorddelete(IHr);
+				stepback(IHr);
+			end;
+		end;
+	end else begin
+		mtrw = matrowcnt(Consignationr);
+		For(i=0;i<mtrw;i=i+1) begin
+	  	matrowget(Consignationr,i,Consignationrw);
+	  	IHr.SerNr = NextSerNr("ItemHistVc",CurrentDate,-1,false,"");
+	  	IHr.FileName = "ConsBrakVc";
+	  	IHr.TransNr = Consignationr.SerNr;
+	  	IHr.TransDate = Consignationr.TransDate;
+	  	IHr.FIFODate = Consignationr.TransDate;
+	  	IHr.Location = Consignationr.Location;
+	  	IHr.StockAffectf = 0;
+	  	
+	  	IHr.ArtCode = Consignationrw.ArtCode;
+	  	IHr.Qty = Consignationrw.Qty;
+	  	IHr.Row = i;
+	  	recordstore(IHr,false);
+	  	
+		end; 
+	end;
+return;
+end;
+
+global
+updating function LongInt ConsignationVcRecordUpdateAfter(var record ConsignationVc Consignationr,record ConsignationVc Consignation2r,LongInt stat,LongInt long4)
+BEGIN
+  LongInt res;
+  
+  if(Consignationr.OKFlag==1 and Consignation2r.OKFlag==0)then begin
+		ConsignationVcUpdateIH(Consignationr,false);
+		ConsignationVcUpdateIH(Consignationr,true);
+ 	end;
+ 	if(Consignationr.OKFlag==0 and Consignation2r.OKFlag==1)then begin
+		ConsignationVcUpdateIH(Consignationr,false);
+ 	end;
+ 	
+  ConsignationVcRecordUpdateAfter = res;
+  RETURN;
+END;
+
+global
+updating function LongInt ConsignationVcRecordSaveAfter(var record ConsignationVc Consignationr,record ConsignationVc Consignation2r,LongInt stat,LongInt long4)
+BEGIN
+  LongInt res;
+  
+
+ 	if(Consignationr.OKFlag==1)then begin
+		ConsignationVcUpdateIH(Consignationr,true);
+ 	end;
+ 	
+  ConsignationVcRecordSaveAfter = res;
+  RETURN;
+END;
+
+global
+updating function LongInt ConsInVcRecordUpdateAfter(var record ConsInVc Consignationr,record ConsInVc Consignation2r,LongInt stat,LongInt long4)
+BEGIN
+  LongInt res;
+  
+  if(Consignationr.OKFlag==1 and Consignation2r.OKFlag==0)then begin
+		ConsInVcUpdateIH(Consignationr,false);
+		ConsInVcUpdateIH(Consignationr,true);
+ 	end;
+ 	if(Consignationr.OKFlag==0 and Consignation2r.OKFlag==1)then begin
+		ConsInVcUpdateIH(Consignationr,false);
+ 	end;
+ 	
+  ConsInVcRecordUpdateAfter = res;
+  RETURN;
+END;
+
+global
+updating function LongInt ConsInVcRecordSaveAfter(var record ConsInVc Consignationr,record ConsInVc Consignation2r,LongInt stat,LongInt long4)
+BEGIN
+  LongInt res;
+  
+
+ 	if(Consignationr.OKFlag==1)then begin
+		ConsInVcUpdateIH(Consignationr,true);
+ 	end;
+ 	
+  ConsInVcRecordSaveAfter = res;
+  RETURN;
+END;
+
+global
+updating function LongInt ConsSaleVcRecordUpdateAfter(var record ConsSaleVc Consignationr,record ConsSaleVc Consignation2r,LongInt stat,LongInt long4)
+BEGIN
+  LongInt res;
+  
+  if(Consignationr.OKFlag==1 and Consignation2r.OKFlag==0)then begin
+		ConsSaleVcUpdateIH(Consignationr,false);
+		ConsSaleVcUpdateIH(Consignationr,true);
+ 	end;
+ 	if(Consignationr.OKFlag==0 and Consignation2r.OKFlag==1)then begin
+		ConsSaleVcUpdateIH(Consignationr,false);
+ 	end;
+ 	
+  ConsSaleVcRecordUpdateAfter = res;
+  RETURN;
+END;
+
+global
+updating function LongInt ConsSaleVcRecordSaveAfter(var record ConsSaleVc Consignationr,record ConsSaleVc Consignation2r,LongInt stat,LongInt long4)
+BEGIN
+  LongInt res;
+  
+
+ 	if(Consignationr.OKFlag==1)then begin
+		ConsSaleVcUpdateIH(Consignationr,true);
+ 	end;
+ 	
+  ConsSaleVcRecordSaveAfter = res;
+  RETURN;
+END;
+
+global
+updating function LongInt ConsBrakVcRecordUpdateAfter(var record ConsBrakVc Consignationr,record ConsBrakVc Consignation2r,LongInt stat,LongInt long4)
+BEGIN
+  LongInt res;
+  
+  if(Consignationr.OKFlag==1 and Consignation2r.OKFlag==0)then begin
+		ConsBrakVcUpdateIH(Consignationr,false);
+		ConsBrakVcUpdateIH(Consignationr,true);
+ 	end;
+ 	if(Consignationr.OKFlag==0 and Consignation2r.OKFlag==1)then begin
+		ConsBrakVcUpdateIH(Consignationr,false);
+ 	end;
+ 	
+  ConsBrakVcRecordUpdateAfter = res;
+  RETURN;
+END;
+
+global
+updating function LongInt ConsBrakVcRecordSaveAfter(var record ConsBrakVc Consignationr,record ConsBrakVc Consignation2r,LongInt stat,LongInt long4)
+BEGIN
+  LongInt res;
+  
+
+ 	if(Consignationr.OKFlag==1)then begin
+		ConsBrakVcUpdateIH(Consignationr,true);
+ 	end;
+ 	
+  ConsBrakVcRecordSaveAfter = res;
+  RETURN;
+END;
+
+global
+updating function LongInt ConsignationVcRecordDuplicate(var record ConsignationVc Consignationr,record ConsignationVc Consignation2r,LongInt stat,LongInt long4)
+BEGIN
+  LongInt res;
+  Integer cnt;  
+  string 255 tstr,errstr;
+  record AccVc Accr;
+  record LocGrVc LocGrr;
+  record PISVc PISr;
+  record CUUserLabelBlock CUUerLb;
+  record CountryVc Countryr;
+		
+	Consignationr.SerNr = -1;
+  
+  ConsignationVcRecordDuplicate = res;
+  RETURN;
+END;
+
+
+global updating procedure ConsignationGenMn(record RcVc RepSpec)
+begin
+	record ItemStatusVc ISr;
+	record INVc INr;
+	record ConsignationVc Consignationr;
+	record DIVc DIr;
+	record PLVc PLr;
+	row ConsignationVc Consignationrw;
+	boolean TrHs,testf;
+	integer i,mtrw;
+	val comprice,totsum,totqty;
+	
+	if(nonblank(RepSpec.f1))then begin
+		testf = true;
+		if(blank(RepSpec.f2))then begin testf = false; end;
+		if(testf)then begin
+			DIr.Code = RepSpec.f2;
+			if(readfirstmain(DIr,1,true))then begin
+				if(DIr.CType!="KOMITENT")then begin
+					testf = false;
+				end;
+			end else begin
+				testf = false;
+			end;
+		end;
+		Logtext(0,"testf 1 " & testf);
+		if(testf)then begin
+			recordNew(Consignationr);
+			Consignationr.SerNr = NextSerNr("ConsignationVc",CurrentDate,-1,false,"");
+			Consignationr.Location = RepSpec.f1;
+			Consignationr.TransDate = currentdate;
+			Consignationr.Comitent = RepSpec.f2;
+		
+			ISr.Location = RepSpec.f1;
+			TrHs = true;
+			while(loopkey("Location",ISr,1,TrHs))begin
+				testf = true;
+				if(ISr.Location!=RepSpec.f1)then begin TrHs = false; testf = false; end;
+				if(ISr.Instock<=0)then begin testf = false; end;
+				
+				if(testf)then begin
+					INr.Code = ISr.Code;
+					if(readfirstmain(INr,1,true))then begin
+						if(!setinset(RepSpec.f2,INr.DispGroups))then begin
+							testf = false;
+						end;
+					end;
+				end;
+				
+				if(testf)then begin
+					PLr.ArtCode = ISr.Code;
+					PLr.PLCode = "KOMPR";
+					comprice = blankval;
+					if(readfirstmain(PLr,2,true))then begin
+						comprice = PLr.ExVatPrice;
+					end;
+					Consignationrw.ArtCode = ISr.Code;
+					Consignationrw.Qty = ISr.Instock;
+					Consignationrw.Price = comprice;
+					Consignationrw.Sum = comprice * ISr.Instock;
+					totsum = totsum + Consignationrw.Sum;
+					totqty = totqty + Consignationrw.Qty;
+					matrowput(Consignationr,mtrw,Consignationrw);
+					mtrw = mtrw + 1;
+				end;
+			end;
+			Consignationr.TotSum = totsum;
+			Consignationr.TotQty = totqty;
+			logtext(0,"mtrw " & mtrw);
+			recordstore(Consignationr,false);
+			end;
+	end;
+	
+return;
+end;
+
+
+global procedure CompareConsignationRn(record RcVc RepSpec)
+begin
+	record INVc INr;
+	record ItemHistVc IHr;
+	record ConsignationVc Consignation1r,Consignation2r,ConsignationBigr;
+	row ConsignationVc Consignation1rw,Consignation2rw,ConsignationBigrw;
+	longint fr,to,ihspos,ihepos;
+	integer mtrw,i,j,k,mtrw2,acnt;
+	vector boolean vartcode;
+	vector val sval,eval,sales,ret,smin,sout;
+	vector longint vstransnr,vetransnr,vsrow,verow;
+	array string 40 aartcode;
+	boolean TrHs,testf;
+	
+	fr = stringtolongint(firstinrange(RepSpec.f1,10));
+	to = stringtolongint(lastinrange(RepSpec.f1,10));
+	
+	if(fr>0 and to>0)then begin
+		if(nonblank(RepSpec.f2) and nonblank(RepSpec.f3))then begin
+			Consignation1r.SerNr = fr;
+			if(readfirstmain(Consignation1r,1,true) and Consignation1r.Comitent==RepSpec.f2 and Consignation1r.Location==RepSpec.f3)then begin
+				Consignation2r.SerNr = to;
+				if(readfirstmain(Consignation2r,1,true) and Consignation2r.Comitent==RepSpec.f2 and Consignation2r.Location==RepSpec.f3)then begin
+					mtrw = matrowcnt(Consignation1r);
+					For(i=0;i<mtrw;i=i+1) begin
+	  				matrowget(Consignation1r,i,Consignation1rw);
+	  				aartcode[acnt] = Consignation1rw.ArtCode;
+	  				sval[aartcode[acnt]] = Consignation1rw.Qty;
+						vartcode[aartcode[acnt]] = true;
+						vstransnr[aartcode[acnt]] = fr;
+						vsrow[aartcode[acnt]] = i;
+	  				acnt = acnt + 1;
+					end; 
+					logtext(0,"1th acnt " & acnt);
+					
+					mtrw = matrowcnt(Consignation2r);
+					For(i=0;i<mtrw;i=i+1) begin
+	  				matrowget(Consignation2r,i,Consignation2rw);
+	  				if(vartcode[Consignation2rw.ArtCode]==false)then begin
+							aartcode[acnt] = Consignation2rw.ArtCode;
+							vartcode[aartcode[acnt]] = true;
+							acnt = acnt + 1;
+	  				end;
+	  				vetransnr[Consignation2rw.ArtCode] = to;
+						verow[Consignation2rw.ArtCode] = i;
+	  				eval[Consignation2rw.ArtCode] = Consignation2rw.Qty;	  				
+					end;
+					logtext(0,"2th acnt " & acnt);
+					MySortStringArray(aartcode,acnt);
+					logtext(0,"sort end ");
+					
+					For(i=0;i<acnt;i=i+1) begin
+	  				IHr.FileName = "ConsignationVc";
+	  				IHr.TransNr = vstransnr[aartcode[i]];
+	  				IHr.Row = vsrow[aartcode[i]];
+	  				ihspos = -1;
+	  				if(readfirstkey("FNTransNr",IHr,3,true))then begin
+	  					ihspos = IHr.SerNr;
+	  				end;
+	  				
+	  				IHr.FileName = "ConsignationVc";
+	  				IHr.TransNr = vetransnr[aartcode[i]];
+	  				IHr.Row = verow[aartcode[i]];
+	  				ihepos = -1;
+	  				if(readfirstkey("FNTransNr",IHr,3,true))then begin
+	  					ihepos = IHr.SerNr;
+	  				end;
+	  					  				
+	  				if(ihspos>0 and ihepos>0)then begin
+							TrHs = true;
+							IHr.ArtCode = aartcode[i];
+							IHr.SerNr = ihspos;
+							while(loopkey("ArtCodeSN",IHr,2,TrHs))begin
+								testf = true;
+								if(IHr.ArtCode!=aartcode[i])then begin TrHs=false; testf = false; end;
+								if(IHr.SerNr<ihspos or IHr.SerNr>ihepos)then begin TrHs=false; testf = false; end;
+								if(IHr.StockAffectf==0)then begin testf = false; end;
+								if(IHr.Location!=RepSpec.f3)then begin testf = false; end;
+								
+								if(testf)then begin
+									switch(IHr.FileName)begin
+										case"IVVc": if(IHr.Qty<0)then begin
+																	sales[IHr.ArtCode] = -IHr.Qty;
+																end else begin
+																	ret[IHr.ArtCode] = IHr.Qty;
+																end;
+										case"SHVc": sales[IHr.ArtCode] = -IHr.Qty;
+										case"RetVc": ret[IHr.ArtCode] = IHr.Qty;
+										case"PUVc": smin[IHr.ArtCode] = IHr.Qty;
+										case"SDVc": sout[IHr.ArtCode] = IHr.Qty;
+										case"StockMovVc": if(IHr.Qty<0)then begin
+																				sout[IHr.ArtCode] = -IHr.Qty;
+																			end else begin
+																				smin[IHr.ArtCode] = IHr.Qty;
+																			end;
+									end;
+								end;
+								
+							end;
+							resetloop(IHr);
+	  				end;
+					end; 
+					logtext(0,"CalculateEnd ");
+					
+					Startreportnoheaderjob("CompareConsignationRn");
+					startformat(15);
+						outstring(0,0,"Item",false);
+						outstring(70,0,"Sqty",false);
+						outstring(150,0,"IN",false);
+						outstring(200,0,"Out",false);
+						outstring(250,0,"SalesOut",false);
+						outstring(300,0,"SalesIn",false);
+						outstring(350,0,"Disbalans",false);
+						outstring(1,0,"Eqty",True);
+					endformat;
+					
+					
+					For(i=0;i<acnt;i=i+1) begin
+	  				startformat(15);
+							outstring(0,0,aartcode[i],false);
+							outstring(70,0,sval[aartcode[i]],false);
+							outstring(150,0,smin[aartcode[i]],false);
+							outstring(200,0,sout[aartcode[i]],false);
+							outstring(250,0,sales[aartcode[i]],false);
+							outstring(300,0,ret[aartcode[i]],false);
+							outstring(350,0,sval[aartcode[i]]+smin[aartcode[i]]-sout[aartcode[i]]-sales[aartcode[i]]+ret[aartcode[i]]-eval[aartcode[i]],false);
+							outstring(1,0,eval[aartcode[i]],True);
+						endformat;
+					end; 
+					endjob;
+											
+				end;
+			end;
+		end;
+	end;
+
+return;
+end;
+
+
+global updating procedure CrConsigIn()
+begin
+	integer wn;
+	record ConsignationVc Consignationr;
+	
+	
+	wn = curwindow();
+	if(windowstate(wn)==0)then begin
+		getwindowrecord(wn,Consignationr);
+		
+	end;
+
+return;
+end;

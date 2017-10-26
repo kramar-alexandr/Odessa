@@ -6225,6 +6225,143 @@ RecordBegin(IPVc,-,"");
   EndArray;
   EndBlock; //Edit***************************Sasha2,16:15 05.09.2017 }
   
+  RecordBegin(ConsignationVc,-,""); // Edit ************************** Tuesday, 17 October 2017 17:43:18
+  RecordField(SerNr,M4Long,0,0);
+  RecordField(TransDate,M4Date,0,0);
+  RecordField(LocOKNr,M4Qty,0,0);
+  RecordField(Location,M4Code,20,0);
+  RecordField(OKFlag,M4Int,0,0);
+  RecordField(Comitent,M4Code,40,0);
+  RecordField(TotSum,M4Val,0,0);
+  RecordField(TotQty,M4Val,0,0);
+
+  RecordField(Math,M4Matrix,0,0);
+  ArrayBegin(Math,-,1);
+  ArrayField(ArtCode,M4Code,40,0);
+  ArrayField(Qty,M4Val,0,0);
+  ArrayField(SelQty,M4Val,0,0);
+  ArrayField(AllSelQty,M4Val,0,0);
+  ArrayField(Price,M4Val,0,0);
+  ArrayField(Sum,M4Val,0,0);
+  ArrayField(PrevQty,M4Val,0,0);
+  
+  EndArray;
+  MainKeyBegin(SerNr,0);
+  KeySegment(SerNr);
+  KeyBegin(TransDate);
+  KeySegment(TransDate);
+  KeySegment(SerNr);
+  KeyBegin(Location);
+  KeySegment(Location);
+  KeySegment(SerNr);
+  KeyBegin(LocOKNr);
+  KeySegment(LocOKNr);
+  KeySegment(SerNr);
+
+  EndRecord; // Edit ************************** Tuesday, 17 October 2017 17:43:17
+  
+  RecordBegin(ConsInVc,-,""); // Edit ************************** Tuesday, 24 October 2017 15:54:04
+  RecordField(SerNr,M4Long,0,0);
+  RecordField(TransDate,M4Date,0,0);
+  RecordField(LocOKNr,M4Qty,0,0);
+  RecordField(Location,M4Code,20,0);
+  RecordField(OKFlag,M4Int,0,0);
+  RecordField(Comitent,M4Code,40,0);
+  RecordField(TotSum,M4Val,0,0);
+  RecordField(TotQty,M4Val,0,0);
+
+  RecordField(Math,M4Matrix,0,0);
+  ArrayBegin(Math,-,1);
+  ArrayField(ArtCode,M4Code,40,0);
+  ArrayField(Qty,M4Val,0,0);
+  ArrayField(SelQty,M4Val,0,0);
+  ArrayField(AllSelQty,M4Val,0,0);
+  ArrayField(Price,M4Val,0,0);
+  ArrayField(Sum,M4Val,0,0);
+  
+  EndArray;
+  MainKeyBegin(SerNr,0);
+  KeySegment(SerNr);
+  KeyBegin(TransDate);
+  KeySegment(TransDate);
+  KeySegment(SerNr);
+  KeyBegin(Location);
+  KeySegment(Location);
+  KeySegment(SerNr);
+  KeyBegin(LocOKNr);
+  KeySegment(LocOKNr);
+  KeySegment(SerNr);
+
+  EndRecord; // Edit ************************** Tuesday, 17 October 2017 17:43:17
+  
+  RecordBegin(ConsSaleVc,-,""); // Edit ************************** Tuesday, 24 October 2017 15:54:04
+  RecordField(SerNr,M4Long,0,0);
+  RecordField(TransDate,M4Date,0,0);
+  RecordField(LocOKNr,M4Qty,0,0);
+  RecordField(Location,M4Code,20,0);
+  RecordField(OKFlag,M4Int,0,0);
+  RecordField(Comitent,M4Code,40,0);
+  RecordField(TotSum,M4Val,0,0);
+  RecordField(TotQty,M4Val,0,0);
+
+  RecordField(Math,M4Matrix,0,0);
+  ArrayBegin(Math,-,1);
+  ArrayField(ArtCode,M4Code,40,0);
+  ArrayField(Qty,M4Val,0,0);
+  ArrayField(SelQty,M4Val,0,0);
+  ArrayField(AllSelQty,M4Val,0,0);
+  ArrayField(Price,M4Val,0,0);
+  ArrayField(Sum,M4Val,0,0);
+  
+  EndArray;
+  MainKeyBegin(SerNr,0);
+  KeySegment(SerNr);
+  KeyBegin(TransDate);
+  KeySegment(TransDate);
+  KeySegment(SerNr);
+  KeyBegin(Location);
+  KeySegment(Location);
+  KeySegment(SerNr);
+  KeyBegin(LocOKNr);
+  KeySegment(LocOKNr);
+  KeySegment(SerNr);
+
+  EndRecord; // Edit ************************** Tuesday, 17 October 2017 17:43:17
+  
+  RecordBegin(ConsBrakVc,-,""); // Edit ************************** Tuesday, 24 October 2017 15:54:04
+  RecordField(SerNr,M4Long,0,0);
+  RecordField(TransDate,M4Date,0,0);
+  RecordField(LocOKNr,M4Qty,0,0);
+  RecordField(Location,M4Code,20,0);
+  RecordField(OKFlag,M4Int,0,0);
+  RecordField(Comitent,M4Code,40,0);
+  RecordField(TotSum,M4Val,0,0);
+  RecordField(TotQty,M4Val,0,0);
+
+  RecordField(Math,M4Matrix,0,0);
+  ArrayBegin(Math,-,1);
+  ArrayField(ArtCode,M4Code,40,0);
+  ArrayField(Qty,M4Val,0,0);
+  ArrayField(SelQty,M4Val,0,0);
+  ArrayField(AllSelQty,M4Val,0,0);
+  ArrayField(Price,M4Val,0,0);
+  ArrayField(Sum,M4Val,0,0);
+  
+  EndArray;
+  MainKeyBegin(SerNr,0);
+  KeySegment(SerNr);
+  KeyBegin(TransDate);
+  KeySegment(TransDate);
+  KeySegment(SerNr);
+  KeyBegin(Location);
+  KeySegment(Location);
+  KeySegment(SerNr);
+  KeyBegin(LocOKNr);
+  KeySegment(LocOKNr);
+  KeySegment(SerNr);
+
+  EndRecord; // Edit ************************** Tuesday, 17 October 2017 17:43:17
+  
 return;
 end;
 

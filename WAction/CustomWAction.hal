@@ -198,3 +198,20 @@ BEGIN
   NPActiveContSenderTClassAfterEditField = res;
   RETURN;
 END; //Edit***************************Sasha2,19:37 05.09.2017 }
+
+
+global procedure SRCheckHistDsm()
+begin
+	record SRVc SRr;
+	integer wn;
+	record RcVc RepSpec;
+		
+	wn = curwindow;
+	getwindowrecord(wn,SRr);
+	RepSpec.repname = "SRCheckHistRn";
+  RepSpec.long1 = SRr.SerNr;
+  RepSpec.Media = mtScreen;
+  RunReport(RepSpec,0);
+	
+return;
+end;

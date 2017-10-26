@@ -34,6 +34,10 @@ begin
   Setting("Настройки Zebra",ZebraPrinterTClass,modIN); //Edit***************************Sasha2,16:35 25.09.2014
 	
 	Setting("Платежи Privat",PrivatBankReportsLClass,modTC);
+	Setting("Consignation",ConsignationLClass,modSL);
+	Setting("Cons In",ConsInLClass,modSL);
+	Setting("Cons Sale",ConsSaleLClass,modSL);
+	Setting("Cons Brak",ConsBrakLClass,modSL);
 	
   Report("Анализ поставщика",VEAnaRClass,VEAnaRn,0,modPO);
   Report("Отчет по товарам по классификации (поставщику)",VERepRClass,VERepRn,0,modPO); //Edit***************************Sasha2,14:08 31.07.2014
@@ -76,7 +80,8 @@ begin
   Report("Некорректные сч.ф.",UncorrectIVRClass,UncorrectIVRn,0,modDBMain);//Edit-------------------Vitalii 12:47 13.03.2017
   
   Report("Экспресс сборка",PrintExpressListRClass,PrintExpressListRn,0,modIN);//Edit-------------------Vitalii 12:47 13.03.2017
-	
+	Report("Отчет по комиссии",CompareConsignationRClass,CompareConsignationRn,0,modSL);// Edit ************************** Tuesday, 24 October 2017 14:26:01
+
 	
 	Import("Импорт регистров БЕЗ ПЕРЕЗАПИСИ",ImportOfRegisterIClass,ImportOfRegister,modDBMain);	//Edit----------------------Dima  27.05.2015
 	Import("Импорт регистров C ПЕРЕЗАПИСЬЮ",ImportOfRegisterRewriteIClass,ImportOfRegisterRewriting,modDBMain);
@@ -466,6 +471,8 @@ begin
 	 Maintenance("ГРуппы продаж Поставшикам",MyVClass,UpdateVESalesGroupMn,modDBMain);
   Maintenance("Поставить \"Счет себе\" в карточках Контакта",MyVClass,SetSelfBillingFlagInCUMn,modDBMain); //Edit***************************Sasha2,14:43 06.09.2017
   Maintenance("Кредитная сч/ф обновляет счет",MyVClass,ChangeORdSetBlockMn,modDBMain);
+  
+  Maintenance("Generate Consignation",ConsignationGenVClass,ConsignationGenMn,modSL);
 	
   Import("Импорт цен",PLImportIClass,PLImportIn,modDI); //Added********************Dima 20.11.2014
   Import("Импорт товаров",INImportIClass,INImportIn,modIN);//Added********************Dima 20.11.2014

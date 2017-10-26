@@ -731,3 +731,71 @@ begin
 
 return;
 end;
+
+
+global procedure SRCheckHistRn(record RcVc RepSpec)
+begin
+	record SRVc SRr;
+	record ItemHistVc IHr;
+	integer mtrw,i;
+	row SRVc SRrw;
+	boolean TrHs,testf;
+	val remcost,remqty,totremcost,totremqty,sumtot;
+	
+	logtext(0,"SRCheckHistRn");
+	
+	
+	startreportnoheaderjob("SRCheckHistRn");
+		
+		SRr.SerNr = RepSpec.long1;
+		if(readfirstmain(SRr,1,true))then begin
+			mtrw = matrowcnt(SRr);
+			For(i=0;i<mtrw;i=i+1) begin
+				matrowget(SRr,i,SRrw);
+				if((SRrw.NewFIFO * SRrw.Qty - SRrw.NewFIFORowVal)!=0)then begin
+					
+					IHr.FileName = "SRVc";
+					IHr.TransNr = SRr.SerNr;
+					IHr.Row = i;
+					TrHs = true;
+					remcost = blankval;
+					remqty = blankval;
+					while(loopkey("FNTransNr",IHr,3,TrHS))begin
+						testf = true;
+						if(IHr.FileName!="SRVc")then begin TrHs = false; testf = true; end;
+						if(IHr.TransNr!=SRr.SerNr)then begin TrHs = false; testf = true; end;
+						if(IHr.Row!=i)then begin TrHs = false; testf = true; end;
+						if(IHr.ArtCode!=SRrw.ArtCode)then begin testf = true; end;
+						if(IHr.RemQty==0)then begin testf = true; end;
+						
+						if(testf)then begin
+							remcost = remcost + IHr.RemQty;
+							remqty = remqty + IHr.RemCostPrice;
+							totremqty = totremqty + IHr.RemQty;
+							totremcost = totremcost + IHr.RemCostPrice;
+						end;
+					end;
+					resetloop(IHr);
+					sumtot = sumtot + SRrw.NewFIFO * SRrw.Qty - SRrw.NewFIFORowVal;
+					startformat(15);
+						outstring(0,0,SRrw.ArtCode,false);
+						outstring(100,0,SRrw.Qty,false);
+						outstring(150,0,SRrw.NewFIFO * SRrw.Qty - SRrw.NewFIFORowVal,false);
+						outstring(200,0,remcost,false);
+						outstring(250,0,remqty,false);
+					endformat;
+				end;
+			end; 
+			
+			gray_divider(0,1);
+			startformat(15);
+				outstring(150,0,sumtot,false);
+				outstring(200,0,totremcost,false);
+				outstring(250,0,totremqty,false);
+			endformat;
+		end;
+
+	endjob;
+
+return;
+end;
