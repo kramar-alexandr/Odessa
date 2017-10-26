@@ -870,8 +870,8 @@ begin
 					end;
 					resetloop(IHsr);
 					
-					sumtot = sumtot + SRrw.NewFIFO * SRrw.Qty - SRrw.NewFIFORowVal;
 						if(SRrw.NewFIFO/(actcost/actqty)<0.9 or SRrw.NewFIFO/(actcost/actqty)>1.1)then begin
+							sumtot = sumtot + SRrw.NewFIFO * SRrw.Qty - SRrw.NewFIFORowVal;
 							startformat(15);
 								outstring(0,0,SRrw.ArtCode,false);
 								outstring(25,0,outcost/outqty,false);
