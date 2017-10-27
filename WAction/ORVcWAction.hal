@@ -383,7 +383,7 @@ BEGIN
   Boolean calcperceppercuf;
 	val fr,to;	//Edit-----------Dima  29.01.2015
 	
-	AlternativeRebateORVc(ORp);//=================================Alexandr 25/09/2017
+	//AlternativeRebateORVc(ORp);//=================================Alexandr 25/09/2017
 
 	
   if (UseTaxTemplatesforTaxCalc) then begin
