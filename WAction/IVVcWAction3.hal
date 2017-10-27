@@ -1222,7 +1222,7 @@ BEGIN
   string 255 location;
   record TaxMatrixVc TMr;
 
-	AlternativeRebateIVVc(IVp);// Edit ************************** Monday, 25 September 2017 16:54:38
+	//AlternativeRebateIVVc(IVp);// Edit ************************** Monday, 25 September 2017 16:54:38
 	
   if (rownr>=0) then begin
     MatRowGet(IVp,rownr,IVrw);
