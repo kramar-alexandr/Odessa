@@ -343,7 +343,7 @@ BEGIN
   record VGVc VGr;
   record AccBlock ARAccRec;
   record IVVc IVr;
-  string 60 tobj;
+  string 255 tobj;// Edit ************************** Monday, 30 October 2017 15:01:55
   Boolean sumpmf;
   row VATCodeBlock VATCoderw;
   record AccVc Accr;
