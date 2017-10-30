@@ -138,7 +138,9 @@ BEGIN
       objstr = objstr & rowobjects;
     end;
   objstr = AddObjectToObjectList255(pmrw.Objects,objstr); //Edit***************************Sasha2,12:02 04.02.2015
-      
+  
+  logtext(0,"objstr " & objstr);
+  
   nilv = -1;
   res = 1085;
   Accr.AccNumber = corspacc;    
