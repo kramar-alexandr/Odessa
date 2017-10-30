@@ -137,9 +137,10 @@ BEGIN
     if (nonblank(objstr)) then begin objstr = objstr & ","; end;
       objstr = objstr & rowobjects;
     end;
+    logtext(0,"objstr old " & objstr);
   objstr = AddObjectToObjectList255(pmrw.Objects,objstr); //Edit***************************Sasha2,12:02 04.02.2015
   
-  logtext(0,"objstr " & objstr);
+  logtext(0,"objstr new " & objstr);
   
   nilv = -1;
   res = 1085;
