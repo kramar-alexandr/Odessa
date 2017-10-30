@@ -1308,7 +1308,7 @@ begin
     ExtractObj(addobjs,pos,aobj);
   end;
   NormalizeObjstr(res);
-  AddObjectToObjectList = res;
+  AddObjectToObjectList255 = res;
   return;
 end;
 
