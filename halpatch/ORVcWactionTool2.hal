@@ -86,7 +86,9 @@ BEGIN
     ORr.InclVAT = inclvat;
     ORr.ExportFlag = CUr.ExportFlag;
     ORr.PayDeal = CUr.PayDeal;
-    ORr.SalesMan = CUr.SalesMan;
+    if(usercanaction("DoNotSetSalesManInOR",false)==false)then begin
+    	ORr.SalesMan = CUr.SalesMan;// Edit ************************** Monday, 30 October 2017 11:15:02
+    end;
 //    PastePDInOR(ORp;
   end;
   PasteCustInOR = res;
