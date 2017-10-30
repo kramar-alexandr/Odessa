@@ -116,7 +116,7 @@ END;
 function Integer AddTransRows(record TRVc gTRp,record MainCLBlock MainCLb,record VATCodeBlock VATCodeb,record APAccBlock APAccb,
                               record BaseCurBlock bcur,record CLOutVc CLOutp,string corspacc,
                               val total,val netval,val vatval,val frrate,val torate1,val torate2,val baserate1,val baserate2,
-                              var val totsum,string CustCode,LongInt InvoiceNr,string accstr,Integer nlrwtype,string rowobjects)
+                              var val totsum,string CustCode,LongInt InvoiceNr,string accstr,Integer nlrwtype,string rowobj)
 BEGIN
   val rs,rs2,bv;
   Integer res;
@@ -128,7 +128,23 @@ BEGIN
   record AccVc Accr;
   string 255 paymode; //Edit***************************Sasha2,11:59 04.02.2015
   row PMBlock pmrw; //Edit***************************Sasha2,12:00 04.02.2015 
+  string 255 rowobjects;// Edit ************************** Monday, 30 October 2017 14:43:21
+  // Edit Start ---------------------------------------------- Edit Start
+	//Monday, 30 October 2017 14:43:23
+	
+  rowobjects = rowobj;
+  if(nonblank(CLOutp.Objects))then begin
+  	if(nonblank(rowobjects))then begin
+  		if(setinset(CLOutp.Objects,rowobjects)==false)then begin
+  			rowobjects = CLOutp.Objects & "," & rowobjects;
+  		end;
+  	end else begin
+  		rowobjects = CLOutp.Objects;
+  	end;
+  end;
   
+	// Edit End ---------------------------------------------- Edit End
+	
   paymode = CLOutp.PayMode; //Edit***************************Sasha2,11:59 04.02.2015
   GetPMRow(paymode,pmrw); //Edit***************************Sasha2,11:59 04.02.2015
   
