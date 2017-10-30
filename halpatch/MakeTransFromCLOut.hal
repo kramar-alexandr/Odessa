@@ -17,7 +17,7 @@ external procedure TRSumup(var record TRVc,var val);
 external procedure AddEuroCurncyTrRow(record TRVc,string,string,string,string,val,Boolean,Boolean,var val,string,val,val,val,val,val,val,val,LongInt,Boolean,string);
 external function Boolean GetAccName(string,var string,Integer);
 external function Boolean TransInFiscal(Date);
-external function string 60 AddObjectToObjectList(string,string); //Edit***************************Sasha2,11:56 04.02.2015
+external function string 255 AddObjectToObjectList255(string,string); //Edit***************************Sasha2,11:56 04.02.2015
 
 global
 procedure GetARPrepaymentRate(LongInt TransNr,var val ofrrate,var val otorate1,var val otorate2,var val obaserate1,var val obaserate2)
@@ -116,7 +116,7 @@ END;
 function Integer AddTransRows(record TRVc gTRp,record MainCLBlock MainCLb,record VATCodeBlock VATCodeb,record APAccBlock APAccb,
                               record BaseCurBlock bcur,record CLOutVc CLOutp,string corspacc,
                               val total,val netval,val vatval,val frrate,val torate1,val torate2,val baserate1,val baserate2,
-                              var val totsum,string CustCode,LongInt InvoiceNr,string accstr,Integer nlrwtype,string rowobj)
+                              var val totsum,string CustCode,LongInt InvoiceNr,string accstr,Integer nlrwtype,string rowobjects)
 BEGIN
   val rs,rs2,bv;
   Integer res;
@@ -128,23 +128,7 @@ BEGIN
   record AccVc Accr;
   string 255 paymode; //Edit***************************Sasha2,11:59 04.02.2015
   row PMBlock pmrw; //Edit***************************Sasha2,12:00 04.02.2015 
-  string 255 rowobjects;// Edit ************************** Monday, 30 October 2017 14:43:21
-  // Edit Start ---------------------------------------------- Edit Start
-	//Monday, 30 October 2017 14:43:23
-	
-  rowobjects = rowobj;
-  if(nonblank(CLOutp.Objects))then begin
-  	if(nonblank(rowobjects))then begin
-  		if(setinset(CLOutp.Objects,rowobjects)==false)then begin
-  			rowobjects = CLOutp.Objects & "," & rowobjects;
-  		end;
-  	end else begin
-  		rowobjects = CLOutp.Objects;
-  	end;
-  end;
   
-	// Edit End ---------------------------------------------- Edit End
-	
   paymode = CLOutp.PayMode; //Edit***************************Sasha2,11:59 04.02.2015
   GetPMRow(paymode,pmrw); //Edit***************************Sasha2,11:59 04.02.2015
   
@@ -153,7 +137,7 @@ BEGIN
     if (nonblank(objstr)) then begin objstr = objstr & ","; end;
       objstr = objstr & rowobjects;
     end;
-  objstr = AddObjectToObjectList(pmrw.Objects,objstr); //Edit***************************Sasha2,12:02 04.02.2015
+  objstr = AddObjectToObjectList255(pmrw.Objects,objstr); //Edit***************************Sasha2,12:02 04.02.2015
       
   nilv = -1;
   res = 1085;
@@ -706,7 +690,7 @@ LFOREND:;
           end else begin
             tobj = pmrw.Objects;
           end; 
-          tobj = AddObjectToObjectList(CLOutp.Objects,tobj); //Edit***************************Sasha2,12:08 04.02.2015
+          tobj = AddObjectToObjectList255(CLOutp.Objects,tobj); //Edit***************************Sasha2,12:08 04.02.2015
           if (CheckTTRPerRow("CLOutVc",pmrw.AccNr,tobj,dc1,taccnumber,1)) then begin end;
           AddEuroCurncyTrRow(gTRp,pmrw.AccNr,tobj,"",pmtstr,rs,MainCLb.CLOutTransBankPerRow==0,dc2,totsum,
                            CLOutp.CurncyCode,CLOutp.FrRate,CLOutp.ToRateB1,CLOutp.ToRateB2,CLOutp.BaseRate1,CLOutp.BaseRate2,CLOutrw.Sum,nilv,-1,false,taccnumber);
