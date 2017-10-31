@@ -749,6 +749,7 @@ begin
 	record SHVc SHr;
 	row SHVc SHrw;
 	vector boolean ihUsed;
+	record ItemStatusVc ISr;
 	
 	logtext(0,"SRCheckHistRn");
 	
@@ -786,7 +787,13 @@ begin
 					actcost = blankval;
 					IHsr.ArtCode = SRrw.ArtCode;
 					TrHss = true;
-					while(loopkey("ActiveQty",IHsr,1,TrHss))begin
+					ISr.Location = ";;;";
+					ISr.Code = SRrw.ArtCode;
+					if(readfirstmain(ISr,2,true))then begin
+						actqty = actqty + ISr.Instock;
+						totremqty = totremqty + ISr.Instock;
+					end;
+					/*while(loopkey("ActiveQty",IHsr,1,TrHss))begin
 						testfs = true;
 						if(IHsr.ArtCode!=SRrw.ArtCode)then begin TrHss = false; end;
 					
@@ -798,7 +805,7 @@ begin
 						end;
 					
 					end;
-					resetloop(IHsr);
+					resetloop(IHsr);*/
 					
 					
 					startformat(15);
