@@ -12011,6 +12011,6 @@ begin
   end;
   SpecialMenu("Поиск товара",'f',1,"ItemSearchDsm");
 	SpecialMenu("Проверить историю",'',0,"SRCheckHistDsm");
-	SpecialMenu("Проверить историю Ecxel",'',0,"SRCheckHistDsm");
+	SpecialMenu("Проверить историю Ecxel",'',0,"SRCheckHistExcelDsm");
   EndWindow;
 end;
