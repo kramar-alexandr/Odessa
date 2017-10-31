@@ -740,9 +740,12 @@ begin
 	integer mtrw,i;
 	row SRVc SRrw;
 	boolean TrHs,testf,TrHss,testfs,TrHssm,testfsm;
-	val remcost,remqty,totremcost,totremqty,sumtot,actqty,actcost,outcost,outqty,smremqty,smremcost,smcost,smqty;
+	val remcost,remqty,totremcost,totremqty,sumtot,actqty,actcost,outcost,outqty,smremqty,smremcost,smcost,smqty,cost;
 	record StockMovVc SMr;
 	row StockMovVc SMrw;
+	record IVVc IVr;
+	row IVVc IVrw;
+	record SalesDataVc SDr;
 	
 	logtext(0,"SRCheckHistRn");
 	
@@ -752,6 +755,13 @@ begin
 		SRr.SerNr = RepSpec.long1;
 		if(readfirstmain(SRr,1,true))then begin
 			mtrw = matrowcnt(SRr);
+			startformat(15);
+				outstring(0,0,"ArtCode",false);
+				outstring(70,0,"Name",false);
+				outstring(350,0,"New corr.cost",false);
+				outstring(400,0,"New incorr. cost",false);
+				outstring(1,0,"Diff 1 pcs",true);
+			endformat;
 			For(i=0;i<mtrw;i=i+1) begin
 				matrowget(SRr,i,SRrw);
 				if((SRrw.NewFIFO * SRrw.Qty - SRrw.NewFIFORowVal)!=0)then begin
@@ -766,6 +776,15 @@ begin
 					outqty = blankval;
 					smremqty = blankval;
 					
+					startformat(15);
+						outstring(0,0,SRrw.ArtCode,false);
+						outstring(70,0,SRrw.Spec,false);
+						outstring(350,0,SRrw.NewFIFO,false);
+						outstring(400,0,SRrw.NewFIFORowVal/SRrw.Qty,false);
+						outstring(1,0,SRrw.NewFIFORowVal/SRrw.Qty-SRrw.NewFIFO,true);
+					endformat;
+					
+					
 					while(loopkey("FNTransNr",IHr,3,TrHS))begin
 						testf = true;
 						if(IHr.FileName!="SRVc")then begin TrHs = false; testf = false; end;
@@ -777,17 +796,39 @@ begin
 						if(testf)then begin
 							
 							
-							IHsr.Source = IHr.SerNr;
+							//IHsr.Source = IHr.SerNr;
 							TrHss = true;
 							smremcost = blankval;
 							smqty = blankval;
-							while(loopkey("Source",IHsr,1,TrHss))begin
+							IHsr.ArtCode = IHr.ArtCode;
+							IHsr.TransDate = IHr.TransDate;
+							while(loopkey("ArtCode",IHsr,2,TrHss))begin
 								testfs = true;
-								if(IHsr.Source!=IHr.SerNr)then begin TrHss = false; testfs = false; end;
-								if(IHsr.ArtCode!=IHr.ArtCode)then begin testfs = false; end;
+								if(IHsr.ArtCode!=IHr.ArtCode)then begin TrHss = false; testfs = false; end;
+								if(IHsr.TransDate!=IHr.TransDate)then begin TrHss = false; testfs = false; end;
+								if(IHsr.FileName!="IVVc")then begin testf = false; end;
 								
 								if(testfs)then begin
-									outcost = outcost + IHsr.TotCostPrice;
+									IVr.SerNr = IHsr.TransNr;
+									if(readfirstmain(IVr,1,true))then begin
+										if(IHsr.Row<matrowcnt(IVr))then begin 
+											matrowget(IVr,IHsr.Row,IVrw);
+											if(IVrw.ArtCode==IHr.ArtCode)then begin
+												SDr.InvNr = IVr.SerNr;
+												SDr.RowNr = IHsr.Row;
+												cost = blankval;
+												if(readfirstmain(SDr,2,true))then begin
+													cost = SDr.Cost/SDr.Quant;
+												end;
+												startformat(15);
+													outstring(20,0,IVr.SerNr,false);
+													outstring(70,0,IVrw.Quant,false);
+													outstring(360,0,cost,false);
+												endformat;
+											end;
+										end;
+									end;
+									/*outcost = outcost + IHsr.TotCostPrice;
 									outqty = outqty + IHsr.Qty;
 									
 									
@@ -819,7 +860,7 @@ begin
 										end;
 										resetloop(IHsmr);
 										
-										/*if(smqty==smremqty)then begin
+										if(smqty==smremqty)then begin
 											IHsmr.FileName = IHsr.FileName;
 											IHsmr.TransNr = IHsr.TransNr;
 											IHsmr.Row = IHsr.Row;
@@ -839,9 +880,9 @@ begin
 											end;
 											resetloop(IHsmr);																	
 											logtext(0,SRrw.ArtCode & " " & SMr.SerNr);
-										end;*/
+										end;
 										
-									end;
+									end;*/
 								end;
 							end;
 							resetloop(IHsr);
@@ -870,7 +911,7 @@ begin
 					end;
 					resetloop(IHsr);
 					
-						if(SRrw.NewFIFO/(actcost/actqty)<0.9 or SRrw.NewFIFO/(actcost/actqty)>1.1)then begin
+						/*if(SRrw.NewFIFO/(actcost/actqty)<0.9 or SRrw.NewFIFO/(actcost/actqty)>1.1)then begin
 							sumtot = sumtot + SRrw.NewFIFO * SRrw.Qty - SRrw.NewFIFORowVal;
 							startformat(15);
 								outstring(0,0,SRrw.ArtCode,false);
@@ -887,7 +928,7 @@ begin
 								outstring(420,0,SRrw.Location & "_" & SRrw.PosCode,false);
 								outstring(1,0,SRrw.NewFIFO/(actcost/actqty),true);
 							endformat;
-						end;
+						end;*/
 					
 					/*if(SRrw.Qty==remqty)then begin
 						SRrw.NewFIFORowVal = SRrw.NewFIFO * SRrw.Qty;
