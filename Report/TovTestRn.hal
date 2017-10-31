@@ -845,6 +845,7 @@ begin
 												if(IVrw.ArtCode==IHr.ArtCode)then begin
 													if(IVrw.FIFORowVal/IVrw.Quant>SRrw.NewFIFO*1.2)then begin
 														startformat(15);
+															outstring(0,0,SRrw.ArtCode,false);
 															outstring(0,0,"ArtCode IV",false);
 															outstring(40,0,IVr.SerNr,false);
 															outstring(80,0,IVrw.Quant,false);
@@ -862,6 +863,7 @@ begin
 												if(SHrw.ArtCode==IHr.ArtCode)then begin
 													if(SHrw.FIFORowVal/SHrw.Ship>SRrw.NewFIFO*1.2)then begin
 														startformat(15);
+															outstring(0,0,SRrw.ArtCode,false);
 															outstring(0,0,"ArtCode SH",false);
 															outstring(40,0,SHr.SerNr,false);
 															outstring(80,0,SHrw.Ship,false);
