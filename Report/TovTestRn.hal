@@ -846,12 +846,13 @@ begin
 													if(IVrw.FIFORowVal/IVrw.Quant>SRrw.NewFIFO*1.2)then begin
 														startformat(15);
 															if(RepSpec.Media==mtExcel)then begin
-																outstring(0,0,"",false);
-																outstring(0,0,"",false);
-																outstring(0,0,"",false);
-																outstring(0,0,"",false);
-																outstring(0,0,"",false);
 																outstring(0,0,SRrw.ArtCode,false);
+																outstring(0,0,"",false);
+																outstring(0,0,"",false);
+																outstring(0,0,"",false);
+																outstring(0,0,"",false);
+																outstring(0,0,"",false);
+																outstring(0,0,"",false);
 															end;
 															outstring(0,0,"ArtCode IV",false);
 															outstring(40,0,IVr.SerNr,false);
@@ -871,12 +872,13 @@ begin
 													if(SHrw.FIFORowVal/SHrw.Ship>SRrw.NewFIFO*1.2)then begin
 														startformat(15);
 															if(RepSpec.Media==mtExcel)then begin
-																outstring(0,0,"",false);
-																outstring(0,0,"",false);
-																outstring(0,0,"",false);
-																outstring(0,0,"",false);
-																outstring(0,0,"",false);
 																outstring(0,0,SRrw.ArtCode,false);
+																outstring(0,0,"",false);
+																outstring(0,0,"",false);
+																outstring(0,0,"",false);
+																outstring(0,0,"",false);
+																outstring(0,0,"",false);
+																outstring(0,0,"",false);
 															end;
 															
 															outstring(0,0,"ArtCode SH",false);
