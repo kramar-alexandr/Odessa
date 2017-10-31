@@ -215,3 +215,19 @@ begin
 	
 return;
 end;
+
+global procedure SRCheckHistExcelDsm()
+begin
+	record SRVc SRr;
+	integer wn;
+	record RcVc RepSpec;
+		
+	wn = curwindow;
+	getwindowrecord(wn,SRr);
+	RepSpec.repname = "SRCheckHistRn";
+  RepSpec.long1 = SRr.SerNr;
+  RepSpec.Media = mtExcel;
+  RunReport(RepSpec,0);
+	
+return;
+end;
