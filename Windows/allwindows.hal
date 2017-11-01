@@ -12012,5 +12012,6 @@ begin
   SpecialMenu("Поиск товара",'f',1,"ItemSearchDsm");
 	SpecialMenu("Проверить историю",'',0,"SRCheckHistDsm");
 	SpecialMenu("Проверить историю Ecxel",'',0,"SRCheckHistExcelDsm");
+	SpecialMenu("Список для переоценки Ecxel",'',0,"SRCheckHistExcelToSMDsm");
   EndWindow;
 end;

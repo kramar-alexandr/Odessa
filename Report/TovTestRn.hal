@@ -1015,3 +1015,138 @@ begin
 
 return;
 end;
+
+global updating procedure SRCheckHistToSMRn(record RcVc RepSpec)
+begin
+	record SRVc SRr;
+	record ItemHistVc IHr,IHsr,IHsmr;
+	integer mtrw,i;
+	row SRVc SRrw;
+	boolean TrHs,testf,TrHss,testfs,TrHssm,testfsm,foundf;
+	val remcost,remqty,totremcost,totremqty,sumtot,actqty,actcost,outcost,outqty,smremqty,smremcost,smcost,smqty,cost;
+	record StockMovVc SMr;
+	row StockMovVc SMrw;
+	record IVVc IVr;
+	row IVVc IVrw;
+	record SalesDataVc SDr;
+	record SHVc SHr;
+	row SHVc SHrw;
+	vector boolean ihUsed;
+	record ItemStatusVc ISr;
+	record LocationVc Locr;
+	record PosVc Posr;
+	record PISVc PISr;
+	
+	logtext(0,"SRCheckHistRn");
+	
+	
+	startreportnoheaderjob("SRCheckHistRn");
+		
+		SRr.SerNr = RepSpec.long1;
+		if(readfirstmain(SRr,1,true))then begin
+			mtrw = matrowcnt(SRr);
+			startformat(15);
+				outstring(0,0,"Товар",false);
+				outstring(70,0,"Название",false);
+				outstring(140,0,"Склад",false);
+				outstring(210,0,"Место",false);
+				outstring(300,0,"Остаток",false);
+				outstring(1,0,"Правильная себестоимость из переоценки",true);
+			endformat;
+			For(i=0;i<mtrw;i=i+1) begin
+				matrowget(SRr,i,SRrw);
+				
+				if((SRrw.NewFIFORowVal/SRrw.Qty - SRrw.NewFIFO)>0.2)then begin
+					if(ihUsed[SRrw.ArtCode]==true)then begin
+					
+					end else begin
+						ihUsed[SRrw.ArtCode] = true;
+						IHr.FileName = "SRVc";
+						IHr.TransNr = SRr.SerNr;
+						IHr.Row = i;
+						TrHs = true;
+						remcost = blankval;
+						remqty = blankval;
+						outcost = blankval;
+						outqty = blankval;
+						smremqty = blankval;
+					
+						actqty = blankval;
+						actcost = blankval;
+						IHsr.ArtCode = SRrw.ArtCode;
+						TrHss = true;
+						ISr.Location = ";;;";
+						ISr.Code = SRrw.ArtCode;
+						if(readfirstmain(ISr,2,true))then begin
+							actqty = actqty + ISr.Instock;
+						end;
+					
+						if(actqty>0)then begin
+							Locr.Code = "";
+							while(loopmain(Locr,1,true))begin
+								ISr.Location = Locr.Code;
+								ISr.Code = SRrw.ArtCode;
+								actqty = blankval;
+								if(readfirstmain(ISr,2,true))then begin
+									actqty = ISr.Instock;
+								end;
+							
+								if(actqty>0)then begin
+									Posr.Location = Locr.Code;
+									TrHs = true;
+									foundf = false;
+									while(loopkey("Location",Posr,1,TrHs))begin
+										if(Posr.Location!=Locr.Code)then begin TrHs = false; end;
+									
+										if(TrHs)then begin
+											PISr.ArtCode = SRrw.ArtCode;
+											PISr.Location = Locr.Code;
+											PISr.Position = Posr.Code;
+											if(readfirstmain(PISr,3,true))then begin
+												if(PISr.Instock>0)then begin
+													foundf = true;
+													startformat(15);
+														outstring(0,0,SRrw.ArtCode,false);
+														outstring(70,0,SRrw.Spec,false);
+														outstring(140,0,Locr.Code,false);
+														outstring(210,0,Posr.Code,false);
+														outstring(300,0,PISr.Instock,false);
+														outstring(1,0,SRrw.NewFIFO,true);
+													endformat;
+												end;
+											end;
+										end;
+									end;
+									resetloop(Posr);
+									if(foundf==false)then begin
+										startformat(15);
+											outstring(0,0,SRrw.ArtCode,false);
+											outstring(70,0,SRrw.Spec,false);
+											outstring(140,0,Locr.Code,false);
+											outstring(210,0,"",false);
+											outstring(300,0,ISr.Instock,false);
+											outstring(1,0,SRrw.NewFIFO,true);
+										endformat;
+									end else begin
+										startformat(15);
+											outstring(0,0,SRrw.ArtCode,false);
+											outstring(70,0,SRrw.Spec,false);
+											outstring(140,0,Locr.Code,false);
+											outstring(210,0,"TOTAL",false);
+											outstring(300,0,ISr.Instock,false);
+											outstring(1,0,SRrw.NewFIFO,true);
+										endformat;
+									end;
+								end;
+							end;
+							resetloop(Locr);
+						end;
+					end;
+				end;
+			end; 
+		end;
+
+	endjob;
+
+return;
+end;
