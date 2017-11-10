@@ -1453,6 +1453,9 @@ LkInvoiceTypeCredit1:;
                   end;
                   GetVATRow(VATrw.VATCode,VATbrw);
                   OutString(390,0,VATbrw.Comment,false);
+                  if(RepSpec.Media==mtExcel)then begin// Edit ************************** Friday, 10 November 2017 13:35:53
+										OutString(460,0,IVr.InvComment,false);// Edit ************************** Friday, 10 November 2017 13:35:54
+									end;
                   EndFormat;
                 end;
               end;
@@ -1502,6 +1505,9 @@ LkInvoiceTypeCredit1:;
               if (HasMultiCurrency) then begin 
                 OutString(465,0,IVr.CurncyCode,false);
               end;
+              if(RepSpec.Media==mtExcel)then begin// Edit ************************** Friday, 10 November 2017 13:35:53
+								OutString(460,0,IVr.InvComment,false);// Edit ************************** Friday, 10 November 2017 13:35:54
+							end;
               EndFormat;
               if (RepSpec.flags[16]!=0) then begin
                 if (nonblank(IVr.OfficialSerNr)) then begin
@@ -1566,6 +1572,9 @@ LkInvoiceTypeCredit1:;
             if (HasMultiCurrency) then begin 
               OutString(465,0,IVr.CurncyCode,false);
             end;
+            if(RepSpec.Media==mtExcel)then begin// Edit ************************** Friday, 10 November 2017 13:35:53
+							OutString(460,0,IVr.InvComment,false);// Edit ************************** Friday, 10 November 2017 13:35:54
+						end;
             EndFormat;
             StartFormat(15);
             if (RepSpec.flags[16]!=0) then begin
