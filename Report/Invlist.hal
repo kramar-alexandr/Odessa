@@ -151,6 +151,9 @@ begin
   if (HasMultiCurrency) then begin 
     OutString(460,0,IVr.CurncyCode,false);
   end;
+  if(RepSpec.Media==mtExcel)then begin// Edit ************************** Friday, 10 November 2017 13:35:53
+  	OutString(460,0,IVr.InvComment,false);// Edit ************************** Friday, 10 November 2017 13:35:54
+  end;
   EndFormat;
   StartFormat(15);
   OutString(70,0,IVr.CustCat,false);

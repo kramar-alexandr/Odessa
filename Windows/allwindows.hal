@@ -11752,9 +11752,9 @@ begin
   DeleteRowTest;
   EndMatrix;
   
-  SpecialMenu("Создать поступление на консигнацию",'',1,"CrConsigIn");
-  SpecialMenu("Создать продажи с консигнации",'',2,"CrConsigSale");
-  SpecialMenu("Создать отбраковку с консигнации",'',3,"CrConsigBrak");
+  SpecialMenu("Создать поступление на консигнацию",'',1,"CrConsigInDsm");
+  SpecialMenu("Создать продажи с консигнации",'',2,"CrConsigSaleDsm");
+  SpecialMenu("Создать отбраковку с консигнации",'',3,"CrConsigBrakDsm");
   
   EndWindow;
 end;

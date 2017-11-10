@@ -94,6 +94,7 @@ begin
 	  	
 	  	IHr.ArtCode = Consignationrw.ArtCode;
 	  	IHr.Qty = Consignationrw.Qty;
+	  	IHr.TotCostPrice = Consignationrw.Price;
 	  	IHr.Row = i;
 	  	recordstore(IHr,false);
 	  	
@@ -136,7 +137,9 @@ begin
 	  	IHr.StockAffectf = 0;
 	  	
 	  	IHr.ArtCode = Consignationrw.ArtCode;
+	  	IHr.TotCostPrice = Consignationrw.Price;
 	  	IHr.Qty = Consignationrw.Qty;
+	  	IHr.Qty2 = Consignationrw.Qty;
 	  	IHr.Row = i;
 	  	recordstore(IHr,false);
 	  	
@@ -589,17 +592,163 @@ return;
 end;
 
 
-global updating procedure CrConsigIn()
+global updating procedure CrConsigIn(record ConsignationVc Consignationr)
 begin
-	integer wn;
-	record ConsignationVc Consignationr;
+	integer wn,i,rwcnt,mtrw;
+	row ConsignationVc Consignationrw;
+	record ConsInVc ConsInr,ConsInoldr;
+	row ConsInVc ConsInrw;
+	record ItemHistVc IHr;
+	boolean TrHs,testf;
 	
+	logtext(0,"CrConsigIn");
 	
-	wn = curwindow();
-	if(windowstate(wn)==0)then begin
-		getwindowrecord(wn,Consignationr);
+	//wn = curwindow;
+	if(true)then begin
+		//getwindowrecord(wn,Consignationr);
+		
+		recordnew(ConsInr);
+		ConsInr.TransDate = currentdate;
+		ConsInr.Location = Consignationr.Location;
+		ConsInr.Comitent = Consignationr.Comitent;
+		
+		mtrw = matrowcnt(Consignationr);
+		For(i=0;i<mtrw;i=i+1) begin
+	  	matrowget(Consignationr,i,Consignationrw);
+	  	
+	  	ConsInrw.ArtCode = Consignationrw.ArtCode;
+	  	ConsInrw.Qty = Consignationrw.Qty;
+	  	ConsInrw.Price = Consignationrw.Price;
+	  	
+	  	TrHs = true;
+	  	IHr.ArtCode = Consignationrw.ArtCode;
+	  	IHr.FileName = "ConsInVc";
+	  	while(loopkey("FNArtCode",IHr,2,TrHs))begin
+	  		testf = true;
+	  		if(IHr.ArtCode!=Consignationrw.ArtCode)then begin TrHs = false; testf =false; end;
+	  		if(IHr.FileName!="ConsInVc")then begin TrHs = false; testf =false; end;
+	  		if(IHr.Qty2<=0)then begin testf = false; end;
+	  		
+	  		if(testf)then begin
+	  			ConsInoldr.SerNr = IHr.TransNr;
+	  			if(readfirstmain(ConsInoldr,1,true))then begin
+	  				if(ConsInoldr.Location!=ConsInr.Location)then begin
+	  					testf = false;
+	  				end;
+	  				if(ConsInoldr.Comitent!=ConsInr.Comitent)then begin
+	  					testf = false;
+	  				end;
+	  			end else begin
+	  				testf = false;
+	  			end;
+	  		end;
+	  		
+	  		if(testf)then begin
+	  			ConsInrw.Qty = ConsInrw.Qty - IHr.Qty2;
+	  		end;
+	  		
+	  	end;
+	  	resetloop(IHr);
+	  	
+	  	if(ConsInrw.Qty>0)then begin
+	  		ConsInrw.Sum = ConsInrw.Qty*ConsInrw.Price;
+	  		ConsInr.TotSum = ConsInr.TotSum + ConsInrw.Sum;
+	  		ConsInr.TotQty = ConsInr.TotQty + ConsInrw.Qty;
+	  		matrowput(ConsInr,rwcnt,ConsInrw);
+	  		rwcnt = rwcnt + 1;
+	  	end;
+	  	
+		end; 
+		if(rwcnt>0)then begin
+			ConsInr.SerNr = NextSerNr("ConsInVc",CurrentDate,-1,false,"");
+			recordstore(ConsInr,true);
+		end;
 		
 	end;
 
+return;
+end;
+
+
+
+global updating procedure CrConsigBrak(record ConsignationVc Consignationr)
+begin
+	integer wn,i,j,rwcnt,mtrw,acnt,acnt1;
+	row ConsignationVc Consignationrw;
+	record ConsBrakVc ConsBrakr,ConsBrakoldr;
+	row ConsBrakVc ConsBrakrw;
+	record ItemHistVc IHr;
+	boolean TrHs,testf,foundf;
+	array string 50 artcodes,artcodesprice;
+	vector val artqty2,artqty2price;
+	vector boolean artf,artf1;
+	
+	logtext(0,"CrConsigIn");
+	
+	IHr.FileName = "ConsInVc";
+	TrHs = true;
+	while(loopkey("FNTransNr",IHr,1,TrHs))begin
+		testf = true;
+		if(IHr.FileName!="ConsInVc")then begin TrHs = false; testf = false; end;
+		if(IHr.Qty2<=0)then begin testf = false; end;
+		
+		if(testf)then begin
+			/*if(artf[IHr.ArtCode & ":" & IHr.TotCostPrice]==false)then begin
+				artf[IHr.ArtCode & ":" & IHr.TotCostPrice] = true;
+				artcodesprice[acnt] = IHr.ArtCode & ":" & IHr.TotCostPrice;
+				acnt = acnt + 1;
+			end;*/
+			if(artf1[IHr.ArtCode]==false)then begin
+				artf1[IHr.ArtCode] = true;
+				artcodes[acnt1] = IHr.ArtCode;
+				acnt1 = acnt1 + 1;
+			end;
+			artqty2[IHr.ArtCode] = artqty2[IHr.ArtCode] + IHr.Qty2;
+			//artqty2price[IHr.ArtCode & ":" & IHr.TotCostPrice] = artqty2price[IHr.ArtCode & ":" & IHr.TotCostPrice] + IHr.Qty2;
+			
+		end;
+	end;
+	
+	recordnew(ConsBrakr);
+	ConsBrakr.TransDate = currentdate;
+	ConsBrakr.Location = Consignationr.Location;
+	ConsBrakr.Comitent = Consignationr.Comitent;
+	
+	rwcnt = matrowcnt(Consignationr);
+	For(i=0;i<acnt1;i=i+1) begin
+		foundf = false;
+	  For(j=0;j<rwcnt;j=j+1) begin
+	  	matrowget(Consignationr,j,Consignationrw);
+	  	if(Consignationrw.ArtCode==artcodes[i])then begin
+	  		foundf = true;
+	  		if(artqty2[artcodes[i]]<Consignationrw.Qty)then begin
+	  			ConsBrakrw.ArtCode = artcodes[i];
+	  			ConsBrakrw.Qty = Consignationrw.Qty - ConsBrakrw.Qty;
+	  			ConsBrakrw.Sum = ConsBrakrw.Qty*ConsBrakrw.Price;
+					//ConsBrakr.TotSum = ConsBrakr.TotSum + ConsBrakrw.Sum;
+					ConsBrakr.TotQty = ConsBrakr.TotQty + ConsBrakrw.Qty;
+					matrowput(ConsBrakr,mtrw,ConsBrakrw);
+					mtrw = mtrw + 1;
+	  		end;
+	  	end;
+		end; 
+		if(foundf==false)then begin
+			ConsBrakrw.ArtCode = artcodes[i];
+			ConsBrakrw.Qty = ConsBrakrw.Qty;
+			ConsBrakrw.Sum = ConsBrakrw.Qty*ConsBrakrw.Price;
+			//ConsBrakr.TotSum = ConsBrakr.TotSum + ConsBrakrw.Sum;
+			ConsBrakr.TotQty = ConsBrakr.TotQty + ConsBrakrw.Qty;
+			matrowput(ConsBrakr,mtrw,ConsBrakrw);
+			mtrw = mtrw + 1;
+		end;
+	end; 
+	
+	
+	
+	if(mtrw>0)then begin
+		ConsBrakr.SerNr = NextSerNr("ConsBrakVc",CurrentDate,-1,false,"");
+		recordstore(ConsBrakr,true);
+	end;
+	
 return;
 end;
