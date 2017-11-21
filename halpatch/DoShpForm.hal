@@ -1292,6 +1292,15 @@ BEGIN
   string 30 formcode,langcode,langcod2;
   record SHVc resSHr;
   record ModuleBlock MBr;
+  record CUvc CUr;// Edit ************************** BPI Ukraine - KramarAlexandr - Tuesday, 21 November 2017 17:22:55
+  boolean ukrform;// Edit ************************** BPI Ukraine - KramarAlexandr - Tuesday, 21 November 2017 17:24:24
+	
+	CUr.Code = SHr.CustCode;// Edit ************************** BPI Ukraine - KramarAlexandr - Tuesday, 21 November 2017 17:25:55
+	if(readfirstmain(CUr,1,true))then begin
+		if(CUr.NameUAHFlag>0)then begin
+			NameUAHFlag = true;
+		end;
+	end;
 	
 	logtext(0,"DoSh1Form");
 	
@@ -1327,11 +1336,16 @@ LFINDFORMCOCESH1:;
     for (i=rwcnt-1;i>=0;i=i-1) begin
       MatRowGet(FDr,i,FDrw);
       if (FindFormcode(SHr.OKFlag,FDrw.Typ)) then begin 
+      	if(NameUAHFlag)then begin
+      		FDrw.FPCode = FDrw.FPCode & "UKR";// Edit ************************** BPI Ukraine - KramarAlexandr - Tuesday, 21 November 2017 17:29:11
+      	end;
         if (Getformcode(i,FDrw.intdocnr,FDrw.FPCode,FDrw.UserGroup,FDrw.LangCode,FDrw.SerNr,SHr.SerNr,FDrw.PrintGroupCode,
                         langcode,intdocnr,"SHVc",formcode)) then
         begin
           goto LBREAKSH1;
         end;
+        
+        
       end;
     end;
     if (nonblank(langcod2)) then begin
@@ -1386,6 +1400,15 @@ BEGIN
   Integer intdocnr;
   string 30 formcode,langcode,langcod2;
   record SHVc resSHr;
+	record CUvc CUr;// Edit ************************** BPI Ukraine - KramarAlexandr - Tuesday, 21 November 2017 17:22:55
+  boolean ukrform;// Edit ************************** BPI Ukraine - KramarAlexandr - Tuesday, 21 November 2017 17:24:24
+	
+	CUr.Code = SHr.CustCode;// Edit ************************** BPI Ukraine - KramarAlexandr - Tuesday, 21 November 2017 17:25:55
+	if(readfirstmain(CUr,1,true))then begin
+		if(CUr.NameUAHFlag>0)then begin
+			NameUAHFlag = true;
+		end;
+	end;
 	
 	logtext(0,"DoSh2Form");
 	
@@ -1414,6 +1437,9 @@ LFINDFORMCOCESH2:;
     for (i=rwcnt-1;i>=0;i=i-1) begin
       MatRowGet(FDr,i,FDrw);
       if (FindFormcode(SHr.OKFlag,FDrw.Typ)) then begin 
+				if(NameUAHFlag)then begin
+      		FDrw.FPCode = FDrw.FPCode & "UKR";// Edit ************************** BPI Ukraine - KramarAlexandr - Tuesday, 21 November 2017 17:29:11
+      	end;
         if (Getformcode(i,FDrw.intdocnr,FDrw.FPCode,FDrw.UserGroup,FDrw.LangCode,FDrw.SerNr,SHr.SerNr,FDrw.PrintGroupCode,
                         langcode,intdocnr,"SHVc",formcode)) then
         begin
@@ -1463,6 +1489,15 @@ BEGIN
   Integer intdocnr;
   string 30 formcode,langcode,langcod2;
   record SHVc resSHr;
+	record CUvc CUr;// Edit ************************** BPI Ukraine - KramarAlexandr - Tuesday, 21 November 2017 17:22:55
+  boolean ukrform;// Edit ************************** BPI Ukraine - KramarAlexandr - Tuesday, 21 November 2017 17:24:24
+	
+	CUr.Code = SHr.CustCode;// Edit ************************** BPI Ukraine - KramarAlexandr - Tuesday, 21 November 2017 17:25:55
+	if(readfirstmain(CUr,1,true))then begin
+		if(CUr.NameUAHFlag>0)then begin
+			NameUAHFlag = true;
+		end;
+	end;
 	
 	logtext(0,"DoSh3Form");
 	
@@ -1491,6 +1526,9 @@ LFINDFORMCOCESH3:;
     for (i=rwcnt-1;i>=0;i=i-1) begin
       MatRowGet(FDr,i,FDrw);
       if (FindFormcode(SHr.OKFlag,FDrw.Typ)) then begin 
+      	if(NameUAHFlag)then begin
+      		FDrw.FPCode = FDrw.FPCode & "UKR";// Edit ************************** BPI Ukraine - KramarAlexandr - Tuesday, 21 November 2017 17:29:11
+      	end;
         if (Getformcode(i,FDrw.intdocnr,FDrw.FPCode,FDrw.UserGroup,FDrw.LangCode,FDrw.SerNr,SHr.SerNr,FDrw.PrintGroupCode,
                         langcode,intdocnr,"SHVc",formcode)) then
         begin
