@@ -1339,6 +1339,7 @@ LFINDFORMCOCESH1:;
       	if(ukrform)then begin
       		FDrw.FPCode = FDrw.FPCode & "UKR";// Edit ************************** BPI Ukraine - KramarAlexandr - Tuesday, 21 November 2017 17:29:11
       	end;
+      	logtext(0,FDrw.FPCode);
         if (Getformcode(i,FDrw.intdocnr,FDrw.FPCode,FDrw.UserGroup,FDrw.LangCode,FDrw.SerNr,SHr.SerNr,FDrw.PrintGroupCode,
                         langcode,intdocnr,"SHVc",formcode)) then
         begin
