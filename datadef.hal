@@ -5695,7 +5695,8 @@ RecordBegin(IPVc,-,"");
   RecordField(AddInvAddr4,M4Str,255,0);// Edit ************************** Wednesday, 7 June 2017 16:15:35
   RecordField(AddInvAddr5,M4Str,255,0);// Edit ************************** Wednesday, 7 June 2017 16:15:35
   RecordField(AddKeySG1,M4Str,255,0);
-
+  RecordField(NameUAH,M4Str,200,0);// Edit ************************** BPI Ukraine - KramarAlexandr - Monday, 20 November 2017 15:19:28
+	RecordField(NameUAHFlag,M4Int,0,0);// Edit ************************** BPI Ukraine - KramarAlexandr - Monday, 20 November 2017 15:19:38
   MainKeyBegin(Code,1);
   StoreInBaseKey;
   AppendFieldToKeyName(SalesGroup);

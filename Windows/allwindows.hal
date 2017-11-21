@@ -11057,7 +11057,7 @@ begin
     if (TestEnablerFile("EnMarketplace")) then begin  
       Tile(0,135,false,"",Code);  
     end else begin
-    Tile(0,95,false,"",Code);
+    Tile(0,105,false,"",Code);
     end;
   end;
   v = 6; h = 130; l=223; vs = 20; h1=410; h2 = 350; h3 = 430; h4 = 580; h5 = 460;
@@ -11072,7 +11072,12 @@ begin
     EditField(h,v+=vs,h1-h+50,"Обращение 3",Normal,Salutation3,false,0);
     EditField(h,v+=vs,h1-h+50,"Наименование",Normal,Name,false,0);
   end else begin
-    EditField(h,v+=vs,h1-h+50,"Наименов.",Normal,Name,false,0);
+    EditField(h-40,v+=vs,h1-h,"ФИО",Normal,Name,false,0);
+    EditField(h-40,v+=vs,h1-h,"ФИО УКР",Normal,NameUAH,false,0);// Edit ************************** BPI Ukraine - KramarAlexandr - Monday, 20 November 2017 15:19:13
+ 		ButtonFrame(h+250,v-vs,100,3,"");// Edit ************************** BPI Ukraine - KramarAlexandr - Monday, 20 November 2017 15:21:45
+  	RadioButton(h+250,v-vs,0,0,"На русском",NameUAHFlag);// Edit ************************** BPI Ukraine - KramarAlexandr - Monday, 20 November 2017 15:21:44
+  	RadioButton(h+250,v,1,0,"На украинском",NameUAHFlag);// Edit ************************** BPI Ukraine - KramarAlexandr - Monday, 20 November 2017 15:21:43
+
   end;
   if (TestEnablerFile("EnMarketplace")) then begin  
     EditField(h,v+=vs,150,"Пользователь MP",Normal,MarketUserName,false,0);  

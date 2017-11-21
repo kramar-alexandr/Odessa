@@ -338,6 +338,7 @@ begin
 	 SString(31175,"Акция 'КАЛИПСОмания' Торговая точка №1001");
 	 SString(31176,"Акция 'КАЛИПСОмания' Торговая точка №1002");
 	 
+	Maintenance("Закрыть старые OR",MyVClass,CloseOldOpenOrders,modSO);
 	Maintenance("Проставить склад первой покупки клиента",MyVClass,FillFirstDateByeCUMn,modSL);
   Maintenance("Экспорт склада CSV",ExportStockCSVClass,ExportStockCSVMn,modSY);
   Maintenance("Копирование ежедневного бэкапа на FTP",ExportStockCSVClass,SenBackuptoFTP,modSY);

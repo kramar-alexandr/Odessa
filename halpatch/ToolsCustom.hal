@@ -97,6 +97,54 @@ return;
 end;
 
 
+global updating procedure CloseOldOpenOrders()
+begin
+	record ORVc ORr,oldORr;
+	boolean TrHs,testf;
+	date mindate,maxdate;
+	record IVVc IVr;
+	record SHVc SHr;
+
+	mindate = addday(currentdate,-120);
+	maxdate = addday(currentdate,-30);
+	ORr.OrdDate = mindate;
+	TrHs = true;
+	while(loopkey("OrdDate",ORr,1,TrHs))begin
+		testf = true;
+		if(ORr.OrdDate<mindate)then begin TrHs = false; testf = false; end;
+		if(ORr.OrdDate>maxdate)then begin TrHs = false; testf = false; end;
+		if(ORr.CustomStatusFlag!=0)then begin testf = false; end;
+		if(ORr.Closed>0)then begin testf = false; end;
+		if(testf)then begin
+			IVr.OrderNr = ORr.SerNr;
+			if(readfirstkey("OrderNr",IVr,1,true))then begin
+				testf = false;
+			end;
+		end;
+		if(testf)then begin
+			SHr.OrderNr = ORr.SerNr;
+			if(readfirstkey("OrderKey",SHr,1,true))then begin
+				testf = false;
+			end;
+		end;
+		
+		
+		
+		if(testf)then begin
+			recordcopy(oldORr,ORr);
+				ORr.CustomStatusFlag = 10;
+				ORr.Closed = 1;
+			logtext(0,"CloseOldOpenOrders " & ORr.SerNr);
+			recordupdate(oldORr,ORr,true);
+		end;
+		
+	end;
+ 
+
+
+return;
+end;
+
 global //Edit***************************Sasha2,17:05 14.08.2015 {
 updating procedure RemoveReservedMarkMn()
 begin
@@ -247,6 +295,8 @@ begin
 				end; 
       end;
     end;
+  
+  CloseOldOpenOrders;// Edit ************************** BPI Ukraine - KramarAlexandr - Monday, 20 November 2017 15:11:00
   
   return;
 end; //Edit***************************Sasha2,17:06 14.08.2015 }

@@ -808,7 +808,12 @@ BEGIN
 	end;
 	
 	if (FIELDINFORM("F_MYPOSTADRESS")) then begin	//Edit by Victor 27.01.15
-		OUTFORMFIELD("F_MYPOSTADRESS",ORr.Addr0);
+		if(CUr.NameUAHFlag==1)then begin// Edit ************************** BPI Ukraine - KramarAlexandr - Monday, 20 November 2017 15:38:24
+			OUTFORMFIELD("F_MYPOSTADRESS",CUr.NameUAH);// Edit ************************** BPI Ukraine - KramarAlexandr - Monday, 20 November 2017 15:39:45
+		end else begin
+			OUTFORMFIELD("F_MYPOSTADRESS",ORr.Addr0);
+		end;
+		
 	end;
 
   
@@ -925,6 +930,13 @@ BEGIN
   end else begin
     tstr = SHr.Addr0;
   end;
+  
+  if(CUr.NameUAHFlag==1)then begin// Edit ************************** BPI Ukraine - KramarAlexandr - Monday, 20 November 2017 15:38:24
+		tstr = CUr.NameUAH;// Edit ************************** BPI Ukraine - KramarAlexandr - Monday, 20 November 2017 15:39:45
+	end else begin
+		tstr = ORr.Addr0;
+	end;
+  
   OUTFORMFIELD("F_AVSNAME",tstr);
   
   if (SHr.Check2!=0) then begin
@@ -1280,7 +1292,9 @@ BEGIN
   string 30 formcode,langcode,langcod2;
   record SHVc resSHr;
   record ModuleBlock MBr;
-
+	
+	logtext(0,"DoSh1Form");
+	
   BlockLoad(MBr);
   langcode = SHr.LangCode;
   langcod2 = SHr.ShipMode;
@@ -1372,7 +1386,9 @@ BEGIN
   Integer intdocnr;
   string 30 formcode,langcode,langcod2;
   record SHVc resSHr;
-
+	
+	logtext(0,"DoSh2Form");
+	
   langcode = SHr.LangCode;
   langcod2 = SHr.ShipMode;
   FDr.repname = RepSpec.repname;
@@ -1447,7 +1463,9 @@ BEGIN
   Integer intdocnr;
   string 30 formcode,langcode,langcod2;
   record SHVc resSHr;
-
+	
+	logtext(0,"DoSh3Form");
+	
   langcode = SHr.LangCode;
   langcod2 = SHr.ShipMode;
   FDr.repname = RepSpec.repname;

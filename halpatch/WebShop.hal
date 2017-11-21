@@ -507,6 +507,7 @@ begin
 	//if(blank(Cur.Name) or Cur.Name=="  ")then begin
 		Cur.Name = XmlGetAttribute(xmlMessage,"orders/order" & i,"name") & " " & XmlGetAttribute(xmlMessage,"orders/order" & i,"name2");
 		Cur.Name = ChangeCaseStr(Cur.Name,4);
+		CUr.NameUAH = CUr.Name;// Edit ************************** BPI Ukraine - KramarAlexandr - Monday, 20 November 2017 15:29:37
 	//end;
 	firsname = XmlGetAttribute(xmlMessage,"orders/order" & i,"firstname");
 	lastname = XmlGetAttribute(xmlMessage,"orders/order" & i,"lastname");
@@ -518,6 +519,7 @@ begin
 	resstr = firsname & lastname & middlename;
 	if(nonblank(resstr) and len(resstr)>3)then begin
 		Cur.Name = lastname & " " & firsname & " " & middlename;
+		CUr.NameUAH = CUr.Name;// Edit ************************** BPI Ukraine - KramarAlexandr - Monday, 20 November 2017 15:29:37
 	end;
 	
 	

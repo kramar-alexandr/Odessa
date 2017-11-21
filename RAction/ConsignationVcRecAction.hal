@@ -190,42 +190,133 @@ begin
 return;
 end;
 
-global updating procedure ConsBrakVcUpdateIH(record ConsBrakVc Consignationr, boolean addflag)
+
+function boolean TestKonsigAvailQty(string artCode,string location,val remqty)
 begin
+	boolean res;
 	record ItemHistVc IHr;
-	row ConsBrakVc Consignationrw;
 	boolean testf,TrHs;
 	integer mtrw,i;
+	val calcqty;
+	
+	res = false;
+	
+	IHr.ArtCode = artCode;
+	IHr.FileName = "ConsInVc";
+	TrHs = true;
+	while(loopkey("FNArtCode",IHr,2,TrHs))begin
+		testf = true;
+		if(IHr.FileName!="ConsInVc")then begin TrHs = false; testf = false; end;
+		if(IHr.ArtCode!=artCode)then begin TrHs = false; testf = false; end;
+		if(IHr.Qty2<=0)then begin TrHs = false; testf = false; end;
+		if(IHr.Location!=location)then begin TrHs = false; testf = false; end;
+		
+		if(testf)then begin
+			calcqty = calcqty + IHr.Qty2;
+		end;
+		
+	end;
+	
+	if(remqty<=calcqty)then begin res = true; end;
+	
+	logtext(0,"TestKonsigAvailQty " & remqty & " _ " & calcqty);
+	
+	TestKonsigAvailQty = res;
+return;
+end;
+
+global updating procedure ConsBrakVcUpdateIH(var record ConsBrakVc ConsBrakr, boolean addflag)
+begin
+	record ItemHistVc IHr,sourceIHr;
+	row ConsBrakVc ConsBrakrw;
+	boolean testf,TrHs;
+	integer mtrw,i;
+	val remqty;
 	
 	if(addflag==false)then begin
 		IHr.FileName = "ConsBrakVc";
-		IHr.TransNr = Consignationr.SerNr;
+		IHr.TransNr = ConsBrakr.SerNr;
 		TrHs = true;
 		while(loopkey("FNTransNr",IHr,2,TrHs))begin
 			if(IHr.FileName!="ConsBrakVc")then begin TrHs = false; end;
-			if(IHr.TransNr!=Consignationr.SerNr)then begin TrHs = false; end;
+			if(IHr.TransNr!=ConsBrakr.SerNr)then begin TrHs = false; end;
 			
 			if(TrHs)then begin
+				sourceIHr.SerNr = IHr.Source;
+				if(readfirstmain(sourceIHr,1,true))then begin
+					sourceIHr.Qty2 = sourceIHr.Qty2 - IHr.Qty;
+					recordstore(sourceIHr,true);
+				end;
 				recorddelete(IHr);
 				stepback(IHr);
 			end;
 		end;
-	end else begin
-		mtrw = matrowcnt(Consignationr);
+		mtrw = matrowcnt(ConsBrakr);
 		For(i=0;i<mtrw;i=i+1) begin
-	  	matrowget(Consignationr,i,Consignationrw);
-	  	IHr.SerNr = NextSerNr("ItemHistVc",CurrentDate,-1,false,"");
-	  	IHr.FileName = "ConsBrakVc";
-	  	IHr.TransNr = Consignationr.SerNr;
-	  	IHr.TransDate = Consignationr.TransDate;
-	  	IHr.FIFODate = Consignationr.TransDate;
-	  	IHr.Location = Consignationr.Location;
-	  	IHr.StockAffectf = 0;
-	  	
-	  	IHr.ArtCode = Consignationrw.ArtCode;
-	  	IHr.Qty = Consignationrw.Qty;
-	  	IHr.Row = i;
-	  	recordstore(IHr,false);
+			matrowget(ConsBrakr,i,ConsBrakrw);
+				ConsBrakrw.Price = blankval;
+				ConsBrakrw.Sum = blankval;
+			matrowput(ConsBrakr,i,ConsBrakrw);
+		end;
+		ConsBrakr.TotSum = 0;
+	end else begin
+		mtrw = matrowcnt(ConsBrakr);
+		For(i=0;i<mtrw;i=i+1) begin
+			matrowget(ConsBrakr,i,ConsBrakrw);
+			remqty = ConsBrakrw.Qty;
+			
+			TrHs = true;
+			sourceIHr.ArtCode = ConsBrakrw.ArtCode;
+			sourceIHr.FileName = "ConsInVc";
+			while(loopkey("FNArtCode",sourceIHr,2,TrHs))begin
+				testf = true;
+				if(sourceIHr.FileName!="ConsInVc")then begin TrHs = false; testf = false; end;
+				if(sourceIHr.ArtCode!=ConsBrakrw.ArtCode)then begin TrHs = false; testf = false; end;
+				if(sourceIHr.Qty2<=0)then begin TrHs = false; testf = false; end;
+				if(sourceIHr.Location!=ConsBrakr.Location)then begin TrHs = false; testf = false; end;
+				if(remqty<=0)then begin TrHs = false; testf = false; end;
+				
+				if(testf)then begin
+					recordnew(IHr);
+					IHr.SerNr = NextSerNr("ItemHistVc",CurrentDate,-1,false,"");
+					IHr.FileName = "ConsBrakVc";
+					IHr.TransNr = ConsBrakr.SerNr;
+					IHr.TransDate = ConsBrakr.TransDate;
+					IHr.FIFODate = ConsBrakr.TransDate;
+					IHr.Location = ConsBrakr.Location;
+					IHr.StockAffectf = 0;
+			
+					IHr.ArtCode = ConsBrakrw.ArtCode;
+					
+					if(sourceIHr.Qty2>remqty)then begin
+						IHr.Source = sourceIHr.SerNr;
+						IHr.Qty = -remqty;
+						IHr.TotCostPrice = sourceIHr.TotCostPrice;
+						ConsBrakrw.Sum = ConsBrakrw.Sum - IHr.TotCostPrice * IHr.Qty;
+						ConsBrakrw.Price = ConsBrakrw.Sum / ConsBrakrw.Qty;
+						ConsBrakr.TotSum = ConsBrakr.TotSum - IHr.TotCostPrice * IHr.Qty;
+						matrowput(ConsBrakr,i,ConsBrakrw);
+						sourceIHr.Qty2 = sourceIHr.Qty2 - remqty;
+						recordstore(sourceIHr,true);
+						remqty = 0;
+					end else begin
+						IHr.Source = sourceIHr.SerNr;
+						IHr.Qty = -sourceIHr.Qty2;
+						IHr.TotCostPrice = sourceIHr.TotCostPrice;
+						ConsBrakrw.Sum = ConsBrakrw.Sum - IHr.TotCostPrice * IHr.Qty;
+						ConsBrakrw.Price = ConsBrakrw.Sum / ConsBrakrw.Qty;
+						ConsBrakr.TotSum = ConsBrakr.TotSum - IHr.TotCostPrice * IHr.Qty;
+						matrowput(ConsBrakr,i,ConsBrakrw);
+						remqty = remqty - sourceIHr.Qty2;
+						sourceIHr.Qty2 = 0;
+						recordstore(sourceIHr,true);
+					end;
+					
+					IHr.Row = i;
+					recordstore(IHr,false);
+				end;
+	  	end;
+	  	resetloop(sourceIHr);
 	  	
 		end; 
 	end;
@@ -326,33 +417,85 @@ BEGIN
 END;
 
 global
-updating function LongInt ConsBrakVcRecordUpdateAfter(var record ConsBrakVc Consignationr,record ConsBrakVc Consignation2r,LongInt stat,LongInt long4)
+updating function LongInt ConsBrakVcRecordUpdate(var record ConsBrakVc ConsBrakr,record ConsBrakVc ConsBrak2r,LongInt stat,LongInt long4)
 BEGIN
   LongInt res;
   
-  if(Consignationr.OKFlag==1 and Consignation2r.OKFlag==0)then begin
-		ConsBrakVcUpdateIH(Consignationr,false);
-		ConsBrakVcUpdateIH(Consignationr,true);
+  if(ConsBrakr.OKFlag==1 and ConsBrak2r.OKFlag==0)then begin
+		ConsBrakVcUpdateIH(ConsBrakr,false);
+		ConsBrakVcUpdateIH(ConsBrakr,true);
  	end;
- 	if(Consignationr.OKFlag==0 and Consignation2r.OKFlag==1)then begin
-		ConsBrakVcUpdateIH(Consignationr,false);
+ 	if(ConsBrakr.OKFlag==0 and ConsBrak2r.OKFlag==1)then begin
+		ConsBrakVcUpdateIH(ConsBrakr,false);
  	end;
  	
-  ConsBrakVcRecordUpdateAfter = res;
+  ConsBrakVcRecordUpdate = res;
   RETURN;
 END;
 
 global
-updating function LongInt ConsBrakVcRecordSaveAfter(var record ConsBrakVc Consignationr,record ConsBrakVc Consignation2r,LongInt stat,LongInt long4)
+updating function LongInt ConsBrakVcRecordSave(var record ConsBrakVc ConsBrakr,record ConsBrakVc ConsBrak2r,LongInt stat,LongInt long4)
 BEGIN
   LongInt res;
   
 
- 	if(Consignationr.OKFlag==1)then begin
-		ConsBrakVcUpdateIH(Consignationr,true);
+ 	if(ConsBrakr.OKFlag==1)then begin
+		ConsBrakVcUpdateIH(ConsBrakr,true);
  	end;
  	
-  ConsBrakVcRecordSaveAfter = res;
+  ConsBrakVcRecordSave = res;
+  RETURN;
+END;
+
+
+global
+updating function LongInt ConsBrakVcRecordCheck(var record ConsBrakVc ConsBrakr,record ConsBrakVc ConsBrak2r,LongInt stat,LongInt long4)
+BEGIN
+  LongInt res;
+  integer i,j,rwcnt;
+  row ConsBrakVc ConsBrakrw,prewConsBrakrw;
+  val prewqty;
+  
+  res = 0;
+  
+  logtext(0,"ConsBrakVcRecordCheck");
+  
+  rwcnt = matrowcnt(ConsBrakr);
+  For(i=0;i<rwcnt;i=i+1) begin
+	  matrowget(ConsBrakr,i,ConsBrakrw);
+	  prewqty = 0;
+	  For(j=0;j<i;j=j+1) begin
+	  	matrowget(ConsBrakr,j,prewConsBrakrw);
+	  	
+	  	if(ConsBrakrw.ArtCode==prewConsBrakrw.ArtCode)then begin
+	  		prewqty = prewqty + prewConsBrakrw.Qty;
+	  	end;
+		end; 
+		
+		if((ConsBrakrw.Qty+prewqty)>0)then begin
+			if(stat==Rs_Insert)then begin
+				if(ConsBrakr.OKFlag==1)then begin
+					if(TestKonsigAvailQty(ConsBrakrw.ArtCode,ConsBrakr.Location,ConsBrakrw.Qty+prewqty)==false)then begin
+						RecordCheckError(1247,"",i,"ArtCode");      
+						res = -1; 
+						goto LConsBrakVcRecordCheck;
+					end;
+				end;
+			end;
+			if(stat==Rs_Update)then begin
+				if(ConsBrakr.OKFlag==1 and ConsBrak2r.OKFlag==0)then begin
+					if(TestKonsigAvailQty(ConsBrakrw.ArtCode,ConsBrakr.Location,ConsBrakrw.Qty+prewqty)==false)then begin
+						RecordCheckError(1247,"",i,"ArtCode");      
+						res = -1; 
+						goto LConsBrakVcRecordCheck;
+					end;
+				end;
+			end;
+		end;
+	end; 
+ 
+ 	LConsBrakVcRecordCheck:;
+  ConsBrakVcRecordCheck = res;
   RETURN;
 END;
 
@@ -443,7 +586,6 @@ begin
 			end;
 			Consignationr.TotSum = totsum;
 			Consignationr.TotQty = totqty;
-			logtext(0,"mtrw " & mtrw);
 			recordstore(Consignationr,false);
 			end;
 	end;
@@ -683,7 +825,7 @@ begin
 	vector val artqty2,artqty2price;
 	vector boolean artf,artf1;
 	
-	logtext(0,"CrConsigIn");
+	logtext(0,"CrConsigBrak");
 	
 	IHr.FileName = "ConsInVc";
 	TrHs = true;
@@ -693,19 +835,12 @@ begin
 		if(IHr.Qty2<=0)then begin testf = false; end;
 		
 		if(testf)then begin
-			/*if(artf[IHr.ArtCode & ":" & IHr.TotCostPrice]==false)then begin
-				artf[IHr.ArtCode & ":" & IHr.TotCostPrice] = true;
-				artcodesprice[acnt] = IHr.ArtCode & ":" & IHr.TotCostPrice;
-				acnt = acnt + 1;
-			end;*/
 			if(artf1[IHr.ArtCode]==false)then begin
 				artf1[IHr.ArtCode] = true;
 				artcodes[acnt1] = IHr.ArtCode;
 				acnt1 = acnt1 + 1;
 			end;
-			artqty2[IHr.ArtCode] = artqty2[IHr.ArtCode] + IHr.Qty2;
-			//artqty2price[IHr.ArtCode & ":" & IHr.TotCostPrice] = artqty2price[IHr.ArtCode & ":" & IHr.TotCostPrice] + IHr.Qty2;
-			
+			artqty2[IHr.ArtCode] = artqty2[IHr.ArtCode] + IHr.Qty2;			
 		end;
 	end;
 	
@@ -717,13 +852,14 @@ begin
 	rwcnt = matrowcnt(Consignationr);
 	For(i=0;i<acnt1;i=i+1) begin
 		foundf = false;
+		clearrow(ConsBrakr,ConsBrakrw,1);
 	  For(j=0;j<rwcnt;j=j+1) begin
 	  	matrowget(Consignationr,j,Consignationrw);
 	  	if(Consignationrw.ArtCode==artcodes[i])then begin
 	  		foundf = true;
-	  		if(artqty2[artcodes[i]]<Consignationrw.Qty)then begin
+	  		if(artqty2[artcodes[i]]>Consignationrw.Qty)then begin
 	  			ConsBrakrw.ArtCode = artcodes[i];
-	  			ConsBrakrw.Qty = Consignationrw.Qty - ConsBrakrw.Qty;
+	  			ConsBrakrw.Qty = artqty2[artcodes[i]] - Consignationrw.Qty;
 	  			ConsBrakrw.Sum = ConsBrakrw.Qty*ConsBrakrw.Price;
 					//ConsBrakr.TotSum = ConsBrakr.TotSum + ConsBrakrw.Sum;
 					ConsBrakr.TotQty = ConsBrakr.TotQty + ConsBrakrw.Qty;
@@ -734,7 +870,7 @@ begin
 		end; 
 		if(foundf==false)then begin
 			ConsBrakrw.ArtCode = artcodes[i];
-			ConsBrakrw.Qty = ConsBrakrw.Qty;
+			ConsBrakrw.Qty = artqty2[artcodes[i]];
 			ConsBrakrw.Sum = ConsBrakrw.Qty*ConsBrakrw.Price;
 			//ConsBrakr.TotSum = ConsBrakr.TotSum + ConsBrakrw.Sum;
 			ConsBrakr.TotQty = ConsBrakr.TotQty + ConsBrakrw.Qty;
@@ -749,6 +885,8 @@ begin
 		ConsBrakr.SerNr = NextSerNr("ConsBrakVc",CurrentDate,-1,false,"");
 		recordstore(ConsBrakr,true);
 	end;
+	
+	logtext(0,"FINISH");
 	
 return;
 end;
