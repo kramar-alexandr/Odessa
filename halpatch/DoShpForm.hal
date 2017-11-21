@@ -1298,7 +1298,7 @@ BEGIN
 	CUr.Code = SHr.CustCode;// Edit ************************** BPI Ukraine - KramarAlexandr - Tuesday, 21 November 2017 17:25:55
 	if(readfirstmain(CUr,1,true))then begin
 		if(CUr.NameUAHFlag>0)then begin
-			NameUAHFlag = true;
+			ukrform = true;
 		end;
 	end;
 	
@@ -1336,7 +1336,7 @@ LFINDFORMCOCESH1:;
     for (i=rwcnt-1;i>=0;i=i-1) begin
       MatRowGet(FDr,i,FDrw);
       if (FindFormcode(SHr.OKFlag,FDrw.Typ)) then begin 
-      	if(NameUAHFlag)then begin
+      	if(ukrform)then begin
       		FDrw.FPCode = FDrw.FPCode & "UKR";// Edit ************************** BPI Ukraine - KramarAlexandr - Tuesday, 21 November 2017 17:29:11
       	end;
         if (Getformcode(i,FDrw.intdocnr,FDrw.FPCode,FDrw.UserGroup,FDrw.LangCode,FDrw.SerNr,SHr.SerNr,FDrw.PrintGroupCode,
@@ -1406,7 +1406,7 @@ BEGIN
 	CUr.Code = SHr.CustCode;// Edit ************************** BPI Ukraine - KramarAlexandr - Tuesday, 21 November 2017 17:25:55
 	if(readfirstmain(CUr,1,true))then begin
 		if(CUr.NameUAHFlag>0)then begin
-			NameUAHFlag = true;
+			ukrform = true;
 		end;
 	end;
 	
@@ -1437,7 +1437,7 @@ LFINDFORMCOCESH2:;
     for (i=rwcnt-1;i>=0;i=i-1) begin
       MatRowGet(FDr,i,FDrw);
       if (FindFormcode(SHr.OKFlag,FDrw.Typ)) then begin 
-				if(NameUAHFlag)then begin
+				if(ukrform)then begin
       		FDrw.FPCode = FDrw.FPCode & "UKR";// Edit ************************** BPI Ukraine - KramarAlexandr - Tuesday, 21 November 2017 17:29:11
       	end;
         if (Getformcode(i,FDrw.intdocnr,FDrw.FPCode,FDrw.UserGroup,FDrw.LangCode,FDrw.SerNr,SHr.SerNr,FDrw.PrintGroupCode,
@@ -1495,7 +1495,7 @@ BEGIN
 	CUr.Code = SHr.CustCode;// Edit ************************** BPI Ukraine - KramarAlexandr - Tuesday, 21 November 2017 17:25:55
 	if(readfirstmain(CUr,1,true))then begin
 		if(CUr.NameUAHFlag>0)then begin
-			NameUAHFlag = true;
+			ukrform = true;
 		end;
 	end;
 	
@@ -1526,7 +1526,7 @@ LFINDFORMCOCESH3:;
     for (i=rwcnt-1;i>=0;i=i-1) begin
       MatRowGet(FDr,i,FDrw);
       if (FindFormcode(SHr.OKFlag,FDrw.Typ)) then begin 
-      	if(NameUAHFlag)then begin
+      	if(ukrform)then begin
       		FDrw.FPCode = FDrw.FPCode & "UKR";// Edit ************************** BPI Ukraine - KramarAlexandr - Tuesday, 21 November 2017 17:29:11
       	end;
         if (Getformcode(i,FDrw.intdocnr,FDrw.FPCode,FDrw.UserGroup,FDrw.LangCode,FDrw.SerNr,SHr.SerNr,FDrw.PrintGroupCode,
