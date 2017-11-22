@@ -113,7 +113,7 @@ begin
 		testf = true;
 		if(ORr.OrdDate<mindate)then begin TrHs = false; testf = false; end;
 		if(ORr.OrdDate>maxdate)then begin TrHs = false; testf = false; end;
-		if(ORr.CustomStatusFlag!=0)then begin testf = false; end;
+		//if(ORr.CustomStatusFlag!=0)then begin testf = false; end;
 		if(ORr.Closed>0)then begin testf = false; end;
 		if(testf)then begin
 			IVr.OrderNr = ORr.SerNr;
