@@ -934,7 +934,7 @@ BEGIN
   if(CUr.NameUAHFlag==1)then begin// Edit ************************** BPI Ukraine - KramarAlexandr - Monday, 20 November 2017 15:38:24
 		tstr = CUr.NameUAH;// Edit ************************** BPI Ukraine - KramarAlexandr - Monday, 20 November 2017 15:39:45
 	end else begin
-		tstr = ORr.Addr0;
+		tstr = SHr.Addr0;
 	end;
   
   OUTFORMFIELD("F_AVSNAME",tstr);
