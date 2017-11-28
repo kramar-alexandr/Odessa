@@ -585,6 +585,8 @@ begin
   StrSetText(ChangingUpdateStockFlag,"Изменение поля Обновить склад на сч/ф клиенту");
   StrSetText(PositionStatusChanging,"Изменение статуса места");
   StrSetText(AllowWSUpdateStockChange,"Изменение в таблицах работ - Обновление склада");
+  StrSetText(EditLoyPoints,"Изменить баллы в накопительной карточке");// Edit ************************** BPI Ukraine - KramarAlexandr - Tuesday, 28 November 2017 15:37:13
+  StrSetText(EditRebCodeinCU,"Изменить таблицу скидок в карточке клиента");// Edit ************************** BPI Ukraine - KramarAlexandr - Tuesday, 28 November 2017 15:37:56
   StrSetText(DiffHalcust,"Compare halcust & halpatch");
   StrSetText(CompletingServiceOrders,"Complete Service Orders");
   StrSetText(InvToCO,"Контракт из сч/ф");

@@ -84,7 +84,7 @@ begin
   
   res = false;
   
-  if(usercanaction("ViewCostPrice", true))then begin
+  if(usercanaction("EditLoyPoints", true))then begin
   	res = true;
   end;
   
