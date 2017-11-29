@@ -11911,6 +11911,7 @@ begin
   v = 10; vs = 20; h = 60;
   EditField(h,v=vs, 100,"Склад",Normal,f1,false,LocationSClass);
   EditField(h,v+=vs, 100,"Comitent",Normal,f2,false,DISClass);
+  EditField(h,v+=vs, 70,"На дату",Normal,d1,false,PasteCurDate);
 
   EndWindow;
 end;

@@ -1452,7 +1452,7 @@ BEGIN
             RecordCopy(oldIVr,IVr);
             IVr.OKFlag = 1;
             RecordUpdate(oldIVr,IVr,true);
-            MyCreateCreditPayment(IVr); //Edit***************************Sasha2,15:09 18.02.2015
+            //MyCreateCreditPayment(IVr); //Edit***************************Sasha2,15:09 18.02.2015
           end;
         end;
       end;

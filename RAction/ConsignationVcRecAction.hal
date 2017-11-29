@@ -517,6 +517,38 @@ BEGIN
   RETURN;
 END;
 
+procedure GetQtyByBackDate(date td, string artcode, string location, var val resqty)
+begin
+	record ItemHistVc IHr;
+	boolean TrHs,testf;
+	record ItemStatusVc ISr;
+	val qty;
+	
+	ISr.Location = location;
+	ISr.Code = artcode;
+	readfirstmain(ISr,2,true);
+	qty = ISr.Instock;
+	
+	IHr.ArtCode = artcode;
+	IHr.Location = location;
+	IHr.TransDate = addday(currentdate,1);
+	TrHs = true;
+	while(loopbackkey("ArtCodeLoc",IHr,3,TrHs))begin
+		testf = true;
+		if(IHr.ArtCode!=artcode)then begin TrHs = false; testf = false; end;
+		if(IHr.Location!=location)then begin TrHs = false; testf = false; end;
+		if(IHr.TransDate<td)then begin TrHs = false; testf = false; end;
+		if(IHr.StockAffectf==0)then begin testf = false; end;
+		
+		if(testf)then begin
+			qty = qty - IHr.Qty;
+		end;
+	end;
+	
+	resqty = qty;
+	
+return;
+end;
 
 global updating procedure ConsignationGenMn(record RcVc RepSpec)
 begin
@@ -528,7 +560,7 @@ begin
 	row ConsignationVc Consignationrw;
 	boolean TrHs,testf;
 	integer i,mtrw;
-	val comprice,totsum,totqty;
+	val comprice,totsum,totqty,resqty;
 	
 	if(nonblank(RepSpec.f1))then begin
 		testf = true;
@@ -550,38 +582,72 @@ begin
 			Consignationr.Location = RepSpec.f1;
 			Consignationr.TransDate = currentdate;
 			Consignationr.Comitent = RepSpec.f2;
-		
-			ISr.Location = RepSpec.f1;
-			TrHs = true;
-			while(loopkey("Location",ISr,1,TrHs))begin
-				testf = true;
-				if(ISr.Location!=RepSpec.f1)then begin TrHs = false; testf = false; end;
-				if(ISr.Instock<=0)then begin testf = false; end;
+			if(nonblankdate(RepSpec.d1))then begin
+				Consignationr.TransDate = RepSpec.d1;
+			end;
+			
+			if(blankdate(RepSpec.d1))then begin
+				ISr.Location = RepSpec.f1;
+				TrHs = true;
+				while(loopkey("Location",ISr,1,TrHs))begin
+					testf = true;
+					if(ISr.Location!=RepSpec.f1)then begin TrHs = false; testf = false; end;
+					if(ISr.Instock<=0)then begin testf = false; end;
 				
-				if(testf)then begin
-					INr.Code = ISr.Code;
-					if(readfirstmain(INr,1,true))then begin
-						if(!setinset(RepSpec.f2,INr.DispGroups))then begin
-							testf = false;
+					if(testf)then begin
+						INr.Code = ISr.Code;
+						if(readfirstmain(INr,1,true))then begin
+							if(!setinset(RepSpec.f2,INr.DispGroups))then begin
+								testf = false;
+							end;
 						end;
 					end;
-				end;
 				
-				if(testf)then begin
-					PLr.ArtCode = ISr.Code;
-					PLr.PLCode = "KOMPR";
-					comprice = blankval;
-					if(readfirstmain(PLr,2,true))then begin
-						comprice = PLr.ExVatPrice;
+					if(testf)then begin
+						PLr.ArtCode = ISr.Code;
+						PLr.PLCode = "KOMPR";
+						comprice = blankval;
+						if(readfirstmain(PLr,2,true))then begin
+							comprice = PLr.ExVatPrice;
+						end;
+						Consignationrw.ArtCode = ISr.Code;
+						Consignationrw.Qty = ISr.Instock;
+						Consignationrw.Price = comprice;
+						Consignationrw.Sum = comprice * ISr.Instock;
+						totsum = totsum + Consignationrw.Sum;
+						totqty = totqty + Consignationrw.Qty;
+						matrowput(Consignationr,mtrw,Consignationrw);
+						mtrw = mtrw + 1;
 					end;
-					Consignationrw.ArtCode = ISr.Code;
-					Consignationrw.Qty = ISr.Instock;
-					Consignationrw.Price = comprice;
-					Consignationrw.Sum = comprice * ISr.Instock;
-					totsum = totsum + Consignationrw.Sum;
-					totqty = totqty + Consignationrw.Qty;
-					matrowput(Consignationr,mtrw,Consignationrw);
-					mtrw = mtrw + 1;
+				end;
+			end else begin
+				INr.Code = "";
+				while(loopmain(INr,1,true))begin
+					testf = true;
+					if(!setinset(RepSpec.f2,INr.DispGroups))then begin
+						testf = false;
+					end;
+					if(testf)then begin
+						GetQtyByBackDate(RepSpec.d1,INr.Code,Consignationr.Location,resqty);
+					end;
+					if(resqty<=0)then begin testf = false; end;
+					
+					if(testf)then begin
+						PLr.ArtCode = INr.Code;
+						PLr.PLCode = "KOMPR";
+						comprice = blankval;
+						if(readfirstmain(PLr,2,true))then begin
+							comprice = PLr.ExVatPrice;
+						end;
+						Consignationrw.ArtCode = INr.Code;
+						Consignationrw.Qty = resqty;
+						Consignationrw.Price = comprice;
+						Consignationrw.Sum = comprice * resqty;
+						totsum = totsum + Consignationrw.Sum;
+						totqty = totqty + Consignationrw.Qty;
+						matrowput(Consignationr,mtrw,Consignationrw);
+						mtrw = mtrw + 1;
+					end;
 				end;
 			end;
 			Consignationr.TotSum = totsum;
