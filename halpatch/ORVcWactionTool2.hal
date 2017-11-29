@@ -480,14 +480,14 @@ begin
       RemoveOldUserObjects(salesman,ORp.Objects);
       ExtractObj(oldsalesmen,pos,salesman);
     end;
-    ORp.SalesGroup = "";    
+    //ORp.SalesGroup = "";    // Edit ************************** BPI Ukraine - KramarAlexandr - Wednesday, 29 November 2017 14:04:28
 
     pos = 0;
     ExtractObj(ORp.SalesMan,pos,salesman);
     while (nonblank(salesman)) begin
       Userr.Code = salesman;
       if (ReadFirstMain(Userr,1,true)) then begin
-        ORp.SalesGroup = AddObjectToObjectList(ORp.SalesGroup,Userr.SalesGroup);                
+        //ORp.SalesGroup = AddObjectToObjectList(ORp.SalesGroup,Userr.SalesGroup);                // Edit ************************** BPI Ukraine - KramarAlexandr - Wednesday, 29 November 2017 14:04:31
         ORp.Objects = AddObjectToObjectList(ORp.Objects,Userr.PersObjx);        
       end;
       ExtractObj(ORp.SalesMan,pos,salesman);

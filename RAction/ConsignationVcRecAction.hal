@@ -956,3 +956,82 @@ begin
 	
 return;
 end;
+
+
+global updating procedure CrConsigSale(record ConsignationVc Consignationr)
+begin
+	integer wn,i,j,rwcnt,mtrw,acnt,acnt1;
+	row ConsignationVc Consignationrw;
+	record ConsSaleVc ConsSaler,ConsSaleoldr;
+	row ConsSaleVc ConsSalerw;
+	record ItemHistVc IHr;
+	boolean TrHs,testf,foundf;
+	array string 50 artcodes,artcodesprice;
+	vector val artqty2,artqty2price;
+	vector boolean artf,artf1;
+	
+	logtext(0,"CrConsigSale");
+	
+	IHr.FileName = "ConsInVc";
+	TrHs = true;
+	while(loopkey("FNTransNr",IHr,1,TrHs))begin
+		testf = true;
+		if(IHr.FileName!="ConsInVc")then begin TrHs = false; testf = false; end;
+		if(IHr.Qty2<=0)then begin testf = false; end;
+		
+		if(testf)then begin
+			if(artf1[IHr.ArtCode]==false)then begin
+				artf1[IHr.ArtCode] = true;
+				artcodes[acnt1] = IHr.ArtCode;
+				acnt1 = acnt1 + 1;
+			end;
+			artqty2[IHr.ArtCode] = artqty2[IHr.ArtCode] + IHr.Qty2;			
+		end;
+	end;
+	
+	recordnew(ConsSaler);
+	ConsSaler.TransDate = currentdate;
+	ConsSaler.Location = Consignationr.Location;
+	ConsSaler.Comitent = Consignationr.Comitent;
+	
+	rwcnt = matrowcnt(Consignationr);
+	For(i=0;i<acnt1;i=i+1) begin
+		foundf = false;
+		clearrow(ConsSaler,ConsSalerw,1);
+	  For(j=0;j<rwcnt;j=j+1) begin
+	  	matrowget(Consignationr,j,Consignationrw);
+	  	if(Consignationrw.ArtCode==artcodes[i])then begin
+	  		foundf = true;
+	  		if(artqty2[artcodes[i]]>Consignationrw.Qty)then begin
+	  			ConsSalerw.ArtCode = artcodes[i];
+	  			ConsSalerw.Qty = artqty2[artcodes[i]] - Consignationrw.Qty;
+	  			ConsSalerw.Sum = ConsSalerw.Qty*ConsSalerw.Price;
+					//ConsSaler.TotSum = ConsSaler.TotSum + ConsSalerw.Sum;
+					ConsSaler.TotQty = ConsSaler.TotQty + ConsSalerw.Qty;
+					matrowput(ConsSaler,mtrw,ConsSalerw);
+					mtrw = mtrw + 1;
+	  		end;
+	  	end;
+		end; 
+		if(foundf==false)then begin
+			ConsSalerw.ArtCode = artcodes[i];
+			ConsSalerw.Qty = artqty2[artcodes[i]];
+			ConsSalerw.Sum = ConsSalerw.Qty*ConsSalerw.Price;
+			//ConsSaler.TotSum = ConsSaler.TotSum + ConsSalerw.Sum;
+			ConsSaler.TotQty = ConsSaler.TotQty + ConsSalerw.Qty;
+			matrowput(ConsSaler,mtrw,ConsSalerw);
+			mtrw = mtrw + 1;
+		end;
+	end; 
+	
+	
+	
+	if(mtrw>0)then begin
+		ConsSaler.SerNr = NextSerNr("ConsSaleVc",CurrentDate,-1,false,"");
+		recordstore(ConsSaler,true);
+	end;
+	
+	logtext(0,"FINISH");
+	
+return;
+end;
