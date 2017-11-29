@@ -877,7 +877,65 @@ begin
 return;
 end;
 
+procedure GetQtyByBackDateSales(date frdate, date td, string artcode, string location, var val resqty)
+begin
+	record ItemHistVc IHr;
+	boolean TrHs,testf;
+	record ItemStatusVc ISr;
+	val qty;
+	
+	
+	IHr.ArtCode = artcode;
+	IHr.Location = location;
+	IHr.TransDate = addday(frdate,-1);
+	TrHs = true;
+	while(loopbackkey("ArtCodeLoc",IHr,3,TrHs))begin
+		testf = true;
+		if(IHr.ArtCode!=artcode)then begin TrHs = false; testf = false; end;
+		if(IHr.Location!=location)then begin TrHs = false; testf = false; end;
+		if(IHr.TransDate<td)then begin TrHs = false; testf = false; end;
+		if(IHr.StockAffectf==0)then begin testf = false; end;
+		
+		if(testf)then begin
+			if(IHr.FileName=="IVVc")then begin 
+				qty = qty - IHr.Qty;
+			end;
+			if(IHr.FileName=="SHVc")then begin 
+				qty = qty - IHr.Qty;
+			end;
+		end;
+	end;
+	
+	resqty = qty;
+	
+return;
+end;
 
+global procedure CalcSalesOnPeriod(record ConsignationVc Consignationr,string itemcode, var val resqty)
+begin
+	record ConsignationVc Consignationoldr;
+	boolean testf,TrHs;
+	date lastdate;
+	
+	Consignationoldr.TransDate = Consignationr.TransDate;
+	while(loopbackkey("TransDate",Consignationoldr,1,TrHs))begin
+		testf = true;
+		if(Consignationoldr.SerNr==Consignationr.SerNr)then begin testf = false; end;
+		if(Consignationoldr.Location!=Consignationr.Location)then begin testf = false; end;
+		if(Consignationoldr.Comitent!=Consignationr.Comitent)then begin testf = false; end;
+		if(Consignationoldr.OKFlag!=Consignationr.OKFlag)then begin testf = false; end;
+		
+		
+		if(testf and TrHs)then begin
+			lastdate = Consignationoldr.TransDate;
+			
+			TrHs = false;
+		end;
+	end;
+	
+	GetQtyByBackDateSales(Consignationr.TransDate,lastdate,lastdate,itemcode,resqty);
+return;
+end;
 
 global updating procedure CrConsigBrak(record ConsignationVc Consignationr)
 begin
@@ -890,6 +948,7 @@ begin
 	array string 50 artcodes,artcodesprice;
 	vector val artqty2,artqty2price;
 	vector boolean artf,artf1;
+	val resqty;
 	
 	logtext(0,"CrConsigBrak");
 	
@@ -925,23 +984,39 @@ begin
 	  		foundf = true;
 	  		if(artqty2[artcodes[i]]>Consignationrw.Qty)then begin
 	  			ConsBrakrw.ArtCode = artcodes[i];
-	  			ConsBrakrw.Qty = artqty2[artcodes[i]] - Consignationrw.Qty;
+	  			resqty = 0;
+	  			CalcSalesOnPeriod(Consignationr,artcodes[i],resqty);
+	  			if(resqty<artqty2[artcodes[i]] - Consignationrw.Qty)then begin
+	  				ConsBrakrw.Qty = artqty2[artcodes[i]] - Consignationrw.Qty - resqty;
+	  			end else begin
+	  				ConsBrakrw.Qty = 0;
+	  			end;
 	  			ConsBrakrw.Sum = ConsBrakrw.Qty*ConsBrakrw.Price;
 					//ConsBrakr.TotSum = ConsBrakr.TotSum + ConsBrakrw.Sum;
 					ConsBrakr.TotQty = ConsBrakr.TotQty + ConsBrakrw.Qty;
-					matrowput(ConsBrakr,mtrw,ConsBrakrw);
-					mtrw = mtrw + 1;
+					if(ConsBrakrw.Qty>0)then begin
+						matrowput(ConsBrakr,mtrw,ConsBrakrw);
+						mtrw = mtrw + 1;
+					end;
 	  		end;
 	  	end;
 		end; 
 		if(foundf==false)then begin
 			ConsBrakrw.ArtCode = artcodes[i];
-			ConsBrakrw.Qty = artqty2[artcodes[i]];
+			resqty = 0;
+	  	CalcSalesOnPeriod(Consignationr,artcodes[i],resqty);
+			if(resqty<artqty2[artcodes[i]])then begin
+				ConsBrakrw.Qty = artqty2[artcodes[i]]-resqty;
+			end else begin
+				ConsBrakrw.Qty = 0;
+			end;
 			ConsBrakrw.Sum = ConsBrakrw.Qty*ConsBrakrw.Price;
 			//ConsBrakr.TotSum = ConsBrakr.TotSum + ConsBrakrw.Sum;
 			ConsBrakr.TotQty = ConsBrakr.TotQty + ConsBrakrw.Qty;
-			matrowput(ConsBrakr,mtrw,ConsBrakrw);
-			mtrw = mtrw + 1;
+			if(ConsBrakrw.Qty>0)then begin
+				matrowput(ConsBrakr,mtrw,ConsBrakrw);
+				mtrw = mtrw + 1;
+			end;
 		end;
 	end; 
 	
@@ -957,7 +1032,6 @@ begin
 return;
 end;
 
-
 global updating procedure CrConsigSale(record ConsignationVc Consignationr)
 begin
 	integer wn,i,j,rwcnt,mtrw,acnt,acnt1;
@@ -969,6 +1043,7 @@ begin
 	array string 50 artcodes,artcodesprice;
 	vector val artqty2,artqty2price;
 	vector boolean artf,artf1;
+	val resqty;
 	
 	logtext(0,"CrConsigSale");
 	
@@ -1004,9 +1079,14 @@ begin
 	  		foundf = true;
 	  		if(artqty2[artcodes[i]]>Consignationrw.Qty)then begin
 	  			ConsSalerw.ArtCode = artcodes[i];
-	  			ConsSalerw.Qty = artqty2[artcodes[i]] - Consignationrw.Qty;
+	  			resqty = 0;
+	  			CalcSalesOnPeriod(Consignationr,artcodes[i],resqty);
+	  			if(resqty>(artqty2[artcodes[i]] - Consignationrw.Qty))then begin
+						ConsSalerw.Qty = artqty2[artcodes[i]] - Consignationrw.Qty;
+	  			end else begin
+	  				ConsSalerw.Qty = resqty;
+	  			end;
 	  			ConsSalerw.Sum = ConsSalerw.Qty*ConsSalerw.Price;
-					//ConsSaler.TotSum = ConsSaler.TotSum + ConsSalerw.Sum;
 					ConsSaler.TotQty = ConsSaler.TotQty + ConsSalerw.Qty;
 					matrowput(ConsSaler,mtrw,ConsSalerw);
 					mtrw = mtrw + 1;
@@ -1015,9 +1095,14 @@ begin
 		end; 
 		if(foundf==false)then begin
 			ConsSalerw.ArtCode = artcodes[i];
-			ConsSalerw.Qty = artqty2[artcodes[i]];
+			resqty = 0;
+			CalcSalesOnPeriod(Consignationr,artcodes[i],resqty);
+			if(resqty>artqty2[artcodes[i]])then begin
+				ConsSalerw.Qty = artqty2[artcodes[i]];
+			end else begin
+				ConsSalerw.Qty = resqty;
+			end;
 			ConsSalerw.Sum = ConsSalerw.Qty*ConsSalerw.Price;
-			//ConsSaler.TotSum = ConsSaler.TotSum + ConsSalerw.Sum;
 			ConsSaler.TotQty = ConsSaler.TotQty + ConsSalerw.Qty;
 			matrowput(ConsSaler,mtrw,ConsSalerw);
 			mtrw = mtrw + 1;
