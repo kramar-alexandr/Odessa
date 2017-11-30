@@ -934,6 +934,7 @@ begin
 	date lastdate;
 	
 	Consignationoldr.TransDate = Consignationr.TransDate;
+	TrHs = true;
 	while(loopbackkey("TransDate",Consignationoldr,1,TrHs))begin
 		testf = true;
 		if(Consignationoldr.SerNr==Consignationr.SerNr)then begin testf = false; end;
@@ -944,12 +945,12 @@ begin
 		
 		if(testf and TrHs)then begin
 			lastdate = Consignationoldr.TransDate;
-			
+			logtext(0,"CalcSalesOnPeriod " & lastdate);
 			TrHs = false;
 		end;
 	end;
 	
-	GetQtyByBackDateSales(Consignationr.TransDate,lastdate,lastdate,itemcode,resqty);
+	GetQtyByBackDateSales(Consignationr.TransDate,lastdate,itemcode,Consignationr.Location,resqty);
 return;
 end;
 
@@ -986,7 +987,7 @@ begin
 	end;
 	
 	recordnew(ConsBrakr);
-	ConsBrakr.TransDate = currentdate;
+	ConsBrakr.TransDate = Consignationr.TransDate;
 	ConsBrakr.Location = Consignationr.Location;
 	ConsBrakr.Comitent = Consignationr.Comitent;
 	
@@ -1041,6 +1042,8 @@ begin
 	if(mtrw>0)then begin
 		ConsBrakr.SerNr = NextSerNr("ConsBrakVc",CurrentDate,-1,false,"");
 		recordstore(ConsBrakr,true);
+		createrecordlink(ConsBrakr,currentcompany,Consignationr,currentcompany);
+		createrecordlink(Consignationr,currentcompany,ConsBrakr,currentcompany);
 	end;
 	
 	logtext(0,"FINISH");
@@ -1081,7 +1084,7 @@ begin
 	end;
 	
 	recordnew(ConsSaler);
-	ConsSaler.TransDate = currentdate;
+	ConsSaler.TransDate = Consignationr.TransDate;
 	ConsSaler.Location = Consignationr.Location;
 	ConsSaler.Comitent = Consignationr.Comitent;
 	
@@ -1097,6 +1100,7 @@ begin
 	  			ConsSalerw.ArtCode = artcodes[i];
 	  			resqty = 0;
 	  			CalcSalesOnPeriod(Consignationr,artcodes[i],resqty);
+	  			logtext(0,artcodes[i] & " " & resqty);
 	  			if(resqty>(artqty2[artcodes[i]] - Consignationrw.Qty))then begin
 						ConsSalerw.Qty = artqty2[artcodes[i]] - Consignationrw.Qty;
 	  			end else begin
@@ -1113,6 +1117,7 @@ begin
 			ConsSalerw.ArtCode = artcodes[i];
 			resqty = 0;
 			CalcSalesOnPeriod(Consignationr,artcodes[i],resqty);
+			logtext(0,artcodes[i] & " " & resqty);
 			if(resqty>artqty2[artcodes[i]])then begin
 				ConsSalerw.Qty = artqty2[artcodes[i]];
 			end else begin
@@ -1130,6 +1135,8 @@ begin
 	if(mtrw>0)then begin
 		ConsSaler.SerNr = NextSerNr("ConsSaleVc",CurrentDate,-1,false,"");
 		recordstore(ConsSaler,true);
+		createrecordlink(ConsSaler,currentcompany,Consignationr,currentcompany);
+		createrecordlink(Consignationr,currentcompany,ConsSaler,currentcompany);
 	end;
 	
 	logtext(0,"FINISH");
