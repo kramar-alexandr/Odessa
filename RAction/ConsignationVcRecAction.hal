@@ -816,7 +816,7 @@ begin
 		//getwindowrecord(wn,Consignationr);
 		
 		recordnew(ConsInr);
-		ConsInr.TransDate = currentdate;
+		ConsInr.TransDate = Consignationr.TransDate;
 		ConsInr.Location = Consignationr.Location;
 		ConsInr.Comitent = Consignationr.Comitent;
 		
@@ -870,6 +870,8 @@ begin
 		if(rwcnt>0)then begin
 			ConsInr.SerNr = NextSerNr("ConsInVc",CurrentDate,-1,false,"");
 			recordstore(ConsInr,true);
+			createrecordlink(ConsInr,currentcompany,Consignationr,currentcompany);
+			createrecordlink(Consignationr,currentcompany,ConsInr,currentcompany);
 		end;
 		
 	end;
