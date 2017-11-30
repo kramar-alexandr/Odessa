@@ -555,105 +555,119 @@ begin
 	record ItemStatusVc ISr;
 	record INVc INr;
 	record ConsignationVc Consignationr;
-	record DIVc DIr;
+	record DIVc DIr,loopDIr;
 	record PLVc PLr;
 	row ConsignationVc Consignationrw;
-	boolean TrHs,testf;
+	boolean TrHs,testf,TrHs1;
 	integer i,mtrw;
 	val comprice,totsum,totqty,resqty;
 	
 	if(nonblank(RepSpec.f1))then begin
 		testf = true;
-		if(blank(RepSpec.f2))then begin testf = false; end;
-		if(testf)then begin
-			DIr.Code = RepSpec.f2;
-			if(readfirstmain(DIr,1,true))then begin
-				if(DIr.CType!="KOMITENT")then begin
-					testf = false;
-				end;
-			end else begin
-				testf = false;
-			end;
-		end;
-		Logtext(0,"testf 1 " & testf);
-		if(testf)then begin
-			recordNew(Consignationr);
-			Consignationr.SerNr = NextSerNr("ConsignationVc",CurrentDate,-1,false,"");
-			Consignationr.Location = RepSpec.f1;
-			Consignationr.TransDate = currentdate;
-			Consignationr.Comitent = RepSpec.f2;
-			if(nonblankdate(RepSpec.d1))then begin
-				Consignationr.TransDate = RepSpec.d1;
-			end;
+		//if(blank(RepSpec.f2))then begin testf = false; end;
+		
+		DIr.CType = "KOMITENT";
+		TrHs1 = true;
+		while(loopkey("CType",DIr,1,TrHs1))begin
+			testf = true;
+			if(DIr.CType!="KOMITENT")then begin TrHs1 = false; testf = false; end;
+			if(nonblank(RepSpec.f2) and !setinset(DIr.Code,RepSpec.f2))then begin testf = false; end;
 			
-			if(blankdate(RepSpec.d1))then begin
-				ISr.Location = RepSpec.f1;
-				TrHs = true;
-				while(loopkey("Location",ISr,1,TrHs))begin
-					testf = true;
-					if(ISr.Location!=RepSpec.f1)then begin TrHs = false; testf = false; end;
-					if(ISr.Instock<=0)then begin testf = false; end;
-				
-					if(testf)then begin
-						INr.Code = ISr.Code;
-						if(readfirstmain(INr,1,true))then begin
-							if(!setinset(RepSpec.f2,INr.DispGroups))then begin
-								testf = false;
-							end;
-						end;
-					end;
-				
-					if(testf)then begin
-						PLr.ArtCode = ISr.Code;
-						PLr.PLCode = "KOMPR";
-						comprice = blankval;
-						if(readfirstmain(PLr,2,true))then begin
-							comprice = PLr.ExVatPrice;
-						end;
-						Consignationrw.ArtCode = ISr.Code;
-						Consignationrw.Qty = ISr.Instock;
-						Consignationrw.Price = comprice;
-						Consignationrw.Sum = comprice * ISr.Instock;
-						totsum = totsum + Consignationrw.Sum;
-						totqty = totqty + Consignationrw.Qty;
-						matrowput(Consignationr,mtrw,Consignationrw);
-						mtrw = mtrw + 1;
-					end;
-				end;
-			end else begin
-				INr.Code = "";
-				while(loopmain(INr,1,true))begin
-					testf = true;
-					if(!setinset(RepSpec.f2,INr.DispGroups))then begin
+			/*if(testf)then begin
+				DIr.Code = RepSpec.f2;
+				if(readfirstmain(DIr,1,true))then begin
+					if(DIr.CType!="KOMITENT")then begin
 						testf = false;
 					end;
-					if(testf)then begin
-						GetQtyByBackDate(RepSpec.d1,INr.Code,Consignationr.Location,resqty);
-					end;
-					if(resqty<=0)then begin testf = false; end;
-					
-					if(testf)then begin
-						PLr.ArtCode = INr.Code;
-						PLr.PLCode = "KOMPR";
-						comprice = blankval;
-						if(readfirstmain(PLr,2,true))then begin
-							comprice = PLr.ExVatPrice;
-						end;
-						Consignationrw.ArtCode = INr.Code;
-						Consignationrw.Qty = resqty;
-						Consignationrw.Price = comprice;
-						Consignationrw.Sum = comprice * resqty;
-						totsum = totsum + Consignationrw.Sum;
-						totqty = totqty + Consignationrw.Qty;
-						matrowput(Consignationr,mtrw,Consignationrw);
-						mtrw = mtrw + 1;
-					end;
+				end else begin
+					testf = false;
 				end;
 			end;
-			Consignationr.TotSum = totsum;
-			Consignationr.TotQty = totqty;
-			recordstore(Consignationr,false);
+			Logtext(0,"testf 1 " & testf);*/
+			if(testf)then begin
+				mtrw = 0;
+				totsum = 0;
+				totqty = 0;
+				recordNew(Consignationr);
+				Consignationr.SerNr = NextSerNr("ConsignationVc",CurrentDate,-1,false,"");
+				Consignationr.Location = RepSpec.f1;
+				Consignationr.TransDate = currentdate;
+				Consignationr.Comitent = DIr.Code;
+				if(nonblankdate(RepSpec.d1))then begin
+					Consignationr.TransDate = RepSpec.d1;
+				end;
+			
+				if(blankdate(RepSpec.d1))then begin
+					ISr.Location = RepSpec.f1;
+					TrHs = true;
+					while(loopkey("Location",ISr,1,TrHs))begin
+						testf = true;
+						if(ISr.Location!=RepSpec.f1)then begin TrHs = false; testf = false; end;
+						if(ISr.Instock<=0)then begin testf = false; end;
+				
+						if(testf)then begin
+							INr.Code = ISr.Code;
+							if(readfirstmain(INr,1,true))then begin
+								if(!setinset(DIr.Code,INr.DispGroups))then begin
+									testf = false;
+								end;
+							end;
+						end;
+				
+						if(testf)then begin
+							PLr.ArtCode = ISr.Code;
+							PLr.PLCode = "KOMPR";
+							comprice = blankval;
+							if(readfirstmain(PLr,2,true))then begin
+								comprice = PLr.ExVatPrice;
+							end;
+							Consignationrw.ArtCode = ISr.Code;
+							Consignationrw.Qty = ISr.Instock;
+							Consignationrw.Price = comprice;
+							Consignationrw.Sum = comprice * ISr.Instock;
+							totsum = totsum + Consignationrw.Sum;
+							totqty = totqty + Consignationrw.Qty;
+							matrowput(Consignationr,mtrw,Consignationrw);
+							mtrw = mtrw + 1;
+						end;
+					end;
+					ResetLoop(ISr);
+				end else begin
+					INr.Code = "";
+					while(loopmain(INr,1,true))begin
+						testf = true;
+						if(!setinset(DIr.Code,INr.DispGroups))then begin
+							testf = false;
+						end;
+						if(testf)then begin
+							GetQtyByBackDate(RepSpec.d1,INr.Code,Consignationr.Location,resqty);
+						end;
+						if(resqty<=0)then begin testf = false; end;
+					
+						if(testf)then begin
+							PLr.ArtCode = INr.Code;
+							PLr.PLCode = "KOMPR";
+							comprice = blankval;
+							if(readfirstmain(PLr,2,true))then begin
+								comprice = PLr.ExVatPrice;
+							end;
+							Consignationrw.ArtCode = INr.Code;
+							Consignationrw.Qty = resqty;
+							Consignationrw.Price = comprice;
+							Consignationrw.Sum = comprice * resqty;
+							totsum = totsum + Consignationrw.Sum;
+							totqty = totqty + Consignationrw.Qty;
+							matrowput(Consignationr,mtrw,Consignationrw);
+							mtrw = mtrw + 1;
+						end;
+					end;
+					ResetLoop(INr);
+				end;
+				Consignationr.TotSum = totsum;
+				Consignationr.TotQty = totqty;
+				recordstore(Consignationr,false);
 			end;
+		end;
 	end;
 	
 return;
