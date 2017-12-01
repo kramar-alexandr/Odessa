@@ -945,7 +945,7 @@ begin
 		
 		if(testf and TrHs)then begin
 			lastdate = Consignationoldr.TransDate;
-			logtext(0,"CalcSalesOnPeriod " & lastdate);
+			//logtext(0,"CalcSalesOnPeriod " & lastdate);
 			TrHs = false;
 		end;
 	end;
@@ -1100,7 +1100,7 @@ begin
 	  			ConsSalerw.ArtCode = artcodes[i];
 	  			resqty = 0;
 	  			CalcSalesOnPeriod(Consignationr,artcodes[i],resqty);
-	  			logtext(0,artcodes[i] & " " & resqty);
+	  			//logtext(0,artcodes[i] & " " & resqty);
 	  			if(resqty>(artqty2[artcodes[i]] - Consignationrw.Qty))then begin
 						ConsSalerw.Qty = artqty2[artcodes[i]] - Consignationrw.Qty;
 	  			end else begin
@@ -1117,7 +1117,7 @@ begin
 			ConsSalerw.ArtCode = artcodes[i];
 			resqty = 0;
 			CalcSalesOnPeriod(Consignationr,artcodes[i],resqty);
-			logtext(0,artcodes[i] & " " & resqty);
+			//logtext(0,artcodes[i] & " " & resqty);
 			if(resqty>artqty2[artcodes[i]])then begin
 				ConsSalerw.Qty = artqty2[artcodes[i]];
 			end else begin
