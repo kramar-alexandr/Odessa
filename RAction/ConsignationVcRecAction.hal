@@ -1008,10 +1008,9 @@ begin
 	  			end else begin
 	  				ConsBrakrw.Qty = 0;
 	  			end;
-	  			ConsBrakrw.Sum = ConsBrakrw.Qty*ConsBrakrw.Price;
-					//ConsBrakr.TotSum = ConsBrakr.TotSum + ConsBrakrw.Sum;
-					ConsBrakr.TotQty = ConsBrakr.TotQty + ConsBrakrw.Qty;
+	  			ConsBrakrw.Sum = ConsBrakrw.Qty*ConsBrakrw.Price;					
 					if(ConsBrakrw.Qty>0)then begin
+						ConsBrakr.TotQty = ConsBrakr.TotQty + ConsBrakrw.Qty;
 						matrowput(ConsBrakr,mtrw,ConsBrakrw);
 						mtrw = mtrw + 1;
 					end;
@@ -1027,10 +1026,9 @@ begin
 			end else begin
 				ConsBrakrw.Qty = 0;
 			end;
-			ConsBrakrw.Sum = ConsBrakrw.Qty*ConsBrakrw.Price;
-			//ConsBrakr.TotSum = ConsBrakr.TotSum + ConsBrakrw.Sum;
-			ConsBrakr.TotQty = ConsBrakr.TotQty + ConsBrakrw.Qty;
+			ConsBrakrw.Sum = ConsBrakrw.Qty*ConsBrakrw.Price;			
 			if(ConsBrakrw.Qty>0)then begin
+				ConsBrakr.TotQty = ConsBrakr.TotQty + ConsBrakrw.Qty;
 				matrowput(ConsBrakr,mtrw,ConsBrakrw);
 				mtrw = mtrw + 1;
 			end;
@@ -1107,9 +1105,11 @@ begin
 	  				ConsSalerw.Qty = resqty;
 	  			end;
 	  			ConsSalerw.Sum = ConsSalerw.Qty*ConsSalerw.Price;
-					ConsSaler.TotQty = ConsSaler.TotQty + ConsSalerw.Qty;
-					matrowput(ConsSaler,mtrw,ConsSalerw);
-					mtrw = mtrw + 1;
+					if(ConsSalerw.Qty>0)then begin
+						ConsSaler.TotQty = ConsSaler.TotQty + ConsSalerw.Qty;
+						matrowput(ConsSaler,mtrw,ConsSalerw);
+						mtrw = mtrw + 1;
+					end;
 	  		end;
 	  	end;
 		end; 
@@ -1124,9 +1124,11 @@ begin
 				ConsSalerw.Qty = resqty;
 			end;
 			ConsSalerw.Sum = ConsSalerw.Qty*ConsSalerw.Price;
-			ConsSaler.TotQty = ConsSaler.TotQty + ConsSalerw.Qty;
-			matrowput(ConsSaler,mtrw,ConsSalerw);
-			mtrw = mtrw + 1;
+			if(ConsSalerw.Qty>0)then begin
+				ConsSaler.TotQty = ConsSaler.TotQty + ConsSalerw.Qty;
+				matrowput(ConsSaler,mtrw,ConsSalerw);
+				mtrw = mtrw + 1;
+			end;
 		end;
 	end; 
 	
