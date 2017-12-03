@@ -951,7 +951,7 @@ begin
 			ConsInr.OKFlag = 1;
 			recordupdate(ConsInoldr,ConsInr,true);
 		end;
-		
+		logtext(0,"CrConsigIn End");
 	end;
 
 return;
