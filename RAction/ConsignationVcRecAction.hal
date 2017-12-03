@@ -946,6 +946,10 @@ begin
 			recordstore(ConsInr,true);
 			createrecordlink(ConsInr,currentcompany,Consignationr,currentcompany);
 			createrecordlink(Consignationr,currentcompany,ConsInr,currentcompany);
+			
+			recordcopy(ConsInoldr,ConsInr);
+			ConsInr.OKFlag = 1;
+			recordupdate(ConsInoldr,ConsInr,true);
 		end;
 		
 	end;
