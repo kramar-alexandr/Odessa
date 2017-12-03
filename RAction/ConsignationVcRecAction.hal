@@ -991,8 +991,9 @@ begin
 return;
 end;
 
-global procedure CalcSalesOnPeriod(record ConsignationVc Consignationr,string itemcode, var val resqty)
+function date GetLastConsigQty(record ConsignationVc Consignationr)
 begin
+	date res;
 	record ConsignationVc Consignationoldr;
 	boolean testf,TrHs;
 	date lastdate;
@@ -1014,6 +1015,17 @@ begin
 		end;
 	end;
 	
+	res = lastdate;
+	
+	GetLastConsigQty = res;
+return;
+end;
+
+global procedure CalcSalesOnPeriod(record ConsignationVc Consignationr,string itemcode, var val resqty,date lastdate)
+begin
+	record ConsignationVc Consignationoldr;
+	boolean testf,TrHs;
+	
 	GetQtyByBackDateSales(Consignationr.TransDate,lastdate,itemcode,Consignationr.Location,resqty);
 return;
 end;
@@ -1030,8 +1042,11 @@ begin
 	vector val artqty2,artqty2price;
 	vector boolean artf,artf1;
 	val resqty;
+	date lastdate;
 	
 	logtext(0,"CrConsigBrak");
+	
+	lastdate = GetLastConsigQty(Consignationr);
 	
 	IHr.FileName = "ConsInVc";
 	TrHs = true;
@@ -1068,7 +1083,7 @@ begin
 	  		if(artqty2[artcodes[i]]>Consignationrw.Qty)then begin
 	  			ConsBrakrw.ArtCode = artcodes[i];
 	  			resqty = 0;
-	  			CalcSalesOnPeriod(Consignationr,artcodes[i],resqty);
+	  			CalcSalesOnPeriod(Consignationr,artcodes[i],resqty,lastdate);
 	  			if(resqty<artqty2[artcodes[i]] - Consignationrw.Qty)then begin
 	  				ConsBrakrw.Qty = artqty2[artcodes[i]] - Consignationrw.Qty - resqty;
 	  			end else begin
@@ -1086,7 +1101,7 @@ begin
 		if(foundf==false)then begin
 			ConsBrakrw.ArtCode = artcodes[i];
 			resqty = 0;
-	  	CalcSalesOnPeriod(Consignationr,artcodes[i],resqty);
+	  	CalcSalesOnPeriod(Consignationr,artcodes[i],resqty,lastdate);
 			if(resqty<artqty2[artcodes[i]])then begin
 				ConsBrakrw.Qty = artqty2[artcodes[i]]-resqty;
 			end else begin
@@ -1130,8 +1145,11 @@ begin
 	vector val artqty2,artqty2price;
 	vector boolean artf,artf1;
 	val resqty;
+	date lastdate;
 	
 	logtext(0,"CrConsigSale");
+	
+	lastdate = GetLastConsigQty(Consignationr);
 	
 	IHr.FileName = "ConsInVc";
 	TrHs = true;
@@ -1168,7 +1186,7 @@ begin
 	  		if(artqty2[artcodes[i]]>Consignationrw.Qty)then begin
 	  			ConsSalerw.ArtCode = artcodes[i];
 	  			resqty = 0;
-	  			CalcSalesOnPeriod(Consignationr,artcodes[i],resqty);
+	  			CalcSalesOnPeriod(Consignationr,artcodes[i],resqty,lastdate);
 	  			//logtext(0,artcodes[i] & " " & resqty);
 	  			if(resqty>(artqty2[artcodes[i]] - Consignationrw.Qty))then begin
 						ConsSalerw.Qty = artqty2[artcodes[i]] - Consignationrw.Qty;
@@ -1187,7 +1205,7 @@ begin
 		if(foundf==false)then begin
 			ConsSalerw.ArtCode = artcodes[i];
 			resqty = 0;
-			CalcSalesOnPeriod(Consignationr,artcodes[i],resqty);
+			CalcSalesOnPeriod(Consignationr,artcodes[i],resqty,lastdate);
 			//logtext(0,artcodes[i] & " " & resqty);
 			if(resqty>artqty2[artcodes[i]])then begin
 				ConsSalerw.Qty = artqty2[artcodes[i]];
