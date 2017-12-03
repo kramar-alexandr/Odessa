@@ -1102,7 +1102,7 @@ begin
 			ConsBrakrw.ArtCode = artcodes[i];
 			resqty = 0;
 	  	CalcSalesOnPeriod(Consignationr,artcodes[i],resqty,lastdate);
-	  	logtext(0,"Sales " & artcodes[i] & " " & resqty);
+	  	logtext(0,"Sales " & artcodes[i] & " " & resqty & " " & artqty2[artcodes[i]]);
 			if(resqty<artqty2[artcodes[i]])then begin
 				ConsBrakrw.Qty = artqty2[artcodes[i]]-resqty;
 			end else begin
