@@ -90,6 +90,7 @@ begin
 	  	IHr.TransDate = Consignationr.TransDate;
 	  	IHr.FIFODate = Consignationr.TransDate;
 	  	IHr.Location = Consignationr.Location;
+	  	IHr.Comitent = Consignationr.Comitent;
 	  	IHr.StockAffectf = 0;
 	  	
 	  	IHr.ArtCode = Consignationrw.ArtCode;
@@ -134,6 +135,7 @@ begin
 	  	IHr.TransDate = Consignationr.TransDate;
 	  	IHr.FIFODate = Consignationr.TransDate;
 	  	IHr.Location = Consignationr.Location;
+	  	IHr.Comitent = Consignationr.Comitent;
 	  	IHr.StockAffectf = 0;
 	  	
 	  	IHr.ArtCode = Consignationrw.ArtCode;
@@ -148,50 +150,7 @@ begin
 return;
 end;
 
-global updating procedure ConsSaleVcUpdateIH(record ConsSaleVc Consignationr, boolean addflag)
-begin
-	record ItemHistVc IHr;
-	row ConsSaleVc Consignationrw;
-	boolean testf,TrHs;
-	integer mtrw,i;
-	
-	if(addflag==false)then begin
-		IHr.FileName = "ConsSaleVc";
-		IHr.TransNr = Consignationr.SerNr;
-		TrHs = true;
-		while(loopkey("FNTransNr",IHr,2,TrHs))begin
-			if(IHr.FileName!="ConsSaleVc")then begin TrHs = false; end;
-			if(IHr.TransNr!=Consignationr.SerNr)then begin TrHs = false; end;
-			
-			if(TrHs)then begin
-				recorddelete(IHr);
-				stepback(IHr);
-			end;
-		end;
-	end else begin
-		mtrw = matrowcnt(Consignationr);
-		For(i=0;i<mtrw;i=i+1) begin
-	  	matrowget(Consignationr,i,Consignationrw);
-	  	IHr.SerNr = NextSerNr("ItemHistVc",CurrentDate,-1,false,"");
-	  	IHr.FileName = "ConsSaleVc";
-	  	IHr.TransNr = Consignationr.SerNr;
-	  	IHr.TransDate = Consignationr.TransDate;
-	  	IHr.FIFODate = Consignationr.TransDate;
-	  	IHr.Location = Consignationr.Location;
-	  	IHr.StockAffectf = 0;
-	  	
-	  	IHr.ArtCode = Consignationrw.ArtCode;
-	  	IHr.Qty = Consignationrw.Qty;
-	  	IHr.Row = i;
-	  	recordstore(IHr,false);
-	  	
-		end; 
-	end;
-return;
-end;
-
-
-function boolean TestKonsigAvailQty(string artCode,string location,val remqty)
+function boolean TestKonsigAvailQty(string artCode,string location,string comitent,val remqty)
 begin
 	boolean res;
 	record ItemHistVc IHr;
@@ -210,6 +169,7 @@ begin
 		if(IHr.ArtCode!=artCode)then begin TrHs = false; testf = false; end;
 		if(IHr.Qty2<=0)then begin TrHs = false; testf = false; end;
 		if(IHr.Location!=location)then begin TrHs = false; testf = false; end;
+		if(IHr.Comitent!=comitent)then begin TrHs = false; testf = false; end;
 		
 		if(testf)then begin
 			calcqty = calcqty + IHr.Qty2;
@@ -222,6 +182,105 @@ begin
 	logtext(0,"TestKonsigAvailQty " & remqty & " _ " & calcqty);
 	
 	TestKonsigAvailQty = res;
+return;
+end;
+
+global updating procedure ConsSaleVcUpdateIH(var record ConsSaleVc ConsSaler, boolean addflag)
+begin
+	record ItemHistVc IHr,sourceIHr;
+	row ConsSaleVc ConsSalerw;
+	boolean testf,TrHs;
+	integer mtrw,i;
+	val remqty;
+	
+	if(addflag==false)then begin
+		IHr.FileName = "ConsSaleVc";
+		IHr.TransNr = ConsSaler.SerNr;
+		TrHs = true;
+		while(loopkey("FNTransNr",IHr,2,TrHs))begin
+			if(IHr.FileName!="ConsSaleVc")then begin TrHs = false; end;
+			if(IHr.TransNr!=ConsSaler.SerNr)then begin TrHs = false; end;
+			
+			if(TrHs)then begin
+				sourceIHr.SerNr = IHr.Source;
+				if(readfirstmain(sourceIHr,1,true))then begin
+					sourceIHr.Qty2 = sourceIHr.Qty2 - IHr.Qty;
+					recordstore(sourceIHr,true);
+				end;
+				recorddelete(IHr);
+				stepback(IHr);
+			end;
+		end;
+		mtrw = matrowcnt(ConsSaler);
+		For(i=0;i<mtrw;i=i+1) begin
+			matrowget(ConsSaler,i,ConsSalerw);
+				ConsSalerw.Price = blankval;
+				ConsSalerw.Sum = blankval;
+			matrowput(ConsSaler,i,ConsSalerw);
+		end;
+		ConsSaler.TotSum = 0;
+	end else begin
+		mtrw = matrowcnt(ConsSaler);
+		For(i=0;i<mtrw;i=i+1) begin
+			matrowget(ConsSaler,i,ConsSalerw);
+			remqty = ConsSalerw.Qty;
+			
+			TrHs = true;
+			sourceIHr.ArtCode = ConsSalerw.ArtCode;
+			sourceIHr.FileName = "ConsInVc";
+			while(loopkey("FNArtCode",sourceIHr,2,TrHs))begin
+				testf = true;
+				if(sourceIHr.FileName!="ConsInVc")then begin TrHs = false; testf = false; end;
+				if(sourceIHr.ArtCode!=ConsSalerw.ArtCode)then begin TrHs = false; testf = false; end;
+				if(sourceIHr.Qty2<=0)then begin TrHs = false; testf = false; end;
+				if(sourceIHr.Location!=ConsSaler.Location)then begin TrHs = false; testf = false; end;
+				if(remqty<=0)then begin TrHs = false; testf = false; end;
+				
+				if(testf)then begin
+					recordnew(IHr);
+					IHr.SerNr = NextSerNr("ItemHistVc",CurrentDate,-1,false,"");
+					IHr.FileName = "ConsSaleVc";
+					IHr.TransNr = ConsSaler.SerNr;
+					IHr.TransDate = ConsSaler.TransDate;
+					IHr.FIFODate = ConsSaler.TransDate;
+					IHr.Location = ConsSaler.Location;
+					IHr.Comitent = ConsSaler.Comitent;
+					IHr.StockAffectf = 0;
+			
+					IHr.ArtCode = ConsSalerw.ArtCode;
+					
+					if(sourceIHr.Qty2>remqty)then begin
+						IHr.Source = sourceIHr.SerNr;
+						IHr.Qty = -remqty;
+						IHr.TotCostPrice = sourceIHr.TotCostPrice;
+						ConsSalerw.Sum = ConsSalerw.Sum - IHr.TotCostPrice * IHr.Qty;
+						ConsSalerw.Price = ConsSalerw.Sum / ConsSalerw.Qty;
+						ConsSaler.TotSum = ConsSaler.TotSum - IHr.TotCostPrice * IHr.Qty;
+						matrowput(ConsSaler,i,ConsSalerw);
+						sourceIHr.Qty2 = sourceIHr.Qty2 - remqty;
+						recordstore(sourceIHr,true);
+						remqty = 0;
+					end else begin
+						IHr.Source = sourceIHr.SerNr;
+						IHr.Qty = -sourceIHr.Qty2;
+						IHr.TotCostPrice = sourceIHr.TotCostPrice;
+						ConsSalerw.Sum = ConsSalerw.Sum - IHr.TotCostPrice * IHr.Qty;
+						ConsSalerw.Price = ConsSalerw.Sum / ConsSalerw.Qty;
+						ConsSaler.TotSum = ConsSaler.TotSum - IHr.TotCostPrice * IHr.Qty;
+						matrowput(ConsSaler,i,ConsSalerw);
+						remqty = remqty - sourceIHr.Qty2;
+						sourceIHr.Qty2 = 0;
+						recordstore(sourceIHr,true);
+					end;
+					
+					IHr.Row = i;
+					recordstore(IHr,false);
+				end;
+	  	end;
+	  	resetloop(sourceIHr);
+	  	
+		end; 
+	end;
 return;
 end;
 
@@ -284,6 +343,7 @@ begin
 					IHr.TransDate = ConsBrakr.TransDate;
 					IHr.FIFODate = ConsBrakr.TransDate;
 					IHr.Location = ConsBrakr.Location;
+					IHr.Comitent = ConsBrakr.Comitent;
 					IHr.StockAffectf = 0;
 			
 					IHr.ArtCode = ConsBrakrw.ArtCode;
@@ -475,7 +535,7 @@ BEGIN
 		if((ConsBrakrw.Qty+prewqty)>0)then begin
 			if(stat==Rs_Insert)then begin
 				if(ConsBrakr.OKFlag==1)then begin
-					if(TestKonsigAvailQty(ConsBrakrw.ArtCode,ConsBrakr.Location,ConsBrakrw.Qty+prewqty)==false)then begin
+					if(TestKonsigAvailQty(ConsBrakrw.ArtCode,ConsBrakr.Location,ConsBrakr.Comitent,ConsBrakrw.Qty+prewqty)==false)then begin
 						RecordCheckError(1247,"",i,"ArtCode");      
 						res = -1; 
 						goto LConsBrakVcRecordCheck;
@@ -484,7 +544,7 @@ BEGIN
 			end;
 			if(stat==Rs_Update)then begin
 				if(ConsBrakr.OKFlag==1 and ConsBrak2r.OKFlag==0)then begin
-					if(TestKonsigAvailQty(ConsBrakrw.ArtCode,ConsBrakr.Location,ConsBrakrw.Qty+prewqty)==false)then begin
+					if(TestKonsigAvailQty(ConsBrakrw.ArtCode,ConsBrakr.Location,ConsBrakr.Comitent,ConsBrakrw.Qty+prewqty)==false)then begin
 						RecordCheckError(1247,"",i,"ArtCode");      
 						res = -1; 
 						goto LConsBrakVcRecordCheck;
@@ -975,6 +1035,8 @@ begin
 		testf = true;
 		if(IHr.FileName!="ConsInVc")then begin TrHs = false; testf = false; end;
 		if(IHr.Qty2<=0)then begin testf = false; end;
+		if(IHr.Location!=Consignationr.Location)then begin testf = false; end;
+		if(IHr.Comitent!=Consignationr.Comitent)then begin testf = false; end;
 		
 		if(testf)then begin
 			if(artf1[IHr.ArtCode]==false)then begin
@@ -1070,6 +1132,8 @@ begin
 		testf = true;
 		if(IHr.FileName!="ConsInVc")then begin TrHs = false; testf = false; end;
 		if(IHr.Qty2<=0)then begin testf = false; end;
+		if(IHr.Location!=Consignationr.Location)then begin testf = false; end;
+		if(IHr.Comitent!=Consignationr.Comitent)then begin testf = false; end;
 		
 		if(testf)then begin
 			if(artf1[IHr.ArtCode]==false)then begin
