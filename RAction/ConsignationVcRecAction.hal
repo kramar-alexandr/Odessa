@@ -984,6 +984,9 @@ begin
 			if(IHr.FileName=="SHVc")then begin 
 				qty = qty - IHr.Qty;
 			end;
+			if(IHr.FileName=="RetVc")then begin 
+				qty = qty - IHr.Qty;
+			end;
 		end;
 	end;
 	
