@@ -167,9 +167,9 @@ begin
 		testf = true;
 		if(IHr.FileName!="ConsInVc")then begin TrHs = false; testf = false; end;
 		if(IHr.ArtCode!=artCode)then begin TrHs = false; testf = false; end;
-		if(IHr.Qty2<=0)then begin TrHs = false; testf = false; end;
-		if(IHr.Location!=location)then begin TrHs = false; testf = false; end;
-		if(IHr.Comitent!=comitent)then begin TrHs = false; testf = false; end;
+		if(IHr.Qty2<=0)then begin testf = false; end;
+		if(IHr.Location!=location)then begin testf = false; end;
+		if(IHr.Comitent!=comitent)then begin testf = false; end;
 		
 		if(testf)then begin
 			calcqty = calcqty + IHr.Qty2;
