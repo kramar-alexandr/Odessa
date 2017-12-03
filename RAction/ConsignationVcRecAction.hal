@@ -868,7 +868,7 @@ return;
 end;
 
 
-global updating procedure CrConsigIn(record ConsignationVc Consignationr)
+global updating procedure CrConsigIn(record ConsignationVc Consignationr,var array val totbal)
 begin
 	integer wn,i,rwcnt,mtrw;
 	row ConsignationVc Consignationrw;
@@ -948,6 +948,7 @@ begin
 			ConsInr.OKFlag = 1;
 			recordupdate(ConsInoldr,ConsInr,true);
 		end;
+		totbal[1] = ConsInr.TotQty;
 		logtext(0,"CrConsigIn End " & ConsInr.TotQty);
 	end;
 
@@ -991,7 +992,7 @@ begin
 return;
 end;
 
-function date GetLastConsigQty(record ConsignationVc Consignationr)
+function date GetLastConsigQty(record ConsignationVc Consignationr,var array val totbal)
 begin
 	date res;
 	record ConsignationVc Consignationoldr;
@@ -1010,6 +1011,7 @@ begin
 		
 		if(testf and TrHs)then begin
 			lastdate = Consignationoldr.TransDate;
+			totbal[0] = Consignationoldr.TotQty;
 			logtext(0,"CalcSalesOnPeriod " & Consignationoldr.TotQty);
 			TrHs = false;
 		end;
@@ -1030,7 +1032,7 @@ begin
 return;
 end;
 
-global updating procedure CrConsigBrak(record ConsignationVc Consignationr)
+global updating procedure CrConsigBrak(record ConsignationVc Consignationr,var array val totbal)
 begin
 	integer wn,i,j,rwcnt,mtrw,acnt,acnt1;
 	row ConsignationVc Consignationrw;
@@ -1046,7 +1048,7 @@ begin
 	
 	logtext(0,"CrConsigBrak");
 	
-	lastdate = GetLastConsigQty(Consignationr);
+	lastdate = GetLastConsigQty(Consignationr,totbal);
 	
 	IHr.FileName = "ConsInVc";
 	TrHs = true;
@@ -1120,12 +1122,13 @@ begin
 		recordupdate(ConsBrakoldr,ConsBrakr,true);
 	end;
 	
+	totbal[3] = ConsBrakr.TotQty;
 	logtext(0,"BRAK FINISH " & ConsBrakr.TotQty);
 	
 return;
 end;
 
-global updating procedure CrConsigSale(record ConsignationVc Consignationr)
+global updating procedure CrConsigSale(record ConsignationVc Consignationr,var array val totbal)
 begin
 	integer wn,i,j,rwcnt,mtrw,acnt,acnt1;
 	row ConsignationVc Consignationrw;
@@ -1141,7 +1144,7 @@ begin
 	
 	logtext(0,"CrConsigSale");
 	
-	lastdate = GetLastConsigQty(Consignationr);
+	lastdate = GetLastConsigQty(Consignationr,totbal);
 	
 	IHr.FileName = "ConsInVc";
 	TrHs = true;
@@ -1225,7 +1228,7 @@ begin
 		ConsSaler.OKFlag = 1;
 		recordupdate(ConsSaleoldr,ConsSaler,true);
 	end;
-	
+	totbal[2] = ConsSaler.TotQty;
 	logtext(0,"SALE FINISH " & ConsSaler.TotQty);
 	
 return;
@@ -1235,11 +1238,22 @@ end;
 
 global updating	procedure	CrConsigAll(record ConsignationVc Consignationr)
 begin
+	array val totbal;
 	
 		logtext(0,"CrConsigAll START");
-		CrConsigIn(Consignationr);
-		CrConsigSale(Consignationr);
-		CrConsigBrak(Consignationr);
+		CrConsigIn(Consignationr,totbal);
+		CrConsigSale(Consignationr,totbal);
+		CrConsigBrak(Consignationr,totbal);
+		
+		totbal[4] = Consignationr.TotQty;
+		
+		logtext(0,"Start " & totbal[0]);
+		logtext(0,"In " & totbal[1]);
+		logtext(0,"Sale " & totbal[2]);
+		logtext(0,"Brak " & totbal[3]);
+		logtext(0,"Fin " & totbal[4]);
+		logtext(0,"Error " & totbal[0]+totbal[1]-totbal[2]-totbal[3]-totbal[4]);
+		
 		logtext(0,"CrConsigAll END" & Consignationr.TotQty);
 
 return;

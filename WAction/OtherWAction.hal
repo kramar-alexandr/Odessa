@@ -1,7 +1,7 @@
 remote procedure RecalcDiscountORD(var record ORVc);
-remote updating	procedure	CrConsigIn(record ConsignationVc);
-remote updating	procedure	CrConsigBrak(record ConsignationVc);
-remote updating	procedure	CrConsigSale(record ConsignationVc);
+remote updating	procedure	CrConsigIn(record ConsignationVc,var array val);
+remote updating	procedure	CrConsigBrak(record ConsignationVc,var array val);
+remote updating	procedure	CrConsigSale(record ConsignationVc,var array val);
 remote updating	procedure	CrConsigAll(record ConsignationVc);
 
 global
@@ -77,11 +77,12 @@ updating procedure CrConsigInDsm()
 BEGIN
 	integer wn,i,rwcnt,mtrw;
 	record ConsignationVc Consignationr;
-
+	array val tmp;
+	
 	wn = curwindow;
 	if(windowstate(wn)==0)then begin
 		getwindowrecord(wn,Consignationr);
-		CrConsigIn(Consignationr);
+		CrConsigIn(Consignationr,tmp);
 	end;
 
  RETURN;
@@ -92,11 +93,12 @@ updating procedure CrConsigBrakDsm()
 BEGIN
 	integer wn,i,rwcnt,mtrw;
 	record ConsignationVc Consignationr;
-
+	array val tmp;
+	
 	wn = curwindow;
 	if(windowstate(wn)==0)then begin
 		getwindowrecord(wn,Consignationr);
-		CrConsigBrak(Consignationr);
+		CrConsigBrak(Consignationr,tmp);
 	end;
 
  RETURN;
@@ -107,11 +109,12 @@ updating procedure CrConsigSaleDsm()
 BEGIN
 	integer wn,i,rwcnt,mtrw;
 	record ConsignationVc Consignationr;
+	array val tmp;
 
 	wn = curwindow;
 	if(windowstate(wn)==0)then begin
 		getwindowrecord(wn,Consignationr);
-		CrConsigSale(Consignationr);
+		CrConsigSale(Consignationr,tmp);
 	end;
 
  RETURN;
