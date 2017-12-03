@@ -230,7 +230,7 @@ begin
 				testf = true;
 				if(sourceIHr.FileName!="ConsInVc")then begin TrHs = false; testf = false; end;
 				if(sourceIHr.ArtCode!=ConsSalerw.ArtCode)then begin TrHs = false; testf = false; end;
-				if(sourceIHr.Qty2<=0)then begin TrHs = false; testf = false; end;
+				if(sourceIHr.Qty2<=0)then begin testf = false; end;
 				if(sourceIHr.Location!=ConsSaler.Location)then begin testf = false; end;
 				if(remqty<=0)then begin TrHs = false; testf = false; end;
 				
@@ -329,7 +329,7 @@ begin
 				testf = true;
 				if(sourceIHr.FileName!="ConsInVc")then begin TrHs = false; testf = false; end;
 				if(sourceIHr.ArtCode!=ConsBrakrw.ArtCode)then begin TrHs = false; testf = false; end;
-				if(sourceIHr.Qty2<=0)then begin TrHs = false; testf = false; end;
+				if(sourceIHr.Qty2<=0)then begin testf = false; end;
 				if(sourceIHr.Location!=ConsBrakr.Location)then begin testf = false; end;
 				if(remqty<=0)then begin TrHs = false; testf = false; end;
 				
