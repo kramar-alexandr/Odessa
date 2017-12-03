@@ -1062,6 +1062,7 @@ begin
 				artf1[IHr.ArtCode] = true;
 				artcodes[acnt1] = IHr.ArtCode;
 				acnt1 = acnt1 + 1;
+				logtext(0,IHr.ArtCode);
 			end;
 			artqty2[IHr.ArtCode] = artqty2[IHr.ArtCode] + IHr.Qty2;			
 		end;
