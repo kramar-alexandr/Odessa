@@ -453,7 +453,7 @@ BEGIN
 		ConsSaleVcUpdateIH(Consignationr,false);
  	end;
  	
-  ConsSaleVcRecordUpdateAfter = res;
+  ConsSaleVcRecordUpdate = res;
   RETURN;
 END;
 
@@ -467,7 +467,7 @@ BEGIN
 		ConsSaleVcUpdateIH(Consignationr,true);
  	end;
  	
-  ConsSaleVcRecordSaveAfter = res;
+  ConsSaleVcRecordSave = res;
   RETURN;
 END;
 
