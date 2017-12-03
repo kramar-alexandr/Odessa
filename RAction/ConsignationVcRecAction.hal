@@ -387,7 +387,6 @@ BEGIN
   LongInt res;
   
   if(Consignationr.OKFlag==1 and Consignation2r.OKFlag==0)then begin
-		ConsignationVcUpdateIH(Consignationr,false);
 		ConsignationVcUpdateIH(Consignationr,true);
  	end;
  	if(Consignationr.OKFlag==0 and Consignation2r.OKFlag==1)then begin
@@ -418,7 +417,6 @@ BEGIN
   LongInt res;
   
   if(Consignationr.OKFlag==1 and Consignation2r.OKFlag==0)then begin
-		ConsInVcUpdateIH(Consignationr,false);
 		ConsInVcUpdateIH(Consignationr,true);
  	end;
  	if(Consignationr.OKFlag==0 and Consignation2r.OKFlag==1)then begin
@@ -444,7 +442,7 @@ BEGIN
 END;
 
 global
-updating function LongInt ConsSaleVcRecordUpdateAfter(var record ConsSaleVc Consignationr,record ConsSaleVc Consignation2r,LongInt stat,LongInt long4)
+updating function LongInt ConsSaleVcRecordUpdate(var record ConsSaleVc Consignationr,record ConsSaleVc Consignation2r,LongInt stat,LongInt long4)
 BEGIN
   LongInt res;
   
@@ -460,7 +458,7 @@ BEGIN
 END;
 
 global
-updating function LongInt ConsSaleVcRecordSaveAfter(var record ConsSaleVc Consignationr,record ConsSaleVc Consignation2r,LongInt stat,LongInt long4)
+updating function LongInt ConsSaleVcRecordSave(var record ConsSaleVc Consignationr,record ConsSaleVc Consignation2r,LongInt stat,LongInt long4)
 BEGIN
   LongInt res;
   
