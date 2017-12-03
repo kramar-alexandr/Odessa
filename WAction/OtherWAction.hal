@@ -2,6 +2,7 @@ remote procedure RecalcDiscountORD(var record ORVc);
 remote updating	procedure	CrConsigIn(record ConsignationVc);
 remote updating	procedure	CrConsigBrak(record ConsignationVc);
 remote updating	procedure	CrConsigSale(record ConsignationVc);
+remote updating	procedure	CrConsigAll(record ConsignationVc);
 
 global
 procedure ChngePasswordClassCancel()
@@ -111,6 +112,21 @@ BEGIN
 	if(windowstate(wn)==0)then begin
 		getwindowrecord(wn,Consignationr);
 		CrConsigSale(Consignationr);
+	end;
+
+ RETURN;
+END;
+
+global 
+updating procedure CrConsigAllDsm()
+BEGIN
+	integer wn,i,rwcnt,mtrw;
+	record ConsignationVc Consignationr;
+
+	wn = curwindow;
+	if(windowstate(wn)==0)then begin
+		getwindowrecord(wn,Consignationr);
+		CrConsigAll(Consignationr);
 	end;
 
  RETURN;

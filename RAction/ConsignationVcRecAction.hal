@@ -951,7 +951,7 @@ begin
 			ConsInr.OKFlag = 1;
 			recordupdate(ConsInoldr,ConsInr,true);
 		end;
-		logtext(0,"CrConsigIn End");
+		logtext(0,"CrConsigIn End " & ConsInr.TotQty);
 	end;
 
 return;
@@ -1009,7 +1009,7 @@ begin
 		
 		if(testf and TrHs)then begin
 			lastdate = Consignationoldr.TransDate;
-			//logtext(0,"CalcSalesOnPeriod " & lastdate);
+			logtext(0,"CalcSalesOnPeriod " & Consignationoldr.TotQty);
 			TrHs = false;
 		end;
 	end;
@@ -1108,9 +1108,12 @@ begin
 		recordstore(ConsBrakr,true);
 		createrecordlink(ConsBrakr,currentcompany,Consignationr,currentcompany);
 		createrecordlink(Consignationr,currentcompany,ConsBrakr,currentcompany);
+		recordcopy(ConsBrakoldr,ConsBrakr);
+		ConsBrakr.OKFlag = 1;
+		recordupdate(ConsBrakoldr,ConsBrakr,true);
 	end;
 	
-	logtext(0,"FINISH");
+	logtext(0,"BRAK FINISH " & ConsBrakr.TotQty);
 	
 return;
 end;
@@ -1207,9 +1210,26 @@ begin
 		recordstore(ConsSaler,true);
 		createrecordlink(ConsSaler,currentcompany,Consignationr,currentcompany);
 		createrecordlink(Consignationr,currentcompany,ConsSaler,currentcompany);
+		recordcopy(ConsSaleoldr,ConsSaler);
+		ConsSaler.OKFlag = 1;
+		recordupdate(ConsSaleoldr,ConsSaler,true);
 	end;
 	
-	logtext(0,"FINISH");
+	logtext(0,"SALE FINISH " & ConsSaler.TotQty);
 	
+return;
+end;
+
+
+
+global updating	procedure	CrConsigAll(record ConsignationVc Consignationr)
+begin
+	
+		logtext(0,"CrConsigAll START");
+		CrConsigIn(Consignationr);
+		CrConsigSale(Consignationr);
+		CrConsigBrak(Consignationr);
+		logtext(0,"CrConsigAll END" & Consignationr.TotQty);
+
 return;
 end;

@@ -11760,6 +11760,7 @@ begin
   SpecialMenu("Создать поступление на консигнацию",'',1,"CrConsigInDsm");
   SpecialMenu("Создать продажи с консигнации",'',2,"CrConsigSaleDsm");
   SpecialMenu("Создать отбраковку с консигнации",'',3,"CrConsigBrakDsm");
+  SpecialMenu("Создать поступление, продажу, отбраковку",'',3,"CrConsigAllDsm");
   
   EndWindow;
 end;
