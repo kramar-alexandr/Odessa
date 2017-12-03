@@ -449,7 +449,6 @@ BEGIN
   LongInt res;
   
   if(Consignationr.OKFlag==1 and Consignation2r.OKFlag==0)then begin
-		ConsSaleVcUpdateIH(Consignationr,false);
 		ConsSaleVcUpdateIH(Consignationr,true);
  	end;
  	if(Consignationr.OKFlag==0 and Consignation2r.OKFlag==1)then begin
@@ -480,7 +479,6 @@ BEGIN
   LongInt res;
   
   if(ConsBrakr.OKFlag==1 and ConsBrak2r.OKFlag==0)then begin
-		ConsBrakVcUpdateIH(ConsBrakr,false);
 		ConsBrakVcUpdateIH(ConsBrakr,true);
  	end;
  	if(ConsBrakr.OKFlag==0 and ConsBrak2r.OKFlag==1)then begin
@@ -1229,6 +1227,7 @@ begin
 	
 	if(mtrw>0)then begin
 		ConsSaler.SerNr = NextSerNr("ConsSaleVc",CurrentDate,-1,false,"");
+		
 		recordstore(ConsSaler,true);
 		createrecordlink(ConsSaler,currentcompany,Consignationr,currentcompany);
 		createrecordlink(Consignationr,currentcompany,ConsSaler,currentcompany);
