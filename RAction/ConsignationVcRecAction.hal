@@ -178,9 +178,7 @@ begin
 	end;
 	
 	if(remqty<=calcqty)then begin res = true; end;
-	
-	logtext(0,"TestKonsigAvailQty " & remqty & " _ " & calcqty);
-	
+		
 	TestKonsigAvailQty = res;
 return;
 end;
@@ -233,7 +231,7 @@ begin
 				if(sourceIHr.FileName!="ConsInVc")then begin TrHs = false; testf = false; end;
 				if(sourceIHr.ArtCode!=ConsSalerw.ArtCode)then begin TrHs = false; testf = false; end;
 				if(sourceIHr.Qty2<=0)then begin TrHs = false; testf = false; end;
-				if(sourceIHr.Location!=ConsSaler.Location)then begin TrHs = false; testf = false; end;
+				if(sourceIHr.Location!=ConsSaler.Location)then begin testf = false; end;
 				if(remqty<=0)then begin TrHs = false; testf = false; end;
 				
 				if(testf)then begin
@@ -332,7 +330,7 @@ begin
 				if(sourceIHr.FileName!="ConsInVc")then begin TrHs = false; testf = false; end;
 				if(sourceIHr.ArtCode!=ConsBrakrw.ArtCode)then begin TrHs = false; testf = false; end;
 				if(sourceIHr.Qty2<=0)then begin TrHs = false; testf = false; end;
-				if(sourceIHr.Location!=ConsBrakr.Location)then begin TrHs = false; testf = false; end;
+				if(sourceIHr.Location!=ConsBrakr.Location)then begin testf = false; end;
 				if(remqty<=0)then begin TrHs = false; testf = false; end;
 				
 				if(testf)then begin
