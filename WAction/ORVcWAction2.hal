@@ -1979,7 +1979,10 @@ BEGIN
 	end;
 	
 	
-	if (Currentuser=="SA" or usercanaction("UnOkAll",false)==true) then begin
+	if (Currentuser=="SA" or usercanaction("UnOKAll",false)==true) then begin
+		res = true;
+	end;
+	if (usercanaction("UnOKAll",false)) then begin
 		res = true;
 	end;
 
