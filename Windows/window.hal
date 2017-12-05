@@ -3649,7 +3649,7 @@ begin
   StaticText(h+=69,v,"На кол.",false);
   StaticText(248,v,"Колонка",false);
   h = 10; v=v+20; l = 40;
-  MatrixBegin(h,v,-40,-10,-,200);
+  MatrixBegin(h,v,-40,-10,-,3000);
   flip(0);
   MatCol(1,h=30,"Код",0,CodeType,false,SetSClass);
   MatCol(1,h=94,"Группа",0,ITCode,false,ITSClass);
@@ -3686,7 +3686,7 @@ begin
       end;
     end;
   
-
+	SpecialMenu("Очистить строки",'',0,"ClearUpRebRowsDm");
   EndWindow;
 end;
 
