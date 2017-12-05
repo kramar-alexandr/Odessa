@@ -415,57 +415,58 @@ BEGIN
     
     // Edit Start ---------------------------------------------- Edit Start
 	//Tuesday, 5 December 2017 10:46:23
-	
-    MatRowGet(ORr,rownr,ORrw);
-    Rebr.Code = "OPTAC";
-    if(readfirstmain(Rebr,1,true))then begin
-    	mtrw = matrowcnt(Rebr);
-    	For(i=0;i<mtrw;i=i+1) begin
-	  		matrowget(Rebr,i,Rebrw);
-	  		
-	  		if(ORrw.ArtCode==Rebrw.ITCode)then begin
-	  			if(ORrw.Quant>=Rebrw.vra1)then begin
-	  				ORrw.vRebate = Rebrw.vra2;
-	  				MatRowPut(ORr,rownr,ORrw);
-	  			end else begin
-	  				ORrw.vRebate = blankval;
-	  				MatRowPut(ORr,rownr,ORrw);
-	  				For(j=0;j<matrowcnt(ORr);j=j+1) begin
-	  					matrowget(ORr,j,OR2rw);
-	  					if(OR2rw.AltRebDiscFlag=="rownr" & rownr)then begin
-	  						matrowdelete(ORr,j);
-	  					end;
-	  				end;
-	  				
-	  			end;
-	  			if(ORrw.Quant>=Rebrw.vra0)then begin
-	  				foundfreb = false;
-	  				For(j=0;j<matrowcnt(ORr);j=j+1) begin
-	  					matrowget(ORr,j,OR2rw);
-	  					if(OR2rw.AltRebDiscFlag=="rownr" & rownr)then begin
-	  						matrowget(ORr,rownr,OR2rw);
-	  						OR2rw.vRebate = blankval;
+		
+		if(blank(ORr.OrderClass))then begin
+			MatRowGet(ORr,rownr,ORrw);
+			Rebr.Code = "OPTAC";
+			if(readfirstmain(Rebr,1,true))then begin
+				mtrw = matrowcnt(Rebr);
+				For(i=0;i<mtrw;i=i+1) begin
+					matrowget(Rebr,i,Rebrw);
+				
+					if(ORrw.ArtCode==Rebrw.ITCode)then begin
+						if(ORrw.Quant>=Rebrw.vra1)then begin
+							ORrw.vRebate = Rebrw.vra2;
+							MatRowPut(ORr,rownr,ORrw);
+						end else begin
+							ORrw.vRebate = blankval;
+							MatRowPut(ORr,rownr,ORrw);
+							For(j=0;j<matrowcnt(ORr);j=j+1) begin
+								matrowget(ORr,j,OR2rw);
+								if(OR2rw.AltRebDiscFlag=="rownr" & rownr)then begin
+									matrowdelete(ORr,j);
+								end;
+							end;
+						
+						end;
+						if(ORrw.Quant>=Rebrw.vra0)then begin
+							foundfreb = false;
+							For(j=0;j<matrowcnt(ORr);j=j+1) begin
+								matrowget(ORr,j,OR2rw);
+								if(OR2rw.AltRebDiscFlag=="rownr" & rownr)then begin
+									matrowget(ORr,rownr,OR2rw);
+									OR2rw.vRebate = blankval;
+									OR2rw.Price = 0.001;
+									OR2rw.Sum = 0.001;
+									OR2rw.AltRebDiscFlag = "rownr" & rownr;
+									MatRowPut(ORr,j,OR2rw);
+									foundfreb = true;
+								end;
+							end; 
+							if(foundfreb==false)then begin
+								matrowget(ORr,rownr,OR2rw);
+								OR2rw.vRebate = blankval;
 								OR2rw.Price = 0.001;
 								OR2rw.Sum = 0.001;
 								OR2rw.AltRebDiscFlag = "rownr" & rownr;
-								MatRowPut(ORr,j,OR2rw);
-								foundfreb = true;
-	  					end;
-						end; 
-	  				if(foundfreb==false)then begin
-							matrowget(ORr,rownr,OR2rw);
-							OR2rw.vRebate = blankval;
-							OR2rw.Price = 0.001;
-							OR2rw.Sum = 0.001;
-							OR2rw.AltRebDiscFlag = "rownr" & rownr;
-							MatRowInsert(ORr,rownr+1,OR2rw);
-	  				end;
-	  			end;
-	  		end;
-			end; 
-    end;    
+								MatRowInsert(ORr,rownr+1,OR2rw);
+							end;
+						end;
+					end;
+				end; 
+			end;    
     
-    
+    end;
     
 	// Edit End ---------------------------------------------- Edit End
 	
