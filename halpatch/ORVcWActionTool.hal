@@ -334,13 +334,16 @@ BEGIN
   string 255 tstr,curitemname,tax2code,location,taxtemplatecode;
   val t,s,price,vreb,baseprice,temp,tax2prc;
   Date orddate;
-  Boolean calcprice,chrsum;
+  Boolean calcprice,chrsum,foundfreb;// Edit ************************** BPI Ukraine - KramarAlexandr - Tuesday, 5 December 2017 11:42:06
   Boolean dummyf;
   Time blankt;
   record ItemStatusVc ISr;// Edit ************************** Monday, 23 June 2014 16:55:39
   val instock,inord,inthisord;// Edit ************************** Monday, 23 June 2014 17:04:06
 	record ORVc ORoldr;// Edit ************************** Monday, 23 June 2014 17:04:07
 	val remqty;
+	record RebVc Rebr;// Edit ************************** BPI Ukraine - KramarAlexandr - Tuesday, 5 December 2017 10:36:04
+	row RebVc Rebrw;// Edit ************************** BPI Ukraine - KramarAlexandr - Tuesday, 5 December 2017 10:41:41
+	integer mtrw,i,j;
 	
   MatRowGet(ORr,rownr,ORrw);
   location = ORrw.Location;
@@ -409,6 +412,64 @@ BEGIN
       end;
     end;
     //ORrw.vRebate = vreb;// Edit ************************** Wednesday, 18 January 2017 17:19:58
+    
+    // Edit Start ---------------------------------------------- Edit Start
+	//Tuesday, 5 December 2017 10:46:23
+	
+    MatRowGet(ORr,rownr,ORrw);
+    Rebr.Code = "OPTAC";
+    if(readfirstmain(Rebr,1,true))then begin
+    	mtrw = matrowcnt(Rebr);
+    	For(i=0;i<mtrw;i=i+1) begin
+	  		matrowget(Rebr,i,Rebrw);
+	  		
+	  		if(ORrw.ArtCode==Rebrw.ITCode)then begin
+	  			if(ORrw.Quant>=Rebrw.vra1)then begin
+	  				ORrw.vRebate = Rebrw.vra2;
+	  				MatRowPut(ORr,rownr,ORrw);
+	  			end else begin
+	  				ORrw.vRebate = blankval;
+	  				MatRowPut(ORr,rownr,ORrw);
+	  				For(j=0;j<matrowcnt(ORr);j=j+1) begin
+	  					matrowget(ORr,j,OR2rw);
+	  					if(OR2rw.AltRebDiscFlag=="rownr" & rownr)then begin
+	  						matrowdelete(ORr,j);
+	  					end;
+	  				end;
+	  				
+	  			end;
+	  			if(ORrw.Quant>=Rebrw.vra0)then begin
+	  				foundfreb = false;
+	  				For(j=0;j<matrowcnt(ORr);j=j+1) begin
+	  					matrowget(ORr,j,OR2rw);
+	  					if(OR2rw.AltRebDiscFlag=="rownr" & rownr)then begin
+	  						matrowget(ORr,rownr,OR2rw);
+	  						OR2rw.vRebate = blankval;
+								OR2rw.Price = 0.001;
+								OR2rw.Sum = 0.001;
+								OR2rw.AltRebDiscFlag = "rownr" & rownr;
+								MatRowPut(ORr,j,OR2rw);
+								foundfreb = true;
+	  					end;
+						end; 
+	  				if(foundfreb==false)then begin
+							matrowget(ORr,rownr,OR2rw);
+							OR2rw.vRebate = blankval;
+							OR2rw.Price = 0.001;
+							OR2rw.Sum = 0.001;
+							OR2rw.AltRebDiscFlag = "rownr" & rownr;
+							MatRowInsert(ORr,rownr+1,OR2rw);
+	  				end;
+	  			end;
+	  		end;
+			end; 
+    end;    
+    
+    
+    
+	// Edit End ---------------------------------------------- Edit End
+	
+    
     if (INr.ExplodeRec==0) then begin
       if (baseprice<>0) then begin
         ORrw.BasePrice = baseprice;
@@ -434,6 +495,7 @@ BEGIN
         ORVc_ChangeQuantityRecepy(ORrw.ArtCode,ORrw.Quant,rownr,ORr);
       end;
     end;
+    
     if (chrsum) then begin
       chsum = ORDchrsum(ORr,rownr);
       ORDchsum(ORr,rownr);
