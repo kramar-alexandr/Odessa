@@ -1284,18 +1284,18 @@ not needed any more
                         end;                               
                          
           							if (IVp.OKFlag!=0) then begin				//Edit----------------------Dima  18.12.2015
-          							    switch (INr.ItemType) begin
-          							      case 1:
-          							        if(ISr.RsrvQty<0) then begin
-          							          ISr.RsrvQty = 0;
-          							        end;
-          							        if ((prev)>(ISr.Instock-ISr.RsrvQty-stockreservq) and (prev>0) ) then begin 
-          							          		RecordCheckError(31132,IVrw.ArtCode,i,"Quant");      
-																			res = -1;
-																			goto L99;
-          							        end;        
-          							  	end;
-          							 end; 	       	   		//Edit--end--------------------Dima  18.12.2015    
+													switch (INr.ItemType) begin
+														case 1:
+															if(ISr.RsrvQty<0) then begin
+																ISr.RsrvQty = 0;
+															end;
+															if ((prev)>(ISr.Instock-ISr.RsrvQty-stockreservq) and (prev>0) ) then begin 
+																RecordCheckError(31132,IVrw.ArtCode,i,"Quant");      
+																res = -1;
+																goto L99;
+															end;        
+													end;
+          							 end; //Edit--end--------------------Dima  18.12.2015    
                         /* 
                         if ((ISr.Instock-stockreservq<prev) and (prev>0) and IVp.OKFlag!=0) then begin //Edit***************************Sasha2,11:40 07.11.2014
                           if (HasModSL) then begin
