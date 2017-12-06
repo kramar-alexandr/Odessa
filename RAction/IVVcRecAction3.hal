@@ -1290,9 +1290,11 @@ not needed any more
 																ISr.RsrvQty = 0;
 															end;
 															if ((prev)>(ISr.Instock-ISr.RsrvQty-stockreservq) and (prev>0) ) then begin 
-																RecordCheckError(31132,IVrw.ArtCode,i,"Quant");      
-																res = -1;
-																goto L99;
+																if(GetDateId(IVp.InvDate)>=1 and GetDateId(IVp.InvDate)<=5)then begin// Edit ************************** BPI Ukraine - KramarAlexandr - Wednesday, 6 December 2017 11:29:47
+																	RecordCheckError(31132,IVrw.ArtCode,i,"Quant");      
+																	res = -1;
+																	goto L99;
+																end;
 															end;        
 													end;
           							 end; //Edit--end--------------------Dima  18.12.2015    
