@@ -1228,16 +1228,18 @@ BEGIN
     ORp.CurncyCode = CUr.CurncyCode;
     ORp.BankCode = CUr.AccOperator;
     ORp.Objects = AddObjectToObjectList(ORp.Objects,CUr.Objects);
-    SetSalesMan(tstr,CUr.SalesMan);
-    tstr2 = ORp.Objects;
-    RemoveOldPersObjects(ORp.SalesMan,tstr2);
-    ORp.Objects = tstr2;
-    ORp.SalesMan = tstr;
-    Userr.Code = ORp.SalesMan;
-    if (ReadFirstMain(Userr,1,true)) then begin
-      ORp.Objects = AddObjectToObjectList(ORp.Objects,Userr.PersObjx);
-      ORp.SalesGroup = Userr.SalesGroup;
-    end;   
+    if(blank(ORp.SalesMan))then begin// Edit ************************** BPI Ukraine - KramarAlexandr - Wednesday, 6 December 2017 11:25:49
+			SetSalesMan(tstr,CUr.SalesMan);
+			tstr2 = ORp.Objects;
+			RemoveOldPersObjects(ORp.SalesMan,tstr2);
+			ORp.Objects = tstr2;
+			ORp.SalesMan = tstr;
+			Userr.Code = ORp.SalesMan;
+			if (ReadFirstMain(Userr,1,true)) then begin
+				ORp.Objects = AddObjectToObjectList(ORp.Objects,Userr.PersObjx);
+				ORp.SalesGroup = Userr.SalesGroup;
+			end;   
+    end;
     ORp.LangCode = CUr.LangCode;
     ORp.ShipDeal = CUr.ShipDeal;
     ORp.ShipMode = CUr.ShipMode;
