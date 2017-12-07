@@ -8960,6 +8960,15 @@ begin
   //EditField(h4,v,80,"Время нач.",Normal,StartTime,false,PasteCurTime);// Edit ************************** Thursday, 23 April 2015 11:25:45
   //EditField(h2,v,80,"Время оконч.",Normal,EndTime,false,PasteCurTime);// Edit ************************** Thursday, 23 April 2015 11:25:46
   EditField(h,v+=vs,80,"Склад",Normal,Location,false,LocationSClass);
+  
+  EditField(h+40,v+=vs,80,"Доп стоимость 1 ",Normal,ExtraCost1,false,0);
+  EditField(h2,v,80,"Доп стоимость 2 ",Normal,ExtraCost2,false,0);
+  EditField(h+40,v+=vs,80,"Доп стоимость 3 ",Normal,ExtraCost3,false,0);
+  EditField(h2,v,80,"Доп стоимость 4 ",Normal,ExtraCost4,false,0);
+  EditField(h+40,v+=vs,80,"Доп стоимость 5 ",Normal,ExtraCost5,false,0);
+  EditField(h2,v,80,"Доп стоимость 6 ",Normal,ExtraCost6,false,0);
+  //EditField(h,v+=vs,80,"Доп стоимость 7 ",Normal,ExtraCost7,false,0);
+  
   /*if (StandardHansa==false) then begin// Edit ************************** Thursday, 23 April 2015 11:25:20
     EditField(h4,v,80,"Класс",Normal,ProdClass,false,ProdClassSClass);
     EditField(h2,v,80,"Машина",Normal,FixAssCode,false,AT2UnitSClass);

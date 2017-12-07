@@ -4789,6 +4789,13 @@ RecordBegin(IPVc,-,"");
   RecordField(Disassemble,M4Mark,0,0);
   RecordField(ProdClass,M4Code,5,0);
   RecordField(ManualCost,M4Int,0,0);// Edit ************************** Wednesday, 21 October 2015 16:24:47
+  RecordField(ExtraCost1,M4Val,0,0);// Edit ************************** BPI Ukraine - KramarAlexandr - Thursday, 7 December 2017 10:55:13
+  RecordField(ExtraCost2,M4Val,0,0);// Edit ************************** BPI Ukraine - KramarAlexandr - Thursday, 7 December 2017 10:55:13
+  RecordField(ExtraCost3,M4Val,0,0);// Edit ************************** BPI Ukraine - KramarAlexandr - Thursday, 7 December 2017 10:55:13
+  RecordField(ExtraCost4,M4Val,0,0);// Edit ************************** BPI Ukraine - KramarAlexandr - Thursday, 7 December 2017 10:55:13
+  RecordField(ExtraCost5,M4Val,0,0);// Edit ************************** BPI Ukraine - KramarAlexandr - Thursday, 7 December 2017 10:55:13
+  RecordField(ExtraCost6,M4Val,0,0);// Edit ************************** BPI Ukraine - KramarAlexandr - Thursday, 7 December 2017 10:55:13
+  RecordField(ExtraCost7,M4Val,0,0);// Edit ************************** BPI Ukraine - KramarAlexandr - Thursday, 7 December 2017 10:55:13
   ArrayBegin(Math,-,1);
   ArrayField(Item,M4Code,20,INVc);
   ArrayField(Comment,M4Str,60,0);

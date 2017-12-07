@@ -310,10 +310,10 @@ BEGIN
   record BatchTextVc BTr;
 	array val incost;// Edit ************************** Thursday, 23 April 2015 11:06:54
 	array integer inrow;// Edit ************************** Wednesday, 21 October 2015 16:19:30
-	integer ci;// Edit ************************** Thursday, 23 April 2015 11:06:55
+	integer ci,totout;// Edit ************************** Thursday, 23 April 2015 11:06:55
 	val totcost;
 	array integer totqty;// Edit ************************** Wednesday, 21 October 2015 16:26:04
-	val subTotalRelVal,totRelVal;
+	val subTotalRelVal,totRelVal,addcostforpeace;// Edit ************************** BPI Ukraine - KramarAlexandr - Thursday, 7 December 2017 11:03:31
 	boolean testblankperc;
 	
   rowno = -1;
@@ -887,8 +887,7 @@ BEGIN
 			if(Prodrw.RelVal!=0)then begin
 				testblankperc = true;
 			end;
-		end; 
-		
+		end;
 		
 		if(testblankperc)then begin
 			// checking for  percent's sum (should be 100%)
@@ -929,12 +928,29 @@ BEGIN
 					ci = ci+1;
 				end;
 			end; 
-		
+			
+			For(i=0;i<rwcnt;i=i+1) begin
+				matrowget(Prodp,i,Prodrw);
+				if(Prodrw.OutQty>0)then begin
+					totout = totout + Prodrw.OutQty;
+				end;
+			end; 
+			if(totout>0)then begin
+				addcostforpeace = Prodp.ExtraCost1;
+				addcostforpeace = addcostforpeace + Prodp.ExtraCost2;
+				addcostforpeace = addcostforpeace + Prodp.ExtraCost3;
+				addcostforpeace = addcostforpeace + Prodp.ExtraCost4;
+				addcostforpeace = addcostforpeace + Prodp.ExtraCost5;
+				addcostforpeace = addcostforpeace + Prodp.ExtraCost6;
+				addcostforpeace = addcostforpeace + Prodp.ExtraCost7;
+				addcostforpeace = addcostforpeace / totout;
+			end;
+			
 			ci = 0;
 			For(i=0;i<rwcnt;i=i+1) begin
 				matrowget(Prodp,i,Prodrw);
 				if(Prodrw.OutQty!=0 and nonblank(Prodrw.Item))then begin
-					Prodrw.ItemCost = incost[ci]*Prodrw.RelVal/100/Prodrw.OutQty;
+					Prodrw.ItemCost = incost[ci]*Prodrw.RelVal/100/Prodrw.OutQty + addcostforpeace;
 					matrowput(Prodp,i,Prodrw);
 				end;
 				if(Prodrw.InQty!=0 and nonblank(Prodrw.Item) and i!=inrow[ci])then begin
