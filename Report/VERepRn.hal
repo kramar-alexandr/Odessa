@@ -365,6 +365,7 @@ RecordNew(ISr);
    /*OutString(300,0,"К отгрузке клиентам",false);*/
    OutString(310,0,"К отгрузке клиентам 1-KOC",false);
    OutString(320,0,"К отгрузке клиентам RYBRAY",false);
+   
 
    step=(360-320)/(locationsBal.length + positionsBal.length);
    startPos = 320;
@@ -386,7 +387,7 @@ RecordNew(ISr);
    //OutString(370,0,"",false); 			//VendorsListUnOK
    OutString(440,0,"Остаток с заказом",false);
    
-       
+  	OutString(450,0,"Дата последнего поступления",false);
   EndFormat;
   Gray_Divider(0,1);
   
@@ -539,6 +540,7 @@ RecordNew(ISr);
   			///OutVal(440,0,restok,M4Val,false);
 				OutString(440,0,restok,false);				//Edit----------------------Dima  13.02.2015
   			//outval(450,0,restunok,M4Val,false);
+  			OutString(450,0,INr.LastPriceChange,false);// Edit ************************** BPI Ukraine - KramarAlexandr - Friday, 8 December 2017 13:25:02
   		EndFormat;
   			VendorsListOK = blankval;
   			VendorsListUnOK = blankval;
