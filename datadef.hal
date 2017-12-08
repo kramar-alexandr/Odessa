@@ -4796,6 +4796,8 @@ RecordBegin(IPVc,-,"");
   RecordField(ExtraCost5,M4Val,0,0);// Edit ************************** BPI Ukraine - KramarAlexandr - Thursday, 7 December 2017 10:55:13
   RecordField(ExtraCost6,M4Val,0,0);// Edit ************************** BPI Ukraine - KramarAlexandr - Thursday, 7 December 2017 10:55:13
   RecordField(ExtraCost7,M4Val,0,0);// Edit ************************** BPI Ukraine - KramarAlexandr - Thursday, 7 December 2017 10:55:13
+  RecordField(CostRule1,M4Int,0,0);// Edit ************************** BPI Ukraine - KramarAlexandr - Thursday, 7 December 2017 13:33:06
+  RecordField(CostRule2,M4Int,0,0);// Edit ************************** BPI Ukraine - KramarAlexandr - Thursday, 7 December 2017 13:33:06
   ArrayBegin(Math,-,1);
   ArrayField(Item,M4Code,20,INVc);
   ArrayField(Comment,M4Str,60,0);
@@ -4837,6 +4839,7 @@ RecordBegin(IPVc,-,"");
   ArrayField(Gender,M4Str,20,0);
   ArrayField(Other,M4Str,20,0);
   ArrayField(Other2,M4Str,20,0)
+  ArrayField(ExtraCostVal,M45Val,0,0);// Edit ************************** BPI Ukraine - KramarAlexandr - Thursday, 7 December 2017 13:33:42
   EndArray;
   MainKeyBegin(SerNr,0);
   KeySegment(SerNr);

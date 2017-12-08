@@ -8944,7 +8944,7 @@ window ProdDClass:1
 begin
   real h,h2,h3,h4,v,vm,vs;
   WindowBegin("Производство",ProdDClass,CGview,-);
-  SetWRect(20,80,620,333);
+  SetWRect(20,80,720,333);
   Sizeable(-1,-1,0,0);
   UseView(ProdVc);
   FormName(ProdOrderForm);
@@ -8961,13 +8961,26 @@ begin
   //EditField(h2,v,80,"Время оконч.",Normal,EndTime,false,PasteCurTime);// Edit ************************** Thursday, 23 April 2015 11:25:46
   EditField(h,v+=vs,80,"Склад",Normal,Location,false,LocationSClass);
   
-  EditField(h+40,v+=vs,80,"Доп стоимость 1 ",Normal,ExtraCost1,false,0);
-  EditField(h2,v,80,"Доп стоимость 2 ",Normal,ExtraCost2,false,0);
-  EditField(h+40,v+=vs,80,"Доп стоимость 3 ",Normal,ExtraCost3,false,0);
-  EditField(h2,v,80,"Доп стоимость 4 ",Normal,ExtraCost4,false,0);
-  EditField(h+40,v+=vs,80,"Доп стоимость 5 ",Normal,ExtraCost5,false,0);
-  EditField(h2,v,80,"Доп стоимость 6 ",Normal,ExtraCost6,false,0);
-  //EditField(h,v+=vs,80,"Доп стоимость 7 ",Normal,ExtraCost7,false,0);
+  EditField(h,v+=vs,80,"Доп. cost 1 ",Normal,ExtraCost1,false,0);
+  EditField(h2-30,v,80,"Доп. cost 4 ",Normal,ExtraCost4,false,0);
+  EditField(h,v+=vs,80,"Доп. cost 2 ",Normal,ExtraCost2,false,0);
+  EditField(h2-30,v,80,"Доп. cost 5 ",Normal,ExtraCost5,false,0);
+  EditField(h,v+=vs,80,"Доп. cost 3 ",Normal,ExtraCost3,false,0);
+  EditField(h2-30,v,80,"Доп. cost 6 ",Normal,ExtraCost6,false,0);
+  
+  ButtonFrame(h+100,v=80,100,4,"Расчет от");
+  RadioButton(h+100,v,0,0,"Кол-ва",CostRule1);
+  RadioButton(h+100,v+=16,1,0,"Себестоим.",CostRule1);
+  RadioButton(h+100,v+=16,2,0,"Веса",CostRule1);
+  RadioButton(h+100,v+=16,3,0,"Объема",CostRule1);
+  
+  
+  ButtonFrame(h+400,v=80,100,4,"Расчет от");
+  RadioButton(h+400,v,0,0,"Кол-ва",CostRule2);
+  RadioButton(h+400,v+=16,1,0,"Себестоим.",CostRule2);
+  RadioButton(h+400,v+=16,2,0,"Веса",CostRule2);
+  RadioButton(h+400,v+=16,3,0,"Объема",CostRule2);
+  //EditField(h,v+=vs,80,"Доп. cost 7 ",Normal,ExtraCost7,false,0);
   
   /*if (StandardHansa==false) then begin// Edit ************************** Thursday, 23 April 2015 11:25:20
     EditField(h4,v,80,"Класс",Normal,ProdClass,false,ProdClassSClass);
@@ -8993,12 +9006,12 @@ begin
   TileButton(1,"Товары");
   TileButton(2,"Комментарий");
 //  CheckBox(370,v,0,"Reserved",Reserved);
-  ButtonFrame(h3,v=20,150,5,"Статус");
-  RadioButton(h3,v,0,0,"Создано",PRStatusFlag);
-  RadioButton(h3,v+=16,4,0,"Отменено",PRStatusFlag);
-  RadioButton(h3,v+=16,2,0,"Начато",PRStatusFlag);
-  RadioButton(h3,v+=16,3,0,"Завершено",PRStatusFlag);
-  RadioButton(h3,v+=16,5,0,"Завершено, но не принято",PRStatusFlag);
+  ButtonFrame(h3+40,v=20,150,2,"Статус");
+  RadioButton(h3+40,v,0,0,"Создано",PRStatusFlag);
+  //RadioButton(h3+40,v+=16,4,0,"Отменено",PRStatusFlag);
+  //RadioButton(h3+40,v+=16,2,0,"Начато",PRStatusFlag);
+  RadioButton(h3+40,v+=16,3,0,"Завершено",PRStatusFlag);
+  //RadioButton(h3+40,v+=16,5,0,"Завершено, но не принято",PRStatusFlag);
   //CheckBox(h2,v+=30,0,"Ручное изменение стоимости",ManualCost);	//Edit----------------------Dima  23.10.2015
   Tile(1,120,true,"1",Math);
   v=20;
@@ -9008,10 +9021,11 @@ begin
   MatCol(1,110,"Коммент.",0,Comment,false,0);
   Flip(1);
   //MatCol(1,-375,"Сер.№",0,SerialNr,false,SerialNrSClass);
-  MatCol(1,-280,"Затр.",0,InQty,true,MATVARINSClass);
-  MatCol(1,-210,"Выпуск",0,OutQty,true,MATVARINSClass);
-  MatCol(1,-140,"% ст-ти",0,RelVal,true,0);
-  MatCol(1,-70," Ст-ть",0,ItemCost,true,0);
+  MatCol(1,-300,"Затр.",0,InQty,true,MATVARINSClass);
+  MatCol(1,-240,"Выпуск",0,OutQty,true,MATVARINSClass);
+  MatCol(1,-180,"% ст-ти",0,RelVal,true,0);
+  MatCol(1,-120,"Ст-ть",0,ItemCost,true,0);
+  MatCol(1,-60,"Затр.",0,ExtraCostVal,true,0);
   //MatCol(1,-100,"Труд.",0,ExtraCost,true,0);
   //MatCol(1,-40,"Коэфф.",0,Coefficient,false,0);
 	Flip(2);

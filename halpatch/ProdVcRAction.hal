@@ -313,7 +313,7 @@ BEGIN
 	integer ci,totout;// Edit ************************** Thursday, 23 April 2015 11:06:55
 	val totcost;
 	array integer totqty;// Edit ************************** Wednesday, 21 October 2015 16:26:04
-	val subTotalRelVal,totRelVal,addcostforpeace;// Edit ************************** BPI Ukraine - KramarAlexandr - Thursday, 7 December 2017 11:03:31
+	val subTotalRelVal,totRelVal,addcostforpeace,totweight,totvolume,addcostforpeace1,newaddcostforpeace,newaddcostforpeace1;// Edit ************************** BPI Ukraine - KramarAlexandr - Thursday, 7 December 2017 11:03:31
 	boolean testblankperc;
 	
   rowno = -1;
@@ -932,25 +932,73 @@ BEGIN
 			For(i=0;i<rwcnt;i=i+1) begin
 				matrowget(Prodp,i,Prodrw);
 				if(Prodrw.OutQty>0)then begin
+					INr.Code = Prodrw.Item;
 					totout = totout + Prodrw.OutQty;
+					if(readfirstmain(INr,1,true))then begin
+						totweight = totweight + INr.Weight*Prodrw.OutQty;
+						totvolume = totvolume + INr.Volume*Prodrw.OutQty;
+					end;
 				end;
 			end; 
 			if(totout>0)then begin
 				addcostforpeace = Prodp.ExtraCost1;
 				addcostforpeace = addcostforpeace + Prodp.ExtraCost2;
 				addcostforpeace = addcostforpeace + Prodp.ExtraCost3;
-				addcostforpeace = addcostforpeace + Prodp.ExtraCost4;
-				addcostforpeace = addcostforpeace + Prodp.ExtraCost5;
-				addcostforpeace = addcostforpeace + Prodp.ExtraCost6;
-				addcostforpeace = addcostforpeace + Prodp.ExtraCost7;
-				addcostforpeace = addcostforpeace / totout;
+				
+				addcostforpeace1 = addcostforpeace1 + Prodp.ExtraCost4;
+				addcostforpeace1 = addcostforpeace1 + Prodp.ExtraCost5;
+				addcostforpeace1 = addcostforpeace1 + Prodp.ExtraCost6;
+				//addcostforpeace = addcostforpeace + Prodp.ExtraCost7;
+				switch(Prodp.CostRule1)begin
+					case 0:addcostforpeace = addcostforpeace / totout;
+					case 1:addcostforpeace = addcostforpeace;
+					case 2:addcostforpeace = addcostforpeace / totweight;
+					case 3:addcostforpeace = addcostforpeace / totvolume;
+				end;
+				switch(Prodp.CostRule2)begin
+					case 0:addcostforpeace1 = addcostforpeace1 / totout;
+					case 1:addcostforpeace1 = addcostforpeace1;
+					case 2:addcostforpeace1 = addcostforpeace1 / totweight;
+					case 3:addcostforpeace1 = addcostforpeace1 / totvolume;
+				end;
+				
 			end;
 			
 			ci = 0;
 			For(i=0;i<rwcnt;i=i+1) begin
 				matrowget(Prodp,i,Prodrw);
 				if(Prodrw.OutQty!=0 and nonblank(Prodrw.Item))then begin
-					Prodrw.ItemCost = incost[ci]*Prodrw.RelVal/100/Prodrw.OutQty + addcostforpeace;
+					newaddcostforpeace = addcostforpeace;
+					newaddcostforpeace1 = addcostforpeace1;
+					if(Prodp.CostRule1==1)then begin
+						newaddcostforpeace = addcostforpeace*incost[ci]*Prodrw.RelVal/100/Prodrw.OutQty/totcost;
+					end;
+					if(Prodp.CostRule2==1)then begin
+						newaddcostforpeace1 = addcostforpeace1*incost[ci]*Prodrw.RelVal/100/Prodrw.OutQty/totcost;
+					end;
+					if(Prodp.CostRule1==2)then begin
+						INr.Code = Prodrw.Item;
+						readfirstmain(INr,1,true);
+						newaddcostforpeace = newaddcostforpeace * Prodrw.OutQty * INr.Weight;
+					end;
+					if(Prodp.CostRule1==3)then begin
+						INr.Code = Prodrw.Item;
+						readfirstmain(INr,1,true);
+						newaddcostforpeace = newaddcostforpeace * Prodrw.OutQty * INr.Volume;
+					end;
+					if(Prodp.CostRule2==2)then begin
+						INr.Code = Prodrw.Item;
+						readfirstmain(INr,1,true);
+						newaddcostforpeace1 = newaddcostforpeace1 * Prodrw.OutQty * INr.Weight;
+					end;
+					if(Prodp.CostRule2==3)then begin
+						INr.Code = Prodrw.Item;
+						readfirstmain(INr,1,true);
+						newaddcostforpeace1 = newaddcostforpeace1 * Prodrw.OutQty * INr.Volume;
+					end;
+					
+					
+					Prodrw.ItemCost = incost[ci]*Prodrw.RelVal/100/Prodrw.OutQty + Prodrw.ExtraCostVal + newaddcostforpeace + newaddcostforpeace1;
 					matrowput(Prodp,i,Prodrw);
 				end;
 				if(Prodrw.InQty!=0 and nonblank(Prodrw.Item) and i!=inrow[ci])then begin
