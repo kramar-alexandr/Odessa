@@ -78,6 +78,7 @@ remote procedure SOAPUpdateStatus(string,string);
 remote updating procedure MakeReserveFromOrder(longint,string);// Edit ************************** Friday, 10 March 2017 13:38:29
 remote updating procedure ORHistBackDsmRemote(record ORVc);
 remote procedure AlternativeRebateORVc(var record ORVc);//==============Alexandr 25/09/2015
+remote procedure Rem_CalcOnePlusOneRebate(var record ORVc);// Edit ************************** BPI Ukraine - KramarAlexandr - Monday, 11 December 2017 09:53:12
 
 global //Edit***************************Sasha2,15:51 04.02.2015 {
 function Integer ORLClassRowColor(record ORVc ORr)
@@ -2814,5 +2815,18 @@ begin
 	
 	ORHistBackDsmRemote(ORr);
 	
+return;
+end;
+
+
+global procedure CalcOnePlusOneRebateDsm()
+begin
+	record ORVc ORr;
+	integer wn;
+	
+	wn = curwindow;
+	getwindowrecord(wn,ORr);
+	Rem_CalcOnePlusOneRebate(ORr);
+	putwindowrecord(wn,ORr);
 return;
 end;

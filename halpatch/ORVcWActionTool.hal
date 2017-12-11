@@ -416,7 +416,7 @@ BEGIN
     // Edit Start ---------------------------------------------- Edit Start
 	//Tuesday, 5 December 2017 10:46:23
 		
-		if(blank(ORr.OrderClass))then begin
+		/*if(blank(ORr.OrderClass))then begin
 			MatRowGet(ORr,rownr,ORrw);
 			Rebr.Code = "OPTAC";
 			if(readfirstmain(Rebr,1,true))then begin
@@ -466,7 +466,7 @@ BEGIN
 				end; 
 			end;    
     
-    end;
+    end;*/
     
 	// Edit End ---------------------------------------------- Edit End
 	
@@ -1781,3 +1781,84 @@ begin
 	return;
 end;
 
+global procedure Rem_CalcOnePlusOneRebate(var record ORVc ORr)
+begin
+	record RebVc Rebr;// Edit ************************** BPI Ukraine - KramarAlexandr - Tuesday, 5 December 2017 10:36:04
+	row RebVc Rebrw;// Edit ************************** BPI Ukraine - KramarAlexandr - Tuesday, 5 December 2017 10:41:41
+	integer mtrw,i,j,rwcnt,kk;
+	row ORVc ORrw,OR2rw;
+	boolean foundfreb;
+	string 10 flagkk;
+	
+	rwcnt = matrowcnt(ORr);
+	Rebr.Code = "OPTAC";
+	if(readfirstmain(Rebr,1,true))then begin
+		For(kk=0;kk<rwcnt;kk=kk+1) begin
+			if(blank(ORr.OrderClass))then begin
+				MatRowGet(ORr,kk,ORrw);
+				mtrw = matrowcnt(Rebr);
+				For(i=0;i<mtrw;i=i+1) begin
+					matrowget(Rebr,i,Rebrw);
+					flagkk = kk;
+					if(ORrw.ArtCode==Rebrw.ITCode and len(ORrw.AltRebDiscFlag)<5)then begin
+						if(blank(ORrw.AltRebDiscFlag))then begin
+							ORrw.AltRebDiscFlag = flagkk;
+							matrowput(ORr,kk,ORrw);
+						end else begin
+							if(len(ORrw.AltRebDiscFlag)<5)then begin
+								flagkk = ORrw.AltRebDiscFlag;
+							end;
+						end;
+						if(ORrw.Quant>=Rebrw.vra1)then begin
+							ORrw.vRebate = Rebrw.vra2;
+							MatRowPut(ORr,kk,ORrw);
+						end else begin
+							ORrw.vRebate = blankval;
+							MatRowPut(ORr,kk,ORrw);
+							For(j=0;j<matrowcnt(ORr);j=j+1) begin
+								matrowget(ORr,j,OR2rw);
+								if(OR2rw.AltRebDiscFlag=="rownr" & flagkk)then begin
+									matrowdelete(ORr,j);
+								end;
+							end;
+				
+						end;
+						if(ORrw.Quant>=Rebrw.vra0)then begin
+							foundfreb = false;
+							For(j=0;j<matrowcnt(ORr);j=j+1) begin
+								matrowget(ORr,j,OR2rw);
+								if(OR2rw.AltRebDiscFlag=="rownr" & flagkk)then begin
+									matrowget(ORr,kk,OR2rw);
+									OR2rw.vRebate = blankval;
+									OR2rw.Price = 0.001;
+									OR2rw.Sum = 0.001;
+									OR2rw.AltRebDiscFlag = "rownr" & flagkk;
+									MatRowPut(ORr,j,OR2rw);
+									foundfreb = true;
+								end;
+							end; 
+							if(foundfreb==false)then begin
+								matrowget(ORr,kk,OR2rw);
+								OR2rw.vRebate = blankval;
+								OR2rw.Price = 0.001;
+								OR2rw.Sum = 0.001;
+								OR2rw.AltRebDiscFlag = "rownr" & flagkk;
+								MatRowInsert(ORr,kk+1,OR2rw);
+								rwcnt = rwcnt + 1;
+							end;
+						end;
+					end;
+				end; 
+			end;
+		end;
+	end;
+	rwcnt = matrowcnt(ORr);
+	For(i=0;i<rwcnt;i=i+1) begin
+	  ORDchrsum(ORr,i);
+		ORDchsum(ORr,i);
+	end; 
+	ORSumup(ORr);
+	
+	
+return;
+end;
