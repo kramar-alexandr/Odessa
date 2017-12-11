@@ -5504,12 +5504,6 @@ begin
   EditField(h2,v,150,"Имя",Normal,NPFirstName,false,0);
   EditField(h3,v,150,"Отчество",Normal,NPMiddleName,false,0);
 	EditField(h1,v+=vs,-20,"Комментарий",Normal,Comment,false,0);
-/*
-  StaticText(130,v+=50,"Адрес контрагента:",false);
-  EditField(h1,v+=vs,150,"Улица",Normal,NPStreet,false,0);
-  EditField(h2,v,70,"Дом",Normal,NPBuilding,false,0);
-  EditField(h3,v,70,"Квартира",Normal,NPFlat,false,0);
- */
 
   StaticText(100,v+=50,"Адрес доставки:",true);
   
@@ -5544,26 +5538,14 @@ begin
   RadioButton(h1,v+=16,2,0,"Не дозвонились 2-ой раз",FeedBackStatus);
   RadioButton(h1,v+=16,3,0,"Не дозвонились 3-ий раз. Заказ закрыт",FeedBackStatus); //Edit***************************Sasha2,10:31 17.08.2015 }
 
-//  EditField(h1+200,v,80,"#VAT Code#",Normal,CustVATCode,false,0);
   EnterSkip(OrdDate);
   if (GuiType==kGuiMetro) then begin // Temporarily disabled on Windows 8
     SpecialMenu("Статус счета",'r',5,"ORInfoRnORDsm");
     SpecialMenu("Статус товара",'I',2,"ItemStatusORDsm");
     SpecialMenu("Создать отгрузку",'L',0,"SHFromORDsm");
     SpecialMenu("Создать сч/ф",'F',1,"IVFromORDsm");
-   // SpecialMenu("Добавить итого",' ',14,"SubtotalORDsm");
-/*
-email not working yet
-    SpecialMenu("Создать e-mail",'m',11,"CreateMailFromORDsm");
-*/
   end else begin
-  //SpecialMenu("Добавить строку заголовка",' ',13,"ORAddHeaderLine");
-  //SpecialMenu("Добавить скрытую строку",' ',13,"ORAddHidLine");
-  //SpecialMenu("Добавить итого",' ',14,"SubtotalORDsm");
   SpecialMenu("Пересчитать скидку",' ',11,"RecalcDiscountORDsm");
-  if (StandardHansa==false) then begin
-    //SpecialMenu("Пересчитать вес и объем",' ',10,"RecalculateWeightORDsm");
-  end;
   SpecialMenu("Проверить наличие на складах товаров из счета",' ',7,"CheckItemsOnStockORDsm"); //Edit***************************Sasha2,15:20 12.08.2015
   SpecialMenu("Обновить товары валютного прейскуранта",' ',7,"UpdatePricesORDsm");
   SpecialMenu("Статус товара",'I',2,"ItemStatusORDsm");
@@ -5574,37 +5556,8 @@ email not working yet
   if(currentuser=="SA")then begin
   	SpecialMenu("Вернуть из истории",'',5,"ORHistBackDsm");
   end;
-  /*if (StandardHansa==false) then begin
-    SpecialMenu("Цены предыдущей продажи",' ',12,"ORLastSPrsm");
-    SpecialMenu("Распечатать внутренний заказ",' ',4,"Or2FormORDsm");
-  end;*/
-  //SpecialMenu("Резервирования",' ',15,"OrderReservORDsm");
-  /*if (StandardHansa==false) then begin
-    SpecialMenu("Отправить для утверждения",' ',6,"ORSendforAcceptanceORDsm");
-    SpecialMenu("Отменить запрос на утверждение",' ',2,"CancelApprovalRequestDsm");
-  end;*/
-  //SpecialMenu("Создать деятельность",'c',9,"CreateActFromORDsm");
   SpecialMenu("Создать отгрузку",'L',0,"SHFromORDsm");
-  //SpecialMenu("Создать счет-фактуру на аванс",'o',3,"DownPayFromORDsm");
-  /*if (HaseMail) then begin
-  SpecialMenu("Создать e-mail",'m',11,"CreateMailFromORDsm");
-  end;*/
   SpecialMenu("Создать реализацию",'F',1,"IVFromORDsm");
-  /*if (HasModTS) then begin
-    SpecialMenu("Создать проект",' ',9,"CreatePRFromORDsm");
-    SpecialMenu("Создать бюджет проекта",' ',10,"CreateTBBUFromORDsm");
-  end;*/
-  /*if (HasModPO) then begin
-    SpecialMenu("Создать заказ поставщику",' ',4,"POFromORDsm");
-  end;*/
-  /*if (GuiType==kGuiiPhone) then begin
-    SpecialMenu("Подписать",' ',10,"SignORDsm");
-  end;*/
-  //SpecialMenu("Создать возврат товаров",'B',6,"RetFromORsm");
-  //SpecialMenu("Создать перемещение по складу",' ',8,"StockMovFromORDsm");
-  /*if (HasTaxMatrix) then begin
-    SpecialMenu("Открыть матрицу налогов",' ',25,"OpenVatMatrixORDsm");
-  end;*/
   SpecialMenu("Справка по клиенту",'e',0,"ORStatusCUDsm");	//Edit------------------Dima 27.01.2015
 	SpecialMenu("Выгрузить таблицу в буфер обмена",'',18,"ExportToExcelORDsm"); // edit ----------Dima 26.11.2014, 23.01.2015
 	SpecialMenu("Отсортировать таблицу",'',20,"TableSortORDsm"); // edit ----------Dima 26.11.2014, 23.01.2015
@@ -5614,7 +5567,6 @@ email not working yet
 	SpecialMenu("Обновить задолженность клиента",'',20,"CalcCustBalDsm");	// Edit ************************** Friday, 22 July 2016 10:42:12
 	SpecialMenu("Послать статус в Magento",'',20,"UpdateMagontoStatDsm");	// Edit ************************** Monday, 14 November 2016 15:13:12
 	SpecialMenu("Отправить в резерв/заказ на логистику",'',20,"SendToReservLogisticDsm");	// Edit ************************** Monday, 14 November 2016 15:13:12
-	
 	SpecialMenu("Рассчитать скидку 1+1",'',20,"CalcOnePlusOneRebateDsm");	// Edit ************************** Monday, 14 November 2016 15:13:12
   end;
   EndWindow;
