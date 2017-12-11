@@ -278,6 +278,7 @@ BEGIN
  // vector string 20 LocationOfPosition;
   val step;
   string 255 VendorsListUnOK, VendorsListOK;
+  record ItemHistVc IHr;
   
 
 RecordNew(ISr);
@@ -540,7 +541,11 @@ RecordNew(ISr);
   			///OutVal(440,0,restok,M4Val,false);
 				OutString(440,0,restok,false);				//Edit----------------------Dima  13.02.2015
   			//outval(450,0,restunok,M4Val,false);
-  			OutString(450,0,INr.LastPriceChange,false);// Edit ************************** BPI Ukraine - KramarAlexandr - Friday, 8 December 2017 13:25:02
+  			IHr.ArtCode = INr.Code;
+  			IHr.FileName = "PUVc";
+  			IHr.TransDate = currentdate;
+  			readlastkey("FNArtCode",IHr,3,false);
+  			OutString(450,0,IHr.TransDate,false);// Edit ************************** BPI Ukraine - KramarAlexandr - Friday, 8 December 2017 13:25:02
   		EndFormat;
   			VendorsListOK = blankval;
   			VendorsListUnOK = blankval;
