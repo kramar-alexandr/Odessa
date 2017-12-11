@@ -4192,7 +4192,27 @@ Begin
 	record LoyaltyCardVc LCr;
 	boolean testf,TrHs,testf1;
 	
-	CUr.Code = "";
+	LCr.SerNr = "LC";
+	while(loopmain(LCr,1,true))begin
+		if(left(LCr.SerNr,2)=="LC")then begin
+			resetloop(IVr);
+				IVr.CustCode = LCr.CustCode;
+				TrHs = true;
+				while(loopkey("CustCode",IVr,1,TrHs))begin
+					testf1 = true;
+					if(IVr.CustCode!=LCr.CustCode)then begin TrHs = false; testf1 = false; end;
+					if(IVr.OKFlag==0)then begin testf1 = false; end;
+					if(IVr.Invalid>0)then begin testf1 = false; end;
+				
+					if(testf1)then begin
+						LCr.PointsBalance = LCr.PointsBalance + IVr.Sum4;
+					end;
+				end;
+			Logtext(0,CUr.Code & "_ _" & LCr.SerNr & "_ _" & LCr.PointsBalance);
+			recordstore(LCr,true);
+		end;
+	end;
+	/*CUr.Code = "";
 	while(loopmain(CUr,1,true))begin
 		testf = true;
 		if(CUr.CUType!=1)then begin testf = false; end;
@@ -4229,7 +4249,7 @@ Begin
 			end;
 		end;
 		
-	end;
+	end;*/
 	
 return;
 end;

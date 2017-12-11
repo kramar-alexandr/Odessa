@@ -53,10 +53,10 @@ begin
     BlockStore(SRb);
   end;
   
-  CUr.Code = LoyaltyCardr.CustCode; //Edit***************************Sasha2,16:39 17.02.2015 {
+  /*CUr.Code = LoyaltyCardr.CustCode; //Edit***************************Sasha2,16:39 17.02.2015 {
   if (ReadFirstMain(CUr,1,true) and CUr.CustCat=="WEB") then begin
      LoyaltyCardr.PointsBalance = StringToVal(CUr.Comment1,M4Val);
-  end; //Edit***************************Sasha2,16:39 17.02.2015 }
+  end; //Edit***************************Sasha2,16:39 17.02.2015 }*/
  
   LoyaltyCardVcRecordSave = res; 
   return;
