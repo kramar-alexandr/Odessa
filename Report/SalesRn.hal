@@ -1516,7 +1516,7 @@ begin
 						if(blank(SHr.NPIntDocNumber))then begin testf = false; end;
 						
 						if(testf)then begin
-							totsum = totsum + ARr.BookRVal;
+							
 							Startformat(15);
 								outstring(rw[0],"DblSHVc",SHr.SerNr,false);
 								outstring(rw[1],0,SHr.CustCode,false);
@@ -1525,8 +1525,10 @@ begin
 								outstring(rw[4],0,SHr.ShipDate,false);
 								if(SHr.NPCostCODEdit>0)then begin
 									outstring(rw[5],0,SHr.NPCostCODEdit,false);
+									totsum = totsum + SHr.NPCostCODEdit;
 								end else begin
 									outstring(rw[5],0,SHr.NPCostCOD,false);
+									totsum = totsum + SHr.NPCostCOD;
 								end;
 								outstring(rw[6],0,"Дата получения",false);
 								outstring(rw[7],0,SHr.NPStatus,false);
