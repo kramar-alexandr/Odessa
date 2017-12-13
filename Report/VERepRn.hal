@@ -543,9 +543,12 @@ RecordNew(ISr);
   			//outval(450,0,restunok,M4Val,false);
   			IHr.ArtCode = INr.Code;
   			IHr.FileName = "PUVc";
-  			IHr.TransDate = currentdate;
-  			readlastkey("FNArtCode",IHr,3,false);
-  			OutString(450,0,IHr.TransDate,false);// Edit ************************** BPI Ukraine - KramarAlexandr - Friday, 8 December 2017 13:25:02
+  			readlastkey("FNArtCode",IHr,2,false);
+  			if(IHr.ArtCode==INr.Code and IHr.FileName=="PUVc")then begin
+					OutString(450,0,IHr.TransDate,false);// Edit ************************** BPI Ukraine - KramarAlexandr - Friday, 8 December 2017 13:25:02
+  			end else begin
+					OutString(450,0,"",false);// Edit ************************** BPI Ukraine - KramarAlexandr - Friday, 8 December 2017 13:25:02
+  			end;
   		EndFormat;
   			VendorsListOK = blankval;
   			VendorsListUnOK = blankval;
