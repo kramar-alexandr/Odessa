@@ -1458,8 +1458,11 @@ LBREAKSH2:;
       if (OpenForm(formcode)) then begin    
           ExpandShipment(RepSpec.repname,RepSpec.flags[1],SHr,resSHr);
           PrintShipment(RepSpec,resSHr,formcode);
-           if(SHr.OKFlag == 0 and blank(SHr.Sorting))then begin 
+          	if(SHr.OKFlag == 0 and blank(SHr.Sorting))then begin 
 							SHr.Sorting = "ÇëÅéêäÖ";
+							if(blank(SHr.SHClass))then begin// Edit ************************** BPI Ukraine - KramarAlexandr - Wednesday, 13 December 2017 16:53:01
+								SHr.Sorting = "ëéÅêÄçé";// Edit ************************** BPI Ukraine - KramarAlexandr - Wednesday, 13 December 2017 16:53:18
+							end;
 							if(recordStore(SHr, true))then begin 	end;
 						end;
           NumberofDocumentPages(FDrw.FPCode,MatRowCnt(resSHr));
