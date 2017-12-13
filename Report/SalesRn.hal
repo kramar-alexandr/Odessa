@@ -1468,3 +1468,80 @@ vector string 100 oblast;
 	EndJob;
 
 end;
+
+global procedure UngetPayForNPRn(record RcVc RepSpec)
+begin
+	record IVVc IVr;
+	record ARVc ARr;
+	record ORVc ORr;
+	record SHVc SHr;
+	boolean TrHs,testf;
+	array integer rw;
+	val totsum;
+	
+	rw[0] = 0;
+	rw[1] = 30;
+	rw[2] = 70;
+	rw[3] = 180;
+	rw[4] = 240;
+	rw[5] = 300;
+	rw[6] = 360;
+	rw[7] = 420;
+	startreportnoheaderjob("Неоплаченные наложенные платежи");
+	
+		Startformat(15);
+			outstring(rw[0],0,"Отгрузка",false);
+			outstring(rw[1],0,"Клиент",false);
+			outstring(rw[2],0,"ФИО",false);
+			outstring(rw[3],0,"ТТН",false);
+			outstring(rw[4],0,"Дата отправки",false);
+			outstring(rw[5],0,"Сумма наложки",false);
+			outstring(rw[6],0,"Дата получения",false);
+			outstring(rw[7],0,"Статус",false);
+		endformat;
+	
+		while(loopmain(ARr,1,true))begin
+			IVr.SerNr = ARr.InvoiceNr;
+			if(readfirstmain(IVr,1,true))then begin
+				if(IVr.OrderNr>-1 and (IVr.Sum4/4)<ARr.RVal)then begin
+					SHr.OrderNr = IVr.OrderNr;
+					TrHs = true;
+					while(loopkey("OrderKey",SHr,1,TrHs))begin
+						testf = true;
+						if(SHr.OrderNr!=IVr.OrderNr)then begin TrHs = false; testf = false; end;
+						if(SHr.OKFlag==0)then begin testf = false; end;
+						if(nonblank(RepSpec.f1) and RepSpec.f1!=SHr.SalesGroup)then begin testf = false; end;
+						if(nonblank(RepSpec.f2) and RepSpec.f2!=SHr.Location)then begin testf = false; end;
+						if(SHr.NPCostCOD==0 and SHr.NPCostCODEdit==0)then begin testf = false; end;
+						if(blank(SHr.NPIntDocNumber))then begin testf = false; end;
+						
+						if(testf)then begin
+							totsum = totsum + ARr.BookRVal;
+							Startformat(15);
+								outstring(rw[0],"DblSHVc",SHr.SerNr,false);
+								outstring(rw[1],0,SHr.CustCode,false);
+								outstring(rw[2],0,SHr.NPRecipientLastName & " " & SHr.NPRecipientFirstName & " " & SHr.NPRecipientMiddleName,false);
+								outstring(rw[3],0,SHr.NPIntDocNumber,false);
+								outstring(rw[4],0,SHr.ShipDate,false);
+								if(SHr.NPCostCODEdit>0)then begin
+									outstring(rw[5],0,SHr.NPCostCODEdit,false);
+								end else begin
+									outstring(rw[5],0,SHr.NPCostCOD,false);
+								end;
+								outstring(rw[6],0,"Дата получения",false);
+								outstring(rw[7],0,SHr.NPStatus,false);
+							endformat;
+						end;
+					end;
+					resetloop(SHr);
+				end;
+			end;
+		end;
+		gray_divider(0,1);
+		Startformat(15);
+			outstring(rw[5],0,totsum,false);
+		endformat;
+	endjob;
+
+return;
+end;

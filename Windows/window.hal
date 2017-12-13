@@ -4890,3 +4890,19 @@ begin
   EndWindow;
 
 end; // 04/01/17
+
+window UngetPayForNPRClass:1 // Edit ************************** BPI Ukraine - KramarAlexandr - Wednesday, 13 December 2017 17:05:52
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  real h,v,vs;
+
+  WindowBegin("Отчет по неполученным наложкам",UngetPayForNPRClass,CGRcW,RcType);
+  SetWRect(20,80,400,200);
+  UseView(RcVc);
+  	v=20;
+  	h=150;
+		EditField(h,v, 70,"Группа продаж",Normal,f1,false,SalesGroupSClass);
+		EditField(h,v+=20, 70,"Склад",Normal,f2,false,LocationSClass);
+  EndWindow;
+
+end; // 04/01/17

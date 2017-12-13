@@ -163,6 +163,8 @@ begin
   Report("ВЫгрузка номеров ЭН НП и Мадженто",TovTestRClass,ORWithENNPRn,0,modIN);
   
   Report("Нормализация телефонов и дубликатов",PhoneNormalizeRClass,PhoneNormalizeRn,0,modSL);
+  
+  Report("Неполученные наложенные платежи",UngetPayForNPRClass,UngetPayForNPRn,0,modSO);
 		
 	SString(964,"");	
 	
