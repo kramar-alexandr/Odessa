@@ -5926,16 +5926,16 @@ begin
       EditField(h2,v,80,"на место",Normal,ToPos,false,PosSClass);// Edit ************************** Tuesday, 17 March 2015 17:17:36
     end;
     if (HasModProd) then begin
-      EditField(h3,v,80,"Для производства",Normal,ProdSerNr,false,ProdSClass); v = v + vs;
-      EditField(h3,v,150,"Маршрут",Normal,Sorting,false,DelRouteSClass); v = v + vs;
+      //EditField(h3,v,80,"Для производства",Normal,ProdSerNr,false,ProdSClass); v = v + vs;
+      //EditField(h3,v,150,"Маршрут",Normal,Sorting,false,DelRouteSClass); v = v + vs;
     end;
     if ((HasLocalization("PRT") and HasModIN and HasMultiLocations) or IsStandardProduct==false) then begin
-      EditField(h3,v,150,"Тип",Normal,StockMovType,false,SetSClass); v = v + vs;
+      //EditField(h3,v,150,"Тип",Normal,StockMovType,false,SetSClass); v = v + vs;
     end;
     if (HasModWHM) then begin
       v = 6 + vs;
-      CheckBox(h+120,v,0,"Вручную",ManualPick);
-      CheckBox(h+120,v+=16,0,"Послать на очередь погрузчика",ToForkLiftQue);
+      //CheckBox(h+120,v,0,"Вручную",ManualPick);
+      //CheckBox(h+120,v+=16,0,"Послать на очередь погрузчика",ToForkLiftQue);
     end;
   end;
   EditField(h,v,80,"Группа продаж",Normal,SalesGroup,false,SalesGroupSClass);
@@ -6173,8 +6173,8 @@ t=1;
     EditField(550,-40,150,"Tax Auth. Approval",Normal,TaxAdminServSeal,false,0);
 //    SoftEditField(550,-40,150,"Tax Auth. Approval",Normal,"TaxAdminServSeal",false,0,M4Str,200);
   end;
-  EditField(550,-60,100,"Объем",ViewOnly,TotVolume,true,0); //Edit***************************Sasha2,13:50 09.02.2015
-  EditField(550,-40,100,"Вес",ViewOnly,TotWeight,true,0); //Edit***************************Sasha2,13:50 09.02.2015
+  EditField(550,-40,100,"Объем",ViewOnly,TotVolume,true,0); //Edit***************************Sasha2,13:50 09.02.2015
+  EditField(550,-20,100,"Вес",ViewOnly,TotWeight,true,0); //Edit***************************Sasha2,13:50 09.02.2015
   
   if (CurrentUser=="SAUNOK") then begin						//Edit----------------------Dima  21.01.2016
 		EditField(200,-60,100,"FrLocOKNr",Normal,FrLocOKNr,true,0);
