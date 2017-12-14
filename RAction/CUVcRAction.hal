@@ -1687,6 +1687,23 @@ BEGIN
       goto LCUVcRecordCheck;
     end;
   end;
+  // Edit Start ---------------------------------------------- Edit Start
+	//Thursday, 14 December 2017 12:38:30
+	
+  if(CUr.CUType>0)then begin
+		if(CUr.CustCat=="WEB")then begin
+			CUr.SalesGroup = "WEB";
+		end;
+		if(CUr.CustCat=="RETAI")then begin
+			CUr.SalesGroup = "WEB";
+		end;
+		if(CUr.CustCat=="CUST")then begin
+			CUr.SalesGroup = "OPT";
+		end;
+	end;
+  
+	// Edit End ---------------------------------------------- Edit End
+	
   if (nonblank(CUr.VECat)) then begin
     VGr.Code = CUr.VECat; 
     if (ReadFirstMain(VGr,1,true)==false) then begin  
