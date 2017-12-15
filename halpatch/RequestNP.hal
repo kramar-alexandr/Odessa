@@ -1692,7 +1692,7 @@ end;
 
 
 global 
-function string 255 NPGetDocumentStatusRequest(string documentID,string ordclass)
+function string 255 NPGetDocumentStatusRequest(string documentID,string ordclass, string phone)
 begin
   area replyarea,mainRequest;
   string 200 getParam,host,page,properties,response;
@@ -1720,7 +1720,7 @@ begin
    
   //properties = "<Documents>" & documentID & "</Documents><Documents></Documents>"; // doubling "<Documents>" need for array form
   
-  properties = "<Documents><item><DocumentNumber>" & documentID & "</DocumentNumber><Phone></Phone></item></Documents>";
+  properties = "<Documents><item><DocumentNumber>" & documentID & "</DocumentNumber><Phone>" & phone & "</Phone></item></Documents>";
   
 	CreateDescriptRequestWithMethod(host, page, apikey, "TrackingDocument","getStatusDocuments", properties, mainRequest);   
 

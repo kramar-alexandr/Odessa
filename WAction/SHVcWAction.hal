@@ -25,7 +25,7 @@ remote updating procedure SHVcToPackListVc(var record SHVc);//Edit--------------
 remote procedure NP_PasteSender(var record SHVc);
 remote procedure NP_PasteSenderWarehouseDesc(var record SHVc);
 remote procedure NP_PasteRecipientWarehouseDesc(var record SHVc);//Edit----------------------Dima  06.05.2015
-remote function string 255 NPGetDocumentStatusRequest(string,string);//Edit----------------------Dima  06.05.2015
+remote function string 255 NPGetDocumentStatusRequest(string,string,string);//Edit----------------------Dima  06.05.2015
 remote updating procedure NPCreateRequestMn(var record SHVc,var string,string);
 remote function boolean NPDeleteDocumentRequest(string,string);//Edit----------------------Dima  06.05.2015
 remote function boolean CheckENremote(record SHVc, var longint,var string);
@@ -270,7 +270,7 @@ begin
   if (nonblank(SHr.NPIntDocNumber)) then begin
   	ORr.SerNr = SHr.OrderNr;
 		readfirstmain(ORr,1,true);
-  	msg = NPGetDocumentStatusRequest(SHr.NPIntDocNumber,ORr.OrderClass);
+  	msg = NPGetDocumentStatusRequest(SHr.NPIntDocNumber,ORr.OrderClass,ORr.NPPhone);
   	
   	if (SHr.NPStatus!=msg) then begin
   		SHr.NPStatus = msg;
