@@ -1730,7 +1730,7 @@ begin
     GetXMLArea(replyarea);
 		xdata = ParseXMLArea(replyarea);
 		
-		response = XmlGet(xdata,"root/data/item/statuscode"); 
+		/*response = XmlGet(xdata,"root/data/item/statuscode"); 
 		switch(response)begin
 			case"1":response = "Нова пошта очікує надходження від відправника";
 			case"2":response = "Видалено";
@@ -1753,8 +1753,8 @@ begin
 			case"105":response = "Припинено зберігання";
 			case"106":response = "Одержано і є ТТН грошовий переказ";		
 			case"107":response = "Нараховується плата за зберігання";		
-		end;
-		//response = XmlGet(xdata,"root/data/item/StateName"); 
+		end;*/
+		response = XmlGet(xdata,"root/data/item/status"); 
 		   
     end else begin
  		logtext(0,"Hansa World: No Connection to api.novaposhta.ua");
