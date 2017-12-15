@@ -1718,9 +1718,11 @@ begin
   host = "api.novaposhta.ua";
   page = "/v2.0/xml/";
    
-  properties = "<Documents>" & documentID & "</Documents><Documents></Documents>"; // doubling "<Documents>" need for array form
+  //properties = "<Documents>" & documentID & "</Documents><Documents></Documents>"; // doubling "<Documents>" need for array form
   
-	CreateDescriptRequestWithMethod(host, page, apikey, "InternetDocument","documentsTracking", properties, mainRequest);   
+  properties = "<Documents><item><DocumentNumber>" & documentID & "</DocumentNumber><Phone></Phone></item></Documents>";
+  
+	CreateDescriptRequestWithMethod(host, page, apikey, "TrackingDocument","getStatusDocuments", properties, mainRequest);   
 
 
   if(MySendRawWebRequest(host,"443",true,"POST",page & getParam,"text/xml","",false,mainRequest,replyarea,5))then begin 
