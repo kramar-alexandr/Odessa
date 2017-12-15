@@ -3432,6 +3432,9 @@ begin
 	boolean testf,ssl;
   string 20 port;
   record ORVc ORr;
+  string 255 datetime,scandatetxt;
+  time scantime;
+  date scandate,resipientdate;
   
   webgetpostdata(replyarea);
 	logtext(0,"WebGetNPGetCytiesRequestProxy");
@@ -3447,6 +3450,22 @@ begin
 		
 			docNumber = XmlGet(xdata,"root/data/item[" & i & "]/number");
 			status = XmlGet(xdata,"root/data/item[" & i & "]/status");
+			datetime = XmlGet(xdata,"root/data/item[" & i & "]/recipientdatetime");
+			scandatetxt = XmlGet(xdata,"root/data/item[" & i & "]/datescan");
+			
+			
+			if(nonblank(scandatetxt))then begin
+				scantime = stringtotime(left(scandatetxt,5));
+				scandate = stringtodate(right(scandatetxt,10));
+			end;
+			if(nonblank(datetime))then begin
+				resipientdate = stringtodate(right(datetime,10));
+			end;
+			
+			//RecordField(NPRecipientDateTime,M4Date,0,0);// Edit ************************** BPI Ukraine - KramarAlexandr - Friday, 15 December 2017 10:02:46
+			//RecordField(NPdatescan,M4Date,0,0);// Edit ************************** BPI Ukraine - KramarAlexandr - Friday, 15 December 2017 11:18:46
+			//RecordField(NPtimescan,M4Time,0,0);// Edit ************************** BPI Ukraine - KramarAlexandr - Friday, 15 December 2017 11:18:47
+	
 			
 			logtext(0,"Update EN status for sh " & docNumber & " status =  " & status);
 			SHr.NPIntDocNumber = docNumber;
@@ -3457,6 +3476,13 @@ begin
 						if (SHr.NPStatus != status) then begin
 							RecordCopy(oldSHr,SHr);
 							SHr.NPStatus = status;
+							if(nonblank(datetime))then begin
+								SHr.NPRecipientDateTime = resipientdate;
+							end;
+							if(nonblank(scandatetxt))then begin
+								SHr.NPdatescan = scandate;
+								SHr.NPtimescan = scantime;
+							end;
 							if (status == USetStr(31063) or status == USetStr(31173)) then begin
 								SHr.NPStatusCode = 1;
 							end;
@@ -3468,6 +3494,13 @@ begin
 						if (SHr.NPStatus != status) then begin
 							RecordCopy(oldSHr,SHr);
 							SHr.NPStatus = status;
+							if(nonblank(datetime))then begin
+								SHr.NPRecipientDateTime = resipientdate;
+							end;
+							if(nonblank(scandatetxt))then begin
+								SHr.NPdatescan = scandate;
+								SHr.NPtimescan = scantime;
+							end;
 							if (status == USetStr(31063) or status == USetStr(31173)) then begin
 								SHr.NPStatusCode = 1;
 							end;
