@@ -1720,7 +1720,7 @@ begin
    
   //properties = "<Documents>" & documentID & "</Documents><Documents></Documents>"; // doubling "<Documents>" need for array form
   
-  properties = "<Documents><item><DocumentNumber>" & documentID & "</DocumentNumber><Phone>" & phone & "</Phone></item></Documents>";
+  properties = "<Documents><item><DocumentNumber>" & documentID & "</DocumentNumber><Phone>" & "" & "</Phone></item></Documents>";
   
 	CreateDescriptRequestWithMethod(host, page, apikey, "TrackingDocument","getStatusDocuments", properties, mainRequest);   
 
