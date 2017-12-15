@@ -1695,7 +1695,7 @@ global
 function string 255 NPGetDocumentStatusRequest(string documentID,string ordclass, string phone)
 begin
   area replyarea,mainRequest;
-  string 200 getParam,host,page,properties,response;
+  string 200 getParam,host,page,properties,response,responsecode;
   area basestring;
   xml xdata;
   record NPSettingsBlock NPSettingsb;
@@ -1730,31 +1730,32 @@ begin
     GetXMLArea(replyarea);
 		xdata = ParseXMLArea(replyarea);
 		
-		/*response = XmlGet(xdata,"root/data/item/statuscode"); 
-		switch(response)begin
-			case"1":response = "Нова пошта очікує надходження від відправника";
-			case"2":response = "Видалено";
-			case"3":response = "Номер не знайдено";
-			case"4":response = "Відправлення у місті";
-			case"41":response = "Відправлення у місті";
-			case"5":response = "Відправлення прямує до міста";
-			case"6":response = "Відправлення у місті. Очікуйте додаткове повідомлення про прибуття.";
-			case"7":response = "Прибув на відділення";
-			case"8":response = "Прибув на відділення";
-			case"9":response = "Відправлення отримано";
-			case"10":response = "Відправлення отримано";
-			case"11":response = "Грошовий переказ видано одержувачу.";
-			case"14":response = "Відправлення передано до огляду отримувачу";
-			case"101":response = "На шляху до одержувача";
-			case"102":response = "Відмова одержувача";
-			case"103":response = "Відмова одержувача";
-			case"108":response = "Відмова одержувача";
-			case"104":response = "Змінено адресу";
-			case"105":response = "Припинено зберігання";
-			case"106":response = "Одержано і є ТТН грошовий переказ";		
-			case"107":response = "Нараховується плата за зберігання";		
-		end;*/
 		response = XmlGet(xdata,"root/data/item/status"); 
+		responsecode = XmlGet(xdata,"root/data/item/statuscode"); 
+		switch(responsecode)begin
+			//case"1":response = "Нова пошта очікує надходження від відправника";
+			//case"2":response = "Видалено";
+			//case"3":response = "Номер не знайдено";
+			//case"4":response = "Відправлення у місті";
+			//case"41":response = "Відправлення у місті";
+			//case"5":response = "Відправлення прямує до міста";
+			//case"6":response = "Відправлення у місті. Очікуйте додаткове повідомлення про прибуття.";
+			//case"7":response = "Прибув на відділення";
+			//case"8":response = "Прибув на відділення";
+			case"9":response = "Одержаний";//"Відправлення отримано";
+			case"10":response = "Одержаний";//"Відправлення отримано";
+			//case"11":response = "Грошовий переказ видано одержувачу.";
+			//case"14":response = "Відправлення передано до огляду отримувачу";
+			//case"101":response = "На шляху до одержувача";
+			//case"102":response = "Відмова одержувача";
+			//case"103":response = "Відмова одержувача";
+			//case"108":response = "Відмова одержувача";
+			//case"104":response = "Змінено адресу";
+			//case"105":response = "Припинено зберігання";
+			//case"106":response = "Одержано і є ТТН грошовий переказ";		
+			//case"107":response = "Нараховується плата за зберігання";		
+		end;
+		
 		   
     end else begin
  		logtext(0,"Hansa World: No Connection to api.novaposhta.ua");
