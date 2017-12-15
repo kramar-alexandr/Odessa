@@ -3468,6 +3468,8 @@ begin
 	
 			
 			logtext(0,"Update EN status for sh " & docNumber & " status =  " & status & " " & scandatetxt);
+			logtext(0,scantime);
+			logtext(0,scandate);
 			SHr.NPIntDocNumber = docNumber;
 			if (ReadFirstKey("NPIntDocNumber",SHr,1,true)) then begin
 					ORr.SerNr = SHr.OrderNr;
