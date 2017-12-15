@@ -1754,7 +1754,7 @@ begin
 			case"106":response = "Одержано і є ТТН грошовий переказ";		
 			case"107":response = "Нараховується плата за зберігання";		
 		end;
-		response = XmlGet(xdata,"root/data/item/StateName"); 
+		//response = XmlGet(xdata,"root/data/item/StateName"); 
 		   
     end else begin
  		logtext(0,"Hansa World: No Connection to api.novaposhta.ua");
