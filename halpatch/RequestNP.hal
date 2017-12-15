@@ -1729,7 +1729,31 @@ begin
     writeareatofile(replyarea,"1getDocStatusReply.txt",0);
     GetXMLArea(replyarea);
 		xdata = ParseXMLArea(replyarea);
-
+		
+		response = XmlGet(xdata,"root/data/item/statuscode"); 
+		switch(response)begin
+			case"1":response = "Нова пошта очікує надходження від відправника";
+			case"2":response = "Видалено";
+			case"3":response = "Номер не знайдено";
+			case"4":response = "Відправлення у місті";
+			case"41":response = "Відправлення у місті";
+			case"5":response = "Відправлення прямує до міста";
+			case"6":response = "Відправлення у місті. Очікуйте додаткове повідомлення про прибуття.";
+			case"7":response = "Прибув на відділення";
+			case"8":response = "Прибув на відділення";
+			case"9":response = "Відправлення отримано";
+			case"10":response = "Відправлення отримано";
+			case"11":response = "Грошовий переказ видано одержувачу.";
+			case"14":response = "Відправлення передано до огляду отримувачу";
+			case"101":response = "На шляху до одержувача";
+			case"102":response = "Відмова одержувача";
+			case"103":response = "Відмова одержувача";
+			case"108":response = "Відмова одержувача";
+			case"104":response = "Змінено адресу";
+			case"105":response = "Припинено зберігання";
+			case"106":response = "Одержано і є ТТН грошовий переказ";		
+			case"107":response = "Нараховується плата за зберігання";		
+		end;
 		response = XmlGet(xdata,"root/data/item/StateName"); 
 		   
     end else begin
