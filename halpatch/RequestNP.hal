@@ -1668,8 +1668,8 @@ begin
  	AddTextToArea("<?xml version=\\\"1.0\\\" encoding=\\\"UTF-8\\\"?>",aRequest);
   AddTextToArea("<file>",aRequest);
   AddTextToArea("<apiKey>" & ConvertXml(aKey) & "</apiKey>",aRequest);
-  AddTextToArea("<modelName>" & ConvertXml("InternetDocument") & "</modelName>",aRequest);
-  AddTextToArea("<calledMethod>" & ConvertXml("documentsTracking") & "</calledMethod>",aRequest);
+  AddTextToArea("<modelName>" & ConvertXml("TrackingDocument") & "</modelName>",aRequest);
+  AddTextToArea("<calledMethod>" & ConvertXml("getStatusDocuments") & "</calledMethod>",aRequest);
   AddTextToArea("<methodProperties>",aRequest);
   AddTextToArea("<Documents>",aRequest);
   
@@ -3443,10 +3443,10 @@ begin
 		xdata = ParseXMLArea(replyarea);
 		i = 0;
 
-		while(XmlNodeExists(xdata,"root/data/item[" & i & "]/Barcode")) begin
+		while(XmlNodeExists(xdata,"root/data/item[" & i & "]/number")) begin
 		
-			docNumber = XmlGet(xdata,"root/data/item[" & i & "]/Barcode");
-			status = XmlGet(xdata,"root/data/item[" & i & "]/StateName");
+			docNumber = XmlGet(xdata,"root/data/item[" & i & "]/number");
+			status = XmlGet(xdata,"root/data/item[" & i & "]/status");
 			
 			logtext(0,"Update EN status for sh " & docNumber & " status =  " & status);
 			SHr.NPIntDocNumber = docNumber;
@@ -3526,7 +3526,7 @@ begin
 			ORr.SerNr = SHr.OrderNr;
 			readfirstmain(ORr,1,true);
 			if(ORr.OrderClass=="WEB")then begin
-				documents[i] = SHr.NPIntDocNumber;
+				documents[i] = "<DocumentNumber>" & SHr.NPIntDocNumber & "</DocumentNumber><Phone>" & "" & "</Phone>";
 				i=i+1;
 			end;
 		end;  
@@ -3550,54 +3550,8 @@ begin
 		port = "1070";
 		ssl = false;
   	if(MySendRawWebRequest(host,port,ssl,"POST",page & getParam,"text/xml","",false,mainRequest,replyarea,5)) then begin  
-  	  /*writeareatofile(replyarea,"1statusesReply.txt",0);
-  	  
-  	  GetXMLArea(replyarea);
-  	  
-			xdata = ParseXMLArea(replyarea);
-			i = 0;
-  	
-			while(XmlNodeExists(xdata,"root/data/item[" & i & "]/Barcode")) begin
-				
-				docNumber = XmlGet(xdata,"root/data/item[" & i & "]/Barcode");
-				status = XmlGet(xdata,"root/data/item[" & i & "]/StateName");
-				
-				SHr.NPIntDocNumber = docNumber;
-				if (ReadFirstKey("NPIntDocNumber",SHr,1,true)) then begin
-						ORr.SerNr = SHr.OrderNr;
-						readfirstmain(ORr,1,true);
-						if(ORr.OrderClass=="WEB")then begin
-							if (SHr.NPStatus != status) then begin
-								RecordCopy(oldSHr,SHr);
-								SHr.NPStatus = status;
-								if (status == USetStr(31063)) then begin
-									SHr.NPStatusCode = 1;
-								end;
-								RecordUpdate(oldSHr,SHr,false);
-								UpdateORVcNewPostStatuses(SHr);
-							end;
-						end;
-				end;			
-				i = i + 1;
-			end;*/
 			
-		end;/* else begin
-			repeat = repeat + 1;
-			if(repeat < 3) then begin
-				millisleep(100);
-				
-				if(repeat==2)then begin
-					host = "api.novaposhta.ua";
-					page = "/v2.0/xml/";
-					ssl = false;
-					port = "80";
-				end;
-				Logtext(0,"Reply request NPUpdateENstatusMn " & repeat);
-				goto LsendRequestAgainGet2;
-			end;
-			repeat = 0;					
-			logtext(0,"Hansa World: No Connection to api.novaposhta.ua");
-  	end;*/
+		end;
   
   end;
   
@@ -3639,7 +3593,7 @@ begin
 			ORr.SerNr = SHr.OrderNr;
 			readfirstmain(ORr,1,true);
 			if(ORr.OrderClass!="WEB")then begin
-				documents[i] = SHr.NPIntDocNumber;
+				documents[i] = "<DocumentNumber>" & SHr.NPIntDocNumber & "</DocumentNumber><Phone>" & "" & "</Phone>";
 				i=i+1;
 			end;
 		end;  
@@ -3664,58 +3618,8 @@ begin
 		port = "1070";
 		ssl = false;
   	if(MySendRawWebRequest(host,port,ssl,"POST",page & getParam,"text/xml","",false,mainRequest,replyarea,5)) then begin  
-  	  /*writeareatofile(replyarea,"1statusesReply.txt",0);
-  	  
-  	  GetXMLArea(replyarea);
-  	  
-			xdata = ParseXMLArea(replyarea);
-			i = 0;
-  	
-			while(XmlNodeExists(xdata,"root/data/item[" & i & "]/Barcode")) begin
-				
-				docNumber = XmlGet(xdata,"root/data/item[" & i & "]/Barcode");
-				status = XmlGet(xdata,"root/data/item[" & i & "]/StateName");
-				
-				SHr.NPIntDocNumber = docNumber;
-				if (ReadFirstKey("NPIntDocNumber",SHr,1,true)) then begin
-						ORr.SerNr = SHr.OrderNr;
-						readfirstmain(ORr,1,true);
-						if(ORr.OrderClass!="WEB")then begin
-							if (SHr.NPStatus != status) then begin
-								RecordCopy(oldSHr,SHr);
-								SHr.NPStatus = status;
-								if (status == USetStr(31063)) then begin
-									SHr.NPStatusCode = 1;
-								end;
-								if (status==USetStr(31171) and SHr.OKFlag==0) then begin// Edit ************************** Wednesday, 23 August 2017 16:59:49
-									SHr.OKFlag = 1;
-									SHr.Sorting = "éíÉêìÜÖçé";
-								end;
-								RecordUpdate(oldSHr,SHr,true);
-								UpdateORVcNewPostStatuses(SHr);
-							end;
-						end;
-				end;			
-				i = i + 1;
-			end;*/
 			
-		end;/* else begin
-			repeat = repeat + 1;
-			if(repeat < 3) then begin
-				millisleep(100);
-				
-				if(repeat==2)then begin
-					host = "api.novaposhta.ua";
-					page = "/v2.0/xml/";
-					ssl = false;
-					port = "80";
-				end;
-				Logtext(0,"Reply request NPUpdateENstatusMn " & repeat);
-				goto LsendRequestAgainGet12;
-			end;
-			repeat = 0;					
-			logtext(0,"Hansa World: No Connection to api.novaposhta.ua");
-  	end;*/
+		end;
   
   end;
   
