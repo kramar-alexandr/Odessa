@@ -1724,7 +1724,7 @@ begin
 
 
   if(MySendRawWebRequest(host,"443",true,"POST",page & getParam,"text/xml","",false,mainRequest,replyarea,5))then begin 
-    //writeareatofile(replyarea,"1getDocStatusReply.txt",0);
+    writeareatofile(replyarea,"1getDocStatusReply.txt",0);
     GetXMLArea(replyarea);
 		xdata = ParseXMLArea(replyarea);
 

@@ -4758,6 +4758,7 @@ begin
   	EditField(h4,v,80,"Цена доставки",Normal,NPCostOnSite,false,0);
  		CheckBox(h6,v,0,"ЭН Напечатана",NPPrinted);
 		EditField(h1,v+=vs,200,"Статус",Normal,NPStatus,false,0);
+		EditField(h1+300,v,70,"Дата получения",Normal,NPRecipientDateTime,false,0);
 
 
   if (GuiType==kGuiMetro) then begin // Temporarily disabled on Windows 8
