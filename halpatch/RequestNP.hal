@@ -3467,7 +3467,7 @@ begin
 			//RecordField(NPtimescan,M4Time,0,0);// Edit ************************** BPI Ukraine - KramarAlexandr - Friday, 15 December 2017 11:18:47
 	
 			
-			logtext(0,"Update EN status for sh " & docNumber & " status =  " & status);
+			logtext(0,"Update EN status for sh " & docNumber & " status =  " & status & " " & scandatetxt);
 			SHr.NPIntDocNumber = docNumber;
 			if (ReadFirstKey("NPIntDocNumber",SHr,1,true)) then begin
 					ORr.SerNr = SHr.OrderNr;
