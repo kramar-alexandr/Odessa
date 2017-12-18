@@ -1228,7 +1228,7 @@ BEGIN
     ORp.CurncyCode = CUr.CurncyCode;
     ORp.BankCode = CUr.AccOperator;
     ORp.Objects = AddObjectToObjectList(ORp.Objects,CUr.Objects);
-    if(blank(ORp.SalesMan))then begin// Edit ************************** BPI Ukraine - KramarAlexandr - Wednesday, 6 December 2017 11:25:49
+    if(blank(ORp.SalesMan) and usercanaction("DoNotSetSalesManInOR",false)==false)then begin// Edit ************************** BPI Ukraine - KramarAlexandr - Wednesday, 6 December 2017 11:25:49
 			SetSalesMan(tstr,CUr.SalesMan);
 			tstr2 = ORp.Objects;
 			RemoveOldPersObjects(ORp.SalesMan,tstr2);
