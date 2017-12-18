@@ -910,6 +910,7 @@ begin
   For(i=0;i<mtrw;i=i+1) begin
 		matrowget(ORp,i,ORrw);
 		if(nonblank(ORrw.ArtCode))then begin
+			vreb = blankval;
 			if (GetItemPriceDiscount3(ORrw.ArtCode,ORrw.Quant,INr,ORp.CurncyCode,
                             ORp.FrRate,ORp.ToRateB1,ORp.ToRateB2,ORp.BaseRate1,ORp.BaseRate2,
                             ORp.LangCode,ORp.CustCat,ORp.PriceList,ORp.RebCode,
