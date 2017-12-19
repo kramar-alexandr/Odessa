@@ -3465,7 +3465,6 @@ begin
 				scandate = StringToDate(right(scandatetxt,10));
 			end;
 			if(nonblank(datetime))then begin
-				datetime = right(datetime,8);
 				datetime = left(datetime,10);
 				resipientdate = StringToDate(mid(datetime,6,2) & "/" & mid(datetime,4,2) & "/" & mid(datetime,0,4));
 			end;
