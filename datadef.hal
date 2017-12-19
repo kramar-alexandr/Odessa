@@ -6258,6 +6258,7 @@ RecordBegin(IPVc,-,"");
   ArrayField(Price,M4Val,0,0);
   ArrayField(Sum,M4Val,0,0);
   ArrayField(PrevQty,M4Val,0,0);
+  ArrayField(Spec,M4Str,255,0);
   
   EndArray;
   MainKeyBegin(SerNr,0);
@@ -6292,6 +6293,7 @@ RecordBegin(IPVc,-,"");
   ArrayField(AllSelQty,M4Val,0,0);
   ArrayField(Price,M4Val,0,0);
   ArrayField(Sum,M4Val,0,0);
+  ArrayField(Spec,M4Str,255,0);
   
   EndArray;
   MainKeyBegin(SerNr,0);
@@ -6326,7 +6328,8 @@ RecordBegin(IPVc,-,"");
   ArrayField(AllSelQty,M4Val,0,0);
   ArrayField(Price,M4Val,0,0);
   ArrayField(Sum,M4Val,0,0);
-  
+  ArrayField(Spec,M4Str,255,0);
+    
   EndArray;
   MainKeyBegin(SerNr,0);
   KeySegment(SerNr);
@@ -6360,6 +6363,7 @@ RecordBegin(IPVc,-,"");
   ArrayField(AllSelQty,M4Val,0,0);
   ArrayField(Price,M4Val,0,0);
   ArrayField(Sum,M4Val,0,0);
+  ArrayField(Spec,M4Str,255,0);
   
   EndArray;
   MainKeyBegin(SerNr,0);

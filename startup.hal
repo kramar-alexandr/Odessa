@@ -477,6 +477,8 @@ begin
   Maintenance("Generate Consignation",ConsignationGenVClass,ConsignationGenMn,modSL);
   
   Maintenance("Create LoyaltyCards",MyVClass,CreateLoyaltyCard,modPOS);
+  
+  Maintenance("Add Spec To Cons",MyVClass,ConsFillSpec,modSL);
 	
   Import("€мпорт цен",PLImportIClass,PLImportIn,modDI); //Added********************Dima 20.11.2014
   Import("€мпорт товаров",INImportIClass,INImportIn,modIN);//Added********************Dima 20.11.2014

@@ -676,6 +676,7 @@ begin
 								comprice = PLr.ExVatPrice;
 							end;
 							Consignationrw.ArtCode = ISr.Code;
+							Consignationrw.Spec = INr.Name;
 							Consignationrw.Qty = ISr.Instock;
 							Consignationrw.Price = comprice;
 							Consignationrw.Sum = comprice * ISr.Instock;
@@ -706,6 +707,7 @@ begin
 								comprice = PLr.ExVatPrice;
 							end;
 							Consignationrw.ArtCode = INr.Code;
+							Consignationrw.Spec = INr.Name;
 							Consignationrw.Qty = resqty;
 							Consignationrw.Price = comprice;
 							Consignationrw.Sum = comprice * resqty;
@@ -893,6 +895,7 @@ begin
 	  	matrowget(Consignationr,i,Consignationrw);
 	  	
 	  	ConsInrw.ArtCode = Consignationrw.ArtCode;
+	  	ConsInrw.Spec = Consignationrw.Spec;
 	  	ConsInrw.Qty = Consignationrw.Qty;
 	  	ConsInrw.Price = Consignationrw.Price;
 	  	
@@ -1045,6 +1048,7 @@ begin
 	vector boolean artf,artf1;
 	val resqty;
 	date lastdate;
+	record INVc INr;
 	
 	logtext(0,"CrConsigBrak");
 	
@@ -1084,6 +1088,10 @@ begin
 	  		foundf = true;
 	  		if(artqty2[artcodes[i]]>Consignationrw.Qty)then begin
 	  			ConsBrakrw.ArtCode = artcodes[i];
+	  			INr.Code = artcodes[i];
+	  			if(readfirstmain(INr,1,true))then begin
+	  				ConsBrakrw.Spec = INr.Name;
+	  			end;
 	  			resqty = 0;
 	  			//CalcSalesOnPeriod(Consignationr,artcodes[i],resqty,lastdate);
 	  			ConsBrakrw.Qty = artqty2[artcodes[i]] - Consignationrw.Qty;
@@ -1098,6 +1106,10 @@ begin
 		end; 
 		if(foundf==false)then begin
 			ConsBrakrw.ArtCode = artcodes[i];
+			INr.Code = artcodes[i];
+			if(readfirstmain(INr,1,true))then begin
+				ConsBrakrw.Spec = INr.Name;
+			end;
 			resqty = 0;
 			ConsBrakrw.Qty = artqty2[artcodes[i]];
 
@@ -1141,6 +1153,7 @@ begin
 	vector boolean artf,artf1;
 	val resqty;
 	date lastdate;
+	record INVc INr;
 	
 	logtext(0,"CrConsigSale");
 	
@@ -1180,6 +1193,10 @@ begin
 	  		foundf = true;
 	  		if(artqty2[artcodes[i]]>Consignationrw.Qty)then begin
 	  			ConsSalerw.ArtCode = artcodes[i];
+	  			INr.Code = artcodes[i];
+	  			if(readfirstmain(INr,1,true))then begin
+	  				ConsSalerw.Spec = INr.Name;
+	  			end;
 	  			resqty = 0;
 	  			CalcSalesOnPeriod(Consignationr,artcodes[i],resqty,lastdate);
 	  			//logtext(0,artcodes[i] & " " & resqty);
@@ -1199,6 +1216,10 @@ begin
 		end; 
 		if(foundf==false)then begin
 			ConsSalerw.ArtCode = artcodes[i];
+			INr.Code = artcodes[i];
+			if(readfirstmain(INr,1,true))then begin
+				ConsSalerw.Spec = INr.Name;
+			end;
 			resqty = 0;
 			CalcSalesOnPeriod(Consignationr,artcodes[i],resqty,lastdate);
 			//logtext(0,artcodes[i] & " " & resqty);
@@ -1256,5 +1277,66 @@ begin
 		
 		logtext(0,"CrConsigAll END" & Consignationr.TotQty);
 
+return;
+end;
+
+
+global updating procedure ConsFillSpec()
+begin
+	record ConsignationVc Consignationr;
+	row ConsignationVc Consignationrw;
+	record ConsSaleVc ConsSaler;
+	row ConsSaleVc ConsSalerw;
+	record ConsInVc ConsInr;
+	row ConsInVc ConsInrw;
+	record ConsBrakVc ConsBrakr;
+	row ConsBrakVc ConsBrakrw;
+	integer i,mtrw;
+	record INVc INr;
+	
+	while(loopmain(Consignationr,1,true))begin
+		For(i=0;i<matrowcnt(Consignationr);i=i+1) begin
+	  	matrowget(Consignationr,i,Consignationrw);
+	  		INr.Code = Consignationrw.ArtCode;
+	  		readfirstmain(INr,1,true);
+	  		Consignationrw.Spec = INr.Name;
+	  	matrowput(Consignationr,i,Consignationrw);
+		end; 
+		recordstore(Consignationr,true);
+	end;
+	
+	while(loopmain(ConsSaler,1,true))begin
+		For(i=0;i<matrowcnt(ConsSaler);i=i+1) begin
+	  	matrowget(ConsSaler,i,ConsSalerw);
+	  		INr.Code = ConsSalerw.ArtCode;
+	  		readfirstmain(INr,1,true);
+	  		ConsSalerw.Spec = INr.Name;
+	  	matrowput(ConsSaler,i,ConsSalerw);
+		end; 
+		recordstore(ConsSaler,true);
+	end;
+	
+	while(loopmain(ConsInr,1,true))begin
+		For(i=0;i<matrowcnt(ConsInr);i=i+1) begin
+	  	matrowget(ConsInr,i,ConsInrw);
+	  		INr.Code = ConsInrw.ArtCode;
+	  		readfirstmain(INr,1,true);
+	  		ConsInrw.Spec = INr.Name;
+	  	matrowput(ConsInr,i,ConsInrw);
+		end; 
+		recordstore(ConsInr,true);
+	end;
+	
+	while(loopmain(ConsBrakr,1,true))begin
+		For(i=0;i<matrowcnt(ConsBrakr);i=i+1) begin
+	  	matrowget(ConsBrakr,i,ConsBrakrw);
+	  		INr.Code = ConsBrakrw.ArtCode;
+	  		readfirstmain(INr,1,true);
+	  		ConsBrakrw.Spec = INr.Name;
+	  	matrowput(ConsBrakr,i,ConsBrakrw);
+		end; 
+		recordstore(ConsBrakr,true);
+	end;
+	
 return;
 end;
