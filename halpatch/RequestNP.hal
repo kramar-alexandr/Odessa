@@ -3489,7 +3489,7 @@ begin
 								SHr.NPdatescan = scandate;
 								SHr.NPtimescan = scantime;
 							end;
-							if (status == USetStr(31063) or status == USetStr(31173)) then begin
+							if (status == USetStr(31063) or status == USetStr(31173) or status == USetStr(31177)) then begin
 								SHr.NPStatusCode = 1;
 							end;
 							RecordUpdate(oldSHr,SHr,true);

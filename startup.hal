@@ -339,6 +339,7 @@ begin
 	 SString(31174,"Нельзя закрыть. Есть отгрузка или сч/ф");
 	 SString(31175,"Акция 'КАЛИПСОмания' Торговая точка №1001");
 	 SString(31176,"Акция 'КАЛИПСОмания' Торговая точка №1002");
+	 SString(31177,"Відправлення отримано");
 	 
 	Maintenance("Закрыть старые OR",MyVClass,CloseOldOpenOrders,modSO);
 	Maintenance("Проставить склад первой покупки клиента",MyVClass,FillFirstDateByeCUMn,modSL);
