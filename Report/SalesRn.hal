@@ -1522,7 +1522,7 @@ begin
 								outstring(rw[1],0,SHr.CustCode,false);
 								outstring(rw[2],0,SHr.NPRecipientLastName & " " & SHr.NPRecipientFirstName & " " & SHr.NPRecipientMiddleName,false);
 								outstring(rw[3],0,SHr.NPIntDocNumber,false);
-								outstring(rw[4],0,SHr.ShipDate,false);
+								outstring(rw[4],0,SHr.ShipOkDate,false);
 								if(SHr.NPCostCODEdit>0)then begin
 									outstring(rw[5],0,SHr.NPCostCODEdit,false);
 									totsum = totsum + SHr.NPCostCODEdit;
