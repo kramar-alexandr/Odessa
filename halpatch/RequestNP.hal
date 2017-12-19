@@ -3430,7 +3430,7 @@ begin
   string 200 docNumber,status;
   integer steps;
   integer repeat;
-	boolean testf,ssl;
+	boolean testf,ssl,changedf;
   string 20 port;
   record ORVc ORr;
   string 255 datetime,scandatetxt;
@@ -3491,6 +3491,24 @@ begin
 							end;
 							RecordUpdate(oldSHr,SHr,true);
 							UpdateORVcNewPostStatuses(SHr);
+						end else begin
+							changedf = false;
+							if(nonblank(datetime))then begin
+								if(SHr.NPRecipientDateTime!=resipientdate)then begin
+									SHr.NPRecipientDateTime = resipientdate;
+									changedf = true;
+								end;
+							end;
+							if(nonblank(scandatetxt))then begin
+								if(SHr.NPdatescan!=scandate or SHr.NPtimescan!=scantime)then begin
+									SHr.NPdatescan = scandate;
+									SHr.NPtimescan = scantime;
+									changedf = true;
+								end;
+							end;
+							if(changedf)then begin
+								recordstore(SHr,true);
+							end;
 						end;
 					end;
 					if(ORr.OrderClass!="WEB")then begin
@@ -3513,6 +3531,24 @@ begin
 							end;
 							RecordUpdate(oldSHr,SHr,true);
 							UpdateORVcNewPostStatuses(SHr);
+						end else begin
+							changedf = false;
+							if(nonblank(datetime))then begin
+								if(SHr.NPRecipientDateTime!=resipientdate)then begin
+									SHr.NPRecipientDateTime = resipientdate;
+									changedf = true;
+								end;
+							end;
+							if(nonblank(scandatetxt))then begin
+								if(SHr.NPdatescan!=scandate or SHr.NPtimescan!=scantime)then begin
+									SHr.NPdatescan = scandate;
+									SHr.NPtimescan = scantime;
+									changedf = true;
+								end;
+							end;
+							if(changedf)then begin
+								recordstore(SHr,true);
+							end;
 						end;
 					end;
 			end;			
