@@ -3456,11 +3456,11 @@ begin
 			
 			
 			if(nonblank(scandatetxt))then begin
-				scantime = stringtotime(left(scandatetxt,5));
-				scandate = stringtodate(right(scandatetxt,10));
+				scantime = stringtotime(right(scandatetxt,5));
+				scandate = stringtodate(left(scandatetxt,10));
 			end;
 			if(nonblank(datetime))then begin
-				resipientdate = stringtodate(right(datetime,10));
+				resipientdate = stringtodate(left(datetime,10));
 			end;
 			
 			//RecordField(NPRecipientDateTime,M4Date,0,0);// Edit ************************** BPI Ukraine - KramarAlexandr - Friday, 15 December 2017 10:02:46
