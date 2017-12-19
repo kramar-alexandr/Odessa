@@ -6293,6 +6293,9 @@ t=1;
 	end;
 	SpecialMenu("Удалить проблемную строку по заказу",'',20,"DeleteOrdRowFromSMHardDsm");
 	SpecialMenu("Остановить сбор веб резервов",'',20,"StopWebReservingDsm");
+	if(currentuser=="SA")then begin
+		SpecialMenu("Обнулить в обработке в строке. Жестко!",'',20,"DeleteOrdRowFromSMHardHardDsm");
+	end;
   EndWindow;
 end;
 

@@ -1561,6 +1561,47 @@ LDeleteOrdRowFromSMHardDsm:;
 return;
 end;
 
+global updating procedure DeleteOrdRowFromSMHardHardDsm()
+begin
+	record ORVc ORr;
+	record StockMovVc SMr,oldSMr;
+	row StockMovVc SMrw;
+	row ORVc ORrw;
+	record RcVc RepSpec;
+	integer wn,nwn,rownr,rownrReal,rwmax;
+	string 200 message1,message2;
+	
+  wn = CurWindow;
+  GetWindowRecord(wn,SMr);
+  
+  if (WindowState(wn)!=Rs_normal) then begin
+  	MessageBox(0,"Сохраните документ");
+  	goto LDeleteOrdRowFromSMHardHardDsm;
+  end;
+  if (SMr.SentOKFlag>0 or SMr.OrdFlag>0 or SMr.OKFlag>0) then begin
+  	//MessageBox(0,"Перемещение уже подтверждено");
+  	rownr = GetWindowCurRow(wn);
+		rownrReal = rownr + 1;
+	
+		if (rownr>=0) then begin
+			MatRowGet(SMr,rownr,SMrw);
+			 SMrw.OrderProcessing = blankval;
+			 SMrw.ORSerial = -1;
+			 SMrw.ORRowUID = blankval;
+			MatRowPut(SMr,rownr,SMrw);
+			recordstore(SMr,true);
+			PutWindowRecord(wn,SMr);
+		end;
+		
+		
+  	goto LDeleteOrdRowFromSMHardHardDsm;
+  end;
+  
+LDeleteOrdRowFromSMHardHardDsm:;
+
+return;
+end;
+
 
 global updating procedure StopWebReservingDsm()
 begin
