@@ -1530,7 +1530,7 @@ begin
 									outstring(rw[5],0,SHr.NPCostCOD,false);
 									totsum = totsum + SHr.NPCostCOD;
 								end;
-								outstring(rw[6],0,"Дата получения",false);
+								outstring(rw[6],0,SHr.NPRecipientDateTime,false);
 								outstring(rw[7],0,SHr.NPStatus,false);
 							endformat;
 						end;
