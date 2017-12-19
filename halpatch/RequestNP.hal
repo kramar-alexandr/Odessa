@@ -3453,7 +3453,8 @@ begin
 			status = XmlGet(xdata,"root/data/item[" & i & "]/status");
 			datetime = XmlGet(xdata,"root/data/item[" & i & "]/recipientdatetime");
 			scandatetxt = XmlGet(xdata,"root/data/item[" & i & "]/datescan");
-			
+			logtext(0,"datetime: " & datetime);
+			logtext(0,"scandatetxt: " & scandatetxt);
 			
 			if(nonblank(scandatetxt))then begin
 				scantime = stringtotime(right(scandatetxt,5));
