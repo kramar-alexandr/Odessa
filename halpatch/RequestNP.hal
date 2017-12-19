@@ -3465,8 +3465,7 @@ begin
 				scandate = StringToDate(right(scandatetxt,10));
 			end;
 			if(nonblank(datetime))then begin
-				datetime = left(datetime,10);
-				resipientdate = StringToDate(mid(datetime,6,2) & "/" & mid(datetime,4,2) & "/" & mid(datetime,0,4));
+				resipientdate = stringtodate(left(datetime,10));
 			end;
 			
 			//RecordField(NPRecipientDateTime,M4Date,0,0);// Edit ************************** BPI Ukraine - KramarAlexandr - Friday, 15 December 2017 10:02:46
