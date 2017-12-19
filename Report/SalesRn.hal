@@ -1478,6 +1478,7 @@ begin
 	boolean TrHs,testf;
 	array integer rw;
 	val totsum;
+	record UserVc USr;
 	
 	rw[0] = 0;
 	rw[1] = 30;
@@ -1499,7 +1500,17 @@ begin
 			outstring(rw[6],0,"Дата получения",false);
 			outstring(rw[7],0,"Статус",false);
 		endformat;
-	
+		
+		USr.Code = currentuser;
+		if(readfirstmain(USr,1,true))then begin
+			if(nonblank(USr.SalesGroup))then begin
+				RepSpec.f1 = USr.SalesGroup;
+			end;
+			if(nonblank(USr.Location))then begin
+				RepSpec.f2 = USr.Location;
+			end;
+		end;
+		
 		while(loopmain(ARr,1,true))begin
 			IVr.SerNr = ARr.InvoiceNr;
 			if(readfirstmain(IVr,1,true))then begin
