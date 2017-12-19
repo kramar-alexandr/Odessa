@@ -3457,7 +3457,9 @@ begin
 			
 			if(nonblank(scandatetxt))then begin
 				scantime = stringtotime(right(scandatetxt,5));
-				scandate = stringtodate(left(scandatetxt,10));
+				scandatetxt = left(scandatetxt,10);
+				StringToDate(mid(scandatetxt,6,2) & "/" & mid(scandatetxt,4,2) & "/" & mid(scandatetxt,0,4));
+				//scandate = stringtodate(left(scandatetxt,10));
 			end;
 			if(nonblank(datetime))then begin
 				resipientdate = stringtodate(left(datetime,10));
