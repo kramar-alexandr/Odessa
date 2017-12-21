@@ -128,13 +128,10 @@ begin
   return;
 end;
 
-webpublic
-global procedure WebFindItem()
+function string 255 FindItem(string item)
 begin
-  string 255 item,itemcode;
+  string 255 itemcode;
   record INVc INr;
-  
-  item = WebGetArg("item");
   INr.Code = item;
   if(readfirstmain(INr,1,true))then begin
   	itemcode = INr.Code;
@@ -149,8 +146,15 @@ begin
 			end;
   	end;
   end;
-  WebOutString(itemcode);
   
+  FindItem = itemcode;
+  return;
+end;
+
+webpublic
+global procedure WebFindItem()
+begin
+  WebOutString(FindItem(WebGetArg("item")));
   return;
 end;
 
@@ -602,5 +606,92 @@ Global
 updating procedure MagentoTestMn(record RcVc RepSpec)
 begin
   SOAPSalesOrderInfo(RepSpec.f1);
+  return;
+end;
+
+webpublic
+global procedure WebLoadStockTakeVc()
+begin
+	record StockTakeVc STr;
+  row StockTakeVc STrw;
+  integer i,mtrw,total;
+  string 5 nl,delim;
+  string 255 param;
+  
+  if (LoggedInTest()) then begin
+    logtext(0,"WebLoadStockTakeVc - " & currentuser);
+    nl = chr(13) & chr(10);
+    delim = ",";
+    param = WebGetArg("param");
+    if nonblank (param) then begin
+      STr.SerNr = param;
+      if readfirstmain(STr,1,true) then begin
+        if (STr.OKFlag==0) then begin
+          total = 0;
+          mtrw = matrowcnt(STr);
+          for (i=0;i<mtrw;i=i+1) begin
+            MatRowGet(STr,i,STrw);
+            total = total + STrw.Qty;
+          end;
+          WebOutString(STr.Location & nl & total);
+        end else begin
+          WebOutString("oked");
+        end;
+      end else begin
+        WebOutString("noindb");
+      end;
+    end else begin
+      WebOutString("nostvcnr");
+    end;
+  end;
+  return;
+end;
+
+webpublic
+global updating procedure WebFindItemST()
+begin
+  record StockTakeVc STr;
+  record INVc INr;
+  row StockTakeVc STrw;
+  string 5 nl,delim;
+  string 255 artcode;
+  integer qty,i,rwcnt,total;
+  boolean foundf;
+  
+  nl = chr(13) & chr(10);
+  artcode = FindItem(WebGetArg("p2"));
+  if (nonblank(artcode)) then begin
+    qty = StringToInt(WebGetArg("p3"));
+    INr.Code = artcode;
+    readfirstmain(INr,1,true);
+    STr.SerNr = WebGetArg("p1");
+    readfirstmain(STr,1,true);
+    rwcnt = matrowcnt(STr);
+    foundf = false;
+    for (i=0;i<rwcnt;i=i+1) begin
+      MatRowGet(STr,i,STrw);
+      if (STrw.ArtCode==artcode) then begin
+        STrw.Qty = STrw.Qty + qty;
+        qty = STrw.Qty;
+        matrowput(STr,i,STrw);
+        foundf = true;
+        i = rwcnt;
+      end;
+    end;
+    if (!foundf) then begin
+      STrw.ArtCode = artcode;
+      STrw.Spec = INr.Name;
+      STrw.Qty = qty;
+      matrowinsert(STr,rwcnt,STrw);
+    end;
+    recordstore(STr,true);
+    total = 0;
+    rwcnt = matrowcnt(STr);
+    for (i=0;i<rwcnt;i=i+1) begin
+      MatRowGet(STr,i,STrw);
+      total = total + STrw.Qty;
+    end;
+    WebOutString(artcode & nl & INr.Name & nl & qty & nl & total);
+  end;
   return;
 end;
