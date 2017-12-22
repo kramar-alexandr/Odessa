@@ -1018,8 +1018,6 @@ BEGIN
 						newaddcostforpeace1 = newaddcostforpeace1 * Prodrw.OutQty * INr.Volume;
 					end;
 					
-					logtext(0,Prodrw.Item);
-					logtext(0,incost[ci]*Prodrw.RelVal/100/Prodrw.OutQty);
 					Prodrw.ItemCost = incost[ci]*Prodrw.RelVal/100/Prodrw.OutQty + Prodrw.ExtraCostVal + newaddcostforpeace + newaddcostforpeace1;
 					matrowput(Prodp,i,Prodrw);
 				end;
