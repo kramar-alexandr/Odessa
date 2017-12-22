@@ -927,9 +927,11 @@ BEGIN
 			For(i=0;i<rwcnt;i=i+1) begin
 				matrowget(Prodp,i,Prodrw);
 				if(Prodrw.InQty!=0 and nonblank(Prodrw.Item))then begin
-					incost[ci] = Prodrw.ItemCost*Prodrw.InQty;
+					incost[ci] = incost[ci] + Prodrw.ItemCost*Prodrw.InQty;
 					inrow[ci] = i;
 					totcost = totcost + Prodrw.ItemCost*Prodrw.InQty;
+					//ci = ci+1;
+				end else begin
 					ci = ci+1;
 				end;
 			end; 
