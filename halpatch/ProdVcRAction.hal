@@ -314,7 +314,7 @@ BEGIN
 	val totcost;
 	array integer totqty;// Edit ************************** Wednesday, 21 October 2015 16:26:04
 	val subTotalRelVal,totRelVal,addcostforpeace,totweight,totvolume,addcostforpeace1,newaddcostforpeace,newaddcostforpeace1;// Edit ************************** BPI Ukraine - KramarAlexandr - Thursday, 7 December 2017 11:03:31
-	boolean testblankperc;
+	boolean testblankperc,added;
 	
   rowno = -1;
   extracom = "";
@@ -904,19 +904,20 @@ BEGIN
 				matrowput(Prodp,i,Prodrw);
 			end;
 			
+			added = false;
 			For(i=rwcnt-1;i>=0;i=i-1) begin
 				matrowget(Prodp,i,Prodrw);
 				if(Prodrw.OutQty!=0) then begin
 					subTotalRelVal = subTotalRelVal + Prodrw.RelVal;
-					logtext(0,i & " " & Prodrw.Item & " " & subTotalRelVal);
+					added = true;
 				end else begin
-					logtext(0,i & "* " & Prodrw.Item & " " & subTotalRelVal);
-					if (subTotalRelVal!=100) then begin
+					if (subTotalRelVal!=100 and added) then begin
 						fieldnam = "RelVal";
 						rowno = i;
 						res = 31124; 
 						goto LProdVcRecordCheck;								
 					end;
+					added = false;
 					subTotalRelVal = 0;
 				end;
 			end;	
