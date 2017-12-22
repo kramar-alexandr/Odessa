@@ -937,13 +937,16 @@ BEGIN
 			end; 
 		
 			ci = 0;
+			added = false;
 			For(i=0;i<rwcnt;i=i+1) begin
 				matrowget(Prodp,i,Prodrw);
 				if(nonblank(Prodrw.Item))then begin
 					totqty[ci] = totqty[ci] + Prodrw.OutQty;
+					added = true;
 				end;
-				if(Prodrw.InQty!=0 and nonblank(Prodrw.Item) and i!=inrow[ci])then begin
+				if(Prodrw.InQty!=0 and nonblank(Prodrw.Item) and i!=inrow[ci] and added)then begin
 					ci = ci+1;
+					added = false;
 				end;
 			end; 
 			
