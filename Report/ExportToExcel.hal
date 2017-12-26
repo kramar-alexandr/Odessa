@@ -1,5 +1,7 @@
   SetLangMode(LangRussian,"RUS",0);  
 
+
+
 global procedure ExportTableToExcelPORn(record RcVc RepSpec)	//Edit--------Dima 
 begin
   record POVc POr;
@@ -93,7 +95,70 @@ return;
 end;
 
 
+global procedure ExportTableToExcelProdRn(record RcVc RepSpec)	//Edit--------Dima 
+begin
+  record ProdVc Prodr;
+  row	ProdVc Prodrw;
+  Integer rwcnt,i,wn;
+  
+  Prodr.SerNr = RepSpec.long1;
+  if (ReadFirstMain(Prodr,1,true)) then begin	  
+  rwcnt=MatRowCnt(Prodr);
+ 
+	StartReportJob("ExportToExcel");
+	
+	EndHeader;
 
+	SetRepCol(2,50);
+	SetRepCol(3,100);
+	SetRepCol(4,150);
+	SetRepCol(5,200);
+	SetRepCol(6,250);
+	SetRepCol(7,300);
+	SetRepCol(8,350);
+	SetRepCol(9,400);
+	SetRepCol(10,450);
+	SetRepCol(11,500);
+	SetRepCol(12,550);
+	SetRepCol(13,600);
+	
+
+
+	StartFormat(15);
+	OutString(2,0,"№",true);
+	OutString(2,0,"Товар",true);
+	OutString(5,0,"Наименование",false);
+	
+	OutString(6,0,"Затр.",false);
+	OutString(7,0,"Выпуск",false);
+	OutString(8,0,"% ст-ти",false);
+	OutString(9,0,"Ст-ть",false);
+	OutString(10,0,"Затр. на ед.",false);
+	
+	EndFormat;
+	Black_Divider(0,1);
+
+	for(i=0;i<rwcnt;i=i+1) begin
+		MatRowGet(Prodr,i,Prodrw)
+		StartFormat(15);			
+		OutString(0,0,i+1,false);
+		OutString(2,0,Prodrw.Item,true);
+		OutString(5,0,Prodrw.Comment,false);
+	
+		OutString(6,0,Prodrw.InQty,false);
+		OutString(7,0,Prodrw.OutQty,false);
+		OutString(8,0,Prodrw.RelVal,false);
+		OutString(9,0,Prodrw.ItemCost,false);
+		OutString(10,0,Prodrw.ExtraCostVal,false);
+		
+		EndFormat;	
+	end;		
+	EndJob;
+
+  end;
+
+return;
+end;
 
 
 global procedure ExportTableToExcelPURn(record RcVc RepSpec)	//Edit--------Dima 

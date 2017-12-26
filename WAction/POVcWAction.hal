@@ -2167,7 +2167,24 @@ begin
 return;
 end;
 
+global// Edit ************************** BPI Ukraine - KramarAlexandr - Tuesday, 26 December 2017 15:53:53
+procedure ExportToExcelProdDsm()
+begin
+  record ProdVc Prodr;
+  record RcVc RepSpec;
+  integer wn;
 
+  wn = CurWindow;
+  GetWindowRecord(wn,Prodr);
+	RepSpec.Media = mtClipBoard;
+  RepSpec.repname = "ExportTableToExcelProdRn";
+  RepSpec.flags[0] = wn;
+  RepSpec.long1 = Prodr.SerNr;
+  RunReport(RepSpec,0);
+
+  
+return;
+end;
 
 
 global				

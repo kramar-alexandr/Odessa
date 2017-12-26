@@ -8982,7 +8982,7 @@ begin
   MatCol(1,-240,"Выпуск",0,OutQty,true,MATVARINSClass);
   MatCol(1,-180,"% ст-ти",0,RelVal,true,0);
   MatCol(1,-120,"Ст-ть",0,ItemCost,true,0);
-  MatCol(1,-60,"Затр.",0,ExtraCostVal,true,0);
+  MatCol(1,-60,"Затр. на ед.",0,ExtraCostVal,true,0);
   //MatCol(1,-100,"Труд.",0,ExtraCost,true,0);
   //MatCol(1,-40,"Коэфф.",0,Coefficient,false,0);
 	Flip(2);
@@ -9048,6 +9048,8 @@ begin
     SpecialMenu("Создать операции производств",' ',9,"ProdOperFromPRDsm");
     SpecialMenu("Контроль качества",'u',8,"QualConFromProdDsm");
   end;
+  SpecialMenu("Выгрузить таблицу в буфер обмена",'',1,"ExportToExcelProdDsm");// Edit ************************** BPI Ukraine - KramarAlexandr - Tuesday, 26 December 2017 15:53:41
+
   EndWindow;
 end;
 

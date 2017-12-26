@@ -704,3 +704,117 @@ begin
 	
 return;
 end;
+
+global updating procedure UnLogistOR(string artcode,longint orserial,val id,val qty)
+begin
+	record ORVc ORr;
+	row ORVc ORrw;
+	record StockMovVc SMr;
+	row StockMovVc SMrw;
+	boolean TrHs,testf;
+	record ItemStatusVc ISr;
+	integer mtrw,rwcnt,j,i;
+	row IVVc IVrw;
+	val perereserv,newprereserv;
+	
+	ORr.SerNr = orserial;
+	if(readfirstmain(ORr,1,true))then begin
+		mtrw = matrowcnt(ORr);
+		For(i=0;i<mtrw;i=i+1) begin
+			matrowget(ORr,i,ORrw);	
+			if(ORrw.UID==id and ORrw.ArtCode==artcode)then begin
+				if(ORrw.ProcessingQuant>=qty)then begin
+					ORrw.ProcessingQuant = ORrw.ProcessingQuant - qty;
+					matrowput(ORr,i,ORrw);	
+				end;
+			end;  
+		end;
+		recordstore(ORr,true);
+	end;
+	
+return;
+end;
+
+global updating procedure RemoveReservesFromStockMov(record IVVc IVr)
+begin
+	record StockMovVc SMr;
+	row StockMovVc SMrw;
+	boolean TrHs,testf;
+	record ItemStatusVc ISr,IS2r;
+	integer mtrw,rwcnt,j,i;
+	row IVVc IVrw;
+	val perereserv,newprereserv;
+	
+	SMr.OKFlag = 0;
+	SMr.TransDate = currentdate;
+	SMr.FrLocation = IVr.Location;
+	
+	rwcnt = matrowcnt(IVr);
+	For(j=0;j<rwcnt;j=j+1) begin
+		matrowget(IVr,j,IVrw);
+		if(IVrw.stp==kInvoiceRowTypeNormal and nonblank(IVrw.ArtCode))then begin 
+			ISr.Code = IVrw.ArtCode;
+			ISr.Location = IVr.Location;
+			
+			if(readfirstmain(ISr,2,true))then begin
+				
+				IS2r.Code = IVrw.ArtCode;
+				IS2r.Location = ";;;";
+				readfirstmain(IS2r,2,true)
+				
+				if(ISr.Instock<ISr.RsrvQty)then begin
+					perereserv = ISr.RsrvQty - ISr.Instock;
+					TrHs = true;
+					while(loopbackkey("FrLocOK",SMr,3,TrHs))begin
+						testf = true;
+						if(SMr.FrLocation!=IVr.Location)then begin TrHs = false; testf = false; end;
+						if(SMr.OKFlag>0)then begin TrHs = false; testf = false; end;
+						if(SMr.SentOKFlag>0)then begin testf = false; end;
+						if(SMr.Reserved==0)then begin testf = false; end;
+		
+						if(testf)then begin
+							mtrw = matrowcnt(SMr);
+							For(i=0;i<mtrw;i=i+1) begin
+								matrowget(SMr,i,SMrw);
+								if(SMrw.ArtCode==IVrw.ArtCode and SMrw.OrdQuant>0)then begin
+									if(SMrw.OrdQuant>perereserv)then begin
+										SMrw.OrdQuant = SMrw.OrdQuant - perereserv;
+										ISr.RsrvQty = ISr.RsrvQty - perereserv;
+										IS2r.RsrvQty = IS2r.RsrvQty - perereserv;
+										if(SMrw.OrderProcessing>perereserv)then begin
+											UnLogistOR(SMrw.ArtCode,SMrw.ORSerial,SMrw.ORRowUID,perereserv);
+											SMrw.OrderProcessing = SMrw.OrderProcessing - perereserv;
+										end else begin
+											UnLogistOR(SMrw.ArtCode,SMrw.ORSerial,SMrw.ORRowUID,SMrw.OrderProcessing);
+											SMrw.OrderProcessing = 0;
+										end;
+										perereserv = 0;
+									end else begin
+										ISr.RsrvQty = ISr.RsrvQty - SMrw.OrdQuant;
+										IS2r.RsrvQty = IS2r.RsrvQty - SMrw.OrdQuant;
+										SMrw.OrdQuant = 0;
+										if(SMrw.OrderProcessing>perereserv)then begin
+											SMrw.OrderProcessing = SMrw.OrderProcessing - perereserv;
+											UnLogistOR(SMrw.ArtCode,SMrw.ORSerial,SMrw.ORRowUID,perereserv);
+										end else begin
+											UnLogistOR(SMrw.ArtCode,SMrw.ORSerial,SMrw.ORRowUID,SMrw.OrderProcessing);
+											SMrw.OrderProcessing = 0;
+										end;
+										perereserv = perereserv - SMrw.OrdQuant;
+									end;									
+									matrowput(SMr,i,SMrw);
+								end;
+							end; 
+							recordstore(SMr,true);
+							recordstore(ISr,true);
+							recordstore(IS2r,true);
+						end;
+					end;
+				end;
+			end;
+		end;
+	end;
+
+
+return;
+end;

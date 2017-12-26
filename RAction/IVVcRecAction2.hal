@@ -105,6 +105,8 @@ external procedure CreateORHistoryVcFromORVc(record ORVc,record ORVc,boolean);//
 external procedure ExtractObjWithSeparator(string,string,Boolean,var Integer,var string);
 external procedure NoDupObjs(string,var string); //Edit***************************Sasha2,16:04 24.01.2017 
 external procedure MyCreateCreditPayment(record IVVc); //Edit***************************Sasha2,15:20 18.02.2015
+external updating procedure RemoveReservesFromStockMov(record IVVc);// Edit ************************** BPI Ukraine - KramarAlexandr - Thursday, 21 December 2017 10:38:43
+
 
 global //Edit***************************Sasha2,9:51 25.01.2017 {
 procedure HandlePromotionObjectsIV(var record IVVc IVp,record IVVc IV2p,LongInt mode)
@@ -706,6 +708,10 @@ BEGIN
 		CloseRebVaucher(IVr.BirthDayVaucher,IVr.SerNr);
   end;
 	UpdateSalesData(IVr);	//Edit----------------------Dima  10.03.2016  
+  
+  if((GetDateId(IVr.InvDate)==6 or GetDateId(IVr.InvDate)==7) and IVr.OKFlag!=0 and IVr.UpdStockFlag==1)then begin
+		RemoveReservesFromStockMov(IVr);// Edit ************************** BPI Ukraine - KramarAlexandr - Thursday, 21 December 2017 10:37:02
+  end;
   
 LIVVcRecordSaveAfter:;
   IVVcRecordSaveAfter = res; 
@@ -1357,6 +1363,10 @@ BEGIN
   if (IVr.OKFlag!=0) and (IV2r.OKFlag==0) then begin
 		MyCreateCreditPayment(IVr);// Edit ************************** BPI Ukraine - KramarAlexandr - Wednesday, 29 November 2017 12:50:23
 	end;
+	
+	if((GetDateId(IVr.InvDate)==6 or GetDateId(IVr.InvDate)==7) and IVr.OKFlag!=0 and IV2r.OKFlag==0 and IVr.UpdStockFlag==1)then begin
+		RemoveReservesFromStockMov(IVr);// Edit ************************** BPI Ukraine - KramarAlexandr - Thursday, 21 December 2017 10:37:02
+  end;
   
 LIVVcRecordUpdateAfter:;
   IVVcRecordUpdateAfter = res; 
