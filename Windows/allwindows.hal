@@ -11635,15 +11635,15 @@ end;
 window ConsignationLClass:1
   wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
 begin
-  WindowBegin("Consignations",ConsignationLClass,CGmlist,-);
+  WindowBegin("Консигнация: Слепок склада",ConsignationLClass,CGmlist,-);
   SpawnClass(ConsignationDClass);
   SetWRect(64,80,509,298);
   Sizeable(-1,-1,0,0);
   UseView(ConsignationVc);
   RecordList(4,17,-21,-39);
   RlColKey(4,2,"#",SerNr,false,SerNr);
-  RlColKey(100,100, "Date",TransDate,false,Location);
-  RlColKey(200,200, "Location",Location,false,Location);
+  RlColKey(100,100, "Дата",TransDate,false,Location);
+  RlColKey(200,200, "Склад",Location,false,Location);
   SearchField("Найти");
   EndWindow;
 end;
@@ -11652,27 +11652,27 @@ window ConsignationDClass:2
   wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
 begin
   real h,v,vs;
-  WindowBegin("Consignation",ConsignationDClass,CGview,-);
+  WindowBegin("Консигнация: Слепок склада",ConsignationDClass,CGview,-);
   SetWRect(64,80,509,700);
   Sizeable(-1,-1,0,0);
   UseView(ConsignationVc);
   v = 10; vs = 20; h = 60;
   EditField(h,v, 80,"#",ViewOnly,SerNr,false,0);
-  EditField(h,v+=vs,80,"TransDate",Normal,TransDate,false,PasteCurDate);
-  EditField(h,v+=vs,80,"Location",Normal,Location,false,LocationSClass);
-  EditField(h,v+=vs,80,"LocOKNr",Normal,LocOKNr,false,0);
-  EditField(h,v+=vs,80,"Comitent",Normal,Comitent,false,DISlass);
-  EditField(h,v+=vs,80,"TotSum",ViewOnly,TotSum,false,0);
-  EditField(h,v+=vs,80,"TotQty",ViewOnly,TotQty,false,0);
-  CheckBox(h,v+=vs,0,"OKFlag",OKFlag);
+  EditField(h,v+=vs,80,"Дата",Normal,TransDate,false,PasteCurDate);
+  EditField(h,v+=vs,80,"Склад",Normal,Location,false,LocationSClass);
+  //EditField(h,v+=vs,80,"LocOKNr",Normal,LocOKNr,false,0);
+  EditField(h,v+=vs,80,"Комитент",Normal,Comitent,false,DISlass);
+  EditField(h,v+=vs,80,"Сумма",ViewOnly,TotSum,false,0);
+  EditField(h,v+=vs,80,"Кол-во",ViewOnly,TotQty,false,0);
+  CheckBox(h,v+=vs,0,"Ок",OKFlag);
   v=v+40;
   MatrixBegin(30,v,-30,-10,-,6000);
-  MatCol(1,40,"ArtCode",0,ArtCode,false,INSClass);
-  MatCol(1,100,"Qty",0,Qty,false,0);
-  MatCol(1,160,"Spec",0,Spec,false,0);
-  MatCol(1,-180,"SelQty",0,SelQty,true,0);
-  MatCol(1,-120,"Price",0,Price,true,0);
-  MatCol(1,-60,"Sum",0,Sum,true,0);
+  MatCol(1,40,"Товар",0,ArtCode,false,INSClass);
+  MatCol(1,100,"Кол-во",0,Qty,false,0);
+  MatCol(1,160,"Название",0,Spec,false,0);
+  //MatCol(1,-180,"Пр",0,SelQty,true,0);
+  MatCol(1,-120,"Цена",0,Price,true,0);
+  MatCol(1,-60,"Сумма",0,Sum,true,0);
   InsertRowTest;
   DeleteRowTest;
   EndMatrix;
@@ -11688,15 +11688,15 @@ end;
 window ConsInLClass:1
   wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
 begin
-  WindowBegin("Consignation InStock",ConsInLClass,CGmlist,-);
+  WindowBegin("Консигнация: Прием товара",ConsInLClass,CGmlist,-);
   SpawnClass(ConsInDClass);
   SetWRect(64,80,509,298);
   Sizeable(-1,-1,0,0);
   UseView(ConsInVc);
   RecordList(4,17,-21,-39);
   RlColKey(4,2,"#",SerNr,false,SerNr);
-  RlColKey(100,100, "Date",TransDate,false,Location);
-  RlColKey(200,200, "Location",Location,false,Location);
+  RlColKey(100,100, "Дата",TransDate,false,Location);
+  RlColKey(200,200, "Склад",Location,false,Location);
   SearchField("Найти");
   EndWindow;
 end;
@@ -11705,27 +11705,27 @@ window ConsInDClass:2
   wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
 begin
   real h,v,vs;
-  WindowBegin("ConsIn",ConsInDClass,CGview,-);
+  WindowBegin("Консигнация: Прием товара",ConsInDClass,CGview,-);
   SetWRect(64,80,509,700);
   Sizeable(-1,-1,0,0);
   UseView(ConsInVc);
   v = 10; vs = 20; h = 60;
   EditField(h,v, 80,"#",ViewOnly,SerNr,false,0);
-  EditField(h,v+=vs,80,"TransDate",Normal,TransDate,false,PasteCurDate);
-  EditField(h,v+=vs,80,"Location",Normal,Location,false,LocationSClass);
-  EditField(h,v+=vs,80,"LocOKNr",Normal,LocOKNr,false,0);
-  EditField(h,v+=vs,80,"Comitent",Normal,Comitent,false,DISlass);
-  EditField(h,v+=vs,80,"TotSum",ViewOnly,TotSum,false,0);
-  EditField(h,v+=vs,80,"TotQty",ViewOnly,TotQty,false,0);
-  CheckBox(h,v+=vs,0,"OKFlag",OKFlag);
+  EditField(h,v+=vs,80,"Дата",Normal,TransDate,false,PasteCurDate);
+  EditField(h,v+=vs,80,"Склад",Normal,Location,false,LocationSClass);
+  //EditField(h,v+=vs,80,"LocOKNr",Normal,LocOKNr,false,0);
+  EditField(h,v+=vs,80,"Комитент",Normal,Comitent,false,DISlass);
+  EditField(h,v+=vs,80,"Сумма",ViewOnly,TotSum,false,0);
+  EditField(h,v+=vs,80,"Кол-во",ViewOnly,TotQty,false,0);
+  CheckBox(h,v+=vs,0,"Ок",OKFlag);
   v=v+40;
   MatrixBegin(30,v,-30,-10,-,6000);
-  MatCol(1,40,"ArtCode",0,ArtCode,false,INSClass);
-  MatCol(1,100,"Qty",0,Qty,false,0);
-  MatCol(1,160,"Spec",0,Spec,false,0);
-  MatCol(1,-180,"SelQty",0,SelQty,true,0);
-  MatCol(1,-120,"Price",0,Price,true,0);
-  MatCol(1,-60,"Sum",0,Sum,true,0);
+  MatCol(1,40,"Товар",0,ArtCode,false,INSClass);
+  MatCol(1,100,"Кол-во",0,Qty,false,0);
+  MatCol(1,160,"Название",0,Spec,false,0);
+  //MatCol(1,-180,"SelQty",0,SelQty,true,0);
+  MatCol(1,-120,"Цена",0,Price,true,0);
+  MatCol(1,-60,"Сумма",0,Sum,true,0);
   InsertRowTest;
   DeleteRowTest;
   EndMatrix;
@@ -11735,15 +11735,15 @@ end;
 window ConsSaleLClass:1
   wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
 begin
-  WindowBegin("ConsSales InStock",ConsSaleLClass,CGmlist,-);
+  WindowBegin("Консигнация: Продажи",ConsSaleLClass,CGmlist,-);
   SpawnClass(ConsSaleDClass);
   SetWRect(64,80,509,298);
   Sizeable(-1,-1,0,0);
   UseView(ConsSaleVc);
   RecordList(4,17,-21,-39);
   RlColKey(4,2,"#",SerNr,false,SerNr);
-  RlColKey(100,100, "Date",TransDate,false,Location);
-  RlColKey(200,200, "Location",Location,false,Location);
+  RlColKey(100,100, "Дата",TransDate,false,Location);
+  RlColKey(200,200, "Склад",Location,false,Location);
   SearchField("Найти");
   EndWindow;
 end;
@@ -11752,27 +11752,27 @@ window ConsSaleDClass:2
   wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
 begin
   real h,v,vs;
-  WindowBegin("ConsSale",ConsSaleDClass,CGview,-);
+  WindowBegin("Консигнация: Продажа",ConsSaleDClass,CGview,-);
   SetWRect(64,80,509,700);
   Sizeable(-1,-1,0,0);
   UseView(ConsSaleVc);
   v = 10; vs = 20; h = 60;
   EditField(h,v, 80,"#",ViewOnly,SerNr,false,0);
-  EditField(h,v+=vs,80,"TransDate",Normal,TransDate,false,PasteCurDate);
-  EditField(h,v+=vs,80,"Location",Normal,Location,false,LocationSClass);
-  EditField(h,v+=vs,80,"LocOKNr",Normal,LocOKNr,false,0);
-  EditField(h,v+=vs,80,"Comitent",Normal,Comitent,false,DISlass);
-  EditField(h,v+=vs,80,"TotSum",ViewOnly,TotSum,false,0);
-  EditField(h,v+=vs,80,"TotQty",ViewOnly,TotQty,false,0);
-  CheckBox(h,v+=vs,0,"OKFlag",OKFlag);
+  EditField(h,v+=vs,80,"Дата",Normal,TransDate,false,PasteCurDate);
+  EditField(h,v+=vs,80,"Склад",Normal,Location,false,LocationSClass);
+  //EditField(h,v+=vs,80,"LocOKNr",Normal,LocOKNr,false,0);
+  EditField(h,v+=vs,80,"Комитент",Normal,Comitent,false,DISlass);
+  EditField(h,v+=vs,80,"Сумма",ViewOnly,TotSum,false,0);
+  EditField(h,v+=vs,80,"Кол-во",ViewOnly,TotQty,false,0);
+  CheckBox(h,v+=vs,0,"Ок",OKFlag);
   v=v+40;
   MatrixBegin(30,v,-30,-10,-,6000);
-  MatCol(1,40,"ArtCode",0,ArtCode,false,INSClass);
-  MatCol(1,100,"Qty",0,Qty,false,0);
-  MatCol(1,160,"Spec",0,Spec,false,0);
-  MatCol(1,-180,"SelQty",0,SelQty,true,0);
-  MatCol(1,-120,"Price",0,Price,true,0);
-  MatCol(1,-60,"Sum",0,Sum,true,0);
+  MatCol(1,40,"Товар",0,ArtCode,false,INSClass);
+  MatCol(1,100,"Кол-во",0,Qty,false,0);
+  MatCol(1,160,"Название",0,Spec,false,0);
+  //MatCol(1,-180,"SelQty",0,SelQty,true,0);
+  MatCol(1,-120,"Цена",0,Price,true,0);
+  MatCol(1,-60,"Сумма",0,Sum,true,0);
   InsertRowTest;
   DeleteRowTest;
   EndMatrix;
@@ -11782,15 +11782,15 @@ end;
 window ConsBrakLClass:1
   wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
 begin
-  WindowBegin("ConsBraks InStock",ConsBrakLClass,CGmlist,-);
+  WindowBegin("Консигнация: Брак",ConsBrakLClass,CGmlist,-);
   SpawnClass(ConsBrakDClass);
   SetWRect(64,80,509,298);
   Sizeable(-1,-1,0,0);
   UseView(ConsBrakVc);
   RecordList(4,17,-21,-39);
   RlColKey(4,2,"#",SerNr,false,SerNr);
-  RlColKey(100,100, "Date",TransDate,false,Location);
-  RlColKey(200,200, "Location",Location,false,Location);
+  RlColKey(100,100, "Дата",TransDate,false,Location);
+  RlColKey(200,200, "Склад",Location,false,Location);
   SearchField("Найти");
   EndWindow;
 end;
@@ -11799,27 +11799,27 @@ window ConsBrakDClass:2
   wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
 begin
   real h,v,vs;
-  WindowBegin("ConsBrak",ConsBrakDClass,CGview,-);
+  WindowBegin("Консигнация: Брак",ConsBrakDClass,CGview,-);
   SetWRect(64,80,509,700);
   Sizeable(-1,-1,0,0);
   UseView(ConsBrakVc);
   v = 10; vs = 20; h = 60;
   EditField(h,v, 80,"#",ViewOnly,SerNr,false,0);
-  EditField(h,v+=vs,80,"TransDate",Normal,TransDate,false,PasteCurDate);
-  EditField(h,v+=vs,80,"Location",Normal,Location,false,LocationSClass);
-  EditField(h,v+=vs,80,"LocOKNr",Normal,LocOKNr,false,0);
-  EditField(h,v+=vs,80,"Comitent",Normal,Comitent,false,DISlass);
-  EditField(h,v+=vs,80,"TotSum",ViewOnly,TotSum,false,0);
-  EditField(h,v+=vs,80,"TotQty",ViewOnly,TotQty,false,0);
-  CheckBox(h,v+=vs,0,"OKFlag",OKFlag);
+  EditField(h,v+=vs,80,"Дата",Normal,TransDate,false,PasteCurDate);
+  EditField(h,v+=vs,80,"Склад",Normal,Location,false,LocationSClass);
+  //EditField(h,v+=vs,80,"LocOKNr",Normal,LocOKNr,false,0);
+  EditField(h,v+=vs,80,"Комитент",Normal,Comitent,false,DISlass);
+  EditField(h,v+=vs,80,"Сумма",ViewOnly,TotSum,false,0);
+  EditField(h,v+=vs,80,"Кол-во",ViewOnly,TotQty,false,0);
+  CheckBox(h,v+=vs,0,"Ок",OKFlag);
   v=v+40;
   MatrixBegin(30,v,-30,-10,-,6000);
-  MatCol(1,40,"ArtCode",0,ArtCode,false,INSClass);
-  MatCol(1,100,"Qty",0,Qty,false,0);
-  MatCol(1,160,"Spec",0,Spec,false,0);
-  MatCol(1,-180,"SelQty",0,SelQty,true,0);
-  MatCol(1,-120,"Price",0,Price,true,0);
-  MatCol(1,-60,"Sum",0,Sum,true,0);
+  MatCol(1,40,"Товар",0,ArtCode,false,INSClass);
+  MatCol(1,100,"Кол-во",0,Qty,false,0);
+  MatCol(1,160,"Название",0,Spec,false,0);
+  //MatCol(1,-180,"SelQty",0,SelQty,true,0);
+  MatCol(1,-120,"Цена",0,Price,true,0);
+  MatCol(1,-60,"Сумма",0,Sum,true,0);
   InsertRowTest;
   DeleteRowTest;
   EndMatrix;
@@ -11830,11 +11830,11 @@ window ConsignationGenVClass:1 //Edit***************************Sasha2,13:51 24.
   wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
 begin
 	real h,v,vs;
-  WindowBegin("Consignation generate",ConsignationGenVClass,CGMnt,RcType);
+  WindowBegin("Генерировать слепок склада",ConsignationGenVClass,CGMnt,RcType);
   SetWRect(64,80,500,300);
   v = 10; vs = 20; h = 60;
   EditField(h,v=vs, 100,"Склад",Normal,f1,false,LocationSClass);
-  EditField(h,v+=vs, 100,"Comitent",Normal,f2,false,DISClass);
+  EditField(h,v+=vs, 100,"Комитент",Normal,f2,false,DISClass);
   EditField(h,v+=vs, 70,"На дату",Normal,d1,false,PasteCurDate);
 
   EndWindow;
