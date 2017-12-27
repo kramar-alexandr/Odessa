@@ -4026,9 +4026,9 @@ begin
   SetWRect(20,80,400,250);
   UseView(RcVc);
   h = 100;
-  EditFieldTL(h,v=20,150,"Номера От:До",M4Str,Normal,150,f1,false,0);
+   PeriodField(h,v=6,"Период");
   EditFieldTL(h,v+=20,150,"Комитент",M4Str,Normal,150,f2,false,DISClass);
-  EditFieldTL(h,v+=20,150,"Склад",M4Str,Normal,150,f3,false,LocationSClass);
+  EditFieldTL(h,v+=20,150,"Склад",M4Str,Normal,150,f1,false,LocationSClass);
   EndWindow;
 end;
 

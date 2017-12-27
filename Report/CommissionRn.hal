@@ -326,5 +326,164 @@ array string 50 combarr;
 	
 	
 	EndJob;
+end;
 
+
+procedure GetPriceByBackDateSales(date frdate, date td, record ConsSaleVc ConsSaler, integer rwnum)
+begin
+	record ItemHistVc IHr,IH2r;
+	record ItemStatusVc ISr;
+	val qty,remqt,sdrqty;
+	row ConsSaleVc ConsSalerw;
+	boolean testf,TrHs,testf2,TrHs2;
+	record SalesDataVc SDr,SD2r;
+	record IVVc IVr;
+	row IVVc IVrw;
+	
+	if(rwnum>-1)then begin
+		matrowget(ConsSaler,rwnum,ConsSalerw);
+		
+		IH2r.FileName = "ConsSaleVc";
+		IH2r.TransNr = ConsSaler.SerNr;
+		IH2r.Row = rwnum;
+		TrHs = true;
+		while(loopkey("FNTransNr",IH2r,3,TrHs))begin
+			testf = true;
+			if(IH2r.FileName!="ConsSaleVc")then begin testf = false; TrHs = false; end;
+			if(IH2r.TransNr!=ConsSaler.SerNr)then begin testf = false; TrHs = false; end;
+			if(IH2r.Row!=rwnum)then begin testf = false; TrHs = false; end;
+			
+			if(testf)then begin
+				logtext(0,"  *** IHR " & IH2r.ArtCode & " " & IH2r.Qty);
+				remqt = -IH2r.Qty;
+				while(remqt>0)begin
+					logtext(0,"while1 " & IH2r.ArtCode & " " & remqt & " sdrqty " & sdrqty);
+					if(sdrqty<=0 and remqt>0)then begin
+						SDr.ArtCode = IH2r.ArtCode;
+						SDr.InvDate = frdate;
+						SDr.Location = ConsSaler.Location;				
+						TrHs2 = true;
+						while(loopkey("LocationCodeDate",SDr,3,TrHs2))begin
+							testf2 = true;
+							if(SDr.ArtCode!=IH2r.ArtCode)then begin testf2 = false; TrHs2 = false; end; logtext(0,"1 " & testf2);
+							if(SDr.InvDate>td)then begin testf2 = false; TrHs2 = false; end;logtext(0,"2 " & testf2);
+							if(SDr.Location!=ConsSaler.Location)then begin testf2 = false; TrHs2 = false; end;logtext(0,"3 " & testf2);
+							if(SDr.Quant<0)then begin testf2 = false; end;logtext(0,"4 " & testf2);
+						
+							logtext(0,"     SD* " & SDr.ArtCode & " inv " & SDr.Quant);
+							if(TrHs==false)then begin
+								remqt = 0;
+							end;
+							if(testf2)then begin
+								
+								sdrqty = SDr.Quant;
+								TrHs2 = false;
+								RecordCopy(SD2r,SDr);
+								IVr.SerNr = SDr.InvNr;
+								if(readfirstmain(IVr,1,true))then begin
+									matrowget(IVr,SDr.RowNr,IVrw);
+								end;
+								logtext(0,"     SD " & SDr.ArtCode & " inv " & SDr.Quant & " sdrqty " & sdrqty);
+							end;
+						end;
+					end;
+					if(sdrqty>0)then begin
+						if(remqt>sdrqty)then begin
+							StartFormat(15);
+								outstring(0,0,IHr.Location,false);
+								outstring(0,0,ConsSaler.Comitent,false);
+								outstring(0,0,IH2r.ArtCode,false);
+								outstring(0,0,SD2r.Spec,false);
+								outstring(0,0,IVrw.Price,false);
+								outstring(0,0,IH2r.TotCostPrice,false);
+								outstring(0,0,sdrqty,false);
+								outstring(0,0,IVrw.Price * sdrqty * (100-IVrw.vRebate)/100,false);
+								outstring(0,0,IH2r.TotCostPrice * sdrqty,false);
+								outstring(0,0,SD2r.InvDate,false);
+								outstring(0,0,SD2r.CustCode,false);
+								outstring(0,0,IVr.Addr0,false);
+								outstring(0,0,SD2r.InvNr,false);
+							endformat;
+							remqt = remqt - sdrqty;
+							sdrqty = 0;
+							logtext(0,"while2 " & IH2r.ArtCode & " " & remqt & " sdrqty " & sdrqty);
+						end else begin
+							StartFormat(15);
+								outstring(0,0,IHr.Location,false);
+								outstring(0,0,ConsSaler.Comitent,false);
+								outstring(0,0,IHr.ArtCode,false);
+								outstring(0,0,SD2r.Spec,false);
+								outstring(0,0,IVrw.Price,false);
+								outstring(0,0,SD2r.CommisionPrice,false);
+								outstring(0,0,sdrqty,false);
+								outstring(0,0,IVrw.Price * sdrqty * (100-IVrw.vRebate)/100,false);
+								outstring(0,0,SD2r.CommisionPrice * sdrqty,false);
+								outstring(0,0,SD2r.InvDate,false);
+								outstring(0,0,SD2r.CustCode,false);
+								outstring(0,0,IVr.Addr0,false);
+								outstring(0,0,SD2r.InvNr,false);
+							endformat;
+							sdrqty = sdrqty - remqt;
+							remqt = 0;
+							logtext(0,"while3 " & IH2r.ArtCode & " " & remqt & " sdrqty " & sdrqty);
+						end;	
+					end;
+				end;			
+			end;
+		end;
+	
+	end;
+		
+return;
+end;
+
+global procedure ComissionSalesRn(record RcVc RepSpec)
+begin
+	record ConsSaleVc ConsSaler;
+	row ConsSaleVc ConsSalerw;
+	integer mtrw,i,acnt;
+	boolean testf,TrHs;
+	record ItemHistVc IHr,IH2r;
+	array val aQty,aPrice,aSum;
+	
+	startreportnoheaderjob("Отчет по продажам комисии");
+	
+	StartFormat(15);
+		outstring(0,0,"Склад",false);
+		outstring(0,0,"Комитент",false);
+		outstring(0,0,"Товар",false);
+		outstring(0,0,"Название",false);
+		outstring(0,0,"Цена продажи",false);
+		outstring(0,0,"Комиссии",false);
+		outstring(0,0,"Кол-во",false);
+		outstring(0,0,"Сумма продажи",false);
+		outstring(0,0,"Сумма комиссии",false);
+		outstring(0,0,"Дата продажи",false);
+		outstring(0,0,"Клиент",false);
+		outstring(0,0,"Имя",false);
+		outstring(0,0,"№ сч/ф",false);
+	endformat;
+	
+	TrHs = true;
+	ConsSaler.TransDate = RepSpec.sStartDate;
+	while(loopkey("TransDate",ConsSaler,1,TrHs))begin
+		testf = true;
+		if(ConsSaler.TransDate<RepSpec.sStartDate)then begin TrHs = false; testf = false; end;
+		if(nonblank(RepSpec.f1) and RepSpec.f1!=ConsSaler.Location)then begin testf = false; end;
+		if(nonblank(RepSpec.f2) and RepSpec.f2!=ConsSaler.Comitent)then begin testf = false; end;
+		if(ConsSaler.OKFlag==0)then begin testf = false; end;
+		
+		if(testf)then begin
+			mtrw = matrowcnt(ConsSaler);
+			For(i=0;i<mtrw;i=i+1) begin
+	  		matrowget(ConsSaler,i,ConsSalerw);
+	  		logtext(0,ConsSalerw.ArtCode & "==START ART Code");
+	  		GetPriceByBackDateSales(RepSpec.sStartDate,RepSpec.sEndDate,ConsSaler,i);
+			end; 
+		end;
+	end;
+	
+	endjob;
+
+return;
 end;
