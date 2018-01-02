@@ -356,6 +356,8 @@ begin
 	
   Maintenance("FixIHCostSM",MyVClass,FixIHCostSM,modDBMain);  //Edit**********Dima, 28.01.2014
   
+  Maintenance("ClearIH ConsignationVc",MyVClass,ConsignationVcClearIH,modDBMain);  //Edit**********Dima, 28.01.2014
+  
   Maintenance("FixSomeCostSM",MyVClass,FixSomeIHCostSM,modDBMain);  //Edit**********Dima, 28.01.2014
 	
 	Maintenance("SalesData fill CustCat",MyVClass,FillCustCatToSalesDataMn,modDBMain);  //Edit**********Dima, 28.01.2014
