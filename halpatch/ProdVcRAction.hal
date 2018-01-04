@@ -888,21 +888,21 @@ BEGIN
 				testblankperc = true;
 			end;
 		end;
-		
-		if(testblankperc)then begin
-			// checking for  percent's sum (should be 100%)
-			For(i=0;i<rwcnt;i=i+1) begin
-				matrowget(Prodp,i,Prodrw);
-					if(Prodrw.ItemCost==0 and Prodrw.InQty>0)then begin
-						if(nonblank(Prodrw.Item))then begin
-							INr.Code = Prodrw.Item;
-							if(readfirstmain(INr,1,true))then begin
-								Prodrw.ItemCost = INr.InPrice;
-							end;
+		For(i=0;i<rwcnt;i=i+1) begin
+			matrowget(Prodp,i,Prodrw);
+				if(Prodrw.ItemCost==0 and Prodrw.InQty>0)then begin
+					if(nonblank(Prodrw.Item))then begin
+						INr.Code = Prodrw.Item;
+						if(readfirstmain(INr,1,true))then begin
+							Prodrw.ItemCost = INr.InPrice;
 						end;
 					end;
-				matrowput(Prodp,i,Prodrw);
-			end;
+				end;
+			matrowput(Prodp,i,Prodrw);
+		end;
+		if(testblankperc)then begin
+			// checking for  percent's sum (should be 100%)
+			
 			
 			added = false;
 			For(i=rwcnt-1;i>=0;i=i-1) begin
