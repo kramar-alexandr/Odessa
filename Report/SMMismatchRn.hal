@@ -95,8 +95,15 @@ begin
 					OutString(pos+=100,"DblItemHistVc",IHr.SerNr,false);
 					OutString(pos+=100,0,IHr.RemQty,false);
 				endformat;
-    		totQty = totQty + IHr.Qty;
-    		allTotQty = allTotQty + IHr.Qty;
+				if(blank(StockMovr.ThrouLocation))then begin
+					totQty = totQty + IHr.Qty;
+					allTotQty = allTotQty + IHr.Qty;
+    		end else begin
+    			if(IHr.Location!=StockMovr.ThrouLocation)then begin
+    				totQty = totQty + IHr.Qty;
+						allTotQty = allTotQty + IHr.Qty;
+    			end;
+    		end;
 			end;
 		end;
 		Gray_Divider(0,1);
