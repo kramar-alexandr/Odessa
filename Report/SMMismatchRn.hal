@@ -31,6 +31,7 @@ begin
    		OutString(pos+=100,0,"Ћстат.кол-во",false);
    		OutString(pos+=100,0,"‘клад",false);
    		OutString(pos+=100,0,"HistSerNr",false);
+   		OutString(pos+=100,0,"RemQty",false);
 		endformat;
 		
 		IHr.FileName = "StockMovVc";
@@ -58,12 +59,15 @@ begin
       		totQty = 0;
 			  end;
 			  startformat(15);
-    			pos = 0;
-    			OutString(pos,0,IHr.ArtCode,false); 
-       		OutString(pos+=100,0,IHr.Qty,false);
-       		OutString(pos+=100,0,IHr.RemQty,false);
-       		OutString(pos+=100,0,IHr.Location,false);
-       		OutString(pos+=100,"DblItemHistVc",IHr.SerNr,false);
+			  	if(IHr.RemQty>0)then begin
+						pos = 0;
+						OutString(pos,0,IHr.ArtCode,false); 
+						OutString(pos+=100,0,IHr.Qty,false);
+						OutString(pos+=100,0,IHr.RemQty,false);
+						OutString(pos+=100,0,IHr.Location,false);
+						OutString(pos+=100,"DblItemHistVc",IHr.SerNr,false);
+       			OutString(pos+=100,0,IHr.RemQty,false);
+       		end;       		
     		endformat;
     		totQty = totQty + IHr.Qty;
     		allTotQty = allTotQty + IHr.Qty;
