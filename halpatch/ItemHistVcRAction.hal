@@ -1,0 +1,15 @@
+
+global
+updating function LongInt ItemHistVcRecordCheck(record ItemHistVc IHp,record ItemHistVc IH2p,LongInt stat,LongInt long4)
+BEGIN
+  LongInt res;
+
+  res = 0;
+  
+  if(IHp.SerNr<0)then begin
+  	IHp.SerNr = NextSerNr("ItemHistVc",IHp.TransDate,-1,false,"");  
+  end;
+  
+  ItemHistVcRecordCheck = res;
+  RETURN;
+END;

@@ -13,10 +13,10 @@ global procedure SMMismatchRn(record RcVc RepSpec)
 begin
 	record StockMovVc StockMovr;
 	row StockMovVc StockMovrw;
-	record ItemHistVc IHr;
+	record ItemHistVc IHr,oldIHr,newIHr;
 	integer pos;
-	boolean TrHs;
-	val totQty,allTotQty;
+	boolean TrHs,TrHs2,testf2;
+	val totQty,allTotQty,remqty;
 	string 30 curcode;
 	
 	startreportnoheaderjob("Отчет несовпадений по количеству в перемещении");
@@ -53,22 +53,48 @@ begin
          		OutString(pos+=150,0,"",false);
          		OutString(pos+=100,0,"",false);
       		endformat;
+      		
+      		if(totQty>0)then begin
+      			oldIHr.ArtCode = curcode;
+      			oldIHr.Location = StockMovr.ThrouLocation;
+      			TrHs2 = true;
+      			/*remqty = totQty;
+      			while(loopkey("",oldIHr,2,TrHs2))begin
+      				testf2 = true;
+      				if(oldIHr.ArtCode!=curcode)then begin TrHs2 = false; testf2 = false; end;
+      				if(oldIHr.Location!=StockMovr.ThrouLocation)then begin TrHs2 = false; testf2 = false; end;
+      				if(remqty<=0)then begin TrHs2 = false; testf2 = false; end;
+      				
+      				if(testf2)then begin
+      					recordcopy(newIHr,oldIHr);
+      					newIHr.SerNr = NextSerNr("ItemHistVc",IHr.TransDate,-1,false,"");  
+      					if(oldIHr.RemQty<remqty)then begin
+      						newIHr.Qty = -newIHr.Qty;
+      						newIHr.RemQty = 0;
+      						newIHr.RemTotCostPrice = 0;
+      						newIHr.Source = oldIHr.SerNr;
+      					end else begin
+      					
+      					end;
+      					//recordstore(newIHr,true);
+      				end;
+      			end;*/
+      		end;
+      		
       		startformat(15);
       		endformat;
       		curcode = IHr.ArtCode;
       		totQty = 0;
 			  end;
-			  if(IHr.RemQty>0 and IHr.Location==StockMovr.ThrouLocation)then begin
-			  	startformat(15);
-						pos = 0;
-						OutString(pos,0,IHr.ArtCode,false); 
-						OutString(pos+=100,0,IHr.Qty,false);
-						OutString(pos+=100,0,IHr.RemQty,false);
-						OutString(pos+=100,0,IHr.Location,false);
-						OutString(pos+=100,"DblItemHistVc",IHr.SerNr,false);
-       			OutString(pos+=100,0,IHr.RemQty,false);
-    			endformat;
-    		end;   
+				startformat(15);
+					pos = 0;
+					OutString(pos,0,IHr.ArtCode,false); 
+					OutString(pos+=100,0,IHr.Qty,false);
+					OutString(pos+=100,0,IHr.RemQty,false);
+					OutString(pos+=100,0,IHr.Location,false);
+					OutString(pos+=100,"DblItemHistVc",IHr.SerNr,false);
+					OutString(pos+=100,0,IHr.RemQty,false);
+				endformat;
     		totQty = totQty + IHr.Qty;
     		allTotQty = allTotQty + IHr.Qty;
 			end;
