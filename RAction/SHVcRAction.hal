@@ -1948,7 +1948,10 @@ begin
 		if (nonblank(SHr.NPIntDocNumber)) then begin
 			logtext(0,"SH UPD SMS2 " & SHr.SerNr);
 			logtext(0,"SH UPD SMS1 NPStatus " & SHr.NPStatus);
-			if(nonblank(SHr.NPStatus) and SHr.NPStatus==USetStr(31171) and SHr.NPStatus!=SH2r.NPStatus)then begin
+			if(nonblank(SHr.NPStatus) and blank(SH2r.NPStatus) and SHr.NPStatus!=USetStr(31178))then begin
+				response = SendSMSNewPost(SHr);
+			end;
+			if(SH2r.NPStatus==USetStr(31178) and SHr.NPStatus!=USetStr(31178) and nonblank(SHr.NPStatus))then begin
 				response = SendSMSNewPost(SHr);
 			end;
 		end;  
