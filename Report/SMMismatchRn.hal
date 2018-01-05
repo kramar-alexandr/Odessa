@@ -58,8 +58,8 @@ begin
       		curcode = IHr.ArtCode;
       		totQty = 0;
 			  end;
-			  startformat(15);
-			  	if(IHr.RemQty>0)then begin
+			  if(IHr.RemQty>0)then begin
+			  	startformat(15);
 						pos = 0;
 						OutString(pos,0,IHr.ArtCode,false); 
 						OutString(pos+=100,0,IHr.Qty,false);
@@ -67,8 +67,8 @@ begin
 						OutString(pos+=100,0,IHr.Location,false);
 						OutString(pos+=100,"DblItemHistVc",IHr.SerNr,false);
        			OutString(pos+=100,0,IHr.RemQty,false);
-       		end;       		
-    		endformat;
+    			endformat;
+    		end;   
     		totQty = totQty + IHr.Qty;
     		allTotQty = allTotQty + IHr.Qty;
 			end;
