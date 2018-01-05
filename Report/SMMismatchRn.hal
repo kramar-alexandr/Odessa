@@ -58,7 +58,7 @@ begin
       		curcode = IHr.ArtCode;
       		totQty = 0;
 			  end;
-			  if(IHr.RemQty>0 and (IHr.Location==StockMovr.FrLocation or IHr.Location==StockMovr.ThrouLocation))then begin
+			  if(IHr.RemQty>0 and IHr.Location==StockMovr.ThrouLocation)then begin
 			  	startformat(15);
 						pos = 0;
 						OutString(pos,0,IHr.ArtCode,false); 
