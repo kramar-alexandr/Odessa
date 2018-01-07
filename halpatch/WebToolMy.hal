@@ -627,13 +627,17 @@ begin
       STr.SerNr = param;
       if readfirstmain(STr,1,true) then begin
         if (STr.OKFlag==0) then begin
-          total = 0;
-          mtrw = matrowcnt(STr);
-          for (i=0;i<mtrw;i=i+1) begin
-            MatRowGet(STr,i,STrw);
-            total = total + STrw.Qty;
+        	if(blank(STr.SalesMan) or STr.SalesMan==currentuser)then begin
+						total = 0;
+						mtrw = matrowcnt(STr);
+						for (i=0;i<mtrw;i=i+1) begin
+							MatRowGet(STr,i,STrw);
+							total = total + STrw.Qty;
+						end;
+						WebOutString(STr.Location & nl & total);
+          end else begin
+          	WebOutString("wrongsm");
           end;
-          WebOutString(STr.Location & nl & total);
         end else begin
           WebOutString("oked");
         end;

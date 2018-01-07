@@ -6520,6 +6520,54 @@ RecordBegin(IPVc,-,"");
   KeySegment(SerNr);
   EndRecord;
   
+  
+  RecordBegin(StockTakeVc,-,"");
+  RecordField(SerNr,M4Long,0,0);
+  SerialNoBlock(StockTakeSerBlock);
+  RecordField(Math,M4Matrix,0,0);
+  RecordField(TransDate,M4Date,0,0);
+  FieldIsTransDate(TransDate);
+  RecordField(OKFlag,M4Mark,0,0);
+  RecordField(Location,M4Code,10,LocationVc);
+  FieldIsLocation(Location);
+  RecordField(Comment,M4Str,60,0);
+  RecordField(Position,M4Code,20,0);
+  RecordField(SetStockValue,M4Mark,0,0);
+  RecordField(OverrideBackdated,M4Mark,0,0);
+  RecordField(AcceptanceStatus,M4Int,0,0);
+  RecordField(SalesMan,M4Code,100,0);// Edit ************************** BPI Ukraine - KramarAlexandr - , 7 1 2018 р. о 19:03:25
+  ArrayBegin(Math,-,1);
+  ArrayField(ArtCode,M4Code,20,INVc);
+  ArrayField(Spec,M4Str,100,0);
+  ArrayField(SerialNr,M4Str,30,0);
+  ArrayField(Qty,M4UVal,0,0);
+  ArrayField(Location,M4Code,10,LocationVc);
+  ArrayField(VARList,M4UStr,30,0);
+  ArrayField(Coefficient,M45Val,0,0);
+  ArrayField(BasePrice,M423Val,0,0);
+  ArrayField(UnitXval,M4UVal,0,0);
+  ArrayField(UnitYval,M4UVal,0,0);
+  ArrayField(UnitZval,M4UVal,0,0);  
+  ArrayField(Position,M4Code,20,0);  
+  ArrayField(Objects,M4UStr,60,ObjVc);
+  ArrayField(CostAcc,M4Code,10,AccVc);
+  ArrayField(FIFO,M45Val,0,0);
+  ArrayField(FIFORowVal,M45Val,0,0);
+  ArrayField(oldFIFO,M45Val,0,0);
+  ArrayField(oldFIFORowVal,M45Val,0,0);
+  ArrayField(InStock,M4UVal,0,0);
+  EndArray;
+  MainKeyBegin(SerNr,0);
+  KeySegment(SerNr);
+  SynchronizationIndex;
+  KeyBegin(OKFlag);
+  KeySegment(OKFlag);
+  KeySegment(SerNr);
+  KeyBegin(TransDate);
+  KeySegment(TransDate);
+  KeySegment(SerNr);
+  EndRecord;
+  
 return;
 end;
 

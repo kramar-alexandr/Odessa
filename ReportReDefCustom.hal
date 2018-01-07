@@ -1,1 +1,69 @@
-remote procedure ShipableRn(record RcVc);remote procedure OrderStockRn(record RcVc);globalprocedure OrderStockRn(record RcVc RepSpec)BEGIN  record UserVc Userr;      Userr.Code = CurrentUser;    ReadFirstMain(Userr,1,true);    if (NonBlank(Userr.Location)) then begin      RepSpec.f5 = Userr.Location;    end;    inner.OrderStockRn(RepSpec);  RETURN;END;globalprocedure ShipableRn(record RcVc RepSpec)BEGIN  record UserVc Userr;      Userr.Code = CurrentUser;    ReadFirstMain(Userr,1,true);    if (NonBlank(Userr.Location)) then begin      RepSpec.f4 = Userr.Location;    end;    inner.ShipableRn(RepSpec);  RETURN;END;
+remote procedure ShipableRn(record RcVc);
+remote procedure OrderStockRn(record RcVc);
+
+global
+procedure OrderStockRn(record RcVc RepSpec)
+BEGIN
+  record UserVc Userr;
+  
+    Userr.Code = CurrentUser;
+    ReadFirstMain(Userr,1,true);
+    if (NonBlank(Userr.Location)) then begin
+      RepSpec.f5 = Userr.Location;
+    end;
+    inner.OrderStockRn(RepSpec);
+
+  RETURN;
+END;
+
+global
+procedure ShipableRn(record RcVc RepSpec)
+BEGIN
+  record UserVc Userr;
+  
+    Userr.Code = CurrentUser;
+    ReadFirstMain(Userr,1,true);
+    if (NonBlank(Userr.Location)) then begin
+      RepSpec.f4 = Userr.Location;
+    end;
+    inner.ShipableRn(RepSpec);
+
+  RETURN;
+END;
+
+
+global
+updating function LongInt StockTakeVcRecordCheck(var record StockTakeVc StockTakep,record StockTakeVc StockTake2p,LongInt stat,LongInt check)
+BEGIN
+  LongInt res;
+  record StockTakeVc lStockTaker;
+  row StockTakeVc StockTakerw,StockTake2rw;
+  record INVc INr;
+  Integer i,rwcnt,cnt;
+  LongInt oldnr;
+  Boolean transf,gentrans,updatefifof;
+  val t;
+  record LocationVc LocRec;
+  string 10 location;
+  string 10 loc2;
+  record MainStockBlock MSb;
+  record SRBlock SRRec;
+  Integer insertmode,updatemode;
+  record PISVc PISr;
+  Date dat;
+  record PosVc Posr;
+  Integer errcode,errorrow;
+  string 255 errorfield;
+  record SerNrTrackBlock SNrb;
+  
+  res = 0;
+  res = inner.StockTakeVcRecordCheck(StockTakep,StockTake2p,stat,check);
+  
+  if(blank(StockTakep.SalesMan))then begin
+  	StockTakep.SalesMan = currentuser;
+  end;
+  
+  StockTakeVcRecordCheck = res;
+  
+  return;
+  end;

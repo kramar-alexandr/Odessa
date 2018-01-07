@@ -9810,6 +9810,7 @@ begin
       EditField(h,v+=vs,82,"Склад",Normal,Location,false,LocationSClass);
       EditField(h+150,v,82,"Место",Normal,Position,false,PosSClass); //Edit***************************Sasha2,11:30 12.02.2016
     end;
+    EditField(h+350,v,82,"Сборщик",Normal,SalesMan,false,UserSClass);// Edit ************************** BPI Ukraine - KramarAlexandr - неділя, 7 січня 2018 р. о 19:11:39
     EnterSkip(Math);
   //  CheckBox(420,v=6,0,"Set #Stock# Levels to these Balances on this day",SetStockValue); // Still not working properly
   //  CheckBox(420,v+=vs,0,"Override Backdated",OverrideBackdated); // Still not working properly
