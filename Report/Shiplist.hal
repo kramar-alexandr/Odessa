@@ -1,0 +1,400 @@
+external function Boolean FindItemVAR(string,var string,var string,var string,var string);
+external function Boolean ReadFirstItem(string,var record INVc,Boolean,Boolean);
+external procedure HTDetailLevel(Integer, var string);
+external procedure HTCusts(string, string, var string);
+external procedure HTOKF(Integer, Integer, var string); 
+external procedure HTNr(Integer,Integer,LongInt,LongInt,var string);
+external procedure HT2Per(Date, Date , var string);
+
+SetLangMode(LangRussian,"RUS",0);
+
+procedure RepShip(record RcVc RepSpec,record SHVc SHp,var val ordtot,var val shptot)
+begin
+  Integer i,rwcnt;
+  row SHVc SHrw;
+  Boolean testf;
+  string 20 frit,toit;
+  string 20 frin,toin;
+  record INVc INr;
+  string 255 tstr;
+  string 255 itsz,mask,subsets,mskrep;
+  
+  frit = FirstInRange(RepSpec.Stext,20);
+  toit = LastInRange(RepSpec.Stext,20);
+  frin = FirstInRange(RepSpec.LastAcc,20);
+  toin = LastInRange(RepSpec.LastAcc,20);  
+  StartFormat(15);
+  OutLongInt(0,"DblSHVc",SHp.SerNr,false);
+  OutDate(60,0,SHp.ShipDate,false);
+  OutLongInt(130,0,SHp.OrderNr,false);
+  OutString(200,0,SHp.CustCode,false);
+  OutString(300,0,SHp.Addr0,false);
+  EndFormat;
+  StartFormat(15);
+  OutString(60,0,SHp.ShipMode,false);
+  OutString(300,0,SHp.Addr1,false);
+  StartFormat(15);
+  EndFormat;
+  StartFormat(15);
+  OutString(300,0,SHp.Addr2,false);
+  EndFormat;
+  StartFormat(15);
+  OutString(300,0,SHp.Addr3,false);
+  EndFormat;
+  rwcnt = MatRowCnt(SHp);
+  for (i = 0 ; i<rwcnt ; i=i+1) begin
+    MatRowGet(SHp,i,SHrw);
+    testf = true;
+    if (nonblank(RepSpec.LastAcc)) or (nonblank(RepSpec.Stext)) then begin
+      ReadFirstItem(SHrw.ArtCode,INr,false,true);
+    end;
+    if (nonblank(RepSpec.Stext)) then begin
+      if (INr.Group<frit) or (INr.Group>toit) then begin 
+        testf = false;              
+      end; 
+    end;
+    if (nonblank(RepSpec.LastAcc)) then begin
+      if (FindItemVAR(INr.Code,itsz,mask,mskrep,subsets)) then begin
+        if (RepSpec.LastAcc!=SHrw.ArtCode) and (RepSpec.LastAcc!=INr.Code) then begin 
+          testf = false;              
+        end; 
+      end else begin
+        if (INr.Code<frin) or (INr.Code>toin) then begin 
+          testf = false;              
+        end; 
+      end;
+    end;
+    if (testf) then begin
+      StartFormat(15);
+      OutString(20,0,SHrw.ArtCode,false);
+      OutString(120,0,SHrw.Spec,false);
+      OutString(300,0,SHrw.SerialNr,false);
+      OutValBiDi(420,0,SHrw.Ordered,M4UVal,true,460);
+      OutValBiDi(480,0,SHrw.Ship,M4UVal,true,520);
+      EndFormat;
+      ordtot = ordtot + SHrw.Ordered;
+      shptot = shptot + SHrw.Ship;
+    end;
+  end;
+  return;
+end;
+
+global
+procedure ShipRn(record RcVc RepSpec)
+begin
+  record SHVc SHr;
+  Boolean TrHs;
+  Boolean testf;
+  LongInt frorder,toorder;
+  LongInt afr,ato;
+  String 60 frcc,tocc;
+  String 255 ckey;
+  String 60 lastcust;
+  Integer keys;
+  val sht,ort,rowt;
+  row SHVc SHrw;
+  Integer i;
+  Integer rwcnt;
+  string 255 tstr;
+  Integer rw;
+  record ORVc ORr;
+  val sum;
+  Integer Printer;
+  record INVc INr;
+  string 20 frit,toit;
+  string 20 frin,toin;
+  string 255 itsz,mask,subsets,mskrep;
+
+  Printer = 1;
+  frit = FirstInRange(RepSpec.Stext,20);
+  toit = LastInRange(RepSpec.Stext,20);
+  frin = FirstInRange(RepSpec.LastAcc,20);
+  toin = LastInRange(RepSpec.LastAcc,20);
+  afr = FirstInRange(RepSpec.f1,20);
+  ato = LastInRange(RepSpec.f1,20);
+  frorder = FirstInRange(RepSpec.TransStr,20);
+  toorder =  LastInRange(RepSpec.TransStr,20);
+  frcc = FirstInRange(RepSpec.f2,20);
+  tocc = LastInRange(RepSpec.f2,20);
+  lastcust = "";
+  StartReportJob(USetStr(2581));
+  rw = 1;
+  HT2Per(RepSpec.sStartDate,RepSpec.sEndDate,tstr);
+  Header(rw,tstr,1);
+  rw = rw + 1;
+  HTDetailLevel(RepSpec.ArtMode,tstr);
+  Header(rw,tstr,0);
+  HTNr(2588,2582,afr,ato,tstr);
+  Header(rw,tstr,1);
+  rw = rw + 1;
+  HTNr(2589,2584,frorder,toorder,tstr);
+  Header(rw,tstr,1);
+  rw = rw + 1;
+  HTCusts(frcc,tocc,tstr);
+  Header(rw,tstr,1);
+  rw = rw + 1; 
+  if nonblank(RepSpec.f3) then begin
+    tstr = USetStr(2587);
+    tstr = tstr & RepSpec.f3;
+    Header(rw,tstr,1);
+    rw = rw + 1;
+  end;
+  if nonblank(RepSpec.f4) then begin
+    tstr = USetStr(2768);
+    tstr = tstr & RepSpec.f4;
+    Header(rw,tstr,1);
+    rw = rw + 1;
+  end;
+  HTOKF(RepSpec.flags[1],RepSpec.flags[2],tstr);
+  if (nonblank(tstr)) then begin
+    Header(rw,tstr,1);
+  end;
+  EndHeader;
+  
+  if RepSpec.ArtMode==0 then begin
+    StartFormat(15);
+    OutString(0,0,USetStr(2582),false);
+    OutString(60,0,USetStr(2583),false);
+    OutString(130,0,USetStr(2584),false);
+    OutString(200,0,USetStr(2585),false);
+    OutString(260,0,USetStr(2586),false);
+    OutStringAdjustBiDi(480,0,USetStr(2928),true,M4Val,520);
+    OutString(500,0,"Маршрут",true);// Edit ************************** BPI Ukraine - KramarAlexandr - понеділок, 8 січня 2018 р. о 13:58:11
+    OutString(1,0,"Готов к сборке",true);// Edit ************************** BPI Ukraine - KramarAlexandr - понеділок, 8 січня 2018 р. о 13:58:13
+    EndFormat;
+  end;
+  if RepSpec.ArtMode==1 then begin
+    StartFormat(15);
+    OutString(0,0,USetStr(2582),false);
+    OutString(60,0,USetStr(2583),false);
+    OutString(130,0,USetStr(2584),false);
+    OutString(200,0,USetStr(2585),false);
+    OutString(260,0,USetStr(2586),false);
+    OutStringAdjustBiDi(420,0,USetStr(2590),true,M4Val,460);
+    OutStringAdjustBiDi(480,0,USetStr(2591),true,M4Val,520);
+    OutString(500,0,"Маршрут",true);// Edit ************************** BPI Ukraine - KramarAlexandr - понеділок, 8 січня 2018 р. о 13:58:11
+    OutString(1,0,"Готов к сборке",true);// Edit ************************** BPI Ukraine - KramarAlexandr - понеділок, 8 січня 2018 р. о 13:58:13
+
+    EndFormat;
+  end;
+
+  if (RepSpec.flags[3]==1) then begin
+   ckey = "CustCode";
+   SHr.CustCode = frcc;
+   SHr.SerNr = afr;
+   keys = 2;
+  end else begin
+   ckey = "SerNr";
+   SHr.SerNr = afr;
+   keys = 1;
+  end;
+
+  if (RepSpec.ArtMode==0) then  begin
+   Gray_Divider(0,1);
+  end;
+
+  TrHs = true;
+  while LoopKey(ckey,SHr,keys,TrHs) begin
+   testf = true;
+   if (RepSpec.flags[3]==1) then begin
+    if nonblank(tocc) then begin
+      if (SHr.CustCode>tocc) then begin
+       TrHs = false;
+      end;
+    end;
+    if (ato<>-1) then begin
+      if (SHr.SerNr>ato) then begin
+      TrHS = false;
+      end;
+    end;
+   end else begin
+    if (ato<>-1) then begin
+      if (SHr.SerNr>ato) then begin
+        TrHs = false;
+      end;
+    end;
+    if nonblank(RepSpec.f2) then begin
+      if ((tocc<SHr.CustCode) or (frcc>SHr.CustCode)) then begin
+        testf = false;
+      end;
+    end;
+   end;
+   if (TrHs==false) then begin
+    testf = false;
+   end;
+   
+   if(RepSpec.flags[3]>0)then begin// Edit ************************** BPI Ukraine - KramarAlexandr - понеділок, 8 січня 2018 р. о 13:52:55
+   	if(RepSpec.flags[3]==1 and SHr.Assembly==0)then begin
+   		testf = false;
+   	end;
+   	if(RepSpec.flags[3]==2 and SHr.Assembly==1)then begin
+   		testf = false;
+   	end;
+   end;
+   if(nonblank(RepSpec.f6) and SHr.Sorting!=RepSpec.f6)then begin// Edit ************************** BPI Ukraine - KramarAlexandr - понеділок, 8 січня 2018 р. о 13:56:05
+   	testf = false;
+   end;
+   
+   if (testf) then begin
+    if nonblank(RepSpec.TransStr) then begin
+      if ((SHr.OrderNr<frorder) or (SHr.OrderNr>toorder)) then begin
+        testf = false;
+      end;
+    end;
+    if ((SHr.ShipDate<RepSpec.sStartDate) or (SHr.ShipDate>RepSpec.sEndDate)) then begin
+        testf = false;
+    end;
+    if nonblank(RepSpec.f3) then begin
+      if (RepSpec.f3<>SHr.ShipMode) then begin
+        testf = false;
+      end;
+    end;
+    if (nonblank(RepSpec.f5)) then begin
+      if (SHr.SHClass!=RepSpec.f5) then begin
+        testf = false;
+      end;
+    end;
+    if ((RepSpec.flags[1]==0) and (SHr.OKFlag==0)) then begin
+      testf = false;
+    end;
+    if ((RepSpec.flags[2]==0) and (SHr.OKFlag<>0)) then begin
+      testf = false;
+    end;
+    if (testf) then begin
+      if (nonblank(RepSpec.f4)) then begin
+         testf = false;
+         rwcnt = MatRowCnt(SHr);
+         for (i = 0 ; i<rwcnt ;i=i+1) begin
+           MatRowGet(SHr,i,SHrw);
+           tstr = SHrw.Location;
+           if (blank(tstr)) then begin
+             tstr = SHr.Location;
+           end; 
+           if (tstr==RepSpec.f4) then begin
+             testf = true;
+             i = rwcnt;
+           end;
+         end;
+      end;
+    end;    
+
+    if (RepSpec.ArtMode==1) then begin
+      if (testf) then begin
+        if (nonblank(RepSpec.LastAcc)) then begin
+          testf = false;
+          rwcnt = MatRowCnt(SHr);
+          for (i=0;i<rwcnt;i=i+1) begin
+            MatRowGet(SHr,i,SHrw);
+            if (ReadFirstItem(SHrw.ArtCode,INr,false,true)) then begin
+              if (FindItemVAR(INr.Code,itsz,mask,mskrep,subsets)) then begin
+                if (RepSpec.LastAcc==SHrw.ArtCode) or (RepSpec.LastAcc==INr.Code) then begin 
+                  testf = true;              
+                  i = rwcnt;
+                end;
+              end else begin
+                if (INr.Code>=frin) and (INr.Code<=toin) then begin 
+                  testf = true;              
+                  i = rwcnt;
+                end; 
+              end;
+            end;
+          end;
+        end;
+      end;
+      if (testf) then begin
+        if (nonblank(RepSpec.Stext)) then begin
+          testf = false;
+          rwcnt = MatRowCnt(SHr);
+          for (i=0;i<rwcnt;i=i+1) begin
+            MatRowGet(SHr,i,SHrw);
+            if (ReadFirstItem(SHrw.ArtCode,INr,false,true)) then begin
+              if (INr.Group>=frit) and (INr.Group<=toit) then begin 
+                testf = true;              
+                i = rwcnt;
+              end; 
+            end;
+          end;
+        end;
+      end;
+    end;
+      
+    if (testf) then begin
+      if (RepSpec.flags[3]==1) then begin
+       if blank(lastcust) then begin
+        lastcust=SHr.CustCode;
+       end;
+       if (lastcust<>SHr.CustCode) then begin
+        if (RepSpec.Media==Printer) then begin
+          NewPage(false);
+        end;
+        lastcust = SHr.CustCode;
+       end;
+      end;
+      if RepSpec.ArtMode==1 then begin
+        Gray_Divider(0,1);
+        RepShip(RepSpec,SHr,ort,sht);
+      end;
+      if RepSpec.ArtMode==0 then begin
+        rowt = 0;
+        rwcnt = MatRowCnt(SHr);
+        for (i=0; i<rwcnt; i=i+1) begin
+          MatRowGet(SHr,i,SHrw);
+          testf = true;
+          if (nonblank(RepSpec.f4)) then begin
+            tstr = SHrw.Location;
+            if (blank(tstr)) then begin
+              tstr = SHr.Location;
+            end; 
+            if (tstr!=RepSpec.f4) then begin
+              testf = false;
+            end;
+          end;
+          if (testf) then begin
+            sum = SHrw.FIFO*SHrw.Ship;
+            rowt = rowt+sum;
+          end;
+        end;
+        StartFormat(15);
+        OutLongInt(0,"DblSHVc",SHr.SerNr,false);
+        OutDate(60,0,SHr.ShipDate,false);
+        OutLongInt(130,0,SHr.OrderNr,false);
+        OutString(200,0,SHr.CustCode,false);
+        OutString(260,0,SHr.Addr0,false);
+        OutValBiDi(480,0,rowt,M4Val,true,520);
+        
+        OutString(360,0,SHr.Sorting,true);// Edit ************************** BPI Ukraine - KramarAlexandr - понеділок, 8 січня 2018 р. о 13:58:11
+    		OutString(1,0,Shr.Assembly,true);// Edit ************************** BPI Ukraine - KramarAlexandr - понеділок, 8 січня 2018 р. о 13:58:13
+
+        
+        EndFormat;
+        sht = sht + rowt;
+        ORr.SerNr = SHr.OrderNr;
+        if ReadFirstMain(ORr,1,true) then begin
+          if (SHr.CustCode<>ORr.CustCode) then begin
+           StartFormat(15);
+           OutString(100,0,UsetStr(1251),false);
+           EndFormat;
+          end;
+        end else begin
+          StartFormat(15);
+          OutString(100,0,UsetStr(1251),false);
+          EndFormat;
+        end;
+      end;
+     end;
+   end;
+  end;
+  Gray_Divider(0,1);
+  if RepSpec.ArtMode==0 then begin
+    StartFormat(15);
+    OutValBiDi(480,0,sht,M4Val,true,520);
+    EndFormat;
+  end;
+  if RepSpec.ArtMode==1 then begin
+    StartFormat(15);
+    OutValBiDi(480,0,sht,M4Val,true,520);
+    EndFormat;
+  end;
+  EndJob;
+  return;
+end;
