@@ -669,36 +669,37 @@ begin
     INr.Code = artcode;
     readfirstmain(INr,1,true);
     STr.SerNr = WebGetArg("p1");
-    readfirstmain(STr,1,true);
-    rwcnt = matrowcnt(STr);
-    foundf = false;
-    for (i=0;i<rwcnt;i=i+1) begin
-      MatRowGet(STr,i,STrw);
-      if (STrw.ArtCode==artcode) then begin
-        STrw.Qty = STrw.Qty + qty;
-        qty = STrw.Qty;
-        matrowput(STr,i,STrw);
-        foundf = true;
-        i = rwcnt;
-      end;
+    if(readfirstmain(STr,1,true))then begin
+			rwcnt = matrowcnt(STr);
+			foundf = false;
+			for (i=0;i<rwcnt;i=i+1) begin
+				MatRowGet(STr,i,STrw);
+				if (STrw.ArtCode==artcode) then begin
+					STrw.Qty = STrw.Qty + qty;
+					qty = STrw.Qty;
+					matrowput(STr,i,STrw);
+					foundf = true;
+					i = rwcnt;
+				end;
+			end;
+			if (!foundf) then begin
+				STrw.ArtCode = artcode;
+				STrw.Spec = INr.Name;
+				STrw.Qty = qty;
+				matrowinsert(STr,rwcnt,STrw);
+			end;
+			if(blank(STr.SalesMan))then begin
+				STr.SalesMan = currentuser;
+			end;
+			recordstore(STr,true);
+			total = 0;
+			rwcnt = matrowcnt(STr);
+			for (i=0;i<rwcnt;i=i+1) begin
+				MatRowGet(STr,i,STrw);
+				total = total + STrw.Qty;
+			end;
+			WebOutString(artcode & nl & INr.Name & nl & qty & nl & total);
     end;
-    if (!foundf) then begin
-      STrw.ArtCode = artcode;
-      STrw.Spec = INr.Name;
-      STrw.Qty = qty;
-      matrowinsert(STr,rwcnt,STrw);
-    end;
-    if(blank(STr.SalesMan))then begin
-    	STr.SalesMan = currentuser;
-    end;
-    recordstore(STr,true);
-    total = 0;
-    rwcnt = matrowcnt(STr);
-    for (i=0;i<rwcnt;i=i+1) begin
-      MatRowGet(STr,i,STrw);
-      total = total + STrw.Qty;
-    end;
-    WebOutString(artcode & nl & INr.Name & nl & qty & nl & total);
   end;
   return;
 end;
