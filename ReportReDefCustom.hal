@@ -31,7 +31,7 @@ BEGIN
   RETURN;
 END;
 
-
+/*
 global
 updating function LongInt StockTakeVcRecordCheck(var record StockTakeVc StockTakep,record StockTakeVc StockTake2p,LongInt stat,LongInt check)
 BEGIN
@@ -66,4 +66,4 @@ BEGIN
   StockTakeVcRecordCheck = res;
   
   return;
-  end;
+  end;*/

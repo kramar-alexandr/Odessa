@@ -688,6 +688,9 @@ begin
       STrw.Qty = qty;
       matrowinsert(STr,rwcnt,STrw);
     end;
+    if(blank(STr.SalesMan))then begin
+    	STr.SalesMan = currentuser;
+    end;
     recordstore(STr,true);
     total = 0;
     rwcnt = matrowcnt(STr);
