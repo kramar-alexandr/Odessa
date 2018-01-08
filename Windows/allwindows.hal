@@ -11977,7 +11977,7 @@ begin
     EditFieldTL(h,v+=vs ,150,"Класс заказа",M4UStr,Normal,5,f5,false,OrderClassSClass);
   end;
   
-  EditFieldTL(h,v+=vs ,150,"Маршрут",M4UStr,Normal,5,f6,false,DelRouteSClass);
+  EditFieldTL(h,v+=vs ,150,"Маршрут",M4UStr,Normal,100,f6,false,DelRouteSClass);
   
   ButtonFrame(h=60,vm=(v+=40),123,2,"Функция");
   RadioButton(h,v,0,0,"Сводный",ArtMode);
