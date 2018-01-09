@@ -51,7 +51,8 @@ BEGIN
       keys = 2;
     end;
     IHr.ArtCode = item;
-    IHr.TransDate = CurrentDate;
+    //IHr.TransDate = CurrentDate;
+    IHr.TransDate = RepSpec.RegDate;// Edit ************************** BPI Ukraine - KramarAlexandr - Tuesday, 9 January 2018 16:05:59
     TrHs = true;
     while (LoopBackKey(keystr,IHr,keys,TrHs)) begin
       if (IHr.ArtCode<>item) then begin TrHs = false; end;
