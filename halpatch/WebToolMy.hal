@@ -699,6 +699,8 @@ begin
 				total = total + STrw.Qty;
 			end;
 			WebOutString(artcode & nl & INr.Name & nl & qty & nl & total);
+    end else begin
+      WebOutString("nostvcn");
     end;
   end;
   return;
