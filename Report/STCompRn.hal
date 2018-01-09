@@ -35,9 +35,7 @@ BEGIN
   record MainStockBlock MainStockRec;
   string 255 keystr;
   Date td;
-	
-	logtext(0,"FindLastST " & item);
-	
+		
   lastdatep = td;
   unitprice = blankval;
   instock = blankval;
@@ -558,15 +556,12 @@ BEGIN
         Locr.Code = RepSpec.AccStr;
         ReadFirstMain(Locr,1,true);
         if (Locr.RequirePos!=0) then begin
-        	logtext(0,"STCompOneItem_PerPosition " & INr.Code);
           STCompOneItem_PerPosition(RepSpec,INr,itemout,instock,instock2,counted,diff,totinprice);
 //          STCompOneItem(RepSpec,INr,itemout,instock,instock2,counted,diff);
         end else begin
-        	logtext(0,"STCompOneItem " & INr.Code);
           STCompOneItem(RepSpec,INr,itemout,instock,instock2,counted,diff,totinprice);
         end;
       end else begin
-      	logtext(0,"STCompOneItem-1 " & INr.Code);
         STCompOneItem(RepSpec,INr,itemout,instock,instock2,counted,diff,totinprice);
       end;
     end;
@@ -782,7 +777,6 @@ BEGIN
   array string 255 posa;
   Integer i,arrcnt;  
 	
-	logtext(0,"STCompOneVarItem " & INr.Code);
   uprice = INr.InPrice;
   FindLastST(RepSpec,INr.Code,INr.SerNrf,RepSpec.RegDate,laststdate,units,instock,counteda,batcha,posa,arrcnt,uprice,variety);
   dat1 = laststdate;
@@ -849,7 +843,6 @@ BEGIN
   row StockTakeVc combStockTakerw;
   record RcVc RepSpec;
 	
-	logtext(0,"STCompOneVarItem_PerPosition " & INr.Code);
   FindLastSTForItem(orgRepSpec,INr.Code,orgRepSpec.RegDate,combStockTaker);
 
   found = true;
