@@ -9884,8 +9884,10 @@ begin
     if (IsEnterprise) then begin
       SpecialMenu("Заполнить текущую стоимость",' ',1,"StockTakeFillFIFODsm");
       SpecialMenu("Поиск товара",'f',1,"ItemSearchDsm");
+      
   //  SpecialMenu("Import Data from Digitag",'f',1,"StockTakeDigitagDsm");
     end;
+    SpecialMenu("Выгрузить в буфер обмена",'f',1,"ExportToExcelSTDsm");
   end;
   EndWindow;
 end;

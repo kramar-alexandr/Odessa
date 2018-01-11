@@ -465,3 +465,57 @@ begin
 
 return;
 end;
+
+
+global procedure ExportTableToExcelStockTakeRn(record RcVc RepSpec)	// Edit ************************** BPI Ukraine - KramarAlexandr - Thursday, 11 January 2018 16:32:19
+begin
+  record StockTakeVc STr;
+  row	StockTakeVc STrw;
+  Integer rwcnt,i,wn;
+  
+  STr.SerNr = RepSpec.long1;
+  if (ReadFirstMain(STr,1,true)) then begin	  
+		
+ 
+		StartReportJob("ExportToExcel");
+	
+		EndHeader;
+
+		SetRepCol(2,50);
+		SetRepCol(3,100);
+		SetRepCol(4,150);
+		SetRepCol(5,200);
+		SetRepCol(6,250);
+		SetRepCol(7,300);
+		SetRepCol(8,350);
+		SetRepCol(9,400);
+
+		StartFormat(15);
+		OutString(0,0,"№",true);
+		OutString(2,0,"Товар",true);
+		OutString(3,0,"К-во",false);
+		OutString(5,0,"На скл.",false);
+		OutString(6,0,"Наименование",false);
+		OutString(7,0,"Склад",false);
+		OutString(8,0,"Позиция",false);
+		EndFormat;
+		Black_Divider(0,1);
+		
+		rwcnt=MatRowCnt(STr);
+		for(i=0;i<rwcnt;i=i+1) begin
+			MatRowGet(STr,i,STrw)
+			StartFormat(15);
+			OutString(0,0,i+1,false);
+			OutString(2,0,STrw.ArtCode,false);
+			OutString(3,0,STrw.Qty,false);
+			OutString(5,0,STrw.InStock,false);
+			OutString(6,0,STrw.Spec,false);
+			OutString(7,0,STrw.Location,false);
+			OutString(8,0,STrw.Position,false);
+			EndFormat;	
+		end;		
+		EndJob;
+  end;
+
+return;
+end;

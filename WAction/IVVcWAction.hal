@@ -2393,3 +2393,18 @@ begin
   RunReport(RepSpec,0);  
 return;
 end;
+
+global// Edit ************************** BPI Ukraine - KramarAlexandr - Thursday, 11 January 2018 16:33:02
+procedure ExportToExcelSTDsm()
+begin
+  record StockTakeVc STr;
+  record RcVc RepSpec;
+  integer wn;
+  wn = CurWindow;
+  GetWindowRecord(wn,STr);
+	RepSpec.Media = mtClipBoard; 
+  RepSpec.repname = "ExportTableToExcelStockTakeRn";
+  RepSpec.long1 = STr.SerNr;
+  RunReport(RepSpec,0);  
+return;
+end;
