@@ -1,4 +1,3 @@
-external procedure LookupInHist(string, Date, Date, string,var val,var val,var val,var val,var val,var val,var val,var val,var val,var val,var val,var vector val,var vector val);
 external function Boolean SetInSet2(string,string);
 remote procedure CollectOrderRows(var record ORVc,Date,Date,string);
 remote procedure CollectPORows(var record POVc,Date,Date,string);

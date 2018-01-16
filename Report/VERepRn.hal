@@ -1,4 +1,4 @@
-external procedure LookupInHist(string, Date, Date, string,var val,var val,var val,var val,var val,var val,var val,var val,var val,var val,var val,var vector val,var vector val);
+external procedure LookupInHist(string, Date, Date, string,var val,var val,var val,var val,var val,var val,var val,var val,var val,var val,var val,var vector val,var vector val,var val,var val);
 external function Boolean SetInSet2(string,string);
 remote procedure CollectOrderRows(var record ORVc,Date,Date,string);
 remote procedure CollectPORows(var record POVc,Date,Date,string);
@@ -262,7 +262,7 @@ BEGIN
   val soldall,sold0,strRest0,gotval0,curRest0,SDqty0,saleopt0,saleroz0;
   boolean nofindf;
   val OrdQty,POQty,POUnOkQty,retPU,SDqty,stin,stout,saleopt,saleroz;
-  val OrdQty0,POQty0,POUnOkQty0,OrdQtyRR,OrdQty1K; 
+  val OrdQty0,POQty0,POUnOkQty0,OrdQtyRR,OrdQty1K,ProdIn,ProdOut; 
   longint OrdQtyInt;
   integer rw,pos,size,size2,startPos;
   string 255 tstr,frin,toin;
@@ -361,6 +361,8 @@ RecordNew(ISr);
    OutString(220,0,"Нач. остаток",false);
    OutString(240,0,"Получено",false);
    OutString(260,0,"Списано",false);
+   OutString(260,0,"Произведено",false);
+   OutString(260,0,"Затрачено",false);
    OutString(280,0,"Остаток",false);
    OutString(300,0,"Остаток на складе Брак",false);
    /*OutString(300,0,"К отгрузке клиентам",false);*/
@@ -445,7 +447,7 @@ RecordNew(ISr);
 					
 					ClearVector(LocBalValues);
 					ClearVector(PosBalValues);
-					LookupInHist(INr.Code, RepSpec.sStartDate, RepSpec.sEndDate,locations[i],sold0,strRest0,gotval0,curRest0,TRWH,retPU,SDqty0,stin,stout,saleopt0,saleroz0,LocBalValues,PosBalValues);
+					LookupInHist(INr.Code, RepSpec.sStartDate, RepSpec.sEndDate,locations[i],sold0,strRest0,gotval0,curRest0,TRWH,retPU,SDqty0,stin,stout,saleopt0,saleroz0,LocBalValues,PosBalValues,ProdIn,ProdOut);
 					sold[i] = sold[i] + sold0;
 					soldall = soldall + sold0;
 					strRest = strRest + strRest0;
@@ -460,7 +462,7 @@ RecordNew(ISr);
 				end;	
 			end else begin
 				GetISStatus(INr.Code,OrdQty,POQty,POUnOkQty,RepSpec.f2,OrdQtyRR,OrdQty1K);		//Edit ------------------------------Dima.                склад - f2, не f1		
-				LookupInHist(INr.Code, RepSpec.sStartDate, RepSpec.sEndDate,RepSpec.f2,sold0,strRest,gotval,curRest,TRWH,retPU,SDqty,stin,stout,saleopt,saleroz,LocBalValues,PosBalValues);
+				LookupInHist(INr.Code, RepSpec.sStartDate, RepSpec.sEndDate,RepSpec.f2,sold0,strRest,gotval,curRest,TRWH,retPU,SDqty,stin,stout,saleopt,saleroz,LocBalValues,PosBalValues,ProdIn,ProdOut);
 				soldall = sold0;
   		end;
   		//Edit end-----------------------------------------------------
@@ -495,6 +497,9 @@ RecordNew(ISr);
   			OutString(220,0,strRest,false);
 				OutString(240,0,gotval + retPU,false); //Edit***************************Sasha2,16:12 17.02.2015		//Edit----------------------Dima  10.03.2015  (from - to +)
 				OutString(260,0,-(retPU+SDqty),false);
+				OutString(260,0,-(retPU+SDqty),false);
+				OutString(260,0,-ProdIn,false);
+				OutString(260,0,ProdOut,false);
 				OutString(280,0,curRest,false);
 				OutString(300,0,OrdQty,false);
 				//OrdQty - ostatki na sklade brak
