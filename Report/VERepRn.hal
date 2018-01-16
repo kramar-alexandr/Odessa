@@ -361,8 +361,8 @@ RecordNew(ISr);
    OutString(220,0,"Нач. остаток",false);
    OutString(240,0,"Получено",false);
    OutString(260,0,"Списано",false);
-   OutString(260,0,"Произведено",false);
    OutString(260,0,"Затрачено",false);
+   OutString(260,0,"Произведено",false);
    OutString(280,0,"Остаток",false);
    OutString(300,0,"Остаток на складе Брак",false);
    /*OutString(300,0,"К отгрузке клиентам",false);*/
@@ -496,7 +496,6 @@ RecordNew(ISr);
   			OutString(190,0,-saleroz,false);
   			OutString(220,0,strRest,false);
 				OutString(240,0,gotval + retPU,false); //Edit***************************Sasha2,16:12 17.02.2015		//Edit----------------------Dima  10.03.2015  (from - to +)
-				OutString(260,0,-(retPU+SDqty),false);
 				OutString(260,0,-(retPU+SDqty),false);
 				OutString(260,0,-ProdIn,false);
 				OutString(260,0,ProdOut,false);
