@@ -496,7 +496,7 @@ RecordNew(ISr);
   			OutString(190,0,-saleroz,false);
   			OutString(220,0,strRest,false);
 				OutString(240,0,gotval + retPU + ProdOut,false); //Edit***************************Sasha2,16:12 17.02.2015		//Edit----------------------Dima  10.03.2015  (from - to +)
-				OutString(260,0,-(retPU+SDqty-ProdIn),false);
+				OutString(260,0,-(retPU+SDqty+ProdIn),false);
 				//OutString(260,0,-ProdIn,false);
 				//OutString(260,0,ProdOut,false);
 				OutString(280,0,curRest,false);
