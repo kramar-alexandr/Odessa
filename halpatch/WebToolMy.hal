@@ -132,6 +132,8 @@ function string 255 FindItem(string item)
 begin
   string 255 itemcode;
   record INVc INr;
+  record BarcodeVc Br;
+  
   INr.Code = item;
   if(readfirstmain(INr,1,true))then begin
   	itemcode = INr.Code;
@@ -145,6 +147,13 @@ begin
   			itemcode = INr.Code;
 			end;
   	end;
+  end;
+  
+  if blank(itemcode) then begin
+    Br.Barcode = item;
+    if(readfirstmain(Br,1,true))then begin
+      itemcode = Br.Itemcode;
+    end;
   end;
   
   FindItem = itemcode;
