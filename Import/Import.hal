@@ -712,8 +712,10 @@ begin
   			  storeF = true;
   			end;
 				if (NonBlank(manager) and CUr.Department!=manager) then begin// Edit ************************** BPI Ukraine - KramarAlexandr - Monday, 22 January 2018 17:30:24
-  			  CUr.Department = manager;
-  			  storeF = true;
+  			  if(userv[manager])then begin
+						CUr.Department = manager;
+						storeF = true;
+  			  end;
   			end;
 				
   			if (storeF) then begin
