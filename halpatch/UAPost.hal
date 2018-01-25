@@ -1,0 +1,103 @@
+external function boolean MySendRawWebRequest(string, string, boolean, string, string, string, string, boolean, area, var area, integer);
+
+global updating procedure CreateUAPOSTAddr()
+begin
+	record UAPOSTAddrVc UAPOSTAddrr;
+	record UAPostSettingsBlock UAPostb;
+	string 255 path;
+	area a_req,replyarea;
+	
+	blockload(UAPostb);
+	path = "/addresses";
+	addtexttoarea("host: " & UAPostb.Host & chr(13) & chr(10),a_req);
+	addtexttoarea("Content-Type: application/json" & chr(13) & chr(10),a_req);
+	addtexttoarea("Authorization: Bearer " & UAPostb.bearer & chr(13) & chr(10),a_req);
+	AddTextToArea("" & chr(13) & chr(10),a_req);
+	
+	MySendRawWebRequest(UAPostb.Host,UAPostb.Port,true,"POST",path,"application/json","",false,a_req,replyarea,5);
+	writeareatofile(replyarea,"CreateUAPOSTAddr.txt",0);
+	
+return;
+end;
+
+global updating procedure CreateUAPOSTClient()
+begin
+	record UAPOSTClientVc UAPOSTClientr;
+	record UAPostSettingsBlock UAPostb;
+	string 255 path;
+	area a_req,replyarea;
+	
+	blockload(UAPostb);
+	path = "/clients?token=" & UAPostb.token;
+	addtexttoarea("host: " & UAPostb.Host & chr(13) & chr(10),a_req);
+	addtexttoarea("Content-Type: application/json" & chr(13) & chr(10),a_req);
+	addtexttoarea("Authorization: Bearer " & UAPostb.bearer & chr(13) & chr(10),a_req);
+	AddTextToArea("" & chr(13) & chr(10),a_req);
+	
+	MySendRawWebRequest(UAPostb.Host,UAPostb.Port,true,"POST",path,"application/json","",false,a_req,replyarea,5);
+	writeareatofile(replyarea,"CreateUAPOSTClient.txt",0);
+	
+return;
+end;
+
+global updating procedure CreateUAPOSTSend()
+begin
+	record UAPOSTSendVc UAPOSTSendr;
+	record UAPostSettingsBlock UAPostb;
+	string 255 path;
+	area a_req,replyarea;
+	
+	blockload(UAPostb);
+	path = "/shipments?token=" & UAPostb.token;
+	addtexttoarea("host: " & UAPostb.Host & chr(13) & chr(10),a_req);
+	addtexttoarea("Content-Type: application/json" & chr(13) & chr(10),a_req);
+	addtexttoarea("Authorization: Bearer " & UAPostb.bearer & chr(13) & chr(10),a_req);
+	AddTextToArea("" & chr(13) & chr(10),a_req);
+	
+	MySendRawWebRequest(UAPostb.Host,UAPostb.Port,true,"POST",path,"application/json","",false,a_req,replyarea,5);
+	writeareatofile(replyarea,"CreateUAPOSTSend.txt",0);
+	
+return;
+end;
+
+global updating procedure CreateUAPOSSmart()
+begin
+	record UAPOSSmartVc UASmartr;
+	record UAPostSettingsBlock UAPostb;
+	string 255 path;
+	area a_req,replyarea;
+	
+	blockload(UAPostb);
+	path = "smart-boxes/{smartBoxCode}/use-with-sender/{clientSenderUuid}?token=" & UAPostb.token;
+	addtexttoarea("host: " & UAPostb.Host & chr(13) & chr(10),a_req);
+	addtexttoarea("Content-Type: application/json" & chr(13) & chr(10),a_req);
+	addtexttoarea("Authorization: Bearer " & UAPostb.bearer & chr(13) & chr(10),a_req);
+	AddTextToArea("" & chr(13) & chr(10),a_req);
+	
+	MySendRawWebRequest(UAPostb.Host,UAPostb.Port,true,"POST",path,"application/json","",false,a_req,replyarea,5);
+	writeareatofile(replyarea,"CreateUAPOSSmart.txt",0);
+	
+return;
+end;
+
+global updating procedure CreateUAPOSGroup()
+begin
+	record UAPOSGroupVc UAPOSGroupr;
+	record UAPostSettingsBlock UAPostb;
+	string 255 path;
+	area a_req,replyarea;
+	
+	blockload(UAPostb);
+	path = "ukrposhta.ua/ecom/0.0.1/shipment-groups?token=" & UAPostb.token;
+	addtexttoarea("host: " & UAPostb.Host & chr(13) & chr(10),a_req);
+	addtexttoarea("Content-Type: application/json" & chr(13) & chr(10),a_req);
+	addtexttoarea("Authorization: Bearer " & UAPostb.bearer & chr(13) & chr(10),a_req);
+	AddTextToArea("" & chr(13) & chr(10),a_req);
+	
+	MySendRawWebRequest(UAPostb.Host,UAPostb.Port,true,"POST",path,"application/json","",false,a_req,replyarea,5);
+	writeareatofile(replyarea,"CreateUAPOSGroup.txt",0);
+	
+	
+return;
+end;
+

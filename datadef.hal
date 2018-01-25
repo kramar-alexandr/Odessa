@@ -6568,6 +6568,135 @@ RecordBegin(IPVc,-,"");
   KeySegment(SerNr);
   EndRecord;
   
+  
+  RecordBegin(UAPOSTAddrVc,-,""); // Edit ************************** BPI Ukraine - KramarAlexandr - Monday, 22 January 2018 17:47:34
+  RecordField(uid,M4Long,0,0);
+  RecordField(postcode,M4Str,5,0);
+  RecordField(country,M4Str,45,0);
+	RecordField(region,M4Str,45,0);
+	RecordField(district,M4Str,45,0);
+	RecordField(city,M4Str,45,0);
+	RecordField(street,M4Str,255,0);
+	RecordField(houseNumber,M4Str,15,0);
+	RecordField(apartmentNumber,M4Str,15,0);
+	RecordField(countryside,M4Int,0,0);
+	RecordField(description,M4Str,255,0);
+	RecordField(detailedInfo,M4Str,255,0);
+  MainKeyBegin(uid,0);
+  KeySegment(uid);
+  KeyBegin(postcode);
+  KeySegment(postcode);
+  KeySegment(uid);
+  KeyBegin(city);
+  KeySegment(city);
+  KeySegment(postcode);
+  KeySegment(uid);
+  EndRecord;
+  
+  
+  RecordBegin(UAPOSTClientVc,-,""); // Edit ************************** BPI Ukraine - KramarAlexandr - Monday, 22 January 2018 17:47:34
+  RecordField(uid,M4Str,255,0);
+  RecordField(name,M4Str,255,0);
+  RecordField(firstName,M4Str,255,0);
+  RecordField(middleName,M4Str,255,0);
+	RecordField(lastName,M4Str,255,0);
+	RecordField(addressId,M4Long,0,0);
+	RecordField(addresses,M4Str,255,0);
+	RecordField(individual,M4Int,0,0);
+	RecordField(phoneNumber,M4Str,25,0);
+	RecordField(phones,M4Str,255,0);
+	RecordField(bankCode,M4Str,10,0);
+	RecordField(bankAccount,M4Str,20,0);
+	RecordField(counterUuid,M4Str,255,0);
+	RecordField(email,M4Str,255,0);
+	RecordField(emails,M4Str,255,0);
+	RecordField(postId,M4Str,255,0);
+	RecordField(externalId,M4Str,255,0);
+	RecordField(contactPersonName,M4Str,255,0);
+	RecordField(resident,M4Int,0,0);
+	RecordField(edrpou,M4Str,255,0);
+	RecordField(tin,M4Str,255,0);
+  MainKeyBegin(uid,0);
+  KeySegment(uid);
+  EndRecord;
+  
+	RecordBegin(UAPOSTSendVc,-,""); // Edit ************************** BPI Ukraine - KramarAlexandr - Tuesday, 23 January 2018 09:31:00
+		RecordField(uid,M4Str,255,0);
+		RecordField(sender,M4Str,255,0);
+		RecordField(recipient,M4Str,255,0);
+		RecordField(recipientPhone,M4Str,50,0);
+		RecordField(recipientEmail,M4Str,50,0);
+		RecordField(recipientAddressId,M4Str,255,0);
+		RecordField(returnAddressId,M4Str,255,0);
+		RecordField(shipmentGroupUuid,M4Str,255,0);
+		RecordField(externalId,M4Str,50,0);
+		RecordField(deliveryType,M4Str,50,0);
+		RecordField(packageType,M4Str,255,0);
+		RecordField(onFailReceiveType,M4Str,50,0);
+		RecordField(barcode,M4Str,255,0);
+		RecordField(weight,M4Int,0,0);
+		RecordField(length,M4Int,0,0);
+		RecordField(width,M4Int,0,0);
+		RecordField(height,M4Int,0,0);
+		RecordField(declaredPrice,M4Long,0,0);
+		RecordField(deliveryPrice,M4Long,0,0);
+		RecordField(postPay,M4Long,0,0);
+		RecordField(currencyCode,M4Str,10,0);
+		RecordField(postPayCurrencyCode,M4Val,0,0);
+		RecordField(currencyExchangeRate,M4Val,0,0);
+		RecordField(discountPerClient,M4Str,100,0);
+		RecordField(lastModified,M4Str,100,0);
+		RecordField(parcels,M4Str,255,0);
+		RecordField(statusTrackings,M4Str,255,0);
+		RecordField(paidByRecipient,M4Int,0,0);
+		RecordField(nonCashPayment,M4Int,0,0);
+		RecordField(bulky,M4Int,0,0);
+		RecordField(fragile,M4Int,0,0);
+		RecordField(bees,M4Int,0,0);
+		RecordField(recommended,M4Int,0,0);
+		RecordField(sms,M4Int,0,0);
+		RecordField(international,M4Int,0,0);
+		RecordField(status,M4Str,255,0);
+		RecordField(postPayDeliveryPrice,M4Str,255,0);
+		RecordField(postPayPaidByRecipient,M4Int,0,0);
+		RecordField(calculationDescription,M4Str,255,0);
+		RecordField(documentBack,M4Int,0,0);
+		RecordField(checkOnDelivery,M4Int,0,0);
+		RecordField(transferPostPayToBank,M4Int,0,0);
+		RecordField(deliveryPricePaid,M4Int,0,0);
+		RecordField(postPayPaid,M4Int,0,0);
+		RecordField(postPayDeliveryPricePaid,M4Int,0,0);
+		RecordField(packedBySender,M4Int,0,0);
+		MainKeyBegin(uid,0);
+  	KeySegment(uid);
+	EndRecord;
+  
+  RecordBegin(UAPOSSmartVc,-,"");
+  	RecordField(uid,M4Str,255,0);
+  	RecordField(name,M4Str,255,0);
+  	RecordField(clientUuid,M4Str,255,0);
+  	RecordField(type,M4Str,255,0);
+  	RecordField(smartBoxCode,M4Str,255,0);
+  	MainKeyBegin(uid,0);
+  	KeySegment(uid);
+	EndRecord;
+	
+	RecordBegin(UAPOSGroupVc,-,"");
+  	RecordField(uid,M4Str,255,0);
+  	RecordField(name,M4Str,255,0);
+  	RecordField(clientUuid,M4Str,255,0);
+  	RecordField(type,M4Str,255,0);
+ 		MainKeyBegin(uid,0);
+  	KeySegment(uid);
+	EndRecord;
+	
+	BlockBegin(UAPostSettingsBlock,-,""); //Edit***************************Sasha2,14:55 23.11.2016
+  	RecordField(Host,M4Str,225,0);
+  	RecordField(Port,M4long,0,0);
+  	RecordField(token,M4Str,225,0);
+  	RecordField(bearer,M4Str,225,0);
+  EndBlock;
+	
 return;
 end;
 

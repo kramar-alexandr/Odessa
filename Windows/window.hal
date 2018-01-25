@@ -4913,3 +4913,298 @@ begin
   EndWindow;
 
 end; // 04/01/17
+
+
+window UAPostSettingsTClass:1 // Edit ************************** BPI Ukraine - KramarAlexandr - Tuesday, 23 January 2018 10:08:09
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  real h,v,vs;
+  WindowBegin("Настройки Укрпочты",UAPostSettingsTClass,CGSbl,-);
+  SetBlid(UAPostSettingsBlock);
+  SetWRect(64,80,500,300);
+  v=6;vs = 20; h = 100;
+  EditField(h,v,-20,"Host",Normal,Host,false,0);
+  EditField(h,v+=vs,-20,"Port",Normal,Port,false,0);
+  EditField(h,v+=vs,-20,"token",Normal,token,false,0);
+  EditField(h,v+=vs,-20,"bearer",Normal,bearer,false,0);
+  EndWindow;
+end;
+
+
+window UAPOSGroupLClass:1 // Edit ************************** BPI Ukraine - KramarAlexandr - Tuesday, 23 January 2018 10:14:14
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  Integer pos;
+  WindowBegin("Группы посылок",UAPOSGroupLClass,CGmlist,-);
+  SpawnClass(UAPOSGroupDClass);
+  SetWRect(20,80,800,500);
+  Sizeable(-1,-1,0,0);
+  UseView(UAPOSGroupVc);
+  RecordList(4,17,-21,-39);
+  RlColKey(pos=4,pos,"uid",uid,false,uid);
+  RlCol(pos+=80,pos,"name",PromEndDate,false);
+  RlCol(pos+=80,pos,"clientUuid",clientUuid,false);
+  RlCol(pos+=60,pos,"type",type,false);
+  SearchField("Найти");
+  EndWindow;
+end;
+
+window UAPOSGroupLClass:1 // Edit ************************** BPI Ukraine - KramarAlexandr - Tuesday, 23 January 2018 10:14:12
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  Integer pos;
+  WindowBegin("Группы посылок",UAPOSGroupLClass,CGmlist,-);
+  SpawnClass(UAPOSGroupDClass);
+  SetWRect(20,80,800,500);
+  Sizeable(-1,-1,0,0);
+  UseView(UAPOSGroupVc);
+  RecordList(4,17,-21,-39);
+  RlColKey(pos=4,pos,"uid",uid,false,uid);
+  RlCol(pos+=80,pos,"name",name,false);
+  RlCol(pos+=80,pos,"clientUuid",clientUuid,false);
+  RlCol(pos+=60,pos,"type",type,false);
+  SearchField("Найти");
+  EndWindow;
+end;
+
+window UAPOSGroupDClass:1 // Edit ************************** BPI Ukraine - KramarAlexandr - Tuesday, 23 January 2018 10:14:12
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  Integer pos,h,v,vs;
+  WindowBegin("Группы посылок",UAPOSGroupDClass,CGview,-);
+  SetWRect(20,80,800,500);
+  Sizeable(-1,-1,0,0);
+  UseView(UAPOSGroupVc);
+	h = 120;
+	v = 25;
+	vs = 20;
+	EditField(h,v+=vs,-20,"uid",Normal,uid,false,0);
+	EditField(h,v+=vs,-20,"name",Normal,name,false,0);
+	EditField(h,v+=vs,-20,"clientUuid",Normal,clientUuid,false,0);
+	EditField(h,v+=vs,-20,"type",Normal,type,false,0);
+  EndWindow;
+end;
+
+window UAPOSSmartLClass:1 // Edit ************************** BPI Ukraine - KramarAlexandr - Tuesday, 23 January 2018 10:14:12
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  Integer pos;
+  WindowBegin("Группы Smart-Box",UAPOSSmartLClass,CGmlist,-);
+  SpawnClass(UAPOSSmartDClass);
+  SetWRect(20,80,800,500);
+  Sizeable(-1,-1,0,0);
+  UseView(UAPOSSmartVc);
+  RecordList(4,17,-21,-39);
+  RlColKey(pos=4,pos,"uid",uid,false,uid);
+  RlCol(pos+=80,pos,"name",name,false);
+  RlCol(pos+=80,pos,"clientUuid",clientUuid,false);
+  RlCol(pos+=60,pos,"type",type,false);
+  SearchField("Найти");
+  EndWindow;
+end;
+
+window UAPOSSmartDClass:1 // Edit ************************** BPI Ukraine - KramarAlexandr - Tuesday, 23 January 2018 10:14:12
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  Integer pos,h,v,vs;
+  WindowBegin("Группы Smart-Box",UAPOSSmartDClass,CGview,-);
+  SetWRect(20,80,800,500);
+  Sizeable(-1,-1,0,0);
+  UseView(UAPOSSmartVc);
+	h = 120;
+	v = 25;
+	vs = 20;
+	EditField(h,v+=vs,-20,"uid",Normal,uid,false,0);
+	EditField(h,v+=vs,-20,"name",Normal,name,false,0);
+	EditField(h,v+=vs,-20,"clientUuid",Normal,clientUuid,false,0);
+	EditField(h,v+=vs,-20,"type",Normal,type,false,0);
+	
+  EndWindow;
+end;
+
+window UAPOSTSendLClass:1 // Edit ************************** BPI Ukraine - KramarAlexandr - Tuesday, 23 January 2018 10:14:12
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  Integer pos;
+  WindowBegin("Посылки",UAPOSTSendLClass,CGmlist,-);
+  SpawnClass(UAPOSTSendDClass);
+  SetWRect(20,80,800,500);
+  Sizeable(-1,-1,0,0);
+  UseView(UAPOSTSendVc);
+  RecordList(4,17,-21,-39);
+  RlColKey(pos=4,pos,"uid",uid,false,uid);
+  RlCol(pos+=80,pos,"sender",sender,false);
+  RlCol(pos+=80,pos,"recipient",recipient,false);
+  RlCol(pos+=60,pos,"status",status,false);
+  SearchField("Найти");
+  EndWindow;
+end;
+
+window UAPOSTSendDClass:1 // Edit ************************** BPI Ukraine - KramarAlexandr - Tuesday, 23 January 2018 10:14:12
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  Integer pos,h,v,vs;
+  WindowBegin("Посылки",UAPOSTSendDClass,CGview,-);
+  SpawnClass(UAPOSTSendDClass);
+  SetWRect(20,80,800,500);
+  Sizeable(-1,-1,0,0);
+  UseView(UAPOSTSendVc);
+  h = 120;
+	v = 25;
+	vs = 20;
+	EditField(h,v+=vs,-20,"uid",Normal,uid,false,0);
+	EditField(h,v+=vs,-20,"sender",Normal,sender,false,0);
+	EditField(h,v+=vs,-20,"recipient",Normal,recipient,false,0);
+	EditField(h,v+=vs,-20,"recipientPhone",Normal,recipientPhone,false,0);
+	EditField(h,v+=vs,-20,"recipientEmail",Normal,recipientEmail,false,0);
+	EditField(h,v+=vs,-20,"recipientAddressId",Normal,recipientAddressId,false,0);
+	EditField(h,v+=vs,-20,"returnAddressId",Normal,returnAddressId,false,0);
+	EditField(h,v+=vs,-20,"shipmentGroupUuid",Normal,shipmentGroupUuid,false,0);
+	EditField(h,v+=vs,-20,"externalId",Normal,externalId,false,0);
+	EditField(h,v+=vs,-20,"deliveryType",Normal,deliveryType,false,0);
+	EditField(h,v+=vs,-20,"packageType",Normal,packageType,false,0);
+	EditField(h,v+=vs,-20,"onFailReceiveType",Normal,onFailReceiveType,false,0);
+	EditField(h,v+=vs,-20,"barcode",Normal,barcode,false,0);
+	EditField(h,v+=vs,-20,"weight",Normal,weight,false,0);
+	EditField(h,v+=vs,-20,"length",Normal,length,false,0);
+	EditField(h,v+=vs,-20,"width",Normal,width,false,0);
+	EditField(h,v+=vs,-20,"height",Normal,height,false,0);
+	EditField(h,v+=vs,-20,"declaredPrice",Normal,declaredPrice,false,0);
+	EditField(h,v+=vs,-20,"deliveryPrice",Normal,deliveryPrice,false,0);
+	EditField(h,v+=vs,-20,"postPay",Normal,postPay,false,0);
+	EditField(h,v+=vs,-20,"currencyCode",Normal,currencyCode,false,0);
+	EditField(h,v+=vs,-20,"postPayCurrencyCode",Normal,postPayCurrencyCode,false,0);
+	EditField(h,v+=vs,-20,"currencyExchangeRate",Normal,currencyExchangeRate,false,0);
+	EditField(h,v+=vs,-20,"discountPerClient",Normal,discountPerClient,false,0);
+	EditField(h,v+=vs,-20,"lastModified",Normal,lastModified,false,0);
+	EditField(h,v+=vs,-20,"parcels",Normal,parcels,false,0);
+	EditField(h,v+=vs,-20,"statusTrackings",Normal,statusTrackings,false,0);
+	EditField(h,v+=vs,-20,"paidByRecipient",Normal,paidByRecipient,false,0);
+	EditField(h,v+=vs,-20,"nonCashPayment",Normal,nonCashPayment,false,0);
+	EditField(h,v+=vs,-20,"bulky",Normal,bulky,false,0);
+	EditField(h,v+=vs,-20,"fragile",Normal,fragile,false,0);
+	EditField(h,v+=vs,-20,"bees",Normal,bees,false,0);
+	EditField(h,v+=vs,-20,"recommended",Normal,recommended,false,0);
+	EditField(h,v+=vs,-20,"sms",Normal,sms,false,0);
+	EditField(h,v+=vs,-20,"international",Normal,international,false,0);
+	EditField(h,v+=vs,-20,"status",Normal,status,false,0);
+	EditField(h,v+=vs,-20,"postPayDeliveryPrice",Normal,postPayDeliveryPrice,false,0);
+	EditField(h,v+=vs,-20,"postPayPaidByRecipient",Normal,postPayPaidByRecipient,false,0);
+	EditField(h,v+=vs,-20,"calculationDescription",Normal,calculationDescription,false,0);
+	EditField(h,v+=vs,-20,"documentBack",Normal,documentBack,false,0);
+	EditField(h,v+=vs,-20,"checkOnDelivery",Normal,checkOnDelivery,false,0);
+	EditField(h,v+=vs,-20,"transferPostPayToBank",Normal,transferPostPayToBank,false,0);
+	EditField(h,v+=vs,-20,"deliveryPricePaid",Normal,deliveryPricePaid,false,0);
+	EditField(h,v+=vs,-20,"postPayPaid",Normal,postPayPaid,false,0);
+	EditField(h,v+=vs,-20,"postPayDeliveryPricePaid",Normal,postPayDeliveryPricePaid,false,0);
+	EditField(h,v+=vs,-20,"packedBySender",Normal,packedBySender,false,0);
+	
+  EndWindow;
+end;
+
+window UAPOSTClientLClass:1 // Edit ************************** BPI Ukraine - KramarAlexandr - Tuesday, 23 January 2018 10:14:12
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  Integer pos;
+  WindowBegin("Контакт",UAPOSTClientLClass,CGmlist,-);
+  SpawnClass(UAPOSTClientDClass);
+  SetWRect(20,80,800,500);
+  Sizeable(-1,-1,0,0);
+  UseView(UAPOSTClientVc);
+  RecordList(4,17,-21,-39);
+  RlColKey(pos=4,pos,"uid",uid,false,uid);
+  RlCol(pos+=80,pos,"firstName",firstName,false);
+  RlCol(pos+=80,pos,"middleName",middleName,false);
+  RlCol(pos+=60,pos,"lastName",lastName,false);
+  RlCol(pos+=60,pos,"phoneNumber",phoneNumber,false);
+  SearchField("Найти");
+  EndWindow;
+end;
+
+window UAPOSTClientDClass:1 // Edit ************************** BPI Ukraine - KramarAlexandr - Tuesday, 23 January 2018 10:14:12
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  Integer pos,h,v,vs;
+  WindowBegin("Контакт",UAPOSTClientDClass,CGview,-);
+  SetWRect(20,80,800,500);
+  Sizeable(-1,-1,0,0);
+  UseView(UAPOSTClientVc);
+  h = 120;
+	v = 25;
+	vs = 20;
+	EditField(h,v+=vs,-20,"uid",Normal,uid,false,0);
+	EditField(h,v+=vs,-20,"name",Normal,name,false,0);
+	EditField(h,v+=vs,-20,"firstName",Normal,firstName,false,0);
+	EditField(h,v+=vs,-20,"middleName",Normal,middleName,false,0);
+	EditField(h,v+=vs,-20,"lastName",Normal,lastName,false,0);
+	EditField(h,v+=vs,-20,"addressId",Normal,addressId,false,0);
+	EditField(h,v+=vs,-20,"addresses",Normal,addresses,false,0);
+	EditField(h,v+=vs,-20,"individual",Normal,individual,false,0);
+	EditField(h,v+=vs,-20,"phoneNumber",Normal,phoneNumber,false,0);
+	EditField(h,v+=vs,-20,"phones",Normal,phones,false,0);
+	EditField(h,v+=vs,-20,"bankCode",Normal,bankCode,false,0);
+	EditField(h,v+=vs,-20,"bankAccount",Normal,bankAccount,false,0);
+	EditField(h,v+=vs,-20,"counterUuid",Normal,counterUuid,false,0);
+	EditField(h,v+=vs,-20,"email",Normal,email,false,0);
+	EditField(h,v+=vs,-20,"postId",Normal,postId,false,0);
+	EditField(h,v+=vs,-20,"externalId",Normal,externalId,false,0);
+	EditField(h,v+=vs,-20,"contactPersonName",Normal,contactPersonName,false,0);
+	EditField(h,v+=vs,-20,"resident",Normal,resident,false,0);
+	EditField(h,v+=vs,-20,"edrpou",Normal,edrpou,false,0);
+	EditField(h,v+=vs,-20,"tin",Normal,tin,false,0);
+  
+  EndWindow;
+end;
+
+
+window UAPOSTAddrLClass:1 // Edit ************************** BPI Ukraine - KramarAlexandr - Tuesday, 23 January 2018 10:14:12
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  Integer pos;
+  WindowBegin("Адреса",UAPOSTAddrLClass,CGmlist,-);
+  SpawnClass(UAPOSTAddrDClass);
+  SetWRect(20,80,800,500);
+  Sizeable(-1,-1,0,0);
+  UseView(UAPOSTAddrVc);
+  RecordList(4,17,-21,-39);
+  RlColKey(pos=4,pos,"uid",uid,false,uid);
+  RlCol(pos+=80,pos,"postcode",postcode,false);
+  RlCol(pos+=80,pos,"region",region,false);
+  RlCol(pos+=60,pos,"district",district,false);
+  RlCol(pos+=60,pos,"city",city,false);
+  SearchField("Найти");
+  EndWindow;
+end;
+
+window UAPOSTAddrDClass:1 // Edit ************************** BPI Ukraine - KramarAlexandr - Tuesday, 23 January 2018 10:14:12
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  Integer pos,h,v,vs;
+  WindowBegin("Адрес",UAPOSTAddrDClass,CGview,-);
+  SetWRect(20,80,800,500);
+  Sizeable(-1,-1,0,0);
+  UseView(UAPOSTAddrVc);
+  	h = 120;
+  	v = 25;
+  	vs = 20;
+  	EditField(h,v+=vs,-20,"uid",Normal,uid,false,0);
+		EditField(h,v+=vs,-20,"postcode",Normal,postcode,false,0);
+		EditField(h,v+=vs,-20,"country",Normal,country,false,0);
+		EditField(h,v+=vs,-20,"region",Normal,region,false,0);
+		EditField(h,v+=vs,-20,"district",Normal,district,false,0);
+		EditField(h,v+=vs,-20,"city",Normal,city,false,0);
+		EditField(h,v+=vs,-20,"street",Normal,street,false,0);
+		EditField(h,v+=vs,-20,"houseNumber",Normal,houseNumber,false,0);
+		EditField(h,v+=vs,-20,"apartmentNumber",Normal,apartmentNumber,false,0);
+		EditField(h,v+=vs,-20,"countryside",Normal,countryside,false,0);
+		EditField(h,v+=vs,-20,"description",Normal,description,false,0);
+		EditField(h,v+=vs,-20,"detailedInfo",Normal,detailedInfo,false,0);
+
+  	
+  EndWindow;
+end;
+
+
+
+
+

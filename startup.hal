@@ -10,6 +10,15 @@ begin
 	SetLangMode(LangRussian,"RUS",0);
 
 		//Module("Управление складом","",730,modWHM);
+	Module("Укрпочта","",730,modUAPost);
+	Register("Клиенты","Клиенты",UAPOSTClientVc,modUAPost);
+	Register("Адреса","Адреса",UAPOSTAddrVc,modUAPost);
+	Register("Посылки","Посылки",UAPOSTSendVc,modUAPost);
+	Register("SmartBox","SmartBox",UAPOSSmartVc,modUAPost);
+	Register("Группы","Группы",UAPOSGroupVc,modUAPost);
+	
+	Setting("Настройки УкрПочты",UAPostSettingsTClass,modUAPost);
+	
 	Module("Новая почта","",730,modNPost);
 	Register("Города","Города",NPCityVc,modNPost);
 	Register("Области","Области",NPAreaVc,modNPost);
