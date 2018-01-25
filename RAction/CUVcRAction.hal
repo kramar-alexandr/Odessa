@@ -725,6 +725,52 @@ begin
   return;
 end;
 
+
+
+global
+updating procedure CreateLoyaltyCardFromCUVc(record CUVc CUr)
+begin
+  record IVVc IVr;
+	record LoyaltyCardVc LCr;
+	boolean testf,TrHs,testf1;
+  
+  testf = true;
+  if(CUr.CUType!=1)then begin testf = false; end;
+  if(CUr.CustCat!="WEB" and CUr.CustCat!="RETAI")then begin testf = false; end;
+  if(left(CUr.Phone,1)=="#")then begin testf = false; end;
+  if(left(CUr.eMail,1)=="#")then begin testf = false; end;
+  if(left(CUr.Name,1)=="#")then begin testf = false; end;
+  if(CUr.Code=="NONAME")then begin testf = false; end;
+  if(CUr.blockedFlag>0)then begin testf = false; end;
+  
+  if(testf)then begin
+    LCr.CustCode = CUr.Code;
+    if(readfirstkey("ActCustCode",LCr,1,true)==false)then begin
+      recordnew(LCr);
+      LCr.CustCode = CUr.Code;
+      LCr.SerNr = "LC" & CUr.Code;
+      LCr.LCMLevel = "1";
+      resetloop(IVr);
+      IVr.CustCode = CUr.Code;
+      TrHs = true;
+      while(loopkey("CustCode",IVr,1,TrHs))begin
+        testf1 = true;
+        if(IVr.CustCode!=CUr.Code)then begin TrHs = false; testf1 = false; end;
+        if(IVr.OKFlag==0)then begin testf1 = false; end;
+        if(IVr.Invalid>0)then begin testf1 = false; end;
+        
+        if(testf1)then begin
+          LCr.PointsBalance = LCr.PointsBalance + IVr.Sum4;
+        end;
+      end;
+      Logtext(0,CUr.Code & "_ _" & LCr.SerNr & "_ _" & LCr.PointsBalance);
+      recordstore(LCr,true);
+    end;
+  end;
+  
+  return;
+end;
+
 global
 updating function LongInt CUVcRecordSaveAfter(var record CUVc CUr,record CUVc CU2r,LongInt stat,LongInt long4)
 BEGIN
@@ -749,7 +795,7 @@ BEGIN
 //  RemoveNormalizedNumbers(CUr); // No need when saving...
   StoreNormalizedNumbers(CUr,CurrentCompany);
   GenerateRebateVouchers(CUr.Code);// Edit ************************** Monday, 28 November 2016 11:22:21
-
+  CreateLoyaltyCardFromCUVc(CUr);//Edit-------------------Vitalii 13:52 25.01.2018
 
   CUVcRecordSaveAfter = res;
   RETURN;
