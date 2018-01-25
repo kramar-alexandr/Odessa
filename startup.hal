@@ -523,6 +523,9 @@ begin
 	Import("Залить минимальные заказы",INMinOrderImportIClass,INMinOrderImportIn,modIN); //Edit***************************Sasha2,14:54 15.02.2017
 	Import("Залить MOQ",INMinOrderImportIClass,INMOQOrderImportIn,modIN); //Edit***************************Sasha2,14:54 15.02.2017
 	
+	Import("Изменение флагов экспорта прайсов",INImportExportFlagsIClass,INImportExportFlagsIn,modIN); //Edit***************************Sasha2,14:54 15.02.2017
+
+	
 	Export("ExxportIN",CashInvCroEClass,ExpRegINEn,modDBMain);
 	Export("ExxportPLHist",UILogEClass,ExpRegPLHistEn,modDBMain);
 

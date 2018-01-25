@@ -521,6 +521,11 @@ begin
   RecordField(WebAddress1,M4Str,255,0); //Edit***************************Sasha2,9:33 12.04.2017
   RecordField(WebAddress2,M4Str,255,0); //Edit***************************Sasha2,9:33 12.04.2017
   RecordField(WebAddress3,M4Str,255,0); //Edit***************************Sasha2,9:33 12.04.2017
+  RecordField(ExpFlag01,M4Int,0,0);// Edit ************************** BPI Ukraine - KramarAlexandr - Thursday, 25 January 2018 14:41:19
+  RecordField(ExpFlag02,M4Int,0,0);// Edit ************************** BPI Ukraine - KramarAlexandr - Thursday, 25 January 2018 14:41:20
+  RecordField(ExpFlag03,M4Int,0,0);// Edit ************************** BPI Ukraine - KramarAlexandr - Thursday, 25 January 2018 14:41:21
+  RecordField(ExpFlag04,M4Int,0,0);// Edit ************************** BPI Ukraine - KramarAlexandr - Thursday, 25 January 2018 14:41:22
+  RecordField(ExpFlag05,M4Int,0,0);// Edit ************************** BPI Ukraine - KramarAlexandr - Thursday, 25 January 2018 14:41:23
   ArrayBegin(Math,-,1);
   ArrayField(LangCode,M4Code,5,0);
   ArrayField(Text,M4Str,100,0);

@@ -2959,6 +2959,12 @@ begin
   if (StandardHansa==false) then begin
     CheckBox(h1,v+=32,0,"В проекте товар как материал",ItemMaterial);
   end;
+  
+  
+  CheckBox(h1+150,14,0,"Экспорт РыбРай",ExpFlag01);
+  CheckBox(h1+150,34,0,"Экспорт Опт",ExpFlag02);
+  CheckBox(h1+150,54,0,"Экспорт Калипсо",ExpFlag03);
+  
   if (HasJewelleryInterface) then begin
     Tile(tilenr,110,false,tilenr,Metal); tilenr = tilenr + 1;
     EditField(h,v=6, 140,"Метал",Normal,Metal,false,0);

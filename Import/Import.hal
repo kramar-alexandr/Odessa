@@ -917,3 +917,54 @@ begin
 	
   return;
 end;
+
+
+global
+updating procedure INImportExportFlagsIn()
+begin
+  string 50 artcode,ExpFlag01,ExpFlag02,ExpFlag03,ExpFlag04,ExpFlag05;
+  val minord;
+  record INVc INr;
+  boolean instf;
+
+	while (TestEOF()==false) begin
+		artcode = ImportField;
+		ExpFlag01 = ImportField;
+		ExpFlag02 = ImportField;
+		ExpFlag03 = ImportField;
+		ExpFlag04 = ImportField;
+		ExpFlag05 = ImportField;
+		
+		if(nonblank(artcode)) then begin
+			INr.Code = artcode;
+			if(readfirstmain(INr,1,true)) then begin
+				if(nonblank(ExpFlag01))then begin
+					INr.ExpFlag01 = evaltoval(ExpFlag01);
+					instf = true;
+				end;
+				if(nonblank(ExpFlag02))then begin
+					INr.ExpFlag02 = evaltoval(ExpFlag02);
+					instf = true;
+				end;
+				if(nonblank(ExpFlag03))then begin
+					INr.ExpFlag03 = evaltoval(ExpFlag03);
+					instf = true;
+				end;
+				if(nonblank(ExpFlag04))then begin
+					INr.ExpFlag04 = evaltoval(ExpFlag04);
+					instf = true;
+				end;
+				if(nonblank(ExpFlag05))then begin
+					INr.ExpFlag05 = evaltoval(ExpFlag05);
+					instf = true;
+				end;
+				if(instf)then begin
+					recordstore(INr,true);
+				end;
+			end;
+		end;
+		NextImportLine(true); 
+  end; 
+	
+  return;
+end;

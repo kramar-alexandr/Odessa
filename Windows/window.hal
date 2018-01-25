@@ -3778,6 +3778,49 @@ Integer i;
 end;
 
 
+window INImportExportFlagsIClass:1	//Edit***************************Sasha2,14:41 15.02.2017
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+real h,v,vs;
+Integer i;
+  WindowBegin("Обновление флагов экспорта прайсов",INImportExportFlagsIClass,CGIcW,-);
+  SetWRect(20,80,470,600);
+  i=1; //номер колонки
+  h=10;  v=15;
+  StaticText(h,v,"Формат импорта",false);
+  h=20;  v=40;
+  StaticText(h,v,"Список колонок:",false);
+  v=v+30; vs=25;
+  StaticText(h,v, 	i & ". Код товара",false);
+	 StaticText(h+150,v,"Обязательное поле",false);
+	 i=i+1;
+  StaticText(h,v+=vs,i & ". Экспорт РыбРай",false);
+	 StaticText(h+150,v,"Необязательное поле 0 или 1",false);
+	 StaticText(h+150,v+=20,"Если пустое, ничего не поменяется",false);
+	 i=i+1;
+	StaticText(h,v+=vs,i & ". Экспорт Опт",false);
+	 StaticText(h+150,v,"Необязательное поле 0 или 1",false);
+	 StaticText(h+150,v+=20,"Если пустое, ничего не поменяется",false);
+	 i=i+1;
+	StaticText(h,v+=vs,i & ". Экспорт Калипсо",false);
+	 StaticText(h+150,v,"Необязательное поле 0 или 1",false);
+	 StaticText(h+150,v+=20,"Если пустое, ничего не поменяется",false);
+	 i=i+1;
+	StaticText(h,v+=vs,i & ". *дополнительное*",false);
+	 StaticText(h+150,v,"Необязательное поле 0 или 1",false);
+	 StaticText(h+150,v+=20,"Если пустое, ничего не поменяется",false);
+	 i=i+1;
+	StaticText(h,v+=vs,i & ". *дополнительное*",false);
+	 StaticText(h+150,v,"Необязательное поле 0 или 1",false);
+	 StaticText(h+150,v+=20,"Если пустое, ничего не поменяется",false);
+
+  StaticText(h,v+=40,"Примечание:   Все столбцы разделены <Tab>",false);
+  StaticText(h+75,v+=15,"Первая строка файла: шапка или пустая строка",false);
+
+  EndWindow;
+end;
+
+
 window ORHistoryLClass:1
   wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
 begin
