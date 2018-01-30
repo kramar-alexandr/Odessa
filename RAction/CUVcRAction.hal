@@ -736,7 +736,7 @@ begin
   
   testf = true;
   if(CUr.CUType!=1)then begin testf = false; end;
-  if(CUr.CustCat!="WEB" and CUr.CustCat!="RETAI")then begin testf = false; end;
+  if(CUr.CustCat!="WEB")then begin testf = false; end;
   if(left(CUr.Phone,1)=="#")then begin testf = false; end;
   if(left(CUr.eMail,1)=="#")then begin testf = false; end;
   if(left(CUr.Name,1)=="#")then begin testf = false; end;
