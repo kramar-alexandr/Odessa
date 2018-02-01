@@ -1320,6 +1320,7 @@ begin
 		
 		if(testf)then begin
 			totbal[1] = 0;
+			logtext(0,"Cr ConsIn for:" & Consignationr.Location & " comtnt " & Consignationr.Comitent);
 			CrConsigIn(Consignationr,totbal);
 			logtext(0,"Start " & totbal[1]);
 		end;
