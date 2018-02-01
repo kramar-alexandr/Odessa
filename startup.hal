@@ -364,6 +364,9 @@ begin
 	Maintenance("Добавить способ оплаты",AddPModeMnVClass,AddPModeMn,modSL);
 	Maintenance("Fix 15% ROZENK VAT",AddPModeMnVClass,FixVATCodeMn,modSL);
 	
+	Maintenance("Приход на консигнацию",CrConsigInAllVClass,CrConsigInAllMn,modSL);  //Edit**********Dima, 28.01.2014
+
+	
   Maintenance("FixIHCostSM",MyVClass,FixIHCostSM,modDBMain);  //Edit**********Dima, 28.01.2014
   
   Maintenance("ClearIH ConsignationVc",MyVClass,ConsignationVcClearIH,modDBMain);  //Edit**********Dima, 28.01.2014

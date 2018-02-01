@@ -1302,6 +1302,35 @@ return;
 end;
 
 
+global updating	procedure	CrConsigInAllMn(record RcVc RepSpec)
+begin
+	array val totbal;
+	record ConsignationVc Consignationr;
+	boolean TrHs,testf;
+	
+	totbal[0] = 0;
+	totbal[1] = 0;
+	
+	Consignationr.TransDate = RepSpec.d1;
+	TrHs = true;
+	while(loopkey("TransDate",Consignationr,1,TrHs))begin
+		testf = true;
+		if(Consignationr.TransDate!=RepSpec.d1)then begin TrHs = false; testf = false; end;
+		if(Consignationr.OKFlag!=1)then begin testf = false; end;
+		
+		if(testf)then begin
+			totbal[1] = 0;
+			CrConsigIn(Consignationr,totbal);
+			logtext(0,"Start " & totbal[1]);
+		end;
+	end;
+	logtext(0,"Error " & totbal[1]);	
+
+return;
+end;
+
+
+
 global updating procedure ConsFillSpec()
 begin
 	record ConsignationVc Consignationr;
