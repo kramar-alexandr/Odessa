@@ -12,12 +12,10 @@ begin
 	mtrw = matrowcnt(ConsSaler);
 	For(i=0;i<mtrw;i=i+1) begin
 	  matrowget(ConsSaler,i,ConsSalerw);
-	  	if(ConsSalerw.CCFlag==0)then begin
-	  		if(ConsSalerw.Price>ConsSalerw.SelPrice)then begin
-	  			ConsSalerw.SelQty = 0;
-	  			matrowput(ConsSaler,i,ConsSalerw);
-	  		end;
-	  	end;
+			if(ConsSalerw.Price>ConsSalerw.SelPrice)then begin
+				ConsSalerw.SelQty = 0;
+				matrowput(ConsSaler,i,ConsSalerw);
+			end;
 	  
 	  corqty = corqty + ConsSalerw.SelQty;
 	  qty = qty + ConsSalerw.Qty;
