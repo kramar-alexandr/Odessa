@@ -1332,19 +1332,6 @@ begin
 							mtrw = mtrw + 1;
 						end;
 					end; 
-	  			
-	  			//logtext(0,artcodes[i] & " " & resqty);
-	  			/*if(resqty>(artqty2[artcodes[i]] - Consignationrw.Qty))then begin
-						ConsSalerw.Qty = artqty2[artcodes[i]] - Consignationrw.Qty;
-	  			end else begin
-	  				ConsSalerw.Qty = resqty;
-	  			end;
-	  			ConsSalerw.Sum = ConsSalerw.Qty*ConsSalerw.Price;
-					if(ConsSalerw.Qty>0)then begin
-						ConsSaler.TotQty = ConsSaler.TotQty + ConsSalerw.Qty;
-						matrowput(ConsSaler,mtrw,ConsSalerw);
-						mtrw = mtrw + 1;
-					end;*/
 	  		end;
 	  	end;
 		end; 
@@ -1357,7 +1344,7 @@ begin
 			resqty = 0;
 			CalcSalesOnPeriod(Consignationr,artcodes[i],resqty,lastdate,prices,prcnt,qty,ivser,ccflag);
 			For(k=0;k<prcnt;k=k+1) begin
-				if(qty[k]>0)then begin
+				if(qty[k]!=0)then begin
 					ConsSalerw.Qty = qty[k];
 					ConsSalerw.SelPrice = prices[k];
 					ConsSalerw.Invoice = ivser[k];
