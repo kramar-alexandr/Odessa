@@ -1037,8 +1037,8 @@ begin
 		
 		if(testf)then begin
 			if(IHr.FileName=="IVVc")then begin 
-				if(IHr.ArtCode=="2080063")then begin
-					logtext(0,"2080063 " & IHr.Qty);
+				if(IHr.ArtCode=="1720600")then begin
+					logtext(0,"1720600 " & IHr.Qty);
 				end;
 				qty = qty - IHr.Qty;
 				IVr.SerNr = IHr.TransNr;
@@ -1065,8 +1065,8 @@ begin
 						aqty[vpcnt[keyv]] = aqty[vpcnt[keyv]] - IHr.Qty;
 						ivser[prcnt] = IVr.SerNr;
 						ccflag[prcnt] = isterm;
-						if(IHr.ArtCode=="2080063")then begin
-							logtext(0,"2080063 " & aqty[vpcnt[keyv]] & " " & IVr.SerNr);
+						if(IHr.ArtCode=="1720600")then begin
+							logtext(0,"1720600 " & aqty[vpcnt[keyv]] & " " & IVr.SerNr);
 						end;
 					end else begin
 						prices[prcnt] = round(IVrw.Sum/IVrw.Quant,SetRoundModeD(2));
@@ -1077,8 +1077,8 @@ begin
 						aqty[vpcnt[keyv]] = - IHr.Qty;
 						prcnt = prcnt + 1;
 						
-						if(IHr.ArtCode=="2080063")then begin
-							logtext(0,"2080063 false " & aqty[vpcnt[round(IVrw.Sum/IVrw.Quant,SetRoundModeD(2))]] & " " & IVr.SerNr);
+						if(IHr.ArtCode=="1720600")then begin
+							logtext(0,"1720600 false " & aqty[vpcnt[round(IVrw.Sum/IVrw.Quant,SetRoundModeD(2))]] & " " & IVr.SerNr);
 						end;
 					end;
 				end;
