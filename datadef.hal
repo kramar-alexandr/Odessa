@@ -6324,6 +6324,9 @@ RecordBegin(IPVc,-,"");
   RecordField(Comitent,M4Code,40,0);
   RecordField(TotSum,M4Val,0,0);
   RecordField(TotQty,M4Val,0,0);
+  RecordField(TotSaleSum,M4Val,0,0);
+  RecordField(TotCorSum,M4Val,0,0);
+  RecordField(CorQty,M4Val,0,0);
 
   RecordField(Math,M4Matrix,0,0);
   ArrayBegin(Math,-,1);

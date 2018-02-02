@@ -2,6 +2,38 @@ external procedure SortStrArray(var array string);
 external function roundmode SetRoundModeD(Integer);
 external function val AbsoluteVal(val);
 
+
+procedure CrConsigSaleSumUp(var record ConsSaleVc ConsSaler)
+begin
+	row ConsSaleVc ConsSalerw;
+	integer i,mtrw;
+	val sum,corsum,qty,corqty,salesum;
+	
+	mtrw = matrowcnt(ConsSaler);
+	For(i=0;i<mtrw;i=i+1) begin
+	  matrowget(ConsSaler,i,ConsSalerw);
+	  	if(ConsSalerw.CCFlag==0)then begin
+	  		if(ConsSalerw.Price>ConsSalerw.SelPrice)then begin
+	  			ConsSalerw.SelQty = 0;
+	  			matrowput(ConsSaler,i,ConsSalerw);
+	  		end;
+	  	end;
+	  
+	  corqty = corqty + ConsSalerw.SelQty;
+	  qty = qty + ConsSalerw.Qty;
+	  corsum = corsum + ConsSalerw.SelQty * ConsSalerw.SelPrice;
+	  salesum = salesum + ConsSalerw.Qty * ConsSalerw.SelPrice;
+	  sum = sum + ConsSalerw.Qty * ConsSalerw.Sum;
+	end; 
+	ConsSaler.TotSum = sum;
+	ConsSaler.TotSaleSum = salesum;
+	ConsSaler.TotQty = qty;
+	ConsSaler.TotCorSum = corsum;
+	ConsSaler.CorQty = corqty;
+	logtext(0,ConsSaler.TotSaleSum & " ++++");
+return;
+end;
+
 global
 procedure MySortStringArray(var array string astr,integer cnt)
 begin
@@ -276,6 +308,7 @@ begin
 						IHr.Qty = -remqty;
 						IHr.TotCostPrice = sourceIHr.TotCostPrice;
 						ConsSalerw.Qty = ConsSalerw.Qty - IHr.Qty;
+						ConsSalerw.SelQty = ConsSalerw.Qty;
 						ConsSalerw.Sum = ConsSalerw.Sum - IHr.TotCostPrice * IHr.Qty;
 						ConsSalerw.Price = ConsSalerw.Sum / ConsSalerw.Qty;
 						ConsSaler.TotSum = ConsSaler.TotSum - IHr.TotCostPrice * IHr.Qty;
@@ -289,6 +322,7 @@ begin
 						IHr.Qty = -sourceIHr.Qty2;
 						IHr.TotCostPrice = sourceIHr.TotCostPrice;
 						ConsSalerw.Qty = ConsSalerw.Qty - IHr.Qty;
+						ConsSalerw.SelQty = ConsSalerw.Qty;
 						ConsSalerw.Sum = ConsSalerw.Sum - IHr.TotCostPrice * IHr.Qty;
 						ConsSalerw.Price = ConsSalerw.Sum / ConsSalerw.Qty;
 						ConsSaler.TotSum = ConsSaler.TotSum - IHr.TotCostPrice * IHr.Qty;
@@ -308,6 +342,7 @@ begin
 	  		//ConsSalerw.Qty = ConsSalerw.Qty - remqty;
 	  		//matrowput(ConsSaler,i,ConsSalerw);
 	  		ConsSalerw.Qty = remqty;
+	  		ConsSalerw.SelQty = ConsSalerw.Qty;
 	  		ConsSalerw.Sum = blankval;
 				ConsSalerw.Price = blankval;
 	  		matrowinsert(ConsSaler,i+1,ConsSalerw);
@@ -479,15 +514,17 @@ BEGIN
 END;
 
 global
-updating function LongInt ConsSaleVcRecordUpdate(var record ConsSaleVc Consignationr,record ConsSaleVc Consignation2r,LongInt stat,LongInt long4)
+updating function LongInt ConsSaleVcRecordUpdate(var record ConsSaleVc ConsSaler,record ConsSaleVc ConsSale2r,LongInt stat,LongInt long4)
 BEGIN
   LongInt res;
   
-  if(Consignationr.OKFlag==1 and Consignation2r.OKFlag==0)then begin
-		ConsSaleVcUpdateIH(Consignationr,true);
+  if(ConsSaler.OKFlag==1 and ConsSale2r.OKFlag==0)then begin
+		ConsSaleVcUpdateIH(ConsSaler,true);
+		CrConsigSaleSumUp(ConsSaler);
  	end;
- 	if(Consignationr.OKFlag==0 and Consignation2r.OKFlag==1)then begin
-		ConsSaleVcUpdateIH(Consignationr,false);
+ 	if(ConsSaler.OKFlag==0 and ConsSale2r.OKFlag==1)then begin
+		ConsSaleVcUpdateIH(ConsSaler,false);
+		CrConsigSaleSumUp(ConsSaler);
  	end;
  	
   ConsSaleVcRecordUpdate = res;
@@ -495,13 +532,14 @@ BEGIN
 END;
 
 global
-updating function LongInt ConsSaleVcRecordSave(var record ConsSaleVc Consignationr,record ConsSaleVc Consignation2r,LongInt stat,LongInt long4)
+updating function LongInt ConsSaleVcRecordSave(var record ConsSaleVc ConsSaler,record ConsSaleVc ConsSale2r,LongInt stat,LongInt long4)
 BEGIN
   LongInt res;
   
 
- 	if(Consignationr.OKFlag==1)then begin
-		ConsSaleVcUpdateIH(Consignationr,true);
+ 	if(ConsSaler.OKFlag==1)then begin
+		ConsSaleVcUpdateIH(ConsSaler,true);
+		CrConsigSaleSumUp(ConsSaler);
  	end;
  	
   ConsSaleVcRecordSave = res;
@@ -955,20 +993,6 @@ begin
 	  		
 	  		if(IHr.Qty2<=0)then begin testf = false; end;
 	  		
-	  		/*if(testf)then begin
-	  			ConsInoldr.SerNr = IHr.TransNr;
-	  			if(readfirstmain(ConsInoldr,1,true))then begin
-	  				if(ConsInoldr.Location!=ConsInr.Location)then begin
-	  					testf = false;
-	  				end;
-	  				if(ConsInoldr.Comitent!=ConsInr.Comitent)then begin
-	  					testf = false;
-	  				end;
-	  			end else begin
-	  				testf = false;
-	  			end;
-	  		end;*/
-	  		
 	  		if(testf)then begin
 	  			ConsInrw.Qty = ConsInrw.Qty - IHr.Qty2;
 	  		end;
@@ -1037,9 +1061,9 @@ begin
 		
 		if(testf)then begin
 			if(IHr.FileName=="IVVc")then begin 
-				if(IHr.ArtCode=="1720600")then begin
+				/*if(IHr.ArtCode=="1720600")then begin
 					logtext(0,"1720600 " & IHr.Qty);
-				end;
+				end;*/
 				qty = qty - IHr.Qty;
 				IVr.SerNr = IHr.TransNr;
 				if(readfirstmain(IVr,1,true))then begin
@@ -1065,9 +1089,9 @@ begin
 						aqty[vpcnt[keyv]] = aqty[vpcnt[keyv]] - IHr.Qty;
 						ivser[prcnt] = IVr.SerNr;
 						ccflag[prcnt] = isterm;
-						if(IHr.ArtCode=="1720600")then begin
+						/*if(IHr.ArtCode=="1720600")then begin
 							logtext(0,"1720600 " & aqty[vpcnt[keyv]] & " " & IVr.SerNr);
-						end;
+						end;*/
 					end else begin
 						prices[prcnt] = AbsoluteVal(round(IVrw.Sum/IVrw.Quant,SetRoundModeD(2)));
 						ivser[prcnt] = IVr.SerNr;
@@ -1078,11 +1102,11 @@ begin
 						
 						prcnt = prcnt + 1;
 						
-						if(IHr.ArtCode=="1720600")then begin
+						/*if(IHr.ArtCode=="1720600")then begin
 							logtext(0,"1720600 false " & aqty[vpcnt[keyv]]);
 							logtext(0,"1720600 false prcnt " & prcnt);
 							logtext(0,"1720600 false aqty " & aqty[vpcnt[keyv]-1]);
-						end;
+						end;*/
 					end;
 				end;
 			end;
@@ -1324,10 +1348,10 @@ begin
 	  			For(k=0;k<prcnt;k=k+1) begin
 	  				if(qty[k]!=0)then begin
 	  					ConsSalerw.Qty = qty[k];
+	  					ConsSalerw.SelQty =  qty[k];
 	  					ConsSalerw.SelPrice = prices[k];
 	  					ConsSalerw.Invoice = ivser[k];
 	  					ConsSalerw.CCFlag = ccflag[k];
-							ConsSaler.TotQty = ConsSaler.TotQty + ConsSalerw.Qty;
 							matrowput(ConsSaler,mtrw,ConsSalerw);
 							mtrw = mtrw + 1;
 						end;
@@ -1346,27 +1370,14 @@ begin
 			For(k=0;k<prcnt;k=k+1) begin
 				if(qty[k]!=0)then begin
 					ConsSalerw.Qty = qty[k];
+					ConsSalerw.SelQty =  qty[k];
 					ConsSalerw.SelPrice = prices[k];
 					ConsSalerw.Invoice = ivser[k];
 	  			ConsSalerw.CCFlag = ccflag[k];
-					ConsSaler.TotQty = ConsSaler.TotQty + ConsSalerw.Qty;
 					matrowput(ConsSaler,mtrw,ConsSalerw);
 					mtrw = mtrw + 1;
 				end;
 			end; 
-			
-			//logtext(0,artcodes[i] & " " & resqty);
-			/*if(resqty>artqty2[artcodes[i]])then begin
-				ConsSalerw.Qty = artqty2[artcodes[i]];
-			end else begin
-				ConsSalerw.Qty = resqty;
-			end;
-			ConsSalerw.Sum = ConsSalerw.Qty*ConsSalerw.Price;
-			if(ConsSalerw.Qty>0)then begin
-				ConsSaler.TotQty = ConsSaler.TotQty + ConsSalerw.Qty;
-				matrowput(ConsSaler,mtrw,ConsSalerw);
-				mtrw = mtrw + 1;
-			end;*/
 		end;
 	end; 
 	
@@ -1374,7 +1385,7 @@ begin
 	
 	if(mtrw>0)then begin
 		ConsSaler.SerNr = NextSerNr("ConsSaleVc",CurrentDate,-1,false,"");
-		
+		CrConsigSaleSumUp(ConsSaler);
 		recordstore(ConsSaler,true);
 		createrecordlink(ConsSaler,currentcompany,Consignationr,currentcompany);
 		createrecordlink(Consignationr,currentcompany,ConsSaler,currentcompany);
