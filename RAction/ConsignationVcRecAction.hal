@@ -1069,16 +1069,18 @@ begin
 							logtext(0,"1720600 " & aqty[vpcnt[keyv]] & " " & IVr.SerNr);
 						end;
 					end else begin
-						prices[prcnt] = round(IVrw.Sum/IVrw.Quant,SetRoundModeD(2));
+						prices[prcnt] = AbsoluteVal(round(IVrw.Sum/IVrw.Quant,SetRoundModeD(2)));
 						ivser[prcnt] = IVr.SerNr;
 						ccflag[prcnt] = isterm;
 						vpflag[keyv] = true;
 						vpcnt[keyv] = prcnt;
 						aqty[vpcnt[keyv]] = - IHr.Qty;
+						
 						prcnt = prcnt + 1;
 						
 						if(IHr.ArtCode=="1720600")then begin
-							logtext(0,"1720600 false " & aqty[vpcnt[round(IVrw.Sum/IVrw.Quant,SetRoundModeD(2))]] & " " & IVr.SerNr);
+							logtext(0,"1720600 false " & aqty[vpcnt[keyv] & " " & IVr.SerNr);
+							logtext(0,"1720600 false prcnt " & prcnt);
 						end;
 					end;
 				end;
