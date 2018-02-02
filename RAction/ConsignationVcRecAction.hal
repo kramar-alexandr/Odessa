@@ -1079,8 +1079,9 @@ begin
 						prcnt = prcnt + 1;
 						
 						if(IHr.ArtCode=="1720600")then begin
-							logtext(0,"1720600 false " & aqty[vpcnt[keyv] & " " & IVr.SerNr);
+							logtext(0,"1720600 false " & aqty[vpcnt[keyv]]);
 							logtext(0,"1720600 false prcnt " & prcnt);
+							logtext(0,"1720600 false aqty " & aqty[vpcnt[keyv]-1]);
 						end;
 					end;
 				end;
