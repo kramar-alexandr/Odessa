@@ -1061,9 +1061,6 @@ begin
 		
 		if(testf)then begin
 			if(IHr.FileName=="IVVc")then begin 
-				/*if(IHr.ArtCode=="1720600")then begin
-					logtext(0,"1720600 " & IHr.Qty);
-				end;*/
 				qty = qty - IHr.Qty;
 				IVr.SerNr = IHr.TransNr;
 				if(readfirstmain(IVr,1,true))then begin
@@ -1089,9 +1086,6 @@ begin
 						aqty[vpcnt[keyv]] = aqty[vpcnt[keyv]] - IHr.Qty;
 						ivser[prcnt] = IVr.SerNr;
 						ccflag[prcnt] = isterm;
-						/*if(IHr.ArtCode=="1720600")then begin
-							logtext(0,"1720600 " & aqty[vpcnt[keyv]] & " " & IVr.SerNr);
-						end;*/
 					end else begin
 						prices[prcnt] = AbsoluteVal(round(IVrw.Sum/IVrw.Quant,SetRoundModeD(2)));
 						ivser[prcnt] = IVr.SerNr;
@@ -1099,19 +1093,43 @@ begin
 						vpflag[keyv] = true;
 						vpcnt[keyv] = prcnt;
 						aqty[vpcnt[keyv]] = - IHr.Qty;
-						
 						prcnt = prcnt + 1;
-						
-						/*if(IHr.ArtCode=="1720600")then begin
-							logtext(0,"1720600 false " & aqty[vpcnt[keyv]]);
-							logtext(0,"1720600 false prcnt " & prcnt);
-							logtext(0,"1720600 false aqty " & aqty[vpcnt[keyv]-1]);
-						end;*/
 					end;
 				end;
 			end;
 			if(IHr.FileName=="SHVc")then begin 
 				qty = qty - IHr.Qty;
+				SHr.SerNr = IHr.TransNr;
+				if(readfirstmain(SHr,1,true))then begin
+					matrowget(SHr,IHr.Row,SHrw);
+					ORr.SerNr = SHr.OrderNr;
+					if (ReadFirstMain(ORr,1,true)) then begin
+						matrowget(ORr,SHrw.OrdRow,ORrw);
+						
+						keyv = "";
+						keyv = AbsoluteVal(round(ORrw.Sum/ORrw.Quant,SetRoundModeD(2))) & ";" & ORr.SerNr;
+					
+						if(vinvflag[ORr.SerNr]==false)then begin
+							vinvflag[ORr.SerNr] = true;
+							ivser[prcnt] = ORr.SerNr;
+							ccflag[prcnt] = isterm;
+						end;
+						if(vpflag[keyv])then begin
+							aqty[vpcnt[keyv]] = aqty[vpcnt[keyv]] - IHr.Qty;
+							ivser[prcnt] = ORr.SerNr;
+							ccflag[prcnt] = isterm;
+						end else begin
+							prices[prcnt] = AbsoluteVal(round(ORrw.Sum/ORrw.Quant,SetRoundModeD(2)));
+							ivser[prcnt] = ORr.SerNr;
+							ccflag[prcnt] = isterm;
+							vpflag[keyv] = true;
+							vpcnt[keyv] = prcnt;
+							aqty[vpcnt[keyv]] = - IHr.Qty;
+							prcnt = prcnt + 1;
+						end;
+						
+					end;  
+				end;
 			end;
 			if(IHr.FileName=="RetVc")then begin 
 				qty = qty - IHr.Qty;
