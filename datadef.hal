@@ -6334,6 +6334,9 @@ RecordBegin(IPVc,-,"");
   ArrayField(Price,M4Val,0,0);
   ArrayField(Sum,M4Val,0,0);
   ArrayField(Spec,M4Str,255,0);
+  ArrayField(SelPrice,M4Val,0,0);
+  ArrayField(Invoice,M4Long,0,0);
+  ArrayField(CCFlag,M4Int,0,0);
     
   EndArray;
   MainKeyBegin(SerNr,0);

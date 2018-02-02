@@ -11780,6 +11780,9 @@ begin
   MatCol(1,100,"Кол-во",0,Qty,false,0);
   MatCol(1,160,"Название",0,Spec,false,0);
   //MatCol(1,-180,"SelQty",0,SelQty,true,0);
+  MatCol(1,-370,"KK",0,CCFlag,true,0);
+  MatCol(1,-250,"Сч/ф",0,Invoice,true,0);
+  MatCol(1,-180,"Цена продажи",0,SelPrice,true,0);
   MatCol(1,-120,"Цена",0,Price,true,0);
   MatCol(1,-60,"Сумма",0,Sum,true,0);
   InsertRowTest;

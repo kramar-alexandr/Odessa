@@ -1,4 +1,6 @@
 external procedure SortStrArray(var array string);
+external function roundmode SetRoundModeD(Integer);
+external function val AbsoluteVal(val);
 
 global
 procedure MySortStringArray(var array string astr,integer cnt)
@@ -208,7 +210,7 @@ global updating procedure ConsSaleVcUpdateIH(var record ConsSaleVc ConsSaler, bo
 begin
 	record ItemHistVc IHr,sourceIHr;
 	row ConsSaleVc ConsSalerw;
-	boolean testf,TrHs;
+	boolean testf,TrHs,foundff;
 	integer mtrw,i;
 	val remqty;
 	
@@ -243,10 +245,11 @@ begin
 		For(i=0;i<mtrw;i=i+1) begin
 			matrowget(ConsSaler,i,ConsSalerw);
 			remqty = ConsSalerw.Qty;
-			
+			ConsSalerw.Qty = 0;
 			TrHs = true;
 			sourceIHr.ArtCode = ConsSalerw.ArtCode;
 			sourceIHr.FileName = "ConsInVc";
+			foundff = false;
 			while(loopkey("FNArtCode",sourceIHr,2,TrHs))begin
 				testf = true;
 				if(sourceIHr.FileName!="ConsInVc")then begin TrHs = false; testf = false; end;
@@ -272,17 +275,20 @@ begin
 						IHr.Source = sourceIHr.SerNr;
 						IHr.Qty = -remqty;
 						IHr.TotCostPrice = sourceIHr.TotCostPrice;
+						ConsSalerw.Qty = ConsSalerw.Qty - IHr.Qty;
 						ConsSalerw.Sum = ConsSalerw.Sum - IHr.TotCostPrice * IHr.Qty;
 						ConsSalerw.Price = ConsSalerw.Sum / ConsSalerw.Qty;
 						ConsSaler.TotSum = ConsSaler.TotSum - IHr.TotCostPrice * IHr.Qty;
 						matrowput(ConsSaler,i,ConsSalerw);
 						sourceIHr.Qty2 = sourceIHr.Qty2 - remqty;
 						recordstore(sourceIHr,true);
+						foundff = true;
 						remqty = 0;
 					end else begin
 						IHr.Source = sourceIHr.SerNr;
 						IHr.Qty = -sourceIHr.Qty2;
 						IHr.TotCostPrice = sourceIHr.TotCostPrice;
+						ConsSalerw.Qty = ConsSalerw.Qty - IHr.Qty;
 						ConsSalerw.Sum = ConsSalerw.Sum - IHr.TotCostPrice * IHr.Qty;
 						ConsSalerw.Price = ConsSalerw.Sum / ConsSalerw.Qty;
 						ConsSaler.TotSum = ConsSaler.TotSum - IHr.TotCostPrice * IHr.Qty;
@@ -290,6 +296,7 @@ begin
 						remqty = remqty - sourceIHr.Qty2;
 						sourceIHr.Qty2 = 0;
 						recordstore(sourceIHr,true);
+						foundff = true;
 					end;
 					
 					IHr.Row = i;
@@ -297,7 +304,16 @@ begin
 				end;
 	  	end;
 	  	resetloop(sourceIHr);
-	  	
+	  	if(remqty>0 and foundff)then begin
+	  		//ConsSalerw.Qty = ConsSalerw.Qty - remqty;
+	  		//matrowput(ConsSaler,i,ConsSalerw);
+	  		ConsSalerw.Qty = remqty;
+	  		ConsSalerw.Sum = blankval;
+				ConsSalerw.Price = blankval;
+	  		matrowinsert(ConsSaler,i+1,ConsSalerw);
+	  		mtrw = mtrw + 1;
+	  		i=i+1;
+	  	end;
 		end; 
 	end;
 return;
@@ -986,13 +1002,27 @@ begin
 return;
 end;
 
-procedure GetQtyByBackDateSales(date frdate, date td, string artcode, string location, var val resqty)
+procedure GetQtyByBackDateSales(date frdate, date td, string artcode, string location, var val resqty,var array val prices,var integer prcnt,var array integer aqty,var array longint ivser,var array integer ccflag)
 begin
 	record ItemHistVc IHr;
 	boolean TrHs,testf;
 	record ItemStatusVc ISr;
 	val qty;
+	record IVVc IVr;
+	row IVVc IVrw;
+	record ORVc ORr;
+	row ORVc ORrw;
+	record SHVc SHr;
+	row SHVc SHrw;
+	record RetVc Retr;
+	row RetVc Retrw;
+	vector boolean vpflag,vinvflag;
+	vector integer vpcnt;
+	integer isterm;
+	integer mtrw,i;
+	string 100 keyv;
 	
+	prcnt = 0;
 	
 	IHr.ArtCode = artcode;
 	IHr.Location = location;
@@ -1007,7 +1037,51 @@ begin
 		
 		if(testf)then begin
 			if(IHr.FileName=="IVVc")then begin 
+				if(IHr.ArtCode=="2080063")then begin
+					logtext(0,"2080063 " & IHr.Qty);
+				end;
 				qty = qty - IHr.Qty;
+				IVr.SerNr = IHr.TransNr;
+				if(readfirstmain(IVr,1,true))then begin
+					isterm = 0;
+					mtrw = matrowcnt(IVr);
+					For(i=0;i<mtrw;i=i+1) begin
+						matrowget(IVr,i,IVrw);
+	  				if(IVrw.stp==kInvoiceRowTypeCreditCardPayment)then begin
+	  					isterm = 1;
+	  				end;
+					end; 
+				
+					matrowget(IVr,IHr.Row,IVrw);
+					keyv = "";
+					keyv = AbsoluteVal(round(IVrw.Sum/IVrw.Quant,SetRoundModeD(2))) & ";" & IVr.SerNr;
+					
+					if(vinvflag[IVr.SerNr]==false)then begin
+						vinvflag[IVr.SerNr] = true;
+						ivser[prcnt] = IVr.SerNr;
+						ccflag[prcnt] = isterm;
+					end;
+					if(vpflag[keyv])then begin
+						aqty[vpcnt[keyv]] = aqty[vpcnt[keyv]] - IHr.Qty;
+						ivser[prcnt] = IVr.SerNr;
+						ccflag[prcnt] = isterm;
+						if(IHr.ArtCode=="2080063")then begin
+							logtext(0,"2080063 " & aqty[vpcnt[keyv]] & " " & IVr.SerNr);
+						end;
+					end else begin
+						prices[prcnt] = round(IVrw.Sum/IVrw.Quant,SetRoundModeD(2));
+						ivser[prcnt] = IVr.SerNr;
+						ccflag[prcnt] = isterm;
+						vpflag[keyv] = true;
+						vpcnt[keyv] = prcnt;
+						aqty[vpcnt[keyv]] = - IHr.Qty;
+						prcnt = prcnt + 1;
+						
+						if(IHr.ArtCode=="2080063")then begin
+							logtext(0,"2080063 false " & aqty[vpcnt[round(IVrw.Sum/IVrw.Quant,SetRoundModeD(2))]] & " " & IVr.SerNr);
+						end;
+					end;
+				end;
 			end;
 			if(IHr.FileName=="SHVc")then begin 
 				qty = qty - IHr.Qty;
@@ -1054,12 +1128,12 @@ begin
 return;
 end;
 
-global procedure CalcSalesOnPeriod(record ConsignationVc Consignationr,string itemcode, var val resqty,date lastdate)
+global procedure CalcSalesOnPeriod(record ConsignationVc Consignationr,string itemcode, var val resqty,date lastdate,var array val prices,var integer prcnt,var array integer qty,var array longint ivser,var array integer ccflag)
 begin
 	record ConsignationVc Consignationoldr;
 	boolean testf,TrHs;
 	
-	GetQtyByBackDateSales(Consignationr.TransDate,lastdate,itemcode,Consignationr.Location,resqty);
+	GetQtyByBackDateSales(Consignationr.TransDate,lastdate,itemcode,Consignationr.Location,resqty,prices,prcnt,qty,ivser,ccflag);
 return;
 end;
 
@@ -1170,7 +1244,7 @@ end;
 
 global updating procedure CrConsigSale(record ConsignationVc Consignationr,var array val totbal)
 begin
-	integer wn,i,j,rwcnt,mtrw,acnt,acnt1;
+	integer wn,i,j,rwcnt,mtrw,acnt,acnt1,prcnt,k;
 	row ConsignationVc Consignationrw;
 	record ConsSaleVc ConsSaler,ConsSaleoldr;
 	row ConsSaleVc ConsSalerw;
@@ -1182,6 +1256,9 @@ begin
 	val resqty;
 	date lastdate;
 	record INVc INr;
+	array val prices;
+	array integer qty,ccflag;
+	array longint ivser
 	
 	logtext(0,"CrConsigSale");
 	
@@ -1202,9 +1279,21 @@ begin
 				artcodes[acnt1] = IHr.ArtCode;
 				acnt1 = acnt1 + 1;
 			end;
-			artqty2[IHr.ArtCode] = artqty2[IHr.ArtCode] + IHr.Qty2;			
+			//artqty2[IHr.ArtCode] = artqty2[IHr.ArtCode] + IHr.Qty2;			
 		end;
 	end;
+	INr.Code = "";
+	while(loopmain(INr,1,true))begin
+		testf = true;
+		if(setinset(Consignationr.Comitent,INr.DispGroups))then begin
+			if(artf1[INr.Code]==false)then begin
+				artf1[INr.Code] = true;
+				artcodes[acnt1] = INr.Code;
+				acnt1 = acnt1 + 1;
+			end;
+		end;
+	end;
+	ResetLoop(INr);
 	
 	recordnew(ConsSaler);
 	ConsSaler.TransDate = Consignationr.TransDate;
@@ -1219,16 +1308,30 @@ begin
 	  	matrowget(Consignationr,j,Consignationrw);
 	  	if(Consignationrw.ArtCode==artcodes[i])then begin
 	  		foundf = true;
-	  		if(artqty2[artcodes[i]]>Consignationrw.Qty)then begin
+	  		//if(artqty2[artcodes[i]]>Consignationrw.Qty)then begin
+	  		if(true)then begin
 	  			ConsSalerw.ArtCode = artcodes[i];
 	  			INr.Code = artcodes[i];
 	  			if(readfirstmain(INr,1,true))then begin
 	  				ConsSalerw.Spec = INr.Name;
 	  			end;
 	  			resqty = 0;
-	  			CalcSalesOnPeriod(Consignationr,artcodes[i],resqty,lastdate);
+	  			CalcSalesOnPeriod(Consignationr,artcodes[i],resqty,lastdate,prices,prcnt,qty,ivser,ccflag);
+	  			
+	  			For(k=0;k<prcnt;k=k+1) begin
+	  				if(qty[k]!=0)then begin
+	  					ConsSalerw.Qty = qty[k];
+	  					ConsSalerw.SelPrice = prices[k];
+	  					ConsSalerw.Invoice = ivser[k];
+	  					ConsSalerw.CCFlag = ccflag[k];
+							ConsSaler.TotQty = ConsSaler.TotQty + ConsSalerw.Qty;
+							matrowput(ConsSaler,mtrw,ConsSalerw);
+							mtrw = mtrw + 1;
+						end;
+					end; 
+	  			
 	  			//logtext(0,artcodes[i] & " " & resqty);
-	  			if(resqty>(artqty2[artcodes[i]] - Consignationrw.Qty))then begin
+	  			/*if(resqty>(artqty2[artcodes[i]] - Consignationrw.Qty))then begin
 						ConsSalerw.Qty = artqty2[artcodes[i]] - Consignationrw.Qty;
 	  			end else begin
 	  				ConsSalerw.Qty = resqty;
@@ -1238,7 +1341,7 @@ begin
 						ConsSaler.TotQty = ConsSaler.TotQty + ConsSalerw.Qty;
 						matrowput(ConsSaler,mtrw,ConsSalerw);
 						mtrw = mtrw + 1;
-					end;
+					end;*/
 	  		end;
 	  	end;
 		end; 
@@ -1249,9 +1352,21 @@ begin
 				ConsSalerw.Spec = INr.Name;
 			end;
 			resqty = 0;
-			CalcSalesOnPeriod(Consignationr,artcodes[i],resqty,lastdate);
+			CalcSalesOnPeriod(Consignationr,artcodes[i],resqty,lastdate,prices,prcnt,qty,ivser,ccflag);
+			For(k=0;k<prcnt;k=k+1) begin
+				if(qty[k]>0)then begin
+					ConsSalerw.Qty = qty[k];
+					ConsSalerw.SelPrice = prices[k];
+					ConsSalerw.Invoice = ivser[k];
+	  			ConsSalerw.CCFlag = ccflag[k];
+					ConsSaler.TotQty = ConsSaler.TotQty + ConsSalerw.Qty;
+					matrowput(ConsSaler,mtrw,ConsSalerw);
+					mtrw = mtrw + 1;
+				end;
+			end; 
+			
 			//logtext(0,artcodes[i] & " " & resqty);
-			if(resqty>artqty2[artcodes[i]])then begin
+			/*if(resqty>artqty2[artcodes[i]])then begin
 				ConsSalerw.Qty = artqty2[artcodes[i]];
 			end else begin
 				ConsSalerw.Qty = resqty;
@@ -1261,7 +1376,7 @@ begin
 				ConsSaler.TotQty = ConsSaler.TotQty + ConsSalerw.Qty;
 				matrowput(ConsSaler,mtrw,ConsSalerw);
 				mtrw = mtrw + 1;
-			end;
+			end;*/
 		end;
 	end; 
 	
