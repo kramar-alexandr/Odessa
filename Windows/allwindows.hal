@@ -11780,7 +11780,7 @@ begin
   v=v+40;
   MatrixBegin(30,v,-30,-10,-,6000);
   MatCol(1,40,"Товар",0,ArtCode,false,INSClass);
-  MatCol(1,100,"Изн",0,SelQty,false,0);
+  MatCol(1,100,"Кор.",0,SelQty,false,0);
   MatCol(1,150,"Кол-во",0,Qty,false,0);
   MatCol(1,200,"Название",0,Spec,false,0);
   //MatCol(1,-180,"SelQty",0,SelQty,true,0);
