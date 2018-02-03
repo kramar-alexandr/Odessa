@@ -76,6 +76,7 @@ begin
   
   brandname = "";
   typename = "";
+  comitent = "";
   
   	pos = 0;  
   	class = "";  
