@@ -243,6 +243,7 @@ begin
 	boolean testf,TrHs,foundff;
 	integer mtrw,i;
 	val remqty;
+	record PLVc PLr;
 	
 	if(addflag==false)then begin
 		IHr.FileName = "ConsSaleVc";
@@ -339,8 +340,14 @@ begin
 	  	if(remqty>0 and foundff)then begin
 	  		ConsSalerw.Qty = remqty;
 	  		ConsSalerw.SelQty = ConsSalerw.Qty;
-	  		//ConsSalerw.Sum = blankval;
-				//ConsSalerw.Price = blankval;
+	  		if(ConsSalerw.Price==0)then begin
+	  			PLr.PLCode = "KOMPR";
+          PLr.ArtCode = ConsSalerw.ArtCode;
+          if(readfirstmain(PLr,2,true))then begin
+						ConsSalerw.Price = PLr.ExVatPrice;
+          	ConsSalerw.Sum = ConsSalerw.Price * ConsSalerw.Qty;
+          end;
+	  		end;
 	  		matrowinsert(ConsSaler,i+1,ConsSalerw);
 	  		mtrw = mtrw + 1;
 	  		i=i+1;
