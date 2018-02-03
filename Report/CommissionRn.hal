@@ -68,7 +68,7 @@ end;
 
 
 
-procedure GetClassifications(string classifications, var string brandname, var string typename)
+procedure GetClassifications(string classifications, var string brandname, var string typename,var string comitent)
 begin
 	record DIVc DIr;
 	string 100 class;
@@ -88,6 +88,9 @@ begin
   	  end;
   	  if(DIr.CType=="BRND_UKR" or DIr.CType=="BRND_WORLD")then begin
   	    brandname = DIr.Name;
+  	  end;
+  	  if(DIr.CType=="KOMITENT")then begin
+  	    typename = DIr.Code;
   	  end;
   	  if (nonblank(brandname) and nonblank(typename)) then begin
 				goto LGetClassifications;
@@ -198,7 +201,7 @@ Integer rw,rwcnt,i,loop;
 string 200 locations,positions;
 val rate;
 val balanceAfterPeriod,balanceBeforePeriod,stockIn,stockOut;
-string 100 brand,type;
+string 100 brand,type,comitent;
 longint tick1,tick2,s1,s2,s3;
 vector val balanceBefore,balanceAfter,ToStock,FromStock;
 vector boolean checkItem;
@@ -214,12 +217,6 @@ array string 50 combarr;
 	end;
 	
 	GetBaseCurncy(1,baseCurncy);
-	
-
-	//check correctness...
-	
-	
-	
 
 	StartReportJob("עקוע ןמ ןנמהאזאל");
 	rw=1;
@@ -255,10 +252,16 @@ array string 50 combarr;
 		if (nonblank(locations) and SetInSet(SalesData.Location,locations)==false) then begin testf=false; end;
 		if (nonblank(positions) and SetInSet(SalesData.Position,positions)==false) then begin testf=false; end;
 		if (SalesData.InvDate>endDate) then begin TrHs=false; testf=false; end;
+		if(testf)then begin
+			GetClassifications(SalesData.DispGroups,brand,type,comitent);
+			if(nonblank(RepSpec.f3) and RepSpec.f3!=comitent)then begin
+				testf = false;
+			end;	
+		end;
 		
 		if (testf) then begin	
 				
-				GetClassifications(SalesData.DispGroups,brand,type);			
+						
 				
 				if (checkItem[SalesData.ArtCode]==false) then begin
 				

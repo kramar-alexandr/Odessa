@@ -337,8 +337,6 @@ begin
 	  	end;
 	  	resetloop(sourceIHr);
 	  	if(remqty>0 and foundff)then begin
-	  		//ConsSalerw.Qty = ConsSalerw.Qty - remqty;
-	  		//matrowput(ConsSaler,i,ConsSalerw);
 	  		ConsSalerw.Qty = remqty;
 	  		ConsSalerw.SelQty = ConsSalerw.Qty;
 	  		ConsSalerw.Sum = blankval;
@@ -1103,10 +1101,13 @@ begin
 					ORr.SerNr = SHr.OrderNr;
 					if (ReadFirstMain(ORr,1,true)) then begin
 						matrowget(ORr,SHrw.OrdRow,ORrw);
-						
+						isterm = 0;
+						if(ORr.NPPaymentType==0)then begin
+							isterm = 1;
+						end;
 						keyv = "";
 						keyv = AbsoluteVal(round(ORrw.Sum/ORrw.Quant,SetRoundModeD(2))) & ";" & ORr.SerNr;
-					
+						
 						if(vinvflag[ORr.SerNr]==false)then begin
 							vinvflag[ORr.SerNr] = true;
 							ivser[prcnt] = ORr.SerNr;
@@ -1125,12 +1126,44 @@ begin
 							aqty[vpcnt[keyv]] = - IHr.Qty;
 							prcnt = prcnt + 1;
 						end;
-						
 					end;  
 				end;
 			end;
 			if(IHr.FileName=="RetVc")then begin 
 				qty = qty - IHr.Qty;
+				Retr.SerNr = IHr.TransNr;
+				if(readfirstmain(Retr,1,true))then begin
+					matrowget(Retr,IHr.Row,Retrw);
+					ORr.SerNr = Retr.OrdNr;
+					if (ReadFirstMain(ORr,1,true)) then begin
+						matrowget(ORr,Retrw.OrdRow,ORrw);
+						isterm = 0;
+						if(ORr.NPPaymentType==0)then begin
+							isterm = 1;
+						end;
+						keyv = "";
+						keyv = AbsoluteVal(round(ORrw.Sum/ORrw.Quant,SetRoundModeD(2))) & ";" & ORr.SerNr;
+
+						if(vinvflag[ORr.SerNr]==false)then begin
+							vinvflag[ORr.SerNr] = true;
+							ivser[prcnt] = ORr.SerNr;
+							ccflag[prcnt] = isterm;
+						end;
+						if(vpflag[keyv])then begin
+							aqty[vpcnt[keyv]] = aqty[vpcnt[keyv]] - IHr.Qty;
+							ivser[prcnt] = ORr.SerNr;
+							ccflag[prcnt] = isterm;
+						end else begin
+							prices[prcnt] = AbsoluteVal(round(ORrw.Sum/ORrw.Quant,SetRoundModeD(2)));
+							ivser[prcnt] = ORr.SerNr;
+							ccflag[prcnt] = isterm;
+							vpflag[keyv] = true;
+							vpcnt[keyv] = prcnt;
+							aqty[vpcnt[keyv]] = - IHr.Qty;
+							prcnt = prcnt + 1;
+						end;
+					end;  
+				end;
 			end;
 		end;
 	end;

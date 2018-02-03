@@ -3022,6 +3022,7 @@ begin
 	PeriodField(h,v=6,"Период");
   EditFieldTL(h,v+=vs,120,"Склад",M4UStr,Normal,41,f1,false,LocationSClass);
   EditFieldTL(h,v+=vs,120,"Место",M4UStr,Normal,41,f2,false,PosSClass);
+  EditFieldTL(h,v+=vs,120,"Комитент",M4UStr,Normal,41,f3,false,DISClass);
 
   EndWindow;
 end;
