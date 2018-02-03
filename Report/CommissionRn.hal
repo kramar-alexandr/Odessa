@@ -2,6 +2,7 @@ external function val AbsoluteVal(val);
 external procedure ExtractObj(string,var Integer,var string);
 external procedure CurValToOtherCur(Date,string,val,string,var val,roundmode);
 external procedure GetBaseCurncy(Integer,var string);
+external function roundmode SetRoundModeD(Integer);
 
 
 SetLangMode(LangRussian,"RUS",0);
@@ -285,7 +286,7 @@ array string 50 combarr;
 					OutString(tab[5],0,SalesData.Spec,false);
 					OutString(tab[6],0,SalesData.Quant,false);
 					OutString(tab[7],0,SalesData.Price * rate,false);
-					OutString(tab[8],0,SalesData.Sum * rate/SalesData.Quant,false);
+					OutString(tab[8],0,round(SalesData.Sum * rate/SalesData.Quant,SetRoundModeD(2)),false);
 					OutString(tab[24],0,SalesData.CommisionPrice,false);
 					OutString(tab[9],0,SalesData.UnitCost * rate,false);
 					OutString(tab[10],0,SalesData.Cost * rate,false);
