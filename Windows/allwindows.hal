@@ -11762,7 +11762,7 @@ window ConsSaleDClass:2
 begin
   real h,v,vs;
   WindowBegin("Консигнация: Продажа",ConsSaleDClass,CGview,-);
-  SetWRect(64,80,509,700);
+  SetWRect(64,80,709,900);
   Sizeable(-1,-1,0,0);
   UseView(ConsSaleVc);
   v = 10; vs = 20; h = 60;
@@ -11787,7 +11787,7 @@ begin
   MatCol(1,-270,"KK",0,CCFlag,true,0);
   MatCol(1,-250,"Сч/ф",0,Invoice,true,0);
   MatCol(1,-180,"Цена продажи",0,SelPrice,true,0);
-  //MatCol(1,-120,"Цена",0,Price,true,0);
+  MatCol(1,-120,"Цена ком",0,Price,true,0);
   MatCol(1,-60,"Сумма",0,Sum,true,0);
   InsertRowTest;
   DeleteRowTest;
