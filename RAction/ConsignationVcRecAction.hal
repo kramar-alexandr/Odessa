@@ -547,15 +547,14 @@ updating function LongInt ConsSaleVcRecordUpdate(var record ConsSaleVc ConsSaler
 BEGIN
   LongInt res;
   
+  
   if(ConsSaler.OKFlag==1 and ConsSale2r.OKFlag==0)then begin
 		ConsSaleVcUpdateIH(ConsSaler,true);
-		CrConsigSaleSumUp(ConsSaler);
  	end;
  	if(ConsSaler.OKFlag==0 and ConsSale2r.OKFlag==1)then begin
 		ConsSaleVcUpdateIH(ConsSaler,false);
-		CrConsigSaleSumUp(ConsSaler);
  	end;
- 	
+ 	CrConsigSaleSumUp(ConsSaler);
   ConsSaleVcRecordUpdate = res;
   RETURN;
 END;
