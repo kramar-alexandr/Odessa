@@ -21,10 +21,12 @@ begin
 			if(readfirstmain(PLr,2,true))then begin
 				ConsSalerw.Price = PLr.ExVatPrice;
 				ConsSalerw.Sum = ConsSalerw.Price * ConsSalerw.Qty;
+				matrowput(ConsSaler,i,ConsSalerw);
 			end;
 		end;
 	  
 	  if(ConsSalerw.Price>ConsSalerw.SelPrice)then begin
+			matrowget(ConsSaler,i,ConsSalerw);
 			ConsSalerw.SelQty = 0;
 			matrowput(ConsSaler,i,ConsSalerw);
 		end;
