@@ -8,15 +8,27 @@ begin
 	row ConsSaleVc ConsSalerw;
 	integer i,mtrw;
 	val sum,corsum,qty,corqty,salesum;
+	record PLVc PLr;
 	
 	mtrw = matrowcnt(ConsSaler);
 	For(i=0;i<mtrw;i=i+1) begin
 	  matrowget(ConsSaler,i,ConsSalerw);
-		if(ConsSalerw.Price>ConsSalerw.SelPrice)then begin
+		
+		
+		if(ConsSalerw.Price==0)then begin
+			PLr.PLCode = "KOMPR";
+			PLr.ArtCode = ConsSalerw.ArtCode;
+			if(readfirstmain(PLr,2,true))then begin
+				ConsSalerw.Price = PLr.ExVatPrice;
+				ConsSalerw.Sum = ConsSalerw.Price * ConsSalerw.Qty;
+			end;
+		end;
+	  
+	  if(ConsSalerw.Price>ConsSalerw.SelPrice)then begin
 			ConsSalerw.SelQty = 0;
 			matrowput(ConsSaler,i,ConsSalerw);
 		end;
-	  
+		
 	  corqty = corqty + ConsSalerw.SelQty;
 	  qty = qty + ConsSalerw.Qty;
 	  corsum = corsum + ConsSalerw.SelQty * ConsSalerw.SelPrice;
@@ -340,14 +352,6 @@ begin
 	  	if(remqty>0 and foundff)then begin
 	  		ConsSalerw.Qty = remqty;
 	  		ConsSalerw.SelQty = ConsSalerw.Qty;
-	  		if(ConsSalerw.Price==0)then begin
-	  			PLr.PLCode = "KOMPR";
-          PLr.ArtCode = ConsSalerw.ArtCode;
-          if(readfirstmain(PLr,2,true))then begin
-						ConsSalerw.Price = PLr.ExVatPrice;
-          	ConsSalerw.Sum = ConsSalerw.Price * ConsSalerw.Qty;
-          end;
-	  		end;
 	  		matrowinsert(ConsSaler,i+1,ConsSalerw);
 	  		mtrw = mtrw + 1;
 	  		i=i+1;
