@@ -339,8 +339,8 @@ begin
 	  	if(remqty>0 and foundff)then begin
 	  		ConsSalerw.Qty = remqty;
 	  		ConsSalerw.SelQty = ConsSalerw.Qty;
-	  		ConsSalerw.Sum = blankval;
-				ConsSalerw.Price = blankval;
+	  		//ConsSalerw.Sum = blankval;
+				//ConsSalerw.Price = blankval;
 	  		matrowinsert(ConsSaler,i+1,ConsSalerw);
 	  		mtrw = mtrw + 1;
 	  		i=i+1;
