@@ -221,6 +221,72 @@ begin
 return;
 end;
 
+global procedure ExportToExcelConsSaleRn(record RcVc RepSpec)	//Edit--------Dima 
+begin
+  record ConsSaleVc ConsSaler;
+  row ConsSaleVc ConsSalerw;
+  Integer rwcnt,i,wn,cnt;
+  val total;
+  
+  ConsSaler.SerNr = RepSpec.long1;
+  if (ReadFirstMain(ConsSaler,1,true)) then begin	  
+  rwcnt=MatRowCnt(ConsSaler);
+ 
+	StartReportJob("ExportToExcel");
+	
+	EndHeader;
+
+	SetRepCol(2,50);
+	SetRepCol(3,100);
+	SetRepCol(4,150);
+	SetRepCol(5,200);
+	SetRepCol(6,250);
+	SetRepCol(7,300);
+	SetRepCol(8,350);
+	SetRepCol(9,400);
+	SetRepCol(10,450);
+	SetRepCol(11,500);
+	SetRepCol(12,550);
+	SetRepCol(13,600);
+
+
+	StartFormat(15);
+	OutString(0,0,"№",true);
+	OutString(2,0,"Товар",true);
+	OutString(3,0,"Кол-во",false);
+	OutString(4,0,"Цена",false);
+	OutString(5,0,"Сумма",false);
+	EndFormat;
+	Black_Divider(0,1);
+	cnt = 1;
+	for(i=0;i<rwcnt;i=i+1) begin
+		if(ConsSalerw.SelQty!=0)then begin
+			MatRowGet(ConsSaler,i,ConsSalerw)
+			StartFormat(15);			
+			OutString(0,0,cnt,false);
+			OutString(2,0,ConsSalerw.Spec,false);
+			OutString(3,0,ConsSalerw.SelQty,false);
+			OutString(5,0,ConsSalerw.SelPrice,false);
+			OutVal(6,0,ConsSalerw.SelPrice*ConsSalerw.SelQty,M4Val,false);
+			total = total + ConsSalerw.SelPrice*ConsSalerw.SelQty;
+			EndFormat;	
+			cnt = cnt + 1;
+		end;
+		StartFormat(15);
+			OutString(0,0,"",true);
+			OutString(2,0,"",true);
+			OutString(3,0,"",false);
+			OutString(4,0,"Всего",false);
+			OutString(5,0,total,false);
+		EndFormat;
+	end;		
+	EndJob;
+
+  end;
+
+return;
+end;
+
 
 
 

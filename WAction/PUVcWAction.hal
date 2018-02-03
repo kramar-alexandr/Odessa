@@ -355,6 +355,25 @@ return;
 end;
 
 
+global  // added -------------------Dima  27.11.2014
+procedure ExportToExcelConsSaleDsm()
+begin
+  record ConsSaleVc ConsSaler;
+  record RcVc RepSpec;
+  integer wn;
+
+  wn = CurWindow;
+  GetWindowRecord(wn,ConsSaler);
+  RepSpec.Media = mtClipBoard;
+  RepSpec.repname = "ExportToExcelConsSaleRn";
+  RepSpec.flags[0] = wn;
+  RepSpec.long1 = ConsSaler.SerNr;
+  RunReport(RepSpec,0);
+  
+return;
+end;
+
+
 global // added -------------------Dima  27.11.2014
 procedure ExportToExcelStockMovDsm()
 begin
