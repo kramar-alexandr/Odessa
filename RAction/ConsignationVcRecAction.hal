@@ -15,7 +15,7 @@ begin
 	  matrowget(ConsSaler,i,ConsSalerw);
 		
 		
-		if(ConsSalerw.Price==0)then begin
+		/*if(ConsSalerw.Price==0)then begin
 			PLr.PLCode = "KOMPR";
 			PLr.ArtCode = ConsSalerw.ArtCode;
 			if(readfirstmain(PLr,2,true))then begin
@@ -24,7 +24,7 @@ begin
 				matrowput(ConsSaler,i,ConsSalerw);
 				matrowget(ConsSaler,i,ConsSalerw);
 			end;
-		end;
+		end;*/
 	  
 	  if(ConsSalerw.Price>ConsSalerw.SelPrice)then begin
 			ConsSalerw.SelQty = 0;
