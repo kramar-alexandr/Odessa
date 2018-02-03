@@ -1143,11 +1143,21 @@ begin
 						if(vinvflag[ORr.SerNr]==false)then begin
 							vinvflag[ORr.SerNr] = true;
 							ivser[prcnt] = ORr.SerNr;
+							if(IVr.OrderNr = ORr.SerNr)then begin
+								if(readfirstkey("OrderNr",IVr,1,true))then begin
+									ivser[prcnt] = IVr.SerNr;
+								end;
+							end;
 							ccflag[prcnt] = isterm;
 						end;
 						if(vpflag[keyv])then begin
 							aqty[vpcnt[keyv]] = aqty[vpcnt[keyv]] - IHr.Qty;
 							ivser[prcnt] = ORr.SerNr;
+							if(IVr.OrderNr = ORr.SerNr)then begin
+								if(readfirstkey("OrderNr",IVr,1,true))then begin
+									ivser[prcnt] = IVr.SerNr;
+								end;
+							end;
 							ccflag[prcnt] = isterm;
 						end else begin
 							prices[prcnt] = AbsoluteVal(round(ORrw.Sum/ORrw.Quant,SetRoundModeD(2)));
@@ -1184,10 +1194,20 @@ begin
 						if(vpflag[keyv])then begin
 							aqty[vpcnt[keyv]] = aqty[vpcnt[keyv]] - IHr.Qty;
 							ivser[prcnt] = ORr.SerNr;
+							if(IVr.OrderNr = ORr.SerNr)then begin
+								if(readfirstkey("OrderNr",IVr,1,true))then begin
+									ivser[prcnt] = IVr.SerNr;
+								end;
+							end;
 							ccflag[prcnt] = isterm;
 						end else begin
 							prices[prcnt] = AbsoluteVal(round(ORrw.Sum/ORrw.Quant,SetRoundModeD(2)));
 							ivser[prcnt] = ORr.SerNr;
+							if(IVr.OrderNr = ORr.SerNr)then begin
+								if(readfirstkey("OrderNr",IVr,1,true))then begin
+									ivser[prcnt] = IVr.SerNr;
+								end;
+							end;
 							ccflag[prcnt] = isterm;
 							vpflag[keyv] = true;
 							vpcnt[keyv] = prcnt;
