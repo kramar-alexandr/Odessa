@@ -260,8 +260,8 @@ begin
 	Black_Divider(0,1);
 	cnt = 1;
 	for(i=0;i<rwcnt;i=i+1) begin
+		MatRowGet(ConsSaler,i,ConsSalerw)
 		if(ConsSalerw.SelQty!=0)then begin
-			MatRowGet(ConsSaler,i,ConsSalerw)
 			StartFormat(15);			
 			OutString(0,0,cnt,false);
 			OutString(2,0,ConsSalerw.Spec,false);
@@ -272,14 +272,14 @@ begin
 			EndFormat;	
 			cnt = cnt + 1;
 		end;
-		StartFormat(15);
-			OutString(0,0,"",true);
-			OutString(2,0,"",true);
-			OutString(3,0,"",false);
-			OutString(4,0,"Всего",false);
-			OutString(5,0,total,false);
-		EndFormat;
-	end;		
+	end;	
+	StartFormat(15);
+		OutString(0,0,"",true);
+		OutString(2,0,"",true);
+		OutString(3,0,"",false);
+		OutString(4,0,"Всего",false);
+		OutString(5,0,total,false);
+	EndFormat;	
 	EndJob;
 
   end;
