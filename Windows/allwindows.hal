@@ -11771,10 +11771,10 @@ begin
   EditField(h,v+=vs,80,"Склад",Normal,Location,false,LocationSClass);
   //EditField(h,v+=vs,80,"LocOKNr",Normal,LocOKNr,false,0);
   EditField(h,v+=vs,80,"Комитент",Normal,Comitent,false,DISlass);
-  EditField(h,v+=vs,80,"Сумма",ViewOnly,TotSum,false,0);
-  EditField(h+200,v,80,"Сумма продажи",ViewOnly,TotSaleSum,false,0);
+  //EditField(h,v+=vs,80,"Сумма",ViewOnly,TotSum,false,0);
+  EditField(h+220,v,80,"Сумма продажи",ViewOnly,TotSaleSum,false,0);
   EditField(h,v+=vs,80,"Кол-во",ViewOnly,TotQty,false,0);
-	EditField(h+200,v,80,"Сумма продажи кор.",ViewOnly,TotCorSum,false,0);
+	EditField(h+220,v,80,"Сумма продажи кор.",ViewOnly,TotCorSum,false,0);
 	EditField(h,v+=vs,80,"Кол-во кор.",ViewOnly,CorQty,false,0);
   CheckBox(h,v+=vs,0,"Ок",OKFlag);
   v=v+40;
@@ -11787,7 +11787,7 @@ begin
   MatCol(1,-270,"KK",0,CCFlag,true,0);
   MatCol(1,-250,"Сч/ф",0,Invoice,true,0);
   MatCol(1,-180,"Цена продажи",0,SelPrice,true,0);
-  MatCol(1,-120,"Цена",0,Price,true,0);
+  //MatCol(1,-120,"Цена",0,Price,true,0);
   MatCol(1,-60,"Сумма",0,Sum,true,0);
   InsertRowTest;
   DeleteRowTest;

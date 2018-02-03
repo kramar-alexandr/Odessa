@@ -45,6 +45,9 @@ begin
 				matrowget(ConsSaler,i,ConsSalerw);
 			end;*/
 		end;
+		
+		ConsSalerw.Sum = ConsSalerw.SelQty * ConsSalerw.SelPrice;
+		matrowput(ConsSaler,i,ConsSalerw);
 	  
 	  if(ConsSalerw.Price>ConsSalerw.SelPrice)then begin
 			ConsSalerw.SelQty = 0;
