@@ -255,35 +255,25 @@ array string 50 combarr;
 		if (SalesData.InvDate>endDate) then begin TrHs=false; testf=false; end;
 		if(testf)then begin
 			GetClassifications(SalesData.DispGroups,brand,type,comitent);
-			if(nonblank(RepSpec.f3) and RepSpec.f3!=comitent)then begin
+			if(nonblank(RepSpec.f3) and !setinset(RepSpec.f3,comitent))then begin
 				testf = false;
 			end;	
 		end;
 		
 		if (testf) then begin	
-				
-						
-				
 				if (checkItem[SalesData.ArtCode]==false) then begin
 				
-					//tick1 = GetCurTick;
 					GetStockBalanceOnPeriod(SalesData,locations,positions,startDate,endDate,balanceBeforePeriod,balanceAfterPeriod,stockIn,stockOut);
-					//tick2 = GetCurTick;
-					//s2=s2+(tick2-tick1);
-					
-					//tick1 = GetCurTick;
+
 					checkItem[SalesData.ArtCode] = true;
 					balanceBefore[SalesData.ArtCode] = balanceBeforePeriod;
 					balanceAfter[SalesData.ArtCode] = balanceAfterPeriod;
 					ToStock[SalesData.ArtCode] = stockIn;
 					FromStock[SalesData.ArtCode] = stockOut;
-					//tick2 = GetCurTick;
-					//s3=s3+(tick2-tick1);					
+				
 				end;	
 				
-				//rate = 1;
 				rate = SalesData.Rate;
-				//CurValToOtherCur(SalesData.TransDate,baseCurncy,1,"UAH_R",rate,DefaultCurRoundOff);
 			
 				StartFormat(15);
 					OutString(tab[0],0,SalesData.InvDate,false);
