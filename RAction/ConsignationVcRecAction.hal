@@ -9,21 +9,41 @@ begin
 	integer i,mtrw;
 	val sum,corsum,qty,corqty,salesum;
 	record PLVc PLr;
+	record SalesDataVc SalesDatar;
+	boolean TrHs;
 	
 	mtrw = matrowcnt(ConsSaler);
 	For(i=0;i<mtrw;i=i+1) begin
 	  matrowget(ConsSaler,i,ConsSalerw);
 		
 		
-		if(ConsSalerw.Price==0)then begin
-			PLr.PLCode = "KOMPR";
+		if(true)then begin
+			SalesDatar.InvNr = ConsSalerw.Invoice;
+			TrHs = true;
+			while(loopmain(SalesDatar,1,TrHs))begin
+				if(SalesDatar.InvNr!=ConsSalerw.Invoice)then begin
+					TrHs = false;
+				end;
+				
+				if(TrHs)then begin
+					if(SalesDatar.ArtCode==ConsSalerw.ArtCode)then begin
+						ConsSalerw.Price = SalesDatar.CommisionPrice;
+						ConsSalerw.Sum = ConsSalerw.Price * ConsSalerw.Qty;
+						matrowput(ConsSaler,i,ConsSalerw);
+						TrHS = false;
+					end;
+				end;
+			end;
+			resetloop(SalesDatar);
+			
+			/*PLr.PLCode = "KOMPR";
 			PLr.ArtCode = ConsSalerw.ArtCode;
 			if(readfirstmain(PLr,2,true))then begin
 				ConsSalerw.Price = PLr.ExVatPrice;
 				ConsSalerw.Sum = ConsSalerw.Price * ConsSalerw.Qty;
 				matrowput(ConsSaler,i,ConsSalerw);
 				matrowget(ConsSaler,i,ConsSalerw);
-			end;
+			end;*/
 		end;
 	  
 	  if(ConsSalerw.Price>ConsSalerw.SelPrice)then begin
