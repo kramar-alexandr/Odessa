@@ -255,7 +255,7 @@ array string 50 combarr;
 		if (SalesData.InvDate>endDate) then begin TrHs=false; testf=false; end;
 		if(testf)then begin
 			GetClassifications(SalesData.DispGroups,brand,type,comitent);
-			logtext(0,SalesData.DispGroups);
+			//logtext(0,SalesData.DispGroups);
 			if(nonblank(RepSpec.f3) and !setinset(RepSpec.f3,SalesData.DispGroups))then begin
 				testf = false;
 			end;	
