@@ -18,13 +18,19 @@ begin
 	integer pos,orcnt,unic;
 	date lastordate,blkdate;
 	record ORVc ORr;
-	boolean TrHs;
+	boolean TrHs,testf;
 	array string 255 a1,a2,a3,a4,a5,a6,a7,a8,a9;
 	
 	logtext(0,"PhoneNormalizeRn");
 	
 	while(loopmain(CUr,1,true))begin
-		if(CUr.CUType==1)then begin
+		testf = true;
+		if(CUr.CUType==0)then begin testf = false; end;
+		if(CUr.CustCat=="CUST")then begin testf = false; end;
+		if(CUr.CustCat=="EMPL")then begin testf = false; end;
+		if(left(CUr.Phone,1)=="#")then begin testf = false; end;
+		
+		if(testf)then begin
 			if(nonblank(CUr.Phone))then begin
 				aphone = "";
 				SimpleNormPhoneNumber(CUr.Phone,aphone);
@@ -99,7 +105,6 @@ begin
 											outstring(170,0,"Can be closed by #",false);
 										end;
 									end;
-									
 								endformat;
 							end;
 	  				end;
@@ -124,13 +129,9 @@ begin
 	  		end else begin
 	  			gray_divider(0,1);
 	  		end;
-	  		
-	  		
 	  	end;
 		end; 
 	endjob;
-	
-	//writeareatofile(phones,"Phones_nrm.txt",0);
-	
+		
 return;
 end;

@@ -1113,13 +1113,13 @@ begin
       if (nonblank(SHrw.ArtCode)) then begin
         isstruct = false;
         if (SHrw.stp!=kInvoiceRowTypeStructuredItemComponent) then begin
-          isstruct = ExpandStructItem(SHrw.ArtCode,SHrw.Recepy,SHrw.Ship,RecSHr);
+          isstruct = ExpandStructItem(SHrw.ArtCode,SHrw.Recepy,SHrw.Ordered,RecSHr);
         end;
         if (isstruct==false) then begin
           if (SH2p.OKFlag==0) then begin
-            t = -SHrw.Ship;
+            t = -SHrw.Ordered;
           end else begin
-            t = SHrw.Ship;
+            t = SHrw.Ordered;
           end;
           if (remove) then begin
             t = -t;
@@ -1130,9 +1130,9 @@ begin
           for (j=0;j<shrwcnt;j=j+1) begin
             MatRowGet(RecSHr,j,SH2rw);
             if (SH2p.OKFlag==0) then begin
-              t = -SH2rw.Ship;
+              t = -SH2rw.Ordered;
             end else begin
-              t = SH2rw.Ship;
+              t = SH2rw.Ordered;
             end;
             if (remove) then begin
               t = -t;
@@ -1160,13 +1160,13 @@ begin
       if (nonblank(SHrw.ArtCode)) then begin
         isstruct = false;
         if (SHrw.stp!=kInvoiceRowTypeStructuredItemComponent) then begin
-          isstruct = ExpandStructItem(SHrw.ArtCode,SHrw.Recepy,SHrw.Ship,RecSHr);
+          isstruct = ExpandStructItem(SHrw.ArtCode,SHrw.Recepy,SHrw.Ordered,RecSHr);
         end;
         if (isstruct==false) then begin
           if (SHp.OKFlag!=0) then begin
-            t = -SHrw.Ship;
+            t = -SHrw.Ordered;
           end else begin
-            t = SHrw.Ship;
+            t = SHrw.Ordered;
           end;
           if (remove) then begin
             t = -t;
@@ -1177,9 +1177,9 @@ begin
           for (j=0;j<shrwcnt;j=j+1) begin
             MatRowGet(RecSHr,j,SH2rw);
             if (SHp.OKFlag!=0) then begin
-              t = -SH2rw.Ship;
+              t = -SH2rw.Ordered;
             end else begin
-              t = SH2rw.Ship;
+              t = SH2rw.Ordered;
             end;
             if (remove) then begin
               t = -t;
