@@ -155,7 +155,7 @@ procedure SimpleNormPhoneNumber(string inPhone, var string phones) begin
 	if(left(phone,2)=="38" and len(phone)==12)then begin
 		phone = "+38" & mid(phone,2,len(tstr)-2);
 	end;
-	if(left(phone,0)=="0" and len(phone)==10)then begin
+	if(left(phone,1)=="0" and len(phone)==10)then begin
 		phone = "+38" & phone;
 	end;
 	
