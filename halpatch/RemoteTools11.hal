@@ -1686,6 +1686,7 @@ begin
 		end;
 	end;
 	resetloop(CUr);
+	CUr.Code = "";
 	while(loopmain(CUr,1,true)) begin
 		testf = true;
 		if(CUr.CUType==0)then begin testf = false; end;
