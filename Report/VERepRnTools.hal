@@ -465,12 +465,12 @@ begin
 	ISr.Location = "RYBRAY";
 	ISr.Code = artcode;
 	if(readfirstmain(ISr,2,true))then begin
-		OrdQtyRR = ISr.OrddOut;
+		OrdQtyRR = ISr.InShipment;
 	end;
 	ISr.Location = "1-KOC";
 	ISr.Code = artcode;
 	if(readfirstmain(ISr,2,true))then begin
-		OrdQty1K = ISr.OrddOut;
+		OrdQty1K = ISr.InShipment;
 	end;
 	
 
