@@ -47,6 +47,7 @@ external procedure PastePDInInv(var record IVVc,string,Boolean);
 external function Boolean PasteCustInInv(var record IVVc);
 external function LongInt GetCurUserLastNr(string);
 external procedure GetItemSalesAccFromOR(record ORVc,var string);
+external procedure SimpleNormPhoneNumber(string, var string);// Edit ************************** BPI Ukraine - KramarAlexandr - вґвторок, 6 лютого 2018 р. о 23:00:22
 
 
 procedure GetItemDebtorsAcc(record ORVc ORr,var string debtorsacc)
@@ -1646,3 +1647,35 @@ LifCustomerWithCurrentPhoneExist:;
   ifCustomerWithCurrentPhoneExist = res;
   return;
 end;
+
+
+// procedure that will be called by maintenance for normalizing of phone numbers
+// phone number is a string
+// it takes a string, that represents the phone number and deletes all symbols except numbers '+' and '#'
+
+global updating procedure NormalizeNumberMn(record RcVc RepSpec)
+begin
+	record CUVc	CUr,CU2r;	// record of the client
+	string 255 	Res;
+	Integer		i;
+	boolean TrHs,testf;
+	
+	i = 0;
+	while(loopmain(CUr,1,true)) begin
+		testf = true;
+		if(CUr.CUType==0)then begin testf = false; end;
+		if(CUr.CustCat=="CUST")then begin testf = false; end;
+		if(CUr.CustCat=="EMPL")then begin testf = false; end;
+		if(left(CUr.Phone,1)=="#")then begin testf = false; end;
+		//Res = NormalizeNumberString(CUr.Phone);
+		if(testf)then begin
+			SimpleNormPhoneNumber(CUr.Phone,Res);
+			CU2r.Phone = Res;
+			if (ReadFirstkey("Phone",CU2r,1,true)==false) then begin
+				CUr.OldPhone = CUr.Phone;
+				CUr.Phone = Res;
+				RecordStore(CUr,1);
+			end;
+		end;
+	end;
+end; 
