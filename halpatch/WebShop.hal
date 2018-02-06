@@ -537,7 +537,7 @@ begin
     end;
   end;
 	if(left(phone,2)=="38")then begin
-		phone = right(phone,len(phone)-2);
+		phone = "+38" & right(phone,len(phone)-2);
 	end;
   Cur.Phone = phone;
 	Cur.PayDeal = "3";
