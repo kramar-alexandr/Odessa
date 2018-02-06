@@ -1659,6 +1659,7 @@ begin
 	string 255 	Res;
 	Integer		i;
 	boolean TrHs,testf;
+	string 20 phone;
 	
 	i = 0;
 	while(loopmain(CUr,1,true)) begin
@@ -1669,12 +1670,39 @@ begin
 		if(left(CUr.Phone,1)=="#")then begin testf = false; end;
 		//Res = NormalizeNumberString(CUr.Phone);
 		if(testf)then begin
+			phone = CUr.Phone;
+			if(left(CUr.Phone,1)=="0" and len(CUr.Phone)==10)then begin
+				phone = "+38" & phone;
+			end;
+			if(phone!=CUr.Phone)then begin
+				CU2r.Phone = phone;
+				if (ReadFirstkey("Phone",CU2r,1,true)==false) then begin
+					CUr.OldPhone = CUr.Phone;
+					CUr.Phone = phone;
+					logtext(0,CUr.OldPhone & " -> " & CUr.Phone);
+					RecordStore(CUr,1);
+				end;
+			end;
+		end;
+	end;
+	resetloop(CUr);
+	while(loopmain(CUr,1,true)) begin
+		testf = true;
+		if(CUr.CUType==0)then begin testf = false; end;
+		if(CUr.CustCat=="CUST")then begin testf = false; end;
+		if(CUr.CustCat=="EMPL")then begin testf = false; end;
+		if(left(CUr.Phone,1)=="#")then begin testf = false; end;
+		//Res = NormalizeNumberString(CUr.Phone);
+		if(testf)then begin
 			SimpleNormPhoneNumber(CUr.Phone,Res);
-			CU2r.Phone = Res;
-			if (ReadFirstkey("Phone",CU2r,1,true)==false) then begin
-				CUr.OldPhone = CUr.Phone;
-				CUr.Phone = Res;
-				RecordStore(CUr,1);
+			if(CUr.Phone!=Res)then begin
+				CU2r.Phone = Res;
+				if (ReadFirstkey("Phone",CU2r,1,true)==false) then begin
+					CUr.OldPhone = CUr.Phone;
+					CUr.Phone = Res;
+					logtext(0,CUr.OldPhone & " -> " & CUr.Phone);
+					RecordStore(CUr,1);
+				end;
 			end;
 		end;
 	end;
