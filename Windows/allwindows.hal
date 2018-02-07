@@ -11775,7 +11775,7 @@ begin
   EditField(h+220,v,80,"Сумма продажи",ViewOnly,TotSaleSum,false,0);
   EditField(h,v+=vs,80,"Кол-во",ViewOnly,TotQty,false,0);
 	EditField(h+220,v,80,"Сумма продажи кор.",ViewOnly,TotCorSum,false,0);
-	EditField(h+220,v+20,80,"Сумма продажи кор. Кред",ViewOnly,TotCorSum,false,0);
+	EditField(h+220,v+20,80,"Сумма продажи кор. Кред",ViewOnly,CCSum,false,0);
 	EditField(h,v+=vs,80,"Кол-во кор.",ViewOnly,CorQty,false,0);
   CheckBox(h,v+=vs,0,"Ок",OKFlag);
   v=v+40;
