@@ -367,7 +367,9 @@ begin
 	Maintenance("Приход на консигнацию",CrConsigInAllVClass,CrConsigInAllMn,modSL);  //Edit**********Dima, 28.01.2014
 
 	
-  Maintenance("FixIHCostSM",MyVClass,FixIHCostSM,modDBMain);  //Edit**********Dima, 28.01.2014
+	Maintenance("FixIHCostSM",MyVClass,FixIHCostSM,modDBMain);  //Edit**********Dima, 28.01.2014
+	
+  Maintenance("RecalcSumSales",RecalcSumSalesVClass,RecalcSumSalesMn,modDBMain);  //Edit**********Dima, 28.01.2014
   
   Maintenance("ClearIH ConsignationVc",MyVClass,ConsignationVcClearIH,modDBMain);  //Edit**********Dima, 28.01.2014
   
