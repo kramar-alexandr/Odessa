@@ -48,21 +48,24 @@ begin
 		end;
 		
 		ConsSalerw.Sum = ConsSalerw.SelQty * ConsSalerw.SelPrice;
+		
 		matrowput(ConsSaler,i,ConsSalerw);
 	  
 	  if(ConsSalerw.Price>ConsSalerw.SelPrice)then begin
 			ConsSalerw.SelQty = 0;
+			
 			matrowput(ConsSaler,i,ConsSalerw);
 		end;
+		ConsSalerw.TermSum = ConsSalerw.SelQty * ConsSalerw.TermPrice;
+		
 		
 	  corqty = corqty + ConsSalerw.SelQty;
 	  qty = qty + ConsSalerw.Qty;
 	  corsum = corsum + ConsSalerw.SelQty * ConsSalerw.SelPrice;
 	  salesum = salesum + ConsSalerw.Qty * ConsSalerw.SelPrice;
 	  sum = sum + ConsSalerw.Qty * ConsSalerw.Sum;
-	  if(ConsSalerw.CCFlag>0)then begin
-	  	ccsum = ccsum + ConsSalerw.SelQty * ConsSalerw.SelPrice;
-	  end;
+	  ccsum = ccsum + ConsSalerw.TermSum;
+	  
 	end; 
 	ConsSaler.TotSum = sum;
 	ConsSaler.TotSaleSum = salesum;
@@ -1062,7 +1065,7 @@ begin
 return;
 end;
 
-procedure GetQtyByBackDateSales(date frdate, date td, string artcode, string location, var val resqty,var array val prices,var integer prcnt,var array integer aqty,var array longint ivser,var array integer ccflag)
+procedure GetQtyByBackDateSales(date frdate, date td, string artcode, string location, var val resqty,var array val prices,var integer prcnt,var array integer aqty,var array longint ivser,var array integer ccflag,var array val termsum)
 begin
 	record ItemHistVc IHr;
 	boolean TrHs,testf;
@@ -1081,10 +1084,51 @@ begin
 	integer isterm;
 	integer mtrw,i;
 	string 100 keyv;
+	record SalesDataVc SalesDatar;
 	
 	prcnt = 0;
 	
-	IHr.ArtCode = artcode;
+	SalesDatar.Location = location;
+	SalesDatar.ArtCode = artcode;
+	SalesDatar.InvDate = td;
+	TrHs = true;
+	while(loopkey("LocationCodeDate",SalesDatar,3,TrHs))begin
+		testf = true;
+		if(SalesDatar.Location!=location)then begin TrHs = false; testf = false; end;
+		if(SalesDatar.ArtCode!=artcode)then begin TrHs = false; testf = false; end;
+		if(SalesDatar.InvDate>addday(frdate,-1))then begin TrHs = false; testf = false; end;
+		
+		if(testf)then begin
+			qty = qty + SalesDatar.Quant;
+			if(SalesDatar.PayedByCCard!=0)then begin
+				isterm = 1;
+			end;
+			keyv = "";
+			keyv = AbsoluteVal(round(SalesDatar.Sum*SalesDatar.Rate/SalesDatar.Quant,SetRoundModeD(2))) & ";" & SalesDatar.InvNr;
+			if(vinvflag[IVr.SerNr]==false)then begin
+				vinvflag[IVr.SerNr] = true;
+				ivser[prcnt] = IVr.SerNr;
+				ccflag[prcnt] = isterm;
+			end;
+			if(vpflag[keyv])then begin
+				aqty[vpcnt[keyv]] = aqty[vpcnt[keyv]] + SalesDatar.Quant;
+				ivser[prcnt] = SalesDatar.InvNr;
+				ccflag[prcnt] = isterm;
+			end else begin
+				prices[prcnt] = AbsoluteVal(round(SalesDatar.Sum*SalesDatar.Rate/SalesDatar.Quant,SetRoundModeD(2)));
+				termsum[prcnt] = SalesDatar.PayedByCCard;
+				ivser[prcnt] = SalesDatar.InvNr;
+				ccflag[prcnt] = isterm;
+				vpflag[keyv] = true;
+				vpcnt[keyv] = prcnt;
+				aqty[vpcnt[keyv]] = SalesDatar.Quant;
+				prcnt = prcnt + 1;
+			end;
+		
+		end;
+	end;
+	
+	/*IHr.ArtCode = artcode;
 	IHr.Location = location;
 	IHr.TransDate = addday(frdate,-1);
 	TrHs = true;
@@ -1215,7 +1259,7 @@ begin
 				end;
 			end;
 		end;
-	end;
+	end;*/
 	
 	resqty = qty;
 	
@@ -1253,12 +1297,12 @@ begin
 return;
 end;
 
-global procedure CalcSalesOnPeriod(record ConsignationVc Consignationr,string itemcode, var val resqty,date lastdate,var array val prices,var integer prcnt,var array integer qty,var array longint ivser,var array integer ccflag)
+global procedure CalcSalesOnPeriod(record ConsignationVc Consignationr,string itemcode, var val resqty,date lastdate,var array val prices,var integer prcnt,var array integer qty,var array longint ivser,var array integer ccflag,var array val termsum)
 begin
 	record ConsignationVc Consignationoldr;
 	boolean testf,TrHs;
 	
-	GetQtyByBackDateSales(Consignationr.TransDate,lastdate,itemcode,Consignationr.Location,resqty,prices,prcnt,qty,ivser,ccflag);
+	GetQtyByBackDateSales(Consignationr.TransDate,lastdate,itemcode,Consignationr.Location,resqty,prices,prcnt,qty,ivser,ccflag,termsum);
 return;
 end;
 
@@ -1381,7 +1425,7 @@ begin
 	val resqty;
 	date lastdate;
 	record INVc INr;
-	array val prices;
+	array val prices,termsum;
 	array integer qty,ccflag;
 	array longint ivser
 	
@@ -1441,7 +1485,7 @@ begin
 	  				ConsSalerw.Spec = INr.Name;
 	  			end;
 	  			resqty = 0;
-	  			CalcSalesOnPeriod(Consignationr,artcodes[i],resqty,lastdate,prices,prcnt,qty,ivser,ccflag);
+	  			CalcSalesOnPeriod(Consignationr,artcodes[i],resqty,lastdate,prices,prcnt,qty,ivser,ccflag,termsum);
 	  			
 	  			For(k=0;k<prcnt;k=k+1) begin
 	  				if(qty[k]!=0)then begin
@@ -1450,6 +1494,8 @@ begin
 	  					ConsSalerw.SelPrice = prices[k];
 	  					ConsSalerw.Invoice = ivser[k];
 	  					ConsSalerw.CCFlag = ccflag[k];
+	  					ConsSalerw.TermPrice = AbsoluteVal(termsum[k]/qty[k]);
+	  					ConsSalerw.TermSum = termsum[k];
 							matrowput(ConsSaler,mtrw,ConsSalerw);
 							mtrw = mtrw + 1;
 						end;
@@ -1464,7 +1510,7 @@ begin
 				ConsSalerw.Spec = INr.Name;
 			end;
 			resqty = 0;
-			CalcSalesOnPeriod(Consignationr,artcodes[i],resqty,lastdate,prices,prcnt,qty,ivser,ccflag);
+			CalcSalesOnPeriod(Consignationr,artcodes[i],resqty,lastdate,prices,prcnt,qty,ivser,ccflag,termsum);
 			For(k=0;k<prcnt;k=k+1) begin
 				if(qty[k]!=0)then begin
 					ConsSalerw.Qty = qty[k];
@@ -1472,6 +1518,8 @@ begin
 					ConsSalerw.SelPrice = prices[k];
 					ConsSalerw.Invoice = ivser[k];
 	  			ConsSalerw.CCFlag = ccflag[k];
+	  			ConsSalerw.TermPrice = AbsoluteVal(termsum[k]/qty[k]);
+	  			ConsSalerw.TermSum = termsum[k];
 					matrowput(ConsSaler,mtrw,ConsSalerw);
 					mtrw = mtrw + 1;
 				end;
