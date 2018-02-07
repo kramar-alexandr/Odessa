@@ -11,6 +11,7 @@ begin
 	record PLVc PLr;
 	record SalesDataVc SalesDatar;
 	boolean TrHs;
+	val ccsum;
 	
 	mtrw = matrowcnt(ConsSaler);
 	For(i=0;i<mtrw;i=i+1) begin
@@ -59,12 +60,16 @@ begin
 	  corsum = corsum + ConsSalerw.SelQty * ConsSalerw.SelPrice;
 	  salesum = salesum + ConsSalerw.Qty * ConsSalerw.SelPrice;
 	  sum = sum + ConsSalerw.Qty * ConsSalerw.Sum;
+	  if(ConsSalerw.CCFlag>0)then begin
+	  	ccsum = ccsum + ConsSalerw.SelQty * ConsSalerw.SelPrice;
+	  end;
 	end; 
 	ConsSaler.TotSum = sum;
 	ConsSaler.TotSaleSum = salesum;
 	ConsSaler.TotQty = qty;
 	ConsSaler.TotCorSum = corsum;
 	ConsSaler.CorQty = corqty;
+	ConsSaler.CCSum = ccsum;
 	logtext(0,ConsSaler.TotSaleSum & " ++++");
 return;
 end;
