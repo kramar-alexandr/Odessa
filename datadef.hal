@@ -6328,9 +6328,8 @@ RecordBegin(IPVc,-,"");
   RecordField(TotSaleSum,M4Val,0,0);
   RecordField(TotCorSum,M4Val,0,0);
   RecordField(CorQty,M4Val,0,0);
-  RecordField(CCSum,M4Val,0,0);
-
   RecordField(Math,M4Matrix,0,0);
+  RecordField(CCSum,M4Val,0,0);
   ArrayBegin(Math,-,1);
   ArrayField(ArtCode,M4Code,40,0);
   ArrayField(Qty,M4Val,0,0);
