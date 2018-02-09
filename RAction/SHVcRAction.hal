@@ -2101,7 +2101,7 @@ begin
   res = 0;
   if (SHr.OKFlag==0) then begin // Edit Dima ************* 2018-02-09 02:51 PM
      res = 1;
-	if (UserCanAction(AllowDeleteSHVc,true)==false) then begin
+	if (UserCanAction("AllowDeleteSHVc",true)==false) then begin
 		messagebox(31179,"");
 		res = 0;
 	goto LSHVcRecordRemoveTest;
