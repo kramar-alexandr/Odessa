@@ -2141,7 +2141,12 @@ BEGIN
     if (long3>0) then begin MessageBox(22408,""); end;
     res = 0;
     goto LIVVcRecordRemoveTest;
-  end;  
+  end;
+  if (UserCanAction("AllowDeleteIVVc",true)==false) then begin // Edit Dima ************* 2018-02-09 02:30 PM
+	res = 0;
+	messagebox(31179,"");
+	goto LIVVcRecordRemoveTest;
+  end;
 LIVVcRecordRemoveTest:;
   IVVcRecordRemoveTest = res;  
   RETURN;
