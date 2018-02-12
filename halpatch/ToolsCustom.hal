@@ -28,6 +28,7 @@ external function string 255 StrReplace(string,string,string);// Edit **********
 external procedure ExpandStructure(record INVc,string,string,Integer,var val,var val,Boolean);
 external function LongInt DateDiff(Date,Date);
 remote procedure IVVc_PasteRebCode(var record IVVc);
+external updating procedure UpdateOrdOut(record ORVc,Boolean,Boolean);
 
 SetLangMode(LangRussian,"RUS",0);
 
@@ -104,8 +105,8 @@ begin
 	date mindate,maxdate;
 	record IVVc IVr;
 	record SHVc SHr;
-
-	mindate = addday(currentdate,-120);
+	
+	mindate = StringToDate("01.01.2015"); // Edit Dima ************* 2018-02-12 01:42 PM
 	maxdate = addday(currentdate,-30);
 	ORr.OrdDate = mindate;
 	TrHs = true;
@@ -131,9 +132,10 @@ begin
 		
 		
 		if(testf)then begin
-			recordcopy(oldORr,ORr);
+			UpdateOrdOut(ORr,false,true)
 				ORr.CustomStatusFlag = 10;
 				ORr.Closed = 1;
+			RecordStore(ORr,true);
 			logtext(0,"CloseOldOpenOrders " & ORr.SerNr);
 			recordupdate(oldORr,ORr,true);
 		end;
