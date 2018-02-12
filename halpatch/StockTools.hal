@@ -113,3 +113,18 @@ begin
   end;
   return;
 end;
+
+// Edit Dima ************* 2018-02-12 11:32 AM
+global function string 255 IVLClassCreadit(var record IVVc IVr)
+begin
+	string 255 res;
+
+	res = "";
+	if (IVr.InvType==kInvoiceTypeCredit) then begin
+		res = "-" & IVr.Sum4; 
+	end else begin
+		res = IVr.Sum4;
+	end;
+	IVLClassCreadit = res;
+	return;
+end;
