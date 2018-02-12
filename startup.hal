@@ -840,7 +840,7 @@ begin
   StrSetText(AllowConditTileCU,"Доступ к вкладке " & chr(34) & "Условия" & chr(34) & " в карточке контакта");
   StrSetText(AllowToEditNewPostFields,"Разрешать редактировать поля, касающихся Новой почты"); //Edit***************************Sasha10:08 24.05.2017
   StrSetText(AllowDeleteIVVc, "Разрешить удалять счёт-фактуру клиента"); // Edit Dima ************* 2018-02-09 02:25 PM
-  StrSetText(AllowDeleteSHVc, "Разрешить удалять документ загрузки"); // Edit Dima ************* 2018-02-09 02:47 PM
+  StrSetText(AllowDeleteSHVc, "Разрешить удалять документ отгрузка"); // Edit Dima ************* 2018-02-09 02:47 PM
   EndStrSet;
 //begin1
 	return;
