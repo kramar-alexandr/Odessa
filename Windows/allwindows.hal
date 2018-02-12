@@ -1940,8 +1940,6 @@ external	function Boolean HasModDI();
 
 remote function integer GetLoyPoints(string);
 
-external function string 255 IVLClassCreadit(var record IVVc); // Edit Dima ************* 2018-02-12 12:10 PM
-
 //##ii
 procedure dummy() //##ii
 begin //##ii
@@ -9135,12 +9133,12 @@ begin
   RlColKey(441,441,"Наим.",Addr0,false,Name);
   RlColKey(-160,-160,"Склад",Location,true,Location);// Edit ************************** Thursday, 10 September 2015 11:25:08
   //RlColKey(-110,-110,"Итого",Sum4,true,Sum4); // Edit Dima ************* 2018-02-12 12:15 PM
+  CalculatedColumn(-110,-110,"Итого","IVLClassCreadit",true); // Edit Dima ************* 2018-02-12 11:42 AM
   RlCol(-39,-39,"",CredMark,true);
   if (HasMultiCurrency or HasBase2) then begin
     RlCol(-30,-30,"Вал.",CurncyCode,true);
   end;
   RlCol(-1,-1,"",Invalid,true);
-  CalculatedColumn(-50,-50,"Итого","IVLClassCreadit",true); // Edit Dima ************* 2018-02-12 11:42 AM
   SearchField("Найти");
   if (HasLimitedAccess) then begin
     BrowseSubsetButton(-40,-15);
