@@ -101,13 +101,15 @@ end;
 global updating procedure CloseOldOpenOrders()
 begin
 	record ORVc ORr,oldORr;
-	boolean TrHs,testf;
+	row ORVc ORrw;
+	boolean TrHs,testf,foundf;
 	date mindate,maxdate;
 	record IVVc IVr;
 	record SHVc SHr;
+	integer i,mtrw;
 	
 	mindate = StringToDate("01.01.2015"); // Edit Dima ************* 2018-02-12 01:42 PM
-	maxdate = addday(currentdate,-30);
+	maxdate = addday(currentdate,-120);
 	ORr.OrdDate = mindate;
 	TrHs = true;
 	while(loopkey("OrdDate",ORr,1,TrHs))begin
@@ -116,28 +118,36 @@ begin
 		if(ORr.OrdDate>maxdate)then begin TrHs = false; testf = false; end;
 		//if(ORr.CustomStatusFlag!=0)then begin testf = false; end;
 		if(ORr.Closed>0)then begin testf = false; end;
-		if(testf)then begin
+		/*if(testf)then begin
 			IVr.OrderNr = ORr.SerNr;
 			if(readfirstkey("OrderNr",IVr,1,true))then begin
 				testf = false;
 			end;
-		end;
-		if(testf)then begin
+		end;*/
+		/*if(testf)then begin
 			SHr.OrderNr = ORr.SerNr;
 			if(readfirstkey("OrderKey",SHr,1,true))then begin
 				testf = false;
 			end;
+		end;*/
+		
+		foundf = false;
+		mtrw = matrowcnt(ORr);
+		For(i=0;i<mtrw;i=i+1) begin
+	  	matrowget(ORr,i,ORrw);
+	  	if(ORrw.Shipd2<ORrw.Quant)then begin
+	  		foundf = true;
+	  	end;
 		end;
 		
 		
-		
-		if(testf)then begin
+		if(testf and foundf)then begin
 			UpdateOrdOut(ORr,false,true)
 				ORr.CustomStatusFlag = 10;
 				ORr.Closed = 1;
 			RecordStore(ORr,true);
 			logtext(0,"CloseOldOpenOrders " & ORr.SerNr);
-			recordupdate(oldORr,ORr,true);
+			//recordupdate(oldORr,ORr,true);
 		end;
 		
 	end;
