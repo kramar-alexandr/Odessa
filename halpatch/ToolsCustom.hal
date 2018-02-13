@@ -108,8 +108,8 @@ begin
 	record SHVc SHr;
 	integer i,mtrw;
 	
-	mindate = StringToDate("01.01.2015"); // Edit Dima ************* 2018-02-12 01:42 PM
-	maxdate = addday(currentdate,-120);
+	mindate = addday(currentdate,-130);
+	maxdate = addday(currentdate,-30);
 	ORr.OrdDate = mindate;
 	TrHs = true;
 	while(loopkey("OrdDate",ORr,1,TrHs))begin
@@ -118,18 +118,18 @@ begin
 		if(ORr.OrdDate>maxdate)then begin TrHs = false; testf = false; end;
 		//if(ORr.CustomStatusFlag!=0)then begin testf = false; end;
 		if(ORr.Closed>0)then begin testf = false; end;
-		/*if(testf)then begin
+		if(testf)then begin
 			IVr.OrderNr = ORr.SerNr;
 			if(readfirstkey("OrderNr",IVr,1,true))then begin
 				testf = false;
 			end;
-		end;*/
-		/*if(testf)then begin
+		end;
+		if(testf)then begin
 			SHr.OrderNr = ORr.SerNr;
 			if(readfirstkey("OrderKey",SHr,1,true))then begin
 				testf = false;
 			end;
-		end;*/
+		end;
 		
 		foundf = false;
 		mtrw = matrowcnt(ORr);
