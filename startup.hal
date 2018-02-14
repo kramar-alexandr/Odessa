@@ -351,6 +351,7 @@ begin
 	 SString(31176,"Акция 'КАЛИПСОмания' Торговая точка №1002");
 	 SString(31177,"Відправлення отримано");
 	 SString(31178,"Нова пошта очікує надходження від відправника");
+	 SString(31179,"Вам запрещено удалять документ"); // Edit Dima ************* 2018-02-09 02:41 PM
 	 
 	Maintenance("Закрыть старые OR",MyVClass,CloseOldOpenOrders,modSO);
 	Maintenance("Проставить склад первой покупки клиента",MyVClass,FillFirstDateByeCUMn,modSL);
@@ -840,6 +841,8 @@ begin
   StrSetText(ApproveSchedMaint,"Approve Scheduled Maintenance");
   StrSetText(AllowConditTileCU,"Доступ к вкладке " & chr(34) & "Условия" & chr(34) & " в карточке контакта");
   StrSetText(AllowToEditNewPostFields,"Разрешать редактировать поля, касающихся Новой почты"); //Edit***************************Sasha10:08 24.05.2017
+  StrSetText(AllowDeleteIVVc, "Разрешить удалять счёт-фактуру клиента"); // Edit Dima ************* 2018-02-09 02:25 PM
+  StrSetText(AllowDeleteSHVc, "Разрешить удалять документ отгрузка"); // Edit Dima ************* 2018-02-09 02:47 PM
   EndStrSet;
 //begin1
 	return;

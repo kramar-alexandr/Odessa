@@ -1940,8 +1940,6 @@ external	function Boolean HasModDI();
 
 remote function integer GetLoyPoints(string);
 
-
-
 //##ii
 procedure dummy() //##ii
 begin //##ii
@@ -9134,7 +9132,8 @@ begin
   RlColKey(381,381,"Клиент",CustCode,false,CustCode);
   RlColKey(441,441,"Наим.",Addr0,false,Name);
   RlColKey(-160,-160,"Склад",Location,true,Location);// Edit ************************** Thursday, 10 September 2015 11:25:08
-  RlColKey(-110,-110,"Итого",Sum4,true,Sum4);
+  //RlColKey(-110,-110,"Итого",Sum4,true,Sum4); // Edit Dima ************* 2018-02-12 12:15 PM
+  CalculatedColumn(-110,-110,"Итого","IVLClassCreadit",true); // Edit Dima ************* 2018-02-12 11:42 AM
   RlCol(-39,-39,"",CredMark,true);
   if (HasMultiCurrency or HasBase2) then begin
     RlCol(-30,-30,"Вал.",CurncyCode,true);

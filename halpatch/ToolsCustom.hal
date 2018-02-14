@@ -28,6 +28,7 @@ external function string 255 StrReplace(string,string,string);// Edit **********
 external procedure ExpandStructure(record INVc,string,string,Integer,var val,var val,Boolean);
 external function LongInt DateDiff(Date,Date);
 remote procedure IVVc_PasteRebCode(var record IVVc);
+external updating procedure UpdateOrdOut(record ORVc,Boolean,Boolean);
 
 SetLangMode(LangRussian,"RUS",0);
 
@@ -100,12 +101,14 @@ end;
 global updating procedure CloseOldOpenOrders()
 begin
 	record ORVc ORr,oldORr;
-	boolean TrHs,testf;
+	row ORVc ORrw;
+	boolean TrHs,testf,foundf;
 	date mindate,maxdate;
 	record IVVc IVr;
 	record SHVc SHr;
-
-	mindate = addday(currentdate,-120);
+	integer i,mtrw;
+	
+	mindate = addday(currentdate,-130);
 	maxdate = addday(currentdate,-30);
 	ORr.OrdDate = mindate;
 	TrHs = true;
@@ -128,14 +131,23 @@ begin
 			end;
 		end;
 		
+		foundf = false;
+		mtrw = matrowcnt(ORr);
+		For(i=0;i<mtrw;i=i+1) begin
+	  	matrowget(ORr,i,ORrw);
+	  	if(ORrw.Shipd2<ORrw.Quant)then begin
+	  		foundf = true;
+	  	end;
+		end;
 		
 		
-		if(testf)then begin
-			recordcopy(oldORr,ORr);
+		if(testf and foundf)then begin
+			UpdateOrdOut(ORr,false,true)
 				ORr.CustomStatusFlag = 10;
 				ORr.Closed = 1;
+			RecordStore(ORr,true);
 			logtext(0,"CloseOldOpenOrders " & ORr.SerNr);
-			recordupdate(oldORr,ORr,true);
+			//recordupdate(oldORr,ORr,true);
 		end;
 		
 	end;

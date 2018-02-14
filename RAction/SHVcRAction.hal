@@ -2099,8 +2099,13 @@ begin
   record ORVc ORr;
 
   res = 0;
-  if (SHr.OKFlag==0) then begin
-    res = 1;
+  if (SHr.OKFlag==0) then begin // Edit Dima ************* 2018-02-09 02:51 PM
+     res = 1;
+	if (UserCanAction("AllowDeleteSHVc",true)==false) then begin
+		messagebox(31179,"");
+		res = 0;
+	goto LSHVcRecordRemoveTest;
+  end;
     goto LSHVcRecordRemoveTest;
   end;
   BlockLoad(DBLockRec);
@@ -2111,7 +2116,7 @@ begin
   end;
   if (res==0) then begin
     if (long3>0) then begin MessageBox(1544,""); end;
-  end;  
+  end;
 LSHVcRecordRemoveTest:;
   SHVcRecordRemoveTest = res; 
   return;
