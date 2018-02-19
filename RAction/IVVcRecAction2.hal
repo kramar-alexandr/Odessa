@@ -473,7 +473,54 @@ boolean paste;
 			end;
 		end;
 	end;
-  
+end;
+
+
+global updating procedure UpdateComPriceMn(record RcVc RepSpec)
+begin
+	record IVVc IVr;
+	row IVVc IVrw;
+	integer i,mtrw;
+	boolean TrHs,testf,paste,foundf;
+	record PLVc PLr;
+	record SalesDataVc SalesData;
+	
+	IVr.InvDate = RepSpec.sStartDate;
+	TrHs = true;
+	while(loopkey("InvDate",IVr,1,TrHs))begin
+		testf = true;
+		foundf = false;
+		if(IVr.InvDate>RepSpec.sEndDate)then begin TrHs = false; testf = false; end;
+		
+		if(testf)then begin
+			for(i=0;i<MatRowCnt(IVr);i=i+1) begin		
+				MatRowGet(IVr,i,IVrw);
+				paste = false;
+				if (IVrw.stp==kInvoiceRowTypeNormal  and nonblank(IVrw.ArtCode)) then begin
+					PLr.PLCode = "KOMPR";
+					PLr.ArtCode = IVrw.ArtCode;
+					if (ReadFirstMain(PLr,2,true)) then begin
+						IVrw.CommisionPrice = PLr.ExVatPrice;
+						paste = true;
+					end;
+					if (paste) then begin 
+						MatRowPut(IVr,i,IVrw); 
+						SalesData.InvNr = IVr.SerNr;
+						SalesData.RowNr = i;
+						if(readfirstmain(SalesData,2,true))then begin
+							SalesData.CommisionPrice = IVrw.CommisionPrice;
+							recordstore(SalesData,true);
+							foundf = true;
+						end;
+					end;	
+				end;
+			end;
+		end;
+		if(foundf)then begin
+			recordstore(IVr,true);
+		end;
+	end;
+return;
 end;
 
 

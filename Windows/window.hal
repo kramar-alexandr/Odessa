@@ -409,6 +409,16 @@ WindowBegin("Maintenance",UpdateORWebStatusesVClass,CGMnt,RcType);
   EndWindow;
 end;
 
+window UpdateComPriceVClass:1 // Edit ************************** Friday, 17 October 2014 11:47:19
+ wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+ begin
+WindowBegin("Обновить коммисионные цены",UpdateComPriceVClass,CGMnt,RcType);
+  SetWRect(20,120,360,220);
+  PeriodField(10,6,"Период");
+  EndWindow;
+end;
+
+
 window POSPaymentsRClass:1
   wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
 begin
