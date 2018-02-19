@@ -4734,7 +4734,8 @@ begin
     	
     	EditField(h1,v+=vs,170,"Улица",ViewOnly,NPAdresStreet,false,NPStreetSClass);
 			EditField(h2,v,40,"Дом/Квартира",ViewOnly,NPAdresBuild,false,0);
-			EditField(h3-90,v,40,"Этаж",ViewOnly,NPAdresFloat,false,0);
+			EditField(h3-120,v,40,"Этаж",ViewOnly,NPAdresFloat,false,0);
+			EditField(h3-60,v,40,"Тел.",ViewOnly,NPRecipientsPhone,false,0);
 			//
 		end;
   // EditField(h3,v,150,"Адрес",Normal,NPRecipientAddress,false,0);
