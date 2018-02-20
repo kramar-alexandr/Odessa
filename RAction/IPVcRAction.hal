@@ -35,6 +35,7 @@ external function Integer PMCheckType(string,var string,var string);
 external function Boolean Date2Test(string,Date,string,Integer);
 external function Boolean SerNrTestIPVc(LongInt,Date,var Boolean);
 external function Integer CashSerNumberTest(string,val,string,LongInt,var Boolean);
+external function roundmode SetRoundModeD(Integer);
 
 function Boolean CheckIfPrepaymentError(record ARPayVc ARPayr,row IPVc IPrw,Date td)
 BEGIN
@@ -70,6 +71,8 @@ BEGIN
         iprate = ipto1/ipfr;
       end;
       
+			logtext(0,"CheckIfPrepaymentError ToRateB1BankVal " & IPrw.ToRateB1BankVal*100 & "  preprate " & preprate*100);
+			iprate = round(iprate,SetRoundModeD(2));
 			logtext(0,"CheckIfPrepaymentError ToRateB1BankVal " & IPrw.ToRateB1BankVal*100 & "  preprate " & preprate*100);
       if (iprate!=preprate) then begin
         res = true;
