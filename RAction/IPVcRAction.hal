@@ -71,9 +71,10 @@ BEGIN
         iprate = ipto1/ipfr;
       end;
       
-			logtext(0,"CheckIfPrepaymentError ToRateB1BankVal " & IPrw.ToRateB1BankVal*100 & "  preprate " & preprate*100);
+			logtext(0,"CheckIfPrepaymentError iprate " & iprate*100 & "  preprate " & preprate*100);
 			iprate = round(iprate,SetRoundModeD(2));
-			logtext(0,"CheckIfPrepaymentError ToRateB1BankVal " & IPrw.ToRateB1BankVal*100 & "  preprate " & preprate*100);
+			preprate = round(preprate,SetRoundModeD(2));
+			logtext(0,"CheckIfPrepaymentError iprate " & iprate*100 & "  preprate " & preprate*100);
       if (iprate!=preprate) then begin
         res = true;
       end;
