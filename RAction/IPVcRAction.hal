@@ -69,6 +69,8 @@ BEGIN
         GetFullCurncyRate(IPrw.InvCurncy,td,ipfr,ipto1,ipto2,ipbr1,ipbr2);
         iprate = ipto1/ipfr;
       end;
+      
+			logtext(0,"CheckIfPrepaymentError ToRateB1BankVal " & IPrw.ToRateB1BankVal & "  preprate " & preprate);
       if (iprate!=preprate) then begin
         res = true;
       end;
