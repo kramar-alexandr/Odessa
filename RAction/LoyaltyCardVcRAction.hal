@@ -114,9 +114,36 @@ begin
   record PointsHistVc PointsHistr;
   record LCMemberLevelVc LCMemberLevelr;
   record CUVc CUr;
-
+  record LoyaltyCardVc LCr;
+  integer counter;
+  boolean testf, TrHs;
+  
   res = 0;
   
+	if (LoyaltyCardr.Closed==0) then begin
+		counter = 0;
+		LCr.CustCode = LoyaltyCardr.CustCode;
+		TrHs = true;
+		
+		while (loopkey("ActCustCode",LCr,1,TrHs)) begin
+			testf = true;
+			if (LCr.CustCode!=LoyaltyCardr.CustCode) then begin
+				testf = false;
+				TrHs = false;
+			end;
+			if (testf) then begin
+				if (LCr.SerNr!=LoyaltyCardr.SerNr) then begin
+					counter = counter + 1;
+				end;
+			end;
+		end;
+		if (counter > 0) then begin
+			res = -1;
+			RecordCheckError(31181,LoyaltyCardr.CustCode,-1,"CustCode");
+			goto LLoyaltyCardVcRecordCheck;
+		end;
+	end;
+    
   if (blank(LoyaltyCardr.CustCode)) then begin
     RecordCheckError(1058,LoyaltyCardr.CustCode,-1,"CustCode");      
     res = -1; 
