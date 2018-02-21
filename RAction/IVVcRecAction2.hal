@@ -690,8 +690,7 @@ BEGIN
 	val 					OTD_Rebcode;
 
 
-  if (IVr.OKFlag!=0) then begin
-  	logtext(0, " IVVcRecordSaveAfter");
+  if (IVr.OKFlag!=0 and IVr.InvType!=kInvoiceTypeCredit) then begin
 	sum = IVVcCountSum(IVr);
 	BlockLoad(OTDr);
 	CUr.Code = IVr.CustCode;
@@ -701,17 +700,20 @@ BEGIN
 		CU_Rebcode = Rebr.vra0;
 	end;
 	mtrw = matrowcnt(OTDr);
-	for (i = 0; i < mtrw; i = i + 1) begin
-		matrowget(OTDr,i,OTDrw);
-		if (sum >= OTDrw.Sum)then begin
-			Rebr.Code = OTDrw.RebCode;
-			if (readfirstmain(Rebr,1,true)) then begin
-				OTD_Rebcode = Rebr.vra0;
-				if (CU_Rebcode < OTD_Rebcode) then begin
-					CUr.RebCode = OTDrw.RebCode;
-					CUr.IVVcSum = sum;
-					CUr.IVVcNr = IVr.SerNr;
-					RecordStore(CUr,true);
+	if (mtrw!=0) then begin
+		for (i = 0; i < mtrw; i = i + 1) begin
+			matrowget(OTDr,i,OTDrw);
+			if (sum >= OTDrw.Sum)then begin
+				Rebr.Code = OTDrw.RebCode;
+				if (readfirstmain(Rebr,1,true)) then begin
+					OTD_Rebcode = Rebr.vra0;
+					if (CU_Rebcode < OTD_Rebcode) then begin
+						logtext(0, " aaa");
+						CUr.RebCode = OTDrw.RebCode;
+						CUr.IVVcSum = sum;
+						CUr.IVVcNr = IVr.SerNr;
+						RecordStore(CUr,true);
+					end;
 				end;
 			end;
 		end;
@@ -1254,8 +1256,7 @@ BEGIN
 	val 					OTD_Rebcode;
 	record CUVc				CUr;
   
-  if (IVr.OKFlag!=0 and IV2r.OKFlag==0) then begin
-	logtext(0, " IVVcRecordUpdateAfter");
+  if (IVr.OKFlag!=0 and IV2r.OKFlag==0 and IVr.InvType!=kInvoiceTypeCredit) then begin
 	sum = IVVcCountSum(IVr);
 	BlockLoad(OTDr);
 	CUr.Code = IVr.CustCode;
@@ -1265,20 +1266,20 @@ BEGIN
 		CU_Rebcode = Rebr.vra0;
 	end;
 	mtrw = matrowcnt(OTDr);
-	logtext(0, " IVVcRecordUpdateAfter before for");
-	logtext(0, " " & sum);
-	for (i = 0; i < mtrw; i = i + 1) begin
-		matrowget(OTDr,i,OTDrw);
-		if (sum >= OTDrw.Sum)then begin
-			Rebr.Code = OTDrw.RebCode;
-			if (readfirstmain(Rebr,1,true)) then begin
-				OTD_Rebcode = Rebr.vra0;
-				if (CU_Rebcode < OTD_Rebcode) then begin
-					logtext(0, " aaa");
-					CUr.RebCode = OTDrw.RebCode;
-					CUr.IVVcSum = sum;
-					CUr.IVVcNr = IVr.SerNr;
-					RecordStore(CUr,true);
+	if (mtrw!=0) then begin
+		for (i = 0; i < mtrw; i = i + 1) begin
+			matrowget(OTDr,i,OTDrw);
+			if (sum >= OTDrw.Sum)then begin
+				Rebr.Code = OTDrw.RebCode;
+				if (readfirstmain(Rebr,1,true)) then begin
+					OTD_Rebcode = Rebr.vra0;
+					if (CU_Rebcode < OTD_Rebcode) then begin
+						logtext(0, " aaa");
+						CUr.RebCode = OTDrw.RebCode;
+						CUr.IVVcSum = sum;
+						CUr.IVVcNr = IVr.SerNr;
+						RecordStore(CUr,true);
+					end;
 				end;
 			end;
 		end;
