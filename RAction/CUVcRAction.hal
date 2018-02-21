@@ -760,7 +760,11 @@ begin
         if(IVr.Invalid>0)then begin testf1 = false; end;
         
         if(testf1)then begin
-          LCr.PointsBalance = LCr.PointsBalance + IVr.Sum4;
+        	if(IVr.InvType==kInvoiceTypeCredit)then begin 
+	        	LCr.PointsBalance = LCr.PointsBalance - IVr.Sum4;
+        	end else begin
+						LCr.PointsBalance = LCr.PointsBalance + IVr.Sum4;
+          end;
         end;
       end;
       Logtext(0,CUr.Code & "_ _" & LCr.SerNr & "_ _" & LCr.PointsBalance);

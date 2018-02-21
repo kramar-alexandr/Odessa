@@ -4208,7 +4208,8 @@ Begin
 	record CUVc CUr;
 	record IVVc IVr;
 	record LoyaltyCardVc LCr;
-	boolean testf,TrHs,testf1;
+	boolean testf,TrHs,testf1,changef;
+	val lastpoints;
 	
 	LCr.SerNr = "LC";
 	while(loopmain(LCr,1,true))begin
@@ -4216,7 +4217,30 @@ Begin
 			CUr.Code = LCr.CustCode;
 			if(readfirstmain(CUr,1,true))then begin
 				LCr.CustName = CUr.Name;
-				recordstore(LCr,true);
+				resetloop(IVr);
+				IVr.CustCode = CUr.Code;
+				TrHs = true;
+				changef = false;
+				lastpoints = LCr.PointsBalance;
+				while(loopkey("CustCode",IVr,1,TrHs))begin
+					testf1 = true;
+					if(IVr.CustCode!=CUr.Code)then begin TrHs = false; testf1 = false; end;
+					if(IVr.OKFlag==0)then begin testf1 = false; end;
+					if(IVr.Invalid>0)then begin testf1 = false; end;
+					if(nonblank(IVr.LoyaltyCardNr))then begin testf1 = false; end;
+					
+					if(testf1)then begin
+						if(IVr.InvType==kInvoiceTypeCredit)then begin 
+							
+							LCr.PointsBalance = LCr.PointsBalance - 2*IVr.Sum4;
+							changef = true;
+						end;
+					end;
+				end;
+				if(changef)then begin
+					Logtext(0,CUr.Code & "_ _" & LCr.SerNr & "_ _" & LCr.PointsBalance & " lst " & lastpoints);
+					//recordstore(LCr,true);
+				end;
 			end;
 		end;
 	end;
