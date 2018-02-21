@@ -139,7 +139,7 @@ begin
 		end;
 		if (counter > 0) then begin
 			res = -1;
-			RecordCheckError(31181,LoyaltyCardr.CustCode,-1,"CustCode");
+			RecordCheckError(31180,LoyaltyCardr.CustCode,-1,"CustCode");
 			goto LLoyaltyCardVcRecordCheck;
 		end;
 	end;
