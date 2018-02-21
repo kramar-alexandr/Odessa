@@ -4239,6 +4239,7 @@ Begin
 				end;
 				if(changef)then begin
 					Logtext(0,CUr.Code & "_ _" & LCr.SerNr & "_ _" & LCr.PointsBalance & " lst " & lastpoints);
+					Logtext(0,"|" & CUr.Name & "_ _" & CUr.Phone & "_ _" & CUr.AltPhone & "_ _" & CUr.Mobile & "_ _" & CUr.eMail);
 					//recordstore(LCr,true);
 				end;
 			end;
