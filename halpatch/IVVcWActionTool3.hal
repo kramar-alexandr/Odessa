@@ -1932,7 +1932,9 @@ begin
 	mtrw = matrowcnt(IVr);
 	for (i = 0; i < mtrw; i = i + 1) begin
 		matrowget(IVr,i,IVrw);
-		sum = sum + IVrw.Price * IVrw.Quant;
+		if (IVrw.stp==kInvoiceRowTypeNormal) then begin
+			sum = sum + IVrw.Price * IVrw.Quant;
+		end;
 	end;
 	IVVcCountSum = sum;
 	return;
