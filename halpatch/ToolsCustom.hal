@@ -4239,7 +4239,7 @@ Begin
 				end;
 				if(changef)then begin
 					Logtext(0,CUr.Code & "_ _" & LCr.SerNr & "_ _" & LCr.PointsBalance & " lst " & lastpoints);
-					//recordstore(LCr,true);
+					recordstore(LCr,true);
 				end;
 			end;
 		end;
