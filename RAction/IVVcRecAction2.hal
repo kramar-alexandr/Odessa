@@ -673,6 +673,51 @@ begin
   return;
 end;
 
+
+global updating procedure RecalcCustomRebate(record IVVc IVr)
+begin
+	integer 	  sum,i,mtrw; // Edit Dima ************* 2018-02-21 11:17 AM
+	row OneTimeDiscBlock	OTDrw;
+  record OneTimeDiscBlock	OTDr;
+	record	RebVc			Rebr;
+	val						CU_Rebcode;
+	val 					OTD_Rebcode;
+	record CUVc CUr; // Edit Dima ************* 2018-02-21 11:14 AM
+
+	if(IVr.CustCode!="NONAME" and false)then begin// Edit ************************** BPI Ukraine - KramarAlexandr - Wednesday, 21 February 2018 15:57:19
+		CUr.Code = IVr.CustCode;
+		readfirstmain(CUr,1,true);
+		if(CUr.CustCat=="WEB" or CUr.CustCat=="RETAI")then begin
+			sum = IVVcCountSum(IVr);
+			BlockLoad(OTDr);
+			Rebr.Code = CUr.RebCode;
+			if (readfirstmain(Rebr,1,true)) then begin
+				CU_Rebcode = Rebr.vra0;
+			end;
+			mtrw = matrowcnt(OTDr);
+			if (mtrw!=0) then begin
+				for (i = 0; i < mtrw; i = i + 1) begin
+					matrowget(OTDr,i,OTDrw);
+					if (sum >= OTDrw.Sum)then begin
+						Rebr.Code = OTDrw.RebCode;
+						if (readfirstmain(Rebr,1,true)) then begin
+							OTD_Rebcode = Rebr.vra0;
+							if (CU_Rebcode < OTD_Rebcode) then begin
+								CUr.RebCode = OTDrw.RebCode;
+								CUr.IVVcSum = sum;
+								CUr.IVVcNr = IVr.SerNr;
+								RecordStore(CUr,true);
+							end;
+						end;
+					end;
+				end;
+			end;
+		end;
+	end;
+
+return;
+end;
+
 global
 updating function LongInt IVVcRecordSaveAfter(var record IVVc IVr,record IVVc IV2r,LongInt long3,LongInt long4)
 BEGIN
@@ -681,43 +726,11 @@ BEGIN
 	record EInvoiceBlock EIb;
 	record SHVc SHr;//Edit----------------------Dima  22.09.2015
 	record ORVc ORr,oldORr;//Edit----------------------Dima  22.09.2015
-	record CUVc CUr; // Edit Dima ************* 2018-02-21 11:14 AM
-	integer 	  sum,i,mtrw; // Edit Dima ************* 2018-02-21 11:17 AM
-	row OneTimeDiscBlock	OTDrw;
-  	record OneTimeDiscBlock	OTDr;
-	record	RebVc			Rebr;
-	val						CU_Rebcode;
-	val 					OTD_Rebcode;
+	
 
 
   if (IVr.OKFlag!=0 and IVr.InvType!=kInvoiceTypeCredit) then begin
-	sum = IVVcCountSum(IVr);
-	BlockLoad(OTDr);
-	CUr.Code = IVr.CustCode;
-	readfirstmain(CUr,1,true);
-	Rebr.Code = CUr.RebCode;
-	if (readfirstmain(Rebr,1,true)) then begin
-		CU_Rebcode = Rebr.vra0;
-	end;
-	mtrw = matrowcnt(OTDr);
-	if (mtrw!=0) then begin
-		for (i = 0; i < mtrw; i = i + 1) begin
-			matrowget(OTDr,i,OTDrw);
-			if (sum >= OTDrw.Sum)then begin
-				Rebr.Code = OTDrw.RebCode;
-				if (readfirstmain(Rebr,1,true)) then begin
-					OTD_Rebcode = Rebr.vra0;
-					if (CU_Rebcode < OTD_Rebcode) then begin
-						logtext(0, " aaa");
-						CUr.RebCode = OTDrw.RebCode;
-						CUr.IVVcSum = sum;
-						CUr.IVVcNr = IVr.SerNr;
-						RecordStore(CUr,true);
-					end;
-				end;
-			end;
-		end;
-	end;
+  	RecalcCustomRebate(IVr);
   end;
   
   if (IVr.Invalid==0) then begin
@@ -1248,42 +1261,10 @@ BEGIN
   Integer notenr;
   record ORVc ORr,oldORr;// Edit ************************** Wednesday, 1 March 2017 10:57:42
   record SHVc SHr;
-	integer 	  sum,i,mtrw; // Edit Dima ************* 2018-02-21 11:17 AM
-	row OneTimeDiscBlock	OTDrw;
-  	record OneTimeDiscBlock	OTDr;
-	record	RebVc			Rebr;
-	val						CU_Rebcode;
-	val 					OTD_Rebcode;
-	record CUVc				CUr;
+	
   
   if (IVr.OKFlag!=0 and IV2r.OKFlag==0 and IVr.InvType!=kInvoiceTypeCredit) then begin
-	sum = IVVcCountSum(IVr);
-	BlockLoad(OTDr);
-	CUr.Code = IVr.CustCode;
-	readfirstmain(CUr,1,true);
-	Rebr.Code = CUr.RebCode;
-	if (readfirstmain(Rebr,1,true)) then begin
-		CU_Rebcode = Rebr.vra0;
-	end;
-	mtrw = matrowcnt(OTDr);
-	if (mtrw!=0) then begin
-		for (i = 0; i < mtrw; i = i + 1) begin
-			matrowget(OTDr,i,OTDrw);
-			if (sum >= OTDrw.Sum)then begin
-				Rebr.Code = OTDrw.RebCode;
-				if (readfirstmain(Rebr,1,true)) then begin
-					OTD_Rebcode = Rebr.vra0;
-					if (CU_Rebcode < OTD_Rebcode) then begin
-						logtext(0, " aaa");
-						CUr.RebCode = OTDrw.RebCode;
-						CUr.IVVcSum = sum;
-						CUr.IVVcNr = IVr.SerNr;
-						RecordStore(CUr,true);
-					end;
-				end;
-			end;
-		end;
-	end;
+		RecalcCustomRebate(IVr);
   end;
   
   ihef = ItemHistExists("IVVc",IVr.SerNr);
