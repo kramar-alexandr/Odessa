@@ -101,12 +101,14 @@ end;
 global updating procedure CloseOldOpenOrders()
 begin
 	record ORVc ORr,oldORr;
-	boolean TrHs,testf;
+	row ORVc ORrw;
+	boolean TrHs,testf,foundf;
 	date mindate,maxdate;
 	record IVVc IVr;
 	record SHVc SHr;
+	integer i,mtrw;
 	
-	mindate = StringToDate("01.01.2015"); // Edit Dima ************* 2018-02-12 01:42 PM
+	mindate = addday(currentdate,-130);
 	maxdate = addday(currentdate,-30);
 	ORr.OrdDate = mindate;
 	TrHs = true;
@@ -129,15 +131,23 @@ begin
 			end;
 		end;
 		
+		foundf = false;
+		mtrw = matrowcnt(ORr);
+		For(i=0;i<mtrw;i=i+1) begin
+	  	matrowget(ORr,i,ORrw);
+	  	if(ORrw.Shipd2<ORrw.Quant)then begin
+	  		foundf = true;
+	  	end;
+		end;
 		
 		
-		if(testf)then begin
+		if(testf and foundf)then begin
 			UpdateOrdOut(ORr,false,true)
 				ORr.CustomStatusFlag = 10;
 				ORr.Closed = 1;
 			RecordStore(ORr,true);
 			logtext(0,"CloseOldOpenOrders " & ORr.SerNr);
-			recordupdate(oldORr,ORr,true);
+			//recordupdate(oldORr,ORr,true);
 		end;
 		
 	end;
@@ -4198,7 +4208,8 @@ Begin
 	record CUVc CUr;
 	record IVVc IVr;
 	record LoyaltyCardVc LCr;
-	boolean testf,TrHs,testf1;
+	boolean testf,TrHs,testf1,changef;
+	val lastpoints;
 	
 	LCr.SerNr = "LC";
 	while(loopmain(LCr,1,true))begin
@@ -4206,7 +4217,31 @@ Begin
 			CUr.Code = LCr.CustCode;
 			if(readfirstmain(CUr,1,true))then begin
 				LCr.CustName = CUr.Name;
-				recordstore(LCr,true);
+				resetloop(IVr);
+				IVr.CustCode = CUr.Code;
+				TrHs = true;
+				changef = false;
+				lastpoints = LCr.PointsBalance;
+				while(loopkey("CustCode",IVr,1,TrHs))begin
+					testf1 = true;
+					if(IVr.CustCode!=CUr.Code)then begin TrHs = false; testf1 = false; end;
+					if(IVr.OKFlag==0)then begin testf1 = false; end;
+					if(IVr.Invalid>0)then begin testf1 = false; end;
+					if(nonblank(IVr.LoyaltyCardNr))then begin testf1 = false; end;
+					
+					if(testf1)then begin
+						if(IVr.InvType==kInvoiceTypeCredit)then begin 
+							
+							LCr.PointsBalance = LCr.PointsBalance - 2*IVr.Sum4;
+							changef = true;
+						end;
+					end;
+				end;
+				if(changef)then begin
+					Logtext(0,CUr.Code & "_ _" & LCr.SerNr & "_ _" & LCr.PointsBalance & " lst " & lastpoints);
+					Logtext(0,"|" & CUr.Name & "_ _" & CUr.Phone & "_ _" & CUr.AltPhone & "_ _" & CUr.Mobile & "_ _" & CUr.eMail);
+					//recordstore(LCr,true);
+				end;
 			end;
 		end;
 	end;

@@ -188,6 +188,7 @@ record IVVc IVr; //Edit***************************Sasha2,14:34 12.12.2016
 vector string 255 CashiersVect; //Edit***************************Sasha2,12:15 16.12.2016
 record UserVc Userr; //Edit***************************Sasha2,12:15 16.12.2016
 boolean multiloc;
+record INVc INr;
 
 separator = "^";
 
@@ -444,6 +445,13 @@ separator = "^";
 								OutVal(310,0,blankval,M4Val,false);
 							end;
 							if (viewcost) then begin
+								if(SalesData.UnitCost==0)then begin// Edit ************************** BPI Ukraine - KramarAlexandr - Tuesday, 13 February 2018 15:22:38
+									INr.Code = SalesData.ArtCode;
+									if(readfirstmain(INr,1,true))then begin
+										SalesData.UnitCost = INr.InPrice;
+										SalesData.Cost = SalesData.UnitCost * SalesData.Quant;
+									end;
+								end;
 								OutVal(320,0,SalesData.UnitCost,M4Val,false);
 								OutVal(340,0,SalesData.Cost,M4Val,false);
 								if(SalesData.VATCode=="15%")then begin//ROZETKA
@@ -473,6 +481,13 @@ separator = "^";
 							//Суммируем данные для консолидированного отчета
 							qty = qty + SalesData.Quant;
 							salesum = salesum + SalesData.Sum;
+							if(SalesData.UnitCost==0)then begin// Edit ************************** BPI Ukraine - KramarAlexandr - Tuesday, 13 February 2018 15:22:38
+									INr.Code = SalesData.ArtCode;
+									if(readfirstmain(INr,1,true))then begin
+										SalesData.UnitCost = INr.InPrice;
+										SalesData.Cost = SalesData.UnitCost * SalesData.Quant;
+									end;
+								end;
 							cost = cost + SalesData.Cost;
 							rent = rent + SalesData.rowGP;
 							if(SalesData.VATCode=="15%")then begin//ROZETKA

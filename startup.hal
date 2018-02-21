@@ -388,6 +388,8 @@ begin
 	Maintenance("Заполнить SG POVc",MyVClass,FillGFPOVcMn,modPO);
 	Maintenance("Заполнить SG PUVc",MyVClass,FillGFPUVcMn,modPO);
 	
+	Maintenance("Обновить коммисионные цены",UpdateComPriceVClass,UpdateComPriceMn,modSO);
+	
 	Maintenance("Нормализовать телефоны +38",MyVClass,NormalizeNumberMn,modSL);
 	
   Maintenance("Пересчитать значение объема в карточке товара",RecalcINVolumeClass,RecalcINVolumeMn,modDBMain);//Edit***************************Sasha2,13:50 24.06.2014
