@@ -11275,8 +11275,11 @@ begin
     EditField(h,v+=vs,80,"Продавец",Normal,SalesMan,false,UserSClass);
   end;
   EditField(h,v+=vs,80,"Товары по умолч.",Normal,CompItemCode,false,CompItemSClass);
+  EditField(h,v+=vs,80,"Номер счет-фактуры",ViewOnly,IVVcNr,false,0);
+  EditField(h,v+=vs,80,"Сумма счет фактуры",ViewOnly,IVVcSum,false,0);
   EditField(h2,v=6,80,"Валюта (пост.)",Normal,VECurncyCode,false,CurncyCodeSClass);
-  EditField(h2,v+=2*vs ,80, "Таблица скидок",Normal,VERebCode,false,RebSClass);
+  CheckBox(h2-90,v+(2*vs),0,"Ручной пересчет клиента",ManualRecountClient);
+  EditField(h2,v+=(2*vs+24) ,80, "Таблица скидок",Normal,VERebCode,false,RebSClass);
   if (StandardHansa==false) then begin
     EditField(h2,v+=vs,80,"Группа продаж",Normal,SalesGroup,false,SalesGroupSClass);
   end;

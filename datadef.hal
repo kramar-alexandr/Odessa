@@ -5716,6 +5716,9 @@ RecordBegin(IPVc,-,"");
   RecordField(NameUAH,M4Str,200,0);// Edit ************************** BPI Ukraine - KramarAlexandr - Monday, 20 November 2017 15:19:28
 	RecordField(NameUAHFlag,M4Int,0,0);// Edit ************************** BPI Ukraine - KramarAlexandr - Monday, 20 November 2017 15:19:38
   RecordField(OldPhone,M4Str,50,0);// Edit ************************** BPI Ukraine - KramarAlexandr - вівторок, 6 лютого 2018 р. о 23:01:54
+  RecordField(ManualRecountClient,M4Int,0,0); // Edit Dima ************* 2018-02-20 12:09 PM
+  RecordField(IVVcNr,M4Long,0,0); // Edit Dima ************* 2018-02-21 10:08 AM
+  RecordField(IVVcSum,M4Int,0,0); // Edit Dima ************* 2018-02-21 10:08 AM
   MainKeyBegin(Code,1);
   StoreInBaseKey;
   AppendFieldToKeyName(SalesGroup);
@@ -6710,6 +6713,14 @@ RecordBegin(IPVc,-,"");
   	RecordField(token,M4Str,225,0);
   	RecordField(bearer,M4Str,225,0);
   EndBlock;
+	
+	BlockBegin(OneTimeDiscBlock,-,""); // Edit Dima ************* 2018-02-20 03:47 PM
+	RecordField(Math,M4Matrix,0,0);
+	ArrayBegin(Math,-,1);
+	ArrayField(Sum,M4Val,0,0);
+	ArrayField(RebCode,M4Str,20,0);
+	EndArray;
+	EndBlock;
 	
 return;
 end;

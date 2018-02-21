@@ -47,6 +47,7 @@ begin
 	Setting("Консигнация: Прием товара",ConsInLClass,modSL);
 	Setting("Консигнация: Продажи",ConsSaleLClass,modSL);
 	Setting("Консигнация: Брак",ConsBrakLClass,modSL);
+	Setting("Одноразовая скидка",OneTimeDiscTCLass,modSL); // Edit Dima ************* 2018-02-20 03:47 PM
 	
   Report("Анализ поставщика",VEAnaRClass,VEAnaRn,0,modPO);
   Report("Отчет по товарам по классификации (поставщику)",VERepRClass,VERepRn,0,modPO); //Edit***************************Sasha2,14:08 31.07.2014

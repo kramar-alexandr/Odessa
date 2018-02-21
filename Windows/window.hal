@@ -5259,7 +5259,21 @@ begin
   EndWindow;
 end;
 
+// Edit Dima ************* 2018-02-20 03:54 PM
 
+window OneTimeDiscTCLass:1
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
 
+	Integer h, v;
 
+	WindowBegin("Настройки скидки",OneTimeDiscTCLass,CGHbl,HBlRecType);
+	SetBlid(OneTimeDiscBlock);
+	SetWRect(64,80,550,300);
+	MatrixBegin(20,27,-50,-40,-,10);
+	MatCol(1,14,"Сумма",0,Sum,false,0);
+	MatCol(1,80,"Таблица скидок",0,RebCode,false,RebSClass);
+	EndMatrix;
+	EndWindow;
+end;
 

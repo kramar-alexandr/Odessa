@@ -13,6 +13,7 @@ external function Boolean IVVc_PasteQuantity(var record IVVc,Integer);
 external procedure DisplayIVItem(record IVVc,Integer);
 external procedure IVPasteItem(string,Integer,LongInt);
 external function Integer ArgEInvLock(record IVVc,integer);
+remote procedure IVVcRebCodeCound(var record IVVc);
 
 global
 function Boolean IVDClassExportFlagButtonAfter(Integer wn,Boolean changedf)
@@ -87,15 +88,12 @@ begin
   row ORVc ORrw;// Edit ************************** Tuesday, 27 June 2017 09:54:51
 
   res = true;
-	
-	
-	
+		
   if (WindowState(wn)==Rs_update) then begin
     GetPrevWindowRecord(wn,IVr);    
     // Edit Start ---------------------------------------------- Edit Start
 	//Tuesday, 27 June 2017 09:58:20
 	
-    
     if(usercanaction("DelIVBeforeSH",true))then begin
 			if(IVr.OrderNr>-1)then begin
 				ORr.SerNr = IVr.OrderNr;
@@ -289,7 +287,6 @@ LIVDClassDeleteRowTest:;
 	if (currentuser=="SAUNOK") then begin// Edit ************************** Wednesday, 4 May 2016 15:57:24
 		res = true;
 	end;
-
   IVDClassDeleteRowTest = res;
   return;
 end;
