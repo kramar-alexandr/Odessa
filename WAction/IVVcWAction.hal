@@ -71,8 +71,7 @@ remote procedure PastePDInInv(var record IVVc,string,Boolean);
 external function Boolean MakeFiscalReceipt(record IVVc);
 external function Boolean IVPrintReceipt(Integer,var record IVVc,var record IVVc,Integer,Boolean,Boolean,Integer,Integer); //Edit***************************Sasha2,16:59 17.08.2015
 external procedure IVVc_PastePosition(var record IVVc,string);	//Edit----------------------Dima  12.01.2016
-external procedure IVVcRebCodeCound(record IVVc); // Edit Dima ************* 2018-02-20 02:35 PM
-remote procedure IVVcRebCodeCound(var record IVVc);
+remote procedure IVVcRebCodeCound(record IVVc); // Edit Dima ************* 2018-02-20 02:35 PM
 
 procedure ChangeIVSerialNr(Integer wnst,var record IVVc IVp)
 BEGIN
