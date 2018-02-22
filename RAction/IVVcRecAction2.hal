@@ -706,6 +706,7 @@ begin
 								CUr.RebCode = OTDrw.RebCode;
 								CUr.IVVcSum = sum;
 								CUr.IVVcNr = IVr.SerNr;
+								CUr.IVVcOneTimeDisc = OTDrw.RebCode; // Edit Dima ************* 2018-02-22 09:18 AM
 								RecordStore(CUr,true);
 							end;
 						end;

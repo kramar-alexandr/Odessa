@@ -5285,6 +5285,7 @@ begin
 	MatrixBegin(20,27,-50,-40,-,10);
 	MatCol(1,14,"Сумма",0,Sum,false,0);
 	MatCol(1,80,"Таблица скидок",0,RebCode,false,RebSClass);
+	MatCol(1,180,"Сумма неодноразовой скидки",0,SumNotOneTime,false,0);
 	EndMatrix;
 	EndWindow;
 end;
