@@ -79,6 +79,7 @@ remote procedure IVDUpdatePrices(var record IVVc,Boolean);// Edit **************
 external function Boolean IVDClassBirthDayVaucherEFAfter(Integer,Boolean);// Edit ************************** Thursday, 1 December 2016 09:12:30
 remote procedure SendToServerArtCode(string,string,string);// Edit ************************** Tuesday, 11 April 2017 16:50:23
 remote function Boolean FindRebateVoucherForReturnIV(var record IVVc); //Edit***************************Sasha2,16:49 08.06.2017
+remote procedure IVVcRebCodeCound(var record IVVc);// Edit ************************** BPI Ukraine - KramarAlexandr - Thursday, 22 February 2018 11:36:52
 
 global updating procedure LogoffKassir()
 begin
@@ -1285,6 +1286,7 @@ begin
         GetWindowRecord(wn,IVr);
   //      matrowix = GetSelectedPOSItemRowIndex(wn); // Why again? On windows, the selection is cleared between the calls to this function, can't figure out why.
         MatRowDelete(IVr,matrowix);
+        IVVcRebCodeCound(IVr);// Edit ************************** BPI Ukraine - KramarAlexandr - Thursday, 22 February 2018 11:40:40
         IVSumup(IVr,true);
         PutWindowRecord(wn,IVr);
 
