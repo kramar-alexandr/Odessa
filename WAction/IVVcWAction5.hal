@@ -20,7 +20,7 @@ remote updating function Integer CreateMailFromIVD(record IVVc,var record MailVc
 external updating function Integer CreateExternalMailFromIVD(record IVVc,var string,Boolean,string);
 external updating procedure IVCreateHtmlFile(record IVVc,record MailVc,Boolean);
 external function Boolean FindLocalSerialPortDevice(Integer,LongInt,string,var record LSerialPortDeviceVc); //Edit----------------------Dima  20.02.2015
-external procedure IVVcRebCodeCound(record IVVc); // Edit Dima ************* 2018-02-20 02:35 PM
+remote procedure IVVcRebCodeCound(record IVVc); // Edit Dima ************* 2018-02-20 02:35 PM
 
 
 global

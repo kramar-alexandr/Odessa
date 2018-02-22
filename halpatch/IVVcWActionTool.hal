@@ -66,7 +66,7 @@ external function Boolean GetItemPriceDiscount3(string,val,var record INVc,strin
 external function Boolean INVc_AllowSales(record INVc,var LongInt);
 external function boolean ItemHasClassification(record INVc,string);	//Edit----------------------Dima  26.01.2016
 external procedure AlternativeRebateIVVc(var record IVVc);// Edit ************************** Friday, 5 May 2017 09:49:37
-
+remote procedure IVVcRebCodeCound(var record IVVc);// Edit ************************** BPI Ukraine - KramarAlexandr - Thursday, 22 February 2018 11:36:52
 
 
 global
@@ -605,6 +605,7 @@ done below
   sernrf = INr.SerNrf;
   AddItemWithholdingTaxesRows_IVVc(IVr,rownr,INr);
   AddMultiBuyDiscountItems_IVVc(IVr);
+  IVVcRebCodeCound(IVr);// Edit ************************** BPI Ukraine - KramarAlexandr - Thursday, 22 February 2018 11:35:31
   IVSumup(IVr,true); 
   IVVc_PasteArtCode = res;
   RETURN;
