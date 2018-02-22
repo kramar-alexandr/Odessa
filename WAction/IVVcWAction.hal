@@ -71,7 +71,7 @@ remote procedure PastePDInInv(var record IVVc,string,Boolean);
 external function Boolean MakeFiscalReceipt(record IVVc);
 external function Boolean IVPrintReceipt(Integer,var record IVVc,var record IVVc,Integer,Boolean,Boolean,Integer,Integer); //Edit***************************Sasha2,16:59 17.08.2015
 external procedure IVVc_PastePosition(var record IVVc,string);	//Edit----------------------Dima  12.01.2016
-remote procedure IVVcRebCodeCound(record IVVc); // Edit Dima ************* 2018-02-20 02:35 PM
+remote procedure IVVcRebCodeCound(var record IVVc); // Edit Dima ************* 2018-02-20 02:35 PM
 
 procedure ChangeIVSerialNr(Integer wnst,var record IVVc IVp)
 BEGIN
@@ -1068,9 +1068,6 @@ begin
   record SerBalVc SBr;
   record LocalMachineBlock LMb;
   
-  
-  logtext(0,"begin " & getcurtick);
-  
   suspended = StringToInt(GetWindowString(wn,"Suspended"));
   input = GetWindowString(wn,"ivcashcommand");
   PutWindowString(wn,"ivcashcommand","");
@@ -1311,7 +1308,9 @@ begin
               IVrw.Quant = IVrw.Quant/decimalptfctr;
             end;
             MatRowPut(IVr,selrownr,IVrw);  
-            if (IVVc_PasteQuantity(IVr,selrownr)) then begin    
+            if (IVVc_PasteQuantity(IVr,selrownr)) then begin 
+            	
+            	IVVcRebCodeCound(IVr);// Edit ************************** BPI Ukraine - KramarAlexandr - Thursday, 22 February 2018 12:25:33
               PutWindowRecord(wn,IVr);    
               IVDClass_RefreshStringList(wn,IVr);
               DisplayIVItem(IVr,selrownr);
