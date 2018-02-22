@@ -5719,7 +5719,7 @@ RecordBegin(IPVc,-,"");
   RecordField(ManualRecountClient,M4Int,0,0); // Edit Dima ************* 2018-02-20 12:09 PM
   RecordField(IVVcNr,M4Long,0,0); // Edit Dima ************* 2018-02-21 10:08 AM
   RecordField(IVVcSum,M4Int,0,0); // Edit Dima ************* 2018-02-21 10:08 AM
-  RecordField(IVVcOneTimeDisc,M4Str,0,0); // Edit Dima ************* 2018-02-22 09:15 AM
+  RecordField(IVVcOneTimeDisc,M4Str,10,0); // Edit Dima ************* 2018-02-22 09:15 AM
   MainKeyBegin(Code,1);
   StoreInBaseKey;
   AppendFieldToKeyName(SalesGroup);
