@@ -342,6 +342,45 @@ begin
 return;
 end;
 
+global updating
+procedure	UpdateDiscount(record LoyaltyCardVc LoyaltyCardr)
+begin
+  row OneTimeDiscBlock		OTDrw;				// Edit Dima ************* 2018-02-23 01:36 PM
+  record CUVc				CU2r;
+  integer					mtrw, k, sum, i;
+  record OneTimeDiscBlock	OTDr;
+  record	RebVc			Rebr;
+  val						CU_Rebcode;
+  val 						OTD_Rebcode;
+  string 	255				cur_disc_mult;
+  string 	255				cur_disc_one;
+	
+  CU2r.Code = LoyaltyCardr.CustCode;
+  if (readfirstmain(CU2r,1,true)) then begin end;
+  cur_disc_one = "";
+  cur_disc_mult = "";
+  BlockLoad(OTDr);
+  mtrw = matrowcnt(OTDr);
+  for (i = 0; i < mtrw; i = i + 1) begin
+	matrowget(OTDr,i,OTDrw);
+	if (LoyaltyCardr.PointsBalance > OTDrw.SumNotOneTime) then begin
+		cur_disc_mult = OTDrw.RebCode;
+	end;
+	if (LoyaltyCardr.PointsBalance > OTDrw.Sum) then begin
+		cur_disc_one = OTDrw.RebCode;
+	end;			
+  end;
+  if (cur_disc_mult==cur_disc_one) then begin
+	CU2r.RebCode = cur_disc_mult;
+  end else begin
+	if (CU2r.IVVcOneTimeDisc!=cur_disc_one) then begin
+		CU2r.RebCode = cur_disc_mult;
+		messagebox(31181, "");
+	end;
+  end;
+  RecordStore(CU2r,true);	  
+end;
+
 global
 updating function LongInt IVVcRecordCheck(record IVVc IVp,record IVVc IV2p,LongInt stat,LongInt long4)
 BEGIN
@@ -397,8 +436,17 @@ BEGIN
   record CYBlock CYb;
   Boolean TouchScreenFinishButtonf;
   record RebateVoucherVc RVr;
-
-
+  
+  row OneTimeDiscBlock		OTDrw;				// Edit Dima ************* 2018-02-23 01:36 PM
+  record CUVc				CU2r;
+  integer					mtrw, k, sum;
+  record OneTimeDiscBlock	OTDr;
+  record	RebVc			Rebr;
+  val						CU_Rebcode;
+  val 						OTD_Rebcode;
+  string 	255				cur_disc_mult;
+  string 	255				cur_disc_one;
+  
   if (long4==3) then begin TouchScreenFinishButtonf = true; end;
   res = 0;
   curcomp = CurrentCompany;    
@@ -438,11 +486,13 @@ BEGIN
         if (LoyaltyCardr.Closed!=0) then begin
           test3f = false;
         end;
+				
         if (test3f) then begin 
-          IVp.LoyaltyCardNr = "";
-          IVp.LCMLevel = "";
-          IVp.Points = 0;
+          //IVp.LoyaltyCardNr = "";
+          //IVp.LCMLevel = "";			// Edit Dima ************* 2018-02-23 01:31 PM
+          //IVp.Points = 0;
           LoyaltyCardr.PointsBalance = LoyaltyCardr.PointsBalance - IV2p.Points;
+		  UpdateDiscount(LoyaltyCardr);
           RECORDSTORE(LoyaltyCardr,true);
           IVSumup(IVp,true);
         end;

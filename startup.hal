@@ -354,6 +354,7 @@ begin
 	 SString(31178,"Нова пошта очікує надходження від відправника");
 	 SString(31179,"Вам запрещено удалять документ"); // Edit Dima ************* 2018-02-09 02:41 PM
 	 SString(31180,"Нельзя создавать две активные карты для одного клиента "); // Edit Dima ************* 2018-02-21 04:42 PM
+	 SString(31181,"Проверьте скидку"); // Edit Dima ************* 2018-02-23 12:33 PM
 	 
 	Maintenance("Закрыть старые OR",MyVClass,CloseOldOpenOrders,modSO);
 	Maintenance("Проставить склад первой покупки клиента",MyVClass,FillFirstDateByeCUMn,modSL);

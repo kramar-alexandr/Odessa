@@ -11277,7 +11277,7 @@ begin
   EditField(h,v+=vs,80,"Товары по умолч.",Normal,CompItemCode,false,CompItemSClass);
   EditField(h,v+=vs,80,"Номер счет-фактуры",ViewOnly,IVVcNr,false,0);
   EditField(h,v+=vs,80,"Сумма счет фактуры",ViewOnly,IVVcSum,false,0);
-  EditField(h,v+=vs,80,"Одноразовая скидка",ViewOnly,IVVcOneTimeDisc,false,0); // Edit Dima ************* 2018-02-22 09:26 AM
+  EditField(h,v+=vs,80,"Одноразовая скидка",Normal,IVVcOneTimeDisc,false,0); // Edit Dima ************* 2018-02-22 09:26 AM
   EditField(h2,v=6,80,"Валюта (пост.)",Normal,VECurncyCode,false,CurncyCodeSClass);
   CheckBox(h2-90,v+(2*vs),0,"Ручной пересчет клиента",ManualRecountClient);
   EditField(h2,v+=(2*vs+24) ,80, "Таблица скидок",Normal,VERebCode,false,RebSClass);
