@@ -1839,10 +1839,9 @@ begin
   record BaseCurBlock BCb;
   row IVVc IVrw;
   val PointsBalance;
-
+		
   if (IVr.OKFlag==0) and nonblank(IVr.LoyaltyCardNr) then begin
       found = CalculateLoyaltyPointsPayment_IVVc(IVr,maxpointstouse,PointsBalance,totusedpoints,totsumb1)==0;
-
       if (found) then begin
         BlockLoad(BCb);
         ClearRow(IVr,IVrw,kInvoiceRowTypeLoyaltyPointsPayment);        

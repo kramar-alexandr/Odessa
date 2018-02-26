@@ -88,7 +88,6 @@ begin
   
   BlockLoad(LCMLevelSetBl);
   rwcnt = MatRowCnt(LCMLevelSetBl);
-  
   for (i=0;i<rwcnt;i=i+1) begin
     MatRowGet(LCMLevelSetBl,i,LCMLevelSetrw);
     if ((points>=LCMLevelSetrw.FromPoints) and ((points<=LCMLevelSetrw.ToPoints) or (LCMLevelSetrw.ToPoints==0)) and (clevel==LCMLevelSetrw.LCMLevel)) then begin
