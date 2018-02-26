@@ -1951,6 +1951,7 @@ begin
 	record	RebVc			Rebr;
 	val						CU_Rebcode;
 	val 					OTD_Rebcode;
+	boolean changed;
 	
 	if (IVr.InvType!=kInvoiceTypeCredit) then begin
 		
@@ -1979,10 +1980,13 @@ begin
 							OTD_Rebcode = Rebr.vra0;
 							if (CU_Rebcode < OTD_Rebcode) then begin
 								IVr.RebCode = OTDrw.RebCode;
+								changed = true;
 							end;
 						end;
-						IVDUpdatePrices(IVr,false);
 					end;
+				end;
+				if(changed)then begin
+					IVDUpdatePrices(IVr,false);
 				end;
 			end;
 		end;
