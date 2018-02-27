@@ -708,7 +708,7 @@ begin
 									CUr.IVVcSum = sum;
 									CUr.IVVcNr = IVr.SerNr;
 									CUr.IVVcOneTimeDisc = OTDrw.RebCode;
-									RecordStore(CUr,true);
+									//RecordStore(CUr,true);
 								end;
 							end;
 						end;
