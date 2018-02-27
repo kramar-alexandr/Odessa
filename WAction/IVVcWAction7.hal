@@ -856,7 +856,7 @@ begin
       goto LIVDClassTouchScreenPasteButtonDo;
     end;
     MatRowGet(POSBr,butnr-1,POSBrw);
-    switch (POSBrw.ButtonType) begi
+    switch (POSBrw.ButtonType) begin
       case kPOSButtonTypeItem:
         PutWindowString(wn,"touchscreenitem",POSBrw.Code);
         PutWindowString(wn,"touchscreenitemqty",1.00);
