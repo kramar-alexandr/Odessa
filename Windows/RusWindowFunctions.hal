@@ -437,7 +437,7 @@ begin
   record CompaniesBlock CBb;// Edit ************************** Wednesday, 12 April 2017 13:39:17
   row CompaniesBlock CBrw;// Edit ************************** Tuesday, 11 April 2017 13:13:21
   //record LoyaltyCardVc LCr;
-
+  
   BlockLoad(CBb);// Edit ************************** Tuesday, 11 April 2017 13:13:20
   matrowget(CBb,0,CBrw);
   
@@ -849,7 +849,11 @@ begin
         procstr = "";  
       case 203: //Edit***************************Sasha2,17:05 08.06.2017 - GOTO IVVCWAction7.hal
         AddTouchScreenPasteButton(h,v,width,heighttemp,procstr,i+1,lblstr,POSBrw.colnr);
-        procstr = "";        
+        procstr = "";
+	  case 204:
+		AddTouchScreenPasteButton(h,v,width,heighttemp,procstr,i+1,lblstr,POSBrw.colnr);
+		procstr = "";
+		goto LLDrawPOSButtons_RUS;
       case kPOSButtonTypeBlank:
         goto LLDrawPOSButtons_RUS;
     end;

@@ -766,6 +766,24 @@ begin
 end;
 
 global
+procedure ChangeObjects(string New_Obj)
+begin
+	integer	wn;
+	record IVVc	IVr;
+	
+	wn = curwindow;
+	GetWindowRecord(wn,IVr);
+	if (!SetInSet(New_Obj, IVr.Objects)) then begin
+		if (!blank(IVr.Objects)) then begin
+			IVr.Objects = IVr.Objects & ",";
+		end;
+		IVr.Objects = IVr.Objects & New_Obj;
+	end;
+	PutWindowRecord(wn,IVr);
+	return;
+end;
+
+global
 procedure IVDClassTouchScreenPasteButtonDo(integer butnr)
 begin
   Integer i,rwcnt,wn,matrowix;
@@ -792,11 +810,9 @@ begin
   wn = CurWindow;
   DeselectWIndow(wn,true);
   GetWindowRecord(wn,IVr);
-  
   found = POSButtonsForWindow(wn,POSBr);
   if (found) then begin
     rwcnt = MatRowCnt(POSBr);
-    
     if (butnr>rwcnt) then begin
       goto LIVDClassTouchScreenPasteButtonDo;
     end;
@@ -817,7 +833,6 @@ begin
         goto LIVDClassTouchScreenPasteButtonDo;
     end;
   end;
-  
   switch (WindowState(wn)) begin
     case Rs_update:
       GetPrevWindowRecord(wn,prevIVr);
@@ -831,19 +846,17 @@ begin
       if (IVr.OKFlag!=0) then begin
         goto LIVDClassTouchScreenPasteButtonDo;
       end;
-      if (IVr.Invalid!=0) then begin 
+      if (IVr.Invalid!=0) then begin
         goto LIVDClassTouchScreenPasteButtonDo; 
       end;
   end;
   if (found) then begin
     rwcnt = MatRowCnt(POSBr);
-    
     if (butnr>rwcnt) then begin
       goto LIVDClassTouchScreenPasteButtonDo;
     end;
-    
     MatRowGet(POSBr,butnr-1,POSBrw);
-    switch (POSBrw.ButtonType) begin
+    switch (POSBrw.ButtonType) begi
       case kPOSButtonTypeItem:
         PutWindowString(wn,"touchscreenitem",POSBrw.Code);
         PutWindowString(wn,"touchscreenitemqty",1.00);
@@ -1037,6 +1050,9 @@ begin
       case 203:
         RebateVoucherItemsReturn;
         goto LIVDClassTouchScreenPasteButtonDo; //GOTO RUSWINDOWFUNCTION.hal
+	  case 204:
+		ChangeObjects(POSBrw.Code);
+		goto LIVDClassTouchScreenPasteButtonDo;
     end;
   end;
 LIVDClassTouchScreenPasteButtonDo:;
