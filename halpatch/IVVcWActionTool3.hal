@@ -1958,35 +1958,37 @@ begin
 		CUr.Code = IVr.CustCode;
 		if (readfirstmain(CUr,1,true)) then begin
 		end;
-		if(CUr.CustCat=="WEB" or CUr.CustCat=="RETAI")then begin
-			if (CUr.RebCode!=IVr.RebCode) then begin
-				IVr.RebCode = CUr.RebCode;
-				IVDUpdatePrices(IVr,false);
-			end;
+		if(CUr.Code!="EXPO" and CUr.Code!="EXPO1")then begin
+			if(CUr.CustCat=="WEB" or CUr.CustCat=="RETAI")then begin
+				if (CUr.RebCode!=IVr.RebCode) then begin
+					IVr.RebCode = CUr.RebCode;
+					IVDUpdatePrices(IVr,false);
+				end;
 		
-			BlockLoad(OTDr);
-			sum = IVVcCountSum(IVr);
-			Rebr.Code = CUr.RebCode;
-			if (readfirstmain(Rebr,1,true)) then begin
-				CU_Rebcode = Rebr.vra0;
-			end;
-			mtrw = matrowcnt(OTDr);
-			if (mtrw!=0) then begin
-				for (i = 0; i < mtrw; i = i + 1) begin
-					matrowget(OTDr,i,OTDrw);
-					if (sum >= OTDrw.Sum)then begin
-						Rebr.Code = OTDrw.RebCode;
-						if (readfirstmain(Rebr,1,true)) then begin
-							OTD_Rebcode = Rebr.vra0;
-							if (CU_Rebcode < OTD_Rebcode) then begin
-								IVr.RebCode = OTDrw.RebCode;
-								changed = true;
+				BlockLoad(OTDr);
+				sum = IVVcCountSum(IVr);
+				Rebr.Code = CUr.RebCode;
+				if (readfirstmain(Rebr,1,true)) then begin
+					CU_Rebcode = Rebr.vra0;
+				end;
+				mtrw = matrowcnt(OTDr);
+				if (mtrw!=0) then begin
+					for (i = 0; i < mtrw; i = i + 1) begin
+						matrowget(OTDr,i,OTDrw);
+						if (sum >= OTDrw.Sum)then begin
+							Rebr.Code = OTDrw.RebCode;
+							if (readfirstmain(Rebr,1,true)) then begin
+								OTD_Rebcode = Rebr.vra0;
+								if (CU_Rebcode < OTD_Rebcode) then begin
+									IVr.RebCode = OTDrw.RebCode;
+									changed = true;
+								end;
 							end;
 						end;
 					end;
-				end;
-				if(changed)then begin
-					IVDUpdatePrices(IVr,false);
+					if(changed)then begin
+						IVDUpdatePrices(IVr,false);
+					end;
 				end;
 			end;
 		end;

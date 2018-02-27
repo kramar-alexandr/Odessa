@@ -684,7 +684,7 @@ begin
 	val 					OTD_Rebcode;
 	record CUVc CUr; // Edit Dima ************* 2018-02-21 11:14 AM
 	
-	if(IVr.CustCode!="NONAME")then begin// Edit ************************** BPI Ukraine - KramarAlexandr - Wednesday, 21 February 2018 15:57:19
+	if(IVr.CustCode!="NONAME" and IVr.CustCode!="EXPO" and IVr.CustCode!="EXPO1")then begin// Edit ************************** BPI Ukraine - KramarAlexandr - Wednesday, 21 February 2018 15:57:19
 		CUr.Code = IVr.CustCode;
 		readfirstmain(CUr,1,true);
 		if (CUr.ManualRecountClient==0) then begin
