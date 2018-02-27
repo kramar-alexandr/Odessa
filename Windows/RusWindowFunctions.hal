@@ -853,7 +853,6 @@ begin
 	  case 204:
 		AddTouchScreenPasteButton(h,v,width,heighttemp,procstr,i+1,lblstr,POSBrw.colnr);
 		procstr = "";
-		goto LLDrawPOSButtons_RUS;
       case kPOSButtonTypeBlank:
         goto LLDrawPOSButtons_RUS;
     end;
