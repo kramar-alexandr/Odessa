@@ -265,7 +265,7 @@ begin
 						end;
 						if (CU_Rebcode < OTD_Rebcode) then begin
 							CUr.RebCode = OTDrw.RebCode;
-							RecordStore(Cur,true);
+							//RecordStore(Cur,true);
 						end;
 					end;
 				end;

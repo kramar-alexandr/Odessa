@@ -378,7 +378,7 @@ begin
 		messagebox(31181, "");
 	end;
   end;
-  RecordStore(CU2r,true);	  
+  //RecordStore(CU2r,true);	  
 end;
 
 global
