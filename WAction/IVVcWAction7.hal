@@ -780,6 +780,7 @@ begin
 		IVr.Objects = IVr.Objects & New_Obj;
 	end;
 	PutWindowRecord(wn,IVr);
+	Messagebox(0,New_Obj);
 	return;
 end;
 
@@ -1051,8 +1052,8 @@ begin
         RebateVoucherItemsReturn;
         goto LIVDClassTouchScreenPasteButtonDo; //GOTO RUSWINDOWFUNCTION.hal
 	  case 204:
-		ChangeObjects(POSBrw.Code);
-		goto LIVDClassTouchScreenPasteButtonDo;
+			ChangeObjects(POSBrw.Code);
+			goto LIVDClassTouchScreenPasteButtonDo;
     end;
   end;
 LIVDClassTouchScreenPasteButtonDo:;
