@@ -3552,7 +3552,7 @@ begin
 					if (curDate<AddDay(nextCUDR,-RebVchB.GenVauchersBeforeDays)) then begin testf = false; end;
 					if (curDate>AddDay(nextCUDR,workdayto)) then begin testf = false; end;
 										
-					if(CUr.CustCat!="RETAI")then begin
+					if(CUr.CustCat!="RETAI" and CUr.CustCat!="WEB")then begin
 						testf = false;
 					end;
 										
