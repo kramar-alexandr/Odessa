@@ -1454,7 +1454,9 @@ BEGIN
   end;
   switch (fieldname) begin// Edit ************************** BPI Ukraine - KramarAlexandr - Wednesday, 29 November 2017 14:05:31
 		case "SalesMan":
-			res = usercanaction("ViewCostPrice",false);		
+			res = usercanaction("ViewCostPrice",false);	
+		case "SalesGroup":
+			res = usercanaction("ViewCostPrice",false);	
 	end;
   
   
