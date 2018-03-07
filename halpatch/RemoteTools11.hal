@@ -48,6 +48,7 @@ external function Boolean PasteCustInInv(var record IVVc);
 external function LongInt GetCurUserLastNr(string);
 external procedure GetItemSalesAccFromOR(record ORVc,var string);
 external procedure SimpleNormPhoneNumber(string, var string);// Edit ************************** BPI Ukraine - KramarAlexandr - вґвторок, 6 лютого 2018 р. о 23:00:22
+external procedure IVVcRebCodeCound(var record IVVc);// Edit ************************** BPI Ukraine - KramarAlexandr - Wednesday, 7 March 2018 11:10:08
 
 
 procedure GetItemDebtorsAcc(record ORVc ORr,var string debtorsacc)
@@ -997,6 +998,9 @@ begin
     if(nonblank(CUr.CurncyCode))then begin	//	********** Edit by Victor 04.11.14	********
 	    curcode = CUr.CurncyCode;
 	end;
+	
+	IVVcRebCodeCound(IVp);// Edit ************************** BPI Ukraine - KramarAlexandr - Wednesday, 7 March 2018 11:09:50
+	
 	if (Modb.TouchScreenLook!=0 and LMb.TouchScreenLook!=0) then begin		//	********** Edit by Victor 31.10.14	********
 		curcode = "UAH_R";
 	end;
