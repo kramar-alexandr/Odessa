@@ -4286,3 +4286,15 @@ Begin
 	
 return;
 end;
+
+
+global updating procedure UpdateDopFuncMn()
+begin
+	record ModuleBlock MBb;
+	
+	blockload(MBb);
+		MBb.AllowSameIP = 1;
+	blockstore(MBb);
+
+return;
+end;
