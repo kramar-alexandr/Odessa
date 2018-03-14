@@ -1371,7 +1371,7 @@ BEGIN
     case "PromotionCode": res = true;
   end;
   
-  if(res and ORr.SerNr>0)then begin// Edit ************************** Wednesday, 16 August 2017 10:03:43
+  if(res and ORr.SerNr>0 and usercanaction("AllowEditORwithIV",false)==false)then begin// Edit ************************** Wednesday, 16 August 2017 10:03:43
   	switch (fieldname) begin
 			case "ArtCode":
 				IVr.OrderNr = ORr.SerNr;
@@ -1379,7 +1379,35 @@ BEGIN
 				if(res)then begin
 					SHr.OrderNr = ORr.SerNr;
 					res = Readfirstkey("OrderKey",SHr,1,true)==false;
-				end;     
+				end; 
+			case "Quant":
+				IVr.OrderNr = ORr.SerNr;
+				res = Readfirstkey("OrderNr",IVr,1,true)==false;
+				if(res)then begin
+					SHr.OrderNr = ORr.SerNr;
+					res = Readfirstkey("OrderKey",SHr,1,true)==false;
+				end; 
+			case "Price":
+				IVr.OrderNr = ORr.SerNr;
+				res = Readfirstkey("OrderNr",IVr,1,true)==false;
+				if(res)then begin
+					SHr.OrderNr = ORr.SerNr;
+					res = Readfirstkey("OrderKey",SHr,1,true)==false;
+				end; 
+			case "Sum":
+				IVr.OrderNr = ORr.SerNr;
+				res = Readfirstkey("OrderNr",IVr,1,true)==false;
+				if(res)then begin
+					SHr.OrderNr = ORr.SerNr;
+					res = Readfirstkey("OrderKey",SHr,1,true)==false;
+				end; 
+			case "vRebate":
+				IVr.OrderNr = ORr.SerNr;
+				res = Readfirstkey("OrderNr",IVr,1,true)==false;
+				if(res)then begin
+					SHr.OrderNr = ORr.SerNr;
+					res = Readfirstkey("OrderKey",SHr,1,true)==false;
+				end;    
     end;     
   end;
   if(res==false)then begin
@@ -1426,7 +1454,9 @@ BEGIN
   end;
   switch (fieldname) begin// Edit ************************** BPI Ukraine - KramarAlexandr - Wednesday, 29 November 2017 14:05:31
 		case "SalesMan":
-			res = usercanaction("ViewCostPrice",false);		
+			res = usercanaction("ViewCostPrice",false);	
+		case "SalesGroup":
+			res = usercanaction("ViewCostPrice",false);	
 	end;
   
   
