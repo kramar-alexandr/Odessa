@@ -372,6 +372,7 @@ begin
 
 	
 	Maintenance("FixIHCostSM",MyVClass,FixIHCostSM,modDBMain);  //Edit**********Dima, 28.01.2014
+	Maintenance("UpdateDopFuncMn",MyVClass,UpdateDopFuncMn,modDBMain);
 	
   Maintenance("RecalcSumSales",RecalcSumSalesVClass,RecalcSumSalesMn,modDBMain);  //Edit**********Dima, 28.01.2014
   
