@@ -2,7 +2,7 @@ external procedure SortStrArray(var array string);
 external function roundmode SetRoundModeD(Integer);
 external function val AbsoluteVal(val);
 
-procedure CrConsigSaleSumUp(var record ConsSaleVc ConsSaler)
+global procedure CrConsigSaleSumUp(var record ConsSaleVc ConsSaler)
 begin
 	row ConsSaleVc ConsSalerw;
 	integer i,mtrw;

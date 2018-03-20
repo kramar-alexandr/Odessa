@@ -288,7 +288,81 @@ return;
 end;
 
 
+global procedure ExportAllToExcelConsSaleRn(record RcVc RepSpec)	//Edit--------Dima 
+begin
+  record ConsSaleVc ConsSaler;
+  row ConsSaleVc ConsSalerw;
+  Integer rwcnt,i,wn,cnt;
+  val total;
+  
+  ConsSaler.SerNr = RepSpec.long1;
+  if (ReadFirstMain(ConsSaler,1,true)) then begin	  
+  rwcnt=MatRowCnt(ConsSaler);
+ 
+	StartReportJob("ExportAllToExcel");
+	
+	EndHeader;
 
+	SetRepCol(2,50);
+	SetRepCol(3,100);
+	SetRepCol(4,150);
+	SetRepCol(5,200);
+	SetRepCol(6,250);
+	SetRepCol(7,300);
+	SetRepCol(8,350);
+	SetRepCol(9,400);
+	SetRepCol(10,450);
+	SetRepCol(11,500);
+	SetRepCol(12,550);
+	SetRepCol(13,600);
+
+
+	StartFormat(15);
+	OutString(0,0,"Товар",true);
+	OutString(2,0,"Кор.",true);
+	OutString(3,0,"Кол-во",false);
+	OutString(4,0,"Название",false);
+	OutString(5,0,"KK",false);
+	OutString(5,0,"Сч/ф",false);
+	OutString(5,0,"Цена продажи",false);
+	OutString(5,0,"Цена ком",false);
+	OutString(5,0,"Сумма",false);
+	OutString(5,0,"Терм. Цена",false);
+	OutString(5,0,"Терм. Сумма",false);
+	EndFormat;
+	Black_Divider(0,1);
+	cnt = 1;
+	for(i=0;i<rwcnt;i=i+1) begin
+		MatRowGet(ConsSaler,i,ConsSalerw)
+			StartFormat(15);			
+			OutString(0,0,ConsSalerw.ArtCode,true);
+			OutString(2,0,ConsSalerw.SelQty,true);
+			OutString(3,0,ConsSalerw.Qty,false);
+			OutString(4,0,ConsSalerw.Spec,false);
+			OutString(5,0,ConsSalerw.CCFlag,false);
+			OutString(5,0,ConsSalerw.Invoice,false);
+			OutString(5,0,ConsSalerw.SelPrice,false);
+			OutString(5,0,ConsSalerw.Price,false);
+			OutString(5,0,ConsSalerw.Sum,false);
+			OutString(5,0,ConsSalerw.TermPrice,false);
+			OutString(5,0,ConsSalerw.TermSum,false);
+			total = total + ConsSalerw.SelPrice*ConsSalerw.SelQty;
+			EndFormat;	
+			cnt = cnt + 1;
+	end;	
+	StartFormat(15);
+		OutString(0,0,"",true);
+		OutString(2,0,"",true);
+		OutString(3,0,"",false);
+		OutString(4,0,"Всего",false);
+		OutString(5,0,total,false);
+	EndFormat;	
+	EndJob;
+
+  end;
+
+return;
+end;
 
 global procedure ExportTableToExcelStockMovRn(record RcVc RepSpec)	//Edit--------Dima 
 begin	

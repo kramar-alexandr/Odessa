@@ -11793,10 +11793,14 @@ begin
   MatCol(1,-180,"Цена продажи",0,SelPrice,true,0);
   MatCol(1,-120,"Цена ком",0,Price,true,0);
   MatCol(1,-60,"Сумма",0,Sum,true,0);
+  MatCol(1,-10,"ТЦ",0,TermPrice,true,0);
+  MatCol(1,-5,"ТС",0,TermSum,true,0);
   InsertRowTest;
   DeleteRowTest;
   EndMatrix;
   SpecialMenu("Выгрузить в буфер",'r',4,"ExportToExcelConsSaleDsm");
+  SpecialMenu("Выгрузить для редактирования",'',4,"ExportAllToExcelConsSaleDsm");
+  SpecialMenu("Очистить строки",'',4,"ClearRowsConsSaleDsm");
   EndWindow;
 end;
 
