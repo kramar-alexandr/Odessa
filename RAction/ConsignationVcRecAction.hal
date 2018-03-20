@@ -42,9 +42,7 @@ begin
 		matrowput(ConsSaler,i,ConsSalerw);
 	  
 	  if(ConsSalerw.Price>ConsSalerw.SelPrice)then begin
-			ConsSalerw.SelQty = 0;
-			
-			
+			ConsSalerw.SelQty = 0;			
 		end;
 		ConsSalerw.TermSum = round(ConsSalerw.SelQty * ConsSalerw.TermPrice,SetRoundModeD(2));
 		matrowput(ConsSaler,i,ConsSalerw);
