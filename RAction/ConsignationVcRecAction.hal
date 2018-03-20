@@ -44,10 +44,10 @@ begin
 	  if(ConsSalerw.Price>ConsSalerw.SelPrice)then begin
 			ConsSalerw.SelQty = 0;
 			
-			matrowput(ConsSaler,i,ConsSalerw);
+			
 		end;
 		ConsSalerw.TermSum = round(ConsSalerw.SelQty * ConsSalerw.TermPrice,SetRoundModeD(2));
-		
+		matrowput(ConsSaler,i,ConsSalerw);
 		
 	  corqty = corqty + ConsSalerw.SelQty;
 	  qty = qty + ConsSalerw.Qty;
