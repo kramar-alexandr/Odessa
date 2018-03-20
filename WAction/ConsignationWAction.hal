@@ -1,0 +1,36 @@
+
+global
+function Boolean ConsSaleDClassActiveEditField(Integer wn,string fieldname,Integer fn,Integer wnst,Integer rownr,Integer changed)
+BEGIN
+  Boolean res;
+  record ConsSaleVc ConsSaler;
+  
+  res = true;
+	GetWindowRecord(wn,ConsSaler);
+	if(ConsSaler.OKFlag>0)then begin
+  	res = false;
+  end;
+
+  ConsSaleDClassActiveEditField = res;
+  RETURN;
+END;
+
+
+
+global 
+function Boolean ConsSaleDClassDeleteRowTest(Integer wn,Integer rownr)
+begin
+  record ConsSaleVc ConsSaler;
+  Boolean res;
+  Integer updatemode;
+
+  res = true;
+  res = true;
+	GetWindowRecord(wn,ConsSaler);
+	if(ConsSaler.OKFlag>0)then begin
+  	res = false;
+  end;
+  
+  ConsSaleDClassDeleteRowTest = res;
+  return;
+end;
