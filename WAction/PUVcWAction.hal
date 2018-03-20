@@ -418,6 +418,21 @@ return;
 end;
 
 
+global procedure ImportRowsConsSaleDsm()
+begin
+	record ConsSaleVc ConsSaler;
+  record RcVc RepSpec;
+  integer wn,i,mtrw;
+  
+  wn = CurWindow;
+  deselectwindow(wn,true);
+  OpenWindow("OpenFileDialogClass",0,wn,"","",RepSpec);
+
+return;
+end;
+
+
+
 global // added -------------------Dima  27.11.2014
 procedure ExportToExcelStockMovDsm()
 begin

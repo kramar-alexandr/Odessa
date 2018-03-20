@@ -11801,6 +11801,7 @@ begin
   SpecialMenu("Выгрузить в буфер",'r',4,"ExportToExcelConsSaleDsm");
   SpecialMenu("Выгрузить для редактирования",'',4,"ExportAllToExcelConsSaleDsm");
   SpecialMenu("Очистить строки",'',4,"ClearRowsConsSaleDsm");
+  SpecialMenu("Импорт строк из файла",'',4,"ImportRowsConsSaleDsm");
   EndWindow;
 end;
 
@@ -12032,5 +12033,27 @@ begin
   RadioButton(h,v+=16,1,0,"Отмеченные",flags[3]);
   RadioButton(h,v+=16,2,0,"Не отмеченные",flags[3]);
   
+  EndWindow;
+end;
+
+
+
+
+
+window OpenFileDialogClass:1
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  real h,v,vs;
+  WindowBegin("Укажите файл",OpenFileDialogClass,CGother,RcType);
+  SetWRect(64,80,400,200);
+  UseView(RcVc);
+  ToolBar;
+  h = -200;
+  HalPushButton(h,5,h+80,25,"OpenManagerPasswordClassCancel","Отмена");
+  h = h+92;
+  PushButton(h,5,h+80,22,ToolOK,"Ок");
+  EndToolBar;
+  v = 16; vs = 20; h = 100;
+  EditFieldTL(h,v+=vs, 150,"Файл", M4Code,Normal,-20,f1,false,PastePictureName);
   EndWindow;
 end;
