@@ -1,0 +1,100 @@
+remote procedure CrConsigSaleSumUp(var record ConsSaleVc);
+
+SetLangMode(LangRussian,"RUS",0);  
+
+global
+function Boolean ConsSaleDClassActiveEditField(Integer wn,string fieldname,Integer fn,Integer wnst,Integer rownr,Integer changed)
+BEGIN
+  Boolean res;
+  record ConsSaleVc ConsSaler;
+  
+  res = true;
+	GetWindowRecord(wn,ConsSaler);
+	if(ConsSaler.OKFlag>0)then begin
+  	res = false;
+  end;
+
+  ConsSaleDClassActiveEditField = res;
+  RETURN;
+END;
+
+
+
+global 
+function Boolean ConsSaleDClassDeleteRowTest(Integer wn,Integer rownr)
+begin
+  record ConsSaleVc ConsSaler;
+  Boolean res;
+  Integer updatemode;
+
+  res = true;
+  res = true;
+	GetWindowRecord(wn,ConsSaler);
+	if(ConsSaler.OKFlag>0)then begin
+  	res = false;
+  end;
+  
+  ConsSaleDClassDeleteRowTest = res;
+  return;
+end;
+
+
+global procedure OpenFileDialogClassOnOkWindow()
+begin
+	integer wn,mwn;
+	record ConsSaleVc ConsSaler;
+	row ConsSaleVc ConsSalerw;
+	record RcVc RepSpec;
+	area afile,aline;
+	string 255 lin,fild;
+	longint lines,i,j;
+	
+	wn = curwindow;
+	deselectwindow(wn,true);
+	getwindowrecord(wn,RepSpec);
+	mwn = motherwindow(wn);
+	getwindowrecord(mwn,ConsSaler);
+	closewindow(wn);
+	
+	if(fileexists(RepSpec.f1))then begin
+		addfiletoarea(RepSpec.f1,afile,0);
+		lines = CountLinesInArea(afile);
+		For(i=0;i<lines;i=i+1) begin
+			//lin = "";
+	  	//lin = getlinefromarea(afile);
+	  	//setareazerosize(aline);
+	  	//addtexttoarea(lin,aline);
+	  	ConsSalerw.ArtCode = "";
+			For(j=0;j<11;j=j+1) begin
+				fild = "";
+				fild = GetTabTextFromArea(i,j,afile);
+				if(nonblank(fild))then begin
+					switch(j)begin
+						case 0:ConsSalerw.ArtCode = fild;
+						case 1:ConsSalerw.SelQty = stringtoval(fild,M4Val);
+						case 2:ConsSalerw.Qty = stringtoval(fild,M4Val);
+						case 3:ConsSalerw.Spec = fild;
+						case 4:ConsSalerw.CCFlag = stringtoval(fild,M4Val);
+						case 5:ConsSalerw.Invoice = stringtolongint(fild);
+						case 6:ConsSalerw.SelPrice = stringtoval(fild,M4Val);
+						case 7:ConsSalerw.Price = stringtoval(fild,M4Val);
+						case 8:ConsSalerw.Sum = stringtoval(fild,M4Val);
+						case 9:ConsSalerw.TermPrice = stringtoval(fild,M4Val);
+						case 10:ConsSalerw.TermSum = stringtoval(fild,M4Val);
+					end;
+				end;
+			end; 
+			if(nonblank(ConsSalerw.ArtCode))then begin
+				matrowput(ConsSaler,matrowcnt(ConsSaler),ConsSalerw);
+			end;
+		end; 
+	end else begin
+		messagebox(0,"Файл не найден");
+	end;
+	if(matrowcnt(ConsSaler)>0)then begin
+		CrConsigSaleSumUp(ConsSaler);
+		putwindowrecord(mwn,ConsSaler);
+	end;
+	
+return;
+end;

@@ -62,6 +62,9 @@ external procedure Zebra_Printing(record RcVc);
 external function Boolean PUVcRowEFActiveCheck(string,Integer,Integer,Integer);
 external function Boolean PUVcEFActiveTest(Integer,Integer,record PUVc);
 external procedure PrintEAN13PODsm();
+remote procedure CrConsigSaleSumUp(var record ConsSaleVc);
+
+
 
 function val UnitCalcQty(string Unittext,val UnitXval,val UnitYval,val UnitZval,val defqty)
 BEGIN
@@ -372,6 +375,62 @@ begin
   
 return;
 end;
+
+global  // added -------------------Dima  27.11.2014
+procedure ExportAllToExcelConsSaleDsm()
+begin
+  record ConsSaleVc ConsSaler;
+  record RcVc RepSpec;
+  integer wn;
+
+  wn = CurWindow;
+  GetWindowRecord(wn,ConsSaler);
+  RepSpec.Media = mtClipBoard;
+  RepSpec.repname = "ExportAllToExcelConsSaleRn";
+  RepSpec.flags[0] = wn;
+  RepSpec.long1 = ConsSaler.SerNr;
+  RunReport(RepSpec,0);
+  
+return;
+end;
+
+
+global procedure ClearRowsConsSaleDsm()
+begin
+	record ConsSaleVc ConsSaler;
+  record RcVc RepSpec;
+  integer wn,i,mtrw;
+  
+  wn = CurWindow;
+  deselectwindow(wn,true);
+  GetWindowRecord(wn,ConsSaler);
+  
+  if(ConsSaler.OKFlag==0)then begin
+		mtrw = matrowcnt(ConsSaler);
+  	For(i=0;i<mtrw;i=i+1) begin
+	  	matrowdelete(ConsSaler,0);
+		end; 
+  end;
+  CrConsigSaleSumUp(ConsSaler);
+  PutWindowRecord(wn,ConsSaler);
+
+return;
+end;
+
+
+global procedure ImportRowsConsSaleDsm()
+begin
+	record ConsSaleVc ConsSaler;
+  record RcVc RepSpec;
+  integer wn,i,mtrw;
+  
+  wn = CurWindow;
+  deselectwindow(wn,true);
+  OpenWindow("OpenFileDialogClass",0,wn,"","",RepSpec);
+
+return;
+end;
+
 
 
 global // added -------------------Dima  27.11.2014

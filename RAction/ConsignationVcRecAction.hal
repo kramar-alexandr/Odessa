@@ -2,7 +2,7 @@ external procedure SortStrArray(var array string);
 external function roundmode SetRoundModeD(Integer);
 external function val AbsoluteVal(val);
 
-procedure CrConsigSaleSumUp(var record ConsSaleVc ConsSaler)
+global procedure CrConsigSaleSumUp(var record ConsSaleVc ConsSaler)
 begin
 	row ConsSaleVc ConsSalerw;
 	integer i,mtrw;
@@ -27,42 +27,31 @@ begin
 				
 				if(TrHs)then begin
 					if(SalesDatar.ArtCode==ConsSalerw.ArtCode)then begin
-						ConsSalerw.Price = SalesDatar.CommisionPrice;
-						ConsSalerw.Sum = ConsSalerw.Price * ConsSalerw.Qty;
+						ConsSalerw.Price = round(SalesDatar.CommisionPrice,SetRoundModeD(2));
+						ConsSalerw.Sum = round(ConsSalerw.Price * ConsSalerw.Qty,SetRoundModeD(2));
 						matrowput(ConsSaler,i,ConsSalerw);
 						TrHS = false;
 					end;
 				end;
 			end;
 			resetloop(SalesDatar);
-			
-			/*PLr.PLCode = "KOMPR";
-			PLr.ArtCode = ConsSalerw.ArtCode;
-			if(readfirstmain(PLr,2,true))then begin
-				ConsSalerw.Price = PLr.ExVatPrice;
-				ConsSalerw.Sum = ConsSalerw.Price * ConsSalerw.Qty;
-				matrowput(ConsSaler,i,ConsSalerw);
-				matrowget(ConsSaler,i,ConsSalerw);
-			end;*/
 		end;
 		
-		ConsSalerw.Sum = ConsSalerw.SelQty * ConsSalerw.SelPrice;
+		ConsSalerw.Sum = round(ConsSalerw.SelQty * ConsSalerw.SelPrice,SetRoundModeD(2));
 		
 		matrowput(ConsSaler,i,ConsSalerw);
 	  
 	  if(ConsSalerw.Price>ConsSalerw.SelPrice)then begin
-			ConsSalerw.SelQty = 0;
-			
-			matrowput(ConsSaler,i,ConsSalerw);
+			ConsSalerw.SelQty = 0;			
 		end;
-		ConsSalerw.TermSum = ConsSalerw.SelQty * ConsSalerw.TermPrice;
-		
+		ConsSalerw.TermSum = round(ConsSalerw.SelQty * ConsSalerw.TermPrice,SetRoundModeD(2));
+		matrowput(ConsSaler,i,ConsSalerw);
 		
 	  corqty = corqty + ConsSalerw.SelQty;
 	  qty = qty + ConsSalerw.Qty;
-	  corsum = corsum + ConsSalerw.SelQty * ConsSalerw.SelPrice;
-	  salesum = salesum + ConsSalerw.Qty * ConsSalerw.SelPrice;
-	  sum = sum + ConsSalerw.Qty * ConsSalerw.Sum;
+	  corsum = corsum + round(ConsSalerw.SelQty * ConsSalerw.SelPrice,SetRoundModeD(2));
+	  salesum = salesum + round(ConsSalerw.Qty * ConsSalerw.SelPrice,SetRoundModeD(2));
+	  sum = sum + round(ConsSalerw.Qty * ConsSalerw.Sum,SetRoundModeD(2));
 	  ccsum = ccsum + ConsSalerw.TermSum;
 	  
 	end; 
@@ -99,8 +88,8 @@ begin
 				
 				if(TrHs)then begin
 					if(SalesDatar.ArtCode==ConsSalerw.ArtCode)then begin
-						ConsSalerw.SelPrice = AbsoluteVal(SalesDatar.Sum*SalesDatar.Rate/SalesDatar.Quant);
-						ConsSalerw.TermPrice = AbsoluteVal(SalesDatar.PayedByCCard/SalesDatar.Quant);						
+						ConsSalerw.SelPrice = round(AbsoluteVal(SalesDatar.Sum*SalesDatar.Rate/SalesDatar.Quant),SetRoundModeD(2));
+						ConsSalerw.TermPrice = round(AbsoluteVal(SalesDatar.PayedByCCard/SalesDatar.Quant),SetRoundModeD(2));						
 						matrowput(ConsSaler,i,ConsSalerw);
 						TrHS = false;
 					end;
@@ -393,7 +382,8 @@ begin
 						ConsSalerw.Qty = ConsSalerw.Qty - IHr.Qty;
 						ConsSalerw.SelQty = ConsSalerw.Qty;
 						ConsSalerw.Sum = ConsSalerw.Sum - IHr.TotCostPrice * IHr.Qty;
-						ConsSalerw.Price = ConsSalerw.Sum / ConsSalerw.Qty;
+						ConsSalerw.Price = round(ConsSalerw.Sum / ConsSalerw.Qty,SetRoundModeD(2));
+						ConsSalerw.Sum = ConsSalerw.Price * ConsSalerw.Qty;
 						ConsSaler.TotSum = ConsSaler.TotSum - IHr.TotCostPrice * IHr.Qty;
 						matrowput(ConsSaler,i,ConsSalerw);
 						sourceIHr.Qty2 = sourceIHr.Qty2 - remqty;
@@ -407,7 +397,8 @@ begin
 						ConsSalerw.Qty = ConsSalerw.Qty - IHr.Qty;
 						ConsSalerw.SelQty = ConsSalerw.Qty;
 						ConsSalerw.Sum = ConsSalerw.Sum - IHr.TotCostPrice * IHr.Qty;
-						ConsSalerw.Price = ConsSalerw.Sum / ConsSalerw.Qty;
+						ConsSalerw.Price = round(ConsSalerw.Sum / ConsSalerw.Qty,SetRoundModeD(2));
+						ConsSalerw.Sum = ConsSalerw.Price * ConsSalerw.Qty;
 						ConsSaler.TotSum = ConsSaler.TotSum - IHr.TotCostPrice * IHr.Qty;
 						matrowput(ConsSaler,i,ConsSalerw);
 						remqty = remqty - sourceIHr.Qty2;
@@ -1167,139 +1158,6 @@ begin
 		end;
 	end;
 	
-	/*IHr.ArtCode = artcode;
-	IHr.Location = location;
-	IHr.TransDate = addday(frdate,-1);
-	TrHs = true;
-	while(loopbackkey("ArtCodeLoc",IHr,3,TrHs))begin
-		testf = true;
-		if(IHr.ArtCode!=artcode)then begin TrHs = false; testf = false; end;
-		if(IHr.Location!=location)then begin TrHs = false; testf = false; end;
-		if(IHr.TransDate<td)then begin TrHs = false; testf = false; end;
-		if(IHr.StockAffectf==0)then begin testf = false; end;
-		
-		if(testf)then begin
-			if(IHr.FileName=="IVVc")then begin 
-				qty = qty - IHr.Qty;
-				IVr.SerNr = IHr.TransNr;
-				if(readfirstmain(IVr,1,true))then begin
-					isterm = 0;
-					mtrw = matrowcnt(IVr);
-					For(i=0;i<mtrw;i=i+1) begin
-						matrowget(IVr,i,IVrw);
-	  				if(IVrw.stp==kInvoiceRowTypeCreditCardPayment)then begin
-	  					isterm = 1;
-	  				end;
-					end; 
-				
-					matrowget(IVr,IHr.Row,IVrw);
-					keyv = "";
-					keyv = AbsoluteVal(round(IVrw.Sum/IVrw.Quant,SetRoundModeD(2))) & ";" & IVr.SerNr;
-					
-					if(vinvflag[IVr.SerNr]==false)then begin
-						vinvflag[IVr.SerNr] = true;
-						ivser[prcnt] = IVr.SerNr;
-						ccflag[prcnt] = isterm;
-					end;
-					if(vpflag[keyv])then begin
-						aqty[vpcnt[keyv]] = aqty[vpcnt[keyv]] - IHr.Qty;
-						ivser[prcnt] = IVr.SerNr;
-						ccflag[prcnt] = isterm;
-					end else begin
-						prices[prcnt] = AbsoluteVal(round(IVrw.Sum/IVrw.Quant,SetRoundModeD(2)));
-						ivser[prcnt] = IVr.SerNr;
-						ccflag[prcnt] = isterm;
-						vpflag[keyv] = true;
-						vpcnt[keyv] = prcnt;
-						aqty[vpcnt[keyv]] = - IHr.Qty;
-						prcnt = prcnt + 1;
-					end;
-				end;
-			end;
-			if(IHr.FileName=="SHVc")then begin 
-				qty = qty - IHr.Qty;
-				SHr.SerNr = IHr.TransNr;
-				if(readfirstmain(SHr,1,true))then begin
-					matrowget(SHr,IHr.Row,SHrw);
-					ORr.SerNr = SHr.OrderNr;
-					if (ReadFirstMain(ORr,1,true)) then begin
-						matrowget(ORr,SHrw.OrdRow,ORrw);
-						isterm = 0;
-						if(ORr.NPPaymentType==0)then begin
-							isterm = 1;
-						end;
-						keyv = "";
-						keyv = AbsoluteVal(round(ORrw.Sum/ORrw.Quant,SetRoundModeD(2))) & ";" & ORr.SerNr;
-						
-						IVr.OrderNr = ORr.SerNr;
-						if(readfirstkey("OrderNr",IVr,1,true))then begin
-						end;
-						
-						if(vinvflag[ORr.SerNr]==false)then begin
-							vinvflag[ORr.SerNr] = true;
-							ivser[prcnt] = IVr.SerNr;
-							ccflag[prcnt] = isterm;
-						end;
-						if(vpflag[keyv])then begin
-							aqty[vpcnt[keyv]] = aqty[vpcnt[keyv]] - IHr.Qty;
-							ivser[prcnt] = IVr.SerNr;
-							ccflag[prcnt] = isterm;
-						end else begin
-							prices[prcnt] = AbsoluteVal(round(ORrw.Sum/ORrw.Quant,SetRoundModeD(2)));
-							ivser[prcnt] = IVr.SerNr;
-							ccflag[prcnt] = isterm;
-							vpflag[keyv] = true;
-							vpcnt[keyv] = prcnt;
-							aqty[vpcnt[keyv]] = - IHr.Qty;
-							prcnt = prcnt + 1;
-						end;
-					end;  
-				end;
-			end;
-			if(IHr.FileName=="RetVc")then begin 
-				qty = qty - IHr.Qty;
-				Retr.SerNr = IHr.TransNr;
-				if(readfirstmain(Retr,1,true))then begin
-					matrowget(Retr,IHr.Row,Retrw);
-					ORr.SerNr = Retr.OrdNr;
-					if (ReadFirstMain(ORr,1,true)) then begin
-						matrowget(ORr,Retrw.OrdRow,ORrw);
-						isterm = 0;
-						if(ORr.NPPaymentType==0)then begin
-							isterm = 1;
-						end;
-						keyv = "";
-						keyv = AbsoluteVal(round(ORrw.Sum/ORrw.Quant,SetRoundModeD(2))) & ";" & ORr.SerNr;
-						
-						IVr.OrderNr = ORr.SerNr;
-						if(readfirstkey("OrderNr",IVr,1,true))then begin
-						end;
-						
-						
-						if(vinvflag[ORr.SerNr]==false)then begin
-							vinvflag[ORr.SerNr] = true;
-							ivser[prcnt] = IVr.SerNr;
-							ccflag[prcnt] = isterm;
-						end;
-						if(vpflag[keyv])then begin
-							aqty[vpcnt[keyv]] = aqty[vpcnt[keyv]] - IHr.Qty;
-							ivser[prcnt] = IVr.SerNr;
-							ccflag[prcnt] = isterm;
-						end else begin
-							prices[prcnt] = AbsoluteVal(round(ORrw.Sum/ORrw.Quant,SetRoundModeD(2)));
-							ivser[prcnt] = IVr.SerNr;
-							ccflag[prcnt] = isterm;
-							vpflag[keyv] = true;
-							vpcnt[keyv] = prcnt;
-							aqty[vpcnt[keyv]] = - IHr.Qty;
-							prcnt = prcnt + 1;
-						end;
-					end;  
-				end;
-			end;
-		end;
-	end;*/
-	
 	resqty = qty;
 	
 return;
@@ -1533,8 +1391,8 @@ begin
 	  					ConsSalerw.SelPrice = prices[k];
 	  					ConsSalerw.Invoice = ivser[k];
 	  					ConsSalerw.CCFlag = ccflag[k];
-	  					ConsSalerw.TermPrice = AbsoluteVal(termsum[k]/qty[k]);
-	  					ConsSalerw.TermSum = termsum[k];
+	  					ConsSalerw.TermPrice = round(AbsoluteVal(termsum[k]/qty[k]),SetRoundModeD(2));
+	  					ConsSalerw.TermSum = ConsSalerw.TermPrice * qty[k];
 							matrowput(ConsSaler,mtrw,ConsSalerw);
 							mtrw = mtrw + 1;
 						end;
