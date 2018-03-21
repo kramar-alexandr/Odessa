@@ -334,6 +334,7 @@ begin
 Integer res;
 row StockMovVc SMrw;
 integer i,rwcnt;
+val sendqty;
 res = 0;
 
 	//if (SMr.Reserved>0) then begin
@@ -354,9 +355,16 @@ res = 0;
 					res = 20884;
   		end;	
 	end else begin
-  		if (CheckRemainQtyInStock(SMr,SMr.ThrouLocation)==false) then begin
-					res = 20884;
-  		end;	
+			rwcnt = MatRowCnt(SMr);
+			for(i=0;i<rwcnt;i=i+1) begin
+				MatRowGet(SMr,i,SMrw);
+				sendqty = sendqty + SMrw.SentQuant;
+			end;
+			if(sendqty>0)then begin
+				if (CheckRemainQtyInStock(SMr,SMr.ThrouLocation)==false) then begin
+						res = 20884;
+				end;	
+  		end;
 	end;
 
 LCheckUnOKStockMov:;
