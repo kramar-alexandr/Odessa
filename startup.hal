@@ -506,6 +506,8 @@ begin
   
   Maintenance("Create LoyaltyCards",MyVClass,CreateLoyaltyCard,modPOS);
   
+  Maintenance("Имена картам оляльности",MyVClass,CreateLoyaltyCardName,modPOS);
+  
   Maintenance("Add Spec To Cons",MyVClass,ConsFillSpec,modSL);
 	
   Import("Импорт цен",PLImportIClass,PLImportIn,modDI); //Added********************Dima 20.11.2014

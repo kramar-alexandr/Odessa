@@ -4202,6 +4202,27 @@ begin
 return;
 end;
 
+global updating procedure CreateLoyaltyCardName()
+begin
+	record CUVc CUr;
+	record LoyaltyCardVc LCr;
+	boolean testf,TrHs,testf1,changef;
+	val lastpoints;
+	
+	LCr.SerNr = "";
+	while(loopmain(LCr,1,true))begin
+		if(blank(LCr.CustName))then begin
+			CUr.Code = LCr.CustCode;
+			if(readfirstmain(CUr,1,true))then begin
+				LCr.CustName = CUr.Name;
+				recordstore(LCr,true);
+				//stepback(LCr);
+			end;
+		end;
+	end;
+	
+return;
+end;
 
 global updating procedure CreateLoyaltyCard()
 Begin
