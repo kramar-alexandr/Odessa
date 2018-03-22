@@ -748,6 +748,7 @@ begin
     if(readfirstkey("ActCustCode",LCr,1,true)==false)then begin
       recordnew(LCr);
       LCr.CustCode = CUr.Code;
+      LCr.CustName = CUr.Name;
       LCr.SerNr = "LC" & CUr.Code;
       LCr.LCMLevel = "1";
       resetloop(IVr);
