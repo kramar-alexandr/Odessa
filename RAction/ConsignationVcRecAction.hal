@@ -1607,7 +1607,7 @@ begin
 				Consignation2r.TransDate = RepSpec.d1;
 				TrHs2 = true;
 				while(loopkey("TransDate",Consignation2r,1,TrHs2))begin
-					TrHs2 = true;
+					testf2 = true;
 					if(Consignation2r.TransDate!=RepSpec.d1)then begin TrHs2 = false; testf2 = false; end;
 					if(Consignation2r.OKFlag!=1)then begin testf2 = false; end;
 					if(Consignationr.Location!=Consignation2r.Location)then begin testf2 = false; end;
