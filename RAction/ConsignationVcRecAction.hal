@@ -1599,7 +1599,8 @@ begin
 			if(Consignationr.OKFlag!=1)then begin testf = false; end;
 			if(nonblank(RepSpec.f1) and RepSpec.f1!=Consignationr.Comitent)then begin testf = false; end;
 			if(nonblank(RepSpec.f2) and RepSpec.f2!=Consignationr.Location)then begin testf = false; end;
-		
+			
+			logtext(0,"CrConsigInAllMn fro cs " & Consignationr.SerNr);
 			if(testf)then begin
 				totbal[1] = 0;
 				logtext(0,"Cr ConsIn for:" & Consignationr.Location & " comtnt " & Consignationr.Comitent);
