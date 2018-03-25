@@ -1132,6 +1132,7 @@ begin
 	rwcnt = matrowcnt(ConsInr);
 	if(rwcnt>0)then begin
 		ConsInr.SerNr = NextSerNr("ConsInVc",CurrentDate,-1,false,"");
+		ConsInr.TransDate = Consignationr.TransDate;
 		recordstore(ConsInr,true);
 		createrecordlink(ConsInr,currentcompany,Consignationr,currentcompany);
 		createrecordlink(Consignationr,currentcompany,ConsInr,currentcompany);
