@@ -1062,20 +1062,21 @@ begin
 		if(ConsInoldr.Comitent!=Consignation2r.Comitent)then begin testf = false; end;
 		
 		if(testf)then begin
-			logtext(0,"ConsInoldr " & ConsInoldr.SerNr);
 			mtrw = matrowcnt(ConsInoldr);
 			For(i=0;i<mtrw;i=i+1) begin
 				matrowget(ConsInoldr,i,ConsInOldrw);
 				if(artflag[ConsInOldrw.ArtCode])then begin
 					for(j=0;j<matrowcnt(ConsInr);j=j+1)begin
 						matrowget(ConsInr,j,ConsInrw);
-						ConsInr.TotSum = ConsInr.TotSum - ConsInrw.Sum;
-						ConsInr.TotQty = ConsInr.TotQty - ConsInrw.Qty;
-						ConsInrw.Qty = ConsInrw.Qty - ConsInOldrw.Qty;
-						ConsInrw.Sum = ConsInrw.Qty*ConsInrw.Price;
-						ConsInr.TotSum = ConsInr.TotSum + ConsInrw.Sum;
-						ConsInr.TotQty = ConsInr.TotQty + ConsInrw.Qty;
-						matrowput(ConsInr,j,ConsInrw);
+						if(ConsInrw.ArtCode==ConsInOldrw.ArtCode)then begin
+							ConsInr.TotSum = ConsInr.TotSum - ConsInrw.Sum;
+							ConsInr.TotQty = ConsInr.TotQty - ConsInrw.Qty;
+							ConsInrw.Qty = ConsInrw.Qty - ConsInOldrw.Qty;
+							ConsInrw.Sum = ConsInrw.Qty*ConsInrw.Price;
+							ConsInr.TotSum = ConsInr.TotSum + ConsInrw.Sum;
+							ConsInr.TotQty = ConsInr.TotQty + ConsInrw.Qty;
+							matrowput(ConsInr,j,ConsInrw);
+						end;
 					end;
 				end else begin
 					ConsInrw.ArtCode = ConsInOldrw.ArtCode;
@@ -1092,7 +1093,7 @@ begin
 		end;
 	end;
 	
-	/*TrHs = true;
+	TrHs = true;
 	ConsSaler.TransDate = Consignationr.TransDate;
 	while(loopkey("TransDate",ConsSaler,1,TrHs))begin
 		testf = true;
@@ -1107,13 +1108,15 @@ begin
 				if(artflag[ConsSalerw.ArtCode])then begin
 					for(j=0;j<matrowcnt(ConsInr);j=j+1)begin
 						matrowget(ConsInr,j,ConsInrw);
-						ConsInr.TotSum = ConsInr.TotSum - ConsInrw.Sum;
-						ConsInr.TotQty = ConsInr.TotQty - ConsInrw.Qty;
-						ConsInrw.Qty = ConsInrw.Qty + ConsSalerw.SelQty;
-						ConsInrw.Sum = ConsInrw.Qty*ConsInrw.Price;
-						ConsInr.TotSum = ConsInr.TotSum + ConsInrw.Sum;
-						ConsInr.TotQty = ConsInr.TotQty + ConsInrw.Qty;
-						matrowput(ConsInr,j,ConsInrw);
+						if(ConsInrw.ArtCode==ConsSalerw.ArtCode)then begin
+							ConsInr.TotSum = ConsInr.TotSum - ConsInrw.Sum;
+							ConsInr.TotQty = ConsInr.TotQty - ConsInrw.Qty;
+							ConsInrw.Qty = ConsInrw.Qty + ConsSalerw.SelQty;
+							ConsInrw.Sum = ConsInrw.Qty*ConsInrw.Price;
+							ConsInr.TotSum = ConsInr.TotSum + ConsInrw.Sum;
+							ConsInr.TotQty = ConsInr.TotQty + ConsInrw.Qty;
+							matrowput(ConsInr,j,ConsInrw);
+						end;
 					end;
 				end else begin
 					ConsInrw.ArtCode = ConsSalerw.ArtCode;
@@ -1128,7 +1131,7 @@ begin
 				end;
 			end;
 		end;
-	end;*/
+	end;
 	
 	rwcnt = matrowcnt(ConsInr);
 	if(rwcnt>0)then begin
