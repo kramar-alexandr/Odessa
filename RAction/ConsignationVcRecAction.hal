@@ -1053,7 +1053,7 @@ begin
 		
 	end;
 	
-	/*TrHs = true;
+	TrHs = true;
 	ConsInoldr.TransDate = Consignation2r.TransDate;
 	while(loopkey("TransDate",ConsInoldr,1,TrHs))begin
 		testf = true;
@@ -1091,7 +1091,7 @@ begin
 		end;
 	end;
 	
-	TrHs = true;
+	/*TrHs = true;
 	ConsSaler.TransDate = Consignationr.TransDate;
 	while(loopkey("TransDate",ConsSaler,1,TrHs))begin
 		testf = true;
