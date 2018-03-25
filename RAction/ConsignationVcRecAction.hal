@@ -1133,6 +1133,8 @@ begin
 	if(rwcnt>0)then begin
 		ConsInr.SerNr = NextSerNr("ConsInVc",CurrentDate,-1,false,"");
 		ConsInr.TransDate = Consignationr.TransDate;
+		ConsInr.Location = Consignationr.Location;
+		ConsInr.Comitent = Consignationr.Comitent;
 		recordstore(ConsInr,true);
 		createrecordlink(ConsInr,currentcompany,Consignationr,currentcompany);
 		createrecordlink(Consignationr,currentcompany,ConsInr,currentcompany);
@@ -1588,12 +1590,12 @@ begin
 	totbal[0] = 0;
 	totbal[1] = 0;
 	
-	if(nonblankdate(RepSpec.d1) and nonblankdate(RepSpec.d2))then begin
-		Consignationr.TransDate = RepSpec.d1;
+	if(nonblankdate(RepSpec.d1) and nonblankdate(RepSpec.d2) and RepSpec.d2>RepSpec.d1)then begin
+		Consignationr.TransDate = RepSpec.d2;
 		TrHs = true;
 		while(loopkey("TransDate",Consignationr,1,TrHs))begin
 			testf = true;
-			if(Consignationr.TransDate!=RepSpec.d1)then begin TrHs = false; testf = false; end;
+			if(Consignationr.TransDate!=RepSpec.d2)then begin TrHs = false; testf = false; end;
 			if(Consignationr.OKFlag!=1)then begin testf = false; end;
 			if(nonblank(RepSpec.f1) and RepSpec.f1!=Consignationr.Comitent)then begin testf = false; end;
 			if(nonblank(RepSpec.f2) and RepSpec.f2!=Consignationr.Location)then begin testf = false; end;
@@ -1601,16 +1603,16 @@ begin
 			if(testf)then begin
 				totbal[1] = 0;
 				logtext(0,"Cr ConsIn for:" & Consignationr.Location & " comtnt " & Consignationr.Comitent);
-				Consignation2r.TransDate = RepSpec.d2;
-				TrHs = true;
-				while(loopkey("TransDate",Consignation2r,1,TrHs))begin
+				Consignation2r.TransDate = RepSpec.d1;
+				TrHs2 = true;
+				while(loopkey("TransDate",Consignation2r,1,TrHs2))begin
 					TrHs2 = true;
-					if(Consignation2r.TransDate!=RepSpec.d2)then begin TrHs2 = false; testf2 = false; end;
+					if(Consignation2r.TransDate!=RepSpec.d1)then begin TrHs2 = false; testf2 = false; end;
 					if(Consignation2r.OKFlag!=1)then begin testf2 = false; end;
 					if(Consignationr.Location!=Consignation2r.Location)then begin testf2 = false; end;
 					if(Consignationr.Comitent!=Consignation2r.Comitent)then begin testf2 = false; end;
 				
-					if(TrHs2)then begin
+					if(testf2)then begin
 						CrConsigIn(Consignationr,Consignation2r,totbal);
 						logtext(0,"Start " & totbal[1]);
 					end;
