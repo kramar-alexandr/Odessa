@@ -1062,6 +1062,7 @@ begin
 		if(ConsInoldr.Comitent!=Consignation2r.Comitent)then begin testf = false; end;
 		
 		if(testf)then begin
+			logtext(0,"ConsInoldr " & ConsInoldr.SerNr);
 			mtrw = matrowcnt(ConsInoldr);
 			For(i=0;i<mtrw;i=i+1) begin
 				matrowget(ConsInoldr,i,ConsInOldrw);
