@@ -397,7 +397,7 @@ WindowBegin("CrConsigInAll",CrConsigInAllVClass,CGMnt,RcType);
   
   EditFieldTL(150,50,150,"Дата предыдущего слепка",M4Date,Normal,41,d1,false,pastecurdate);
   EditFieldTL(150,70,150,"Дата тукущего слепка",M4Date,Normal,41,d2,false,pastecurdate);
-  EditFieldTL(150,70,150,"Комисант",M4Date,Normal,41,f1,false,0);
+  EditFieldTL(150,90,150,"Комисант",M4Code,Normal,41,f1,false,0);
   
   EndWindow;
 end;
