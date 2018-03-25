@@ -1053,7 +1053,7 @@ begin
 		
 	end;
 	
-	TrHs = true;
+	/*TrHs = true;
 	ConsInoldr.TransDate = Consignation2r.TransDate;
 	while(loopkey("TransDate",ConsInoldr,1,TrHs))begin
 		testf = true;
@@ -1127,7 +1127,7 @@ begin
 				end;
 			end;
 		end;
-	end;
+	end;*/
 	
 	rwcnt = matrowcnt(ConsInr);
 	if(rwcnt>0)then begin
