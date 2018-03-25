@@ -1133,6 +1133,16 @@ begin
 		end;
 	end;
 	
+	mtrw = matrowcnt(ConsInr);
+	For(i=0;i<mtrw;i=i+1) begin
+		matrowget(ConsInr,i,ConsInrw);
+		if(ConsInrw.Qty==0)then begin
+			matrowdelete(ConsInr,i);
+			i=i-1;
+			mtrw = mtrw - 1;
+		end;
+	end;
+	
 	rwcnt = matrowcnt(ConsInr);
 	if(rwcnt>0)then begin
 		ConsInr.SerNr = NextSerNr("ConsInVc",CurrentDate,-1,false,"");
