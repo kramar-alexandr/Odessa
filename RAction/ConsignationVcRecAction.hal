@@ -1021,18 +1021,145 @@ return;
 end;
 
 
-global updating procedure CrConsigIn(record ConsignationVc Consignationr,var array val totbal)
+global updating procedure CrConsigIn(record ConsignationVc Consignationr,record ConsignationVc Consignation2r,var array val totbal)
 begin
-	integer wn,i,rwcnt,mtrw;
+	integer wn,i,j,rwcnt,mtrw;
 	row ConsignationVc Consignationrw;
 	record ConsInVc ConsInr,ConsInoldr;
-	row ConsInVc ConsInrw;
+	row ConsInVc ConsInrw,ConsInOldrw;
 	record ItemHistVc IHr;
 	boolean TrHs,testf;
+	vector boolean artflag;
+	record ConsSaleVc ConsSaler;
+	row ConsSaleVc ConsSalerw;
 	
 	logtext(0,"CrConsigIn");
 	
 	//wn = curwindow;
+	
+	
+	mtrw = matrowcnt(Consignationr);
+	For(i=0;i<mtrw;i=i+1) begin
+		matrowget(Consignationr,i,Consignationrw);
+		artflag[Consignationrw.ArtCode] = true;
+		ConsInrw.ArtCode = Consignationrw.ArtCode;
+		ConsInrw.Spec = Consignationrw.Spec;
+		ConsInrw.Qty = Consignationrw.Qty;
+		ConsInrw.Price = Consignationrw.Price;
+		ConsInrw.Sum = ConsInrw.Qty*ConsInrw.Price;
+		ConsInr.TotSum = ConsInr.TotSum + ConsInrw.Sum;
+		ConsInr.TotQty = ConsInr.TotQty + ConsInrw.Qty;
+		matrowput(ConsInr,matrowcnt(ConsInr),ConsInrw);
+		
+	end;
+	
+	TrHs = true;
+	ConsInoldr.TransDate = Consignation2r.TransDate;
+	while(loopkey("TransDate",ConsInoldr,1,TrHs))begin
+		testf = true;
+		if(ConsInoldr.TransDate!=Consignation2r.TransDate)then begin TrHs = false; testf = false; end;
+		if(ConsInoldr.Location!=Consignation2r.Location)then begin testf = false; end;
+		if(ConsInoldr.Comitent!=Consignation2r.Comitent)then begin testf = false; end;
+		
+		if(testf)then begin
+			mtrw = matrowcnt(ConsInoldr);
+			For(i=0;i<mtrw;i=i+1) begin
+				matrowget(ConsInoldr,i,ConsInOldrw);
+				if(artflag[ConsInOldrw.ArtCode])then begin
+					for(j=0;j<matrowcnt(ConsInr);j=j+1)begin
+						matrowget(ConsInr,j,ConsInrw);
+						if(ConsInrw.ArtCode==ConsInOldrw.ArtCode)then begin
+							ConsInr.TotSum = ConsInr.TotSum - ConsInrw.Sum;
+							ConsInr.TotQty = ConsInr.TotQty - ConsInrw.Qty;
+							ConsInrw.Qty = ConsInrw.Qty - ConsInOldrw.Qty;
+							ConsInrw.Sum = ConsInrw.Qty*ConsInrw.Price;
+							ConsInr.TotSum = ConsInr.TotSum + ConsInrw.Sum;
+							ConsInr.TotQty = ConsInr.TotQty + ConsInrw.Qty;
+							matrowput(ConsInr,j,ConsInrw);
+						end;
+					end;
+				end else begin
+					ConsInrw.ArtCode = ConsInOldrw.ArtCode;
+					ConsInrw.Spec = ConsInOldrw.Spec;
+					ConsInrw.Qty = -ConsInOldrw.Qty;
+					ConsInrw.Price = ConsInOldrw.Price;
+					ConsInrw.Sum = ConsInrw.Qty*ConsInrw.Price;
+					ConsInr.TotSum = ConsInr.TotSum + ConsInrw.Sum;
+					ConsInr.TotQty = ConsInr.TotQty + ConsInrw.Qty;
+					artflag[ConsInOldrw.ArtCode] = true;
+					matrowput(ConsInr,matrowcnt(ConsInr),ConsInrw);
+				end;
+			end;
+		end;
+	end;
+	
+	TrHs = true;
+	ConsSaler.TransDate = Consignationr.TransDate;
+	while(loopkey("TransDate",ConsSaler,1,TrHs))begin
+		testf = true;
+		if(ConsSaler.TransDate!=Consignationr.TransDate)then begin TrHs = false; testf = false; end;
+		if(ConsSaler.Location!=Consignationr.Location)then begin testf = false; end;
+		if(ConsSaler.Comitent!=Consignationr.Comitent)then begin testf = false; end;
+		
+		if(testf)then begin
+			mtrw = matrowcnt(ConsSaler);
+			For(i=0;i<mtrw;i=i+1) begin
+				matrowget(ConsSaler,i,ConsSalerw);
+				if(artflag[ConsSalerw.ArtCode])then begin
+					for(j=0;j<matrowcnt(ConsInr);j=j+1)begin
+						matrowget(ConsInr,j,ConsInrw);
+						if(ConsInrw.ArtCode==ConsSalerw.ArtCode)then begin
+							ConsInr.TotSum = ConsInr.TotSum - ConsInrw.Sum;
+							ConsInr.TotQty = ConsInr.TotQty - ConsInrw.Qty;
+							ConsInrw.Qty = ConsInrw.Qty + ConsSalerw.SelQty;
+							ConsInrw.Sum = ConsInrw.Qty*ConsInrw.Price;
+							ConsInr.TotSum = ConsInr.TotSum + ConsInrw.Sum;
+							ConsInr.TotQty = ConsInr.TotQty + ConsInrw.Qty;
+							matrowput(ConsInr,j,ConsInrw);
+						end;
+					end;
+				end else begin
+					ConsInrw.ArtCode = ConsSalerw.ArtCode;
+					ConsInrw.Spec = ConsSalerw.Spec;
+					ConsInrw.Qty = ConsSalerw.SelQty;
+					ConsInrw.Price = ConsSalerw.Price;
+					ConsInrw.Sum = ConsInrw.Qty*ConsInrw.Price;
+					ConsInr.TotSum = ConsInr.TotSum + ConsInrw.Sum;
+					ConsInr.TotQty = ConsInr.TotQty + ConsInrw.Qty;
+					artflag[ConsInrw.ArtCode] = true;
+					matrowput(ConsInr,matrowcnt(ConsInr),ConsInrw);
+				end;
+			end;
+		end;
+	end;
+	
+	mtrw = matrowcnt(ConsInr);
+	For(i=0;i<mtrw;i=i+1) begin
+		matrowget(ConsInr,i,ConsInrw);
+		if(ConsInrw.Qty==0)then begin
+			matrowdelete(ConsInr,i);
+			i=i-1;
+			mtrw = mtrw - 1;
+		end;
+	end;
+	
+	rwcnt = matrowcnt(ConsInr);
+	if(rwcnt>0)then begin
+		ConsInr.SerNr = NextSerNr("ConsInVc",CurrentDate,-1,false,"");
+		ConsInr.TransDate = Consignationr.TransDate;
+		ConsInr.Location = Consignationr.Location;
+		ConsInr.Comitent = Consignationr.Comitent;
+		recordstore(ConsInr,true);
+		createrecordlink(ConsInr,currentcompany,Consignationr,currentcompany);
+		createrecordlink(Consignationr,currentcompany,ConsInr,currentcompany);
+		
+		//recordcopy(ConsInoldr,ConsInr);
+		//ConsInr.OKFlag = 1;
+		//recordupdate(ConsInoldr,ConsInr,true);
+	end;
+	
+	/*
+	
 	if(true)then begin
 		//getwindowrecord(wn,Consignationr);
 		
@@ -1091,7 +1218,7 @@ begin
 		totbal[1] = ConsInr.TotQty;
 		logtext(0,"CrConsigIn End " & ConsInr.TotQty);
 	end;
-
+*/
 return;
 end;
 
@@ -1449,7 +1576,7 @@ begin
 	array val totbal;
 	
 		logtext(0,"CrConsigAll START");
-		CrConsigIn(Consignationr,totbal);
+		//CrConsigIn(Consignationr,totbal);
 		CrConsigSale(Consignationr,totbal);
 		CrConsigBrak(Consignationr,totbal);
 		
@@ -1471,27 +1598,49 @@ end;
 global updating	procedure	CrConsigInAllMn(record RcVc RepSpec)
 begin
 	array val totbal;
-	record ConsignationVc Consignationr;
-	boolean TrHs,testf;
+	record ConsignationVc Consignationr,Consignation2r;
+	boolean TrHs,testf,TrHs2,testf2;
 	
 	totbal[0] = 0;
 	totbal[1] = 0;
 	
-	Consignationr.TransDate = RepSpec.d1;
-	TrHs = true;
-	while(loopkey("TransDate",Consignationr,1,TrHs))begin
-		testf = true;
-		if(Consignationr.TransDate!=RepSpec.d1)then begin TrHs = false; testf = false; end;
-		if(Consignationr.OKFlag!=1)then begin testf = false; end;
-		
-		if(testf)then begin
-			totbal[1] = 0;
-			logtext(0,"Cr ConsIn for:" & Consignationr.Location & " comtnt " & Consignationr.Comitent);
-			CrConsigIn(Consignationr,totbal);
-			logtext(0,"Start " & totbal[1]);
+	if(nonblankdate(RepSpec.d1) and nonblankdate(RepSpec.d2) and RepSpec.d2>RepSpec.d1)then begin
+		Consignationr.TransDate = RepSpec.d2;
+		TrHs = true;
+		while(loopkey("TransDate",Consignationr,1,TrHs))begin
+			testf = true;
+			if(Consignationr.TransDate!=RepSpec.d2)then begin TrHs = false; testf = false; end;
+			if(Consignationr.OKFlag!=1)then begin testf = false; end;
+			if(nonblank(RepSpec.f1) and RepSpec.f1!=Consignationr.Comitent)then begin testf = false; end;
+			if(nonblank(RepSpec.f2) and RepSpec.f2!=Consignationr.Location)then begin testf = false; end;
+			
+			logtext(0,"CrConsigInAllMn fro cs " & Consignationr.SerNr);
+			if(testf)then begin
+				totbal[1] = 0;
+				logtext(0,"Cr ConsIn for:" & Consignationr.Location & " comtnt " & Consignationr.Comitent);
+				Consignation2r.TransDate = RepSpec.d1;
+				TrHs2 = true;
+				while(loopkey("TransDate",Consignation2r,1,TrHs2))begin
+					testf2 = true;
+					if(Consignation2r.TransDate!=RepSpec.d1)then begin TrHs2 = false; testf2 = false; end;
+					if(Consignation2r.OKFlag!=1)then begin testf2 = false; end;
+					if(Consignationr.Location!=Consignation2r.Location)then begin testf2 = false; end;
+					if(Consignationr.Comitent!=Consignation2r.Comitent)then begin testf2 = false; end;
+				
+					if(testf2)then begin
+						CrConsigIn(Consignationr,Consignation2r,totbal);
+						logtext(0,"Start " & totbal[1]);
+					end;
+				
+				end;
+				resetloop(Consignation2r);
+			
+			
+				logtext(0,"Start " & totbal[1]);
+			end;
 		end;
-	end;
-	logtext(0,"Error " & totbal[1]);	
+		logtext(0,"Error " & totbal[1]);
+	end;	
 
 return;
 end;
