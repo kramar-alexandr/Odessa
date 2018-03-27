@@ -807,6 +807,8 @@ begin
 							res = true;
 						end;
 					end;
+				end else begin
+					res = false;
 				end;
 			end;
 		end;
@@ -1121,7 +1123,9 @@ begin
 	  									qty = StringToVal(XmlGetAttribute(xmlPost,"orders/order" & i & "/row" & j,"Qty"),M4UVal);
 											sum = StringToVal(XmlGetAttribute(xmlPost,"orders/order" & i & "/row" & j ,"PriceTotal"),M4Val);
 	  									ORrw.Quant = ORrw.Quant + qty;
-											ORrw.NecessaryQuant = ORrw.NecessaryQuant + qty;
+	  									if(storeidtag!="7")then begin
+												ORrw.NecessaryQuant = ORrw.NecessaryQuant + qty;
+											end;
 											MatRowPut(ORr,r,ORrw);
 											ORrw.Sum = ORrw.Sum + sum;
 											MatRowPut(ORr,r,ORrw);
@@ -1175,28 +1179,31 @@ begin
 											ORrw.Spec = artspec;
 										end;
 										ORrw.Quant = qty;
-										ORrw.NecessaryQuant = qty;
+										if(storeidtag!="7")then begin
+											ORrw.NecessaryQuant = qty;
+										end;
 										MatRowPut(ORr,rowNr,ORrw);
 										if (OptFeature.NoQtyDepPrices==0) then begin
 												ORVc_PasteQuant(ORr,rowNr,true,chsum);
-											end else begin
-												chsum = ORDchrsum(ORr,rowNr);
-											end; 
+										end else begin
+											chsum = ORDchrsum(ORr,rowNr);
+										end; 
+										if (chsum) then begin
+											chsumConfirm = true;
+										end;
+										MatRowGet(ORr,rowNr,ORrw);   
+										if(storeidtag!="7")then begin
+											ORrw.Price = price;
+											MatRowPut(ORr,rowNr,ORrw);
+											ORVc_PastePrice(ORr,rowNr,chsum);
 											if (chsum) then begin
 												chsumConfirm = true;
 											end;
-											MatRowGet(ORr,rowNr,ORrw);   
-										ORrw.Price = price;
-										MatRowPut(ORr,rowNr,ORrw);
-										ORVc_PastePrice(ORr,rowNr,chsum);
-											if (chsum) then begin
-											chsumConfirm = true;
-											end;
 											MatRowGet(ORr,rowNr,ORrw);
-										ORrw.Sum = sum;
-										MatRowPut(ORr,rowNr,ORrw);
-							
-										ORVc_PasteSum(ORr,rowNr,chsum);
+											ORrw.Sum = sum;
+											MatRowPut(ORr,rowNr,ORrw);
+											ORVc_PasteSum(ORr,rowNr,chsum);
+										end;
 										if (chsum) then begin
 											chsumConfirm = true;
 										end;
