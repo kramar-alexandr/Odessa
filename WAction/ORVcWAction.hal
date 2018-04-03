@@ -79,6 +79,8 @@ remote updating procedure MakeReserveFromOrder(longint,string);// Edit *********
 remote updating procedure ORHistBackDsmRemote(record ORVc);
 remote procedure AlternativeRebateORVc(var record ORVc);//==============Alexandr 25/09/2015
 remote procedure Rem_CalcOnePlusOneRebate(var record ORVc);// Edit ************************** BPI Ukraine - KramarAlexandr - Monday, 11 December 2017 09:53:12
+remote procedure AdNP_PasteRecipientWarehouseDescOR(var record ORVc);
+
 
 global //Edit***************************Sasha2,15:51 04.02.2015 {
 function Integer ORLClassRowColor(record ORVc ORr)
@@ -1456,6 +1458,20 @@ begin
   return;
 end;
 
+function Boolean ORDClassAdNPWarehouseEFAfter(Integer wn,Integer changed)	//Edit----------------------Dima  07.05.2015
+begin  
+  record ORVc ORr;
+
+  if (changed!=0) then begin  
+    GetWindowRecord(wn,ORr);
+    AdNP_PasteRecipientWarehouseDescOR(ORr);
+    PutWindowRecord(wn,ORr);
+  end;  
+  ORDClassAdNPWarehouseEFAfter = true;
+  return;
+end;
+
+
 
 function Boolean ORDClassOrderQuantEFAfter(Integer wn,Integer fn,Integer rownr,Integer changedf)//Edit----------------------Dima  26.01.2016
 begin   
@@ -1527,6 +1543,8 @@ BEGIN
     case "NPPhone": res = ORDClassNPPhoneEFAfter(wn,changed);
     case "NPWarehouse": res = ORDClassNPWarehouseEFAfter(wn,changed);	//Edit----------------------Dima  15.04.2015
     case "OrderQuant": res = ORDClassOrderQuantEFAfter(wn,fn,rownr,changed);	//Edit----------------------Dima  20.08.2015
+	case "AdNPWarehouse": res = ORDClassAdNPWarehouseEFAfter(wn,changed);	//Edit----------------------Dima  15.04.2015
+
   end;
   ORDClassAfterEditField = res;
   RETURN;

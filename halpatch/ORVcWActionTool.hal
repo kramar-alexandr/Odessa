@@ -1568,6 +1568,26 @@ begin
 return;
 end;
 
+global
+procedure AdNP_PasteRecipientWarehouseDescOR(var record ORVc ORr)	//Edit----------------------Anton 03.03.2018
+begin
+	record NPWarehouseVc NPWr;
+		
+
+		NPWr.Number = ORr.AdNPWarehouse;
+		NPWr.City = ORr.NPCityRecipient;		
+
+
+	if (ReadFirstKey("City",NPWr,2,true)) then begin
+				ORr.AdNPWarehouseDesc = NPWr.Description;
+	end else begin
+				ORr.AdNPWarehouseDesc = "";
+	end;
+
+	
+return;
+end;
+
 
 
 global procedure GetAvailableItems(var record ORVc ORr)	//Edit----------------------Dima  29.09.2015

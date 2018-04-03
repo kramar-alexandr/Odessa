@@ -5515,9 +5515,12 @@ begin
   RadioButton(h2,v,0,0,"Отделение",NPAdresDeliv);
   RadioButton(h2,v+20,1,0,"Адрес",NPAdresDeliv);
   
-  EditField(h1,v+=vs,150,"Город",Normal,NPCityRecipient,false,NPCitySClass);
-  EditField(h1,v+=vs,70,"Отделение НП",Normal,NPWarehouse,false,NPWarehouseSClass);
-  EditField(h2,v,250,"",ViewOnly,NPWarehouseDesc,false,0);
+  EditField(h1+40,v+=vs,150,"Город",Normal,NPCityRecipient,false,NPCitySClass);
+  EditField(h1+40,v+=vs,70,"Отделение НП",Normal,NPWarehouse,false,NPWarehouseSClass);
+  EditField(h2+40,v,250,"",ViewOnly,NPWarehouseDesc,false,0);
+  EditField(h1+40,v+=vs,70,"Груз/доп тделение НП",Normal,AdNPWarehouse,false,AdNPWarehouseSClass);
+  EditField(h2+40,v,250,"",ViewOnly,AdNPWarehouseDesc,false,0);
+
   
   EditField(h1,v+=vs,70,"Улица",Normal,NPAdresStreet,false,NPStreetSClass);
   EditField(h1+140,v,40,"Дом/Квартира",Normal,NPAdresBuild,false,0);

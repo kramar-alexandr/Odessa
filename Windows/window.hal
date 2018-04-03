@@ -4346,7 +4346,7 @@ begin
   integer sQuant;
 
   WindowBegin("Отгрузка",SHDClass,CGview,-);
-  SetWRect(20,80,800,520);
+  SetWRect(20,80,1000,520);
   Sizeable(-1,-1,0,0);
   UseView(SHVc);
   vs = 20;
@@ -4709,9 +4709,11 @@ begin
     EditField(h1,v+=5,190,"Название",Normal,NPSender,false,NPCounterpartySenderSClass);
     EditField(h2,v,100,"Город",Normal,NPCitySender,false,0);
     EditField(h3,v,120,"Отделение НП",Normal,NPSenderWarehouse,false,NPWarehouseSClass);
+	//EditField(h3+270,v,120,"Доп/ Груз отделение НП",Normal,ADDNPRecipientWarehouse,false,NPWarehouseSClass);
     EditField(h1,v+=vs,190,"Контактное лицо",Normal,NPContactSender,false,NPSenderContSClass);
     EditField(h2,v,100,"Телефон",Normal,NPSendersPhone,false,0);
     EditField(h3,v,120,"",ViewOnly,NPSenderWarehouseDesc,false,0);
+	//EditField(h3+270,v,120,"",ViewOnly,ADDNPRecipientWarehouseDesc,false,0);
     //EditField(h2,v,150,"Адрес",Normal,NPSenderAddress,false,0);
     StaticText(90,v+=40,"Получатель:",true);
     if (CurrentUser=="SA") then begin
@@ -4744,6 +4746,7 @@ begin
 				
     	EditField(h1,v+=vs,100,"Город",ViewOnly,NPCityRecipient,false,0);
     	EditField(h2,v,100,"Отделение НП",ViewOnly,NPRecipientWarehouse,false,NPWarehouseSClass);
+		//EditField(h3+270,v,120,"Доп/ Груз отделение НП",Normal,ADDNPRecipientWarehouse,false,NPWarehouseSClass);
     	EditField(h3-90,v,200,"",ViewOnly,NPRecipientWarehouseDesc,false,0);
     	
     	EditField(h1,v+=vs,170,"Улица",ViewOnly,NPAdresStreet,false,NPStreetSClass);
