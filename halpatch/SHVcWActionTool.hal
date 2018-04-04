@@ -1407,6 +1407,7 @@ return;
 end;
 
 
+
 global
 procedure NP_PasteRecipientWarehouseDesc(var record SHVc SHr)	//Edit----------------------Dima  05.05.2015
 begin
