@@ -31,6 +31,8 @@ external procedure NP_PasteRecipientWarehouseDesc(var record SHVc);//Edit-------
 external procedure NP_PasteSenderWarehouseDesc(var record SHVc);
 external procedure NP_PasteSender(var record SHVc);	//Edit----------------------Dima  27.04.2015
 external updating procedure RecalcORMn(record RcVc); //Edit***************************Sasha2,14:27 19.04.2017
+external procedure AdNP_PasteRecipientWarehouseDesc(var record SHVc);//Edit----------------------Dima  05.05.2015
+
 
 SetLangMode(LangRussian,"RUS",0);
 
@@ -891,6 +893,8 @@ LPasteOrdInShipLimitMes:
 			SHp.NPRecipientsPhone = ORr.NPPhone;
 			SHp.NPCityRecipient = ORr.NPCityRecipient;
 			SHp.NPRecipientWarehouse = ORr.NPWarehouse;
+			SHp.AdNPRecipientWarehouse = ORr.AdNPWarehouse;
+
 			
 			SHp.NPAdresDeliv = ORr.NPAdresDeliv;
 			SHp.NPAdresStreet = ORr.NPAdresStreet;
@@ -898,6 +902,8 @@ LPasteOrdInShipLimitMes:
 			SHp.NPAdresFloat = ORr.NPAdresFloat;
 			
 			NP_PasteRecipientWarehouseDesc(SHp);				//Edit----------------------Dima  07.05.2015
+
+
   	end else begin// Edit ************************** Wednesday, 17 May 2017 15:45:45
   		SHp.NPSender = NPSettingsb.DefSenderRef1;			//Edit----------------------Dima  16.04.2015
 			SHp.NPSenderWarehouse = NPSettingsb.DefSenderWarehouse1;
@@ -923,7 +929,6 @@ LPasteOrdInShipLimitMes:
 			SHp.NPRecipientMiddleName = ORr.NPMiddleName;
 			SHp.NPRecipientsPhone = ORr.NPPhone;
 			SHp.NPCityRecipient = ORr.NPCityRecipient;
-			SHp.NPRecipientWarehouse = ORr.NPWarehouse;
 			
 			SHp.NPAdresDeliv = ORr.NPAdresDeliv;
 			SHp.NPAdresStreet = ORr.NPAdresStreet;

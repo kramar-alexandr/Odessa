@@ -1406,24 +1406,7 @@ begin
 return;
 end;
 
-/*global
-procedure ADDNP_PasteSenderWarehouseDesc(var record SHVc SHr)	//Edit----------------------Anton  03.03.2018
-begin
-	record NPWarehouseVc NPWr;
-	
-		NPWr.Number = SHr.NPSenderWarehouse;
-		NPWr.City = SHr.NPCitySender;
 
-	if (ReadFirstKey("City",NPWr,2,true)) then begin
-				SHr.ADDNPSenderWarehouseDesc = NPWr.Description;
-	end else begin
-				SHr.ADDNPSenderWarehouseDesc = "";
-	end;
-	
-	
-return;
-end;
-*/
 global
 procedure NP_PasteRecipientWarehouseDesc(var record SHVc SHr)	//Edit----------------------Dima  05.05.2015
 begin
@@ -1431,7 +1414,8 @@ begin
 	
 
 		NPWr.Number = SHr.NPRecipientWarehouse;
-		NPWr.City = SHr.NPCityRecipient;		
+		NPWr.City = SHr.NPCityRecipient;
+		
 
 
 	if (ReadFirstKey("City",NPWr,2,true)) then begin
@@ -1439,10 +1423,21 @@ begin
 	end else begin
 				SHr.NPRecipientWarehouseDesc = "";
 	end;
+
+	NPWr.Number = SHr.AdNPRecipientWarehouse;
+	NPWr.City = SHr.NPCityRecipient;		
+
+	if (ReadFirstKey("City",NPWr,2,true)) then begin
+				SHr.AdNPRecipientWarehouseDesc = NPWr.Description;
+	end else begin
+				SHr.AdNPRecipientWarehouseDesc = "";
+	end;
 	
 	
 return;
 end;
+
+
 
 
 

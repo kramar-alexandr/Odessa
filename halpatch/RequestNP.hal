@@ -286,12 +286,20 @@ Logtext(0,"CityRecipient " & CityRecipient);
 				ContactRecipient = Counterparty1rw.Ref;
 		end;
   end;
-  
-  Warehouser.Number = SHr.NPRecipientWarehouse;
-  Warehouser.City = SHr.NPCityRecipient;
-  if(ReadFirstkey("City", Warehouser, 2, true)) then begin
-	  RecipientAddress = Warehouser.Ref;									
-  end;  
+  if (SHr.ChckAdNPRcpntWarehouse = 1) then begin
+	  Warehouser.Number = SHr.AdNPRecipientWarehouse;
+	  Warehouser.City = SHr.NPCityRecipient;
+	  if(ReadFirstkey("City", Warehouser, 2, true)) then begin
+		  RecipientAddress = Warehouser.Ref;									
+	  end;
+  end else begin
+	  Warehouser.Number = SHr.NPRecipientWarehouse;
+	  Warehouser.City = SHr.NPCityRecipient;
+	  if(ReadFirstkey("City", Warehouser, 2, true)) then begin
+		  RecipientAddress = Warehouser.Ref;									
+	  end;
+  end;
+	
   
 	curdate = CurrentDate;
 	dd = GetDay(curdate);

@@ -2682,8 +2682,9 @@ RecordBegin(INVc,-,"artikel5");
 	RecordField(NPRecipientDateTime,M4Date,0,0);// Edit ************************** BPI Ukraine - KramarAlexandr - Friday, 15 December 2017 10:02:46
 	RecordField(NPdatescan,M4Date,0,0);// Edit ************************** BPI Ukraine - KramarAlexandr - Friday, 15 December 2017 11:18:46
 	RecordField(NPtimescan,M4Time,0,0);// Edit ************************** BPI Ukraine - KramarAlexandr - Friday, 15 December 2017 11:18:47
-	RecordField(ADDNPSenderWarehouse,M4Int,0,0);
-	RecordField(ADDNPSenderWarehouseDesc,M4Str,200,0);
+	RecordField(AdNPRecipientWarehouse,M4Int,0,0);
+	RecordField(AdNPRecipientWarehouseDesc,M4Str,200,0);
+	RecordField(ChckAdNPRcpntWarehouse,M4Int,0,0);
 	
   ArrayBegin(Math,-,1);
   ArrayField(OrdRow,M4Long,0,0);

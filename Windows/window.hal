@@ -4346,7 +4346,7 @@ begin
   integer sQuant;
 
   WindowBegin("Отгрузка",SHDClass,CGview,-);
-  SetWRect(20,80,1000,520);
+  SetWRect(20,80,800,620);
   Sizeable(-1,-1,0,0);
   UseView(SHVc);
   vs = 20;
@@ -4729,6 +4729,12 @@ begin
     	EditField(h1,v+=vs,100,"Город",Normal,NPCityRecipient,false,0);
     	EditField(h2,v,100,"Отделение НП",Normal,NPRecipientWarehouse,false,NPWarehouseSClass);
     	EditField(h3-90,v,200,"",Normal,NPRecipientWarehouseDesc,false,0);
+		
+		CheckBox(h1-90,v+=vs,0,"Исп. груз. отделение",SHr.ChackAdNPRecipientWarehouseDesc);
+		EditField(h2,v,100,"Доп/Груз отделение НП",Normal,AdNPRecipientWarehouse,false,AdNPWarehouseSClass);
+		EditField(h3-90,v,200,"",ViewOnly,AdNPRecipientWarehouseDesc,false,0);
+
+
   
 			EditField(h1,v+=vs,170,"Улица",Normal,NPAdresStreet,false,NPStreetSClass);
 			EditField(h2,v,40,"Дом/Квартира",Normal,NPAdresBuild,false,0);
@@ -4746,8 +4752,12 @@ begin
 				
     	EditField(h1,v+=vs,100,"Город",ViewOnly,NPCityRecipient,false,0);
     	EditField(h2,v,100,"Отделение НП",ViewOnly,NPRecipientWarehouse,false,NPWarehouseSClass);
-		//EditField(h3+270,v,120,"Доп/ Груз отделение НП",Normal,ADDNPRecipientWarehouse,false,NPWarehouseSClass);
-    	EditField(h3-90,v,200,"",ViewOnly,NPRecipientWarehouseDesc,false,0);
+		EditField(h3-90,v,200,"",ViewOnly,NPRecipientWarehouseDesc,false,0);
+
+		CheckBox(h1-90,v+=vs,0,"Исп. груз. отделение",0);
+		EditField(h2,v,100,"Доп/Груз отделение НП",Normal,AdNPRecipientWarehouse,false,AdNPWarehouseSClass);
+		EditField(h3-90,v,200,"",ViewOnly,AdNPRecipientWarehouseDesc,false,0);
+
     	
     	EditField(h1,v+=vs,170,"Улица",ViewOnly,NPAdresStreet,false,NPStreetSClass);
 			EditField(h2,v,40,"Дом/Квартира",ViewOnly,NPAdresBuild,false,0);
