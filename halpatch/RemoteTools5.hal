@@ -902,6 +902,7 @@ LPasteOrdInShipLimitMes:
 			SHp.NPAdresFloat = ORr.NPAdresFloat;
 			
 			NP_PasteRecipientWarehouseDesc(SHp);				//Edit----------------------Dima  07.05.2015
+			AdNP_PasteRecipientWarehouseDesc(SHp);
 
 
   	end else begin// Edit ************************** Wednesday, 17 May 2017 15:45:45
@@ -938,6 +939,7 @@ LPasteOrdInShipLimitMes:
 			SHp.NPAdresFloat = ORr.NPAdresFloat;
 			
 			NP_PasteRecipientWarehouseDesc(SHp);				//Edit----------------------Dima  07.05.2015
+			AdNP_PasteRecipientWarehouseDesc(SHp);
   	end;// Edit ************************** Wednesday, 17 May 2017 15:45:44
   end;
   
