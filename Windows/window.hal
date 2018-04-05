@@ -4760,7 +4760,7 @@ begin
 		EditField(h3-90,v,200,"",ViewOnly,NPRecipientWarehouseDesc,false,0);
 
 		CheckBox(h1-90,v+=vs,0,"Исп. груз. отделение",SHr.ChckAdNPRcpntWarehouse);
-		EditField(h2,v,100,"Доп/Груз отделение НП",Normal,AdNPRecipientWarehouse,false,AdNPWarehouseSClass);
+		EditField(h2,v,100,"Доп/Груз отделение НП",Normal,AdNPRecipientWarehouse,false,NPWarehouseSClass);
 		EditField(h3-90,v,200,"",ViewOnly,AdNPRecipientWarehouseDesc,false,0);
 
     	
