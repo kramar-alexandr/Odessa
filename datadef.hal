@@ -651,6 +651,11 @@ BlockBegin(ExportStockCSVBlock,-,"" )
 	
 EndBlock;
 
+BlockBegin(RozetkaAuntBlock,-,"");//Edit---------------Anton  
+	RecordField(Login,M4Str,255,0);
+	RecordField(Password,M4Str,255,0);
+EndBlock;
+
 BlockBegin(MyAccountBlock,-,"");
   BlockInServer;
   BlockForAllCompanies;
@@ -1541,7 +1546,7 @@ RecordBegin(INVc,-,"artikel5");
   KeySegment(TransDate);
   KeySegment(SerNr);
   EndRecord;
-  
+ 
   begin //Edit***************************Sasha2,10:19 14.07.2014 {
   BlockBegin(WebShopSettingsBlock,-,"" )
   RecordField(Location,M4Str,100,0);

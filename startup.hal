@@ -17,6 +17,7 @@ begin
 	Register("Посылки","Посылки",UAPOSTSendVc,modUAPost);
 	Register("SmartBox","SmartBox",UAPOSSmartVc,modUAPost);
 	Register("Группы","Группы",UAPOSGroupVc,modUAPost);
+	Setting("Натройки",RozetkaAuntTCLass,modRozetka);
 	
 	Setting("Настройки УкрПочты",UAPostSettingsTClass,modUAPost);
 	
