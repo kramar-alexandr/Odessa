@@ -1,3 +1,8 @@
+
+	
+	
+	
+
 external procedure RateField(real,real,real,string,integer,string,boolean,real,real,string,boolean);
 external function boolean AddBicToMasterWindow(integer,var real,var real,real,real,real,real);
 external function Boolean IsIntEnabActive(var string,var string,var Boolean,var string);
@@ -4722,7 +4727,7 @@ begin
     	EditField(h3-90,v,100,"Отчество",Normal,NPRecipientMiddleName,false,0);
     	
     	ButtonFrame(h3+130,v,80,2,"Доставка на:");
-			RadioButton(h3+130,v,0,0,"Отделение",NPAdresDeliv);
+			RadioButton(h3+130,v,0,0,"Отделение",NPAdresDeliv);//Edit---------------------Anton  
 			RadioButton(h3+130,v+20,1,0,"Адрес",NPAdresDeliv);
     	
     	
@@ -4730,7 +4735,7 @@ begin
     	EditField(h2,v,100,"Отделение НП",Normal,NPRecipientWarehouse,false,NPWarehouseSClass);
     	EditField(h3-90,v,200,"",Normal,NPRecipientWarehouseDesc,false,0);
 		
-		CheckBox(h1-90,v+=vs,0,"Исп. груз. отделение",SHr.ChackAdNPRecipientWarehouseDesc);
+		CheckBox(h1-90,v+=vs,0,"Исп. груз. отделение",SHr.SHr.ChckAdNPRcpntWarehouse); //SHr.ChackAdNPRecipientWarehouseDesc
 		EditField(h2,v,100,"Доп/Груз отделение НП",Normal,AdNPRecipientWarehouse,false,AdNPWarehouseSClass);
 		EditField(h3-90,v,200,"",ViewOnly,AdNPRecipientWarehouseDesc,false,0);
 
@@ -4754,7 +4759,7 @@ begin
     	EditField(h2,v,100,"Отделение НП",ViewOnly,NPRecipientWarehouse,false,NPWarehouseSClass);
 		EditField(h3-90,v,200,"",ViewOnly,NPRecipientWarehouseDesc,false,0);
 
-		CheckBox(h1-90,v+=vs,0,"Исп. груз. отделение",0);
+		CheckBox(h1-90,v+=vs,0,"Исп. груз. отделение",SHr.ChckAdNPRcpntWarehouse);
 		EditField(h2,v,100,"Доп/Груз отделение НП",Normal,AdNPRecipientWarehouse,false,AdNPWarehouseSClass);
 		EditField(h3-90,v,200,"",ViewOnly,AdNPRecipientWarehouseDesc,false,0);
 

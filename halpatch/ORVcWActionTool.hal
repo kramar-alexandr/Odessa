@@ -1564,6 +1564,16 @@ begin
 				ORr.NPWarehouseDesc = "";
 	end;
 	
+	
+return;
+end;
+
+global
+procedure AdNP_PasteRecipientWarehouseDescOR(var record ORVc ORr)	//Edit----------------------Dima  05.05.2015
+begin
+	record NPWarehouseVc NPWr;
+	
+	
 	NPWr.Number = ORr.AdNPWarehouse;
 	NPWr.City = ORr.NPCityRecipient;		
 
