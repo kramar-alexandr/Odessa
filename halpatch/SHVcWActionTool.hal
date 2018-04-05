@@ -1429,9 +1429,7 @@ return;
 end;
 
 global
-
 procedure AdNP_PasteRecipientWarehouseDesc(var record SHVc SHr)	//Edit----------------------Dima  05.05.2015
-
 begin
 	record NPWarehouseVc NPWr;
 	
