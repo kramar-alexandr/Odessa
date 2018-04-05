@@ -31,6 +31,7 @@ remote function boolean NPDeleteDocumentRequest(string,string);//Edit-----------
 remote function boolean CheckENremote(record SHVc, var longint,var string);
 remote updating function boolean CheckCounterpartySH(var record SHVc,var string);
 remote function string 200 SendSMSNewPost(record SHVc);	//Edit----------------------Dima  30.06.2015
+remote procedure AdNP_PasteRecipientWarehouseDesc(var record SHVc);
 
 function boolean CheckEN(record SHVc SHr,integer wn)	//Edit----------------------Dima  07.05.2015
 begin
@@ -849,6 +850,19 @@ begin
   return;
 end;
 
+function Boolean SHDClassRecipientAdWarehouseEFAfter(Integer wn,Boolean changedf)	//Edit----------------------Dima  24.04.2015
+begin  
+  record SHVc SHr;
+
+  if (changedf) then begin  
+    GetWindowRecord(wn,SHr);
+    AdNP_PasteRecipientWarehouseDesc(SHr);
+    PutWindowRecord(wn,SHr);
+  end;
+  SHDClassRecipientAdWarehouseEFAfter = true;
+  return;
+end;
+
 function Boolean SHDClassNPContactSenderEFAfter(Integer wn,Boolean changedf)	//Edit----------------------Dima  24.04.2015
 begin  
   record SHVc SHr;
@@ -934,6 +948,8 @@ BEGIN
 		case "NPSenderWarehouse" : res = SHDClassSenderWarehouseEFAfter(wn,changed);
 		case "NPRecipientWarehouse" : res = SHDClassRecipientWarehouseEFAfter(wn,changed);		//Edit----------------------Dima  20.04.2015
 		case "NPContactSender" : res = SHDClassNPContactSenderEFAfter(wn,changed);// Edit ************************** Wednesday, 16 August 2017 14:07:06
+		case "AdNPRecipientWarehouse" : res = SHDClassRecipientAdWarehouseEFAfter(wn,changed);		//Edit----------------------Dima  20.04.2015
+
 	end;
   end else begin //Edit-------------------Vitalii 10:44 25.12.2015
 	res = true;
