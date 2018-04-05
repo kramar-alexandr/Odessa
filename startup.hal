@@ -11,6 +11,7 @@ begin
 
 		//Module("Управление складом","",730,modWHM);
 	Module("Укрпочта","",730,modUAPost);
+	Module("ROZETKA","",730,modRozetka);
 	Register("Клиенты","Клиенты",UAPOSTClientVc,modUAPost);
 	Register("Адреса","Адреса",UAPOSTAddrVc,modUAPost);
 	Register("Посылки","Посылки",UAPOSTSendVc,modUAPost);
@@ -509,6 +510,8 @@ begin
   Maintenance("Имена картам оляльности",MyVClass,CreateLoyaltyCardName,modPOS);
   
   Maintenance("Add Spec To Cons",MyVClass,ConsFillSpec,modSL);
+  
+  Maintenance("Проверить соединение",MyVClass,RozetkaTestMn,modRozetka);
 	
   Import("Импорт цен",PLImportIClass,PLImportIn,modDI); //Added********************Dima 20.11.2014
   Import("Импорт товаров",INImportIClass,INImportIn,modIN);//Added********************Dima 20.11.2014

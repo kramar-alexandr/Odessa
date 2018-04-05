@@ -1,0 +1,42 @@
+external function boolean MySendRawWebRequest(string, string, boolean, string, string, string, string, boolean, area, var area, integer);
+external procedure GetXMLArea(var area);
+
+
+global procedure RozetkaTestMn(record RcVc RepSpec)
+begin
+	area request,replyarea,mainRequest,extracted;
+  string 255 username,filename;
+  string 200 getParam,host,page,webaddr,path;
+  area basestring;
+  xml xdata;
+  longint i;
+  record NPSettingsBlock NPSettingsb;
+  string 255 www,apikey;
+  record ORVc ORr;
+  integer mtrw;
+    
+  host = "seller.rozetka.com.ua";
+  page = "/api/Order/";
+  
+  getParam = "?dateFrom=" & DateToString(Addday(currentdate,-4),"YYYY-MM-DD") & "&dateTo=" & DateToString(currentdate,"YYYY-MM-DD") & "";
+	addtexttoarea("GET " & page & " HTTP/1.1" & chr(13) & chr(10),mainRequest);
+ 	addtexttoarea("host: " & host & getParam & chr(13) & chr(10),mainRequest);
+ 	addtexttoarea("Authorization: Basic ZmlzaGVyc2NsdWI6cVNhZDlN" & chr(13) & chr(10),mainRequest);
+ 
+ 	AddTextToArea("" & chr(13) & chr(10),mainRequest);
+	//AddTextToArea("dateFrom=2018-01-03&dateTo=2018-05-03",mainRequest);
+
+  if(MySendRawWebRequest(host,"443",true,"GET",page & getParam,"text/xml","",false,mainRequest,replyarea,5))then begin  //WORK! 
+    writeareatofile(replyarea,"ROZETKA.txt",0);
+    GetXMLArea(replyarea);
+    xdata = ParseXMLArea(replyarea);
+    mtrw = XmlCountChildren(xdata,"Order/records");
+    messagebox(0,mtrw);
+    For(i=0;i<mtrw;i=i+1) begin
+	  	logtext(0,XmlGet(xdata,"Order/records/record[" & i & "]/id"));
+		end; 
+    
+  end;
+  	
+return;
+end;
