@@ -929,6 +929,8 @@ LPasteOrdInShipLimitMes:
 			SHp.NPRecipientMiddleName = ORr.NPMiddleName;
 			SHp.NPRecipientsPhone = ORr.NPPhone;
 			SHp.NPCityRecipient = ORr.NPCityRecipient;
+			SHp.NPRecipientWarehouse = ORr.NPWarehouse;
+			SHp.AdNPRecipientWarehouse = ORr.AdNPWarehouse;
 			
 			SHp.NPAdresDeliv = ORr.NPAdresDeliv;
 			SHp.NPAdresStreet = ORr.NPAdresStreet;

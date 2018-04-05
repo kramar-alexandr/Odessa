@@ -46,7 +46,6 @@ begin
 				str2 = Right(str2,7);
 				//check correctness of XML file
 				if(str!="<?xml version" or str2!="</root>")then begin	//Edit----------------------Dima  13.11.2015
-					writeareatofile(a,"1warehouses" & GetCurTick & ".txt",0);
 					logtext(0,"XML file not valid:  beginning: " & str & "  ending:" & str2);
 					SetAreaZeroSize(a);
 					goto GetXMLAreaPoint2;
