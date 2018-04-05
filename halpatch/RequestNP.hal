@@ -268,8 +268,8 @@ begin
 		Counterpartyr.CityRef = CityRecipient;
 		Logtext(0,"NPRecipientLastName " & SHr.NPRecipientLastName);
 		Logtext(0,"NPRecipientFirstName " & SHr.NPRecipientFirstName);
-Logtext(0,"RecipientsPhone " & RecipientsPhone);
-Logtext(0,"CityRecipient " & CityRecipient);
+		Logtext(0,"RecipientsPhone " & RecipientsPhone);
+		Logtext(0,"CityRecipient " & CityRecipient);
 		if(ReadFirstMain(Counterpartyr,4,true))then begin
 			Recipient = Counterpartyr.Ref;
 			matrowget(Counterpartyr, 0, Counterpartyrw);
@@ -286,7 +286,7 @@ Logtext(0,"CityRecipient " & CityRecipient);
 				ContactRecipient = Counterparty1rw.Ref;
 		end;
   end;
-  if (SHr.ChckAdNPRcpntWarehouse = 1) then begin
+  if (SHr.ChckAdNPRcpntWarehouse==1) then begin
 	  Warehouser.Number = SHr.AdNPRecipientWarehouse;
 	  Warehouser.City = SHr.NPCityRecipient;
 	  if(ReadFirstkey("City", Warehouser, 2, true)) then begin
