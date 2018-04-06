@@ -10710,7 +10710,23 @@ begin
   EndWindow;
 end;
 
-
+window RozetkaAuntTCLass:1
+	wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+	real h,v,vs;
+	h = 100;
+	v = 0;
+	vs = 20;
+	WindowBegin("Авторизация Rozetka",RozetkaAuntTCLass,CGSbl,-)
+	SetWRect(20,80,300,200);
+	AutoSizeWindow(false);
+	SetBlid(RozetkaAuntBlock);
+	EditField(h,v+=vs,60,"Лоин",Normal,Login,false,0);
+	EditField(h,50,100,"Пароль",Normal,Password,false,0);
+	
+	EndWindow;
+	
+end;
 
 window LocalMachineTClass:2
   wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
