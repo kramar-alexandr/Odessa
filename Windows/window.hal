@@ -3178,6 +3178,12 @@ begin
   RadioButton(h,v,0,0,"Сводный",ArtMode);
   RadioButton(h,v+=16,1,0,"Подробный",ArtMode);
   RadioButton(h,v+=16,2,0,"Без НДС",ArtMode);
+  
+  ButtonFrame(h=30,v+=40,123,3,"НП Наложенный");// Edit ************************** BPI Ukraine - KramarAlexandr - Friday, 6 April 2018 13:21:29
+  RadioButton(h,v,0,0,"Все",flags[14]);
+  RadioButton(h,v+=16,1,0,"Предоплата",flags[14]);
+  RadioButton(h,v+=16,2,0,"Наложенный",flags[14]);
+  
   ButtonFrame(h+=143,v = vm,143,6,"Статус");
   CheckBox(h,v,0,"Сч/ф не отгруженные",flags[4]); v = v + 16;
   CheckBox(h,v,0,"Сч/ф частично отгруж.",flags[13]); v = v + 16;
