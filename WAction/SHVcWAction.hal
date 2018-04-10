@@ -1315,12 +1315,7 @@ BEGIN
 				case "Collector":	res = true;
 				case "PackMan":	res = true;
 				case "Sorting":	res = true;
-      end;
-      
-      if(UserCanAction("UnOkAll",false))then begin
-      	if(fieldname=="Ship")then begin
-					res = true;
-				end;
+				case "Ship":	res = true;
       end;
    end;
    
