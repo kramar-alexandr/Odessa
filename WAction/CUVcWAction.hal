@@ -33,6 +33,9 @@ external procedure FindUserMailboxName(string,var string,var string);
 external function Integer GetCodeFromCompanyCode(Integer);
 remote procedure CUVc_PasteCountryCode(var record CUVc,string);
 forward updating procedure UpdateCUAddr(integer,string,string,integer,Integer);
+remote procedure AdNP_PasteRecipientWarehouseDescCU(var record CUVc);// Edit ************************** BPI Ukraine - KramarAlexandr - Tuesday, 10 April 2018 11:57:59
+remote procedure NP_PasteRecipientWarehouseDescCU(var record CUVc);// Edit ************************** BPI Ukraine - KramarAlexandr - Tuesday, 10 April 2018 11:57:59
+
 
 function Boolean CUDClassNationalityEFAfter(Integer wn,Integer changed)
 begin
@@ -165,8 +168,39 @@ begin
   CUDClassDelCountryCodeEFAfter = res;
   return;
 end;
+// Edit Start ---------------------------------------------- Edit Start
+	//Tuesday, 10 April 2018 11:56:42
+	
+
+function Boolean CUDClassNPWarehouseEFAfter(Integer wn,Integer changed)	//Edit----------------------Dima  07.05.2015
+begin  
+  record CUVc CUr;
+
+  if (changed!=0) then begin  
+    GetWindowRecord(wn,CUr);
+     NP_PasteRecipientWarehouseDescCU(CUr);
+    PutWindowRecord(wn,CUr);
+  end;  
+  CUDClassNPWarehouseEFAfter = true;
+  return;
+end;
+
+function Boolean CUDClassAdNPWarehouseEFAfter(Integer wn,Integer changed)	//Edit----------------------Dima  07.05.2015
+begin  
+  record CUVc CUr;
+
+  if (changed!=0) then begin  
+    GetWindowRecord(wn,CUr);
+     AdNP_PasteRecipientWarehouseDescCU(CUr);
+    PutWindowRecord(wn,CUr);
+  end;  
+  CUDClassAdNPWarehouseEFAfter = true;
+  return;
+end;
 
 
+	// Edit End ---------------------------------------------- Edit End
+	
 global
 function Boolean CUDClassAfterEditField(Integer wn,string fieldname,Integer fn, Integer rownr,Integer changed)
 BEGIN
@@ -185,6 +219,9 @@ BEGIN
     case "InvAddr4": res = CUDClassInvAddrEFAfter(wn,changed,4);
     case "CountryCode": res = CUDClassCountryCodeEFAfter(wn,changed);
     case "DelCountry": res = CUDClassDelCountryCodeEFAfter(wn,changed);
+   	case "NPWarehouse": res = CUDClassNPWarehouseEFAfter(wn,changed);	// Edit ************************** BPI Ukraine - KramarAlexandr - Tuesday, 10 April 2018 11:56:36
+		case "AdNPWarehouse": res = CUDClassAdNPWarehouseEFAfter(wn,changed);	// Edit ************************** BPI Ukraine - KramarAlexandr - Tuesday, 10 April 2018 11:56:38
+
   end;
   CUDClassAfterEditField = res;
   RETURN;

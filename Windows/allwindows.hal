@@ -11166,8 +11166,15 @@ begin
   v=6;
   
   EditField(h,v,120,"Факс",Normal,Fax,false,0);//Edit-------------------Vitalii 17:37 14.09.2016
+  
+  EditField(h+250,v,120,"Город НП",Normal,NPCityRecipient,false,NPCitySClass);
+  
   EditField(h,v+=20,120,"Номер паспорта",Normal,PassportNr,false,0);
+  EditField(h+250,v,40,"Отделение НП",Normal,NPWarehouse,false,NPWarehouseSClass);
+  EditField(h+300,v,200,"",ViewOnly,NPWarehouseDesc,false,0);
   EditField(h,v+=vs,120,"ИНН",Normal,VATNr,false,0);
+  EditField(h+250,v,40," Груз. отделение НП",Normal,AdNPWarehouse,false,NPWarehouseSClass);
+  EditField(h+300,v,200,"",ViewOnly,AdNPWarehouseDesc,false,0);
 	EditField(h,v+=vs,120,"E-mail",Normal,eMail,false,0);
 	EditField(h,v+=vs,120,"Мобильный телефон",Normal,Phone,false,0);
 	EditField(h,v+=vs,120,"Доп. телефон",Normal,AltPhone,false,0);

@@ -1587,6 +1587,45 @@ begin
 return;
 end;
 
+global
+procedure AdNP_PasteRecipientWarehouseDescCU(var record CUVc CUr)	//Edit----------------------Dima  05.05.2015
+begin
+	record NPWarehouseVc NPWr;
+	
+	
+	NPWr.Number = CUr.AdNPWarehouse;
+	NPWr.City = CUr.NPCityRecipient;		
+
+
+	if (ReadFirstKey("City",NPWr,2,true)) then begin
+				CUr.AdNPWarehouseDesc = NPWr.Description;
+	end else begin
+				CUr.AdNPWarehouseDesc = "";
+	end;
+	
+return;
+end;
+
+global
+procedure NP_PasteRecipientWarehouseDescCU(var record CUVc CUr)	//Edit----------------------Dima  05.05.2015
+begin
+	record NPWarehouseVc NPWr;
+	
+	
+	NPWr.Number = CUr.NPWarehouse;
+	NPWr.City = CUr.NPCityRecipient;		
+
+
+	if (ReadFirstKey("City",NPWr,2,true)) then begin
+				CUr.NPWarehouseDesc = NPWr.Description;
+	end else begin
+				CUr.NPWarehouseDesc = "";
+	end;
+	
+return;
+end;
+
+
 
 
 
