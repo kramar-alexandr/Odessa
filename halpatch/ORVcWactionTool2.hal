@@ -89,6 +89,24 @@ BEGIN
     if(usercanaction("DoNotSetSalesManInOR",false)==false)then begin
     	ORr.SalesMan = CUr.SalesMan;// Edit ************************** Monday, 30 October 2017 11:15:02
     end;
+    // Edit Start ---------------------------------------------- Edit Start
+	//Tuesday, 10 April 2018 12:16:43
+	
+    if(nonblank(CUr.NPCityRecipient))then begin
+    	ORr.NPCityRecipient = CUr.NPCityRecipient;
+    end;
+    if(nonblank(CUr.NPWarehouse))then begin
+    	ORr.NPWarehouse = CUr.NPWarehouse;
+    	ORr.NPWarehouseDesc = CUr.NPWarehouseDesc;
+    end;
+    if(nonblank(CUr.AdNPWarehouse))then begin
+    	ORr.AdNPWarehouse = CUr.AdNPWarehouse;
+    	ORr.AdNPWarehouseDesc = CUr.AdNPWarehouseDesc;
+    end;
+    
+    
+	// Edit End ---------------------------------------------- Edit End
+	
 //    PastePDInOR(ORp;
   end;
   PasteCustInOR = res;
