@@ -1316,6 +1316,12 @@ BEGIN
 				case "PackMan":	res = true;
 				case "Sorting":	res = true;
       end;
+      
+      if(UserCanAction("UnOkAll",false))then begin
+      	switch (fieldname) begin
+					case "Ship":	res = true;
+				end;
+      end;
    end;
    
    
