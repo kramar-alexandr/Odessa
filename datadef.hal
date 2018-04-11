@@ -5742,6 +5742,13 @@ RecordBegin(IPVc,-,"");
   RecordField(IVVcNr,M4Long,0,0); // Edit Dima ************* 2018-02-21 10:08 AM
   RecordField(IVVcSum,M4Int,0,0); // Edit Dima ************* 2018-02-21 10:08 AM
   RecordField(IVVcOneTimeDisc,M4Str,10,0); // Edit Dima ************* 2018-02-22 09:15 AM
+  
+  RecordField(NPCityRecipient,M4Str,100,0);// Edit ************************** BPI Ukraine - KramarAlexandr - Tuesday, 10 April 2018 11:44:38
+  RecordField(NPWarehouse,M4Int,0,0);		// Edit ************************** BPI Ukraine - KramarAlexandr - Tuesday, 10 April 2018 11:44:38
+  RecordField(NPWarehouseDesc,M4Str,200,0);// Edit ************************** BPI Ukraine - KramarAlexandr - Tuesday, 10 April 2018 11:44:39
+  RecordField(AdNPWarehouse,M4Int,0,0);	// Edit ************************** BPI Ukraine - KramarAlexandr - Tuesday, 10 April 2018 11:44:40
+  RecordField(AdNPWarehouseDesc,M4Str,200,0);// Edit ************************** BPI Ukraine - KramarAlexandr - Tuesday, 10 April 2018 11:44:40
+  
   MainKeyBegin(Code,1);
   StoreInBaseKey;
   AppendFieldToKeyName(SalesGroup);

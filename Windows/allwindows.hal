@@ -5047,7 +5047,11 @@ begin
   TileButton(9,"Обр.связь с кл."); //Edit***************************Sasha2,10:29 17.08.2015
   Tile(1,110,false,"1",OrdDate);
   vs = 22; h1 = 110; h2 = 290; h3 = 530; h4 = -115;
-  EditField(h1,vm=(v=6),82,"Дата",Normal,OrdDate,false,PasteCurDate);
+  if(UserCanAction("UnOkAll",false))then begin
+		EditField(h1,vm=(v=6),82,"Дата",Normal,OrdDate,false,PasteCurDate);
+  end else begin
+  	EditField(h1,vm=(v=6),82,"Дата",ViewOnly,OrdDate,false,PasteCurDate);
+  end;
   EditField(h1,v+=vs,25,"Условия оплаты",Normal,PayDeal,false,PDSClass);
   EditField(h1,v+=vs,82,"Заплан. отгрузка",Normal,PlanShip,false,PasteCurDate);
   EditField(h1,v+=vs,82,"Дата отправки",Normal,DespatchDate,false,PasteCurDate);
@@ -11210,8 +11214,15 @@ begin
   v=6;
   
   EditField(h,v,120,"Факс",Normal,Fax,false,0);//Edit-------------------Vitalii 17:37 14.09.2016
+  
+  EditField(h+250,v,120,"Город НП",Normal,NPCityRecipient,false,NPCitySClass);
+  
   EditField(h,v+=20,120,"Номер паспорта",Normal,PassportNr,false,0);
+  EditField(h+250,v,40,"Отделение НП",Normal,NPWarehouse,false,NPWarehouseSClass);
+  EditField(h+300,v,200,"",ViewOnly,NPWarehouseDesc,false,0);
   EditField(h,v+=vs,120,"ИНН",Normal,VATNr,false,0);
+  EditField(h+250,v,40," Груз. отделение НП",Normal,AdNPWarehouse,false,NPWarehouseSClass);
+  EditField(h+300,v,200,"",ViewOnly,AdNPWarehouseDesc,false,0);
 	EditField(h,v+=vs,120,"E-mail",Normal,eMail,false,0);
 	EditField(h,v+=vs,120,"Мобильный телефон",Normal,Phone,false,0);
 	EditField(h,v+=vs,120,"Доп. телефон",Normal,AltPhone,false,0);

@@ -667,6 +667,17 @@ BEGIN
     end;
   end;
   
+  
+  if(nonblankdate(SMp.TransDate) and SMp.TransDate>currentdate)then begin// Edit ************************** BPI Ukraine - KramarAlexandr - Tuesday, 10 April 2018 15:37:08
+  	SMp.TransDate = currentdate;
+  end;
+  if(nonblankdate(SMp.SentTransDate) and SMp.SentTransDate>currentdate)then begin// Edit ************************** BPI Ukraine - KramarAlexandr - Tuesday, 10 April 2018 15:37:09
+  	SMp.SentTransDate = currentdate;
+  end;
+  if(nonblankdate(SMp.OrdTransDate) and SMp.OrdTransDate>currentdate)then begin// Edit ************************** BPI Ukraine - KramarAlexandr - Tuesday, 10 April 2018 15:37:09
+  	SMp.OrdTransDate = currentdate;
+  end;
+  
   if (SMp.SentOKFlag==0) then begin				//Edit----------------------Dima  02.10.2015 (UnOk)
     if (stat==updatemode) then begin
       if (SM2p.SentOKFlag==1) then begin unoksent = true; end;

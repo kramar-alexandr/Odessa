@@ -375,7 +375,19 @@ begin
 				end;
 		end;
     
+    // Edit Start ---------------------------------------------- Edit Start
+	//Friday, 6 April 2018 13:25:15
+		if(foundf)then begin
+			if(RepSPec.flags[14]==1)then begin
+				foundf = ORr.NPPaymentType==0;
+			end;
+			if(RepSPec.flags[14]==2)then begin
+				foundf = ORr.NPPaymentType==1;
+			end;
+    end;
     
+	// Edit End ---------------------------------------------- Edit End
+	
     if (TrHs and foundf) then begin
       testf = false;
       if (RepSpec.flags[4]==1) then begin /* Invoiced not delivered*/

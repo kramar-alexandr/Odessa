@@ -1315,6 +1315,7 @@ BEGIN
 				case "Collector":	res = true;
 				case "PackMan":	res = true;
 				case "Sorting":	res = true;
+				case "Ship":	res = true;
       end;
    end;
    
