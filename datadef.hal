@@ -656,6 +656,8 @@ BlockBegin(RozetkaAuntBlock,-,"");//Edit---------------Anton
 	RecordField(Password,M4Str,255,0);
 EndBlock;
 
+
+
 BlockBegin(MyAccountBlock,-,"");
   BlockInServer;
   BlockForAllCompanies;
@@ -694,6 +696,16 @@ BlockBegin(MyAccountBlock,-,"");
   RecordField(RegShowLogin,M4Int,0,0);
   RecordField(RegUniquePhone,M4Int,0,0); //Edit***************************Sasha2,12:01 07.11.2014
 EndBlock;
+
+RecordBegin (RozetkaRequestVc,-,"")//Edit---------------Anton  
+  RecordField(ID,M4Long,0,0);
+  RecordField(Date,M4Date,0,0);
+  RecordField(Time,M4Time,0,0);
+  MainKeyBegin(ID,0);
+  KeySegment(ID);
+EndRecord;
+  
+  
 
 RecordBegin(INVc,-,"artikel5");
   ImpExpLevel(1);

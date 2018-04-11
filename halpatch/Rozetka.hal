@@ -1,40 +1,221 @@
+external function longint DateDiff(date,date);
+external function longint TimeDiff(time,time);
+external function longint ExactTimeDiff(Time,Time,var Time);
+external function longint TimeDiffInSeconds(Time,Time);
+external function Boolean FindTheUser(var record UserVc);
+external procedure ExtractObj(string,var Integer,var string);
+external function LongInt POSNETHexToLong(string);
+//external function boolean MySendRawWebmainRequest(string, string, boolean, string, string, string, string, boolean, area, var area, integer);
+external procedure TSVc_PastePRCode(var record TSVc,Integer);
+external procedure TSVc_PasteEMCode(var record TSVc,Integer);
+external function Boolean TSVc_PasteArtCode(var record TSVc,Integer,var string);
+external function Boolean FindStringInString(string, string);
+//external function Boolean SendRawWebRequest(string,LongInt,Boolean,string,string,string,string,Boolean,area,area,LongInt);
 external function boolean MySendRawWebRequest(string, string, boolean, string, string, string, string, boolean, area, var area, integer);
-external procedure GetXMLArea(var area);
+external function string 255 ConvertXml(string);
+external function string 255 ConvertXmlString(string,Boolean);
+external updating procedure UpdateORVcNewPostStatuses(record SHVc);
+external procedure StripSpace(var string,string);
+external function string 255 StripCharacter(string,string);
 
+SetLangMode(LangRussian,"RUS",0);
 
-global procedure RozetkaTestMn(record RcVc RepSpec)
+global
+procedure GetXMLArea(var area a)
 begin
-	area request,replyarea,mainRequest,extracted;
-  string 255 username,filename;
+
+  longint alen,i,outlen;
+  area out;
+  longint nodelen,res;
+  string 100 str;
+  string 255 str2;
+  		
+  res = 0;
+  
+  alen = GetAreaLength(a);
+  //MessageBox(0,alen);
+  //logtext(0,alen);
+  if(alen>0)then begin  
+		for(i=0;i<alen;i=i+1)begin
+			str = GetStringFromArea(a,i,1);
+			if(str==(chr(60)))then begin
+				//MessageBox(0,i);
+				res = GetAreaFromArea(a,i,alen-i,out);	
+				str = GetStringFromArea(out,0,13);		
+				//logtext(0,"str2 " & GetAreaLength(out)-50 & " " & GetStringFromArea(out,GetAreaLength(out)-50,50));
+				str2 = GetStringFromArea(out,GetAreaLength(out)-50,50);
+				str2 = StripCharacter(str2,chr(0));
+				str2 = StripCharacter(str2,chr(10));				
+				str2 = Right(str2,7);
+				goto GetXMLAreaPoint;
+			end;
+		end;
+	end else begin
+				logtext(0,"XML file is empty.");
+				SetAreaZeroSize(a);
+				goto GetXMLAreaPoint2;
+		end;
+	
+	GetXMLAreaPoint:;
+	
+	setareazerosize(a);
+	outlen = GetAreaLength(out);
+	GetAreaFromArea(out,0,outlen,a);
+	
+	GetXMLAreaPoint2:;
+	   
+  return;
+end;
+
+global function string 255 RozetkaEncodedAunt ()
+begin
+	string 255 LogPass,EncodedLogPass;
+	record RozetkaAuntBlock RozetkaAuntb;
+	
+	BlockLoad(RozetkaAuntb);
+	LogPass = RozetkaAuntb.Login & ":" & RozetkaAuntb.Password;
+	EncodedLogPass = "Authorization: Basic " & Base64Encode(LogPass);
+	RozetkaEncodedAunt = EncodedLogPass;
+	
+	return;
+end;
+
+global updating procedure RozetkaTestMn(record RcVc RepSpec)
+begin
+	area request,replyarea,mainRequest,extracted,ourarea,DataAr;
+  string 255 username,filename,str,datetime,timestr,datestr,idstr;
   string 200 getParam,host,page,webaddr,path;
   area basestring;
-  xml xdata;
-  longint i;
+  xml xdata, ydata;
+  longint i, j, replyarealen;
   record NPSettingsBlock NPSettingsb;
+  record RozetkaAuntBlock RozetkaAuntb;
+  record RozetkaRequestVc RozetkaReqestr;
+  boolean sv;
+
   string 255 www,apikey;
   record ORVc ORr;
-  integer mtrw;
+  integer mtrw, mtrw1,idint;
+  date d1;
     
   host = "seller.rozetka.com.ua";
   page = "/api/Order/";
   
+  
   getParam = "?dateFrom=" & DateToString(Addday(currentdate,-4),"YYYY-MM-DD") & "&dateTo=" & DateToString(currentdate,"YYYY-MM-DD") & "";
 	addtexttoarea("GET " & page & " HTTP/1.1" & chr(13) & chr(10),mainRequest);
  	addtexttoarea("host: " & host & getParam & chr(13) & chr(10),mainRequest);
- 	addtexttoarea("Authorization: Basic ZmlzaGVyc2NsdWI6cVNhZDlN" & chr(13) & chr(10),mainRequest);
+	addtexttoarea(RozetkaEncodedAunt & chr(13) & chr(10),mainRequest);
+	//MessageBox(0,"ZmlzaGVyc2NsdWI6cVNhZDlN");
  
  	AddTextToArea("" & chr(13) & chr(10),mainRequest);
 	//AddTextToArea("dateFrom=2018-01-03&dateTo=2018-05-03",mainRequest);
 
-  if(MySendRawWebRequest(host,"443",true,"GET",page & getParam,"text/xml","",false,mainRequest,replyarea,5))then begin  //WORK! 
-    writeareatofile(replyarea,"ROZETKA.txt",0);
+	if(MySendRawWebRequest(host,"443",true,"GET",page & getParam,"text/xml","",false,mainRequest,replyarea,5))then begin  //WORK! 
+    writeareatofile(replyarea,"ROZETKA/ROZETKA.xml",0);
     GetXMLArea(replyarea);
+	writeareatofile(replyarea,"ROZETKA1.txt",0);
+
     xdata = ParseXMLArea(replyarea);
     mtrw = XmlCountChildren(xdata,"Order/records");
-    messagebox(0,mtrw);
-    For(i=0;i<mtrw;i=i+1) begin
-	  	logtext(0,XmlGet(xdata,"Order/records/record[" & i & "]/id"));
-		end; 
+    //messagebox(0,mtrw);
+	
+	
+	replyarealen = GetAreaLength(replyarea);
+	//MessageBox(0,replyarealen);
+	//AddfileToArea("posthate.txt",ourarea,false);
+	if (mtrw>0)then begin
+			AddTextToArea("<orders>",ourarea);
+	end;
+	//writeareatofile(ourarea,"ROZETKA3.txt",0);
+	
+	For (i=0;i<mtrw;i = i+1) begin
+		SetAreaZeroSize(ourarea);
+
+		AddfileToArea("posthate.txt",ourarea,false);
+		AddTextToArea("<order0 orderno=\"",ourarea);
+		AddTextToArea(XmlGet(xdata,"Order/records/record[" & i & "]/id"),ourarea);
+		AddTextToArea("\" name=\"",ourarea);
+		AddTextToArea(XmlGet(xdata,"Order/records/record[" & i & "]/user/contactFio"),ourarea);
+		AddTextToArea("\" storeid=\"r",ourarea);
+		AddTextToArea("\" name2=\"\"",ourarea);
+		AddTextToArea(" clientid=\"",ourarea);
+		AddTextToArea(XmlGet(xdata,"Order/records/record[" & i & "]/user/id"),ourarea);
+		AddTextToArea("\" group_id=\"",ourarea);
+		AddTextToArea("\" email=\"",ourarea);
+		AddTextToArea(XmlGet(xdata,"Order/records/record[" & i & "]/user/email"),ourarea);
+		AddTextToArea("\" phone=\"",ourarea);
+		AddTextToArea(XmlGet(xdata,"Order/records/record[" & i & "]/user/phone"),ourarea);
+		AddTextToArea("\" payment=\"",ourarea);
+		AddTextToArea("\" delivery=\"",ourarea);
+		AddTextToArea(XmlGet(xdata,"Order/records/record[" & i & "]/delivery/service"),ourarea);
+		AddTextToArea("\" city=\"",ourarea);
+		AddTextToArea(XmlGet(xdata,"Order/records/record[" & i & "]/delivery/city"),ourarea);
+		AddTextToArea("\" country=\"UA",ourarea);
+		AddTextToArea("\" address=\"",ourarea);
+		AddTextToArea("ςδελενθεά " & XmlGet(xdata,"Order/records/record[" & i & "]/delivery/serviceId") & ":",ourarea);
+		AddTextToArea("\" ordercomment=\"\">",ourarea);
+		
+		ydata = ParseXMLArea(replyarea);
+		mtrw1 = XmlCountChildren(ydata,"Order/records/record[" & i & "]/purchase");
+		//messagebox(0,mtrw1);
+		
+		For(j=0;j<mtrw1;j=j+1)begin
+			AddTextToArea("<row" & j &" SKU=\"",ourarea);
+			AddTextToArea("\" name=\"",ourarea);
+			//AddTextToArea(XmlGet(xdata,"Order/records/record[" & i & "]/purchase/record[" & j & "]/title"),ourarea);
+			AddTextToArea("\" Qty=\"",ourarea);
+			AddTextToArea(XmlGet(xdata,"Order/records/record[" & i & "]/purchase/record[" & j & "]/quantity"),ourarea);
+			AddTextToArea("\" PriceInitial=\"",ourarea);
+			AddTextToArea(XmlGet(xdata,"Order/records/record[" & i & "]/purchase/record[" & j & "]/cost"),ourarea);
+			AddTextToArea("\" PriceTotal=\"\"/>",ourarea);
+		end;
+		AddTextToArea("</order0>",ourarea);
+		AddTextToArea("</orders><messageend>END</messageend>",ourarea);
+		//writeareatofile(ourarea,"ROZETKA_NEW/ROZETKA" & i+1 & ".xml",0);
+		
+		AddTextToArea(XmlGet(xdata,"Order/records/record[" & i & "]/created"),extracted);
+		//timestr=GetStringFromArea(extracted,11,9);
+		
+		/*GetAreaFromArea(extracted,8,2,DataAr);
+		GetAreaFromArea(extracted,5,2,DataAr);
+		GetAreaFromArea(extracted,2,2,DataAr);*/
+		
+		datetime=XmlGet(xdata,"Order/records/record[" & i & "]/created");
+		d1.day=StringToInt(mid(datetime,8,2));
+		d1.month=StringToInt(mid(datetime,5,2));
+		d1.year=StringToInt(mid(datetime,2,2));
+	
+		timestr=right(datetime,8);
+		//MessageBox(0,day & " " & mon & " " & year);
+		idstr=XmlGet(xdata,"Order/records/record[" & i & "]/id");
+		//MessageBox(0,datestr & " " & timestr & " " & datetime);
+		//idint=StringToInt(XmlGet(xdata,"Order/records/record[" & i & "]/id"));
+		RozetkaReqestr.ID=StringToLongInt(idstr);
+		if(ReadFirstMain(RozetkaReqestr,1,true)==false)then begin
+			
+			//MessageBox(0,StringToLongInt(idstr));
+			RecordNew(RozetkaReqestr);
+			RozetkaReqestr.ID=StringToLongInt(idstr);
+			RozetkaReqestr.Date=d1;
+			RozetkaReqestr.Time=StringToTime(timestr);
+			Recordstore(RozetkaReqestr,true);
+			writeareatofile(ourarea,"ROZETKA_NEW/ROZETKA" & i+1 & ".xml",0);
+			
+		end;
+		SetAreaZeroSize(extracted);
+		SetAreaZeroSize(DataAr);
+		//MessageBox(0,RozetkaReqestr.Time);
+		//MessageBox(0,RozetkaReqestr.Date);
+	end;
+	
+	
+	
+	
+	
+	For(i=0;i<mtrw;i=i+1) begin
+		logtext(0,XmlGet(xdata,"Order/records/record[" & i & "]/id"));
+	end; 
     
   end;
   	
