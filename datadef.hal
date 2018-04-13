@@ -5329,6 +5329,7 @@ RecordBegin(IPVc,-,"");
   RecordField(locvra7,M41Val,0,0);
   RecordField(locvra8,M41Val,0,0);
   RecordField(locvra9,M41Val,0,0);
+  RecordField(QtyFlag,M4Int,0,0);// Edit ************************** BPI Ukraine - KramarAlexandr - Friday, 13 April 2018 14:11:49
   ArrayBegin(Math,-,1);
   ArrayField(ITCode,M4Code,20,ITVc);
   ArrayField(StaffCode,M4Code,5,0);
