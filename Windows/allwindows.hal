@@ -10725,11 +10725,55 @@ begin
 	SetWRect(20,80,300,200);
 	AutoSizeWindow(false);
 	SetBlid(RozetkaAuntBlock);
-	EditField(h,v+=vs,60,"Лоин",Normal,Login,false,0);
+	EditField(h,v+=vs,60,"Логин",Normal,Login,false,0);
 	EditField(h,50,100,"Пароль",Normal,Password,false,0);
 	
 	EndWindow;
 	
+end;
+
+
+window RozetkaRequestDClass:1
+	wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+	real h,v,hs;
+	h = 30;
+	v = 20;
+	hs = 150;
+	WindowBegin("Редактировать отчет",RozetkaRequestDClass,CGview,DIView)
+	SetWRect(20,80,500,120);
+	AutoSizeWindow(false);
+	UseView(RozetkaRequestVc);
+	EditField(h,v,100,"ID",Normal,ID,false,0);
+	EditField(h+=hs,v,100,"Дата",Normal,Date,false,0);
+	EditField(h+=hs,v,100,"Время",Normal,Time,false,0);
+	
+	EndWindow;
+	
+end;
+
+
+window RozetkaRequestLClass:1
+	wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  real pos;
+
+  WindowBegin("Запросы",RozetkaRequestLClass,CGmlist,-);
+  SpawnClass(RozetkaRequestDClass);
+  SetWRect(64,80,740,298);
+  Sizeable(-1,-1,0,0);
+  UseView(RozetkaRequestVc);
+  RecordList(4,17,-21,-39);
+  RlColKey(4,15,"ID",ID,false,ID);
+  pos = 111;
+  RecordList(4,17,-21,-39);
+  //RlColKey(40,40,"ID",ID,false,ID);
+  RlColKey(120,120,"Дата",Date,false,ID);
+  RlColKey(500,500,"Время",Time,false,ID);
+  SearchField("Найти");
+  
+  EndWindow;
+  
 end;
 
 window LocalMachineTClass:2
