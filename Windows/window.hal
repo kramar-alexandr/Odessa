@@ -3656,15 +3656,15 @@ begin
   h = 110; h1 = 200; h2 = 300; vs = 20;
   EditField(h,v=6,50,"Скидка от кол-ва",Normal,StaffCode,false,StaffSClass);
   
-  ButtonFrame(h+100,v+16,130,2,"Скидка от:");// Edit ************************** BPI Ukraine - KramarAlexandr - Friday, 13 April 2018 14:12:55
+  /*ButtonFrame(h+100,v+16,130,2,"Скидка от:");// Edit ************************** BPI Ukraine - KramarAlexandr - Friday, 13 April 2018 14:12:55
 	RadioButton(h+100,v+16,0,0,"Склада",QtyFlag);
-	RadioButton(h+100,v+32,1,0,"Количества",QtyFlag);
+	RadioButton(h+100,v+32,1,0,"Количества",QtyFlag);*/
   
   EditField(h,v+=vs,50,"Колонка 0",Normal,vra0,false,0);
   
   EditField(h,v+=vs,50,"Колонка 1",Normal,vra1,false,0);
-  //EditField(h1,v,50,"2",Normal,vra2,false,0);
-  //EditField(h2,v,50,"3",Normal,vra3,false,0);
+  EditField(h1,v,50,"2",Normal,vra2,false,0);
+  EditField(h2,v,50,"3",Normal,vra3,false,0);
   EditField(h,v+=vs,50,"Колонка 4",Normal,vra4,false,0);
   EditField(h1,v,50,"5",Normal,vra5,false,0);
   EditField(h2,v,50,"6",Normal,vra6,false,0);
