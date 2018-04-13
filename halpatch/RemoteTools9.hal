@@ -917,6 +917,7 @@ begin
                             price,tstr,vreb,dummystr,baseprice,dummystr,
                             exportflag,calcprice,ORp.OrdDate,blankt,ORp.CustCode,true,dummyf,ORp.PayDeal,
                             tax2code,tax2prc,ORp.Region,ORp.Location,itemtaxtemplatecode)) then begin
+        logtext(0,"RecalcDiscountORD " & vreb);
 				ORrw.vRebate = vreb;
         MatRowPut(ORp,i,ORrw);
 				
