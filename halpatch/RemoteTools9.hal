@@ -916,7 +916,7 @@ begin
                             ORp.LangCode,ORp.CustCat,ORp.PriceList,ORp.RebCode,
                             price,tstr,vreb,dummystr,baseprice,dummystr,
                             exportflag,calcprice,ORp.OrdDate,blankt,ORp.CustCode,true,dummyf,ORp.PayDeal,
-                            tax2code,tax2prc,ORp.Region,location,itemtaxtemplatecode)) then begin
+                            tax2code,tax2prc,ORp.Region,ORp.Location,itemtaxtemplatecode)) then begin
 				ORrw.vRebate = vreb;
         MatRowPut(ORp,i,ORrw);
 				
