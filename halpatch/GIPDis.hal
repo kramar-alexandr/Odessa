@@ -389,6 +389,8 @@ BEGIN
   string 5 rebcode;
   Boolean rebfound;
   
+  logtext(0,"location1 " & location);
+  
   rebvp = 0;
   rebcode = reb2code;
   if (blank(rebcode)) then begin
@@ -438,6 +440,7 @@ BEGIN
         end;
         if (Rebrw.CodeType==1) then begin
           if (INr.Code==Rebrw.ITCode) then begin
+          	logtext(0,"location2 " & location);
           	if(Rebr.QtyFlag==0)then begin// Edit ************************** BPI Ukraine - KramarAlexandr - Friday, 13 April 2018 14:20:36
             	GetLocationReb(INr,location,qtp,pricep,Rebr,i,rebvp,foundstaff);
 							if(nonblank(Rebrw.StaffCode))then begin// Edit ************************** Friday, 24 March 2017 14:20:32
