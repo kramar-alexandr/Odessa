@@ -526,6 +526,7 @@ begin
   RecordField(ExpFlag03,M4Int,0,0);// Edit ************************** BPI Ukraine - KramarAlexandr - Thursday, 25 January 2018 14:41:21
   RecordField(ExpFlag04,M4Int,0,0);// Edit ************************** BPI Ukraine - KramarAlexandr - Thursday, 25 January 2018 14:41:22
   RecordField(ExpFlag05,M4Int,0,0);// Edit ************************** BPI Ukraine - KramarAlexandr - Thursday, 25 January 2018 14:41:23
+  RecordField(NewNetWeight,M45Val,0,0);// Edit ************************** BPI Ukraine - KramarAlexandr - Tuesday, 17 April 2018 10:48:53
   ArrayBegin(Math,-,1);
   ArrayField(LangCode,M4Code,5,0);
   ArrayField(Text,M4Str,100,0);
@@ -1772,6 +1773,7 @@ RecordBegin(INVc,-,"artikel5");
   RecordField(SeqCustomStatusFlag,M4Int,0,0);// Edit ************************** Wednesday, 12 July 2017 11:03:09
   RecordField(AdNPWarehouse,M4Int,0,0);	
   RecordField(AdNPWarehouseDesc,M4Str,200,0);//Edit----------------------Dima  08.05.2015
+  RecordField(NewPD,M4Code,50,0);// Edit ************************** BPI Ukraine - KramarAlexandr - Tuesday, 17 April 2018 10:31:11
   ArrayBegin(Math,-,1);
   ArrayField(stp,M4Int,0,0);
   ArrayField(ArtCode,M4Code,20,INVc);
@@ -2216,6 +2218,8 @@ RecordBegin(INVc,-,"artikel5");
   RecordField(AddAddr4,M4Str,255,0);// Edit ************************** Wednesday, 7 June 2017 17:11:50
   RecordField(AddAddr5,M4Str,255,0);// Edit ************************** Wednesday, 7 June 2017 17:11:51
   RecordField(PromotionCode2,M4UStr,255,0); //Edit***************************Sasha2,10:23 11.07.2017
+  RecordField(NewPD,M4Code,50,0);// Edit ************************** BPI Ukraine - KramarAlexandr - Tuesday, 17 April 2018 10:31:11
+
   DefineIVVcRecordType_Array;
   MainKeyBegin(SerNr,1);
   StoreInBaseKey;
@@ -5353,6 +5357,7 @@ RecordBegin(IPVc,-,"");
   RecordField(locvra7,M41Val,0,0);
   RecordField(locvra8,M41Val,0,0);
   RecordField(locvra9,M41Val,0,0);
+  RecordField(QtyFlag,M4Int,0,0);// Edit ************************** BPI Ukraine - KramarAlexandr - Friday, 13 April 2018 14:11:49
   ArrayBegin(Math,-,1);
   ArrayField(ITCode,M4Code,20,ITVc);
   ArrayField(StaffCode,M4Code,5,0);
@@ -6765,6 +6770,16 @@ RecordBegin(IPVc,-,"");
 	EndArray;
 	EndBlock;
 	
+	RecordBegin(NewPDVc,-,"NewPDVc");
+  RecordField(Code,M4Code,2,0);
+  RecordField(Comment,M4Str,255,0);
+  MainKeyBegin(Code,0);
+  KeySegment(Code);
+  KeyBegin(Comment);
+  KeySegment(Comment);
+  KeySegment(Code);
+  EndRecord;
+		
 return;
 end;
 

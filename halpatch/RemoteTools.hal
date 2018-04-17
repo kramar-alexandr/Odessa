@@ -1235,6 +1235,7 @@ BEGIN
   IVp.TREONr = ORp.TREONr;
   IVp.RecipientGLN = ORp.RecipientGLN;
   IVp.DelRecipientGLN = ORp.DelRecipientGLN;
+  IVp.NewPD = ORp.NewPD;// Edit ************************** BPI Ukraine - KramarAlexandr - Tuesday, 17 April 2018 10:54:36
   if (nonblank(ORp.InvoiceToCode)) then begin
     CUr.Code = ORp.InvoiceToCode;
     if (ReadFirstMain(CUr,1,true)) then begin
@@ -1264,6 +1265,7 @@ BEGIN
       IVp.OrgCust = ORp.CustCode;
 //      IVp.PayDeal = CUr.PayDeal;
       IVp.PayDeal = ORp.PayDeal;
+      
       IVp.VATNr = CUr.VATNr;      
       IVp.ExportFlag = CUr.ExportFlag;
       IVp.FiscalFlag = CUr.FiscalFlag;

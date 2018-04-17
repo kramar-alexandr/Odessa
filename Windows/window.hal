@@ -3655,6 +3655,11 @@ begin
   Tile(1,110,false,"1",StaffCode);
   h = 110; h1 = 200; h2 = 300; vs = 20;
   EditField(h,v=6,50,"Скидка от кол-ва",Normal,StaffCode,false,StaffSClass);
+  
+  /*ButtonFrame(h+100,v+16,130,2,"Скидка от:");// Edit ************************** BPI Ukraine - KramarAlexandr - Friday, 13 April 2018 14:12:55
+	RadioButton(h+100,v+16,0,0,"Склада",QtyFlag);
+	RadioButton(h+100,v+32,1,0,"Количества",QtyFlag);*/
+  
   EditField(h,v+=vs,50,"Колонка 0",Normal,vra0,false,0);
   
   EditField(h,v+=vs,50,"Колонка 1",Normal,vra1,false,0);
@@ -5317,3 +5322,46 @@ begin
 	EndWindow;
 end;
 
+window NewPDLClass:1
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  WindowBegin("Способы оплаты",NewPDLClass,CGmlist,-);
+  SpawnClass(NewPDDClass);
+  SetWRect(64,80,509,298);
+  Sizeable(-1,-1,0,0);
+  UseView(NewPDVc);
+  RecordList(4,17,-21,-39);
+  RlColKey(4,2,"Код",Code,false,Code);
+  RlColKey(100,100, "Комментарий",Comment,false,Comment);
+  SearchField("Search");
+  EndWindow;
+end;
+
+window NewPDSClass:1
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  WindowBegin("Способы оплаты",NewPDSClass,CGslist,-);
+  SpawnClass(NewPDDClass);
+  SetWRect(64,80,509,298);
+  Sizeable(-1,-1,0,0);
+  UseView(NewPDVc);
+  RecordList(4,17,-21,-39);
+  RlColKey(4,2,"Код",Code,false,Code);
+  RlColKey(100,100, "Комментарий",Comment,false,Comment);
+  SearchField("Search");
+  EndWindow;
+end;
+
+
+window NewPDDClass:3
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  real h,h2,v,vm,vs;
+  WindowBegin("Способы оплаты",NewPDDClass,CGview,-);
+  SetWRect(64,80,509,440);
+  UseView(NewPDVc);
+  v = 6; vs = 20; h = 120; h2 = 300;
+  EditField(h,v, 30,"Код",St_i,Code,false,0);
+  EditField(200,v,-40,"Комм.",Normal,Comment,false,0);
+  EndWindow;
+end;
