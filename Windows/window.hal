@@ -5360,8 +5360,8 @@ begin
   WindowBegin("Способы оплаты",NewPDDClass,CGview,-);
   SetWRect(64,80,509,440);
   UseView(NewPDVc);
-  v = 6; vs = 20; h = 120; h2 = 300;
-  EditField(h,v, 30,"Код",St_i,Code,false,0);
+  v = 6; vs = 20; h = 60; h2 = 300;
+  EditField(h,v, 60,"Код",Normal,Code,false,0);
   EditField(200,v,-40,"Комм.",Normal,Comment,false,0);
   EndWindow;
 end;
