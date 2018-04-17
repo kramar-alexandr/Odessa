@@ -44,7 +44,7 @@ begin
 	OutString(10,0,"Сумма",false);
 	OutString(12,0,"Объем",false);
 	OutString(13,0,"Вес",false);
-	OutString(13,0,"Нетто",false);
+	OutString(13,0,"Вес за единицу",false);
 	OutString(14,0,"В ящике",false);
 	OutString(15,0,"№ паллеты",false);
 	OutString(16,0,"Комментарий",false);

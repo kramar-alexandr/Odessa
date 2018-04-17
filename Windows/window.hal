@@ -5322,3 +5322,46 @@ begin
 	EndWindow;
 end;
 
+window NewPDLClass:1
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  WindowBegin("Способы оплаты",NewPDLClass,CGmlist,-);
+  SpawnClass(NewPDDClass);
+  SetWRect(64,80,509,298);
+  Sizeable(-1,-1,0,0);
+  UseView(NewPDVc);
+  RecordList(4,17,-21,-39);
+  RlColKey(4,2,"Код",Code,false,Code);
+  RlColKey(100,100, "Комментарий",Comment,false,Comment);
+  SearchField("Search");
+  EndWindow;
+end;
+
+window NewPDSClass:1
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  WindowBegin("Способы оплаты",NewPDSClass,CGslist,-);
+  SpawnClass(NewPDDClass);
+  SetWRect(64,80,509,298);
+  Sizeable(-1,-1,0,0);
+  UseView(NewPDVc);
+  RecordList(4,17,-21,-39);
+  RlColKey(4,2,"Код",Code,false,Code);
+  RlColKey(100,100, "Комментарий",Comment,false,Comment);
+  SearchField("Search");
+  EndWindow;
+end;
+
+
+window NewPDDClass:3
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  real h,h2,v,vm,vs;
+  WindowBegin("Способы оплаты",NewPDDClass,CGview,-);
+  SetWRect(64,80,509,440);
+  UseView(NewPDVc);
+  v = 6; vs = 20; h = 120; h2 = 300;
+  EditField(h,v, 30,"Код",St_i,Code,false,0);
+  EditField(200,v,-40,"Комм.",Normal,Comment,false,0);
+  EndWindow;
+end;
