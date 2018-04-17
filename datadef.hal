@@ -697,6 +697,8 @@ BlockBegin(MyAccountBlock,-,"");
   RecordField(RegUniquePhone,M4Int,0,0); //Edit***************************Sasha2,12:01 07.11.2014
 EndBlock;
 
+//RecordBegin()
+
 RecordBegin (RozetkaRequestVc,-,"")//Edit---------------Anton  
   RecordField(ID,M4Long,0,0);
   RecordField(Date,M4Date,0,0);
@@ -704,7 +706,17 @@ RecordBegin (RozetkaRequestVc,-,"")//Edit---------------Anton
   MainKeyBegin(ID,0);
   KeySegment(ID);
 EndRecord;
-  
+
+
+RecordBegin (RybRayRequestVc,-,"")//Edit---------------Anton  
+  RecordField(offerId,M4Long,0,0);
+  RecordField(vendorcode,M4Long,0,0);
+  MainKeyBegin(offerId,0);
+  KeySegment(offerId);
+  KeyBegin(vendorcode);
+  KeySegment(vendorcode);
+  KeySegment(offerId);
+EndRecord;  
   
 
 RecordBegin(INVc,-,"artikel5");

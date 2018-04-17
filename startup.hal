@@ -19,6 +19,7 @@ begin
 	Register("Группы","Группы",UAPOSGroupVc,modUAPost);
 	
 	Register("Запросы","Запросы",RozetkaRequestVc,modRozetka);
+	Register("Запросы RybRay","Запросы RybRay",RybRayRequestVc,modRozetka);
 	Setting("Натройки",RozetkaAuntTCLass,modRozetka);
 	
 	Setting("Настройки УкрПочты",UAPostSettingsTClass,modUAPost);
@@ -515,6 +516,8 @@ begin
   Maintenance("Add Spec To Cons",MyVClass,ConsFillSpec,modSL);
   
   Maintenance("Проверить соединение",MyVClass,RozetkaTestMn,modRozetka);
+  
+  Maintenance("Проверить соединение rybray",MyVClass,RybrayRequestMn,modRozetka);
 	
   Import("Импорт цен",PLImportIClass,PLImportIn,modDI); //Added********************Dima 20.11.2014
   Import("Импорт товаров",INImportIClass,INImportIn,modIN);//Added********************Dima 20.11.2014
