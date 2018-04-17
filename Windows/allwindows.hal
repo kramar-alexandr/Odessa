@@ -2638,7 +2638,7 @@ begin
     Flip(flipnr); flipnr = flipnr + 1;
       MatCol(1,164,"Наименование",0,Spec,false,0);
       MatColTL(1,-210,"Объем",0,M45Val,Normal,0,Volume,false,0);// Edit ************************** Friday, July 4, 2014 at 17:43:03
-      MatColTL(1,-140,"Вез за единицу",0,M45Val,Normal,0,NetWeight,false,0);// Edit ************************** Friday, July 4, 2014 at 17:43:03
+      MatColTL(1,-140,"Вес за единицу",0,M45Val,Normal,0,NetWeight,false,0);// Edit ************************** Friday, July 4, 2014 at 17:43:03
       MatColTL(1,-70,"Брутто",0,M45Val,Normal,0,Weight,true,0);// Edit ************************** Friday, July 4, 2014 at 17:43:06
   end;
   DeleteRowTest;
@@ -3053,7 +3053,7 @@ begin
 
     EditField(h4,v+=vs ,50,"Плотность",Normal,Density,true,0); //Edit***************************Sasha2,16:58 23.06.2014
     EditField(h5,v ,50,"Объем",Normal,Volume,true,0); //Edit***************************Sasha2,16:59 23.06.2014
-    EditField(h4,v+vs ,50,"Вез за единицу",Normal,NetWeight,true,0); //Edit***************************Sasha2,16:59 23.06.2014
+    EditField(h4,v+vs ,50,"Вес за единицу",Normal,NetWeight,true,0); //Edit***************************Sasha2,16:59 23.06.2014
     StaticText(h4 + 55,v+vs+15,"КГ",false);
     /*if (GuiType == kGuiWPF or GuiType == kGuiWindowsDesktop) then begin
     	StaticText(h5 + 55,v + 15,"cm"& chr(179),false); //Edit***************************Sasha2,17:19 23.06.2014
@@ -8287,7 +8287,7 @@ begin
   if (HasLanguages) then begin
   EditField(h3,v,50,"Язык",Normal,LangCode,true,LangSClass);
   end;
-  EditField(h,v+=vs,100,"Вез за единицу",Normal,NetVal,true,0);
+  EditField(h,v+=vs,100,"Вес за единицу",Normal,NetVal,true,0);
   if (HasLocalization("POL")==false) then begin
   EditField(h2,v,80,"НДС",Normal,VATVal,true,0);
   end;
@@ -8441,7 +8441,7 @@ begin
   if (HasLanguages) then begin
   EditField(h3,v,50,"Язык",Normal,LangCode,true,LangSClass);
   end;
-  EditField(h,v+=vs,100,"Вез за единицу",Normal,NetVal,true,0);
+  EditField(h,v+=vs,100,"Вес за единицу",Normal,NetVal,true,0);
   if (HasLocalization("POL")==false) then begin
   EditField(h2,v,80,"НДС",Normal,VATVal,true,0);
   end;
