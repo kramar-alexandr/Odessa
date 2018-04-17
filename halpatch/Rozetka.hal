@@ -153,11 +153,11 @@ begin
 			
 			For(j=0;j<mtrw1;j=j+1)begin
 				extrofferid = StringToLongInt(XmlGet(xdata,"Order/records/record[" & i & "]/purchase/record[" & j & "]/offerId"));
-				MessageBox(0,extrofferid);
+				//MessageBox(0,extrofferid);
 				RybRayRequestr.offerId = extrofferid;
 				if(ReadFirstMain(RybRayRequestr,1,true))then begin
 					SKU = RybRayRequestr.vendorcode;
-					MessageBox(0,SKU);
+					//MessageBox(0,SKU);
 				end;
 				
 				AddTextToArea("<row" & j &" SKU=\"" & SKU & "",ourarea);
