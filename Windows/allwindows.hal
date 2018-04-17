@@ -10779,6 +10779,45 @@ begin
   
 end;
 
+window RybRayRequestDClass:1
+	wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+	real h,v,hs;
+	h = 50;
+	v = 20;
+	hs = 180;
+	WindowBegin("Редактировать отчет",RybRayRequestDClass,CGview,DIView)
+	SetWRect(20,80,500,120);
+	AutoSizeWindow(false);
+	UseView(RybRayRequestVc);
+	EditField(h,v,100,"Offer ID",Normal,offerId,false,0);
+	EditField(h+=hs,v,100,"Vendorcode",Normal,vendorcode,false,0);
+	
+	
+	EndWindow;
+	
+end;
+
+
+window RybRayRequestLClass:1
+	wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  real pos;
+
+  WindowBegin("Запросы",RybRayRequestLClass,CGmlist,-);
+  SpawnClass(RybRayRequestDClass);
+  SetWRect(64,80,300,298);
+  AutoSizeWindow(false);
+  UseView(RybRayRequestVc);
+  RecordList(4,17,-21,-39);
+  RlColKey(4,15,"Offer ID",offerId,false,offerId);
+  RlColKey(140,140,"Vendorcode",vendorcode,false,vendorcode);
+  SearchField("Найти");
+  
+  EndWindow;
+  
+end;
+
 window LocalMachineTClass:2
   wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
 begin

@@ -86,7 +86,7 @@ begin
   longint i, j, replyarealen;
   record NPSettingsBlock NPSettingsb;
   record RozetkaAuntBlock RozetkaAuntb;
-  record RozetkaRequestVc RozetkaReqestr;
+  record RozetkaRequestVc RozetkaRequestr;
   boolean sv;
 
   string 255 www,apikey;
@@ -106,83 +106,83 @@ begin
  	AddTextToArea("" & chr(13) & chr(10),mainRequest);
 
 	if(MySendRawWebRequest(host,"443",true,"GET",page & getParam,"text/xml","",false,mainRequest,replyarea,5))then begin  //WORK! 
-    writeareatofile(replyarea,"ROZETKA/ROZETKA.xml",0);
-    GetXMLArea(replyarea);
-	writeareatofile(replyarea,"ROZETKA1.txt",0);
+		writeareatofile(replyarea,"ROZETKA/ROZETKA.xml",0);
+		GetXMLArea(replyarea);
+		writeareatofile(replyarea,"ROZETKA1.txt",0);
 
-    xdata = ParseXMLArea(replyarea);
-    mtrw = XmlCountChildren(xdata,"Order/records");
-    replyarealen = GetAreaLength(replyarea);
-	
-	if (mtrw>0)then begin
-			AddTextToArea("<orders>",ourarea);
-	end;
-	
-	
-	For (i=0;i<mtrw;i = i+1) begin
-		SetAreaZeroSize(ourarea);
+		xdata = ParseXMLArea(replyarea);
+		mtrw = XmlCountChildren(xdata,"Order/records");
+		replyarealen = GetAreaLength(replyarea);
+		
+		if (mtrw>0)then begin
+				AddTextToArea("<orders>",ourarea);
+		end;
+		
+		
+		For (i=0;i<mtrw;i = i+1) begin
+			SetAreaZeroSize(ourarea);
 
-		AddfileToArea("posthate.txt",ourarea,false);
-		AddTextToArea("<order0 orderno=\"",ourarea);
-		AddTextToArea(XmlGet(xdata,"Order/records/record[" & i & "]/id"),ourarea);
-		AddTextToArea("\" name=\"",ourarea);
-		AddTextToArea(XmlGet(xdata,"Order/records/record[" & i & "]/user/contactFio"),ourarea);
-		AddTextToArea("\" storeid=\"r",ourarea);
-		AddTextToArea("\" name2=\"\"",ourarea);
-		AddTextToArea(" clientid=\"",ourarea);
-		AddTextToArea(XmlGet(xdata,"Order/records/record[" & i & "]/user/id"),ourarea);
-		AddTextToArea("\" group_id=\"",ourarea);
-		AddTextToArea("\" email=\"",ourarea);
-		AddTextToArea(XmlGet(xdata,"Order/records/record[" & i & "]/user/email"),ourarea);
-		AddTextToArea("\" phone=\"",ourarea);
-		AddTextToArea(XmlGet(xdata,"Order/records/record[" & i & "]/user/phone"),ourarea);
-		AddTextToArea("\" payment=\"",ourarea);
-		AddTextToArea("\" delivery=\"",ourarea);
-		AddTextToArea(XmlGet(xdata,"Order/records/record[" & i & "]/delivery/service"),ourarea);
-		AddTextToArea("\" city=\"",ourarea);
-		AddTextToArea(XmlGet(xdata,"Order/records/record[" & i & "]/delivery/city"),ourarea);
-		AddTextToArea("\" country=\"UA",ourarea);
-		AddTextToArea("\" address=\"",ourarea);
-		AddTextToArea("ςδελενθεά " & XmlGet(xdata,"Order/records/record[" & i & "]/delivery/serviceId") & ":",ourarea);
-		AddTextToArea("\" ordercomment=\"\">",ourarea);
-		
-		ydata = ParseXMLArea(replyarea);
-		mtrw1 = XmlCountChildren(ydata,"Order/records/record[" & i & "]/purchase");
-		
-		For(j=0;j<mtrw1;j=j+1)begin
-			AddTextToArea("<row" & j &" SKU=\"",ourarea);
+			AddfileToArea("posthate.txt",ourarea,false);
+			AddTextToArea("<order0 orderno=\"",ourarea);
+			AddTextToArea(XmlGet(xdata,"Order/records/record[" & i & "]/id"),ourarea);
 			AddTextToArea("\" name=\"",ourarea);
-			AddTextToArea("\" Qty=\"",ourarea);
-			AddTextToArea(XmlGet(xdata,"Order/records/record[" & i & "]/purchase/record[" & j & "]/quantity"),ourarea);
-			AddTextToArea("\" PriceInitial=\"",ourarea);
-			AddTextToArea(XmlGet(xdata,"Order/records/record[" & i & "]/purchase/record[" & j & "]/cost"),ourarea);
-			AddTextToArea("\" PriceTotal=\"\"/>",ourarea);
-		end;
+			AddTextToArea(XmlGet(xdata,"Order/records/record[" & i & "]/user/contactFio"),ourarea);
+			AddTextToArea("\" storeid=\"r",ourarea);
+			AddTextToArea("\" name2=\"\"",ourarea);
+			AddTextToArea(" clientid=\"",ourarea);
+			AddTextToArea(XmlGet(xdata,"Order/records/record[" & i & "]/user/id"),ourarea);
+			AddTextToArea("\" group_id=\"",ourarea);
+			AddTextToArea("\" email=\"",ourarea);
+			AddTextToArea(XmlGet(xdata,"Order/records/record[" & i & "]/user/email"),ourarea);
+			AddTextToArea("\" phone=\"",ourarea);
+			AddTextToArea(XmlGet(xdata,"Order/records/record[" & i & "]/user/phone"),ourarea);
+			AddTextToArea("\" payment=\"",ourarea);
+			AddTextToArea("\" delivery=\"",ourarea);
+			AddTextToArea(XmlGet(xdata,"Order/records/record[" & i & "]/delivery/service"),ourarea);
+			AddTextToArea("\" city=\"",ourarea);
+			AddTextToArea(XmlGet(xdata,"Order/records/record[" & i & "]/delivery/city"),ourarea);
+			AddTextToArea("\" country=\"UA",ourarea);
+			AddTextToArea("\" address=\"",ourarea);
+			AddTextToArea("ςδελενθεά " & XmlGet(xdata,"Order/records/record[" & i & "]/delivery/serviceId") & ":",ourarea);
+			AddTextToArea("\" ordercomment=\"\">",ourarea);
+			
+			ydata = ParseXMLArea(replyarea);
+			mtrw1 = XmlCountChildren(ydata,"Order/records/record[" & i & "]/purchase");
+			
+			For(j=0;j<mtrw1;j=j+1)begin
+				AddTextToArea("<row" & j &" SKU=\"",ourarea);
+				AddTextToArea("\" name=\"",ourarea);
+				AddTextToArea("\" Qty=\"",ourarea);
+				AddTextToArea(XmlGet(xdata,"Order/records/record[" & i & "]/purchase/record[" & j & "]/quantity"),ourarea);
+				AddTextToArea("\" PriceInitial=\"",ourarea);
+				AddTextToArea(XmlGet(xdata,"Order/records/record[" & i & "]/purchase/record[" & j & "]/cost"),ourarea);
+				AddTextToArea("\" PriceTotal=\"\"/>",ourarea);
+			end;
+			
+			
+			AddTextToArea("</order0>",ourarea);
+			AddTextToArea("</orders><messageend>END</messageend>",ourarea);
+			datetime=XmlGet(xdata,"Order/records/record[" & i & "]/created");
+			d1.day=StringToInt(mid(datetime,8,2));
+			d1.month=StringToInt(mid(datetime,5,2));
+			d1.year=StringToInt(mid(datetime,2,2));
 		
-		
-		AddTextToArea("</order0>",ourarea);
-		AddTextToArea("</orders><messageend>END</messageend>",ourarea);
-		datetime=XmlGet(xdata,"Order/records/record[" & i & "]/created");
-		d1.day=StringToInt(mid(datetime,8,2));
-		d1.month=StringToInt(mid(datetime,5,2));
-		d1.year=StringToInt(mid(datetime,2,2));
-	
-		timestr=right(datetime,8);
-		idstr=XmlGet(xdata,"Order/records/record[" & i & "]/id");
-		RozetkaReqestr.ID=StringToLongInt(idstr);
-		if(ReadFirstMain(RozetkaReqestr,1,true)==false)then begin
-			
-			
-			RecordNew(RozetkaReqestr);
-			RozetkaReqestr.ID=StringToLongInt(idstr);
-			RozetkaReqestr.Date=d1;
-			RozetkaReqestr.Time=StringToTime(timestr);
-			Recordstore(RozetkaReqestr,true);
-			writeareatofile(ourarea,"ROZETKA_NEW/ROZETKA" & i+1 & ".xml",0);
-			
-		end;
-		SetAreaZeroSize(extracted);
-		SetAreaZeroSize(DataAr);
+			timestr=right(datetime,8);
+			idstr=XmlGet(xdata,"Order/records/record[" & i & "]/id");
+			RozetkaRequestr.ID=StringToLongInt(idstr);
+			if(ReadFirstMain(RozetkaRequestr,1,true)==false)then begin
+				
+				
+				RecordNew(RozetkaRequestr);
+				RozetkaRequestr.ID=StringToLongInt(idstr);
+				RozetkaRequestr.Date=d1;
+				RozetkaRequestr.Time=StringToTime(timestr);
+				Recordstore(RozetkaRequestr,true);
+				writeareatofile(ourarea,"ROZETKA_NEW/ROZETKA" & i+1 & ".xml",0);
+				
+			end;
+			SetAreaZeroSize(extracted);
+			SetAreaZeroSize(DataAr);
 		
 	end;
 	
@@ -196,4 +196,101 @@ begin
   end;
   	
 return;
+end;
+
+global updating procedure RybrayRequestMn(record RcVc RepSpec)
+begin
+  area request,replyarea,mainRequest,extracted,ourarea,DataAr,space,sim,culine;
+  string 255 username,filename,str,datetime,timestr,datestr,idstr,linestr;
+  string 200 getParam,host,page,webaddr,path;
+  area basestring;
+  xml xdata, ydata;
+  longint i, j, replyarealen,cLines,culinelen,cuvndcdlnlen, k, lid, r, offid, vendcode, t;
+  record RybRayRequestVc RybRayRequestr;
+  boolean sv;
+
+  string 255 www,apikey;
+  record ORVc ORr;
+  integer mtrw, mtrw1,idint;
+  date d1;
+	AddTextToArea(" ",space);
+	host = "www.rybray.com.ua";
+	page = "/media/feed/rozetka.xml";
+  
+  
+    //getParam = "?dateFrom=" & DateToString(Addday(currentdate,-4),"YYYY-MM-DD") & "&dateTo=" & DateToString(currentdate,"YYYY-MM-DD") & "";
+	addtexttoarea("GET " & page & " HTTP/1.1" & chr(13) & chr(10),mainRequest);
+ 	addtexttoarea("host: " & host & chr(13) & chr(10),mainRequest);
+	//addtexttoarea(RozetkaEncodedAunt & chr(13) & chr(10),mainRequest);
+ 
+ 	AddTextToArea("" & chr(13) & chr(10),mainRequest);
+	t = 0;
+
+	if(MySendRawWebRequest(host,"443",true,"GET",page,"text/xml","",false,mainRequest,replyarea,5))then begin  
+		writeareatofile(replyarea,"rybray/rybray.xml",0);
+		GetXMLArea(replyarea);
+		writeareatofile(replyarea,"rybray1.txt",0);
+		cLines = CountLinesInArea(replyarea);
+		replyarealen = GetAreaLength(replyarea);
+		
+		//MessageBox(0,replyarealen);
+		//MessageBox(0,cLines);
+		for(i=0;i<replyarealen;i=i+1) begin
+			
+			
+			
+			if(GetStringFromArea(replyarea,i,1)==Chr(13))then begin
+				linestr = GetStringFromArea(replyarea,i,50);
+				t = t+1;
+				if(t==500)then begin
+					t = 0;
+					logtext(0,CurrentTime);
+				end;
+			
+				for(j=0;j<50;j=j+1) begin
+					if(Mid(linestr,j,11)=="<offer id=\"")then begin
+						j = j+11;
+						lid = 0;
+						for(k=j;k<50;k=k+1) begin
+							if(Mid(linestr,k,1)=="\"")then begin
+								lid = k-j;
+								k = 50;
+							end;
+						end;
+						offid = StringToLongInt(Mid(linestr,j,lid));
+						//j = 50;
+					end;
+					if(Mid(linestr,j,12)=="<vendorCode>")then begin
+						j = j+12;
+						lid = 0;
+						for(k=j;k<50;k=k+1) begin
+							if(Mid(linestr,k,1)=="<")then begin
+								lid = k-j;
+								k = 50;
+							end;
+						end;
+						vendcode = StringToLongInt(Mid(linestr,j,lid));
+						//j = 50;
+					end;
+				end;
+				if (offid>0)then begin
+					if (vendcode>0)then begin
+						RybRayRequestr.offerId = offid;
+						if(vendcode!=0)then begin
+							if(ReadFirstMain(RybRayRequestr,1,true)==false)then begin
+								RecordNew(RybRayRequestr);
+								RybRayRequestr.offerId = offid;
+								RybRayRequestr.vendorcode = vendcode;
+								Recordstore(RybRayRequestr,true);
+							end;
+						end;
+					end;
+				end;
+			end;
+			vendcode = 0;
+			linestr = "";
+		end;
+		
+	end;
+return;	
 end;
