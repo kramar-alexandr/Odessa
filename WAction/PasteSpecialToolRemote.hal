@@ -851,6 +851,10 @@ begin
   string 5 otype,ctype;
   boolean res,found;
   string 100 object,typ,cobject,accnr;
+  record UserVc USr;// Edit ************************** BPI Ukraine - KramarAlexandr - Thursday, 19 April 2018 10:06:51
+  
+  USr.Code = currentuser;// Edit ************************** BPI Ukraine - KramarAlexandr - Thursday, 19 April 2018 10:06:51
+  readfirstmain(USr,1,true);// Edit ************************** BPI Ukraine - KramarAlexandr - Thursday, 19 April 2018 10:06:52
   
   if (currow>=0) then begin
     MatRowGet(IVr,currow,IVrw);
@@ -862,6 +866,9 @@ begin
   end;
     if (nonblank(object)) then begin
       FindOTforAcc(accnr,typ);
+      if(nonblank(USr.AllowObjTypes))then begin// Edit ************************** BPI Ukraine - KramarAlexandr - Thursday, 19 April 2018 10:06:53
+				typ = USr.AllowObjTypes;
+			end;
       if (nonblank(typ)) then begin
         typeam=CountObjects(typ); 
         objam=CountObjects(object); 

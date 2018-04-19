@@ -745,7 +745,12 @@ begin
         accnr = IVrw.SalesAcc;
       end else begin
         accnr = IVr.ARAcc;
+        if(nonblank(USr.AllowObjTypes))then begin// Edit ************************** BPI Ukraine - KramarAlexandr - Thursday, 19 April 2018 10:56:34
+        	accnr = "";
+        end;
       end;
+      USr.Code = currentuser;// Edit ************************** BPI Ukraine - KramarAlexandr - Thursday, 19 April 2018 10:22:17
+			readfirstmain(USr,1,true);// Edit ************************** BPI Ukraine - KramarAlexandr - Thursday, 19 April 2018 10:22:18
     end;
     if (GetWindowClass(wn)=="QTDClass") then begin
       GetWindowRecord(wn,QTr);
@@ -813,6 +818,9 @@ begin
     fn = StringToLongInt(fldname);
     if (fn==0) then begin 
       plbl = accnr;
+      if(nonblank(USr.AllowObjTypes))then begin
+      	plbl = "";
+      end;
       res = true;
     end else begin
       if (GetWindowClass(wn)=="PRDClass") then begin 

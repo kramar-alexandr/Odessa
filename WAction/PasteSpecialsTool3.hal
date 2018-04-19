@@ -683,7 +683,7 @@ BEGIN
       accnr = Bud2r.AccNumber;
   end;
   otype = "";
-  if (nonblank(accnr)) then begin
+  if (nonblank(accnr) and GetWindowFileName(cwn)!="IVVc") then begin
     if (GetWindowClass(cwn)=="PRDClass") then begin 
       FindOTforPRClass(accnr,typ);
     end else begin
