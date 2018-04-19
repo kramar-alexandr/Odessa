@@ -1,4 +1,5 @@
 external function longint DateDiff(date,date);
+external function Boolean Getformcode(Integer,Integer,string,string,string,LongInt,LongInt,string,string,Integer,string,var string);
 external function longint TimeDiff(time,time);
 external function longint ExactTimeDiff(Time,Time,var Time);
 external function longint TimeDiffInSeconds(Time,Time);
@@ -83,11 +84,12 @@ begin
   string 200 getParam,host,page,webaddr,path;
   area basestring;
   xml xdata, ydata;
-  longint i, j, replyarealen;
+  longint i, j, replyarealen, extrofferid, SKU;
   record NPSettingsBlock NPSettingsb;
   record RozetkaAuntBlock RozetkaAuntb;
   record RozetkaRequestVc RozetkaRequestr;
-  boolean sv;
+  record RybRayRequestVc RybRayRequestr;
+  boolean sv, TrHs;
 
   string 255 www,apikey;
   record ORVc ORr;
@@ -150,7 +152,15 @@ begin
 			mtrw1 = XmlCountChildren(ydata,"Order/records/record[" & i & "]/purchase");
 			
 			For(j=0;j<mtrw1;j=j+1)begin
-				AddTextToArea("<row" & j &" SKU=\"",ourarea);
+				extrofferid = StringToLongInt(XmlGet(xdata,"Order/records/record[" & i & "]/purchase/record[" & j & "]/offerId"));
+				//MessageBox(0,extrofferid);
+				RybRayRequestr.offerId = extrofferid;
+				if(ReadFirstMain(RybRayRequestr,1,true))then begin
+					SKU = RybRayRequestr.vendorcode;
+					//MessageBox(0,SKU);
+				end;
+				
+				AddTextToArea("<row" & j &" SKU=\"" & SKU & "",ourarea);
 				AddTextToArea("\" name=\"",ourarea);
 				AddTextToArea("\" Qty=\"",ourarea);
 				AddTextToArea(XmlGet(xdata,"Order/records/record[" & i & "]/purchase/record[" & j & "]/quantity"),ourarea);
@@ -244,7 +254,7 @@ begin
 				t = t+1;
 				if(t==500)then begin
 					t = 0;
-					logtext(0,CurrentTime);
+					//logtext(0,CurrentTime);
 				end;
 			
 				for(j=0;j<50;j=j+1) begin
