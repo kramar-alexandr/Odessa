@@ -9207,6 +9207,7 @@ begin
     EditField(h,v+=vs,100,"Ограничение клиента",Normal,CanUseOS,false,SetSClass);
   end;
   EditField(h,v+=vs,100,"Кода контакта",Normal,CustCode,false,ContactCUSClass);
+  EditField(h,v+=vs,100,"Разр. типы объектов",Normal,AllowObjTypes,false,OTSClass);// Edit ************************** BPI Ukraine - KramarAlexandr - Thursday, 19 April 2018 09:52:48
 //  EditField(h,v+=vs,100,"Discount Password",Normal,OldPassWord,false,0);
   if (StandardHansa==false) then begin
     ButtonFrame(h2,v=44,165,3,"Ограниченный доступ");

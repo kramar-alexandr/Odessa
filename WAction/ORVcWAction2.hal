@@ -1810,6 +1810,10 @@ begin
   row ORVc ORrw;
   Integer rownr;
   string 200 typ;
+  record UserVc USr;// Edit ************************** BPI Ukraine - KramarAlexandr - Thursday, 19 April 2018 09:57:07
+  
+  USr.Code = currentuser;// Edit ************************** BPI Ukraine - KramarAlexandr - Thursday, 19 April 2018 09:57:08
+  readfirstmain(USr,1,true);// Edit ************************** BPI Ukraine - KramarAlexandr - Thursday, 19 April 2018 09:57:09
 
   GetWindowRecord(wn,ORr);
   rownr = WindowActiveRow(wn);
@@ -1819,6 +1823,9 @@ begin
     FindOTforAcc(ORrw.SalesAcc,typ);
   end else begin
     FindOTforAcc("",typ);
+    if(nonblank(USr.AllowObjTypes))then begin// Edit ************************** BPI Ukraine - KramarAlexandr - Thursday, 19 April 2018 09:57:06
+    	typ = USr.AllowObjTypes;
+    end;
   end;
   if (nonblank(typ)) then begin
     psname = "TRObjSClass";
