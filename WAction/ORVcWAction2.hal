@@ -387,6 +387,13 @@ BEGIN
   DeselectWindow(wn,false);
   if (WindowState(wn)==Rs_normal) then begin
     GetWindowRecord(wn,ORr);
+    	if(blank(ORr.NewPD) and blank(ORr.OrderClass))then begin
+    		if(usercanaction("UnOkAll",false)==false)then begin
+    			messagebox(31182,"");
+    			beep;
+    			goto lIVFromORDsm;
+    		end;
+    	end;
 //    if (ORr.Closed==0) then begin
       if (UserCanAction("ORToInv",true)) then begin
         testf = true;
@@ -457,6 +464,10 @@ BEGIN
   end else begin
     Beep;
   end;
+  
+  lIVFromORDsm:;
+  
+  
   RETURN;
 END;
 
