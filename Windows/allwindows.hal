@@ -9565,6 +9565,9 @@ begin
 	if (IsEnterprise) then begin
 		EditFieldTL(h,v3=(v+=vs),50,"Миним. сумма",M4Val,Normal,0,vals0,false,0);
 	end;
+	
+	EditFieldTL(h,v3=(v+=vs),50,"Способ оплаты",M4Code,Normal,20,f7,false,NewPDSClass);// Edit ************************** BPI Ukraine - KramarAlexandr - Thursday, 19 April 2018 11:24:18
+	
 	if (IsEnterprise) then begin
 		h = 320;
 		v = vm + 10;

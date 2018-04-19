@@ -386,6 +386,10 @@ begin
 			end;
     end;
     
+    if(nonblank(RepSpec.f7) and RepSpec.f7!=ORr.NewPD)then begin
+    	foundf = false;    
+    end;
+    
 	// Edit End ---------------------------------------------- Edit End
 	
     if (TrHs and foundf) then begin
@@ -574,6 +578,8 @@ L30:;
             OutString(220,0,ORr.Comment,false);// Edit ************************** Wednesday, 13 July 2016 09:49:06
             OutString(320,0,ORr.Objects,false);// Edit ************************** Thursday, 11 May 2017 15:41:04
             OutString(390,0,ORr.CustomStatusFlagText,false);// Edit ************************** Wednesday, 13 July 2016 09:49:06
+            OutString(410,0,ORr.NewPD,false);// Edit ************************** BPI Ukraine - KramarAlexandr - Thursday, 19 April 2018 11:17:44
+            
             if (HasMultiCurrency) then begin
               OutVal(440,0,iv,M4Val,true);
               OutString(445,0,ORr.CurncyCode,false);

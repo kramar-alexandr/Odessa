@@ -926,6 +926,11 @@ begin
         end;
       end;
       
+      if(nonblank(RepSpec.f7) and RepSpec.f7!=IVr.NewPD)then begin
+				testf = false;    
+			end;
+      
+      
       CUr.Code = IVr.CustCode;// Edit ************************** Wednesday, 15 July 2015 15:11:18
 			ReadFirstMain(CUr,1,true);// Edit ************************** Wednesday, 15 July 2015 15:11:19
 			
