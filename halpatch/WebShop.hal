@@ -1277,8 +1277,12 @@ begin
 			end;
 			if (recordSaved) then begin //Edit***************************Sasha2,17:49 05.12.2016 {
 			  testf = true;
-			  if (ORr.SelfDelivery==1 and (FindSubString("Šˆ…‚",UpperCase(ORr.ShipAddr1)) or FindSubString("Šˆº‚",UpperCase(ORr.ShipAddr1)))) then begin testf = false; end;
-			  
+		    if (ORr.SelfDelivery==1 and (FindSubString("Šˆ…‚",UpperCase(ORr.ShipAddr1)) or FindSubString("Šˆº‚",UpperCase(ORr.ShipAddr1)))) then begin testf = false; end;
+		    
+			if (storeidtag=="R")then begin
+					testf = false;
+			end;
+				
 			  
 			  if(testf) then begin
 				MakeReserveFromOrder(ORr.SerNr,ORr.Location);
