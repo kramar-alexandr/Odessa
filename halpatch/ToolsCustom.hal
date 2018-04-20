@@ -3253,8 +3253,8 @@ begin
 	record PUVc PUr;
 	row PUVc PUrw;
 	
-	artcode = "1606006";
-	realcost = 0.0153;
+	artcode = "5635234";
+	realcost = 3.470;
 	min = 1.5;
 	max = 1.6;
 	
