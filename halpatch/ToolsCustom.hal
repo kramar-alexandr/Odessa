@@ -3360,7 +3360,7 @@ begin
 															recordstore(Prodr,true);
 														end;
 						end;
-									
+						logtext(0,"IHrArtCodeStore " & IHr.ArtCode);
 						recordstore(IHr,true);
 					end;
 				end else begin
