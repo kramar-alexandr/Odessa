@@ -3255,8 +3255,8 @@ begin
 	
 	artcode = "5635234";
 	realcost = 3.470;
-	min = 6.8;
-	max = 7.1;
+	min = 1.5;
+	max = 1.9;
 	
 	IHr.ArtCode = artcode;
 	TrHs = true;
