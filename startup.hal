@@ -517,7 +517,7 @@ begin
   
   Maintenance("Add Spec To Cons",MyVClass,ConsFillSpec,modSL);
   
-  Maintenance("Проверить соединение",MyVClass,RozetkaTestMn,modRozetka);
+  Maintenance("Импорт заказов клиента",RozetkaMyTenVClass,RozetkaTestMn,modRozetka);
   
   Maintenance("Проверить соединение rybray",MyVClass,RybrayRequestMn,modRozetka);
 	

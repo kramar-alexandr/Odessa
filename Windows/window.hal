@@ -394,6 +394,16 @@ WindowBegin("Maintenance",MyVClass,CGMnt,RcType);
   EndWindow;
 end;
 
+
+window RozetkaMyTenVClass:1//Edit---------------Anton  
+ wtag("language","UKR"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+ begin
+WindowBegin("€мпорт заказов клиента",RozetkaMyTenVClass,CGMnt,RcType);
+  SetWRect(20,120,360,220);
+  PeriodField(100,6,"Џерґод");
+  EndWindow;
+end;
+
 window CrConsigInAllVClass:1 // Edit ************************** Friday, 17 October 2014 11:47:19
  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
  begin
