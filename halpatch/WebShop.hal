@@ -954,7 +954,9 @@ begin
 			
 			ORr.NPFirstName = XmlGetAttribute(xmlPost,"orders/order" & i,"firstname");
 			ORr.NPFirstName = ChangeCaseStr(ORr.NPFirstName,4);
-			
+			if(storeidtag=="R")then begin
+				ORr.Objects = "ROZETKA";
+			end;
 			ORr.NPMiddleName = XmlGetAttribute(xmlPost,"orders/order" & i,"middlename");
 			ORr.NPMiddleName = ChangeCaseStr(ORr.NPMiddleName,4);
 			
@@ -1101,6 +1103,7 @@ begin
 				logtext(0,"###AUTO###");
 				ORr.AutoCreation = 1;
 			end;
+			
 			
 			
 			
