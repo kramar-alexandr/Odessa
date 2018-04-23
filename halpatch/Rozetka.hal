@@ -138,7 +138,7 @@ begin
 			AddTextToArea(XmlGet(xdata,"Order/records/record[" & i & "]/user/email"),ourarea);
 			AddTextToArea("\" phone=\"",ourarea);
 			AddTextToArea(XmlGet(xdata,"Order/records/record[" & i & "]/user/phone"),ourarea);
-			AddTextToArea("\" payment=\"",ourarea);
+			AddTextToArea("\" payment=\"Наложенный платеж",ourarea);
 			AddTextToArea("\" delivery=\"",ourarea);
 			AddTextToArea(XmlGet(xdata,"Order/records/record[" & i & "]/delivery/service"),ourarea);
 			AddTextToArea("\" city=\"",ourarea);
