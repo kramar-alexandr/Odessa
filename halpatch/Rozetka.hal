@@ -201,6 +201,8 @@ begin
 			end;
 			SetAreaZeroSize(extracted);
 			SetAreaZeroSize(DataAr);
+			ProdName = "";
+			SKU = 0;
 		
 	end;
 
