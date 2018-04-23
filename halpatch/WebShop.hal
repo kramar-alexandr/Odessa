@@ -445,22 +445,42 @@ begin
 	string 50 oblast,city;
 	
 	Cur.Code = XmlGetAttribute(xmlMessage,"orders/order" & i,"clientid");
-	if(blank(Cur.Code))then begin
-	
-		CUr.Code = "G00000";
-		if(!readfirstmain(CUr,1,true))then begin
-			CUr.Code = "G00000";
-			Logtext(0,"Create GUEST Customer  CODE!!!!    " & CUr.Code);
-		end else begin
-			CUr.Code = "G99999";
-			readlastmain(CUr,1,false);
-			newcode = "";
-			NextM4Number(CUr.Code,newcode);
-			CUr.Code = newcode;
-			Logtext(0,"Create GUEST Customer  CODE!!!!    " & CUr.Code);
-		end;
-		//Cur.Code = "000";
+	if(storeidtag=="R")then begin
+		Cur.Code = "";
 	end;
+	if(blank(Cur.Code))then begin
+		if(blank(storeidtag)) then begin
+			CUr.Code = "G00000";
+			if(!readfirstmain(CUr,1,true))then begin
+				CUr.Code = "G00000";
+				Logtext(0,"Create GUEST Customer  CODE!!!!    " & CUr.Code);
+			end else begin
+				CUr.Code = "G99999";
+				readlastmain(CUr,1,false);
+				newcode = "";
+				NextM4Number(CUr.Code,newcode);
+				CUr.Code = newcode;
+				Logtext(0,"Create GUEST Customer  CODE!!!!    " & CUr.Code);
+			end;
+			//Cur.Code = "000";
+		end;
+		if(storeidtag=="R")then begin
+			CUr.Code = "R0000";
+			if(!readfirstmain(CUr,1,true))then begin
+				CUr.Code = "R0000";
+				Logtext(0,"Create GUEST Customer  CODE!!!!    " & CUr.Code);
+			end else begin
+				CUr.Code = "R9999";
+				readlastmain(CUr,1,false);
+				newcode = "";
+				NextM4Number(CUr.Code,newcode);
+				CUr.Code = newcode;
+				Logtext(0,"Create GUEST Customer  CODE!!!!    " & CUr.Code);
+			end;
+			//Cur.Code = "000";
+		end;
+	end;
+
 	CCode = Cur.Code;
 	
 	loopName = 1;
