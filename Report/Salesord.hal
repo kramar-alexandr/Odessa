@@ -10,6 +10,10 @@ external procedure HTPrintedf(integer, integer, var string);
 external procedure HTCusts(string, string, var string);
 external procedure HTSaleMan(string, var string); 
 external procedure ExtractObj(string,var Integer,var string);// Edit ************************** Wednesday, 13 July 2016 09:57:55
+	
+	
+	SetLangMode(LangRussian,"RUS",0);
+
 
 procedure HTOrdStatus2(Integer invnotd, Integer finished,Integer pardelv,Integer noti,Integer delnotinv, var string res)
 begin
@@ -168,6 +172,7 @@ end;
 global
 procedure OrdRn(record RcVc RepSpec)
 begin
+	
   record ORVc ORr;
   row ORVc ORrw;
   Boolean TrHs;
@@ -285,7 +290,7 @@ begin
       OutString(290,0,USetStr(18352),false);
       OutString(350,0,USetStr(18353),false);
       if (HasMultiCurrency) then begin
-        OutString(440,0,USetStr(2567),true);
+        OutString(430,0,USetStr(2567),true);
       end else begin
         OutString(1,0,USetStr(2567),true);
       end;
@@ -293,10 +298,11 @@ begin
     end else begin
       StartFormat(15);
       OutString(0,0,USetStr(2562),false);
-      OutString(90,0,USetStr(2563),false);
-      OutString(140,0,USetStr(2564),false);
+      OutString(100,0,USetStr(2563),false);
+      OutString(180,0,USetStr(2564),false);
+	  OutString(300,0,"Cпособ оплаты",false);
       if (HasMultiCurrency) then begin
-        OutString(440,0,USetStr(2567),true);
+        OutString(437,0,USetStr(2567),true);
       end else begin
         OutString(1,0,USetStr(2567),true);
       end;
@@ -304,11 +310,11 @@ begin
     end;
   end;
   if (RepSpec.ArtMode==1) then begin
-    if (RepSpec.flags[10]==1) then begin
-      OutString(0,0,USetStr(2562),false);
+    if (RepSpec.flags[10]==1) then begin 
+      OutString(0,0,USetStr(2562),false);     
       OutString(130,0,USetStr(2563),false);
       OutString(310,0,USetStr(18352),false);
-      OutString(380,0,USetStr(18353),false);
+      OutString(480,0,USetStr(18353),false);
       EndFormat;
     end else begin
       StartFormat(15);
@@ -575,10 +581,10 @@ L30:;
             OutDate(100,0,ORr.OrdDate,false);
             OutString(140,"DblCUVc",ORr.CustCode,false);// Edit ************************** Thursday, 11 May 2017 11:24:17
             OutString(180,0,ORr.Addr0,false);
-            OutString(220,0,ORr.Comment,false);// Edit ************************** Wednesday, 13 July 2016 09:49:06
-            OutString(320,0,ORr.Objects,false);// Edit ************************** Thursday, 11 May 2017 15:41:04
+            OutString(250,0,ORr.Comment,false);// Edit ************************** Wednesday, 13 July 2016 09:49:06
+			OutString(300,0,ORr.NewPD,false);//Edit_-_-_-_-_-_-_-Anton 16:57 23.04.2018
+            OutString(340,0,ORr.Objects,false);// Edit ************************** Thursday, 11 May 2017 15:41:04
             OutString(390,0,ORr.CustomStatusFlagText,false);// Edit ************************** Wednesday, 13 July 2016 09:49:06
-            //OutString(410,0,ORr.NewPD,false);// Edit ************************** BPI Ukraine - KramarAlexandr - Thursday, 19 April 2018 11:17:44
             
             if (HasMultiCurrency) then begin
               OutVal(440,0,iv,M4Val,true);
