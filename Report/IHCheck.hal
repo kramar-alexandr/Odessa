@@ -1,0 +1,49 @@
+external function val AbsoluteVal(val);
+
+global procedure ChechIHRn(record RcVc RepSpec)
+begin
+	record INVc INr;
+	record ItemHistVc IHr;
+	boolean TrHs,testf;
+	val incost,inqty;
+	
+	startreportnoheaderjob("Check IH");
+		
+		INr.Code = "";
+		While(loopmain(INr,1,true))begin
+			resetloop(IHr);
+			IHr.ArtCode = INr.Code;
+			incost = blankval;
+			inqty = blankval;
+			TrHs = true;
+			while(loopkey("ArtCode",IHr,1,TrHs))begin
+				testf = true;
+			
+				if(IHr.ArtCode!=INr.Code)then begin
+					TrHs = false;
+					testf = false;
+				end;
+				if(IHr.StockAffectf==0)then begin testf = false; end;
+				if(IHr.FileName!="PUVc")then begin testf = false; end;
+					
+				if(testf)then begin
+					incost = incost + IHr.TotCostPrice;
+					inqty = inqty + IHr.Qty;
+				end;
+			end;
+			
+			Startformat(15);
+				OutString(0,"DblINVc",INr.Code,false);
+				OutString(50,0,INr.InPrice,false);
+				OutString(100,0,incost,false);
+				OutString(150,0,inqty,false);
+				OutString(200,0,incost/inqty,false);
+				OutString(250,0,incost/inqty-INr.InPrice,false);
+			endformat;
+		end;
+	
+	
+	endjob;
+
+return;
+end;
