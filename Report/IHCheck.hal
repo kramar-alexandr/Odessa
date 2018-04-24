@@ -24,11 +24,44 @@ begin
 					testf = false;
 				end;
 				if(IHr.StockAffectf==0)then begin testf = false; end;
-				if(IHr.FileName!="PUVc")then begin testf = false; end;
+				//if(IHr.FileName!="PUVc")then begin testf = false; end;
 					
 				if(testf)then begin
-					incost = incost + IHr.TotCostPrice;
-					inqty = inqty + IHr.Qty;
+					if(IHr.FileName=="PUVc")then begin
+						incost = incost + IHr.TotCostPrice;
+						inqty = inqty + IHr.Qty;
+					end;
+					if(IHr.FileName=="SDVc")then begin
+						incost = incost - IHr.TotCostPrice;
+						inqty = inqty + IHr.Qty;
+					end;
+					if(IHr.FileName=="IVVc")then begin
+						incost = incost - IHr.TotCostPrice;
+						inqty = inqty + IHr.Qty;
+					end;
+					if(IHr.FileName=="SHVc")then begin
+						incost = incost - IHr.TotCostPrice;
+						inqty = inqty + IHr.Qty;
+					end;
+					if(IHr.FileName=="ProdVc")then begin
+						if(IHr.Qty>0)then begin
+							incost = incost + IHr.TotCostPrice;
+							inqty = inqty + IHr.Qty;
+						end else begin
+							incost = incost - IHr.TotCostPrice;
+							inqty = inqty + IHr.Qty;
+						end;
+					end;
+					if(IHr.FileName=="SRVc")then begin
+						if(IHr.Qty>0)then begin
+							incost = incost + IHr.TotCostPrice;
+							inqty = inqty + IHr.Qty;
+						end else begin
+							incost = incost - IHr.TotCostPrice;
+							inqty = inqty + IHr.Qty;
+						end;
+					end;
+					
 				end;
 			end;
 			
@@ -38,7 +71,7 @@ begin
 				OutString(100,0,incost,false);
 				OutString(150,0,inqty,false);
 				OutString(200,0,incost/inqty,false);
-				OutString(250,0,incost/inqty-INr.InPrice,false);
+				OutString(250,0,incost/inqty/INr.InPrice,false);
 			endformat;
 		end;
 	
