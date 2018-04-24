@@ -30,7 +30,7 @@ begin
 				//if(IHr.FileName!="PUVc")then begin testf = false; end;
 					
 				if(testf)then begin
-					if(prevcost!=0)then begin
+					if(prevcost!=0 and IHr.TotCostPrice!=0)then begin
 						if((AbsoluteVal(IHr.TotCostPrice/IHr.Qty)/prevcost)>1.9)then begin
 							foundf = true;
 						end;

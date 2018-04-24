@@ -24,6 +24,7 @@ external function Boolean ShouldItemUpdateStock(string);
 external function Boolean ExpandStructItem(string,string,val,var record SHVc);
 external procedure FindStockValue(string,string,var record ItemStatusVc);
 external updating procedure UpdateInShipment(string,string,Date,val);
+external function val AbsoluteVal(val);
 
 /* INRS
 
@@ -1412,7 +1413,7 @@ begin
     end;
   end;
   if (IVrw.FIFORowVal==0) then begin //Edit***************************Sasha2,15:40 03.06.2015 {
-    IVrw.FIFORowVal = INr.LastPurchPrice;
+    IVrw.FIFORowVal = INr.LastPurchPrice*AbsoluteVal(IVrw.Quant);
   end; //Edit***************************Sasha2,15:40 03.06.2015 }
   IVrw.FIFORowVal = Round(IVrw.FIFORowVal,SetRoundModeD(5));
   IVrw.FIFO = IVrw.FIFORowVal/IVrw.Quant;
