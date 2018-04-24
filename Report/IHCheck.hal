@@ -5,7 +5,8 @@ begin
 	record INVc INr;
 	record ItemHistVc IHr;
 	boolean TrHs,testf;
-	val incost,inqty,diff;
+	val incost,inqty,diff,prevcost;
+	boolean foundf;
 	
 	startreportnoheaderjob("Check IH");
 		
@@ -16,6 +17,8 @@ begin
 			incost = blankval;
 			inqty = blankval;
 			TrHs = true;
+			foundf = false;
+			prevcost = blankval;
 			while(loopkey("ArtCode",IHr,1,TrHs))begin
 				testf = true;
 			
@@ -27,6 +30,17 @@ begin
 				//if(IHr.FileName!="PUVc")then begin testf = false; end;
 					
 				if(testf)then begin
+					if(prevcost!=0)then begin
+						if((AbsoluteVal(IHr.TotCostPrice/IHr.Qty)/prevcost)>1.9)then begin
+							foundf = true;
+						end;
+						if(prevcost/(AbsoluteVal(IHr.TotCostPrice/IHr.Qty))>1.9)then begin
+							foundf = true;
+						end;
+					end;
+					prevcost = AbsoluteVal(IHr.TotCostPrice/IHr.Qty);
+					
+					
 					if(IHr.FileName=="PUVc")then begin
 						incost = incost + IHr.TotCostPrice;
 						inqty = inqty + IHr.Qty;
@@ -75,7 +89,7 @@ begin
 			end;
 			
 			diff = AbsoluteVal(incost/inqty/INr.InPrice);
-			if(diff>1.2)then begin
+			if(diff>1.2 and foundf)then begin
 				
 				Startformat(15);
 					OutString(0,"DblINVc",INr.Code,false);
