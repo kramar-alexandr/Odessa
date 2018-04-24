@@ -40,8 +40,13 @@ begin
 						inqty = inqty + IHr.Qty;
 					end;
 					if(IHr.FileName=="IVVc")then begin
-						incost = incost - IHr.TotCostPrice;
-						inqty = inqty + IHr.Qty;
+						if(IHr.Qty>0)then begin
+							incost = incost + IHr.TotCostPrice;
+							inqty = inqty + IHr.Qty;
+						end else begin
+							incost = incost - IHr.TotCostPrice;
+							inqty = inqty + IHr.Qty;
+						end;
 					end;
 					if(IHr.FileName=="SHVc")then begin
 						incost = incost - IHr.TotCostPrice;
