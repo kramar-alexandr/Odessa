@@ -108,3 +108,42 @@ begin
 
 return;
 end;
+
+
+
+
+global updating procedure RecalcItemHistCost(record RcVc RepSpec)
+begin
+	record INVc INr;
+	record ItemHistVc IHr;
+	boolean TrHs,testf;
+	val incost,inqty,diff,prevcost;
+	boolean foundf;
+	
+	
+	startreportnoheaderjob("Check IH");
+		if(nonblank(RepSpec.f1))then begin
+			IHr.ArtCode = RepSpec.f1;
+			incost = blankval;
+			inqty = blankval;
+			TrHs = true;
+			foundf = false;
+			prevcost = blankval;
+			while(loopkey("ArtCode",IHr,1,TrHs))begin
+				testf = true;
+			
+				if(IHr.ArtCode!=RepSpec.f1)then begin
+					TrHs = false;
+					testf = false;
+				end;
+				if(IHr.StockAffectf==0)then begin testf = false; end;
+				
+				
+			end;
+		
+		
+		end;
+	endjob;
+	
+return;
+end;
