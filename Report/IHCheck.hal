@@ -5,7 +5,7 @@ begin
 	record INVc INr;
 	record ItemHistVc IHr;
 	boolean TrHs,testf;
-	val incost,inqty;
+	val incost,inqty,diff;
 	
 	startreportnoheaderjob("Check IH");
 		
@@ -69,14 +69,19 @@ begin
 				end;
 			end;
 			
-			Startformat(15);
-				OutString(0,"DblINVc",INr.Code,false);
-				OutString(50,0,INr.InPrice,false);
-				OutString(100,0,incost,false);
-				OutString(150,0,inqty,false);
-				OutString(200,0,incost/inqty,false);
-				OutString(250,0,incost/inqty/INr.InPrice,false);
-			endformat;
+			diff = AbsoluteVal(incost/inqty/INr.InPrice);
+			if(diff>1.2)then begin
+				
+				Startformat(15);
+					OutString(0,"DblINVc",INr.Code,false);
+					OutString(50,0,INr.InPrice,false);
+					OutString(100,0,incost,false);
+					OutString(150,0,inqty,false);
+					OutString(200,0,incost/inqty,false);
+					OutString(250,0,diff,false);
+				endformat;
+			
+			end;
 		end;
 	
 	
