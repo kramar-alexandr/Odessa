@@ -31,6 +31,10 @@ begin
 						incost = incost + IHr.TotCostPrice;
 						inqty = inqty + IHr.Qty;
 					end;
+					if(IHr.FileName=="RetVc")then begin
+						incost = incost + IHr.TotCostPrice;
+						inqty = inqty + IHr.Qty;
+					end;
 					if(IHr.FileName=="SDVc")then begin
 						incost = incost - IHr.TotCostPrice;
 						inqty = inqty + IHr.Qty;
