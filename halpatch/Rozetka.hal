@@ -138,7 +138,7 @@ begin
 			AddTextToArea(XmlGet(xdata,"Order/records/record[" & i & "]/user/email"),ourarea);
 			AddTextToArea("\" phone=\"",ourarea);
 			AddTextToArea(XmlGet(xdata,"Order/records/record[" & i & "]/user/phone"),ourarea);
-			AddTextToArea("\" payment=\"",ourarea);
+			AddTextToArea("\" payment=\"Наложенный платеж",ourarea);
 			AddTextToArea("\" delivery=\"",ourarea);
 			AddTextToArea(XmlGet(xdata,"Order/records/record[" & i & "]/delivery/service"),ourarea);
 			AddTextToArea("\" city=\"",ourarea);
@@ -160,10 +160,12 @@ begin
 			For(j=0;j<mtrw1;j=j+1)begin
 				extrofferid = StringToLongInt(XmlGet(xdata,"Order/records/record[" & i & "]/purchase/record[" & j & "]/offerId"));
 				RybRayRequestr.offerId = extrofferid;
+				SKU = -1;
 				if(ReadFirstMain(RybRayRequestr,1,true))then begin
 					SKU = RybRayRequestr.vendorcode;
 				end;
 				INr.Code = SKU;
+				ProdName = "";
 				if(ReadFirstMain(INr,1,true))then begin
 					ProdName = INr.Name;
 				end;
@@ -201,6 +203,7 @@ begin
 			end;
 			SetAreaZeroSize(extracted);
 			SetAreaZeroSize(DataAr);
+			
 		
 	end;
 
