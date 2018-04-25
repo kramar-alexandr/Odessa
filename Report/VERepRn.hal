@@ -279,7 +279,9 @@ BEGIN
   val step;
   string 255 VendorsListUnOK, VendorsListOK;
   record ItemHistVc IHr;
-  
+  record ProdVc Prodr;
+  row ProdVc Prodrw;
+  date ProdDate;
 
 RecordNew(ISr);
 
@@ -549,9 +551,24 @@ RecordNew(ISr);
   			IHr.FileName = "PUVc";
   			readlastkey("FNArtCode",IHr,2,false);
   			if(IHr.ArtCode==INr.Code and IHr.FileName=="PUVc")then begin
-					OutString(450,0,IHr.TransDate,false);// Edit ************************** BPI Ukraine - KramarAlexandr - Friday, 8 December 2017 13:25:02
+					//OutString(440,0,IHr.TransDate,false);// Edit ************************** BPI Ukraine - KramarAlexandr - Friday, 8 December 2017 13:25:02
+					ProdDate = IHr.TransDate;
+					Prodr.SerNr = -1;
+					while(LoopMain(Prodr,1,true))begin
+						rwcnt = MatRowCnt(Prodr);
+						for(i=0;i<rwcnt;i=i+1)begin
+							MatRowGet(Prodr,i,Prodrw);
+							if(Prodrw.Item==INr.Code)then begin
+								if(ProdDate>Prodr.ProdDate)then begin//Edit_-_-_-_-_-_-_-_-Anton 18:32 25.04.2018
+									ProdDate = Prodr.ProdDate;
+								end;
+							end;
+						end;
+					end;
+					OutString(450,0,ProdDate,false);
   			end else begin
 					OutString(450,0,"",false);// Edit ************************** BPI Ukraine - KramarAlexandr - Friday, 8 December 2017 13:25:02
+					
   			end;
   		EndFormat;
   			VendorsListOK = blankval;
