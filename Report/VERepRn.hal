@@ -281,7 +281,7 @@ BEGIN
   record ItemHistVc IHr;
   record ProdVc Prodr;
   row ProdVc Prodrw;
-  date ProdDate;
+  date TransDate, ClDate;
 
 RecordNew(ISr);
 
@@ -547,29 +547,31 @@ RecordNew(ISr);
   			///OutVal(440,0,restok,M4Val,false);
 				OutString(440,0,restok,false);				//Edit----------------------Dima  13.02.2015
   			//outval(450,0,restunok,M4Val,false);
+			
+			IHr.TransDate = ClDate;
+			IHr.ArtCode = INr.Code;
+			IHr.FileName = "ProdVc";
+			readlastkey("FNArtCode",IHr,2,false);
+			TransDate = ClDate;
+			if(IHr.ArtCode==INr.Code and IHr.FileName=="ProdVc")then begin //Edit_-_-_-_-_-_-_-_-Anton 11:50 26.04.2018
+				TransDate = IHr.TransDate;
+			end;
+			
+			
   			IHr.ArtCode = INr.Code;
   			IHr.FileName = "PUVc";
   			readlastkey("FNArtCode",IHr,2,false);
   			if(IHr.ArtCode==INr.Code and IHr.FileName=="PUVc")then begin
-					//OutString(440,0,IHr.TransDate,false);// Edit ************************** BPI Ukraine - KramarAlexandr - Friday, 8 December 2017 13:25:02
-					ProdDate = IHr.TransDate;
-					Prodr.SerNr = -1;
-					while(LoopMain(Prodr,1,true))begin
-						rwcnt = MatRowCnt(Prodr);
-						for(i=0;i<rwcnt;i=i+1)begin
-							MatRowGet(Prodr,i,Prodrw);
-							if(Prodrw.Item==INr.Code)then begin
-								if(ProdDate>Prodr.ProdDate)then begin//Edit_-_-_-_-_-_-_-_-Anton 18:32 25.04.2018
-									ProdDate = Prodr.ProdDate;
-								end;
-							end;
-						end;
+					if(TransDate<IHr.TransDate)then begin //Edit_-_-_-_-_-_-_-_-Anton 11:50 26.04.2018
+						TransDate = IHr.TransDate;
 					end;
-					OutString(450,0,ProdDate,false);
-  			end else begin
-					OutString(450,0,"",false);// Edit ************************** BPI Ukraine - KramarAlexandr - Friday, 8 December 2017 13:25:02
+			end;
+			if(nonblankdate(TransDate))then begin 
+				OutString(450,0,TransDate,false);
+			end else begin
+				OutString(450,0,"",false);// Edit ************************** BPI Ukraine - KramarAlexandr - Friday, 8 December 2017 13:25:02
+			end;
 					
-  			end;
   		EndFormat;
   			VendorsListOK = blankval;
   			VendorsListUnOK = blankval;
