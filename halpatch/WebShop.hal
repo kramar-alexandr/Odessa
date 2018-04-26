@@ -449,7 +449,7 @@ begin
 		Cur.Code = "";
 	end;
 	if(blank(Cur.Code))then begin
-		if(blank(storeidtag)) then begin
+		if(storeidtag!="R") then begin
 			CUr.Code = "G00000";
 			if(!readfirstmain(CUr,1,true))then begin
 				CUr.Code = "G00000";
@@ -575,8 +575,12 @@ begin
 	Cur.OnAccount = 1;		//Edit----------------------Dima  11.02.2015
 	Cur.SelfBilling = 1;	//Edit----------------------Dima  11.02.2015
 	CUr.DateCreated = currentdate;
-	if (!recordStore(Cur,true)) then begin
-		if (Blank(errors)) then begin errors = "Error2"; end else begin errors = errors & ",Error2"; end;
+	if(nonblank(CUr.Code))then begin
+		if (!recordStore(Cur,true)) then begin
+			if (Blank(errors)) then begin errors = "Error2"; end else begin errors = errors & ",Error2"; end;
+			logtext(0,"CUVc create error: " & Cur.Name);
+		end;
+	end else begin
 		logtext(0,"CUVc create error: " & Cur.Name);
 	end;
 return;
