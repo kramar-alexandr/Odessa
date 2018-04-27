@@ -32,6 +32,8 @@ external updating procedure PrivateGetReport(record RcVc);
 external function string 255 ChangeCaseStr(string, integer); //Edit-------------------Vitalii 11:34 14.09.2016
 external updating procedure NPUpdateENstatus1Mn(record RcVc);// Edit ************************** Wednesday, 16 August 2017 16:54:09
 external updating procedure NPUpdateENstatusMn(record RcVc);// Edit ************************** Wednesday, 16 August 2017 16:54:09
+external updating procedure RybrayRequestMn(record RcVc);// Edit ************************** BPI Ukraine - KramarAlexandr - Friday, 27 April 2018 09:28:22
+external updating procedure RozetkaTestMn(record RcVc);// Edit ************************** BPI Ukraine - KramarAlexandr - Friday, 27 April 2018 09:28:22
 
 SetLangMode(LangRussian,"RUS",0);
 
@@ -126,12 +128,16 @@ begin
     	SOAPLogin;    
     	PrivateGetID;	
     	PrivateGetReport(RepSpec);
-    	
+    	recordnew(RepSpec);
+    	RepSpec.sStartDate = currentdate;
+    	RepSpec.sEndDate = currentdate;
+    	RozetkaTestMn(RepSpec);
     	UpdateLastORWebStatusesBySequenceMn;
     end;
     
     if(curtnew>=StringToTime("8:00") and curtnew.minute==0)then begin
     	LogText(0,"CustTimeTableAction at planned time: " & curtnew);
+    	RybrayRequestMn(RepSpec);// Edit ************************** BPI Ukraine - KramarAlexandr - Friday, 27 April 2018 09:29:02
     	ExportStockCSVMn(RepSpec);
     	if(hr=="8" or hr=="12" or hr=="16" or hr=="20")then begin
 				ExportAllItems(RepSpec);
@@ -1307,7 +1313,7 @@ begin
 		    if (ORr.SelfDelivery==1 and (FindSubString("Šˆ…‚",UpperCase(ORr.ShipAddr1)) or FindSubString("Šˆº‚",UpperCase(ORr.ShipAddr1)))) then begin testf = false; end;
 		    
 			if (storeidtag=="R")then begin
-					testf = false;
+					//testf = false;
 			end;
 				
 			  
