@@ -1468,6 +1468,8 @@ BEGIN
 			res = usercanaction("ViewCostPrice",false);	
 		case "SalesGroup":
 			res = usercanaction("ViewCostPrice",false);	
+		case "OrdDate":
+			res = usercanaction("ViewCostPrice",false);	
 	end;
   
   
