@@ -1463,7 +1463,11 @@ BEGIN
   if (res == true and fieldname=="ProcessingQuant" and Logisticsb.AllowChangeFields==0) then begin
   	res = false;
   end;
-  switch (fieldname) begin// Edit ************************** BPI Ukraine - KramarAlexandr - Wednesday, 29 November 2017 14:05:31
+ 
+  
+  
+LORDClassActiveEditField:;
+ 	switch (fieldname) begin// Edit ************************** BPI Ukraine - KramarAlexandr - Wednesday, 29 November 2017 14:05:31
 		case "SalesMan":
 			res = usercanaction("ViewCostPrice",false);	
 		case "SalesGroup":
@@ -1471,9 +1475,6 @@ BEGIN
 		case "OrdDate":
 			res = usercanaction("ViewCostPrice",false);	
 	end;
-  
-  
-LORDClassActiveEditField:;
 	if(currentuser=="SAUNOK")then begin// Edit ************************** Friday, 14 April 2017 10:39:22
 		res = true;
 	end;
