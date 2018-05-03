@@ -5036,6 +5036,7 @@ begin
     CheckBox(h4=-60,vm=(v+=20),0,"OK",OKFlag);   // From dict
   end;
   CheckBox(h4=-60,vm + 15,0,"Closed",Closed); //Edit***************************Sasha2,15:05 14.07.2014
+  CheckBox(h4=-250,vm,0,"Предзаказ",PreOrderFlag);// Edit ************************** BPI Ukraine - KramarAlexandr - Thursday, 3 May 2018 15:57:37
   CheckBox(h4=-150,vm,0,"Reserved",Reserved); //Edit***************************Sasha2,15:05 14.07.2014
 // CheckBox(h+120,vm,0,"Closed",Closed);
 // CheckBox(h+240,vm,0,"Reserved",Reserved);
