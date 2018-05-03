@@ -2390,7 +2390,9 @@ begin
   RepSpec.repname = "ExportTableToExcelIVRn";
   RepSpec.flags[0] = wn;
   RepSpec.long1 = IVr.SerNr;
-  RunReport(RepSpec,0);  
+  if(usercanaction("AllowExportTableToExcelIV",true))then begin
+		RunReport(RepSpec,0);
+  end;
 return;
 end;
 
@@ -2405,6 +2407,8 @@ begin
 	RepSpec.Media = mtClipBoard; 
   RepSpec.repname = "ExportTableToExcelStockTakeRn";
   RepSpec.long1 = STr.SerNr;
-  RunReport(RepSpec,0);  
+  if(usercanaction("AllowExportTableToExcelStockTake",true))then begin
+		RunReport(RepSpec,0);
+  end;  
 return;
 end;

@@ -792,6 +792,16 @@ begin
   StrSetText(SHBeforeIV,"Запрет отгрузки до сч/ф (запретить)");// Edit ************************** Tuesday, 27 June 2017 09:51:09
   StrSetText(DelIVBeforeSH,"Запрет удалить сч/ф до отгрузки (запретить)");// Edit ************************** Tuesday, 27 June 2017 09:51:09
   StrSetText(StockMovOK,"Получение перемещения товара");
+  
+  StrSetText(AllowExportTableToExcelPO,"Разрешить выгрузку в эксель: Заказ поставщику");// Edit ************************** BPI Ukraine - KramarAlexandr - Thursday, 3 May 2018 13:54:27
+  StrSetText(AllowExportTableToExcelProd,"Разрешить выгрузку в эксель: Производство");// Edit ************************** BPI Ukraine - KramarAlexandr - Thursday, 3 May 2018 13:54:30
+  StrSetText(AllowExportTableToExcelPU,"Разрешить выгрузку в эксель: Поступление");// Edit ************************** BPI Ukraine - KramarAlexandr - Thursday, 3 May 2018 13:54:30
+  StrSetText(AllowExportTableToExcelStockMov,"Разрешить выгрузку в эксель: Перемещение");// Edit ************************** BPI Ukraine - KramarAlexandr - Thursday, 3 May 2018 13:54:30
+  StrSetText(AllowExportTableToExcelOR,"Разрешить выгрузку в эксель: Счет Клиента");// Edit ************************** BPI Ukraine - KramarAlexandr - Thursday, 3 May 2018 13:54:30
+  StrSetText(AllowExportTableToExcelSH,"Разрешить выгрузку в эксель: Отгрузка");// Edit ************************** BPI Ukraine - KramarAlexandr - Thursday, 3 May 2018 13:54:30
+  StrSetText(AllowExportTableToExcelIV,"Разрешить выгрузку в эксель: Сч/ф");// Edit ************************** BPI Ukraine - KramarAlexandr - Thursday, 3 May 2018 13:54:30
+  StrSetText(AllowExportTableToExcelStockTake,"Разрешить выгрузку в эксель: Инвентаризация");// Edit ************************** BPI Ukraine - KramarAlexandr - Thursday, 3 May 2018 13:54:30
+  
   StrSetText(AllowNPTSReprint," Перепечатать строки сч/ф (сенсорный экран)");
   StrSetText(AllowMultySH,"Разрешить несколько отгрузок из счета");// Edit ************************** Thursday, 13 July 2017 11:14:43
   StrSetText(AllowChangeTerms,"Разрешить менять условия сч/ф (сенсорный экран)");// Edit ************************** Wednesday, 4 February 2015 14:51:00

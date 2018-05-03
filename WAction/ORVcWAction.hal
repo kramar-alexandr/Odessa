@@ -2185,7 +2185,9 @@ begin
   RepSpec.repname = "ExportTableToExcelORRn";
   RepSpec.flags[0] = wn;
   RepSpec.long1 = ORr.SerNr;
-  RunReport(RepSpec,0);
+  if(usercanaction("AllowExportTableToExcelOR",true))then begin
+		RunReport(RepSpec,0);
+  end;
 
   
 return;
@@ -2204,7 +2206,9 @@ begin
   RepSpec.repname = "ExportTableToExcelSHRn";
   RepSpec.flags[0] = wn;
   RepSpec.long1 = SHr.SerNr;
-  RunReport(RepSpec,0);
+  if(usercanaction("AllowExportTableToExcelSH",true))then begin
+		RunReport(RepSpec,0);
+  end;
 
   
 return;

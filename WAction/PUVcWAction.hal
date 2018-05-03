@@ -352,7 +352,9 @@ begin
   RepSpec.repname = "ExportTableToExcelPURn";
   RepSpec.flags[0] = wn;
   RepSpec.long1 = PUr.SerNr;
-  RunReport(RepSpec,0);
+  if(usercanaction("AllowExportTableToExcelPU",true))then begin
+		RunReport(RepSpec,0);
+  end;
   
 return;
 end;
@@ -446,7 +448,9 @@ begin
   RepSpec.repname = "ExportTableToExcelStockMovRn";
   RepSpec.flags[0] = wn;
   RepSpec.long1 = StockMovr.SerNr;
-  RunReport(RepSpec,0);
+  if(usercanaction("AllowExportTableToExcelStockMov",true))then begin
+		RunReport(RepSpec,0);
+  end;
   
 return;
 end;
