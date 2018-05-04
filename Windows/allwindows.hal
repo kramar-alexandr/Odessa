@@ -12175,3 +12175,16 @@ begin
   EditFieldTL(h,v+=vs, 150,"Файл", M4Code,Normal,-20,f1,false,PastePictureName);
   EndWindow;
 end;
+
+
+window RecalcItemStatusVClass:1
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  real h,v,vs;
+  WindowBegin("Определите пересчёт статуса товара",RecalcItemStatusVClass,CGMnt,RcType);
+  SetWRect(20,80,400,150);
+  v = 6; vs = 20; h = 100;
+  StaticText(h,v=20,"Нажмите кнопку Запуск",false);
+  CheckBox(h,v,0,"Только статус в счетах",flags[1]);
+  EndWindow;
+end;
