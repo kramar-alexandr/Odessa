@@ -2008,7 +2008,6 @@ begin
             end;
           end;
         end;
-        messagebox(0,"t2 " & t2);
         if ((t2!=0) or (t3!=0)) then begin
           UpdateInstock("ORVc",ORp.SerNr,ORrw.ArtCode,theloc,ORp.OrdDate,t,t2,t3,t,t,t,t,t,t);
         end;
