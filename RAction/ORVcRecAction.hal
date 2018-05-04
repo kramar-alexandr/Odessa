@@ -1949,7 +1949,7 @@ begin
   Boolean isstruct;
   string 255 location,theloc;
   record DropSHVc DropSHr;
-  
+    
   switch (ORp.OrderType) begin
     case kOrderTypeDropShip:
       goto LUpdateOrdOut;
@@ -1983,6 +1983,10 @@ begin
         if (addf==false) then begin
           t2 = -t2;
           t3 = -t3;
+          if (ORp.Closed!=0) then begin// Edit ************************** BPI Ukraine - KramarAlexandr - Friday, 4 May 2018 11:49:53
+          	t2 = blankval;
+          	t3 = blankval;
+          end;
         end else begin
           if (ORp.Closed!=0) then begin  // if ord is closed then nothing left to deliver
 //            if (MSb.UpdateAvailable==1) then begin
@@ -2004,6 +2008,7 @@ begin
             end;
           end;
         end;
+        messagebox(0,"t2 " & t2);
         if ((t2!=0) or (t3!=0)) then begin
           UpdateInstock("ORVc",ORp.SerNr,ORrw.ArtCode,theloc,ORp.OrdDate,t,t2,t3,t,t,t,t,t,t);
         end;
