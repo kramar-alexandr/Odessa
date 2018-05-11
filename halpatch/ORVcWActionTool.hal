@@ -412,7 +412,9 @@ BEGIN
       end;
     end;
     //ORrw.vRebate = vreb;// Edit ************************** Wednesday, 18 January 2017 17:19:58
-    
+    if(blank(ORr.OrderClass))then begin
+    	ORrw.vRebate = vreb;
+    end;
     // Edit Start ---------------------------------------------- Edit Start
 	//Tuesday, 5 December 2017 10:46:23
 		
