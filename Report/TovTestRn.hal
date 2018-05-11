@@ -256,6 +256,17 @@ begin
 			OutString(280,0,ISr.Instock,false);
 			endformat;
 		end;
+		
+		if(ISr.RsrvQty<0)then begin
+			startformat(15);
+			OutString(0,"DblOpenINrsRn",ISr.Code,false);
+			OutString(140,0,ISr.Code,false);
+			OutString(210,0,ISr.Location,false);
+			OutString(280,0,ISr.Instock,false);
+			OutString(320,0,ISr.RsrvQty,false);
+			endformat;
+		end;
+		
 	end;
 	
 	EndJob;
