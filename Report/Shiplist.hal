@@ -154,25 +154,29 @@ begin
   if RepSpec.ArtMode==0 then begin
     StartFormat(15);
     OutString(0,0,USetStr(2582),false);
-    OutString(60,0,USetStr(2583),false);
-    OutString(130,0,USetStr(2584),false);
-    OutString(200,0,USetStr(2585),false);
+    OutString(40,0,USetStr(2583),false);
+    OutString(80,0,USetStr(2584),false);
+    OutString(120,0,USetStr(2585),false);
+	OutString(160,0,"Условия доставки",false);
+	OutString(210,0,"Способ оплаты",false);
     OutString(260,0,USetStr(2586),false);
-    OutStringAdjustBiDi(480,0,USetStr(2928),true,M4Val,520);
-    OutString(500,0,"Маршрут",true);// Edit ************************** BPI Ukraine - KramarAlexandr - понеділок, 8 січня 2018 р. о 13:58:11
+	OutString(380,0,"Маршрут",false);// Edit ************************** BPI Ukraine - KramarAlexandr - понеділок, 8 січня 2018 р. о 13:58:11
+    OutStringAdjustBiDi(420,0,USetStr(2928),false,M4Val,520);
     OutString(1,0,"Готов к сборке",true);// Edit ************************** BPI Ukraine - KramarAlexandr - понеділок, 8 січня 2018 р. о 13:58:13
     EndFormat;
   end;
   if RepSpec.ArtMode==1 then begin
     StartFormat(15);
     OutString(0,0,USetStr(2582),false);
-    OutString(60,0,USetStr(2583),false);
-    OutString(130,0,USetStr(2584),false);
-    OutString(200,0,USetStr(2585),false);
+    OutString(40,0,USetStr(2583),false);
+    OutString(80,0,USetStr(2584),false);
+    OutString(120,0,USetStr(2585),false);
+	OutString(160,0,"Условия доставки",false);
+	OutString(210,0,"Способ оплаты",false);
     OutString(260,0,USetStr(2586),false);
+	OutString(380,0,"Маршрут",false);// Edit ************************** BPI Ukraine - KramarAlexandr - понеділок, 8 січня 2018 р. о 13:58:11
     OutStringAdjustBiDi(420,0,USetStr(2590),true,M4Val,460);
-    OutStringAdjustBiDi(480,0,USetStr(2591),true,M4Val,520);
-    OutString(500,0,"Маршрут",true);// Edit ************************** BPI Ukraine - KramarAlexandr - понеділок, 8 січня 2018 р. о 13:58:11
+    OutStringAdjustBiDi(420,0,USetStr(2591),true,M4Val,520);
     OutString(1,0,"Готов к сборке",true);// Edit ************************** BPI Ukraine - KramarAlexandr - понеділок, 8 січня 2018 р. о 13:58:13
 
     EndFormat;
@@ -354,16 +358,19 @@ begin
             rowt = rowt+sum;
           end;
         end;
+		ORr.SerNr = SHr.OrderNr;
+		ReadFirstMain(ORr,1,true);
         StartFormat(15);
         OutLongInt(0,"DblSHVc",SHr.SerNr,false);
-        OutDate(60,0,SHr.ShipDate,false);
-        OutLongInt(130,0,SHr.OrderNr,false);
-        OutString(200,0,SHr.CustCode,false);
-        OutString(260,0,SHr.Addr0,false);
-        OutValBiDi(480,0,rowt,M4Val,true,520);
-        
-        OutString(360,0,SHr.Sorting,true);// Edit ************************** BPI Ukraine - KramarAlexandr - понеділок, 8 січня 2018 р. о 13:58:11
-    		OutString(1,0,Shr.Assembly,true);// Edit ************************** BPI Ukraine - KramarAlexandr - понеділок, 8 січня 2018 р. о 13:58:13
+        OutDate(40,0,SHr.ShipDate,false);
+        OutLongInt(80,0,SHr.OrderNr,false);
+        OutString(120,0,SHr.CustCode,false);
+		OutString(160,0,ORr.ShipMode,false);
+		OutString(210,0,ORr.NewPD,false);
+        OutString(260,0,SHr.Addr0,false);        
+        OutString(380,0,SHr.Sorting,false);// Edit *******************
+		 OutValBiDi(420,0,rowt,M4Val,false,520);
+    	OutString(1,0,Shr.Assembly,true);// Edit ************************** BPI Ukraine - KramarAlexandr - понеділок, 8 січня 2018 р. о 13:58:13
 
         
         EndFormat;
