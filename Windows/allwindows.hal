@@ -1950,6 +1950,18 @@ end; //##ii
 
 
 
+window ItHistProdRClass:1
+	wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin 
+	real v, vs, h;
+	WindowBegin ("Отчет по истории товара",ItHistProdRClass,CGRcW,RcType);
+	SetWRect(20,80,470,400);
+	v = 6; vs = 20; h = 140;
+	EditFieldTL(h,v, 150,"Товар",M4UStr,Normal,50,f1,false,INSClass);
+	EndWindow;
+end;
+
+
 window PUDClass:1
   wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
 begin

@@ -93,6 +93,7 @@ begin
   Report("Статистика продаж",MyBIRClass,MyBIRn,0,modSO);//Edit-------------------Vitalii 11:31 14.09.2016
   Report("Журнал изменений счетов клиентам",ORHistoryRClass,ORHistoryRn,0,modSO);//Edit-------------------Vitalii 15:43 28.02.2017
   Report("Некорректные сч.ф.",UncorrectIVRClass,UncorrectIVRn,0,modDBMain);//Edit-------------------Vitalii 12:47 13.03.2017
+  Report("Отчет по истории товара",ItHistProdRClass,ItHistProdRn,0,modDBMain);
   
   Report("Экспресс сборка",PrintExpressListRClass,PrintExpressListRn,0,modIN);//Edit-------------------Vitalii 12:47 13.03.2017
 	
