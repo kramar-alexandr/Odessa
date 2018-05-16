@@ -24,16 +24,18 @@ external function Boolean AccObjTypePerBal(record RcVc,Boolean,string,string,var
 external procedure InitValArray(Integer,var Array val);
 external procedure InitLongArray(Integer,var Array LongInt);
 
+SetLangMode(LangRussian,"RUS",0);	
 
 global
 procedure ItHistProdRn(record RcVc RepSpec) 		
 begin
 	record ItemHistVc ItemHistr;
-	boolean TrHs, testf;
+	boolean TrHs, testf, testf2, rc, rc2;
 	real v, vs;
-	array string 255 TotCostStr;
-	array Integer QtyStr, DepQtyStr;
-	integer i, j, aQty, DepQty;
+	array string 255 DepStr;
+	array Val TotCostStr, TotAllCostStr, QtyStr, DepQtyStr, DpTotCostStr, DpTtAllCostStr;
+	Val TotCostStr1, CurQty;
+	integer i, j, y, aQty, DepQty;
 	
 	
 	StartReportNoHeaderJob("Отчет по истории товара");
@@ -42,54 +44,101 @@ begin
 	TrHs = true;
 	i = 0;
 	j = 0;
+	rc = false;
+	rc2 = false;
 	while(loopkey("ArtCode",ItemHistr,1,TrHs)) begin
 		testf = true;
 		if(nonblank(RepSpec.f1) and ItemHistr.ArtCode!=RepSpec.f1)then begin TrHs = false; testf = false; end;
 		if(ItemHistr.StockAffectf==0)then begin testf = false; end;
 		if(testf)then begin
 			if(ItemHistr.Qty>0)then begin
-				TotCostStr[i] = ItemHistr.TotCostPrice;
+				TotCostStr1 = ItemHistr.TotCostPrice / ItemHistr.Qty;
+				/*if(TotCostStr[i]!=TotCostStr1 and rc==true)then begin
+					i = i+1;
+					rc = false;
+				end;
+				TotCostStr[i] = TotCostStr1;
+				if (!rc)then begin
+					QtyStr[i] = ItemHistr.Qty;
+					TotAllCostStr[i] = ItemHistr.TotCostPrice;
+					rc = true;
+				end else begin
+					QtyStr[i] = QtyStr[i] + ItemHistr.Qty;
+					TotAllCostStr[i] = TotAllCostStr[i] + ItemHistr.TotCostPrice;
+				end;*/
 				QtyStr[i] = ItemHistr.Qty;
+				TotAllCostStr[i] = ItemHistr.TotCostPrice;
+				TotCostStr[i] = TotCostStr1;
 				i = i+1;
-			end;
-			if(ItemHistr.Qty<0)then begin
-				DepQtyStr[j] = ItemHistr.Qty;
-				j = j+1;
 			end;
 		end;
 	end;
 	ResetLoop(ItemHistr);
 	aQty = i;
 	DepQty = j;
-	j=0;
-	for(i=0;i<aQty;i=i+1) begin
-		if(QtyStr[i]<=0)then begin
-			QtyStr[i+1] = QtyStr[i+1] + QtyStr[i];
-			QtyStr[i] = 0;
-		end;
-		for(j=j;QtyStr[i]>0;j=j+1) begin
-			QtyStr[i] = QtyStr[i] + DepQtyStr[j];
-			if(QtyStr[i]<=0)then begin
-				QtyStr[i+1] = QtyStr[i+1] + QtyStr[i];
-				QtyStr[i] = 0;
-			end;
+	StartFormat(15);
+		OutString(v,0,"Стоим. єд.",false);
+		OutString(v=v+vs,0,"Количество",false);
+		OutString(v=v+vs,0,"Сумма",false);
+		//OutString(v=v+vs*2,0,"Стоим. єд.",false);
+		OutString(v=v+vs*2,0,"Количество ушедшего",false);
+		OutString(v=v+vs*2,0,"Остаток товара на сумму",false);
+	EndFormat;
+	ItemHistr.ArtCode = RepSpec.f1;
+	i = 0;
+	j = 0;
+	TrHs = true;
+	CurQty = 0;
+	while(loopkey("ArtCode",ItemHistr,1,TrHs)) begin
+		testf = true;
+		if(nonblank(RepSpec.f1) and ItemHistr.ArtCode!=RepSpec.f1)then begin TrHs = false; testf = false; end;
+		if(ItemHistr.StockAffectf==0)then begin testf = false; end;
+		if(testf)then begin
+			v = 11;
+			vs = 50;
+			StartFormat(15);
+				if(ItemHistr.Qty>0)then begin
+					OutString(v,0,TotCostStr[i],false);
+					OutString(v=v+vs,0,QtyStr[i],false);
+					OutString(v=v+vs,0,TotAllCostStr[i],false);
+					i = i+1;
+				end;
+				if(ItemHistr.Qty<0)then begin
+					if((QtyStr[j] + ItemHistr.Qty)>0)then begin
+						QtyStr[j] = QtyStr[j] + ItemHistr.Qty;
+						CurQty = 0;
+						OutString(v,0,TotCostStr[j],false);
+						OutString(v=v+vs,0,ItemHistr.Qty,false);
+						OutString(v=v+vs,0,TotCostStr[j]*-ItemHistr.Qty,false);
+					end else begin
+						j=j+1;
+					end;
+					/*if((QtyStr[i] + ItemHistr.Qty + CurQty)<0)then begin
+						DepQtyStr[i] = -QtyStr[i];
+						DpTotCostStr[i] = TotCostStr[i];
+						DpTtAllCostStr[i] = TotAllCostStr[i] + DepQtyStr[i]*DpTotCostStr[i];
+						CurQty = CurQty + ItemHistr.Qty + DepQtyStr[i];
+						i = i+1;
+					end else begin
+						DepQtyStr[i] = ItemHistr.Qty + CurQty;
+						DpTotCostStr[i] = TotCostStr[i];
+						DpTtAllCostStr[i] = TotAllCostStr[i] + DepQtyStr[i]*DpTotCostStr[i];
+						CurQty = 0;
+					end;*/
+				end;
+			EndFormat;
 		end;
 	end;
+	v = 11;
+	vs = 50;
+	
 	
 	
 	ResetLoop(ItemHistr);
-	for(i=0;i<=aQty;i=i+1)begin
-		v = 11;
-		vs = 50;
-		StartFormat(15);
-			outstring(v,0,TotCostStr[i],false);
-			outstring(v=v+vs,0,QtyStr[i],false);
-		EndFormat;
-	end;
 	testf = true;
 	TrHs = true;
 	ItemHistr.ArtCode = RepSpec.f1;
-	while(loopkey("ArtCode",ItemHistr,1,TrHs)) begin
+	/*while(loopkey("ArtCode",ItemHistr,1,TrHs)) begin
 	v = 11;
 	vs = 50;
 		if(nonblank(RepSpec.f1) and ItemHistr.ArtCode!=RepSpec.f1)then begin TrHs = false; testf = false; end;
@@ -105,7 +154,7 @@ begin
 				outstring(v=v+vs,0,ItemHistr.Location,false);
 			EndFormat;
 		end;
-	end;
+	end;*/
 	ResetLoop(ItemHistr);
 	endjob;
 end;
