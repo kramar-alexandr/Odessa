@@ -161,7 +161,8 @@ begin
 	OutString(210,0,"Способ оплаты",false);
     OutString(260,0,USetStr(2586),false);
 	OutString(380,0,"Маршрут",false);// Edit ************************** BPI Ukraine - KramarAlexandr - понеділок, 8 січня 2018 р. о 13:58:11
-    OutStringAdjustBiDi(420,0,USetStr(2928),false,M4Val,520);
+    OutStringAdjustBiDi(400,0,"Себестоимость",false,M4Val,520);
+	OutString(430,0,"Сумма по заказу",false);
     OutString(1,0,"Готов к сборке",true);// Edit ************************** BPI Ukraine - KramarAlexandr - понеділок, 8 січня 2018 р. о 13:58:13
     EndFormat;
   end;
@@ -369,7 +370,8 @@ begin
 		OutString(210,0,ORr.NewPD,false);
         OutString(260,0,SHr.Addr0,false);        
         OutString(380,0,SHr.Sorting,false);// Edit *******************
-		 OutValBiDi(420,0,rowt,M4Val,false,520);
+		 OutValBiDi(400,0,rowt,M4Val,false,520);
+		OutString(430,0,ORr.Sum4,false);
     	OutString(1,0,Shr.Assembly,true);// Edit ************************** BPI Ukraine - KramarAlexandr - понеділок, 8 січня 2018 р. о 13:58:13
 
         
