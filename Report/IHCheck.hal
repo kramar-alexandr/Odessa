@@ -256,7 +256,8 @@ begin
 							endformat;
 							
 							if(acnt==1)then begin
-								//FixSomeIHCostSM(INr.Code,realcost);
+								logtext(0,"recalc item cost " & realcost & " to cost " & realcost);
+								FixSomeIHCostSM(INr.Code,realcost);
 							end;
 							
 							goto lerr;
