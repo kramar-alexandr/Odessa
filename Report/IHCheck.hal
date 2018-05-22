@@ -146,7 +146,7 @@ begin
 			TrHs = true;
 			foundf = false;
 			prevcost = blankval;
-			
+			error = true;
 			while(loopkey("ArtCode",IHr,1,TrHs))begin
 				testf = true;
 			
@@ -165,12 +165,21 @@ begin
 					end;
 					if(IHr.FileName=="StockMovVc" and IHr.Qty<0)then begin
 						smc = -IHr.TotCostPrice/IHr.Qty;
-						smin[sacnt] = smc;
-						sacnt = sacnt + 1;
+						for(i=0;i<acnt;i=i+1)begin
+							if(finddif(smc,puin[i])<1)then begin
+								error = false;
+							end;
+						end;
+						if(error)then begin
+							TrHs = false;
+							goto lerr;
+						end;
+
 					end;
 				end;
 			end;
 			
+			/*
 			for(i=0;i<sacnt;i=i+1)begin
 				for(j=0;j<acnt;j=j+1)begin
 					if(finddif(puin[j],smin[i])<1)then begin
@@ -180,7 +189,7 @@ begin
 				if(error)then begin
 					goto lerr;
 				end;
-			end;
+			end;*/
 			
 lerr:;			
 			sacnt = 0;
