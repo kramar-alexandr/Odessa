@@ -177,7 +177,7 @@ begin
 							acnt = acnt + 1;
 						end;
 					end;
-					if(IHr.FileName=="IVVc" and IHr.Qty>0)then begin
+					/*if(IHr.FileName=="IVVc" and IHr.Qty>0)then begin
 						foundf = false;
 						For(i=0;i<acnt;i=i+1) begin
 	  					if(puin[i]==round(IHr.TotCostPrice/IHr.Qty,SetRoundModeD(2)))then begin
@@ -189,7 +189,7 @@ begin
 							realcost = IHr.TotCostPrice/IHr.Qty;
 							acnt = acnt + 1;
 						end;
-					end;
+					end;*/
 					if(IHr.FileName=="SRVc" and IHr.Qty>0)then begin
 						foundf = false;
 						For(i=0;i<acnt;i=i+1) begin
