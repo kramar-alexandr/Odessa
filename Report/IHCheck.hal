@@ -260,7 +260,7 @@ begin
 								logtext(0,"recalc item cost " & INr.Code & " to cost " & realcost);
 								RepSpec1.f1 = INr.Code;
 								RepSpec1.vals0 = realcost;
-								//FixSomeIHCostSM(RepSpec1);
+								FixSomeIHCostSM(RepSpec1);
 							end;
 							
 							goto lerr;
