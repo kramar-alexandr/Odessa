@@ -137,12 +137,17 @@ begin
 	
 	startreportnoheaderjob("Check IH");
 		
-		INr.Code = "";
+		//INr.Code = "5635234";
 		While(loopmain(INr,1,true))begin
 			resetloop(IHr);
 			
+			/*if(INr.Code!="5635234")then begin
+				goto lend;
+			end;*/
 			
 			acnt = 0;
+			TrHs = true;
+			IHr.ArtCode = INr.Code;
 			while(loopkey("ArtCode",IHr,1,TrHs))begin
 				testf = true;
 			
@@ -158,9 +163,16 @@ begin
 					if(IHr.FileName=="PUVc")then begin
 						puin[acnt] = IHr.TotCostPrice/IHr.Qty;
 						acnt = acnt + 1;
+						//logtext(0,"puin	" & IHr.TotCostPrice/IHr.Qty);
+					end;
+					if(IHr.FileName=="ProdVc")then begin
+						puin[acnt] = IHr.TotCostPrice/IHr.Qty;
+						acnt = acnt + 1;
+						//logtext(0,"puin	" & IHr.TotCostPrice/IHr.Qty);
 					end;
 					if(IHr.FileName=="StockMovVc" and IHr.Qty<0)then begin
 						smc = -IHr.TotCostPrice/IHr.Qty;
+						//logtext(0,"smout	" & -IHr.TotCostPrice/IHr.Qty & " " & IHr.TransDate & " " & IHr.SerNr & " " & IHr.TransNr);
 						error = true;
 						for(i=0;i<acnt;i=i+1)begin
 							if(finddif(smc,puin[i])<1)then begin
@@ -172,6 +184,7 @@ begin
 							Startformat(15);
 								OutString(0,"DblINVc",INr.Code,false);
 								OutString(50,0,INr.InPrice,false);
+								OutString(100,0,-IHr.TotCostPrice/IHr.Qty,false);
 							endformat;
 							goto lerr;
 						end;
@@ -181,7 +194,7 @@ begin
 			end;
 lerr:;			
 		end;
-	
+lend:;	
 	
 	endjob;
 
