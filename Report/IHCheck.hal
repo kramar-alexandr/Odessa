@@ -257,7 +257,7 @@ begin
 							endformat;
 							
 							if(acnt==1)then begin
-								logtext(0,"recalc item cost " & realcost & " to cost " & realcost);
+								logtext(0,"recalc item cost " & INr.Code & " to cost " & realcost);
 								RepSpec1.f1 = INr.Code;
 								RepSpec1.vals0 = realcost;
 								FixSomeIHCostSM(RepSpec1);
