@@ -138,13 +138,13 @@ begin
 	
 	startreportnoheaderjob("Check IH");
 		
-		INr.Code = "1330012";
+		//INr.Code = "1330012";
 		While(loopmain(INr,1,true))begin
 			resetloop(IHr);
 			
-			if(INr.Code!="1330012")then begin
+			/*if(INr.Code!="1330012")then begin
 				goto lend;
-			end;
+			end;*/
 			
 			acnt = 0;
 			TrHs = true;
