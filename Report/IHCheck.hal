@@ -184,10 +184,14 @@ begin
 						smc = -IHr.TotCostPrice/IHr.Qty;
 						//logtext(0,"smout	" & -IHr.TotCostPrice/IHr.Qty & " " & IHr.TransDate & " " & IHr.SerNr & " " & IHr.TransNr);
 						error = true;
-						for(i=0;i<acnt;i=i+1)begin
-							if(finddif(smc,puin[i])<2)then begin
-								error = false;
+						if(acnt>0)then begin
+							for(i=0;i<acnt;i=i+1)begin
+								if(finddif(smc,puin[i])<2)then begin
+									error = false;
+								end;
 							end;
+						end else begin
+							error = false;
 						end;
 						if(error)then begin
 							TrHs = false;
