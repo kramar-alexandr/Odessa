@@ -1,4 +1,5 @@
 external function val AbsoluteVal(val);
+external function roundmode SetRoundModeD(Integer);
 
 global procedure ChechIHRnold(record RcVc RepSpec)
 begin
@@ -161,27 +162,55 @@ begin
 				if(testf)then begin
 					
 					if(IHr.FileName=="PUVc")then begin
-						puin[acnt] = IHr.TotCostPrice/IHr.Qty;
-						acnt = acnt + 1;
-						//logtext(0,"puin	" & IHr.TotCostPrice/IHr.Qty);
+						foundf = false;
+						For(i=0;i<acnt;i=i+1) begin
+	  					if(puin[i]==round(IHr.TotCostPrice/IHr.Qty,SetRoundModeD(2)))then begin
+	  						foundf = true;
+	  					end;
+						end; 
+						if(foundf==false)then begin
+							puin[acnt] = round(IHr.TotCostPrice/IHr.Qty,SetRoundModeD(2));
+							acnt = acnt + 1;
+						end;
 					end;
 					if(IHr.FileName=="IVVc" and IHr.Qty>0)then begin
-						puin[acnt] = IHr.TotCostPrice/IHr.Qty;
-						acnt = acnt + 1;
-						//logtext(0,"puin	" & IHr.TotCostPrice/IHr.Qty);
+						foundf = false;
+						For(i=0;i<acnt;i=i+1) begin
+	  					if(puin[i]==round(IHr.TotCostPrice/IHr.Qty,SetRoundModeD(2)))then begin
+	  						foundf = true;
+	  					end;
+						end; 
+						if(foundf==false)then begin
+							puin[acnt] = round(IHr.TotCostPrice/IHr.Qty,SetRoundModeD(2));
+							acnt = acnt + 1;
+						end;
 					end;
 					if(IHr.FileName=="SRVc" and IHr.Qty>0)then begin
-						puin[acnt] = IHr.TotCostPrice/IHr.Qty;
-						acnt = acnt + 1;
-						//logtext(0,"puin	" & IHr.TotCostPrice/IHr.Qty);
+						foundf = false;
+						For(i=0;i<acnt;i=i+1) begin
+	  					if(puin[i]==round(IHr.TotCostPrice/IHr.Qty,SetRoundModeD(2)))then begin
+	  						foundf = true;
+	  					end;
+						end; 
+						if(foundf==false)then begin
+							puin[acnt] = round(IHr.TotCostPrice/IHr.Qty,SetRoundModeD(2));
+							acnt = acnt + 1;
+						end;
 					end;
 					if(IHr.FileName=="ProdVc" and IHr.Qty>0)then begin
-						puin[acnt] = IHr.TotCostPrice/IHr.Qty;
-						acnt = acnt + 1;
-						//logtext(0,"puin	" & IHr.TotCostPrice/IHr.Qty);
+						foundf = false;
+						For(i=0;i<acnt;i=i+1) begin
+	  					if(puin[i]==round(IHr.TotCostPrice/IHr.Qty,SetRoundModeD(2)))then begin
+	  						foundf = true;
+	  					end;
+						end; 
+						if(foundf==false)then begin
+							puin[acnt] = round(IHr.TotCostPrice/IHr.Qty,SetRoundModeD(2));
+							acnt = acnt + 1;
+						end;
 					end;
 					if(IHr.FileName=="StockMovVc" and IHr.Qty<0)then begin
-						smc = -IHr.TotCostPrice/IHr.Qty;
+						smc = -round(IHr.TotCostPrice/IHr.Qty,SetRoundModeD(2));
 						//logtext(0,"smout	" & -IHr.TotCostPrice/IHr.Qty & " " & IHr.TransDate & " " & IHr.SerNr & " " & IHr.TransNr);
 						error = true;
 						if(acnt>0)then begin
@@ -198,9 +227,9 @@ begin
 							Startformat(15);
 								OutString(0,"DblINVc",INr.Code,false);
 								OutString(50,0,INr.InPrice,false);
-								OutString(100,0,-IHr.TotCostPrice/IHr.Qty,false);
+								OutString(100,0,-round(IHr.TotCostPrice/IHr.Qty,SetRoundModeD(2)),false);
 								OutString(150,0,acnt,false);
-								OutString(150,0,puin[acnt-1],false);
+								OutString(200,0,puin[acnt-1],false);
 							endformat;
 							goto lerr;
 						end;
