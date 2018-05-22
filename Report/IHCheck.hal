@@ -132,8 +132,8 @@ begin
 	boolean TrHs,testf;
 	val incost,inqty,diff,prevcost,smc;
 	boolean foundf,error;
-	array val puin;
-	integer acnt,i;
+	array val puin,smin;
+	integer acnt,sacnt,i,j;
 	
 	startreportnoheaderjob("Check IH");
 		
@@ -146,7 +146,7 @@ begin
 			TrHs = true;
 			foundf = false;
 			prevcost = blankval;
-			error = true;
+			
 			while(loopkey("ArtCode",IHr,1,TrHs))begin
 				testf = true;
 			
@@ -158,40 +158,34 @@ begin
 				//if(IHr.FileName!="PUVc")then begin testf = false; end;
 					
 				if(testf)then begin
-					if(prevcost!=0 and IHr.TotCostPrice!=0)then begin
-						if((AbsoluteVal(IHr.TotCostPrice/IHr.Qty)/prevcost)>1.9)then begin
-							foundf = true;
-						end;
-						if(prevcost/(AbsoluteVal(IHr.TotCostPrice/IHr.Qty))>1.9)then begin
-							foundf = true;
-						end;
-					end;
-					prevcost = AbsoluteVal(IHr.TotCostPrice/IHr.Qty);
-					
 					
 					if(IHr.FileName=="PUVc")then begin
 						puin[acnt] = IHr.TotCostPrice/IHr.Qty;
 						acnt = acnt + 1;
 					end;
-					if(IHr.FileName=="StockMovVc")then begin
-						
-						for(i=0;i<acnt;i=i+1)begin
-							if(IHr.Qty>0)then begin
-								smc = IHr.TotCostPrice/IHr.Qty;
-								if(finddif(smc,puin[])<1)then begin
-									error = false;
-								end;
-							end;
-						end;
+					if(IHr.FileName=="StockMovVc" and IHr.Qty<0)then begin
+						smc = -IHr.TotCostPrice/IHr.Qty;
+						smin[sacnt] = smc;
+						sacnt = sacnt + 1;
 					end;
-					
-					
 				end;
 			end;
 			
-			diff = AbsoluteVal(incost/inqty/INr.InPrice);
+			for(i=0;i<sacnt;i=i+1)begin
+				for(j=0;j<acnt;j=j+1)begin
+					if(finddif(puin[j],smin[i])<1)then begin
+						error = false;
+					end;
+				end;
+				if(error)then begin
+					goto lerr;
+				end;
+			end;
+			
+lerr:;			
+			sacnt = 0;
+			acnt = 0;
 			if(error)then begin
-				
 				Startformat(15);
 					OutString(0,"DblINVc",INr.Code,false);
 					OutString(50,0,INr.InPrice,false);
