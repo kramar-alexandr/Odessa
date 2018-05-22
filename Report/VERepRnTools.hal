@@ -492,6 +492,8 @@ begin
 return;
 end;
 
+
+
 global procedure DblOpenINrsRn(string dblstr,string l,Integer currepwn)
 begin
 	string 200 artcode;

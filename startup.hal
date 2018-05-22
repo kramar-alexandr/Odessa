@@ -361,7 +361,8 @@ begin
 	 SString(31180,"Нельзя создавать две активные карты для одного клиента "); // Edit Dima ************* 2018-02-21 04:42 PM
 	 SString(31181,"Проверьте скидку"); // Edit Dima ************* 2018-02-23 12:33 PM
 	 SString(31182,"Заполните способ оплаты"); // Edit Dima ************* 2018-02-23 12:33 PM
-	 
+	
+	Maintenance("Выровнять стоимость товара",FixItemCostVClass,FixSomeIHCostSM,modIN);
 	Maintenance("Закрыть старые OR",MyVClass,CloseOldOpenOrders,modSO);
 	Maintenance("Проставить склад первой покупки клиента",MyVClass,FillFirstDateByeCUMn,modSL);
   Maintenance("Экспорт склада CSV",ExportStockCSVClass,ExportStockCSVMn,modSY);

@@ -3230,7 +3230,7 @@ begin
 	return;
 	end;
 	
-	global updating procedure FixSomeIHCostSMold()
+global updating procedure FixSomeIHCostSMold()
 begin
 	record ItemHistVc IHr,sourceIHr;
 	record StockMovVc SMr;
@@ -3447,7 +3447,7 @@ begin
 return;
 end;
 
-global updating procedure FixSomeIHCostSM(string artnew,val realc)
+global updating procedure FixSomeIHCostSM(record RcVc RepSpec)
 begin
 	record ItemHistVc IHr,sourceIHr;
 	record StockMovVc SMr;
@@ -3475,8 +3475,9 @@ begin
 	record PUVc PUr;
 	row PUVc PUrw;
 	
-	artcode = artnew;
-	realcost = realc;
+	
+	artcode = RepSpec.f1;
+	realcost = RepSpec.vals0;
 		
 	IHr.ArtCode = artcode;
 	TrHs = true;
