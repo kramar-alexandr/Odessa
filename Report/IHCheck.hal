@@ -137,13 +137,13 @@ begin
 	
 	startreportnoheaderjob("Check IH");
 		
-		//INr.Code = "5635234";
+		INr.Code = "1330012";
 		While(loopmain(INr,1,true))begin
 			resetloop(IHr);
 			
-			/*if(INr.Code!="5635234")then begin
+			if(INr.Code!="1330012")then begin
 				goto lend;
-			end;*/
+			end;
 			
 			acnt = 0;
 			TrHs = true;
@@ -199,6 +199,8 @@ begin
 								OutString(0,"DblINVc",INr.Code,false);
 								OutString(50,0,INr.InPrice,false);
 								OutString(100,0,-IHr.TotCostPrice/IHr.Qty,false);
+								OutString(150,0,acnt,false);
+								OutString(150,0,puin[acnt-1],false);
 							endformat;
 							goto lerr;
 						end;
