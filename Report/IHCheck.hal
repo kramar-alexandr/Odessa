@@ -165,7 +165,12 @@ begin
 						acnt = acnt + 1;
 						//logtext(0,"puin	" & IHr.TotCostPrice/IHr.Qty);
 					end;
-					if(IHr.FileName=="ProdVc")then begin
+					if(IHr.FileName=="IVVc" and IHr.Qty>0)then begin
+						puin[acnt] = IHr.TotCostPrice/IHr.Qty;
+						acnt = acnt + 1;
+						//logtext(0,"puin	" & IHr.TotCostPrice/IHr.Qty);
+					end;
+					if(IHr.FileName=="ProdVc" and IHr.Qty>0)then begin
 						puin[acnt] = IHr.TotCostPrice/IHr.Qty;
 						acnt = acnt + 1;
 						//logtext(0,"puin	" & IHr.TotCostPrice/IHr.Qty);
