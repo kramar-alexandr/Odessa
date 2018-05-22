@@ -140,13 +140,9 @@ begin
 		INr.Code = "";
 		While(loopmain(INr,1,true))begin
 			resetloop(IHr);
-			IHr.ArtCode = INr.Code;
-			incost = blankval;
-			inqty = blankval;
-			TrHs = true;
-			foundf = false;
-			prevcost = blankval;
-			error = true;
+			
+			
+			acnt = 0;
 			while(loopkey("ArtCode",IHr,1,TrHs))begin
 				testf = true;
 			
@@ -165,6 +161,7 @@ begin
 					end;
 					if(IHr.FileName=="StockMovVc" and IHr.Qty<0)then begin
 						smc = -IHr.TotCostPrice/IHr.Qty;
+						error = true;
 						for(i=0;i<acnt;i=i+1)begin
 							if(finddif(smc,puin[i])<1)then begin
 								error = false;
@@ -172,34 +169,17 @@ begin
 						end;
 						if(error)then begin
 							TrHs = false;
+							Startformat(15);
+								OutString(0,"DblINVc",INr.Code,false);
+								OutString(50,0,INr.InPrice,false);
+							endformat;
 							goto lerr;
 						end;
 
 					end;
 				end;
 			end;
-			
-			/*
-			for(i=0;i<sacnt;i=i+1)begin
-				for(j=0;j<acnt;j=j+1)begin
-					if(finddif(puin[j],smin[i])<1)then begin
-						error = false;
-					end;
-				end;
-				if(error)then begin
-					goto lerr;
-				end;
-			end;*/
-			
 lerr:;			
-			sacnt = 0;
-			acnt = 0;
-			if(error)then begin
-				Startformat(15);
-					OutString(0,"DblINVc",INr.Code,false);
-					OutString(50,0,INr.InPrice,false);
-				endformat;
-			end;
 		end;
 	
 	
