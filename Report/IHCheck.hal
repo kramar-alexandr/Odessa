@@ -1,5 +1,6 @@
 external function val AbsoluteVal(val);
 external function roundmode SetRoundModeD(Integer);
+external updating procedure FixSomeIHCostSM(string,val);
 
 global procedure ChechIHRnold(record RcVc RepSpec)
 begin
@@ -126,7 +127,7 @@ begin
 return;
 end;
 
-global procedure ChechIHRn(record RcVc RepSpec)
+global updating procedure ChechIHRn(record RcVc RepSpec)
 begin
 	record INVc INr;
 	record ItemHistVc IHr;
@@ -135,16 +136,17 @@ begin
 	boolean foundf,error;
 	array val puin,smin;
 	integer acnt,sacnt,i,j;
+	val realcost;
 	
 	startreportnoheaderjob("Check IH");
 		
-		//INr.Code = "1330012";
+		INr.Code = "6060016";
 		While(loopmain(INr,1,true))begin
 			resetloop(IHr);
 			
-			/*if(INr.Code!="1330012")then begin
+			if(INr.Code!="6060016")then begin
 				goto lend;
-			end;*/
+			end;
 			
 			acnt = 0;
 			TrHs = true;
@@ -170,6 +172,7 @@ begin
 						end; 
 						if(foundf==false)then begin
 							puin[acnt] = round(IHr.TotCostPrice/IHr.Qty,SetRoundModeD(2));
+							realcost = IHr.TotCostPrice/IHr.Qty;
 							acnt = acnt + 1;
 						end;
 					end;
@@ -182,6 +185,7 @@ begin
 						end; 
 						if(foundf==false)then begin
 							puin[acnt] = round(IHr.TotCostPrice/IHr.Qty,SetRoundModeD(2));
+							realcost = IHr.TotCostPrice/IHr.Qty;
 							acnt = acnt + 1;
 						end;
 					end;
@@ -194,6 +198,7 @@ begin
 						end; 
 						if(foundf==false)then begin
 							puin[acnt] = round(IHr.TotCostPrice/IHr.Qty,SetRoundModeD(2));
+							realcost = IHr.TotCostPrice/IHr.Qty;
 							acnt = acnt + 1;
 						end;
 					end;
@@ -206,6 +211,7 @@ begin
 						end; 
 						if(foundf==false)then begin
 							puin[acnt] = round(IHr.TotCostPrice/IHr.Qty,SetRoundModeD(2));
+							realcost = IHr.TotCostPrice/IHr.Qty;
 							acnt = acnt + 1;
 						end;
 					end;
@@ -231,6 +237,11 @@ begin
 								OutString(150,0,acnt,false);
 								OutString(200,0,puin[acnt-1],false);
 							endformat;
+							
+							if(acnt==1)then begin
+								FixSomeIHCostSM(INr.Code,realcost);
+							end;
+							
 							goto lerr;
 						end;
 

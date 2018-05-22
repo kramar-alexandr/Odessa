@@ -3230,7 +3230,7 @@ begin
 	return;
 	end;
 	
-	global updating procedure FixSomeIHCostSM()
+	global updating procedure FixSomeIHCostSMold()
 begin
 	record ItemHistVc IHr,sourceIHr;
 	record StockMovVc SMr;
@@ -3444,6 +3444,173 @@ begin
 		end;
 	end;*/
 
+return;
+end;
+
+global updating procedure FixSomeIHCostSM(string artnew,val realc)
+begin
+	record ItemHistVc IHr,sourceIHr;
+	record StockMovVc SMr;
+	row StockMovVc SMrw;
+	boolean TrHs,testf;
+	string 100 artcode;
+	val cost,nosorcecost,remcost;
+	val qty,nosorceqty,middlecost,wrongcost;
+	longint transnr;
+	integer rowsm;
+	val newcost;
+	date transdate;
+	record SHVc SHr;
+	row SHVc SHrw;
+	record IVVc IVr;
+	row IVVc IVrw;
+	record SDVc SDr;
+	row SDVc SDrw;
+	record RetVc Retr;
+	row RetVc Retrw;
+	record ProdVc Prodr;
+	row ProdVc Prodrw;
+	record SalesDataVc SalesData;
+	val realcost,min,max;
+	record PUVc PUr;
+	row PUVc PUrw;
+	
+	artcode = artnew;
+	realcost = realc;
+		
+	IHr.ArtCode = artcode;
+	TrHs = true;
+	while(loopkey("ArtCode",IHr,1,TrHs))begin
+		if(IHr.ArtCode!=artcode)then begin
+			TrHs = false;
+		end;
+		if(TrHs)then begin
+			if(IHr.Qty<0)then begin
+				cost = -IHr.TotCostPrice/IHr.Qty;
+			end else begin
+				cost = IHr.TotCostPrice/IHr.Qty;
+			end;
+			if(true)then begin
+				if(IHr.StockAffectf>0)then begin
+					if(cost!=realcost)then begin
+						if(IHr.Qty<0)then begin
+							IHr.TotCostPrice = -realcost*IHr.Qty;
+						end else begin
+							IHr.TotCostPrice = realcost*IHr.Qty;
+							IHr.RemCostPrice = realcost*IHr.RemQty;
+						end;
+						cost = realcost;
+						switch(IHr.FileName)begin
+							case"PUVc":PUr.SerNr = IHr.TransNr;
+													if(readfirstmain(PUr,1,true))then begin
+														matrowget(PUr,IHr.Row,PUrw);
+															PUrw.CostPrice = cost;
+															PUrw.Sum = cost * PUrw.CostPrice;
+														matrowput(PUr,IHr.Row,PUrw);
+														recordstore(PUr,true);
+													end;
+							case"SHVc":SHr.SerNr = IHr.TransNr;
+													if(readfirstmain(SHr,1,true))then begin
+														matrowget(SHr,IHr.Row,SHrw);
+															SHrw.FIFO = cost;
+															SHrw.FIFORowVal = cost * SHrw.Ship;
+														matrowput(SHr,IHr.Row,SHrw);
+														recordstore(SHr,true);
+													end;
+							case"SDVc":SDr.SerNr = IHr.TransNr;
+													if(readfirstmain(SDr,1,true))then begin
+														matrowget(SDr,IHr.Row,SDrw);
+															SDrw.FIFO = cost;
+															SDrw.FIFORowVal = cost * SDrw.Qty;
+														matrowput(SDr,sourceIHr.Row,SDrw);
+														recordstore(SDr,true);
+													end;
+							case"RetVc":Retr.SerNr = IHr.TransNr;
+													if(readfirstmain(Retr,1,true))then begin
+														matrowget(Retr,IHr.Row,Retrw);
+															Retrw.UPrice = cost;
+															Retrw.CostPrice = cost;
+														matrowput(Retr,sourceIHr.Row,Retrw);
+														recordstore(Retr,true);
+													end;
+							case"IVVc":IVr.SerNr = IHr.TransNr;
+													if(readfirstmain(IVr,1,true))then begin
+														matrowget(IVr,IHr.Row,IVrw);
+															IVrw.BasePrice = cost;
+															if(IVr.CurncyCode=="USD")then begin
+																IVrw.rowGP = IVrw.Sum - realcost*IVrw.Quant;
+															end else begin
+																IVrw.rowGP = IVrw.Sum/IVr.FrRate - cost*IVrw.Quant;
+															end;
+															//IVrw.rowGP = IVrw.rowGP-(cost*IVrw.Quant-IVrw.rowGP);
+															IVrw.FIFO = cost;
+															IVrw.FIFORowVal = cost * IVrw.Quant;
+														matrowput(IVr,IHr.Row,IVrw);
+														recordstore(IVr,true);
+														SalesData.InvNr = IVr.SerNr;
+														SalesData.RowNr = IHr.Row;
+														if(readfirstmain(SalesData,2,true))then begin
+															SalesData.BasePrice = IVrw.BasePrice;
+															SalesData.rowGP = IVrw.rowGP;
+															SalesData.Cost = IVrw.BasePrice*IVrw.Quant;
+															SalesData.UnitCost = IVrw.BasePrice;
+															recordstore(SalesData,true);
+														end;
+													end;
+							case"StockMovVc":SMr.SerNr = IHr.TransNr;
+														if(readfirstmain(SMr,1,true))then begin
+															matrowget(SMr,sourceIHr.Row,SMrw);
+																SMrw.OldPrice = cost;
+																SMrw.NewPrice = cost;
+																SMrw.FIFORowVal = cost * SMrw.Quant;
+															matrowput(SMr,IHr.Row,SMrw);
+															recordstore(SMr,true);
+														end;
+							case"ProdVc":			Prodr.SerNr = IHr.TransNr;
+														if(readfirstmain(Prodr,1,true))then begin
+															matrowget(Prodr,IHr.Row,Prodrw);
+																Prodrw.ItemCost = cost;
+																if(Prodrw.InQty>0)then begin
+																	Prodrw.FIFORowVal = cost * Prodrw.InQty;
+																end;
+																if(Prodrw.OutQty>0)then begin
+																	Prodrw.FIFORowVal = cost * Prodrw.OutQty;
+																end;
+															matrowput(Prodr,IHr.Row,Prodrw);
+															recordstore(Prodr,true);
+														end;
+						end;
+						logtext(0,"IHrArtCodeStore " & IHr.ArtCode);
+						recordstore(IHr,true);
+					end;
+				end else begin
+					if(IHr.FileName=="IVVc")then begin
+						IVr.SerNr = IHr.TransNr;
+						readfirstmain(IVr,1,true);
+						matrowget(IVr,IHr.Row,IVrw);
+							IVrw.BasePrice = realcost;
+							if(IVr.CurncyCode=="USD")then begin
+								IVrw.rowGP = IVrw.Sum - realcost*IVrw.Quant;
+							end else begin
+								IVrw.rowGP = IVrw.Sum/IVr.FrRate - realcost*IVrw.Quant;
+							end;
+							//IVrw.rowGP = IVrw.rowGP-(realcost*IVrw.Quant-IVrw.rowGP);
+						matrowput(IVr,IHr.Row,IVrw);
+						recordstore(IVr,true);
+						SalesData.InvNr = IVr.SerNr;
+						SalesData.RowNr = IHr.Row;
+						if(readfirstmain(SalesData,2,true))then begin
+							SalesData.BasePrice = IVrw.BasePrice;
+							SalesData.rowGP = IVrw.rowGP;
+							SalesData.Cost = IVrw.BasePrice*IVrw.Quant;
+							SalesData.UnitCost = IVrw.BasePrice;
+							recordstore(SalesData,true);
+						end;
+					end;
+				end;
+			end;
+		end;
+	end;
 return;
 end;
 
