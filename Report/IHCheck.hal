@@ -116,9 +116,9 @@ begin
 	val res;
 	
 		if(v1>v2)then begin
-		 res = v1-v2;
+		 res = v1/v2;
 		end else begin
-			res = v2-v1;
+			res = v2/v1;
 		end;
 	
 	finddif = res;
@@ -175,7 +175,7 @@ begin
 						//logtext(0,"smout	" & -IHr.TotCostPrice/IHr.Qty & " " & IHr.TransDate & " " & IHr.SerNr & " " & IHr.TransNr);
 						error = true;
 						for(i=0;i<acnt;i=i+1)begin
-							if(finddif(smc,puin[i])<1)then begin
+							if(finddif(smc,puin[i])<2)then begin
 								error = false;
 							end;
 						end;
