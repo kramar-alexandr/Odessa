@@ -1,6 +1,6 @@
 external function val AbsoluteVal(val);
 external function roundmode SetRoundModeD(Integer);
-external updating procedure FixSomeIHCostSM(string,val);
+external updating procedure FixSomeIHCostSM(record RcVc);
 
 global procedure ChechIHRnold(record RcVc RepSpec)
 begin
@@ -137,6 +137,7 @@ begin
 	array val puin,smin;
 	integer acnt,sacnt,i,j;
 	val realcost;
+	record RcVc RepSpec;
 	
 	startreportnoheaderjob("Check IH");
 		
@@ -257,7 +258,9 @@ begin
 							
 							if(acnt==1)then begin
 								logtext(0,"recalc item cost " & realcost & " to cost " & realcost);
-								FixSomeIHCostSM(INr.Code,realcost);
+								RepSpec.f1 = INr.Code;
+								RepSpec.vals0 = realcost;
+								FixSomeIHCostSM(RepSpec);
 							end;
 							
 							goto lerr;
