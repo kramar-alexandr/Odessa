@@ -1,12 +1,14 @@
 external function val AbsoluteVal(val);
 
-global procedure ChechIHRn(record RcVc RepSpec)
+global procedure ChechIHRnold(record RcVc RepSpec)
 begin
 	record INVc INr;
 	record ItemHistVc IHr;
 	boolean TrHs,testf;
 	val incost,inqty,diff,prevcost;
 	boolean foundf;
+	array val puin;
+	integer acnt;
 	
 	startreportnoheaderjob("Check IH");
 		
@@ -100,6 +102,100 @@ begin
 					OutString(250,0,diff,false);
 				endformat;
 			
+			end;
+		end;
+	
+	
+	endjob;
+
+return;
+end;
+
+function val finddif(val v1, val v2)
+begin
+	val res;
+	
+		if(v1>v2)then begin
+		 res = v1-v2;
+		end else begin
+			res = v2-v1;
+		end;
+	
+	finddif = res;
+return;
+end;
+
+global procedure ChechIHRn(record RcVc RepSpec)
+begin
+	record INVc INr;
+	record ItemHistVc IHr;
+	boolean TrHs,testf;
+	val incost,inqty,diff,prevcost,smc;
+	boolean foundf,error;
+	array val puin;
+	integer acnt,i;
+	
+	startreportnoheaderjob("Check IH");
+		
+		INr.Code = "";
+		While(loopmain(INr,1,true))begin
+			resetloop(IHr);
+			IHr.ArtCode = INr.Code;
+			incost = blankval;
+			inqty = blankval;
+			TrHs = true;
+			foundf = false;
+			prevcost = blankval;
+			error = true;
+			while(loopkey("ArtCode",IHr,1,TrHs))begin
+				testf = true;
+			
+				if(IHr.ArtCode!=INr.Code)then begin
+					TrHs = false;
+					testf = false;
+				end;
+				if(IHr.StockAffectf==0)then begin testf = false; end;
+				//if(IHr.FileName!="PUVc")then begin testf = false; end;
+					
+				if(testf)then begin
+					if(prevcost!=0 and IHr.TotCostPrice!=0)then begin
+						if((AbsoluteVal(IHr.TotCostPrice/IHr.Qty)/prevcost)>1.9)then begin
+							foundf = true;
+						end;
+						if(prevcost/(AbsoluteVal(IHr.TotCostPrice/IHr.Qty))>1.9)then begin
+							foundf = true;
+						end;
+					end;
+					prevcost = AbsoluteVal(IHr.TotCostPrice/IHr.Qty);
+					
+					
+					if(IHr.FileName=="PUVc")then begin
+						puin[acnt] = IHr.TotCostPrice/IHr.Qty;
+						acnt = acnt + 1;
+					end;
+					if(IHr.FileName=="StockMovVc")then begin
+						
+						for(i=0;i<acnt;i=i+1)begin
+							if(IHr.Qty>0)then begin
+								smc = IHr.TotCostPrice/IHr.Qty;
+								if(finddif(smc,puin[])<1)then begin
+									error = false;
+								end;
+							end;
+						end;
+					end;
+					
+					
+				end;
+			end;
+			
+			diff = AbsoluteVal(incost/inqty/INr.InPrice);
+			if(error)then begin
+				
+				Startformat(15);
+					OutString(0,"DblINVc",INr.Code,false);
+					OutString(50,0,INr.InPrice,false);
+				endformat;
 			end;
 		end;
 	
