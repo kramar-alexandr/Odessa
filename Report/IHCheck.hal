@@ -137,7 +137,7 @@ begin
 	array val puin,smin;
 	integer acnt,sacnt,i,j;
 	val realcost;
-	record RcVc RepSpec;
+	record RcVc RepSpec1;
 	
 	startreportnoheaderjob("Check IH");
 		
@@ -258,9 +258,9 @@ begin
 							
 							if(acnt==1)then begin
 								logtext(0,"recalc item cost " & realcost & " to cost " & realcost);
-								RepSpec.f1 = INr.Code;
-								RepSpec.vals0 = realcost;
-								FixSomeIHCostSM(RepSpec);
+								RepSpec1.f1 = INr.Code;
+								RepSpec1.vals0 = realcost;
+								FixSomeIHCostSM(RepSpec1);
 							end;
 							
 							goto lerr;
