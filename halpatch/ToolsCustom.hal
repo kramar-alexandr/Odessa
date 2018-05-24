@@ -3867,7 +3867,7 @@ begin
 	record INVc INr;
 	boolean changef;
 	
-	SMr.SerNr = 21000;
+	SMr.SerNr = 35915;
 	while(loopmain(SMr,1,true))begin
 		changef = false;
 		if(SMr.OKFlag>0)then begin
@@ -3885,7 +3885,7 @@ begin
 							INr.Code = SMrw.ArtCode;
 							readfirstmain(INr,1,true);
 							SMrw.Spec = INr.Name;
-							matrowput(SMr,i,SMrw);
+							//matrowput(SMr,i,SMrw);
 							changef = true;
 						end;
 					end else begin
@@ -3896,7 +3896,7 @@ begin
 		end;
 		
 		if(changef)then begin
-			recordstore(SMr,true);
+			//recordstore(SMr,true);
 		end;
 		
 	end;
