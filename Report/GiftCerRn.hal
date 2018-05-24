@@ -249,7 +249,7 @@ begin
 									if (IVrw.GCNr==GCr.SerNr) then begin
 										MulVATIV(IVrw.VATCode,IVrw.Sum,vatv,t1,IVr.InclVAT,IVr.NoTAXonVAT);
 										anet[maxp] = anet[maxp] - IVrw.Sum;
-										i = rwcnt;
+										ivi = rwcnt;
 									end;
 								end;
 							end;
