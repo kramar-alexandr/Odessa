@@ -572,7 +572,7 @@ LPrintItemHistExcel:;
           OutLongInt(115,dblstr,IHr.TransNr,false);    
 		  OutString(135,0,USetStr(31134) & (IHr.Row + 1),false); //Edit-------------------Vitalii 14:51 12.01.2016
 		  
-		  if(currentuser=="SA")then begin
+		  if(left(currentuser,2)=="SA")then begin
 				OutString(155,"DblItemHistVc",IHr.SerNr,false); //Edit-------------------Vitalii 14:51 12.01.2016
 				OutString(200,"DblItemHistVc",IHr.Source,false);
 		  end;
@@ -621,7 +621,7 @@ LPrintItemHistExcel:;
           OutString(60,0,USetStr(strid),false);                        
           OutLongIntOvst(115,dblstr,IHr.TransNr,false,IHr.Invalid);    
 		  OutString(135,0,USetStr(31134) & (IHr.Row + 1),false); //Edit-------------------Vitalii 14:51 12.01.2016
-		  if(currentuser=="SA")then begin
+		  if(left(currentuser,2)=="SA")then begin
 				OutString(155,"DblItemHistVc",IHr.SerNr,false); //Edit-------------------Vitalii 14:51 12.01.2016
 				OutString(200,"DblItemHistVc",IHr.Source,false);
 		  end;
@@ -665,7 +665,7 @@ LPrintItemHistExcel:;
           OutString(60,0,USetStr(strid),false);                       
           OutLongInt(115,dblstr,IHr.TransNr,false);                    
 		  OutString(135,0,USetStr(31134) & (IHr.Row + 1),false); //Edit-------------------Vitalii 14:51 12.01.2016
-		  if(currentuser=="SA")then begin
+		  if(left(currentuser,2)=="SA")then begin
 				OutString(155,"DblItemHistVc",IHr.SerNr,false); //Edit-------------------Vitalii 14:51 12.01.2016
 				OutString(200,"DblItemHistVc",IHr.Source,false);
 		  end;
@@ -710,7 +710,7 @@ LPrintItemHistExcel:;
           OutString(60,0,USetStr(strid),false);
           OutLongInt(115,dblstr,IHr.TransNr,false);
 		  OutString(135,0,USetStr(31134) & (IHr.Row + 1),false); //Edit-------------------Vitalii 14:51 12.01.2016
-		  if(currentuser=="SA")then begin
+		  if(left(currentuser,2)=="SA")then begin
 				OutString(155,"DblItemHistVc",IHr.SerNr,false); //Edit-------------------Vitalii 14:51 12.01.2016
 				OutString(200,"DblItemHistVc",IHr.Source,false);
 		  end;
@@ -743,7 +743,7 @@ LPrintItemHistExcel:;
           if (RepSpec.flags[22]!=0) then begin
             OutLongIntOvst(115,dblstr,IHr.TransNr,false,IHr.Invalid);    
 			OutString(135,0,USetStr(31134) & (IHr.Row + 1),false); //Edit-------------------Vitalii 14:51 12.01.2016
-			if(currentuser=="SA")then begin
+			if(left(currentuser,2)=="SA")then begin
 				OutString(155,"DblItemHistVc",IHr.SerNr,false); //Edit-------------------Vitalii 14:51 12.01.2016
 				OutString(200,"DblItemHistVc",IHr.Source,false);
 		  end;
@@ -751,7 +751,7 @@ LPrintItemHistExcel:;
           end else begin
             OutLongIntOvst(135,dblstr,IHr.TransNr,false,IHr.Invalid);    
 			OutString(155,0,USetStr(31134) & (IHr.Row + 1),false); //Edit-------------------Vitalii 14:51 12.01.2016
-			if(currentuser=="SA")then begin
+			if(left(currentuser,2)=="SA")then begin
 				OutString(155,"DblItemHistVc",IHr.SerNr,false); //Edit-------------------Vitalii 14:51 12.01.2016
 				OutString(200,"DblItemHistVc",IHr.Source,false);
 		  end;
@@ -779,7 +779,7 @@ LPrintItemHistExcel:;
           OutString(60,0,USetStr(strid),false);                       
           OutLongInt(115,dblstr,IHr.TransNr,false);                    
 		  OutString(135,0,USetStr(31134) & (IHr.Row + 1),false); //Edit-------------------Vitalii 14:51 12.01.2016
-		  if(currentuser=="SA")then begin
+		  if(left(currentuser,2)=="SA")then begin
 				OutString(155,"DblItemHistVc",IHr.SerNr,false); //Edit-------------------Vitalii 14:51 12.01.2016
 				OutString(200,"DblItemHistVc",IHr.Source,false);
 		  end;
