@@ -234,6 +234,7 @@ begin
 					lpGCRr.GCSSerNr = GCr.SerNr;
 					TrHs1 = true;
 					resetloop(lpGCRr);
+					anet[maxp] = GCr.Amount;
 					while(loopkey("GCSSerNr",lpGCRr,1,TrHs1))begin
 						if(lpGCRr.GCSSerNr!=GCr.SerNr)then begin
 							TrHs1 = false;
@@ -247,7 +248,7 @@ begin
 									MatRowGet(IVr,ivi,IVrw);
 									if (IVrw.GCNr==GCr.SerNr) then begin
 										MulVATIV(IVrw.VATCode,IVrw.Sum,vatv,t1,IVr.InclVAT,IVr.NoTAXonVAT);
-										anet[maxp] = GCr.Amount - IVrw.Sum;
+										anet[maxp] = anet[maxp] - IVrw.Sum;
 										i = rwcnt;
 									end;
 								end;
