@@ -3493,7 +3493,7 @@ begin
 			end;
 			if(true)then begin
 				if(IHr.StockAffectf>0)then begin
-					if(cost!=realcost)then begin
+					if(cost>realcost*2)then begin
 						if(IHr.Qty<0)then begin
 							IHr.TotCostPrice = -realcost*IHr.Qty;
 						end else begin
