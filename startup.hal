@@ -524,6 +524,7 @@ begin
   Import("Импорт цен",PLImportIClass,PLImportIn,modDI); //Added********************Dima 20.11.2014
   Import("Импорт товаров",INImportIClass,INImportIn,modIN);//Added********************Dima 20.11.2014
   //Import("Заменить группу товара",INReplaceGroupIClass,INReplaceGroupIn,modIN); The same as "Импорт Item/Group" //Added********************Dima 21.11.2014
+  Import("справить кол-во в перемещениях",INReplaceGroupIClass,FixSMQtyIN,modIN);
   Import("Импорт поступлений на склад",PUImportIClass,PUImportIn,modIN);//Added********************Dima 24.12.2014
   Import("Импорт перемещений",SMImportIClass,SMImportIn,modIN);
  	Import("Обновить название товаров и описание",ImportRawItemsIClass,ImportRawItems,modDBMain);//Added********************Dima 20.11.2014

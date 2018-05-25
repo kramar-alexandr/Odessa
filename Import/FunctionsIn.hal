@@ -118,6 +118,66 @@ begin
 return;
 end;
 
+global updating procedure FixSMQtyIN()
+begin
+	string 50 sernr,row1;
+	record StockMovVc SMr;
+	row StockMovVc SMrw;
+	record ItemHistVc IHr;
+	integer rnint,qty,toqty,thqty;
+	boolean TrHs;
+	
+	while (TestEOF()==false) begin
+  	sernr = ImportField;
+  	row1 = ImportField;
+  	
+  	if (nonblank(sernr) ) then begin
+  		SMr.SerNr = stringtolongint(sernr);	
+  		qty = 0;
+  		toqty = 0;
+  		thqty = 0;
+  		if (ReadFirstMain(SMr,1,true)) then begin
+				if(nonblank(row1))then begin
+					rnint = stringtolongint(row1)-1;
+					matrowget(SMr,rnint,SMrw);
+					IHr.ArtCode = SMrw.ArtCode;
+					TrHs = true;
+					IHr.FileName = "StockMovVc";
+					IHr.TransNr = SMr.SerNr;
+					IHr.Row = rnint;
+					while(loopkey("FNTransNr",IHr,3,TrHs))begin
+						if(IHr.FileName!="StockMovVc")then begin TrHs = false;	end;
+						if(IHr.TransNr!=SMr.SerNr)then begin TrHs = false;	end;
+						if(IHr.Row!=rnint)then begin TrHs = false;	end;
+						
+						if(TrHs)then begin
+							if(IHr.Qty<0 and IHr.Location==SMr.FrLocation)then begin
+								qty = qty - IHr.Qty;
+							end;
+							if(IHr.Qty>0 and IHr.Location==SMr.ToLocation)then begin
+								toqty = toqty + IHr.Qty;
+							end;
+							if(IHr.Qty>0 and IHr.Location==SMr.ThrouLocation)then begin
+								thqty = thqty + IHr.Qty;
+							end;
+						end;
+					end;
+					resetloop(IHr);
+					if(qty!=SMrw.OrdQuant)then begin
+						SMrw.OrdQuant = qty;
+						SMrw.Quant = toqty;
+						SMrw.FromQuant = thqty;
+						logtext(0,"Fixed qty " & SMR.SerNr & " ArtCode " & SMrw.ArtCode & " rownr " & rnint & "  " & SMrw.OrdQuant & "->" & qty);
+						matrowput(SMr,rnint,SMrw);
+					end;
+				end;
+			end; 	
+  	end;
+	if (NextImportLine(true)) then begin end;
+  end;
+	
+return;
+end;
 
 
 global
