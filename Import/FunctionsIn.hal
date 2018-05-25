@@ -124,7 +124,8 @@ begin
 	record StockMovVc SMr;
 	row StockMovVc SMrw;
 	record ItemHistVc IHr;
-	integer rnint,qty,toqty,thqty;
+	integer rnint;
+	val qty,toqty,thqty;
 	boolean TrHs;
 	
 	while (TestEOF()==false) begin
