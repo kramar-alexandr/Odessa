@@ -164,10 +164,10 @@ begin
 						end;
 					end;
 					resetloop(IHr);
-					if(qty!=SMrw.OrdQuant)then begin
+					if(thqty!=SMrw.SentQuant)then begin
 						logtext(0,"Fixed qty " & SMR.SerNr & " ArtCode " & SMrw.ArtCode & " rownr " & rnint & "  " & SMrw.OrdQuant & "->" & qty);
 						SMrw.OrdQuant = qty;
-						SMrw.Quant = toqty;
+						SMrw.SentQuant = toqty;
 						SMrw.FromQuant = thqty;
 						matrowput(SMr,rnint,SMrw);
 						recordstore(SMr,true);
