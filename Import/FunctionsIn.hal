@@ -170,6 +170,7 @@ begin
 						SMrw.Quant = toqty;
 						SMrw.FromQuant = thqty;
 						matrowput(SMr,rnint,SMrw);
+						recordstore(SMr,true);
 					end;
 				end;
 			end; 	
