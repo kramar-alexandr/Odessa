@@ -3896,7 +3896,7 @@ begin
 		end;
 		
 		if(changef)then begin
-			//recordstore(SMr,true);
+			recordstore(SMr,true);
 		end;
 		
 	end;
