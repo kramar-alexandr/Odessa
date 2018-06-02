@@ -152,6 +152,7 @@ begin
 								outstring(50,0,a2[j],false);
 								outstring(100,0,a3[j],false);
 								outstring(150,0,a4[j],false);
+								outstring(150,0,a5[j],false);
 								outstring(170,0,a10[j],false);
 								outstring(170,0,a11[j],false);
 								outstring(200,0,a6[j],false);
