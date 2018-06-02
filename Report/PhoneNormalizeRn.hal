@@ -16,12 +16,22 @@ begin
 	vector string 255 vnrmphonecu;
 	longint phcnt,i,j;
 	integer pos,orcnt,unic;
-	date lastordate,blkdate;
+	date lastordate,blkdate,lastinvdate;
 	record ORVc ORr;
 	boolean TrHs,testf;
 	array string 255 a1,a2,a3,a4,a5,a6,a7,a8,a9;
+	Record IVVc IVr;
+	integer ivcnt;
 	
 	logtext(0,"PhoneNormalizeRn");
+	
+	outstring(0,0,"Код",false);
+	outstring(50,0,"Тел",false);
+	outstring(100,0,"Кат",false);
+	outstring(150,0,"Счетов",false);
+	outstring(170,0,"Дата",false);
+	outstring(190,0,"Сч/ф",false);
+	outstring(210,0,"Дата",false);
 	
 	while(loopmain(CUr,1,true))begin
 		testf = true;
@@ -74,6 +84,17 @@ begin
 	  							if(lastordate<ORr.OrdDate)then begin lastordate = ORr.OrdDate; end;
 	  						end;
 	  					end;
+	  					IVr.CustCode = CUr.Code;
+	  					ivcnt = 0;
+	  					lastinvdate = blkdate;
+	  					TrHs = true;
+	  					while(loopkey("CustCode",IVr,1,TrHs))begin
+	  						if(IVr.CustCode!=CUr.Code)then begin TrHs = false; end;
+	  						if(TrHs)then begin
+	  							ivcnt = ivcnt + 1;
+	  							if(lastinvdate<IVr.InvDate)then begin lastinvdate = IVr.InvDate; end;
+	  						end;
+	  					end;
 	  					if(orcnt>0)then begin
 	  						a1[unic] = tstr;
 	  						a2[unic] = avnrmphone[i];
@@ -94,11 +115,13 @@ begin
 									outstring(100,0,CUr.CustCat,false);
 									outstring(150,0,orcnt,false);
 									outstring(170,0,lastordate,false);
+									outstring(190,0,ivcnt,false);
+									outstring(210,0,lastinvdate,false);
 									if(avnrmphone[i]==CUr.Phone)then begin
 										outstring(170,0,lastordate,false);
-										outstring(200,0,"Original",false);
+										outstring(240,0,"Original",false);
 										if(orcnt==0)then begin
-											outstring(250,0,"Can be closed by #",false);
+											outstring(280,0,"Can be closed by #",false);
 										end;
 									end else begin
 										if(orcnt==0)then begin
