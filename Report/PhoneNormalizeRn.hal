@@ -132,6 +132,8 @@ begin
 										end;
 									end else begin
 										if(orcnt==0)then begin
+											outstring(150,0,"",false);
+											outstring(160,0,"",false);
 											outstring(170,0,"Can be closed by #",false);
 										end;
 									end;
