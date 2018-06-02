@@ -98,6 +98,7 @@ begin
 	  							if(lastinvdate<IVr.InvDate)then begin lastinvdate = IVr.InvDate; end;
 	  						end;
 	  					end;
+	  					resetloop(IVr);
 	  					if(orcnt>0)then begin
 	  						a1[unic] = tstr;
 	  						a2[unic] = avnrmphone[i];
