@@ -25,13 +25,6 @@ begin
 	
 	logtext(0,"PhoneNormalizeRn");
 	
-	outstring(0,0,"Код",false);
-	outstring(50,0,"Тел",false);
-	outstring(100,0,"Кат",false);
-	outstring(150,0,"Счетов",false);
-	outstring(170,0,"Дата",false);
-	outstring(190,0,"Сч/ф",false);
-	outstring(210,0,"Дата",false);
 	
 	while(loopmain(CUr,1,true))begin
 		testf = true;
@@ -62,6 +55,15 @@ begin
 	end;
 	
 	startreportnoheaderjob("PhoneNormalizeRn");
+		startformat(15);
+			outstring(0,0,"Код",false);
+			outstring(50,0,"Тел",false);
+			outstring(100,0,"Кат",false);
+			outstring(150,0,"Счетов",false);
+			outstring(170,0,"Дата",false);
+			outstring(190,0,"Сч/ф",false);
+			outstring(210,0,"Дата",false);
+		endformat;
 		For(i=0;i<phcnt;i=i+1) begin
 	  	if(vnrmphonedbl[avnrmphone[i]]>1)then begin	
 	  		pos = 0;
