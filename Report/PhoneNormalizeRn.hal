@@ -3,6 +3,7 @@ external procedure SimpleNormPhoneNumber(string, var string);
 external procedure ExtractObj(string,var Integer,var string);
 
 
+SetLangMode(LangRussian,"RUS",0);	
 
 
 global updating procedure PhoneNormalizeRn(record RcVc RepSpec)
@@ -19,7 +20,7 @@ begin
 	date lastordate,blkdate,lastinvdate;
 	record ORVc ORr;
 	boolean TrHs,testf;
-	array string 255 a1,a2,a3,a4,a5,a6,a7,a8,a9;
+	array string 255 a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11;
 	Record IVVc IVr;
 	integer ivcnt;
 	
@@ -103,6 +104,9 @@ begin
 	  						a3[unic] = CUr.CustCat;
 	  						a4[unic] = orcnt;
 	  						a5[unic] = lastordate;
+	  						a10[unic] = ivcnt;
+	  						a11[unic] = lastinvdate;
+	  						
 	  						if(avnrmphone[i]==CUr.Phone)then begin
 									a6[unic] = "Original";
 								end else begin
@@ -145,7 +149,8 @@ begin
 								outstring(50,0,a2[j],false);
 								outstring(100,0,a3[j],false);
 								outstring(150,0,a4[j],false);
-								outstring(170,0,a5[j],false);
+								outstring(170,0,a10[j],false);
+								outstring(170,0,a11[j],false);
 								outstring(200,0,a6[j],false);
 							endformat;
 						end; 
