@@ -20,6 +20,16 @@ external function string 255 StripCharacter(string,string);
 
 SetLangMode(LangRussian,"RUS",0); 
 
+
+function string 100 ConvertXmlVal(val inpval)
+begin
+	string 100 res;
+	res = ValToString(inpval,M45Val,"",".",0);
+	ConvertXmlVal = res;
+return;
+end;
+
+
 global
 procedure GetXMLArea(var area a)
 begin
@@ -337,16 +347,16 @@ begin
   AddTextToArea("				<PaymentMethod>" & ConvertXml(PaymentForm) & "</PaymentMethod>" & chr(13),aRequest);
   AddTextToArea("				<DateTime>" & ConvertXml(dd & "." & mm & "." & yyyy) & "</DateTime>" & chr(13),aRequest);//"29.04.2015"
   AddTextToArea("				<CargoType>" & ConvertXml(CargoType) & "</CargoType>" & chr(13),aRequest);
-  AddTextToArea("				<VolumeGeneral>" & ConvertXml(ValToString(Volume,M45Val,SysFormatRec.thousSep,SysFormatRec.decimalPt,0)) & "</VolumeGeneral>" & chr(13),aRequest);
-  AddTextToArea("				<Weight>" & ConvertXml(Weight) & "</Weight>" & chr(13),aRequest);
+  AddTextToArea("				<VolumeGeneral>" & ConvertXml(ValToString(Volume,M45Val,SysFormatRec.thousSep,".",0)) & "</VolumeGeneral>" & chr(13),aRequest);
+  AddTextToArea("				<Weight>" & ConvertXml(ConvertXmlVal(Weight)) & "</Weight>" & chr(13),aRequest);
   if(SHr.NPAdresDeliv==0)then begin
 		AddTextToArea("				<ServiceType>" & ConvertXml("WarehouseWarehouse") & "</ServiceType>" & chr(13),aRequest);
   end else begin
   	AddTextToArea("				<ServiceType>" & ConvertXml("WarehouseDoors") & "</ServiceType>" & chr(13),aRequest);
   end;
-  AddTextToArea("				<SeatsAmount>" & ConvertXml(SeatsAmount) & "</SeatsAmount>" & chr(13),aRequest);
+  AddTextToArea("				<SeatsAmount>" & ConvertXml(ConvertXmlVal(SeatsAmount)) & "</SeatsAmount>" & chr(13),aRequest);
   AddTextToArea("				<Description>" & ConvertXml(Descrip) & "</Description>" & chr(13),aRequest);
-  AddTextToArea("				<Cost>" & ConvertXml(Cost) & "</Cost>" & chr(13),aRequest);
+  AddTextToArea("				<Cost>" & ConvertXml(ConvertXmlVal(Cost)) & "</Cost>" & chr(13),aRequest);
   AddTextToArea("				<CitySender>" & ConvertXml(CitySender) & "</CitySender>" & chr(13),aRequest);	//!
   AddTextToArea("				<Sender>" & ConvertXml(Sender) & "</Sender>" & chr(13),aRequest);
   AddTextToArea("				<SenderAddress>" & ConvertXml(SenderAddress) & "</SenderAddress>" & chr(13),aRequest);
@@ -386,11 +396,11 @@ begin
 						length = 0;
 					end;
 					AddTextToArea("		<item>"& chr(13),aRequest);
- 					AddTextToArea("				<volumetricWidth>" & ConvertXml(width) & "</volumetricWidth>" & chr(13),aRequest);	
- 					AddTextToArea("				<volumetricLength>" & ConvertXml(length) & "</volumetricLength>" & chr(13),aRequest);
- 					AddTextToArea("				<volumetricHeight>" & ConvertXml(height) & "</volumetricHeight>" & chr(13),aRequest);
-	 				AddTextToArea("				<volumetricVolume>" & ConvertXml(ValToString(PackListrw.Volume,M45Val,SysFormatRec.thousSep,SysFormatRec.decimalPt,0)) & "</volumetricVolume>" & chr(13),aRequest);
- 					AddTextToArea("				<weight>" & ConvertXml(PackListrw.Weight) & "</weight>" & chr(13),aRequest);		
+ 					AddTextToArea("				<volumetricWidth>" & ConvertXml(ConvertXmlVal(width)) & "</volumetricWidth>" & chr(13),aRequest);	
+ 					AddTextToArea("				<volumetricLength>" & ConvertXml(ConvertXmlVal(length)) & "</volumetricLength>" & chr(13),aRequest);
+ 					AddTextToArea("				<volumetricHeight>" & ConvertXml(ConvertXmlVal(height)) & "</volumetricHeight>" & chr(13),aRequest);
+	 				AddTextToArea("				<volumetricVolume>" & ConvertXml(ValToString(PackListrw.Volume,M45Val,SysFormatRec.thousSep,".",0)) & "</volumetricVolume>" & chr(13),aRequest);
+ 					AddTextToArea("				<weight>" & ConvertXml(ConvertXmlVal(PackListrw.Weight)) & "</weight>" & chr(13),aRequest);		
  					AddTextToArea("		</item>" & chr(13),aRequest);
  				end;
 		end;
@@ -402,7 +412,7 @@ begin
 				AddTextToArea("		<item>"& chr(13),aRequest);
  				AddTextToArea("				<PayerType>" & ConvertXml(BackDeliveryPayer) & "</PayerType>" & chr(13),aRequest);	
  				AddTextToArea("				<CargoType>" & ConvertXml(BackDeliveryType) & "</CargoType>" & chr(13),aRequest);
- 				AddTextToArea("				<RedeliveryString>" & ConvertXml(CostCOD) & "</RedeliveryString>" & chr(13),aRequest);	
+ 				AddTextToArea("				<RedeliveryString>" & ConvertXml(ConvertXmlVal(CostCOD)) & "</RedeliveryString>" & chr(13),aRequest);	
  				AddTextToArea("		</item>" & chr(13),aRequest);
 				AddTextToArea("		</BackwardDeliveryData>"& chr(13),aRequest);	
 	end;	
