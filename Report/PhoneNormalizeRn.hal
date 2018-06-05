@@ -3,6 +3,7 @@ external procedure SimpleNormPhoneNumber(string, var string);
 external procedure ExtractObj(string,var Integer,var string);
 
 
+SetLangMode(LangRussian,"RUS",0);	
 
 
 global updating procedure PhoneNormalizeRn(record RcVc RepSpec)
@@ -16,12 +17,15 @@ begin
 	vector string 255 vnrmphonecu;
 	longint phcnt,i,j;
 	integer pos,orcnt,unic;
-	date lastordate,blkdate;
+	date lastordate,blkdate,lastinvdate;
 	record ORVc ORr;
 	boolean TrHs,testf;
-	array string 255 a1,a2,a3,a4,a5,a6,a7,a8,a9;
+	array string 255 a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11;
+	Record IVVc IVr;
+	integer ivcnt;
 	
 	logtext(0,"PhoneNormalizeRn");
+	
 	
 	while(loopmain(CUr,1,true))begin
 		testf = true;
@@ -52,6 +56,15 @@ begin
 	end;
 	
 	startreportnoheaderjob("PhoneNormalizeRn");
+		startformat(15);
+			outstring(0,0,"Код",false);
+			outstring(50,0,"Тел",false);
+			outstring(100,0,"Кат",false);
+			outstring(150,0,"Счетов",false);
+			outstring(170,0,"Дата",false);
+			outstring(190,0,"Сч/ф",false);
+			outstring(210,0,"Дата",false);
+		endformat;
 		For(i=0;i<phcnt;i=i+1) begin
 	  	if(vnrmphonedbl[avnrmphone[i]]>1)then begin	
 	  		pos = 0;
@@ -74,12 +87,27 @@ begin
 	  							if(lastordate<ORr.OrdDate)then begin lastordate = ORr.OrdDate; end;
 	  						end;
 	  					end;
+	  					IVr.CustCode = CUr.Code;
+	  					ivcnt = 0;
+	  					lastinvdate = blkdate;
+	  					TrHs = true;
+	  					while(loopkey("CustCode",IVr,1,TrHs))begin
+	  						if(IVr.CustCode!=CUr.Code)then begin TrHs = false; end;
+	  						if(TrHs)then begin
+	  							ivcnt = ivcnt + 1;
+	  							if(lastinvdate<IVr.InvDate)then begin lastinvdate = IVr.InvDate; end;
+	  						end;
+	  					end;
+	  					resetloop(IVr);
 	  					if(orcnt>0)then begin
 	  						a1[unic] = tstr;
 	  						a2[unic] = avnrmphone[i];
 	  						a3[unic] = CUr.CustCat;
 	  						a4[unic] = orcnt;
 	  						a5[unic] = lastordate;
+	  						a10[unic] = ivcnt;
+	  						a11[unic] = lastinvdate;
+	  						
 	  						if(avnrmphone[i]==CUr.Phone)then begin
 									a6[unic] = "Original";
 								end else begin
@@ -94,14 +122,18 @@ begin
 									outstring(100,0,CUr.CustCat,false);
 									outstring(150,0,orcnt,false);
 									outstring(170,0,lastordate,false);
+									outstring(190,0,ivcnt,false);
+									outstring(210,0,lastinvdate,false);
 									if(avnrmphone[i]==CUr.Phone)then begin
 										outstring(170,0,lastordate,false);
-										outstring(200,0,"Original",false);
+										outstring(240,0,"Original",false);
 										if(orcnt==0)then begin
-											outstring(250,0,"Can be closed by #",false);
+											outstring(280,0,"Can be closed by #",false);
 										end;
 									end else begin
 										if(orcnt==0)then begin
+											outstring(150,0,"",false);
+											outstring(160,0,"",false);
 											outstring(170,0,"Can be closed by #",false);
 										end;
 									end;
@@ -120,7 +152,9 @@ begin
 								outstring(50,0,a2[j],false);
 								outstring(100,0,a3[j],false);
 								outstring(150,0,a4[j],false);
-								outstring(170,0,a5[j],false);
+								outstring(150,0,a5[j],false);
+								outstring(170,0,a10[j],false);
+								outstring(170,0,a11[j],false);
 								outstring(200,0,a6[j],false);
 							endformat;
 						end; 
