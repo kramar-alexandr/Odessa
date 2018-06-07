@@ -4766,7 +4766,7 @@ begin
 			EditField(h1,v+=vs,170,"Улица",Normal,NPAdresStreet,false,NPStreetSClass);
 			EditField(h2,v,40,"Дом/Квартира",Normal,NPAdresBuild,false,0);
 			EditField(h3-120,v,40,"Этаж",Normal,NPAdresFloat,false,0);
-			EditField(h3-60,v,40,"Тел.",Normal,NPRecipientsPhone,false,0);
+			EditField(h3-30,v,80,"Тел.",Normal,NPRecipientsPhone,false,0);
     	
     end else begin
     	EditField(h1,v+=5,100,"Фамилия",ViewOnly,NPRecipientLastName,false,0);
@@ -4789,7 +4789,7 @@ begin
     	EditField(h1,v+=vs,170,"Улица",ViewOnly,NPAdresStreet,false,NPStreetSClass);
 			EditField(h2,v,40,"Дом/Квартира",ViewOnly,NPAdresBuild,false,0);
 			EditField(h3-120,v,40,"Этаж",ViewOnly,NPAdresFloat,false,0);
-			EditField(h3-60,v,40,"Тел.",ViewOnly,NPRecipientsPhone,false,0);
+			EditField(h3-30,v,80,"Тел.",Normal,NPRecipientsPhone,false,0);
 			//
 		end;
   // EditField(h3,v,150,"Адрес",Normal,NPRecipientAddress,false,0);
