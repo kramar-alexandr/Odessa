@@ -380,7 +380,7 @@ begin
 						IHr.Qty = -remqty;
 						IHr.TotCostPrice = sourceIHr.TotCostPrice;
 						ConsSalerw.Qty = ConsSalerw.Qty - IHr.Qty;
-						ConsSalerw.SelQty = ConsSalerw.Qty;
+						//ConsSalerw.SelQty = ConsSalerw.Qty;// Edit ************************** BPI Ukraine - KramarAlexandr - Wednesday, 6 June 2018 17:40:49
 						ConsSalerw.Sum = ConsSalerw.Sum - IHr.TotCostPrice * IHr.Qty;
 						ConsSalerw.Price = round(ConsSalerw.Sum / ConsSalerw.Qty,SetRoundModeD(2));
 						ConsSalerw.Sum = ConsSalerw.Price * ConsSalerw.Qty;
@@ -395,7 +395,7 @@ begin
 						IHr.Qty = -sourceIHr.Qty2;
 						IHr.TotCostPrice = sourceIHr.TotCostPrice;
 						ConsSalerw.Qty = ConsSalerw.Qty - IHr.Qty;
-						ConsSalerw.SelQty = ConsSalerw.Qty;
+						//ConsSalerw.SelQty = ConsSalerw.Qty;// Edit ************************** BPI Ukraine - KramarAlexandr - Wednesday, 6 June 2018 17:40:50
 						ConsSalerw.Sum = ConsSalerw.Sum - IHr.TotCostPrice * IHr.Qty;
 						ConsSalerw.Price = round(ConsSalerw.Sum / ConsSalerw.Qty,SetRoundModeD(2));
 						ConsSalerw.Sum = ConsSalerw.Price * ConsSalerw.Qty;
