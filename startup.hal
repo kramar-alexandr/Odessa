@@ -642,6 +642,7 @@ begin
   StrSetText(InvToCO,"Контракт из сч/ф");
   StrSetText(RoyaltyRepToCO,"Контракт из роялти записей о продажи");
   StrSetText(VievAllSalesGroupDocuments,"Разрешить просмотр всех документов");	//Edit by Victor 02.12.14
+  StrSetText(ViewAllStockMov,"Разрешить просмотр перемещений");	// Edit ************************** BPI Ukraine - KramarAlexandr - Friday, 8 June 2018 14:01:04
   StrSetText(AllowCreateCust,"Создавать клиентов");
   StrSetText(AllowCreateDealer,"Создавать дилеров");
   StrSetText(AllowCreateGuest,"Создавать гостей");
