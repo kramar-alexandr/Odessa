@@ -581,7 +581,7 @@ begin
 	
 	webgetpostdata(replyarea);
 	logtext(0,"WebGetNPGetCytiesRequestProxy");
-	writeareatofile(replyarea,"1getStatusReplyCyties.txt",0);
+	//writeareatofile(replyarea,"1getStatusReplyCyties.txt",0);
 
   if(GetAreaLength(replyarea)>0)then begin  
     GetXMLArea(replyarea);
@@ -1417,7 +1417,7 @@ begin
 				
 				if(MySendRawWebRequest(host,port,ssl,"POST",page & getParam,"text/xml","",false,mainRequest,replyarea,5))then begin 
 					logtext(0,"Hansa World: GetWarehouses - " & cityName);
-					writeareatofile(replyarea,"1getWarehousesReply.txt",0);
+					//writeareatofile(replyarea,"1getWarehousesReply.txt",0);
 					GetXMLArea(replyarea);
 					if (GetAreaLength(replyarea)==0) then begin	notSynchronize = true;  LogText(0,cityName);  goto L2222; 	end;
 					xdata = ParseXMLArea(replyarea);
@@ -3071,7 +3071,7 @@ begin
   			While(repeat<3)  begin  
   			  
   			  if (MySendRawWebRequest(host,"443",true,"POST",page & getParam,"text/xml","",false,mainRequest,replyarea,5)) then begin
-  			  		writeareatofile(replyarea,counterpartyRef & ".txt",0);
+  			  		//writeareatofile(replyarea,counterpartyRef & ".txt",0);
   			  		repeat = 3; // break loop
   			  		GetXMLArea(replyarea);
 							xdata = ParseXMLArea(replyarea);
@@ -3636,7 +3636,7 @@ begin
 		ssl = true;
   	SetAreaZeroSize(mainRequest);
 		CreateDescriptRequestDocumentTrackig(host, page, NPSettingsb.APIkey, tempArray, mainRequest); 
-		writeareatofile(mainRequest,"1NPUpdateENstatusMnReq" & k & ".txt",0);
+		//writeareatofile(mainRequest,"1NPUpdateENstatusMnReq" & k & ".txt",0);
   	host = "127.0.0.1";
 		page = "/getProxyRequest";
 		port = "1070";
@@ -3704,7 +3704,7 @@ begin
 		port = "443";
 		ssl = true;
 		CreateDescriptRequestDocumentTrackig(host, page, NPSettingsb.APIkey1, tempArray, mainRequest); 
-  	writeareatofile(mainRequest,"1NPUpdateENstatus1MnReq" & k & ".txt",0);
+  	//writeareatofile(mainRequest,"1NPUpdateENstatus1MnReq" & k & ".txt",0);
   	host = "127.0.0.1";
 		page = "/getProxyRequest";
 		port = "1070";

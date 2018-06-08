@@ -71,9 +71,13 @@ begin
   Userr.Code = CurrentUser;
   if(readFirstMain(Userr, 1, true))then begin
 		if(nonblank(Userr.Location))then begin
-			SetWindowSubset(wn,Userr.Location);
+			if(UserCanAction("ViewAllStockMov",false)==false) then begin
+				SetWindowSubset(wn,Userr.Location);
+			end;
 		end;
 	end;  
+
+	
   /*if(UserCanAction("VievAllSalesGroupDocuments", true)==false) then begin
 		Userr.Code = CurrentUser;
 		if(readFirstMain(Userr, 1, true))then begin
