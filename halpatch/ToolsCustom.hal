@@ -4499,6 +4499,7 @@ begin
 	
 	while(loopmain(INr,1,true))begin
 		INr.ExpFlag01 = 1;
+		INr.FExpFlag01 = 1;
 		recordstore(INr,true);
 	end;
 
