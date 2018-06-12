@@ -380,12 +380,21 @@ begin
 				
 		if (testf==true) then begin
 		  //price = ValToString(PLr.ExVatPrice,M4Val,"",".",0);
-			addtexttoarea("opt;simple;" & INr.Code & ";" & price & ";" & qty & ";" & inStock & ";" & dop_ostatok & ";" & acprice,importar);
-			addtexttoarea(chr(13) & chr(10),importar);
+		  if(INr.ExpFlag01==1)then begin
+				addtexttoarea("opt;simple;" & INr.Code & ";" & price & ";" & qty & ";" & inStock & ";" & dop_ostatok & ";" & acprice,importar);
+				addtexttoarea(chr(13) & chr(10),importar);
+			end else begin
+				addtexttoarea("opt;simple;" & INr.Code & ";" & price & ";" & qty & ";" & inStock & ";" & dop_ostatok & ";" & acprice,importar);
+				addtexttoarea(chr(13) & chr(10),importar);
+			end;
 			
-			addtexttoarea("opt;simple;" & INr.Code & ";" & price & ";" & qty & ";" & inStock & ";" & dop_ostatok & ";" & optprice & ";" & optprice5 & ";" & optprice10 & ";" & optprice15,importoptar);
-			addtexttoarea(chr(13) & chr(10),importoptar);
-			
+			if(INr.ExpFlag02==1)then begin
+				addtexttoarea("opt;simple;" & INr.Code & ";" & price & ";" & qty & ";" & inStock & ";" & dop_ostatok & ";" & optprice & ";" & optprice5 & ";" & optprice10 & ";" & optprice15,importoptar);
+				addtexttoarea(chr(13) & chr(10),importoptar);
+			end else begin
+				addtexttoarea("opt;simple;" & INr.Code & ";" & price & ";" & qty & ";" & 0 & ";" & 0 & ";" & optprice & ";" & optprice5 & ";" & optprice10 & ";" & optprice15,importoptar);
+				addtexttoarea(chr(13) & chr(10),importoptar);
+			end;
 		end;
 
 	end;	
