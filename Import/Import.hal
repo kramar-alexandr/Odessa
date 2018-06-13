@@ -923,6 +923,7 @@ global
 updating procedure INImportExportFlagsIn()
 begin
   string 50 artcode,ExpFlag01,ExpFlag02,ExpFlag03,ExpFlag04,ExpFlag05;
+  string 50 FExpFlag01,FExpFlag02,FExpFlag03,FExpFlag04,FExpFlag05;
   val minord;
   record INVc INr;
   boolean instf;
@@ -932,8 +933,14 @@ begin
 		ExpFlag01 = ImportField;
 		ExpFlag02 = ImportField;
 		ExpFlag03 = ImportField;
-		ExpFlag04 = ImportField;
-		ExpFlag05 = ImportField;
+		//ExpFlag04 = ImportField;
+		//ExpFlag05 = ImportField;
+		
+		FExpFlag01 = ImportField;
+		FExpFlag02 = ImportField;
+		FExpFlag03 = ImportField;
+		//FExpFlag04 = ImportField;
+		//FExpFlag05 = ImportField;
 		
 		if(nonblank(artcode)) then begin
 			INr.Code = artcode;
@@ -950,12 +957,24 @@ begin
 					INr.ExpFlag03 = evaltoval(ExpFlag03);
 					instf = true;
 				end;
-				if(nonblank(ExpFlag04))then begin
+				/*if(nonblank(ExpFlag04))then begin
 					INr.ExpFlag04 = evaltoval(ExpFlag04);
 					instf = true;
 				end;
 				if(nonblank(ExpFlag05))then begin
 					INr.ExpFlag05 = evaltoval(ExpFlag05);
+					instf = true;
+				end;*/
+				if(nonblank(FExpFlag01))then begin
+					INr.FExpFlag01 = evaltoval(FExpFlag01);
+					instf = true;
+				end;
+				if(nonblank(FExpFlag02))then begin
+					INr.FExpFlag02 = evaltoval(FExpFlag02);
+					instf = true;
+				end;
+				if(nonblank(FExpFlag03))then begin
+					INr.FExpFlag03 = evaltoval(FExpFlag03);
 					instf = true;
 				end;
 				if(instf)then begin

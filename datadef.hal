@@ -527,6 +527,11 @@ begin
   RecordField(ExpFlag04,M4Int,0,0);// Edit ************************** BPI Ukraine - KramarAlexandr - Thursday, 25 January 2018 14:41:22
   RecordField(ExpFlag05,M4Int,0,0);// Edit ************************** BPI Ukraine - KramarAlexandr - Thursday, 25 January 2018 14:41:23
   RecordField(NewNetWeight,M45Val,0,0);// Edit ************************** BPI Ukraine - KramarAlexandr - Tuesday, 17 April 2018 10:48:53
+  RecordField(FExpFlag01,M4Int,0,0);// Edit ************************** BPI Ukraine - KramarAlexandr - Monday, 11 June 2018 15:36:26
+  RecordField(FExpFlag02,M4Int,0,0);// Edit ************************** BPI Ukraine - KramarAlexandr - Monday, 11 June 2018 15:36:29
+  RecordField(FExpFlag03,M4Int,0,0);// Edit ************************** BPI Ukraine - KramarAlexandr - Monday, 11 June 2018 15:36:31
+  RecordField(FExpFlag04,M4Int,0,0);// Edit ************************** BPI Ukraine - KramarAlexandr - Monday, 11 June 2018 15:36:34
+  RecordField(FExpFlag05,M4Int,0,0);// Edit ************************** BPI Ukraine - KramarAlexandr - Monday, 11 June 2018 15:36:35
   ArrayBegin(Math,-,1);
   ArrayField(LangCode,M4Code,5,0);
   ArrayField(Text,M4Str,100,0);

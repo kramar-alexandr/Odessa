@@ -2971,10 +2971,10 @@ begin
     CheckBox(h1,v+=32,0,"В проекте товар как материал",ItemMaterial);
   end;
   
-  
-  CheckBox(h1+150,14,0,"Экспорт РыбРай",ExpFlag01);
-  CheckBox(h1+150,34,0,"Экспорт Опт",ExpFlag02);
-  CheckBox(h1+150,54,0,"Экспорт Калипсо",ExpFlag03);
+  StaticText(h1+290,14,"Все остатки",true);
+  CheckBox(h1+150,24,0,"Экспорт РыбРай",ExpFlag01);CheckBox(h1+270,24,0,"",FExpFlag01);
+  CheckBox(h1+150,44,0,"Экспорт Опт",ExpFlag02);CheckBox(h1+270,44,0,"",FExpFlag02);
+  CheckBox(h1+150,64,0,"Экспорт Калипсо",ExpFlag03);CheckBox(h1+270,64,0,"",FExpFlag03);
   
   if (HasJewelleryInterface) then begin
     Tile(tilenr,110,false,tilenr,Metal); tilenr = tilenr + 1;

@@ -180,11 +180,11 @@ begin
 	area importar,importoptar;
 //	area ftpRoutine;
   string 200 tstr;
-	string 10 location,loc1,loc2,loc3,loc4,loc5,loc6,qty,price,optprice,optprice5,optprice10,optprice15,acprice;
+	string 10 location,loc1,loc2,loc3,loc4,loc5,loc6,qty,price,optprice,optprice5,optprice10,optprice15,acprice,optqty;
 	string 10 loc1t,loc2t,loc3t,loc4t,loc5t,loc6t;
 	boolean testf,foudnf;
-	integer inStock,dop_ostatok,pos;
-	integer realqty;
+	integer inStock,dop_ostatok,pos,optdop_ostatok,optinStock;
+	integer realqty,optrealqty;
 	boolean r1f,r2f,r3f,r4f,r5f;
 	val varpriceopt;
 	
@@ -226,39 +226,40 @@ begin
 		realqty = 0;
 	  testf = true;
 	  dop_ostatok = 0;
+	  optdop_ostatok = 0;
 	  
 		ISr.Code = INr.Code;
-		ISr.Location = loc1;
+		ISr.Location = loc1;//"RYBRAY"
 		IS2r.Code = INr.Code;
-		IS2r.Location = loc2;
+		IS2r.Location = loc2;//"3-RAY"
 		IS3r.Code = INr.Code;
 		IS3r.Location = loc3;
 		
 		IS4r.Code = INr.Code;
-		IS4r.Location = loc4;
+		IS4r.Location = loc4;//"1-KOC"
 		IS5r.Code = INr.Code;
 		IS5r.Location = loc6;
 		
 		
 		
-		r1f = readfirstmain(ISr,2,true);
-		r2f = readfirstmain(IS2r,2,true);
+		r1f = readfirstmain(ISr,2,true);//"RYBRAY"
+		r2f = readfirstmain(IS2r,2,true);//"3-RAY"
 		r3f = readfirstmain(IS3r,2,true);
 		
 		r4f = readfirstmain(IS4r,2,true);
 		r5f = readfirstmain(IS5r,2,true);
 		
-		if(ISr.RsrvQty<0)then begin
+		if(ISr.RsrvQty<0)then begin//"RYBRAY"
 			ISr.RsrvQty = 0;
 		end;
-		if(IS2r.RsrvQty<0)then begin
+		if(IS2r.RsrvQty<0)then begin//"3-RAY"
 			IS2r.RsrvQty = 0;
 		end;
 		if(IS3r.RsrvQty<0)then begin
 			IS3r.RsrvQty = 0;
 		end;
 		
-		if(IS4r.RsrvQty<0)then begin
+		if(IS4r.RsrvQty<0)then begin//"1-KOC"
 			IS4r.RsrvQty = 0;
 		end;
 		
@@ -266,28 +267,54 @@ begin
 			IS5r.RsrvQty = 0;
 		end;
 		
-		if((r1f and (ISr.Instock-ISr.RsrvQty)>0) or (r2f and (IS2r.Instock-IS2r.RsrvQty)>0) or (r3f and (IS3r.Instock-IS3r.RsrvQty)>0) or (r4f and (IS4r.Instock-IS4r.RsrvQty)>0) or (r5f and (IS5r.Instock-IS5r.RsrvQty)>0)) then begin dop_ostatok = dop_ostatok + 1; end;
+		if(INr.FExpFlag01==1)then begin
+			if((r1f and (ISr.Instock-ISr.RsrvQty)>0) or (r2f and (IS2r.Instock-IS2r.RsrvQty)>0) or (r3f and (IS3r.Instock-IS3r.RsrvQty)>0) or (r4f and (IS4r.Instock-IS4r.RsrvQty)>0) or (r5f and (IS5r.Instock-IS5r.RsrvQty)>0)) then begin dop_ostatok = dop_ostatok + 1; end;
+		end else begin
+			if((r1f and (ISr.Instock-ISr.RsrvQty)>0)) then begin dop_ostatok = dop_ostatok + 1; end;
+		end;
 		
-		if((ISr.Instock-ISr.RsrvQty)>0)then begin
+		if(INr.FExpFlag02==1)then begin
+			if((r1f and (ISr.Instock-ISr.RsrvQty)>0) or (r2f and (IS2r.Instock-IS2r.RsrvQty)>0) or (r3f and (IS3r.Instock-IS3r.RsrvQty)>0) or (r4f and (IS4r.Instock-IS4r.RsrvQty)>0) or (r5f and (IS5r.Instock-IS5r.RsrvQty)>0)) then begin dop_ostatok = dop_ostatok + 1; end;
+		end else begin
+			if(r4f and (IS4r.Instock-IS4r.RsrvQty)>0) then begin optdop_ostatok = optdop_ostatok + 1; end;
+		end;
+		
+		if((ISr.Instock-ISr.RsrvQty)>0)then begin//"RYBRAY"
 			realqty = realqty +  ISr.Instock-ISr.RsrvQty;
 		end;
-		if((IS2r.Instock-IS2r.RsrvQty)>0)then begin
-			realqty = realqty +  IS2r.Instock-IS2r.RsrvQty;
-		end;
-		if((IS3r.Instock-IS3r.RsrvQty)>0)then begin
-			realqty = realqty +  IS3r.Instock-IS3r.RsrvQty;
-		end;
-		if((IS4r.Instock-IS4r.RsrvQty)>0)then begin
-			realqty = realqty +  IS4r.Instock-IS4r.RsrvQty;
-		end;
-		if((IS5r.Instock-IS5r.RsrvQty)>0)then begin
-			realqty = realqty +  IS5r.Instock-IS5r.RsrvQty;
+		if(INr.FExpFlag01==1)then begin
+			if((IS2r.Instock-IS2r.RsrvQty)>0)then begin
+				realqty = realqty +  IS2r.Instock-IS2r.RsrvQty;
+			end;
+			if((IS3r.Instock-IS3r.RsrvQty)>0)then begin
+				realqty = realqty +  IS3r.Instock-IS3r.RsrvQty;
+			end;
+			if((IS4r.Instock-IS4r.RsrvQty)>0)then begin//"1-KOC"
+				realqty = realqty +  IS4r.Instock-IS4r.RsrvQty;
+			end;
+			if((IS5r.Instock-IS5r.RsrvQty)>0)then begin
+				realqty = realqty +  IS5r.Instock-IS5r.RsrvQty;
+			end;
 		end;
 		
-		//realqty = realqty + ISr.Instock-ISr.OrddOut + IS2r.Instock-IS2r.OrddOut + IS3r.Instock-IS3r.OrddOut;
-		
-		
-					
+		if((IS4r.Instock-IS4r.RsrvQty)>0)then begin//"1-KOC"
+			optrealqty = optrealqty +  IS4r.Instock-IS4r.RsrvQty;
+		end;
+		if(INr.FExpFlag02==1)then begin
+			if((ISr.Instock-ISr.RsrvQty)>0)then begin//"RYBRAY"
+				optrealqty = optrealqty +  ISr.Instock-ISr.RsrvQty;
+			end;
+			if((IS2r.Instock-IS2r.RsrvQty)>0)then begin
+				optrealqty = optrealqty +  IS2r.Instock-IS2r.RsrvQty;
+			end;
+			if((IS3r.Instock-IS3r.RsrvQty)>0)then begin
+				optrealqty = optrealqty +  IS3r.Instock-IS3r.RsrvQty;
+			end;
+			if((IS5r.Instock-IS5r.RsrvQty)>0)then begin
+				optrealqty = optrealqty +  IS5r.Instock-IS5r.RsrvQty;
+			end;
+		end;	
+			
 		PLr.ArtCode = INr.Code;
 		PLr.PLCode = ExportStockCSVb.PLCode;
 		if(!readfirstmain(PLr,2,true))then begin
@@ -326,45 +353,34 @@ begin
 		optprice15 = ValToString(round(varpriceopt*0.85,SetRoundModeD(0)),M4Val,"",".",0);
 		
 	// Edit End ---------------------------------------------- Edit End
-		
-		/*ISr.Code = INr.Code;
-		ISr.Location = loc4;	*/
-		
 		IS2r.Code = INr.Code;
 		IS2r.Location = loc5;
 		
-		/*IS3r.Code = INr.Code;
-		IS3r.Location = loc6;*/
-		
-		//r1f = readfirstmain(ISr,2,true);
 		r2f = readfirstmain(IS2r,2,true);
-		//r3f = readfirstmain(IS3r,2,true);
-		
-		/*if(ISr.RsrvQty<0)then begin
-			ISr.RsrvQty = 0;
-		end;*/
+
 		if(IS2r.RsrvQty<0)then begin
 			IS2r.RsrvQty = 0;
 		end;
-		/*if(IS3r.RsrvQty<0)then begin
-			IS3r.RsrvQty = 0;
-		end;*/
 		
-		if((r2f and (IS2r.Instock-IS2r.RsrvQty)>0)) then begin dop_ostatok = dop_ostatok + 2; end;
-		
-		/*if((ISr.Instock-ISr.RsrvQty)>0)then begin
-			realqty = realqty + ISr.Instock-ISr.RsrvQty;
-		end;*/
-		if((IS2r.Instock-IS2r.RsrvQty)>0)then begin
-			realqty = realqty + IS2r.Instock-IS2r.RsrvQty;
+		if(INr.FExpFlag01==1)then begin
+			if((r2f and (IS2r.Instock-IS2r.RsrvQty)>0)) then begin dop_ostatok = dop_ostatok + 2; end;
 		end;
-		/*if((IS3r.Instock-IS3r.RsrvQty)>0)then begin
-			realqty = realqty + IS3r.Instock-IS3r.RsrvQty;
-		end;*/
+		if(INr.FExpFlag02==1)then begin
+			if((r2f and (IS2r.Instock-IS2r.RsrvQty)>0)) then begin optdop_ostatok = optdop_ostatok + 2; end;
+		end;
 		
-		//realqty = realqty + ISr.Instock-ISr.OrddOut + IS2r.Instock-IS2r.OrddOut;
+		if(INr.FExpFlag01==1)then begin
+			if((IS2r.Instock-IS2r.RsrvQty)>0)then begin
+				realqty = realqty + IS2r.Instock-IS2r.RsrvQty;
+			end;
+		end;
+		if(INr.FExpFlag02==1)then begin
+			if((IS2r.Instock-IS2r.RsrvQty)>0)then begin
+				optrealqty = optrealqty + IS2r.Instock-IS2r.RsrvQty;
+			end;
+		end;
+
 		loc5 = loc5t;
-		
 		if (dop_ostatok>0) then begin	
 			if(realqty>10)then begin		
 				qty = 200;
@@ -375,17 +391,38 @@ begin
 		end else begin	
 			qty = 0;
 			inStock = 2;
+		end;
+		
+		if (optdop_ostatok>0) then begin	
+			if(realqty>10)then begin		
+				optqty = 200;
+			end else begin
+				optqty = realqty;
+			end;
+			optinStock = 1;
+		end else begin	
+			optqty = 0;
+			optinStock = 2;
 		end;			
 		
 				
 		if (testf==true) then begin
 		  //price = ValToString(PLr.ExVatPrice,M4Val,"",".",0);
-			addtexttoarea("opt;simple;" & INr.Code & ";" & price & ";" & qty & ";" & inStock & ";" & dop_ostatok & ";" & acprice,importar);
-			addtexttoarea(chr(13) & chr(10),importar);
+		  if(INr.ExpFlag01==1)then begin
+				addtexttoarea("opt;simple;" & INr.Code & ";" & price & ";" & qty & ";" & inStock & ";" & dop_ostatok & ";" & acprice,importar);
+				addtexttoarea(chr(13) & chr(10),importar);
+			end else begin
+				addtexttoarea("opt;simple;" & INr.Code & ";" & price & ";" & qty & ";" & inStock & ";" & dop_ostatok & ";" & acprice,importar);
+				addtexttoarea(chr(13) & chr(10),importar);
+			end;
 			
-			addtexttoarea("opt;simple;" & INr.Code & ";" & price & ";" & qty & ";" & inStock & ";" & dop_ostatok & ";" & optprice & ";" & optprice5 & ";" & optprice10 & ";" & optprice15,importoptar);
-			addtexttoarea(chr(13) & chr(10),importoptar);
-			
+			if(INr.ExpFlag02==1)then begin
+				addtexttoarea("opt;simple;" & INr.Code & ";" & price & ";" & optqty & ";" & optinStock & ";" & optdop_ostatok & ";" & optprice & ";" & optprice5 & ";" & optprice10 & ";" & optprice15,importoptar);
+				addtexttoarea(chr(13) & chr(10),importoptar);
+			end else begin
+				addtexttoarea("opt;simple;" & INr.Code & ";" & price & ";" & optqty & ";" & 0 & ";" & 0 & ";" & optprice & ";" & optprice5 & ";" & optprice10 & ";" & optprice15,importoptar);
+				addtexttoarea(chr(13) & chr(10),importoptar);
+			end;
 		end;
 
 	end;	

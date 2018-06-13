@@ -380,6 +380,7 @@ begin
 
 	
 	Maintenance("FixIHCostSM",MyVClass,FixIHCostSM,modDBMain);  //Edit**********Dima, 28.01.2014
+	Maintenance("SetItemFlagsMn",MyVClass,SetItemFlagsMn,modIN);
 	Maintenance("UpdateDopFuncMn",MyVClass,UpdateDopFuncMn,modDBMain);
 	
   Maintenance("RecalcSumSales",RecalcSumSalesVClass,RecalcSumSalesMn,modDBMain);  //Edit**********Dima, 28.01.2014
@@ -389,6 +390,8 @@ begin
   Maintenance("FixSomeCostSM",MyVClass,FixSomeIHCostSM,modDBMain);  //Edit**********Dima, 28.01.2014
 	
 	Maintenance("SalesData fill CustCat",MyVClass,FillCustCatToSalesDataMn,modDBMain);  //Edit**********Dima, 28.01.2014
+	
+	Maintenance("DelBlankCU",MyVClass,DelBlankCU,modSL); // Edit ************************** BPI Ukraine - KramarAlexandr - Wednesday, 13 June 2018 15:47:37
 
 	
 	Maintenance("SEND SOAP",MyVClass,SOAPLogin,modDBMain);  //Edit**********Dima, 28.01.2014

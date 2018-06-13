@@ -4491,3 +4491,19 @@ begin
 
 return;
 end;
+
+
+global updating procedure SetItemFlagsMn(record RcVc RepSpec)
+begin
+	record INVc INr;
+	
+	while(loopmain(INr,1,true))begin
+		INr.ExpFlag01 = 1;
+		INr.FExpFlag01 = 1;
+		recordstore(INr,true);
+	end;
+
+return;
+end;
+
+
