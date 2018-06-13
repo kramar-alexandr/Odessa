@@ -309,13 +309,13 @@ begin
 							outstring(200,0,a6[j],false);
 						endformat;
 					end;
-					CU1r.Phone = "##" & a2[j];
+					CU1r.Phone = "##@" & a2[0];
 					CU1r.blockedFlag = 1;
-					//recordstore(CU1r,1,true);
+					recordstore(CU1r,true);
 					LC1r.CustCode = CU1r.Code;
 					if(readfirstkey("ActCustCode",LC1r,1,true))then begin
 						LC1r.Closed = 1;
-						//recordstore(LC1r,true);
+						recordstore(LC1r,true);
 					end;
 					
 					
@@ -335,12 +335,12 @@ begin
 					If(blank(CUr.Comment2))then begin
 						CUr.Comment2 = CU1r.Comment2;
 					end;
-					//recordstore(CU1r,1,true);
+					recordstore(CUr,true);
 					LCr.CustCode = CUr.Code;
 					if(readfirstkey("ActCustCode",LCr,1,true))then begin
 						Logtext(0,"ClosedOldCU " & CU1r.Code & " -> " & CUr.Code & " -> " & a2[0] & " balance " & LCr.PointsBalance & " + " & LC1r.PointsBalance & " = " & LCr.PointsBalance + LC1r.PointsBalance);
 						LCr.PointsBalance = LCr.PointsBalance + LC1r.PointsBalance;
-						//recordstore(LCr,true);
+						recordstore(LCr,true);
 					end;
 					
 					
