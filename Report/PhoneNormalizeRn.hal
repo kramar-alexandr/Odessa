@@ -183,13 +183,8 @@ begin
 	longint phcnt,phcnt1,i,j;
 	integer pos,pos1,orcnt,orcnt1,unic,cnt;
 	date lastordate,blkdate,lastinvdate;
-<<<<<<< HEAD
 	record ORVc ORr,OR1r;
-	boolean TrHs,testf,testf1;
-=======
-	record ORVc ORr;
 	boolean TrHs,testf,testf1,zerrofound;
->>>>>>> f6a697c4a8ae67e18e09b8a02870f523647911d5
 	array string 255 a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11;
 	Record IVVc IVr,IV1r;
 	integer ivcnt,ivcnt1;
@@ -236,7 +231,6 @@ begin
 			outstring(210,0,"Дата",false);
 		endformat;
 		For(i=0;i<phcnt;i=i+1) begin
-<<<<<<< HEAD
 			if(vnrmphonedbl[avnrmphone[i]]>1 and vnrmphonedbl[avnrmphone[i]]<3)then begin	
 				pos = 0;
 				tstr = "";
@@ -311,7 +305,6 @@ begin
 					gray_divider(0,1);
 				end;
 			end;
-=======
 	  	if(vnrmphonedbl[avnrmphone[i]]>1 and vnrmphonedbl[avnrmphone[i]]<3)then begin	
 	  		pos = 0;
 	  		tstr = "";
@@ -429,7 +422,6 @@ begin
 				end;
 	  		
 	  	end;
->>>>>>> f6a697c4a8ae67e18e09b8a02870f523647911d5
 		end; 
 	endjob;
 		
