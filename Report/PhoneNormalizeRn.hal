@@ -353,3 +353,33 @@ begin
 		
 return;
 end;
+
+
+
+global updating procedure DelBlankCU()
+begin
+	boolean TrHs;
+	record CUVc CUr;
+	record LoyaltyCardVc LCr;
+	
+	
+	CUr.Phone = "##@";
+	TrHs = True;
+	while(loopkey("Phone",CUr,1,TrHs))begin
+		if(left(CUr.Phone,3)!="##@")then begin TrHs = false; end;
+		
+		if(TrHs)then begin
+			if(left(CUr.Phone,3)=="##@" and CUr.blockedFlag==1)then begin
+				LCr.CustCode = CUr.Code;
+				if(readfirstkey("CustCode",LCr,1,true))then begin
+					recorddelete(LCr);
+				end;
+				logtext(0,"Delete card " & CUr.Code);
+				recorddelete(CUr);
+				stepback(CUr);
+			end;
+		end;
+	end;
+	
+return;
+end;
