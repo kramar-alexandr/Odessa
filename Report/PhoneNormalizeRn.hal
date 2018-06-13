@@ -183,10 +183,10 @@ begin
 	longint phcnt,phcnt1,i,j;
 	integer pos,pos1,orcnt,orcnt1,unic,cnt;
 	date lastordate,blkdate,lastinvdate;
-	record ORVc ORr;
+	record ORVc ORr,OR1r;
 	boolean TrHs,testf,testf1;
 	array string 255 a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11;
-	Record IVVc IVr;
+	Record IVVc IVr,IV1r;
 	integer ivcnt,ivcnt1;
 	
 	logtext(0,"ActiveClientItemRn");
@@ -231,138 +231,80 @@ begin
 			outstring(210,0,"Дата",false);
 		endformat;
 		For(i=0;i<phcnt;i=i+1) begin
-	  	if(vnrmphonedbl[avnrmphone[i]]>1 and vnrmphonedbl[avnrmphone[i]]<3)then begin	
-	  		pos = 0;
-			pos1 = 1;
-	  		tstr = "";
-			tstr1 = "";
-			ExtractObj(vnrmphonecu[avnrmphone[i]],pos1,tstr1);
-			ExtractObj(vnrmphonecu[avnrmphone[i]],pos,tstr);
-	  		unic = 0;
-			cnt = 0;
-	  		while(nonblank(tstr))begin
-	  			if(nonblank(tstr))then begin
-	  				CUr.Code = tstr;
-	  				if(readfirstmain(CUr,1,true))then begin
-	  					resetloop(ORr);
-	  					ORr.CustCode = CUr.Code;
-	  					orcnt = 0;
-	  					lastordate = blkdate;
-	  					TrHs = true;
-	  					while(loopkey("CustCode",ORr,1,TrHs))begin
-	  						if(ORr.CustCode!=CUr.Code)then begin TrHs = false; end;
-	  						if(TrHs)then begin
-	  							orcnt = orcnt + 1;
-	  							if(lastordate<ORr.OrdDate)then begin lastordate = ORr.OrdDate; end;
-	  						end;
-	  					end;
-	  					IVr.CustCode = CUr.Code;
-	  					ivcnt = 0;
-	  					lastinvdate = blkdate;
-	  					TrHs = true;
-	  					while(loopkey("CustCode",IVr,1,TrHs))begin
-	  						if(IVr.CustCode!=CUr.Code)then begin TrHs = false; end;
-	  						if(TrHs)then begin
-	  							ivcnt = ivcnt + 1;
-	  							if(lastinvdate<IVr.InvDate)then begin lastinvdate = IVr.InvDate; end;
-	  						end;
-	  					end;
-						testf1 = true;
-						if(ivcnt!=0 and orcnt!=0 and cnt==0)then begin
+			if(vnrmphonedbl[avnrmphone[i]]>1 and vnrmphonedbl[avnrmphone[i]]<3)then begin	
+				pos = 0;
+				tstr = "";
+				ExtractObj(vnrmphonecu[avnrmphone[i]],pos,tstr);
+				unic = 0;
+				while(nonblank(tstr))begin
+					if(nonblank(tstr))then begin
+						CUr.Code = tstr;
+						CU1r.Code = tstr1;
+						if(readfirstmain(CUr,1,true))then begin
 							resetloop(ORr);
-							ORr.CustCode = tstr1;
-							orcnt1 = 0;
-							//lastordate = blkdate;
+							ORr.CustCode = CUr.Code;
+							orcnt = 0;
+							lastordate = blkdate;
 							TrHs = true;
 							while(loopkey("CustCode",ORr,1,TrHs))begin
-								if(ORr.CustCode!=CU1r.Code)then begin TrHs = false; end;
+								if(ORr.CustCode!=CUr.Code)then begin TrHs = false; end;
 								if(TrHs)then begin
-									orcnt1 = orcnt1 + 1;
-									//if(lastordate<ORr.OrdDate)then begin lastordate = ORr.OrdDate; end;
+									orcnt = orcnt + 1;
+									if(lastordate<ORr.OrdDate)then begin lastordate = ORr.OrdDate; end;
 								end;
 							end;
-							IVr.CustCode = tstr1;
-							ivcnt1 = 0;
-							//lastinvdate = blkdate;
+							IVr.CustCode = CUr.Code;
+							ivcnt = 0;
+							lastinvdate = blkdate;
 							TrHs = true;
 							while(loopkey("CustCode",IVr,1,TrHs))begin
-								if(IVr.CustCode!=CU1r.Code)then begin TrHs = false; end;
+								if(IVr.CustCode!=CUr.Code)then begin TrHs = false; end;
 								if(TrHs)then begin
-									ivcnt1 = ivcnt1 + 1;
-									//if(lastinvdate<IVr.InvDate)then begin lastinvdate = IVr.InvDate; end;
+									ivcnt = ivcnt + 1;
+									if(lastinvdate<IVr.InvDate)then begin lastinvdate = IVr.InvDate; end;
 								end;
 							end;
-							if(orcnt1!=0 or ivcnt1!=0)then begin testf1 = false; end;
-						end;
-						if(true)then begin
-							cnt = cnt+1;
+			
 							resetloop(IVr);
-							if(orcnt>0)then begin
-								a1[unic] = tstr;
-								a2[unic] = avnrmphone[i];
-								a3[unic] = CUr.CustCat;
-								a4[unic] = orcnt;
-								a5[unic] = lastordate;
-								a10[unic] = ivcnt;
-								a11[unic] = lastinvdate;
 								
-								if(avnrmphone[i]==CUr.Phone)then begin
-										a6[unic] = "Original";
-									end else begin
-										a6[unic] = "";
-									end;
-								unic = unic + 1;
-							end;
-							if(RepSpec.flags[0]==0)then begin
-									startformat(15);
-										outstring(0,"DblCUVc",tstr,false);
-										outstring(50,0,avnrmphone[i],false);
-										outstring(100,0,CUr.CustCat,false);
-										outstring(150,0,orcnt,false);
-										outstring(170,0,lastordate,false);
-										outstring(190,0,ivcnt,false);
-										outstring(210,0,lastinvdate,false);
-										if(avnrmphone[i]==CUr.Phone)then begin
-											outstring(170,0,lastordate,false);
-											outstring(240,0,"Original",false);
-											if(orcnt==0)then begin
-												outstring(280,0,"Can be closed by #",false);
-											end;
-										end else begin
-											if(orcnt==0)then begin
-												outstring(150,0,"",false);
-												outstring(160,0,"",false);
-												outstring(170,0,"Can be closed by #",false);
-											end;
-										end;
-									endformat;
-							end;
+							a1[unic] = tstr;
+							a2[unic] = avnrmphone[i];
+							a3[unic] = CUr.CustCat;
+							a4[unic] = orcnt;
+							a5[unic] = lastordate;
+							a10[unic] = ivcnt;
+							a11[unic] = lastinvdate;
+							
+							if(avnrmphone[i]==CUr.Phone)then begin
+									a6[unic] = "Original";
+								end else begin
+									a6[unic] = "";
+								end;
+							unic = unic + 1;
 						end;
-	  				end;
-	  			end;
-	  			ExtractObj(vnrmphonecu[avnrmphone[i]],pos,tstr);
-	  		end;
-	  		
-	  		if(RepSpec.flags[0]>0)then begin
-					if(unic>1)then begin
-						For(j=0;j<unic;j=j+1) begin
-							startformat(15);
-								outstring(0,"DblCUVc",a1[j],false);
-								outstring(50,0,a2[j],false);
-								outstring(100,0,a3[j],false);
-								outstring(150,0,a4[j],false);
-								outstring(150,0,a5[j],false);
-								outstring(170,0,a10[j],false);
-								outstring(170,0,a11[j],false);
-								outstring(200,0,a6[j],false);
-							endformat;
-						end; 
-						gray_divider(0,1);
 					end;
-	  		end else begin
-	  			gray_divider(0,1);
-	  		end;
-	  	end;
+					ExtractObj(vnrmphonecu[avnrmphone[i]],pos,tstr);
+				end;
+				testf1 = false;
+				for(j=0;j<unic;j=j+1) begin
+					if(StringToInt(a4[j])==0 and StringToInt(a10[j])==0)then begin testf1 = true; end;
+				end;
+				if(testf1)then begin
+					For(j=0;j<unic;j=j+1) begin
+						startformat(15);
+							outstring(0,"DblCUVc",a1[j],false);
+							outstring(50,0,a2[j],false);
+							outstring(100,0,a3[j],false);
+							outstring(150,0,a4[j],false);
+							outstring(150,0,a5[j],false);
+							outstring(170,0,a10[j],false);
+							outstring(170,0,a11[j],false);
+							outstring(200,0,a6[j],false);
+						endformat;
+					end; 
+					gray_divider(0,1);
+				end;
+			end;
 		end; 
 	endjob;
 		

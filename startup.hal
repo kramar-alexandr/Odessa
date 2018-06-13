@@ -178,7 +178,7 @@ begin
   Report("Проверка статуса товара",TovTestRClass,ItemStatusTestRn,0,modDBMain);
   Report("ВЫгрузка номеров ЭН НП и Мадженто",TovTestRClass,ORWithENNPRn,0,modIN);
   Report("Нормализация телефонов и дубликатов",PhoneNormalizeRClass,PhoneNormalizeRn,0,modSL);
-  Report("Отчет по клиентам с неактивными контактами",PhoneNormalizeRClass,ActiveClientItemRn,0,modSL);
+  Report("Отчет по клиентам с неактивными контактами",ActiveClientItemRClass,ActiveClientItemRn,0,modSL);
   Report("Неполученные наложенные платежи",UngetPayForNPRClass,UngetPayForNPRn,0,modSO);
   
   Report("Проверка склада",TovTestRClass,ChechIHRn,0,modIN);
@@ -733,6 +733,8 @@ begin
   StrSetText(AllowPOSIVNegQty,"Отрицательное количество в сч/ф кассового терминала");
   StrSetText(VievOnlyWorldVE,"Просмотр только иностранных поставщиков");//++++++++++
   StrSetText(VievOnlyUKRVE,"Просмотр только украинских поставщиков");//+++++++++++++++
+  StrSetText(CuPerRnAllPeriod,"Разрешить ведомость расчетов с клиентами за весь период");
+  StrSetText(CuPerRnForAllCustomers,"Разрешить ведомость расчетов с клиентами по всем клиентам");
   StrSetText(AllowNegativePriceonIV,"Negative Unit Price on an SL Invoice");
   StrSetText(SMToTrans,"Запись операций из симуляций");
   StrSetText(ActOK,"Утвержение активностей");

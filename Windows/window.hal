@@ -2923,6 +2923,19 @@ begin
 
 end;
 
+
+window ActiveClientItemRClass:1
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+
+  WindowBegin("Дублиакты телефонов",ActiveClientItemRClass,CGRcW,RcType);
+  SetWRect(20,80,400,200);
+
+  EndWindow;
+
+end;
+
+
 window OneKocBlankPosRClass:1
   wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
 begin
