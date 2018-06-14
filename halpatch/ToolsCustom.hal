@@ -145,8 +145,9 @@ begin
 		
 		if(testf and foundf)then begin
 			UpdateOrdOut(ORr,false,true)
-				ORr.CustomStatusFlag = 10;
-				ORr.Closed = 1;
+			ORr.CustomStatusFlag = 10;
+			ORr.Closed = 1;
+			Recalculate_CustomStatusFlagText(ORr);
 			RecordStore(ORr,true);
 			logtext(0,"CloseOldOpenOrders " & ORr.SerNr);
 			//recordupdate(oldORr,ORr,true);
