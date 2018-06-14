@@ -302,6 +302,7 @@ begin
 									ORr.CustomStatusFlag = 10;		//Edit----------------------Dima  16.09.2015
 									ORr.Comment = USetStr(31101) & ORr.Comment;
 									ORr.Closed = 1;
+									Recalculate_CustomStatusFlagText(ORr);
 									res = RecordUpdate(OR2r,ORr,true);
 								end;
 								if (res!=0) then begin
