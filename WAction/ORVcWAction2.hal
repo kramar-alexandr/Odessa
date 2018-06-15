@@ -2053,7 +2053,7 @@ BEGIN
 
   GetWindowRecord(wn,ORr);	
   if(blank(ORr.OrderClass))then begin
-	messagebox(0,"Недопустимый способ оплаты для данного вида оплаты!");
+	messagebox(0,"Недопустимый способ оплаты для данного вида счета!");
 	res = false;
   end;
 
