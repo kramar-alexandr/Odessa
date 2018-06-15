@@ -99,6 +99,7 @@ begin
 	
 	//Report("Отчет по комиссии",CompareConsignationRClass,CompareConsignationRn,0,modSL);// Edit ************************** Tuesday, 24 October 2017 14:26:01
 	Report("Отчет по комиссии",CompareConsignationRClass,ComissionSalesRn,0,modSL);// Edit ************************** BPI Ukraine - KramarAlexandr - Wednesday, 27 December 2017 11:20:35
+	Report("Отчет по флагам экспорта товара",ProdExpFlagsRClass,ProdExpFlagsRn,0,modIN);
 	
 	Import("Импорт регистров БЕЗ ПЕРЕЗАПИСИ",ImportOfRegisterIClass,ImportOfRegister,modDBMain);	//Edit----------------------Dima  27.05.2015
 	Import("Импорт регистров C ПЕРЕЗАПИСЬЮ",ImportOfRegisterRewriteIClass,ImportOfRegisterRewriting,modDBMain);

@@ -4148,6 +4148,21 @@ begin
   EndWindow;
 end;
 
+
+window ProdExpFlagsRClass:1 
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer") 
+begin
+	real h,h2,v,v2,vm,vs;
+  WindowBegin("Ћпределите отчет по флагам экспортов товаров",ProdExpFlagsRClass,CGRcW,RcType);
+  SetWRect(20,80,400,250);
+  UseView(RcVc);
+  h = 100;
+    
+  EditField(h,v,150,"ЉласификациЯ",Normal,f1,false,0);
+  EndWindow;
+end;
+
+
 window ArtStatIClass:1
   wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
 begin
