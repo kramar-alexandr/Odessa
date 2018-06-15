@@ -26,6 +26,9 @@ begin
 			outstring(0,0,"Экспорт РыбРай",false);
 			outstring(0,0,"Экспорт ОПТ",false);
 			outstring(0,0,"Экспорт Калипсо",false);
+			outstring(0,0,"Все остатки РыбРай",false);
+			outstring(0,0,"Все остатки ОПТ",false);
+			outstring(0,0,"Все остатки Калипсо",false);
 		endformat;
     end else begin
 		StartFormat(15);
@@ -55,10 +58,6 @@ begin
 					outstring(0,0,INr.ExpFlag01,false);
 					outstring(0,0,INr.ExpFlag02,false);
 					outstring(0,0,INr.ExpFlag03,false);
-				endformat;
-				StartFormat(15);
-					outstring(0,0,"",false);
-					outstring(0,0,"Все остатки:",false);
 					outstring(0,0,INr.FExpFlag01,false);
 					outstring(0,0,INr.FExpFlag02,false);
 					outstring(0,0,INr.FExpFlag03,false);
