@@ -972,7 +972,8 @@ updating procedure RecalculateORVC_CustomStatusFlagText_Mn(record RcVc RepSpec)	
 	string 255 sCustomStatusFlagText;
 	
 	TrHs = true;
-	while (LoopMain(ORr,1,TrHs)) begin	
+	ORr.OrdDate = RepSpec.sStartDate;
+	while (LoopKey("OrdDate",ORr,1,TrHs)) begin	
 		testf = true;
 		if(RepSpec.sStartDate>ORr.OrdDate)then begin testf = false; end;
 		if(RepSpec.sEndDate<ORr.OrdDate)then begin testf = false; TrHs = false; end;
