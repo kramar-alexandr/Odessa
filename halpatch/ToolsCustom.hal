@@ -978,6 +978,7 @@ updating procedure RecalculateORVC_CustomStatusFlagText_Mn(record RcVc RepSpec)	
 		if(RepSpec.sStartDate>ORr.OrdDate)then begin testf = false; end;
 		if(RepSpec.sEndDate<ORr.OrdDate)then begin testf = false; TrHs = false; end;
 		if(testf)then begin
+		//logtext(0,"Date -> " & ORr.OrdDate);
 			sCustomStatusFlagText = ORr.CustomStatusFlagText;
 			Recalculate_CustomStatusFlagText(ORr);
 			if(sCustomStatusFlagText!=ORr.CustomStatusFlagText)then begin
@@ -986,7 +987,6 @@ updating procedure RecalculateORVC_CustomStatusFlagText_Mn(record RcVc RepSpec)	
 			end;
 		end;
 	end;
-
 return;
 end;
 
