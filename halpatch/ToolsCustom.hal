@@ -965,14 +965,19 @@ end;
 
 
 global		
-updating procedure RecalculateORVC_CustomStatusFlagText_Mn()		//Edit----------------------Dima  24.03.2015
+updating procedure RecalculateORVC_CustomStatusFlagText_Mn(record RcVc RepSpec)		//Edit----------------------Dima  24.03.2015
 	begin
 	record ORVc ORr;
-
-	
-	while (LoopMain(ORr,1,true)) begin	
-		Recalculate_CustomStatusFlagText(ORr);	
-		RecordStore(ORr,true);
+	boolean TrHs,testf;
+	TrHs = true;
+	while (LoopMain(ORr,1,TrHs)) begin	
+		testf = true;
+		if(RepSpec.sStartDate>ORr.OrdDate)then begin testf = false; end;
+		if(RepSpec.sEndDate<ORr.OrdDate)then begin testf = false; TrHs = false; end;
+		if(testf)then begin
+			Recalculate_CustomStatusFlagText(ORr);	
+			RecordStore(ORr,true);
+		end;
 	end;
 
 return;
