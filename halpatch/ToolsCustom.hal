@@ -969,14 +969,20 @@ updating procedure RecalculateORVC_CustomStatusFlagText_Mn(record RcVc RepSpec)	
 	begin
 	record ORVc ORr;
 	boolean TrHs,testf;
+	string 255 sCustomStatusFlagText;
+	
 	TrHs = true;
 	while (LoopMain(ORr,1,TrHs)) begin	
 		testf = true;
 		if(RepSpec.sStartDate>ORr.OrdDate)then begin testf = false; end;
 		if(RepSpec.sEndDate<ORr.OrdDate)then begin testf = false; TrHs = false; end;
 		if(testf)then begin
-			Recalculate_CustomStatusFlagText(ORr);	
-			RecordStore(ORr,true);
+			sCustomStatusFlagText = ORr.CustomStatusFlagText;
+			Recalculate_CustomStatusFlagText(ORr);
+			if(sCustomStatusFlagText!=ORr.CustomStatusFlagText)then begin
+				RecordStore(ORr,true);
+				logtext(0,"DEFAULT -> " & sCustomStatusFlagText & ", RECALCULATED -> " & ORr.CustomStatusFlagText);
+			end;
 		end;
 	end;
 
