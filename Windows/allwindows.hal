@@ -11521,7 +11521,6 @@ begin
   	EditField(h,v+=vs,100,"Источник заказа",Normal,BookOrigin,false,BookOrgSClass);
   	EditField(h,v+=vs,300,"Отметки о диете",Normal,DietRemarks,false,0);
   	EditField(h,v+=vs,300,"Отметки о треб.",Normal,RequirementRemarks,false,0);
-
   	ButtonFrame(h2,v=vm+20,100,2,"Пол");
   	RadioButton(h2,v,0,0,"Мужской",Gender);
   	RadioButton(h2,v+=17,1,0,"Женский",Gender);
@@ -11540,6 +11539,12 @@ begin
   	RadioButton(h2,v,1,0,"Ребенок",AgeStatus);
   	RadioButton(h2,v+=17,0,0,"Взрослый",AgeStatus);
   	RadioButton(h2,v+=17,2,0,"Пенсионер",AgeStatus);*/
+	StaticText(h,v=300,"Новая Почта - юр.лицо",false);
+	EditField(h,v+=vs-10,120,"Рег. номер",Normal,RegNr2,false,RegDefSClass);
+	EditField(h,v+=vs,120,"NP Ref",Normal,NPRef,false,RegDefSClass);
+	CheckBox(h,v+=vs,0,"Безнальный способ оплаты",NonCashPmnt);
+	
+	
   end;
 	/*// Edit ************************** Tuesday, 5 July 2016 10:01:41
   if (StandardHansa==false) then begin
