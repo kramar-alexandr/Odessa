@@ -11539,7 +11539,7 @@ begin
   	RadioButton(h2,v,1,0,"Ребенок",AgeStatus);
   	RadioButton(h2,v+=17,0,0,"Взрослый",AgeStatus);
   	RadioButton(h2,v+=17,2,0,"Пенсионер",AgeStatus);*/
-	StaticText(h,v=300,"Новая Почта юр.лицо",false);
+	StaticText(h,v=300,"Новая Почта - юр.лицо",false);
 	EditField(h,v+=vs-10,120,"Рег. номер",Normal,RegNr2,false,RegDefSClass);
 	EditField(h,v+=vs,120,"NP Ref",Normal,NPRef,false,RegDefSClass);
 	CheckBox(h,v+=vs,0,"Безнальный способ оплаты",NonCashPmnt);
