@@ -11615,6 +11615,9 @@ begin
   if (UserCanReport("CustPSRn","",true)) then begin
     SpecialMenu("Справка по клиенту",'e',0,"CUStatusCUDsm");
   end;
+  if(currentuser=="SA")then begin
+	SpecialMenu("Снять галочку \"Клиент\"",' ',1,"DeleteClientCUDsm");
+  end;
   SpecialMenu("Связать существующий контакт",' ',1,"AddContactCUDsm");
   SpecialMenu("Создать новый контакт",' ',1,"NewContactCUDsm");
   SpecialMenu("Удалить связанный контакт",' ',1,"DelContactCUDsm");

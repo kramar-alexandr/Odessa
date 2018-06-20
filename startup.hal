@@ -418,7 +418,7 @@ begin
 	Maintenance("Установить флаги для Web-клиентов",MyVClass,PutFlagsForCUWeb,modDBMain);	//Edit----------------------Dima  11.02.2015
 	Maintenance("Создать карты лояльности клиентам \"WEB\"",MyVClass,CreateLoyaltyForWebClients,modDBMain);	//Edit***************************Sasha2,15:51 26.02.2015
 	Maintenance("Recalculate POVc.ActOkFlag",MyVClass,RecalculatePOVC_ActOkFlag_Mn,modDBMain);
-	Maintenance("Recalculate ORVc.CustomStatusFlagText",MyVClass,RecalculateORVC_CustomStatusFlagText_Mn,modDBMain);	//Edit----------------------Dima  24.03.2015
+	Maintenance("Recalculate ORVc.CustomStatusFlagText",RecalcCustStatFlagTextVClass,RecalculateORVC_CustomStatusFlagText_Mn,modDBMain);	//Edit----------------------Dima  24.03.2015
 
 	Maintenance("Проверить перемещения по товарам",MyVClass,StockMovErrormn,modDBMain);
 	
