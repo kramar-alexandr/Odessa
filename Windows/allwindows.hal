@@ -2482,7 +2482,7 @@ begin
   EditField(h1,vm=(v=6),82,"Дата",Normal,TransDate,false,PasteCurDate);
   EditField(h1,v+=vs,25,"Условия оплаты",Normal,PayDeal,false,PDSClass);
   if (IsEnterprise) then begin
-    EditField(h1,v+=vs,82,"Действителен до",Normal,ValidUntil,false,PasteCurDate);
+    EditField(h1,v+=vs,82,"Дата заказа",Normal,ValidUntil,false,PasteCurDate);
   end;
   if (HasModIN) then begin
     EditField(h1,v+=vs,82,"Заплан.отгрузка",Normal,PlanShip,false,PasteCurDate);
