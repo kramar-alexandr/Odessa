@@ -994,10 +994,10 @@ begin
       if (CUr.Phone!=Phone) then begin TrHs = false; end;
       if (TrHs) then begin
         if ((blank(cucode)) or (cucode<>CUr.Code)) then begin
-          if (CUr.CustCat==CustCat) then begin
+          //if (CUr.CustCat==CustCat) then begin
             res = true; 
             goto LCustomerWithPhoneExists;
-          end;
+          //end;
         end;
       end;
     end;
