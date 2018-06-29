@@ -2482,7 +2482,7 @@ begin
   EditField(h1,vm=(v=6),82,"Дата",Normal,TransDate,false,PasteCurDate);
   EditField(h1,v+=vs,25,"Условия оплаты",Normal,PayDeal,false,PDSClass);
   if (IsEnterprise) then begin
-    EditField(h1,v+=vs,82,"Действителен до",Normal,ValidUntil,false,PasteCurDate);
+    EditField(h1,v+=vs,82,"Дата заказа",Normal,ValidUntil,false,PasteCurDate);
   end;
   if (HasModIN) then begin
     EditField(h1,v+=vs,82,"Заплан.отгрузка",Normal,PlanShip,false,PasteCurDate);
@@ -2971,10 +2971,10 @@ begin
     CheckBox(h1,v+=32,0,"В проекте товар как материал",ItemMaterial);
   end;
   
-  
-  CheckBox(h1+150,14,0,"Экспорт РыбРай",ExpFlag01);
-  CheckBox(h1+150,34,0,"Экспорт Опт",ExpFlag02);
-  CheckBox(h1+150,54,0,"Экспорт Калипсо",ExpFlag03);
+  StaticText(h1+290,14,"Все остатки",true);
+  CheckBox(h1+150,24,0,"Экспорт РыбРай",ExpFlag01);CheckBox(h1+270,24,0,"",FExpFlag01);
+  CheckBox(h1+150,44,0,"Экспорт Опт",ExpFlag02);CheckBox(h1+270,44,0,"",FExpFlag02);
+  CheckBox(h1+150,64,0,"Экспорт Калипсо",ExpFlag03);CheckBox(h1+270,64,0,"",FExpFlag03);
   
   if (HasJewelleryInterface) then begin
     Tile(tilenr,110,false,tilenr,Metal); tilenr = tilenr + 1;
@@ -11521,7 +11521,6 @@ begin
   	EditField(h,v+=vs,100,"Источник заказа",Normal,BookOrigin,false,BookOrgSClass);
   	EditField(h,v+=vs,300,"Отметки о диете",Normal,DietRemarks,false,0);
   	EditField(h,v+=vs,300,"Отметки о треб.",Normal,RequirementRemarks,false,0);
-
   	ButtonFrame(h2,v=vm+20,100,2,"Пол");
   	RadioButton(h2,v,0,0,"Мужской",Gender);
   	RadioButton(h2,v+=17,1,0,"Женский",Gender);
@@ -11540,6 +11539,12 @@ begin
   	RadioButton(h2,v,1,0,"Ребенок",AgeStatus);
   	RadioButton(h2,v+=17,0,0,"Взрослый",AgeStatus);
   	RadioButton(h2,v+=17,2,0,"Пенсионер",AgeStatus);*/
+	StaticText(h,v=300,"Новая Почта - юр.лицо",false);
+	EditField(h,v+=vs-10,120,"Рег. номер",Normal,RegNr2,false,RegDefSClass);
+	EditField(h,v+=vs,120,"NP Ref",Normal,NPRef,false,RegDefSClass);
+	CheckBox(h,v+=vs,0,"Безнальный способ оплаты",NonCashPmnt);
+	
+	
   end;
 	/*// Edit ************************** Tuesday, 5 July 2016 10:01:41
   if (StandardHansa==false) then begin
@@ -11614,6 +11619,9 @@ begin
   end else begin
   if (UserCanReport("CustPSRn","",true)) then begin
     SpecialMenu("Справка по клиенту",'e',0,"CUStatusCUDsm");
+  end;
+  if(currentuser=="SA")then begin
+	SpecialMenu("Снять галочку \"Клиент\"",' ',1,"DeleteClientCUDsm");
   end;
   SpecialMenu("Связать существующий контакт",' ',1,"AddContactCUDsm");
   SpecialMenu("Создать новый контакт",' ',1,"NewContactCUDsm");

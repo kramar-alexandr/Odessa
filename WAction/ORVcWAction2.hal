@@ -2042,6 +2042,27 @@ BEGIN
   RETURN;
 END;
 
+
+global
+function Boolean ORDClassNPPaymentTypeButtonAction(Integer wn,Integer value) //Edit_-_-_-_-_-_-_-_-Anton 13:44 15.06.2018
+BEGIN
+  Boolean res;
+  record ORVc ORr;
+
+  res = true;
+
+  GetWindowRecord(wn,ORr);	
+  if(blank(ORr.OrderClass))then begin
+	messagebox(0,"Недопустимый способ оплаты для данного вида счета!");
+	res = false;
+  end;
+
+
+  ORDClassNPPaymentTypeButtonAction = res;
+  RETURN;
+END;
+
+
 global
 updating procedure OKORLsm()
 BEGIN

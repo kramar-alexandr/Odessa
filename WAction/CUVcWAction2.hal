@@ -156,6 +156,26 @@ begin
   return;
 end;
 
+
+global
+updating procedure DeleteClientCUDsm()
+begin
+  record CUVc CUr;
+  record CUVc ContactCUr;
+  record ContactRelVc ContactRelr;
+  Integer wn,nwn;
+  string 200 tstr;
+  record RcVc RepSpec;
+  
+  wn = CurWindow;
+  GetWindowRecord(wn,CUr);
+  CUr.CUType = 0;
+  RecordStore(CUr,true);
+  PutWindowRecord(wn,CUr);
+  return;
+end;
+
+
 global
 updating function Boolean AddContactCUDClassOnOKWindow(Integer wn)
 begin

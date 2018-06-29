@@ -388,9 +388,7 @@ BEGIN
   Integer i;
   string 5 rebcode;
   Boolean rebfound;
-  
-  logtext(0,"location1 " & location);
-  
+    
   rebvp = 0;
   rebcode = reb2code;
   if (blank(rebcode)) then begin

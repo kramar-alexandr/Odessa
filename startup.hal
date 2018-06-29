@@ -99,6 +99,7 @@ begin
 	
 	//Report("Отчет по комиссии",CompareConsignationRClass,CompareConsignationRn,0,modSL);// Edit ************************** Tuesday, 24 October 2017 14:26:01
 	Report("Отчет по комиссии",CompareConsignationRClass,ComissionSalesRn,0,modSL);// Edit ************************** BPI Ukraine - KramarAlexandr - Wednesday, 27 December 2017 11:20:35
+	Report("Отчет по флагам экспорта товара",ProdExpFlagsRClass,ProdExpFlagsRn,0,modIN);
 	
 	Import("Импорт регистров БЕЗ ПЕРЕЗАПИСИ",ImportOfRegisterIClass,ImportOfRegister,modDBMain);	//Edit----------------------Dima  27.05.2015
 	Import("Импорт регистров C ПЕРЕЗАПИСЬЮ",ImportOfRegisterRewriteIClass,ImportOfRegisterRewriting,modDBMain);
@@ -178,6 +179,7 @@ begin
   Report("Проверка статуса товара",TovTestRClass,ItemStatusTestRn,0,modDBMain);
   Report("ВЫгрузка номеров ЭН НП и Мадженто",TovTestRClass,ORWithENNPRn,0,modIN);
   Report("Нормализация телефонов и дубликатов",PhoneNormalizeRClass,PhoneNormalizeRn,0,modSL);
+  Report("Отчет по клиентам с неактивными контактами",ActiveClientItemRClass,ActiveClientItemRn,0,modSL);
   Report("Неполученные наложенные платежи",UngetPayForNPRClass,UngetPayForNPRn,0,modSO);
   
   Report("Проверка склада",TovTestRClass,ChechIHRn,0,modIN);
@@ -379,6 +381,7 @@ begin
 
 	
 	Maintenance("FixIHCostSM",MyVClass,FixIHCostSM,modDBMain);  //Edit**********Dima, 28.01.2014
+	Maintenance("SetItemFlagsMn",MyVClass,SetItemFlagsMn,modIN);
 	Maintenance("UpdateDopFuncMn",MyVClass,UpdateDopFuncMn,modDBMain);
 	
   Maintenance("RecalcSumSales",RecalcSumSalesVClass,RecalcSumSalesMn,modDBMain);  //Edit**********Dima, 28.01.2014
@@ -388,6 +391,8 @@ begin
   Maintenance("FixSomeCostSM",MyVClass,FixSomeIHCostSM,modDBMain);  //Edit**********Dima, 28.01.2014
 	
 	Maintenance("SalesData fill CustCat",MyVClass,FillCustCatToSalesDataMn,modDBMain);  //Edit**********Dima, 28.01.2014
+	
+	Maintenance("DelBlankCU",MyVClass,DelBlankCU,modSL); // Edit ************************** BPI Ukraine - KramarAlexandr - Wednesday, 13 June 2018 15:47:37
 
 	
 	Maintenance("SEND SOAP",MyVClass,SOAPLogin,modDBMain);  //Edit**********Dima, 28.01.2014
@@ -413,7 +418,7 @@ begin
 	Maintenance("Установить флаги для Web-клиентов",MyVClass,PutFlagsForCUWeb,modDBMain);	//Edit----------------------Dima  11.02.2015
 	Maintenance("Создать карты лояльности клиентам \"WEB\"",MyVClass,CreateLoyaltyForWebClients,modDBMain);	//Edit***************************Sasha2,15:51 26.02.2015
 	Maintenance("Recalculate POVc.ActOkFlag",MyVClass,RecalculatePOVC_ActOkFlag_Mn,modDBMain);
-	Maintenance("Recalculate ORVc.CustomStatusFlagText",MyVClass,RecalculateORVC_CustomStatusFlagText_Mn,modDBMain);	//Edit----------------------Dima  24.03.2015
+	Maintenance("Recalculate ORVc.CustomStatusFlagText",RecalcCustStatFlagTextVClass,RecalculateORVC_CustomStatusFlagText_Mn,modDBMain);	//Edit----------------------Dima  24.03.2015
 
 	Maintenance("Проверить перемещения по товарам",MyVClass,StockMovErrormn,modDBMain);
 	
@@ -450,6 +455,8 @@ begin
 	Maintenance("Обновить формы оплаты",RequestNPVClass,NPGetPaymentFormsMn,modNPost);
 	Maintenance("Обновить адреса конрагентов",RequestNPVClass,NPRefreshAddressesOfCounterpartiesMn,modNPost);
 	Maintenance("Обновить контрагентов",RequestNPVClass,NPRefreshCounterparties,modNPost);
+		Maintenance("Обновить контрагентов ОПТ",RequestNPVClass,NPRefreshCounterpartiesOpt,modNPost);
+
 	Maintenance("Обновить контрагентов отправителя",RequestNPVClass,NPRefreshSenderCounterparties,modNPost);
 	//Maintenance("Create sender-counterparty",RequestNPVClass,NPCreateCounterpartySender,modNPost);
 	//Maintenance("Add address for counterparty",RequestNPVClass,NPAddAddressForCounterpartyMn,modNPost);
@@ -732,6 +739,8 @@ begin
   StrSetText(AllowPOSIVNegQty,"Отрицательное количество в сч/ф кассового терминала");
   StrSetText(VievOnlyWorldVE,"Просмотр только иностранных поставщиков");//++++++++++
   StrSetText(VievOnlyUKRVE,"Просмотр только украинских поставщиков");//+++++++++++++++
+  StrSetText(CuPerRnAllPeriod,"Разрешить ведомость расчетов с клиентами за весь период");
+  StrSetText(CuPerRnForAllCustomers,"Разрешить ведомость расчетов с клиентами по всем клиентам");
   StrSetText(AllowNegativePriceonIV,"Negative Unit Price on an SL Invoice");
   StrSetText(SMToTrans,"Запись операций из симуляций");
   StrSetText(ActOK,"Утвержение активностей");

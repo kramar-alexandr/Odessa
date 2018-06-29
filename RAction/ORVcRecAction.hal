@@ -661,6 +661,7 @@ begin
   boolean ifBegin;
   record PLVc PLr;
 	record WebShopSettingsBlock WSSB;
+	record SHVc SHr;
 	
 	blockload(WSSB);
 	if(blank(WSSB.AdressDelimeter))then begin
@@ -1410,19 +1411,22 @@ begin
         end;
         if (nonblank(ORrw.ArtCode)) then begin
         	if(usercanaction("DoMinOrderQtyOR",false)==false)then begin
-						if (Blank(ORr.OrderClass) and ORrw.MinOrderedQuant>0) then begin //Edit***************************Sasha2,11:33 10.05.2017 {
-							ISr.Code = ORrw.ArtCode;
-							ISr.Location = ORr.Location;
-							if(readfirstmain(ISr,2,true))then begin
-								if(ORrw.Quant>0)then begin
-									if (ORrw.Quant<ORrw.MinOrderedQuant and ORrw.MinOrderedQuant<=ISr.Instock-ISr.RsrvQty) then begin
-										RecordCheckError(12053,USetStr(20111),i,"Quant");
-										res = -1; 
-										goto LORVcRecordCheck;
+        		SHr.OrderNr = ORr.SerNr;
+        		if(readfirstkey("OrderKey",SHr,1,true)==false)then begin
+							if (Blank(ORr.OrderClass) and ORrw.MinOrderedQuant>0) then begin //Edit***************************Sasha2,11:33 10.05.2017 {
+								ISr.Code = ORrw.ArtCode;
+								ISr.Location = ORr.Location;
+								if(readfirstmain(ISr,2,true))then begin
+									if(ORrw.Quant>0)then begin
+										if (ORrw.Quant<ORrw.MinOrderedQuant and ORrw.MinOrderedQuant<=ISr.Instock-ISr.RsrvQty) then begin
+											RecordCheckError(12053,USetStr(20111),i,"Quant");
+											res = -1; 
+											goto LORVcRecordCheck;
+										end;
 									end;
 								end;
-							end;
-						end; //Edit***************************Sasha2,11:33 10.05.2017 }
+							end; //Edit***************************Sasha2,11:33 10.05.2017 }
+						end;
           end;
           if (HasLocalization("PRT")) then begin
             if (ORrw.vRebate<0) then begin
@@ -2311,9 +2315,6 @@ begin
 row ORVc ORrw,OR2rw;
 integer rwcnt1,rwcnt2,i;
 
-  if (Blank(ORr.SalesMan) and UserCanAction("DoNotSetSalesManInOR",false)==false) then begin 
-  	ORr.SalesMan = CurrentUser;
-  end;
   if (ORr.CustomStatusFlag!=OR2r.CustomStatusFlag) then begin
   	ORr.TransDate = CurrentDate;
   	ORr.TransTime = CurrentTime;
@@ -2716,6 +2717,9 @@ begin
   if (ORr.OrderClass == "WEB") then begin //Edit***************************Sasha2,11:57 15.07.2014
   	MoreORVcHandling(ORr,OR2r); 
   end; //Edit***************************Sasha2,11:57 15.07.2014
+  if (Blank(ORr.SalesMan) and UserCanAction("DoNotSetSalesManInOR",false)==false) then begin // Edit ************************** BPI Ukraine - KramarAlexandr - Monday, 11 June 2018 15:31:19
+  	ORr.SalesMan = CurrentUser;
+  end;
   if (blank(ORr.OptUAHRate)) then begin		//Edit--------------------------Dima  29.01.2015
 		GetForeignCurncyRate("UAH",fr,to1,to2,ORr.OrdDate,edt);
     ORr.OptUAHRate = fr/to1;

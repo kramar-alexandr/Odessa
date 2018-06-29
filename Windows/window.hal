@@ -395,6 +395,16 @@ WindowBegin("Maintenance",MyVClass,CGMnt,RcType);
 end;
 
 
+window RecalcCustStatFlagTextVClass:1//Edit---------------Anton  11:48 19.06.2018
+ wtag("language","UKR"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+ begin
+WindowBegin("RecalculateORVC_CustomStatusFlagTextVClass",RecalculateORVC_CustomStatusFlagTextVClass,CGMnt,RcType);
+  SetWRect(20,120,360,220);
+  PeriodField(100,6,"Період");
+  EndWindow;
+end;
+
+
 window RozetkaMyTenVClass:1//Edit---------------Anton  
  wtag("language","UKR"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
  begin
@@ -403,6 +413,7 @@ WindowBegin("Импорт заказов клиента",RozetkaMyTenVClass,CGMnt,RcType);
   PeriodField(100,6,"Період");
   EndWindow;
 end;
+
 
 window CrConsigInAllVClass:1 // Edit ************************** Friday, 17 October 2014 11:47:19
  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
@@ -2923,6 +2934,19 @@ begin
 
 end;
 
+
+window ActiveClientItemRClass:1
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+
+  WindowBegin("Дублиакты телефонов",ActiveClientItemRClass,CGRcW,RcType);
+  SetWRect(20,80,400,200);
+
+  EndWindow;
+
+end;
+
+
 window OneKocBlankPosRClass:1
   wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
 begin
@@ -3858,11 +3882,15 @@ Integer i;
 	 StaticText(h+150,v,"Необязательное поле 0 или 1",false);
 	 StaticText(h+150,v+=20,"Если пустое, ничего не поменяется",false);
 	 i=i+1;
-	StaticText(h,v+=vs,i & ". *дополнительное*",false);
+	StaticText(h,v+=vs,i & ". Все остатки в РыбРай",false);
 	 StaticText(h+150,v,"Необязательное поле 0 или 1",false);
 	 StaticText(h+150,v+=20,"Если пустое, ничего не поменяется",false);
 	 i=i+1;
-	StaticText(h,v+=vs,i & ". *дополнительное*",false);
+	StaticText(h,v+=vs,i & ". Все остатки в Опт",false);
+	 StaticText(h+150,v,"Необязательное поле 0 или 1",false);
+	 StaticText(h+150,v+=20,"Если пустое, ничего не поменяется",false);
+	 i=i+1;
+	StaticText(h,v+=vs,i & ". Все остатки в Калипсо",false);
 	 StaticText(h+150,v,"Необязательное поле 0 или 1",false);
 	 StaticText(h+150,v+=20,"Если пустое, ничего не поменяется",false);
 
@@ -4130,6 +4158,21 @@ begin
   EditFieldTL(h,v+=20,150,"Склад",M4Str,Normal,150,f1,false,LocationSClass);
   EndWindow;
 end;
+
+
+window ProdExpFlagsRClass:1 
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer") 
+begin
+	real h,h2,v,v2,vm,vs;
+  WindowBegin("Определите отчет по флагам экспортов товаров",ProdExpFlagsRClass,CGRcW,RcType);
+  SetWRect(20,80,400,250);
+  UseView(RcVc);
+  h = 150;
+  v = 6; 
+  EditField(h,v,150,"Класификация",Normal,f1,false,0);
+  EndWindow;
+end;
+
 
 window ArtStatIClass:1
   wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")

@@ -169,3 +169,291 @@ begin
 		
 return;
 end;
+
+
+global updating procedure ActiveClientItemRn(record RcVc RepSpec)
+begin
+	record CUVc CUr,CU1r;
+	area phones;
+	string 20 aphone,tstr,tstr1;
+	vector boolean vnrmphone;
+	vector integer vnrmphonedbl;
+	array string 50 avnrmphone;
+	vector string 255 vnrmphonecu;
+	longint phcnt,phcnt1,i,j;
+	integer pos,pos1,orcnt,orcnt1,unic,cnt;
+	date lastordate,blkdate,lastinvdate;
+	record ORVc ORr,OR1r;
+	boolean TrHs,testf,testf1,zerrofound;
+	array string 255 a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11;
+	Record IVVc IVr,IV1r;
+	integer ivcnt,ivcnt1;
+	record LoyaltyCardVc LCr,LC1r;	
+	logtext(0,"ActiveClientItemRn");
+	
+	
+	while(loopmain(CUr,1,true))begin
+		testf = true;
+		if(CUr.CUType==0)then begin testf = false; end;
+		if(CUr.CustCat=="CUST")then begin testf = false; end;
+		if(CUr.CustCat=="EMPL")then begin testf = false; end;
+		if(left(CUr.Phone,1)=="#")then begin testf = false; end;
+		
+		if(testf)then begin
+			if(nonblank(CUr.Phone))then begin
+				aphone = "";
+				SimpleNormPhoneNumber(CUr.Phone,aphone);
+				if(nonblank(aphone))then begin
+					//addtexttoarea(aphone & chr(9) & chr(9) & chr(9) & CUr.Phone & chr(9) & chr(9) & CUr.Code & chr(13) & chr(10),phones);
+					if(vnrmphone[aphone]==false)then begin
+						vnrmphone[aphone] = true;
+						vnrmphonedbl[aphone] = vnrmphonedbl[aphone] + 1;
+						avnrmphone[phcnt] = aphone;
+						vnrmphonecu[aphone] = CUr.Code;
+						phcnt = phcnt + 1;
+					end else begin
+						vnrmphonedbl[aphone] = vnrmphonedbl[aphone] + 1;
+						vnrmphonecu[aphone] = vnrmphonecu[aphone] & "," & CUr.Code;
+					end;
+				end;
+			end;
+		end;
+	end;
+	
+	startreportnoheaderjob("Отчет по клиентам с неактивными контактами");
+		startformat(15);
+			outstring(0,0,"Код",false);
+			outstring(50,0,"Тел",false);
+			outstring(100,0,"Кат",false);
+			outstring(150,0,"Счетов",false);
+			outstring(170,0,"Дата",false);
+			outstring(190,0,"Сч/ф",false);
+			outstring(210,0,"Дата",false);
+		endformat;
+		For(i=0;i<phcnt;i=i+1) begin
+			if(vnrmphonedbl[avnrmphone[i]]>1 and vnrmphonedbl[avnrmphone[i]]<3)then begin	
+				pos = 0;
+				tstr = "";
+				ExtractObj(vnrmphonecu[avnrmphone[i]],pos,tstr);
+				unic = 0;
+				while(nonblank(tstr))begin
+					if(nonblank(tstr))then begin
+						CUr.Code = tstr;
+						CU1r.Code = tstr1;
+						if(readfirstmain(CUr,1,true))then begin
+							resetloop(ORr);
+							ORr.CustCode = CUr.Code;
+							orcnt = 0;
+							lastordate = blkdate;
+							TrHs = true;
+							while(loopkey("CustCode",ORr,1,TrHs))begin
+								if(ORr.CustCode!=CUr.Code)then begin TrHs = false; end;
+								if(TrHs)then begin
+									orcnt = orcnt + 1;
+									if(lastordate<ORr.OrdDate)then begin lastordate = ORr.OrdDate; end;
+								end;
+							end;
+							IVr.CustCode = CUr.Code;
+							ivcnt = 0;
+							lastinvdate = blkdate;
+							TrHs = true;
+							while(loopkey("CustCode",IVr,1,TrHs))begin
+								if(IVr.CustCode!=CUr.Code)then begin TrHs = false; end;
+								if(TrHs)then begin
+									ivcnt = ivcnt + 1;
+									if(lastinvdate<IVr.InvDate)then begin lastinvdate = IVr.InvDate; end;
+								end;
+							end;
+			
+							resetloop(IVr);
+								
+							a1[unic] = tstr;
+							a2[unic] = avnrmphone[i];
+							a3[unic] = CUr.CustCat;
+							a4[unic] = orcnt;
+							a5[unic] = lastordate;
+							a10[unic] = ivcnt;
+							a11[unic] = lastinvdate;
+							
+							if(avnrmphone[i]==CUr.Phone)then begin
+									a6[unic] = "Original";
+								end else begin
+									a6[unic] = "";
+								end;
+							unic = unic + 1;
+						end;
+					end;
+					ExtractObj(vnrmphonecu[avnrmphone[i]],pos,tstr);
+				end;
+				testf1 = false;
+				for(j=0;j<unic;j=j+1) begin
+					if(StringToInt(a4[j])==0 and StringToInt(a10[j])==0)then begin testf1 = true; end;
+				end;
+				if(testf1)then begin
+					For(j=0;j<unic;j=j+1) begin
+						startformat(15);
+							outstring(0,"DblCUVc",a1[j],false);
+							outstring(50,0,a2[j],false);
+							outstring(100,0,a3[j],false);
+							outstring(150,0,a4[j],false);
+							outstring(150,0,a5[j],false);
+							outstring(170,0,a10[j],false);
+							outstring(170,0,a11[j],false);
+							outstring(200,0,a6[j],false);
+						endformat;
+					end; 
+					gray_divider(0,1);
+				end;
+			end;
+	  	if(vnrmphonedbl[avnrmphone[i]]>1 and vnrmphonedbl[avnrmphone[i]]<3)then begin	
+	  		pos = 0;
+	  		tstr = "";
+				ExtractObj(vnrmphonecu[avnrmphone[i]],pos,tstr);
+	  		unic = 0;
+				cnt = 0;
+				zerrofound = false;
+	  		while(nonblank(tstr))begin
+	  			if(nonblank(tstr))then begin
+	  				CUr.Code = tstr;
+	  				if(readfirstmain(CUr,1,true))then begin
+	  					resetloop(ORr);
+	  					ORr.CustCode = CUr.Code;
+	  					orcnt = 0;
+	  					TrHs = true;
+	  					while(loopkey("CustCode",ORr,1,TrHs))begin
+	  						if(ORr.CustCode!=CUr.Code)then begin TrHs = false; end;
+	  						if(TrHs)then begin
+	  							orcnt = orcnt + 1;
+	  						end;
+	  					end;
+	  					IVr.CustCode = CUr.Code;
+	  					ivcnt = 0;
+	  					TrHs = true;
+	  					while(loopkey("CustCode",IVr,1,TrHs))begin
+	  						if(IVr.CustCode!=CUr.Code)then begin TrHs = false; end;
+	  						if(TrHs)then begin
+	  							ivcnt = ivcnt + 1;
+	  						end;
+	  					end;
+							testf1 = true;
+							if(orcnt==0 and ivcnt==0)then begin
+								zerrofound = true;	
+							end;
+							
+							if(true)then begin
+
+								a1[unic] = tstr;
+								a2[unic] = avnrmphone[i];
+								a3[unic] = CUr.CustCat;
+								a4[unic] = orcnt;
+								a5[unic] = lastordate;
+								a10[unic] = ivcnt;
+								a11[unic] = lastinvdate;
+							
+								if(avnrmphone[i]==CUr.Phone)then begin
+										a6[unic] = "Original";
+									end else begin
+										a6[unic] = "";
+									end;
+								unic = unic + 1;
+							
+							end;
+	  				end;
+	  			end;
+	  			ExtractObj(vnrmphonecu[avnrmphone[i]],pos,tstr);
+	  		end;
+	  		
+				if(unic>1 and zerrofound)then begin
+					For(j=0;j<unic;j=j+1) begin
+						if(stringtoint(a4[j])==0 and stringtoint(a10[j])==0)then begin
+							CU1r.Code = a1[j];
+							readfirstmain(CU1r,1,true);
+						end else begin
+							CUr.Code = a1[j];
+							readfirstmain(CUr,1,true);
+						end;
+						startformat(15);
+							outstring(0,"DblCUVc",a1[j],false);
+							outstring(50,0,a2[j],false);
+							outstring(100,0,a3[j],false);
+							outstring(150,0,a4[j],false);
+							outstring(150,0,a5[j],false);
+							outstring(170,0,a10[j],false);
+							outstring(170,0,a11[j],false);
+							outstring(200,0,a6[j],false);
+						endformat;
+					end;
+					CU1r.Phone = "##@" & a2[0];
+					CU1r.blockedFlag = 1;
+					recordstore(CU1r,true);
+					LC1r.CustCode = CU1r.Code;
+					if(readfirstkey("ActCustCode",LC1r,1,true))then begin
+						LC1r.Closed = 1;
+						recordstore(LC1r,true);
+					end;
+					
+					
+					CUr.Phone = a2[0];
+					If(blank(CUr.Extension))then begin
+						CUr.Extension = CU1r.Extension;
+					end;
+					If(blank(CUr.Comment0))then begin
+						CUr.Comment0 = CU1r.Comment0;
+					end;
+					If(blank(CUr.Comment0))then begin
+						CUr.Comment0 = CU1r.Comment0;
+					end;
+					If(blank(CUr.Comment1))then begin
+						CUr.Comment1 = CU1r.Comment1;
+					end;
+					If(blank(CUr.Comment2))then begin
+						CUr.Comment2 = CU1r.Comment2;
+					end;
+					recordstore(CUr,true);
+					LCr.CustCode = CUr.Code;
+					if(readfirstkey("ActCustCode",LCr,1,true))then begin
+						Logtext(0,"ClosedOldCU " & CU1r.Code & " -> " & CUr.Code & " -> " & a2[0] & " balance " & LCr.PointsBalance & " + " & LC1r.PointsBalance & " = " & LCr.PointsBalance + LC1r.PointsBalance);
+						LCr.PointsBalance = LCr.PointsBalance + LC1r.PointsBalance;
+						recordstore(LCr,true);
+					end;
+					
+					
+					gray_divider(0,1);
+				end;
+	  		
+	  	end;
+		end; 
+	endjob;
+		
+return;
+end;
+
+
+
+global updating procedure DelBlankCU()
+begin
+	boolean TrHs;
+	record CUVc CUr;
+	record LoyaltyCardVc LCr;
+	
+	
+	CUr.Phone = "##@";
+	TrHs = True;
+	while(loopkey("Phone",CUr,1,TrHs))begin
+		if(left(CUr.Phone,3)!="##@")then begin TrHs = false; end;
+		
+		if(TrHs)then begin
+			if(left(CUr.Phone,3)=="##@" and CUr.blockedFlag==1)then begin
+				LCr.CustCode = CUr.Code;
+				if(readfirstkey("CustCode",LCr,1,true))then begin
+					recorddelete(LCr);
+				end;
+				logtext(0,"Delete card " & CUr.Code);
+				recorddelete(CUr);
+				stepback(CUr);
+			end;
+		end;
+	end;
+	
+return;
+end;

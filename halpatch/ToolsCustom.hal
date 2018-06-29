@@ -145,8 +145,9 @@ begin
 		
 		if(testf and foundf)then begin
 			UpdateOrdOut(ORr,false,true)
-				ORr.CustomStatusFlag = 10;
-				ORr.Closed = 1;
+			ORr.CustomStatusFlag = 10;
+			ORr.Closed = 1;
+			Recalculate_CustomStatusFlagText(ORr);
 			RecordStore(ORr,true);
 			logtext(0,"CloseOldOpenOrders " & ORr.SerNr);
 			//recordupdate(oldORr,ORr,true);
@@ -302,6 +303,7 @@ begin
 									ORr.CustomStatusFlag = 10;		//Edit----------------------Dima  16.09.2015
 									ORr.Comment = USetStr(31101) & ORr.Comment;
 									ORr.Closed = 1;
+									Recalculate_CustomStatusFlagText(ORr);
 									res = RecordUpdate(OR2r,ORr,true);
 								end;
 								if (res!=0) then begin
@@ -963,16 +965,28 @@ end;
 
 
 global		
-updating procedure RecalculateORVC_CustomStatusFlagText_Mn()		//Edit----------------------Dima  24.03.2015
+updating procedure RecalculateORVC_CustomStatusFlagText_Mn(record RcVc RepSpec)		//Edit----------------------Dima  24.03.2015
 	begin
 	record ORVc ORr;
-
+	boolean TrHs,testf;
+	string 255 sCustomStatusFlagText;
 	
-	while (LoopMain(ORr,1,true)) begin	
-		Recalculate_CustomStatusFlagText(ORr);	
-		RecordStore(ORr,true);
+	TrHs = true;
+	ORr.OrdDate = RepSpec.sStartDate;
+	while (LoopKey("OrdDate",ORr,1,TrHs)) begin	
+		testf = true;
+		if(RepSpec.sStartDate>ORr.OrdDate)then begin testf = false; end;
+		if(RepSpec.sEndDate<ORr.OrdDate)then begin testf = false; TrHs = false; end;
+		if(testf)then begin
+		//logtext(0,"Date -> " & ORr.OrdDate);
+			sCustomStatusFlagText = ORr.CustomStatusFlagText;
+			Recalculate_CustomStatusFlagText(ORr);
+			if(sCustomStatusFlagText!=ORr.CustomStatusFlagText)then begin
+				RecordStore(ORr,true);
+				logtext(0,"DEFAULT -> " & sCustomStatusFlagText & ", RECALCULATED -> " & ORr.CustomStatusFlagText);
+			end;
+		end;
 	end;
-
 return;
 end;
 
@@ -4491,3 +4505,19 @@ begin
 
 return;
 end;
+
+
+global updating procedure SetItemFlagsMn(record RcVc RepSpec)
+begin
+	record INVc INr;
+	
+	while(loopmain(INr,1,true))begin
+		INr.ExpFlag01 = 1;
+		INr.FExpFlag01 = 1;
+		recordstore(INr,true);
+	end;
+
+return;
+end;
+
+

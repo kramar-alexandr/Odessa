@@ -885,6 +885,9 @@ LPasteOrdInShipLimitMes:
 				SHp.NPPayer = NPSettingsb.DefPayer;
 			end;
 			SHp.NPPaymentMethod = NPSettingsb.DefPaymentForm;
+			if(CUr.NonCashPmnt>0)then begin
+				SHp.NPPaymentMethod = "Безготівковий";
+			end;
 			NP_PasteSender(SHp); 
 			NP_PasteSenderWarehouseDesc(SHp);
 			SHp.NPRecipientLastName = ORr.NPLastName;			
@@ -923,6 +926,9 @@ LPasteOrdInShipLimitMes:
 				SHp.NPPayer = NPSettingsb.DefPayer1;
 			end;
 			SHp.NPPaymentMethod = NPSettingsb.DefPaymentForm1;
+			if(CUr.NonCashPmnt>0)then begin
+				SHp.NPPaymentMethod = "Безготівковий";
+			end;
 			NP_PasteSender(SHp); 
 			NP_PasteSenderWarehouseDesc(SHp);
 			SHp.NPRecipientLastName = ORr.NPLastName;			

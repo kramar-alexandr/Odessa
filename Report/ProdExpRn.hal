@@ -1,0 +1,84 @@
+external function val AbsoluteVal(val);
+external procedure ExtractObj(string,var Integer,var string);
+external procedure CurValToOtherCur(Date,string,val,string,var val,roundmode);
+external procedure GetBaseCurncy(Integer,var string);
+external function roundmode SetRoundModeD(Integer);
+
+
+SetLangMode(LangRussian,"RUS",0);
+
+
+
+global procedure ProdExpFlagsRn(record RcVc RepSpec)
+begin
+	record INVc INr;
+	array integer tab;
+	boolean testf,TrHs;
+	
+	tab[0] = 0;			tab[1] = 50;		tab[2] = 200;		tab[3] = 270;
+	tab[4] = 340;		tab[5] = 410;		
+	
+	startreportnoheaderjob("Отчет по флагам экспорта товара");
+	if (RepSpec.Media==mtFile) or (RepSpec.Media==mtExcel) or (RepSpec.Media==mtClipboard) then begin
+        StartFormat(15);
+			outstring(0,0,"Код товара",false);
+			outstring(0,0,"Наименование",false);
+			outstring(0,0,"Экспорт РыбРай",false);
+			outstring(0,0,"Экспорт ОПТ",false);
+			outstring(0,0,"Экспорт Калипсо",false);
+			outstring(0,0,"Все остатки РыбРай",false);
+			outstring(0,0,"Все остатки ОПТ",false);
+			outstring(0,0,"Все остатки Калипсо",false);
+		endformat;
+    end else begin
+		StartFormat(15);
+			outstring(tab[0],0,"Код товара",false);
+			outstring(tab[1],0,"Наименование",false);
+			outstring(tab[3],0,"Экспорт РыбРай",false);
+			outstring(tab[4],0,"Экспорт ОПТ",false);
+			outstring(tab[5],0,"Экспорт Калипсо",false);
+		endformat;
+		Gray_Divider(0,1);
+	end;
+	TrHs = true;
+	INr.Code = "";
+	while(loopmain(INr,1,TrHs))begin
+		testf = true;
+		if(nonblank(RepSpec.f1))then begin
+			if(SetInSet(RepSpec.f1,INr.DispGroups)==false)then begin
+				testf = false; 
+			end;
+		end;
+		
+		if(testf)then begin
+			if (RepSpec.Media==mtFile) or (RepSpec.Media==mtExcel) or (RepSpec.Media==mtClipboard) then begin
+				StartFormat(15);
+					outstring(0,0,INr.Code,false);
+					outstring(0,0,INr.Name,false);
+					outstring(0,0,INr.ExpFlag01,false);
+					outstring(0,0,INr.ExpFlag02,false);
+					outstring(0,0,INr.ExpFlag03,false);
+					outstring(0,0,INr.FExpFlag01,false);
+					outstring(0,0,INr.FExpFlag02,false);
+					outstring(0,0,INr.FExpFlag03,false);
+				endformat;
+			end else begin
+				StartFormat(15);
+					outstring(tab[0],"DblINVc",INr.Code,false);
+					outstring(tab[1],0,INr.Name,false);
+					outstring(tab[3],0,INr.ExpFlag01,false);
+					outstring(tab[4],0,INr.ExpFlag02,false);
+					outstring(tab[5],0,INr.ExpFlag03,false);
+					outstring(tab[2],0,"Все остатки:",false);
+					outstring(tab[3],0,INr.FExpFlag01,false);
+					outstring(tab[4],0,INr.FExpFlag02,false);
+					outstring(tab[5],0,INr.FExpFlag03,false);
+				endformat;
+			Gray_Divider(0,1);
+			end;
+		end;
+	end;
+	endjob;
+
+return;
+end;
