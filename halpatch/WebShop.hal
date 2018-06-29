@@ -348,9 +348,9 @@ begin
 			CurValToOtherCur(currentdate,"USD",PLr.ExVatPrice,"UAH",varpriceopt,SetRoundModeD(2));
 		end;
 		optprice = ValToString(varpriceopt,M4Val,"",".",0);
-		optprice5 = ValToString(round(varpriceopt*0.95,SetRoundModeD(0)),M4Val,"",".",0);
-		optprice10 = ValToString(round(varpriceopt*0.90,SetRoundModeD(0)),M4Val,"",".",0);
-		optprice15 = ValToString(round(varpriceopt*0.85,SetRoundModeD(0)),M4Val,"",".",0);
+		optprice5 = ValToString(round(varpriceopt*0.95,SetRoundModeD(2)),M4Val,"",".",0);
+		optprice10 = ValToString(round(varpriceopt*0.90,SetRoundModeD(2)),M4Val,"",".",0);
+		optprice15 = ValToString(round(varpriceopt*0.85,SetRoundModeD(2)),M4Val,"",".",0);
 		
 	// Edit End ---------------------------------------------- Edit End
 		IS2r.Code = INr.Code;
