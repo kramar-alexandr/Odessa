@@ -318,7 +318,7 @@ begin
 		PLr.ArtCode = INr.Code;
 		PLr.PLCode = "OPT";
 		if(readfirstmain(PLr,2,true))then begin
-			CurValToOtherCur(currentdate,"USD",PLr.ExVatPrice,"UAH",varpriceopt,SetRoundModeD(0));
+			CurValToOtherCur(currentdate,"USD",PLr.ExVatPrice,"UAH",varpriceopt,SetRoundModeD(2));
 		end;
 		optprice = ValToString(varpriceopt,M4Val,"",".",0);
 		optprice5 = ValToString(round(varpriceopt*0.95,SetRoundModeD(0)),M4Val,"",".",0);
