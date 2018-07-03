@@ -409,10 +409,10 @@ begin
 		if (testf==true) then begin
 		  //price = ValToString(PLr.ExVatPrice,M4Val,"",".",0);
 		  if(INr.ExpFlag01==1)then begin
-				addtexttoarea("opt;simple;" & INr.Code & ";" & price & ";" & qty & ";" & inStock & ";" & dop_ostatok & ";" & acprice,importar);
+				addtexttoarea("base;simple;" & INr.Code & ";" & price & ";" & qty & ";" & inStock & ";" & dop_ostatok & ";" & acprice,importar);
 				addtexttoarea(chr(13) & chr(10),importar);
 			end else begin
-				addtexttoarea("opt;simple;" & INr.Code & ";" & price & ";" & qty & ";" & inStock & ";" & dop_ostatok & ";" & acprice,importar);
+				addtexttoarea("base;simple;" & INr.Code & ";" & price & ";" & qty & ";" & inStock & ";" & dop_ostatok & ";" & acprice,importar);
 				addtexttoarea(chr(13) & chr(10),importar);
 			end;
 			
