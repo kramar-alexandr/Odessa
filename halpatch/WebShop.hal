@@ -345,12 +345,12 @@ begin
 		PLr.ArtCode = INr.Code;
 		PLr.PLCode = "OPT";
 		if(readfirstmain(PLr,2,true))then begin
-			CurValToOtherCur(currentdate,"USD",PLr.ExVatPrice,"UAH",varpriceopt,SetRoundModeD(0));
+			CurValToOtherCur(currentdate,"USD",PLr.ExVatPrice,"UAH",varpriceopt,SetRoundModeD(2));
 		end;
 		optprice = ValToString(varpriceopt,M4Val,"",".",0);
-		optprice5 = ValToString(round(varpriceopt*0.95,SetRoundModeD(0)),M4Val,"",".",0);
-		optprice10 = ValToString(round(varpriceopt*0.90,SetRoundModeD(0)),M4Val,"",".",0);
-		optprice15 = ValToString(round(varpriceopt*0.85,SetRoundModeD(0)),M4Val,"",".",0);
+		optprice5 = ValToString(round(varpriceopt*0.95,SetRoundModeD(2)),M4Val,"",".",0);
+		optprice10 = ValToString(round(varpriceopt*0.90,SetRoundModeD(2)),M4Val,"",".",0);
+		optprice15 = ValToString(round(varpriceopt*0.85,SetRoundModeD(2)),M4Val,"",".",0);
 		
 	// Edit End ---------------------------------------------- Edit End
 		IS2r.Code = INr.Code;
@@ -408,19 +408,19 @@ begin
 				
 		if (testf==true) then begin
 		  //price = ValToString(PLr.ExVatPrice,M4Val,"",".",0);
-		  if(INr.ExpFlag01==1)then begin
-				addtexttoarea("opt;simple;" & INr.Code & ";" & price & ";" & qty & ";" & inStock & ";" & dop_ostatok & ";" & acprice,importar);
+		  if(INr.ExpFlag01>0)then begin
+				addtexttoarea("base;simple;" & INr.Code & ";" & price & ";" & qty & ";" & inStock & ";" & dop_ostatok & ";" & acprice,importar);
 				addtexttoarea(chr(13) & chr(10),importar);
 			end else begin
-				addtexttoarea("opt;simple;" & INr.Code & ";" & price & ";" & qty & ";" & inStock & ";" & dop_ostatok & ";" & acprice,importar);
+				addtexttoarea("base;simple;" & INr.Code & ";" & price & ";" & 0 & ";" & 2 & ";" & 0 & ";" & acprice,importar);
 				addtexttoarea(chr(13) & chr(10),importar);
 			end;
 			
-			if(INr.ExpFlag02==1)then begin
+			if(INr.ExpFlag02>0)then begin
 				addtexttoarea("opt;simple;" & INr.Code & ";" & price & ";" & optqty & ";" & optinStock & ";" & optdop_ostatok & ";" & optprice & ";" & optprice5 & ";" & optprice10 & ";" & optprice15,importoptar);
 				addtexttoarea(chr(13) & chr(10),importoptar);
 			end else begin
-				addtexttoarea("opt;simple;" & INr.Code & ";" & price & ";" & optqty & ";" & 0 & ";" & 0 & ";" & optprice & ";" & optprice5 & ";" & optprice10 & ";" & optprice15,importoptar);
+				addtexttoarea("opt;simple;" & INr.Code & ";" & price & ";" & 0 & ";" & 2 & ";" & 0 & ";" & optprice & ";" & optprice5 & ";" & optprice10 & ";" & optprice15,importoptar);
 				addtexttoarea(chr(13) & chr(10),importoptar);
 			end;
 		end;
