@@ -1458,7 +1458,9 @@ begin
   record RcVc RepSpec;
   
   ExportStockCSVMn(RepSpec);
-
+	
+	weboutstring("ok");
+	
 return;
 end;
 
