@@ -1831,7 +1831,7 @@ LORVcRecordCheck:;
     ORr.OfficialSerNr = oldOfficialSerNr;
     ORr.OfficialSerNrSerie = "";
   end;
-	if(ORr.CustCode!="NONAME" and ORr.OrderClass!="WEB")then begin
+	if(ORr.CustCode!="NONAME" and ORr.OrderClass=="RETAI")then begin
 			ORr.OrderClass = "WEB";
 	end;
   ORVcRecordCheck = res;
