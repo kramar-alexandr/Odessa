@@ -672,6 +672,11 @@ begin
   res = 0;
   insertmode = 1;//Rs_insert
   updatemode = 2;//Rs_update
+  
+  if(ORr.CustCode!="NONAME" and ORr.OrderClass=="RETAI")then begin
+			ORr.OrderClass = "WEB";
+	end;
+  
   if (ORr.Reserved!=0) then begin //Edit***************************Sasha2,11:24 18.08.2015 {
     if (blankdate(ORr.ReservToDate) and ORr.OrderClass=="WEB") then begin
       //ORr.ReservToDate = AddDay(ORr.OrdDate,3);
@@ -1831,9 +1836,6 @@ LORVcRecordCheck:;
     ORr.OfficialSerNr = oldOfficialSerNr;
     ORr.OfficialSerNrSerie = "";
   end;
-	if(ORr.CustCode!="NONAME" and ORr.OrderClass=="RETAI")then begin
-			ORr.OrderClass = "WEB";
-	end;
   ORVcRecordCheck = res;
   return;
 end;
