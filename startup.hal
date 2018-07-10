@@ -740,7 +740,8 @@ begin
   StrSetText(VievOnlyWorldVE,"Просмотр только иностранных поставщиков");//++++++++++
   StrSetText(VievOnlyUKRVE,"Просмотр только украинских поставщиков");//+++++++++++++++
   StrSetText(CuPerRnAllPeriod,"Разрешить ведомость расчетов с клиентами за весь период");
-  StrSetText(CuPerRnForAllCustomers,"Разрешить ведомость расчетов с клиентами по всем клиентам");
+  StrSetText(CuPerRnForAllCustomers,"Разрешить ведомость расчетов с клиентами по всем клиентам");// Edit ************************** BPI Ukraine - KramarAlexandr - Tuesday, 10 July 2018 11:55:11
+  StrSetText(OrdRnForAllCustomers,"Разрешить журнал счетов клиентов по всем клиентам");// Edit ************************** BPI Ukraine - KramarAlexandr - Tuesday, 10 July 2018 11:55:11
   StrSetText(AllowNegativePriceonIV,"Negative Unit Price on an SL Invoice");
   StrSetText(SMToTrans,"Запись операций из симуляций");
   StrSetText(ActOK,"Утвержение активностей");
