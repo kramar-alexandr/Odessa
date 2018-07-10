@@ -356,7 +356,6 @@ change does not increase invoice values
       OutString(pos2,"DblCustPS2",tstr,false);   
       if (RepSpec.Media==mtFile) or (RepSpec.Media==mtExcel) or (RepSpec.Media==mtClipboard) then begin// Edit ************************** BPI Ukraine - KramarAlexandr - Tuesday, 10 July 2018 10:17:05
         OutString(2,0,"",true);
-        OutString(2,0,"",true);
       end;         
       OutVal(3,0,v,M4Val,true);
       if (RepSpec.Media==mtFile) or (RepSpec.Media==mtExcel) or (RepSpec.Media==mtClipboard) then begin
@@ -462,6 +461,9 @@ change does not increase invoice values
           tstr = tstr & " )";
         end;
         OutString(pos2,"DblCustPS2",tstr,false);
+      end;
+      if (RepSpec.Media==mtFile) or (RepSpec.Media==mtExcel) or (RepSpec.Media==mtClipboard) then begin// Edit ************************** BPI Ukraine - KramarAlexandr - Tuesday, 10 July 2018 10:17:05
+        OutString(2,0,"",true);
       end;
       if (cash) then begin
         OutVal(3,0,v,M4Val,true);
