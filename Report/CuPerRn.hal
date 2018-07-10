@@ -129,9 +129,11 @@ begin
   OutString(pos2,0,USetStr(2436),false);
   OutStringAdjust(3,0,USetStr(2490),true,M4Val);
   if (RepSpec.Media==mtFile) or (RepSpec.Media==mtExcel) or (RepSpec.Media==mtClipboard) then begin
-  	 OutString(2,0,"",true);// Edit ************************** BPI Ukraine - KramarAlexandr - Tuesday, 10 July 2018 10:28:21
-  	 OutString(2,0,"",true);// Edit ************************** BPI Ukraine - KramarAlexandr - Tuesday, 10 July 2018 10:28:22
     OutStringAdjust(3,0,"",true,M4Val);
+  end;
+  if (RepSpec.Media==mtFile) or (RepSpec.Media==mtExcel) or (RepSpec.Media==mtClipboard) then begin
+  	OutString(pos1,0,"Object",false);
+  	OutString(pos1,0,"",false);
   end;
   OutStringAdjust(4,0,USetStr(2491),true,M4Val);
   if (HasMultiCurrency) then begin 
