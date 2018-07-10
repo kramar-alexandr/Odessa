@@ -285,7 +285,7 @@ begin
   end;
   EndHeader;
   
-  if(blank(RepSpec.f1))then begin
+  if(blank(RepSpec.f2))then begin
 		if(UserCanAction("OrdRnForAllCustomers",true)==false) then begin
 			StartFormat(15);
 				outstring(0,0,"Введите имя конкретного клиента!!!",false);
