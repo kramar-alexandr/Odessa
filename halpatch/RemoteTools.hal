@@ -53,6 +53,12 @@ external function string 255 StrReplace(string,string,string);
 external procedure GetCurUser(var record UserVc);
 external updating procedure RecalcORMn(record RcVc); //Edit***************************Sasha2,14:27 19.04.2017
 external procedure NormalizeObjstr(var string);//Edit-------------------Vitalii 13:53 12.10.2017
+remote updating procedure GiftVoucherPasterow(record IVVc,string,longint);//Edit_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-Anton 13:08 11.07.2018
+external procedure ExtractObj(string,var Integer,var string);
+
+
+SetLangMode(LangRussian,"RUS",0);	
+
 
 global
 procedure GetItemSalesAccFromOR(record ORVc ORr,var string salesacc)
@@ -1164,7 +1170,7 @@ BEGIN
   Integer AllowInvBeforeShip;
   val remn,t;
   val pr,coef;
-  val s,rowsum;
+  val s,rowsum,sumpp;
   val from,to1,to2,base1,base2;
   val FrBase,FrGP,FrPrice;
   string 255 tstr,curcode;
@@ -1177,7 +1183,7 @@ BEGIN
   record SHVc SHr;
   record SHVc lastSHr;
   Boolean found,subvatf;
-  Integer hiddenrow;
+  Integer hiddenrow,k;
   Integer acnt,adscnt,oldstyle;
   array record SHVc aSHr;
   array record SHVc aDropSHr;
@@ -1192,7 +1198,12 @@ BEGIN
   record ARPayHistVc ARPHr;
   record UserVc USr;//Edit-------------------Vitalii 15:11 28.11.2016
   record ObjVc Objr;
-  string 255 obj,ot;
+  string 255 obj,ot,instr,curstr;
+	record DefCashBlock DCb;
+  row PMBlock PMrw;
+  val paidsum;// Edit ************************** Friday, 1 April 2016 14:29:45
+  integer rwcnt2;
+	record GCSVc GCSr;
 
   
   lastrwcnt = MatRowCnt(IVp);
@@ -1890,6 +1901,42 @@ LPasteOrdInInv:;
       end;
     end;
   end;
+	
+	sumpp = 0;
+	rwcnt2 = matrowcnt(IVp);
+	for (i=0;i<rwcnt2;i=i+1) begin
+		matrowget(IVp,i,IVrw);
+		if(IVrw.stp==kInvoiceRowTypePrepayment)then begin
+			sumpp = sumpp + IVrw.Sum;
+		end;
+	end;
+	
+	if(nonblank(ORp.GiftVouchers))then begin
+		instr = ORp.GiftVouchers;
+		k = 0;
+		ExtractObj(instr,k,curstr);
+		While (nonblank(curstr)) begin
+		logtext(0,curstr & " <> " & IVp.Sum4);
+			if(IVp.Sum4>0)then begin
+				GCSr.BarCode = curstr;
+				if(ReadFirstKey("BarCode",GCSr,1,true))then begin
+					BlockLoad(DCb);
+					ClearRow(IVp,IVrw,kInvoiceRowTypeGiftVoucherPayment);
+					IVrw.stp = kInvoiceRowTypeGiftVoucherPayment;
+					IVrw.Sum = IVp.Sum4 - sumpp;
+					if (IVrw.Sum>GCSr.Balance) then begin
+						IVrw.Sum = GCSr.Balance;
+					end;
+					IVrw.SalesAcc = PMrw.AccNr;
+					IVrw.Spec = "Ћплата под. серт.";
+					IVrw.GCNr = GCSr.SerNr;
+					MatRowPut(IVp,MatRowCnt(IVp),IVrw);
+					IVSumup(IVp,true);
+				end;
+			end;
+			ExtractObj(instr,k,curstr);
+		end;
+	end;
   IVSumup(IVp,true);
   PasteOrdInInv = res;
   return;

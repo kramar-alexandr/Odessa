@@ -619,12 +619,12 @@ begin
   record MainStockBlock MSb;  
   row ORVc ORrw;
   row ORVc OR2rw;
-  Integer i,j,rwcnt,errcode;
+  Integer i,j,rwcnt,errcode,k;
   LongInt oldnr,ErrorCode;
   LongInt newnr;
   val bal;
   val limit,rsrvd;
-  string 255 tstr,errstr;
+  string 255 tstr,errstr,instr,curstr;
   Boolean gentrans,transf,unokf,testf,test2f;
   record OrdSettBlock OSb;
   string 20 location,oldOfficialSerNr;
@@ -648,7 +648,7 @@ begin
   val TotDownPaymentval;
   Array string 255 otcheckaccs;
   Array string 255 otcheckobjtyps;
-  Integer otcheckcnt;
+  Integer otcheckcnt,number;
   record OTCheckBlock OTCheckr;
   Boolean initotcheckf;  
   record CUUserLabelBlock CUUerLb;
@@ -662,6 +662,9 @@ begin
   record PLVc PLr;
 	record WebShopSettingsBlock WSSB;
 	record SHVc SHr;
+	record GCSVc GCSr;
+	record RLinkVc RLinkr;
+	record IVVc IVr;
 	
 	blockload(WSSB);
 	if(blank(WSSB.AdressDelimeter))then begin
@@ -704,7 +707,32 @@ begin
       end;
     end;
   end; //Edit***************************Sasha2,11:24 18.08.2015 }
-  
+	
+	
+	if(nonblank(ORr.GiftVouchers))then begin
+		instr = ORr.GiftVouchers;
+		k = 0;
+		ExtractObj(instr,k,curstr);
+		While (nonblank(curstr)) begin
+			GCSr.BarCode = curstr;
+			if(!readfirstKey("BarCode",GCSr,1,true))then begin
+				RecordCheckError(31183,"",-1,"GiftVouchers");      
+        res = -1;
+        goto LORVcRecordCheck; 
+			end;
+			ExtractObj(instr,k,curstr);
+		end;
+	end;
+	
+	number = 1;
+	if(OR2r.GiftVouchers!=ORr.GiftVouchers and ReadRecordLink(ORr,number,IVr,RLinkr))then begin
+		RecordCheckError(31184,"",-1,"GiftVouchers");      
+		res = -1;
+		goto LORVcRecordCheck; 
+	end;
+	
+	
+	
   if(ORr.FeedBackStatus==3 and ORr.FeedBackStatus > OR2r.FeedBackStatus) then begin	//Edit----------------------Dima  31.08.2015
   	ORr.CustomStatusFlag = 10;
 		ORr.Closed = 1;

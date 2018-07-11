@@ -800,6 +800,32 @@ begin
 end;
 
 global 
+procedure GiftVoucherOpenDClass ()
+begin
+	Integer wn,mwn;
+	record RcVc RepSpec;
+	record IVVc prevIVr;
+	record IVVc IVr;
+	row IVVc IVrw;
+	record IVCashVc prevIVCashr;
+	record IVCashVc IVCashr;
+	row IVCashVc IVCashrw;
+	record GCSVc GCSr;
+	record RestAccVc prevRestAccr;
+	record RestAccVc RestAccr;
+	row RestAccVc RestAccrw;
+	Boolean found;
+	record DefCashBlock DCb;
+	row PMBlock PMrw;
+	val paidsum;// Edit ************************** Friday, 1 April 2016 14:29:45
+	integer rwcnt2,i;// Edit ************************** Friday, 1 April 2016 14:31:47
+
+  wn = CurWindow;
+	GetWindowRecord(wn,IVr);
+	OpenGiftVoucherTouchScreenDClass(wn,-1,IVr.SerNr,IVr.RetnValue,blankval,IVr.CurncyCode,"","Ћплата под. серт.");
+	return;
+end;
+global 
 procedure OpenOnAccountPaymentTouchScreenDClass(Integer mwn,LongInt sernr,string paymode,string label)
 begin
   Integer nwn;
