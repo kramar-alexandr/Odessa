@@ -235,6 +235,8 @@ begin
   TotSum = 0;
   BeginCurncyTotals(curcnt);
   StartReportJob(USetStr(2561));
+  
+  
   HT2Per(RepSpec.sStartDate,RepSpec.sEndDate,tstr);
   Header(rw,tstr,1);
   if (BuildProductCode!="WeHaveInvoices") then begin
@@ -282,6 +284,16 @@ begin
     rw = rw + 1;
   end;
   EndHeader;
+  
+  if(blank(RepSpec.f2))then begin
+		if(UserCanAction("OrdRnForAllCustomers",true)==false) then begin
+			StartFormat(15);
+				outstring(0,0,"Введите имя конкретного клиента!!!",false);
+			EndFormat;
+			goto LOrdRn;
+		end;
+  end;
+  
   if ((RepSpec.ArtMode==2) or (RepSpec.ArtMode==0)) then begin
     if (RepSpec.flags[10]==1) then begin
       StartFormat(15);
@@ -635,6 +647,9 @@ L30:;
       PrintCurncyTotals(acur,av1,av2,av3,curcnt,1,-1,-1,140,true,RepSpec.PocketPC);
     end;
   end;
+  
+LOrdRn:;  
+
   EndJob;
   return;
 end;

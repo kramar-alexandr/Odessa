@@ -674,7 +674,7 @@ begin
 end;
 
 
-global updating procedure RecalcCustomRebate(record IVVc IVr)
+global updating procedure RecalcCustomRebate(var record IVVc IVr)
 begin
 	integer 	  			sum,i,mtrw; // Edit Dima ************* 2018-02-21 11:17 AM
 	row OneTimeDiscBlock	OTDrw;
@@ -708,7 +708,8 @@ begin
 									CUr.IVVcSum = sum;
 									CUr.IVVcNr = IVr.SerNr;
 									CUr.IVVcOneTimeDisc = OTDrw.RebCode;
-									//RecordStore(CUr,true);
+									IVr.OneTimeReb = 1;
+									RecordStore(CUr,true);
 								end;
 							end;
 						end;
@@ -1107,7 +1108,6 @@ BEGIN
   Boolean ihef,testf;
   record EInvCUVc EInvCUr;
 
-  
   HandlePromotionObjectsIV(IVr,IV2r,2); //Edit***************************Sasha2,9:57 25.01.2017
   SetIVAcceptanceFlag(IVr,IV2r,stat);
   SetFinRef(IVr);

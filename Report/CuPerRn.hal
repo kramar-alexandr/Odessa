@@ -127,11 +127,18 @@ begin
   OutString(0,0,USetStr(3184),false);
   OutString(pos1,0,USetStr(2435),false);
   OutString(pos2,0,USetStr(2436),false);
+  if (RepSpec.Media==mtFile) or (RepSpec.Media==mtExcel) or (RepSpec.Media==mtClipboard) then begin
+  	OutString(pos1,0,"Object",false);
+  end;
   OutStringAdjust(3,0,USetStr(2490),true,M4Val);
   if (RepSpec.Media==mtFile) or (RepSpec.Media==mtExcel) or (RepSpec.Media==mtClipboard) then begin
     OutStringAdjust(3,0,"",true,M4Val);
   end;
+  
   OutStringAdjust(4,0,USetStr(2491),true,M4Val);
+  if (RepSpec.Media==mtFile) or (RepSpec.Media==mtExcel) or (RepSpec.Media==mtClipboard) then begin
+    OutStringAdjust(3,0,"",true,M4Val);
+  end;
   if (HasMultiCurrency) then begin 
     if (inbase==0) then begin
       OutString(420,0,USetStr(3201) & "/" & USetStr(3200),true);

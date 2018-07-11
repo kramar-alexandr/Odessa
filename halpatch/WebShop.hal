@@ -138,7 +138,7 @@ begin
     if(curtnew>=StringToTime("8:00") and curtnew.minute==0)then begin
     	LogText(0,"CustTimeTableAction at planned time: " & curtnew);
     	RybrayRequestMn(RepSpec);// Edit ************************** BPI Ukraine - KramarAlexandr - Friday, 27 April 2018 09:29:02
-    	ExportStockCSVMn(RepSpec);
+    	// ExportStockCSVMn(RepSpec);
     	if(hr=="8" or hr=="12" or hr=="16" or hr=="20")then begin
 				ExportAllItems(RepSpec);
     	end;
@@ -917,7 +917,7 @@ begin
 	
 
 	WRITEAREATOFILE(aPost,"post.txt",0);///////////////////////////////
-	WRITEAREATOFILE(aPost,"MagentaMSG/" & currentdate & ":" & currenttime & "post.txt",1);///////////////////////////////
+	WRITEAREATOFILE(aPost,"MagentaMSG/" & DateToString(currentdate,"YYYYMMDD") & ":" & currenttime & "post.txt",1);///////////////////////////////
 
 	xmlPost = PARSEXMLAREA(aPost);
 	if (!XmlNodeExists(xmlPost,"messagestart")) then begin
@@ -942,6 +942,8 @@ begin
 		if (XmlNodeExists(xmlPost,"orders/order" & i)) then begin
 			ORCnt = ORCnt + 1;
 			ORr.CustOrdNr = XmlGetAttribute(xmlPost,"orders/order" & i,"orderno"); 
+			WRITEAREATOFILE(aPost,"MagentaMSG_Ord/" & ORr.CustOrdNr & "_post.txt",1);///////////////////////////////
+
 			storeidtag = XmlGetAttribute(xmlPost,"orders/order" & i,"storeid");
 			if(storeidtag=="7")then begin
 				ORr.CustOrdNr = "7:" & ORr.CustOrdNr;
@@ -1458,7 +1460,9 @@ begin
   record RcVc RepSpec;
   
   ExportStockCSVMn(RepSpec);
-
+	
+	weboutstring("ok");
+	
 return;
 end;
 
