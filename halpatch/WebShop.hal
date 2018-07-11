@@ -917,7 +917,7 @@ begin
 	
 
 	WRITEAREATOFILE(aPost,"post.txt",0);///////////////////////////////
-	WRITEAREATOFILE(aPost,"MagentaMSG/" & currentdate & ":" & currenttime & "post.txt",1);///////////////////////////////
+	WRITEAREATOFILE(aPost,"MagentaMSG/" & DateToString(currentdate,"YYYYMMDD") & ":" & currenttime & "post.txt",1);///////////////////////////////
 
 	xmlPost = PARSEXMLAREA(aPost);
 	if (!XmlNodeExists(xmlPost,"messagestart")) then begin
