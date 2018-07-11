@@ -942,6 +942,8 @@ begin
 		if (XmlNodeExists(xmlPost,"orders/order" & i)) then begin
 			ORCnt = ORCnt + 1;
 			ORr.CustOrdNr = XmlGetAttribute(xmlPost,"orders/order" & i,"orderno"); 
+			WRITEAREATOFILE(aPost,"MagentaMSG_Ord/" & ORr.CustOrdNr & "_post.txt",1);///////////////////////////////
+
 			storeidtag = XmlGetAttribute(xmlPost,"orders/order" & i,"storeid");
 			if(storeidtag=="7")then begin
 				ORr.CustOrdNr = "7:" & ORr.CustOrdNr;
