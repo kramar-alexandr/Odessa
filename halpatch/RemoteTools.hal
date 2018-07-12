@@ -1916,7 +1916,6 @@ LPasteOrdInInv:;
 		k = 0;
 		ExtractObj(instr,k,curstr);
 		While (nonblank(curstr)) begin
-		logtext(0,curstr & " <> " & IVp.Sum4);
 			if(IVp.Sum4>0)then begin
 				GCSr.BarCode = curstr;
 				if(ReadFirstKey("BarCode",GCSr,1,true))then begin
@@ -1932,6 +1931,7 @@ LPasteOrdInInv:;
 					IVrw.GCNr = GCSr.SerNr;
 					MatRowPut(IVp,MatRowCnt(IVp),IVrw);
 					IVSumup(IVp,true);
+					sumpp = sumpp + IVrw.Sum;
 				end;
 			end;
 			ExtractObj(instr,k,curstr);
