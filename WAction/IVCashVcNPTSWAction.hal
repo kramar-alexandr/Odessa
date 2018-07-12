@@ -1,6 +1,7 @@
 external function Boolean HasJewelleryInterface();
 external procedure M4PadString(string,Integer,string,Boolean,var string);
 
+SetLangMode(LangRussian,"RUS",0);
 
 procedure AddStringListRow(Integer wn,Integer width,Integer POSFontSize,string artcode,string spec,string q,string p,string s,string r,string tag,string vatcode,string location)
 begin
@@ -787,8 +788,8 @@ begin
       RepSpec.long1 = sernr;
       RepSpec.long2 = rownr;
       RepSpec.CurncyCode = BCb.BaseCur1;
-      RepSpec.AccStr = paymode;
-      RepSpec.f6 = label;
+      RepSpec.AccStr = "GC";
+      RepSpec.f6 = "Ћплата под. серт.";
       PutWindowRecord(nwn,RepSpec);
       WindowFieldGoto(nwn,RepSpec,-1,"f1",true);
     end;
