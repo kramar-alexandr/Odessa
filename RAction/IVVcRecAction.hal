@@ -460,6 +460,18 @@ BEGIN
     end;
   end;
   if (unokf) then begin
+		if(IVp.Sum4>2000)then begin
+			CUr.Code = IVp.CustCode;
+			if(readfirstmain(CUr,1,true))then begin
+				if(IVp.SerNr==CUr.IVVcNr)then begin
+					messagebox(0,"Была использована одноразовая скидка!");
+				end;
+				if(IVp.InvType==kInvoiceTypeCredit and IVp.CredInv==CUr.IVVcNr)then begin
+					messagebox(0,"Была использована одноразовая скидка по оригинальной сч/ф!");
+				end;
+			end;
+		end;
+		
     errcode = IsUnOKAllowed_IVVc(IVp);
     if (errcode!=0) then begin
       RecordCheckError(errcode,"",-1,"TransDate");      
