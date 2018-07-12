@@ -1013,6 +1013,7 @@ begin
 	
 		if (testf) then begin
 			CUr.RebCode = RepSpec.f3;
+			CUr.LastDateChangeDiscount = CurrentDate;
 			RecordStore(CUr,true);
 		end;
 		
@@ -4009,6 +4010,7 @@ begin
 		
 		if(testf and blank(CUr.RebCode))then begin
 			CUr.RebCode = "0%";
+			CUr.LastDateChangeDiscount = CurrentDate;
 			recordstore(CUr,true);
 		end;
 	end;

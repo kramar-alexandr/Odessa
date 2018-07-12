@@ -5775,6 +5775,7 @@ RecordBegin(IPVc,-,"");
   RecordField(AdNPWarehouseDesc,M4Str,200,0);// Edit ************************** BPI Ukraine - KramarAlexandr - Tuesday, 10 April 2018 11:44:40
   RecordField(NPRef,M4Str,255,0);//Edit_-_-_-_-_-_-_-_-Anton 15:37 20.06.2018
   RecordField(NonCashPmnt,M4Int,0,0);//Edit_-_-_-_-_-_-_-_-Anton 15:37 20.06.2018
+	RecordField(LastDateChangeDiscount,M4Date,0,0);//Edit_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-Anton 14:00 12.07.2018
   
   
   MainKeyBegin(Code,1);

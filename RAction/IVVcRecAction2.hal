@@ -705,6 +705,7 @@ begin
 								OTD_Rebcode = Rebr.vra0;
 								if (CU_Rebcode <= OTD_Rebcode) then begin
 									CUr.RebCode = OTDrw.RebCode;
+									CUr.LastDateChangeDiscount = CurrentDate;
 									CUr.IVVcSum = sum;
 									CUr.IVVcNr = IVr.SerNr;
 									CUr.IVVcOneTimeDisc = OTDrw.RebCode;

@@ -614,6 +614,7 @@ begin
 	Cur.PLCode = "RRP";
 	Cur.VATCode = "0%";
 	CUr.RebCode = "0%";
+	CUr.LastDateChangeDiscount = CurrentDate;
 	CUr.FreightNr = "RYBRAY";
 	Cur.OnAccount = 1;		//Edit----------------------Dima  11.02.2015
 	Cur.SelfBilling = 1;	//Edit----------------------Dima  11.02.2015
