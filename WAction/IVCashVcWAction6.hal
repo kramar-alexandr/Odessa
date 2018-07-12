@@ -708,7 +708,7 @@ begin
         if (IVrw.Sum>GCSr.Balance) then begin
           IVrw.Sum = GCSr.Balance;
         end;
-        IVrw.VATCode = DCb.DefGCSVATCode;          
+        IVrw.VATCode = DCb.DefGCSVATCode;
         IVrw.PayMode = RepSpec.AccStr;
         if (GetPMRow(IVrw.PayMode,PMrw)) then begin end;
         IVrw.SalesAcc = PMrw.AccNr;

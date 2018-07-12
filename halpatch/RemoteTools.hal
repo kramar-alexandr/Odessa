@@ -55,6 +55,8 @@ external updating procedure RecalcORMn(record RcVc); //Edit*********************
 external procedure NormalizeObjstr(var string);//Edit-------------------Vitalii 13:53 12.10.2017
 remote updating procedure GiftVoucherPasterow(record IVVc,string,longint);//Edit_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-Anton 13:08 11.07.2018
 external procedure ExtractObj(string,var Integer,var string);
+external function Boolean GetPMRow(string,var row PMBlock);
+
 
 
 SetLangMode(LangRussian,"RUS",0);	
@@ -1926,6 +1928,9 @@ LPasteOrdInInv:;
 					if (IVrw.Sum>GCSr.Balance) then begin
 						IVrw.Sum = GCSr.Balance;
 					end;
+					IVrw.VATCode = DCb.DefGCSVATCode;
+					IVrw.PayMode = "GC";
+					if (GetPMRow(IVrw.PayMode,PMrw)) then begin end;
 					IVrw.SalesAcc = PMrw.AccNr;
 					IVrw.Spec = "Ћплата под. серт.";
 					IVrw.GCNr = GCSr.SerNr;
