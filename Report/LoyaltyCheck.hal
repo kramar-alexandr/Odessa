@@ -2,6 +2,7 @@ global updating procedure LoyaltyCheckRn(record RcVc RepSpec)
 begin
 	record IVVc IVr;
 	record LoyaltyCardVc LCr;
+	vector boolean vfound;
 	
 	startreportnoheaderjob("LoyPoin");
 	
@@ -9,7 +10,7 @@ begin
 	
 		if(IVr.OKFlag==1 and IVr.LCMLevel=="1")then begin
 			if(true)then begin
-				if(IVr.Sum4!=0)then begin
+				if(IVr.Sum4>1 or IVr.Sum4<-1)then begin
 					if(IVr.Points==0)then begin
 						StartFormat(15);
 							outstring(0,"DblIVVc",IVr.SerNr,false);
@@ -27,6 +28,22 @@ begin
 								if(LCr.Closed==0)then begin
 									outstring(250,0,LCr.SerNr,false);
 									outstring(300,0,LCr.PointsBalance,false);
+									
+									if(IVr.InvType!=kInvoiceTypeCredit)then begin
+										if(LCr.PointsBalance==0)then begin
+											IVr.Points = IVr.Sum4;
+											recordstore(IVr,true);
+											LCr.PointsBalance = LCr.PointsBalance + IVr.Points;
+											recordstore(LCr,true);
+											vfound[LCr.SerNr] = true;
+										end;
+										if(vfound[LCr.SerNr])then begin
+											IVr.Points = IVr.Sum4;
+											recordstore(IVr,true);
+											LCr.PointsBalance = LCr.PointsBalance + IVr.Points;
+											recordstore(LCr,true);
+										end;
+									end;
 								end else begin
 									outstring(250,0,"ClosedCard",false);
 								end;
