@@ -29,7 +29,7 @@ begin
 									outstring(250,0,LCr.SerNr,false);
 									outstring(300,0,LCr.PointsBalance,false);
 									
-									if(IVr.TransDate>stringtodate("1/1/2018"))then begin
+									if(IVr.TransDate>stringtodate("1/1/2017"))then begin
 										IVr.Points = IVr.Sum4;
 										recordstore(IVr,true);
 										LCr.PointsBalance = LCr.PointsBalance + IVr.Points;
