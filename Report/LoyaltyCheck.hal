@@ -21,6 +21,7 @@ begin
 							if (ReadFirstMain(LCr,1,true)) then begin
 								if(LCr.Closed==0)then begin
 									outstring(250,0,LCr.SerNr,false);
+									outstring(300,0,LCr.PointsBalance,false);
 								end else begin
 									outstring(250,0,"ClosedCard",false);
 								end;
