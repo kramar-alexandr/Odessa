@@ -183,6 +183,8 @@ begin
   Report("Неполученные наложенные платежи",UngetPayForNPRClass,UngetPayForNPRn,0,modSO);
   
   Report("Проверка склада",TovTestRClass,ChechIHRn,0,modIN);
+  
+  Report("Проверка баллов",TovTestRClass,LoyaltyCheckRn,0,modSL);
 		
 	SString(964,"");	
 	

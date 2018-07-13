@@ -1,0 +1,28 @@
+global procedure LoyaltyCheckRn(record RcVc RepSpec)
+begin
+	record IVVc IVr;
+	
+	startreportnoheaderjob("LoyPoin");
+	
+	while(loopmain(IVr,1,true))begin
+	
+		if(IVr.OKFlag==1 and IVr.LCMLevel=="1")then begin
+			if(IVr.InvType!=kInvoiceTypeCredit)then begin
+				if(IVr.Sum4!=0)then begin
+					if(IVr.Points==0)then begin
+						StartFormat(15);
+							outstring(0,"DblIVVc",IVr.SerNr,false);
+							outstring(100,0,IVr.InvDate,false);
+							outstring(150,0,IVr.Sum4,false);
+							outstring(200,0,IVr.Points,false);
+						endformat;
+					end;
+				end;
+			end;
+		end;
+	
+	end;
+	endjob;
+	
+return;
+end;
