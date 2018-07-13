@@ -1,6 +1,7 @@
-global procedure LoyaltyCheckRn(record RcVc RepSpec)
+global updating procedure LoyaltyCheckRn(record RcVc RepSpec)
 begin
 	record IVVc IVr;
+	record LoyaltyCardVc LCr;
 	
 	startreportnoheaderjob("LoyPoin");
 	
@@ -16,6 +17,16 @@ begin
 							outstring(120,0,IVr.InvDate,false);
 							outstring(150,0,IVr.Sum4,false);
 							outstring(200,0,IVr.Points,false);
+							LCr.SerNr = IVr.LoyaltyCardNr;
+							if (ReadFirstMain(LCr,1,true)) then begin
+								if(LCr.Closed==0)then begin
+									outstring(250,0,LCr.SerNr,false);
+								end else begin
+									outstring(250,0,"ClosedCard",false);
+								end;
+							end else begin
+								outstring(250,0,"ExistCard",false);
+							end;
 						endformat;
 					end;
 				end;
