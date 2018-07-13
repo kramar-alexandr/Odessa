@@ -34,7 +34,6 @@ begin
 										recordstore(IVr,true);
 										LCr.PointsBalance = LCr.PointsBalance + IVr.Points;
 										recordstore(LCr,true);
-										vfound[LCr.SerNr] = true;
 									end;
 									
 									if(IVr.InvType!=kInvoiceTypeCredit)then begin
