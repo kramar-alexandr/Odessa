@@ -11406,6 +11406,7 @@ begin
   EditField(h,v=6,  80,"Валюта (кл.)",Normal,CurncyCode,false,CurncyCodeSClass);
   EditField(h,v+=vs ,80, "Прейскурант",Normal,PLCode,false,PLDefSClass);
   EditField(h,v+=vs ,80, "Таблица скидок",Normal,RebCode,false,RebSClass);
+	EditField(h,v+=vs ,80, "Посл.дата изм.скидки",Normal,LastDateChangeDiscount,false,RebSClass);
   if (HasSalesman) then begin
     EditField(h,v+=vs,80,"Продавец",Normal,SalesMan,false,UserSClass);
   end;

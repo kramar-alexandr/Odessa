@@ -153,6 +153,7 @@ BEGIN
   
   
   CUr.RebCode = "0%";
+	CUr.LastDateChangeDiscount = CurrentDate;
   if (IsBooks==false) or (ValuePack(1)) then begin
     if (CSb.CurrentUserasSalesman!=0) then begin
       Userr.Code = CurrentUser;

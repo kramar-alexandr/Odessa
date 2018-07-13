@@ -265,6 +265,7 @@ begin
 						end;
 						if (CU_Rebcode < OTD_Rebcode) then begin
 							CUr.RebCode = OTDrw.RebCode;
+							CUr.LastDateChangeDiscount = CurrentDate;
 							//RecordStore(Cur,true);
 						end;
 					end;

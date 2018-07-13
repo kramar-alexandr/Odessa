@@ -494,14 +494,17 @@ boolean TrHs,testf1;
 					if(readfirstkey("eMail",CUr,1,true))then begin
 						if(group_id == "6") then begin
 							CUr.RebCode = "5%";
+							CUr.LastDateChangeDiscount = CurrentDate;
 							recordStore(CUr,true);
 						end else begin
 							if(group_id == "5") then begin
 								CUr.RebCode = "10%";
+								CUr.LastDateChangeDiscount = CurrentDate;
 								recordStore(CUr,true);
 							end else begin 
 								if(group_id == "4") then begin
 									CUr.RebCode = "15%";
+									CUr.LastDateChangeDiscount = CurrentDate;
 									recordStore(CUr,true);
 								end;
 							end;

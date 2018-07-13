@@ -41,6 +41,7 @@ begin
       end;
       if blank(CUr.RebCode) then begin
         CUr.RebCode = Countryr.RebCode;
+				CUr.LastDateChangeDiscount = CurrentDate;
       end;
       if (!SetInSet(Countryr.Objects,CUr.Objects)) then begin
         CUr.Objects = AddStr(CUr.Objects,Countryr.Objects,",");

@@ -199,6 +199,23 @@ begin
 end;
 
 
+function Boolean CUDClassRebCodeEFAfter(Integer wn,Boolean changedf)
+begin
+  Boolean res;
+  record CUVc CUr;
+  string 255 tstr,gotofield;
+  LongInt errcode;
+  
+  if (changedf) then begin
+    GetWindowRecord(wn,CUr);
+    CUr.LastDateChangeDiscount = CurrentDate;
+		PutWIndowRecord(wn,CUr);
+  end;
+  CUDClassRebCodeEFAfter = res;
+  return;
+end;
+
+
 	// Edit End ---------------------------------------------- Edit End
 	
 global
@@ -221,7 +238,7 @@ BEGIN
     case "DelCountry": res = CUDClassDelCountryCodeEFAfter(wn,changed);
    	case "NPWarehouse": res = CUDClassNPWarehouseEFAfter(wn,changed);	// Edit ************************** BPI Ukraine - KramarAlexandr - Tuesday, 10 April 2018 11:56:36
 		case "AdNPWarehouse": res = CUDClassAdNPWarehouseEFAfter(wn,changed);	// Edit ************************** BPI Ukraine - KramarAlexandr - Tuesday, 10 April 2018 11:56:38
-
+		case "RebCode": res = CUDClassRebCodeEFAfter(wn,changed!=0);
   end;
   CUDClassAfterEditField = res;
   RETURN;
