@@ -503,7 +503,11 @@ BEGIN
           //IVp.LoyaltyCardNr = "";
           //IVp.LCMLevel = "";			// Edit Dima ************* 2018-02-23 01:31 PM
           //IVp.Points = 0;
-          LoyaltyCardr.PointsBalance = LoyaltyCardr.PointsBalance - IV2p.Points;
+					if (IVp.InvType!=kInvoiceTypeCredit)then begin
+						LoyaltyCardr.PointsBalance = LoyaltyCardr.PointsBalance - IV2p.Points;
+					end else begin
+						LoyaltyCardr.PointsBalance = LoyaltyCardr.PointsBalance + IV2p.Points;
+					end;
 		  UpdateDiscount(LoyaltyCardr);
           RECORDSTORE(LoyaltyCardr,true);
           IVSumup(IVp,true);
