@@ -8,15 +8,20 @@ begin
 	while(loopmain(IVr,1,true))begin
 	
 		if(IVr.OKFlag==1 and IVr.LCMLevel=="1")then begin
-			if(IVr.InvType!=kInvoiceTypeCredit)then begin
+			if(true)then begin
 				if(IVr.Sum4!=0)then begin
 					if(IVr.Points==0)then begin
 						StartFormat(15);
 							outstring(0,"DblIVVc",IVr.SerNr,false);
 							outstring(70,"DblCUVc",IVr.CustCode,false);
 							outstring(120,0,IVr.InvDate,false);
-							outstring(150,0,IVr.Sum4,false);
-							outstring(200,0,IVr.Points,false);
+							if(IVr.InvType!=kInvoiceTypeCredit)then begin
+								outstring(150,0,IVr.Sum4,false);
+								outstring(200,0,IVr.Points,false);
+							end else begin
+								outstring(150,0,IVr.Sum4,false);
+								outstring(200,0,IVr.Points,false);
+							end;
 							LCr.SerNr = IVr.LoyaltyCardNr;
 							if (ReadFirstMain(LCr,1,true)) then begin
 								if(LCr.Closed==0)then begin
