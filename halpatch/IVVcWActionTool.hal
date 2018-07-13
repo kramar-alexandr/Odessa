@@ -155,6 +155,7 @@ begin
           IVDUpdatePrices(IVr,false);
         end;  
       end;
+      IVSumup(IVr,true);
       //end;
     end else begin
       IVr.LCMLevel = "";
