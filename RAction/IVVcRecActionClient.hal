@@ -15,6 +15,10 @@ external procedure ShowUnOkWarn(string,Integer);
 external function Boolean MakeFiscalReceipt(record IVVc); //Edit----------------------Dima  16.06.2015
 external procedure OpenCashBox(); //Edit***************************Sasha2,11:17 16.07.2015
 
+
+SetLangMode(LangRussian,"RUS",0);	
+
+
 updating procedure acCreateEDIInv(record IVVc IVp)
 BEGIN
   record EDIIVVc EDIIVr;
@@ -236,9 +240,9 @@ end;
 global
 function LongInt IVVcRecordCheckClient(LongInt wn,record IVVc IVr,record IVVc IV2r,LongInt stat,LongInt errorcheck)
 begin
-  LongInt res;
+  LongInt res, currloyaltpoints;
   Boolean checkf,testf,testfcleancashf;
-  record IVVc credIVr;
+  record IVVc credIVr, sum4chkIVr;
   record LocalMachineBlock LMb;
   record LSerialPortDeviceVc LSPDr;
   string 255 errstr;
@@ -246,12 +250,14 @@ begin
   record AccBlock Accb;
   record CashierDefBlock CDb;
   row IVVc IVrw; //Edit***************************Sasha2,16:04 29.10.2014
-  integer i,rwcnt; //Edit***************************Sasha2,16:04 29.10.2014
+  integer i,rwcnt,mtrw; //Edit***************************Sasha2,16:04 29.10.2014
   val cash; //Edit***************************Sasha2,16:37 25.03.2015
   Integer insertmode,updatemode; //Edit***************************Sasha2,16:45 25.03.2015
   record AccBlock ARAccb; //Edit***************************Sasha2,16:51 25.03.2015
   record KassirLoginVc KLr;// Edit ************************** Wednesday, 30 November 2016 13:53:09
-
+	record OneTimeDiscBlock	OTDr;
+	row OneTimeDiscBlock		OTDrw;
+	record LoyaltyCardVc LCr;
   
 //no client-server calls pls
   res = 0;
@@ -262,7 +268,59 @@ begin
   insertmode = 1;//Rs_insert //Edit***************************Sasha2,16:45 25.03.2015
   updatemode = 2;//Rs_update //Edit***************************Sasha2,16:45 25.03.2015
   rwcnt = MatRowCnt(IVr);
-  
+	
+	if ((IV2r.OKFlag!=0) and (IVr.OKFlag==0) and IVr.InvType!=kInvoiceTypeCredit) then begin 
+		if(nonblank(IVr.LoyaltyCardNr))then begin
+			blockload(OTDr);
+			mtrw = MatRowCnt(OTDr);
+			LCr.SerNr =	IVr.LoyaltyCardNr;
+			if(readfirstmain(LCr,1,true))then begin
+				currloyaltpoints = LCr.PointsBalance - IVr.Sum4;
+				for (i=0;i<mtrw;i=i+1) begin
+					matrowget(OTDr,i,OTDrw);
+					if(LCr.PointsBalance>OTDrw.SumNotOneTime and currloyaltpoints<OTDrw.SumNotOneTime)then begin
+						testf = true;
+						sum4chkIVr.CustCode = IVr.CustCode;
+						while (loopkey("CustCode",sum4chkIVr,1,testf))begin
+							if(sum4chkIVr.Sum4>OTDrw.Sum)then begin testf = false; end;
+						end;
+						if(testf==true)then begin
+							messagebox(0,"Џо баллансу при утверждении сч/ф была присвоена скидка: " & OTDrw.RebCode);
+						end;
+						i = mtrw;
+					end;
+				end;
+			end;
+		end; 
+	end;
+	if ((IV2r.OKFlag==0) and (IVr.OKFlag!=0) and IVr.InvType==kInvoiceTypeCredit) then begin 
+		if(nonblank(IVr.LoyaltyCardNr))then begin
+			blockload(OTDr);
+			mtrw = MatRowCnt(OTDr);
+			LCr.SerNr =	IVr.LoyaltyCardNr;
+			if(readfirstmain(LCr,1,true))then begin
+				currloyaltpoints = LCr.PointsBalance - IVr.Sum4;
+				for (i=0;i<mtrw;i=i+1) begin
+					matrowget(OTDr,i,OTDrw);
+					if(LCr.PointsBalance>OTDrw.SumNotOneTime and currloyaltpoints<OTDrw.SumNotOneTime)then begin
+						testf = true;
+						sum4chkIVr.CustCode = IVr.CustCode;
+						while (loopkey("CustCode",sum4chkIVr,1,testf))begin
+							if(sum4chkIVr.Sum4>OTDrw.Sum)then begin testf = false; end;
+						end;
+						if(testf==true)then begin
+							messagebox(0,"Џо баллансу при утверждении сч/ф была присвоена скидка: " & OTDrw.RebCode);
+						end;
+						i = mtrw;
+					end;
+				end;
+			end;
+		end; 
+	end;
+	
+	
+	
+	
   if (TouchScreenLook) then begin //Edit***************************Sasha2,15:43 25.03.2015 {
     testf = true;
     if (IVr.OKFlag==1) then begin
