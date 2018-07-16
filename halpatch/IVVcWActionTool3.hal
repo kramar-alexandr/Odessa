@@ -1946,16 +1946,21 @@ procedure IVVcRebCodeCound(var record IVVc IVr)
 begin
 	row OneTimeDiscBlock	OTDrw;
 	record CUVc				CUr;
-	integer					mtrw, i,sum;
+	integer					mtrw, i,sum,allsum;
 	record OneTimeDiscBlock	OTDr;
 	record	RebVc			Rebr;
 	val						CU_Rebcode;
 	val 					OTD_Rebcode;
 	boolean changed;
+	record LoyaltyCardVc LCr;
 	
 	if (IVr.InvType!=kInvoiceTypeCredit) then begin
-		
+		allsum = 0;
 		CUr.Code = IVr.CustCode;
+		if (nonblank(IVr.LoyaltyCardNr))then begin
+			LCr.SerNr =	IVr.LoyaltyCardNr;
+			if(readfirstmain(LCr,1,true))then begin end;
+		end;
 		if (readfirstmain(CUr,1,true)) then begin
 		end;
 		if(CUr.Code!="EXPO" and CUr.Code!="EXPO1")then begin
@@ -1967,6 +1972,7 @@ begin
 		
 				BlockLoad(OTDr);
 				sum = IVVcCountSum(IVr);
+				allsum = sum + LCr.PointsBalance;
 				Rebr.Code = CUr.RebCode;
 				if (readfirstmain(Rebr,1,true)) then begin
 					CU_Rebcode = Rebr.vra0;
@@ -1982,6 +1988,19 @@ begin
 								if (CU_Rebcode < OTD_Rebcode) then begin
 									IVr.RebCode = OTDrw.RebCode;
 									changed = true;
+								end;
+							end;
+						end else begin
+							if (allsum >= OTDrw.SumNotOneTime)then begin
+								messagebox(0,"I");
+								Rebr.Code = OTDrw.RebCode;
+								if (readfirstmain(Rebr,1,true)) then begin
+									OTD_Rebcode = Rebr.vra0;
+									if (CU_Rebcode < OTD_Rebcode) then begin
+										messagebox(0,"II " & allsum);
+										IVr.RebCode = OTDrw.RebCode;
+										changed = true;
+									end;
 								end;
 							end;
 						end;

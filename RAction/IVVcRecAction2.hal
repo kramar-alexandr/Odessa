@@ -676,20 +676,26 @@ end;
 
 global updating procedure RecalcCustomRebate(var record IVVc IVr)
 begin
-	integer 	  			sum,i,mtrw; // Edit Dima ************* 2018-02-21 11:17 AM
+	integer 	  			sum,i,mtrw,allsum; // Edit Dima ************* 2018-02-21 11:17 AM
 	row OneTimeDiscBlock	OTDrw;
   record OneTimeDiscBlock	OTDr;
 	record	RebVc			Rebr;
 	val						CU_Rebcode;
 	val 					OTD_Rebcode;
 	record CUVc CUr; // Edit Dima ************* 2018-02-21 11:14 AM
+	record LoyaltyCardVc LCr;
 	
 	if(IVr.CustCode!="NONAME" and IVr.CustCode!="EXPO" and IVr.CustCode!="EXPO1")then begin// Edit ************************** BPI Ukraine - KramarAlexandr - Wednesday, 21 February 2018 15:57:19
 		CUr.Code = IVr.CustCode;
 		readfirstmain(CUr,1,true);
 		if (CUr.ManualRecountClient==0) then begin
 			if(CUr.CustCat=="WEB" or CUr.CustCat=="RETAI")then begin
+				if (nonblank(IVr.LoyaltyCardNr))then begin
+					LCr.SerNr =	IVr.LoyaltyCardNr;
+					if(readfirstmain(LCr,1,true))then begin end;
+				end;
 				sum = IVVcCountSum(IVr);
+				allsum = sum + LCr.PointsBalance;
 				BlockLoad(OTDr);
 				Rebr.Code = CUr.RebCode;
 				if (readfirstmain(Rebr,1,true)) then begin
@@ -711,6 +717,18 @@ begin
 									CUr.IVVcOneTimeDisc = OTDrw.RebCode;
 									IVr.OneTimeReb = 1;
 									RecordStore(CUr,true);
+								end;
+							end;
+						end else begin
+							if(allsum >= OTDrw.SumNotOneTime)then begin
+								Rebr.Code = OTDrw.RebCode;
+								if (readfirstmain(Rebr,1,true)) then begin
+									OTD_Rebcode = Rebr.vra0;
+									if (CU_Rebcode <= OTD_Rebcode) then begin
+										CUr.RebCode = OTDrw.RebCode;
+										CUr.LastDateChangeDiscount = CurrentDate;
+										RecordStore(CUr,true);
+									end;
 								end;
 							end;
 						end;
