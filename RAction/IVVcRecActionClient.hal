@@ -280,7 +280,7 @@ begin
 					matrowget(OTDr,i,OTDrw);
 					if(LCr.PointsBalance>OTDrw.SumNotOneTime and currloyaltpoints<OTDrw.SumNotOneTime)then begin
 						testf = true;
-						messagebox(0,"По баллансу при утверждении сч/ф могла быть присвоена скидка!");
+						messagebox(0,"Используется скидка!");
 						sum4chkIVr.CustCode = IVr.CustCode;
 						while (loopkey("CustCode",sum4chkIVr,1,testf))begin
 							if(sum4chkIVr.Sum4>OTDrw.Sum)then begin testf = false; end;
@@ -306,7 +306,7 @@ begin
 					matrowget(OTDr,i,OTDrw);
 					if(LCr.PointsBalance>OTDrw.SumNotOneTime and currloyaltpoints<OTDrw.SumNotOneTime)then begin
 						testf = true;
-						messagebox(0,"По баллансу при утверждении сч/ф могла быть присвоена скидка!");
+						messagebox(0,"Используется скидка!");
 						sum4chkIVr.CustCode = IVr.CustCode;
 						while (loopkey("CustCode",sum4chkIVr,1,testf))begin
 							if(sum4chkIVr.Sum4>OTDrw.Sum)then begin testf = false; end;
