@@ -1992,12 +1992,10 @@ begin
 							end;
 						end else begin
 							if (allsum >= OTDrw.SumNotOneTime)then begin
-								messagebox(0,"I");
 								Rebr.Code = OTDrw.RebCode;
 								if (readfirstmain(Rebr,1,true)) then begin
 									OTD_Rebcode = Rebr.vra0;
 									if (CU_Rebcode < OTD_Rebcode) then begin
-										messagebox(0,"II " & allsum);
 										IVr.RebCode = OTDrw.RebCode;
 										changed = true;
 									end;
