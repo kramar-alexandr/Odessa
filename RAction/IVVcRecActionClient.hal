@@ -278,12 +278,12 @@ begin
 				currloyaltpoints = LCr.PointsBalance - IVr.Sum4;
 				for (i=0;i<mtrw;i=i+1) begin
 					matrowget(OTDr,i,OTDrw);
-					if(LCr.PointsBalance>OTDrw.SumNotOneTime and currloyaltpoints<OTDrw.SumNotOneTime)then begin
+					if(LCr.PointsBalance>=OTDrw.SumNotOneTime and currloyaltpoints<OTDrw.SumNotOneTime)then begin
 						testf = true;
 						messagebox(0,"Используется скидка!");
 						sum4chkIVr.CustCode = IVr.CustCode;
 						while (loopkey("CustCode",sum4chkIVr,1,testf))begin
-							if(sum4chkIVr.Sum4>OTDrw.Sum)then begin testf = false; end;
+							if(sum4chkIVr.Sum4>=OTDrw.Sum)then begin testf = false; end;
 						end;
 						ResetLoop(sum4chkIVr);
 						if(testf)then begin
@@ -304,12 +304,12 @@ begin
 				currloyaltpoints = LCr.PointsBalance - IVr.Sum4;
 				for (i=0;i<mtrw;i=i+1) begin
 					matrowget(OTDr,i,OTDrw);
-					if(LCr.PointsBalance>OTDrw.SumNotOneTime and currloyaltpoints<OTDrw.SumNotOneTime)then begin
+					if(LCr.PointsBalance>=OTDrw.SumNotOneTime and currloyaltpoints<OTDrw.SumNotOneTime)then begin
 						testf = true;
 						messagebox(0,"Используется скидка!");
 						sum4chkIVr.CustCode = IVr.CustCode;
 						while (loopkey("CustCode",sum4chkIVr,1,testf))begin
-							if(sum4chkIVr.Sum4>OTDrw.Sum)then begin testf = false; end;
+							if(sum4chkIVr.Sum4>=OTDrw.Sum)then begin testf = false; end;
 						end;
 						if(testf==true)then begin
 							messagebox(0,"По баллансу при утверждении сч/ф была присвоена скидка: " & OTDrw.RebCode);
