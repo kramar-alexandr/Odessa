@@ -280,7 +280,7 @@ begin
 					matrowget(OTDr,i,OTDrw);
 					if(LCr.PointsBalance>=OTDrw.SumNotOneTime and currloyaltpoints<OTDrw.SumNotOneTime)then begin
 						testf = true;
-						messagebox(0,"Балланс баллов был изменен!");
+						messagebox(0,"Балланс накопительных баллов был изменен!");
 						sum4chkIVr.CustCode = IVr.CustCode;
 						while (loopkey("CustCode",sum4chkIVr,1,testf))begin
 							if(sum4chkIVr.Sum4>=OTDrw.Sum)then begin testf = false; end;
@@ -308,7 +308,7 @@ begin
 					matrowget(OTDr,i,OTDrw);
 					if(LCr.PointsBalance>=OTDrw.SumNotOneTime and currloyaltpoints<OTDrw.SumNotOneTime)then begin
 						testf = true;
-						messagebox(0,"Балланс баллов был изменен!");
+						messagebox(0,"Балланс накопительных баллов был изменен!");
 						sum4chkIVr.CustCode = IVr.CustCode;
 						while (loopkey("CustCode",sum4chkIVr,1,testf))begin
 							if(sum4chkIVr.Sum4>=OTDrw.Sum)then begin testf = false; end;
@@ -337,7 +337,7 @@ begin
 					matrowget(OTDr,i,OTDrw);
 					if(LCr.PointsBalance>=OTDrw.SumNotOneTime and currloyaltpoints<OTDrw.SumNotOneTime)then begin
 						testf = true;
-						messagebox(0,"Балланс баллов был изменен!");
+						messagebox(0,"Балланс накопительных баллов был изменен!");
 						sum4chkIVr.CustCode = IVr.CustCode;
 						while (loopkey("CustCode",sum4chkIVr,1,testf))begin
 							if(sum4chkIVr.Sum4>=OTDrw.Sum)then begin testf = false; end;
