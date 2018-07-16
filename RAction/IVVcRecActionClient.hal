@@ -295,6 +295,37 @@ begin
 			end;
 		end; 
 	end;
+	
+	
+	if ((IV2r.OKFlag==0) and (IVr.OKFlag!=0) and IVr.InvType!=kInvoiceTypeCredit and IVr.Sum4<0) then begin 
+		if(nonblank(IVr.LoyaltyCardNr))then begin
+			blockload(OTDr);
+			mtrw = MatRowCnt(OTDr);
+			LCr.SerNr =	IVr.LoyaltyCardNr;
+			if(readfirstmain(LCr,1,true))then begin
+				currloyaltpoints = LCr.PointsBalance + IVr.Sum4;
+				for (i=0;i<mtrw;i=i+1) begin
+					matrowget(OTDr,i,OTDrw);
+					if(LCr.PointsBalance>=OTDrw.SumNotOneTime and currloyaltpoints<OTDrw.SumNotOneTime)then begin
+						testf = true;
+						messagebox(0,"Балланс баллов был изменен!");
+						sum4chkIVr.CustCode = IVr.CustCode;
+						while (loopkey("CustCode",sum4chkIVr,1,testf))begin
+							if(sum4chkIVr.Sum4>=OTDrw.Sum)then begin testf = false; end;
+						end;
+						ResetLoop(sum4chkIVr);
+						if(testf)then begin
+							messagebox(0,"По баллансу при покупке товаров была присвоена скидка: " & OTDrw.RebCode);
+						end;
+						i = mtrw;
+					end;
+				end;
+			end;
+		end; 
+	end;
+	
+	
+	
 	if ((IV2r.OKFlag==0) and (IVr.OKFlag!=0) and IVr.InvType==kInvoiceTypeCredit) then begin 
 		if(nonblank(IVr.LoyaltyCardNr))then begin
 			blockload(OTDr);
@@ -306,13 +337,13 @@ begin
 					matrowget(OTDr,i,OTDrw);
 					if(LCr.PointsBalance>=OTDrw.SumNotOneTime and currloyaltpoints<OTDrw.SumNotOneTime)then begin
 						testf = true;
-						messagebox(0,"Используется скидка!");
+						messagebox(0,"Балланс баллов был изменен!");
 						sum4chkIVr.CustCode = IVr.CustCode;
 						while (loopkey("CustCode",sum4chkIVr,1,testf))begin
 							if(sum4chkIVr.Sum4>=OTDrw.Sum)then begin testf = false; end;
 						end;
 						if(testf==true)then begin
-							messagebox(0,"По баллансу при утверждении сч/ф была присвоена скидка: " & OTDrw.RebCode);
+							messagebox(0,"По баллансу при утверждении оригинальной сч/ф была присвоена скидка: " & OTDrw.RebCode);
 						end;
 						i = mtrw;
 					end;
