@@ -241,7 +241,7 @@ global
 function LongInt IVVcRecordCheckClient(LongInt wn,record IVVc IVr,record IVVc IV2r,LongInt stat,LongInt errorcheck)
 begin
   LongInt res, currloyaltpoints;
-  Boolean checkf,testf,testfcleancashf;
+  Boolean checkf,testf,testfcleancashf,Retf;
   record IVVc credIVr, sum4chkIVr;
   record LocalMachineBlock LMb;
   record LSerialPortDeviceVc LSPDr;
@@ -297,8 +297,44 @@ begin
 	end;
 	
 	
-	if ((IV2r.OKFlag==0) and (IVr.OKFlag!=0) and IVr.InvType!=kInvoiceTypeCredit and IVr.Sum4<0) then begin 
+	if ((IV2r.OKFlag==0) and (IVr.OKFlag!=0) and IVr.InvType!=kInvoiceTypeCredit) then begin 
 		if(nonblank(IVr.LoyaltyCardNr))then begin
+			blockload(OTDr);
+			mtrw = MatRowCnt(OTDr);
+			LCr.SerNr =	IVr.LoyaltyCardNr;
+			if(readfirstmain(LCr,1,true))then begin
+				currloyaltpoints = LCr.PointsBalance + IVr.Sum4;
+				for (i=0;i<mtrw;i=i+1) begin
+					matrowget(OTDr,i,OTDrw);
+					if(LCr.PointsBalance<OTDrw.SumNotOneTime and currloyaltpoints>=OTDrw.SumNotOneTime)then begin
+						testf = true;
+						messagebox(0,"Балланс накопительных баллов был изменен!");
+						sum4chkIVr.CustCode = IVr.CustCode;
+						while (loopkey("CustCode",sum4chkIVr,1,testf))begin
+							if(sum4chkIVr.Sum4>=OTDrw.Sum)then begin testf = false; end;
+						end;
+						ResetLoop(sum4chkIVr);
+						if(testf)then begin
+							messagebox(0,"по сумме накопленных баллов присваевается скидка: " & OTDrw.RebCode);
+						end;
+						i = mtrw;
+					end;
+				end;
+			end;
+		end; 
+	end;
+	
+	
+	
+	
+	if ((IV2r.OKFlag==0) and (IVr.OKFlag!=0) and IVr.InvType!=kInvoiceTypeCredit and IVr.Sum4<0) then begin 
+		mtrw = matrowcnt(IVr);
+		Retf = false;
+		for (i=0;i<mtrw;i=i+1)begin
+			matrowget(IVr,i,IVrw);
+			if(IVrw.Quant<0)then begin Retf = true; end;
+		end;
+		if(nonblank(IVr.LoyaltyCardNr) and Retf)then begin
 			blockload(OTDr);
 			mtrw = MatRowCnt(OTDr);
 			LCr.SerNr =	IVr.LoyaltyCardNr;
