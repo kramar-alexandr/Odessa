@@ -354,8 +354,10 @@ begin
 					while(loopkey("ActCustCode",lLCr,1,TrHs1))begin
 						if(lLCr.CustCode!=LCr.CustCode)then begin TrHs1 = false; end;
 						
-						if(lLCr.SerNr!=LCr.SerNr)then begin
-							existother = existother & "," & lLCr.SerNr;
+						if(TrHs1)then begin
+							if(lLCr.SerNr!=LCr.SerNr)then begin
+								existother = existother & "," & lLCr.SerNr;
+							end;
 						end;
 					
 					end;
