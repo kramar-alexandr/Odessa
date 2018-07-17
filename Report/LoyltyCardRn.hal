@@ -395,8 +395,13 @@ begin
 					end;
 				end;
 				if(roundpointsum>0)then begin
+					if(AbsoluteVal(LCr.PointsBalance-pointsum-roundpointsum-tesval)<10)then begin
+						LCr.PointsBalance = pointsum + tesval;
+						logtext(0,"Fixoints " & LCr.SerNr & " " & LCr.PointsBalance);
+						//recordstore(LCr,true);
+					end;
 					if(AbsoluteVal(LCr.PointsBalance-pointsum-roundpointsum+tesval+notregbal)<10)then begin
-						LCr.PointsBalance = pointsum;
+						LCr.PointsBalance = pointsum + tesval + tesval;
 						logtext(0,"Fixoints " & LCr.SerNr & " " & LCr.PointsBalance);
 						//recordstore(LCr,true);
 					end;
