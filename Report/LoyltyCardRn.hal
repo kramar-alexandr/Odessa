@@ -409,22 +409,24 @@ begin
 						logtext(0,"Fixoints " & LCr.SerNr & " " & LCr.PointsBalance);
 					end;
 				end;*/
-				StartFormat(15);
-					OutString(0,"DblCUVc",CUr.Code,false);
-					OutString(70,"DblLCardVc",LCr.SerNr,false);
-					OutString(90,0,LCr.LCMLevel,false);
-					OutString(120,0,LCr.PointsBalance,false);
-					OutString(260,0,tesval,true);
-					OutString(320,0,currsum,true);
-					OutString(370,0,notregbal,true);
-					OutString(400,0,disbalans,true);
-					OutString(1,0,CUr.RebCode,true);
-					OutString(1,0,LCr.CustName,true);
-					OutString(1,0,existother,true);
-					//OutString(1,0,pointsum,true);
-					//OutString(1,0,roundpointsum,true);
-					//OutString(1,0,dateerror,true);
-				EndFormat;
+				if(disbalans!=0)then begin
+					StartFormat(15);
+						OutString(0,"DblCUVc",CUr.Code,false);
+						OutString(70,"DblLCardVc",LCr.SerNr,false);
+						OutString(90,0,LCr.LCMLevel,false);
+						OutString(120,0,LCr.PointsBalance,false);
+						OutString(260,0,tesval,true);
+						OutString(320,0,currsum,true);
+						OutString(370,0,notregbal,true);
+						OutString(400,0,disbalans,true);
+						OutString(1,0,CUr.RebCode,true);
+						OutString(1,0,LCr.CustName,true);
+						OutString(1,0,existother,true);
+						//OutString(1,0,pointsum,true);
+						//OutString(1,0,roundpointsum,true);
+						//OutString(1,0,dateerror,true);
+					EndFormat;
+				end;
 
 
 			end;
