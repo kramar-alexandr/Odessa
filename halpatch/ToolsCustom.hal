@@ -4419,7 +4419,7 @@ Begin
 	record LoyaltyCardVc LCr;
 	boolean testf,TrHs,testf1,changef;
 	val lastpoints;
-	val currsum,credsum;
+	val currsum,credsum,tesval;
 	
 	LCr.SerNr = "LC";
 	while(loopmain(LCr,1,true))begin
@@ -4466,7 +4466,9 @@ Begin
 						//Logtext(0,CUr.Code & "_ _" & LCr.SerNr & "_ _" & LCr.PointsBalance & "_ _" & lastpoints & "_ _" & currsum & "_ _" & credsum & "_ _" & CUr.Comment1);
 						
 						if(nonblank(CUr.Comment1))then begin
-							if((currsum + evaltoval(CUr.Comment1))==LCr.PointsBalance)then begin
+							tesval = LCr.PointsBalance - currsum - evaltoval(CUr.Comment1);
+							tesval = AbsoluteVal(tesval);
+							if(tesval<10)then begin
 								Logtext(0,CUr.Code & "_ _" & LCr.SerNr & "_ _" & LCr.PointsBalance & "_ _" & lastpoints & "_ _" & currsum & "_ _" & credsum & "_ _" & CUr.Comment1);
 							end;
 						end;
