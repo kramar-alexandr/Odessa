@@ -325,12 +325,18 @@ begin
 									//recordstore(IVr,true);
 									logtext(0,"IVrUpdsate " & IVr.SerNr);
 									if(IVr.InvType==kInvoiceTypeCredit)then begin
-										//LCr.PointsBalance = LCr.PointsBalance - IVr.Points;
+										LCr.PointsBalance = LCr.PointsBalance - IVr.Points;
 									end else begin
-										//LCr.PointsBalance = LCr.PointsBalance + IVr.Points;
+										LCr.PointsBalance = LCr.PointsBalance + IVr.Points;
 									end;
 								end;
 							end;
+							
+							disbalans = LCr.PointsBalance - currsum - tesval;
+							if(AbsoluteVal(disbalans)<20)then begin
+								LCr.PointsBalance = currsum - tesval;
+							end;
+							
 						end;
 					end;
 				end;
