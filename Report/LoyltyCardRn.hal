@@ -395,7 +395,7 @@ begin
 					end;
 				end;
 				if(roundpointsum>0)then begin
-					if(LCr.PointsBalance==pointsum+roundpointsum)then begin
+					if(AbsoluteVal(LCr.PointsBalance-pointsum-roundpointsum)<10)then begin
 						LCr.PointsBalance = pointsum;
 						logtext(0,"Fixoints " & LCr.SerNr & " " & LCr.PointsBalance);
 					end;
