@@ -298,12 +298,12 @@ begin
 					tesval = stringtoval(CUr.Comment1,M4Val);
 				end;
 				disbalans = LCr.PointsBalance - currsum - tesval;
-				if(AbsoluteVal(disbalans)<20)then begin
+				/*if(AbsoluteVal(disbalans)<20)then begin
 					if(LCr.LCMLevel=="1")then begin
 						LCr.PointsBalance = currsum + tesval;
 						recordstore(LCr,true);
 					end;
-				end;
+				end;*/
 				StartFormat(15);
 					OutString(0,"DblCUVc",CUr.Code,false);
 					OutString(70,"DblLCardVc",LCr.SerNr,false);
@@ -312,7 +312,7 @@ begin
 					OutString(260,0,tesval,true);
 					OutString(320,0,currsum,true);
 					OutString(370,0,notregbal,true);
-					OutString(400,0,LCr.PointsBalance - currsum - tesval + notregbal,true);
+					OutString(400,0,disbalans + notregbal,true);
 					OutString(1,0,CUr.RebCode,true);
 				EndFormat;
 
