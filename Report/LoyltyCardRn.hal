@@ -304,6 +304,42 @@ begin
 						recordstore(LCr,true);
 					end;
 				end;*/
+				
+				if(len(LCr.SerNr)==13 and LCr.LCMLevel=="1")then begin
+					if(notregbal>0)then begin
+						if(LCr.PointsBalance<currsum)then begin
+							resetloop(IVr);
+							IVr.CustCode = CUr.Code;
+							TrHs1 = true;
+							while(loopkey("CustCode",IVr,1,TrHs1))begin
+								testf1 = true;
+								if(IVr.CustCode!=CUr.Code)then begin TrHs1 = false; testf1 = false; end;
+								if(IVr.OKFlag==0)then begin testf1 = false; end;
+								if(IVr.Invalid>0)then begin testf1 = false; end;
+								if(nonblank(IVr.LoyaltyCardNr))then begin testf1 = false; end;
+					
+								if(testf1)then begin
+									IVr.LoyaltyCardNr = LCr.SerNr;
+									IVr.Points = IVr.Sum4;
+									IVr.LCMLevel = LCr.LCMLevel;
+									//recordstore(IVr,true);
+									if(IVr.InvType==kInvoiceTypeCredit)then begin
+										LCr.PointsBalance = LCr.PointsBalance - IVr.Points;
+									end else begin
+										LCr.PointsBalance = LCr.PointsBalance + IVr.Points;
+									end;
+								end;
+								disbalans = LCr.PointsBalance - currsum - tesval;
+								if(AbsoluteVal(disbalans)<20)then begin
+									LCr.PointsBalance = currsum - tesval;
+									recordstore(LCr,true);
+									Logtext(0,"Fixed " & LCr.SerNr);
+								end;
+							end;
+						end;
+					end;
+				end;
+				disbalans = LCr.PointsBalance - currsum - tesval;
 				StartFormat(15);
 					OutString(0,"DblCUVc",CUr.Code,false);
 					OutString(70,"DblLCardVc",LCr.SerNr,false);
