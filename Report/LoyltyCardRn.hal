@@ -253,7 +253,10 @@ begin
 			if(RepSpec.f1!=LCr.SerNr)then begin
 				testf = false;
 			end;
-		end;		
+		end;	
+		if(LCr.Closed>0)then begin
+			testf = false;
+		end;	
 		
 		if(testf)then begin
 			CUr.Code = LCr.CustCode;
