@@ -156,11 +156,12 @@ begin
   string 20 card,customer;
 	record IVVc IVr;
 	record LoyaltyCardVc LCr,lLCr;
-	boolean testf1,changef,TrHs1;
+	boolean testf1,changef,TrHs1,Accs;
 	val lastpoints;
 	val currsum,credsum,tesval,notregbal,disbalans,pointsum,roundpointsum,dateerror;
-	string 255 skey,existother;
+	string 255 skey,existother,rectr,Lastsave;
   roundmode rnd;
+  record RHistVc RHistr;
   
   rnd = DefaultValRoundoff;
 	rnd.decimals = 0;
@@ -410,6 +411,16 @@ begin
 					end;
 				end;*/
 				if(disbalans!=0)then begin
+					Lastsave = "";
+					rectr = BuildRecordIdStr(LCr,currentcompany);
+					RHistr.RecidStr  = rectr;
+					while (LoopKey("RecidStr",RHistr,1,Accs)) begin
+						if (RHistr.RecidStr!=rectr) then begin Accs = false; end;
+						if (Accs) then begin
+							Lastsave = RHistr.User & " " & RHistr.TransDate;
+						end;
+					end;
+					
 					StartFormat(15);
 						OutString(0,"DblCUVc",CUr.Code,false);
 						OutString(70,"DblLCardVc",LCr.SerNr,false);
