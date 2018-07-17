@@ -305,7 +305,7 @@ begin
 					end;
 				end;*/
 				
-				if(len(LCr.SerNr)==13 and LCr.LCMLevel=="1")then begin
+				/*if(len(LCr.SerNr)==13 and LCr.LCMLevel=="1")then begin
 					if(notregbal>0)then begin
 						if(LCr.PointsBalance<currsum)then begin
 							resetloop(IVr);
@@ -343,7 +343,7 @@ begin
 							end;
 						end;
 					end;
-				end;
+				end;*/
 				disbalans = LCr.PointsBalance - currsum - tesval;
 				StartFormat(15);
 					OutString(0,"DblCUVc",CUr.Code,false);
