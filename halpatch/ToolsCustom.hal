@@ -4464,6 +4464,7 @@ Begin
 					
 					if(lastpoints==currsum+credsum*2)then begin
 						Logtext(0,CUr.Code & "_ _" & LCr.SerNr & "_ _" & LCr.PointsBalance & "_ _" & lastpoints & "_ _" & currsum & "_ _" & credsum);
+						recordstore(LCr,true);
 					end;
 					
 					//recordstore(LCr,true);
