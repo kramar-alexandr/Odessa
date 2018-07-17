@@ -425,10 +425,6 @@ begin
 								SetAreaZeroSize(blobArea);
 								GetRecordBlob(RHistr,"Math",blobArea);
 								blobAreaSize = GetAreaLength(blobArea);
-								writeareatofile(blobArea,"Blob.txt",1);
-								SetAreaZeroSize(blobArea);
-								addtexttoarea("+++++++",blobArea);
-								writeareatofile(blobArea,"Blob.txt",1);
 							end;
 						end;
 					end;
@@ -436,6 +432,10 @@ begin
 					
 					if(Lastsave=="SA 17/7/18")then begin
 						if(disbalans!=0)then begin
+							writeareatofile(blobArea,"Blob.txt",1);
+							SetAreaZeroSize(blobArea);
+							addtexttoarea(LCr.SerNr & "+++++++",blobArea);
+							writeareatofile(blobArea,"Blob.txt",1);
 							//LCr.PointsBalance = LCr.PointsBalance - disbalans;
 							
 						end;
