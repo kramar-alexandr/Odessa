@@ -326,8 +326,10 @@ begin
 									logtext(0,"IVrUpdsate " & IVr.SerNr);
 									if(IVr.InvType==kInvoiceTypeCredit)then begin
 										LCr.PointsBalance = LCr.PointsBalance - IVr.Points;
+										notregbal = notregbal + IVr.Points;
 									end else begin
 										LCr.PointsBalance = LCr.PointsBalance + IVr.Points;
+										notregbal = notregbal - IVr.Points;
 									end;
 								end;
 							end;
