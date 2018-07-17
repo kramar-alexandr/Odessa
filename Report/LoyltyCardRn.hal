@@ -388,11 +388,15 @@ begin
 										roundpointsum = roundpointsum - round(IVr.Points,rnd);
 									end else begin
 										pointsum = pointsum + IVr.Points;
-										roundpointsum = roundpointsum - round(IVr.Points,rnd);
+										roundpointsum = roundpointsum + round(IVr.Points,rnd);
 									end;
 								end;
 							end;
 					end;
+				end;
+				if(LCr.PointsBalance==pointsum+roundpointsum)then begin
+					LCr.PointsBalance = pointsum;
+					logtext(0,"Fixoints " & LCr.SerNr & " " & LCr.PointsBalance);
 				end;
 				StartFormat(15);
 					OutString(0,"DblCUVc",CUr.Code,false);
