@@ -4419,36 +4419,48 @@ Begin
 	record LoyaltyCardVc LCr;
 	boolean testf,TrHs,testf1,changef;
 	val lastpoints;
+	val currsum,credsum;
 	
 	LCr.SerNr = "LC";
 	while(loopmain(LCr,1,true))begin
 		if(left(LCr.SerNr,2)=="LC")then begin
 			CUr.Code = LCr.CustCode;
 			if(readfirstmain(CUr,1,true))then begin
+				currsum = blankval;
 				LCr.CustName = CUr.Name;
 				resetloop(IVr);
 				IVr.CustCode = CUr.Code;
 				TrHs = true;
 				changef = false;
 				lastpoints = LCr.PointsBalance;
+				credsum = blankval;
 				while(loopkey("CustCode",IVr,1,TrHs))begin
 					testf1 = true;
 					if(IVr.CustCode!=CUr.Code)then begin TrHs = false; testf1 = false; end;
 					if(IVr.OKFlag==0)then begin testf1 = false; end;
 					if(IVr.Invalid>0)then begin testf1 = false; end;
+					
+					if(testf1)then begin
+						if(IVr.InvType==kInvoiceTypeCredit)then begin 
+							currsum = currsum - IVr.Sum4;
+						end else begin
+							currsum = currsum + IVr.Sum4;
+						end;
+					end;
+					
 					if(nonblank(IVr.LoyaltyCardNr))then begin testf1 = false; end;
 					
 					if(testf1)then begin
 						if(IVr.InvType==kInvoiceTypeCredit)then begin 
 							
 							LCr.PointsBalance = LCr.PointsBalance - 2*IVr.Sum4;
+							credsum = credsum + IVr.Sum4;
 							changef = true;
 						end;
 					end;
 				end;
 				if(changef)then begin
-					Logtext(0,CUr.Code & "_ _" & LCr.SerNr & "_ _" & LCr.PointsBalance & " lst " & lastpoints);
-					Logtext(0,"|" & CUr.Name & "_ _" & CUr.Phone & "_ _" & CUr.AltPhone & "_ _" & CUr.Mobile & "_ _" & CUr.eMail);
+					Logtext(0,CUr.Code & "_ _" & LCr.SerNr & "_ _" & LCr.PointsBalance & "_ _" & lastpoints & "_ _" & currsum & "_ _" & credsum);
 					//recordstore(LCr,true);
 				end;
 			end;
