@@ -4461,17 +4461,21 @@ Begin
 				end;
 				if(changef)then begin
 					//Logtext(0,CUr.Code & "_ _" & LCr.SerNr & "_ _" & LCr.PointsBalance & "_ _" & lastpoints & "_ _" & currsum & "_ _" & credsum);
+					tesval = blankval;
+					if(nonblank(CUr.Comment1))then begin
+						tesval = evaltoval(CUr.Comment1);
+					end;
 					
-					if(lastpoints!=currsum)then begin
-						//Logtext(0,CUr.Code & "_ _" & LCr.SerNr & "_ _" & LCr.PointsBalance & "_ _" & lastpoints & "_ _" & currsum & "_ _" & credsum & "_ _" & CUr.Comment1);
+					if(lastpoints!=(currsum + tesval))then begin
+						Logtext(0,CUr.Code & "_ _" & LCr.SerNr & "_ _" & LCr.PointsBalance & "_ _" & lastpoints & "_ _" & currsum & "_ _" & credsum & "_ _" & CUr.Comment1);
 						
 						if(nonblank(CUr.Comment1))then begin
 							tesval = LCr.PointsBalance - currsum - evaltoval(CUr.Comment1);
 							tesval = AbsoluteVal(tesval);
-							Logtext(0,CUr.Code & "_ _" & LCr.SerNr & "_ _" & LCr.PointsBalance & "_ _" & lastpoints & "_ _" & currsum & "_ _" & credsum & "_ _" & CUr.Comment1 & "_ _" & tesval);
+							//Logtext(0,CUr.Code & "_ _" & LCr.SerNr & "_ _" & LCr.PointsBalance & "_ _" & lastpoints & "_ _" & currsum & "_ _" & credsum & "_ _" & CUr.Comment1 & "_ _" & tesval);
 							if(tesval<10)then begin
 								//Logtext(0,CUr.Code & "_ _" & LCr.SerNr & "_ _" & LCr.PointsBalance & "_ _" & lastpoints & "_ _" & currsum & "_ _" & credsum & "_ _" & CUr.Comment1);
-								recordstore(LCr,true);
+								//recordstore(LCr,true);
 							end;
 						end;
 						//recordstore(LCr,true);
