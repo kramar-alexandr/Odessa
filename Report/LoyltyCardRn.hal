@@ -244,6 +244,9 @@ begin
 	TrHs = true;
 	while(loopkey(skey,LCr,1,TrHs))begin
 		testf = true;
+		if(len(LCr.SerNr)!=13)then begin
+			testf = false;
+		end;
 		if(nonblank(RepSpec.f1) and RepSpec.f1!=LCr.SerNr)then begin
 			TrHs = false; testf = false;
 		end;
