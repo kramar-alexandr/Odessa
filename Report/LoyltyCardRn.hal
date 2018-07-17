@@ -401,7 +401,7 @@ begin
 						//recordstore(LCr,true);
 					end;*/
 					if(AbsoluteVal(LCr.PointsBalance-pointsum-roundpointsum-tesval-notregbal)<10)then begin
-						LCr.PointsBalance = roundpointsum + tesval + tesval;
+						LCr.PointsBalance = roundpointsum + tesval + notregbal;
 						logtext(0,"Fixoints " & LCr.SerNr & " " & LCr.PointsBalance);
 						//recordstore(LCr,true);
 					end;
