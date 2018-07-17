@@ -411,15 +411,17 @@ begin
 					end;
 				end;*/
 				if(disbalans!=0)then begin
-					Lastsave = "";
+					Lastsave = "-";
 					rectr = BuildRecordIdStr(LCr,currentcompany);
 					RHistr.RecidStr  = rectr;
+					Accs = true;
 					while (LoopKey("RecidStr",RHistr,1,Accs)) begin
 						if (RHistr.RecidStr!=rectr) then begin Accs = false; end;
 						if (Accs) then begin
 							Lastsave = RHistr.User & " " & RHistr.TransDate;
 						end;
 					end;
+					resetloop(RHistr);
 					
 					StartFormat(15);
 						OutString(0,"DblCUVc",CUr.Code,false);
