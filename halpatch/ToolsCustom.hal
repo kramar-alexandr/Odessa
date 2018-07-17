@@ -4462,7 +4462,7 @@ Begin
 				if(changef)then begin
 					//Logtext(0,CUr.Code & "_ _" & LCr.SerNr & "_ _" & LCr.PointsBalance & "_ _" & lastpoints & "_ _" & currsum & "_ _" & credsum);
 					
-					if(lastpoints!=currsum+credsum*2)then begin
+					if(lastpoints!=currsum)then begin
 						Logtext(0,CUr.Code & "_ _" & LCr.SerNr & "_ _" & LCr.PointsBalance & "_ _" & lastpoints & "_ _" & currsum & "_ _" & credsum);
 						//recordstore(LCr,true);
 					end;
