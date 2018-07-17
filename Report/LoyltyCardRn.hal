@@ -306,7 +306,7 @@ begin
 				end;*/
 				
 				if(len(LCr.SerNr)==13 and LCr.LCMLevel=="1")then begin
-					if(notregbal>0 and AbsoluteVal(disbalans+notregbal)<20)then begin
+					if(notregbal>0)then begin
 						if(LCr.PointsBalance<(currsum + tesval))then begin
 							resetloop(IVr);
 							IVr.CustCode = CUr.Code;
