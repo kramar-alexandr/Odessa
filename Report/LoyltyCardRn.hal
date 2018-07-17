@@ -306,8 +306,8 @@ begin
 				end;*/
 				
 				if(len(LCr.SerNr)==13 and LCr.LCMLevel=="1")then begin
-					if(notregbal>0 and disbalans==0)then begin
-						if(LCr.PointsBalance<currsum)then begin
+					if(notregbal>0 and AbsoluteVal(disbalans+notregbal)<20)then begin
+						if(LCr.PointsBalance<(currsum + tesval))then begin
 							resetloop(IVr);
 							IVr.CustCode = CUr.Code;
 							TrHs1 = true;
@@ -322,12 +322,12 @@ begin
 									IVr.LoyaltyCardNr = LCr.SerNr;
 									IVr.Points = IVr.Sum4;
 									IVr.LCMLevel = LCr.LCMLevel;
-									recordstore(IVr,true);
+									//recordstore(IVr,true);
 									logtext(0,"IVrUpdsate " & IVr.SerNr);
 									if(IVr.InvType==kInvoiceTypeCredit)then begin
-										LCr.PointsBalance = LCr.PointsBalance - IVr.Points;
+										//LCr.PointsBalance = LCr.PointsBalance - IVr.Points;
 									end else begin
-										LCr.PointsBalance = LCr.PointsBalance + IVr.Points;
+										//LCr.PointsBalance = LCr.PointsBalance + IVr.Points;
 									end;
 								end;
 							end;
