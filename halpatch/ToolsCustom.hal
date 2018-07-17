@@ -4460,7 +4460,12 @@ Begin
 					end;
 				end;
 				if(changef)then begin
-					Logtext(0,CUr.Code & "_ _" & LCr.SerNr & "_ _" & LCr.PointsBalance & "_ _" & lastpoints & "_ _" & currsum & "_ _" & credsum);
+					//Logtext(0,CUr.Code & "_ _" & LCr.SerNr & "_ _" & LCr.PointsBalance & "_ _" & lastpoints & "_ _" & currsum & "_ _" & credsum);
+					
+					if(LCr.PointsBalance==currsum+credsum*2)then begin
+						Logtext(0,CUr.Code & "_ _" & LCr.SerNr & "_ _" & LCr.PointsBalance & "_ _" & lastpoints & "_ _" & currsum & "_ _" & credsum);
+					end;
+					
 					//recordstore(LCr,true);
 				end;
 			end;
