@@ -316,7 +316,7 @@ begin
 								if(IVr.CustCode!=CUr.Code)then begin TrHs1 = false; testf1 = false; end;
 								if(IVr.OKFlag==0)then begin testf1 = false; end;
 								if(IVr.Invalid>0)then begin testf1 = false; end;
-								if(nonblank(IVr.LoyaltyCardNr))then begin testf1 = false; end;
+								if(blank(IVr.LoyaltyCardNr))then begin testf1 = false; end;
 					
 								if(testf1)then begin
 									IVr.LoyaltyCardNr = LCr.SerNr;
