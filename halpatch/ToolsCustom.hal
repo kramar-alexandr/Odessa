@@ -4466,9 +4466,14 @@ Begin
 						tesval = evaltoval(CUr.Comment1);
 					end;
 					
+					if(lastpoints-currsum-tesval!=0)then begin
+						Logtext(0,CUr.Code & "_ _" & LCr.SerNr & "_ _" & lastpoints & "_ _" & currsum & "_ _" & credsum & "_ _" & tesval);
+					
+					end;
+					
 					if(AbsoluteVal(LCr.PointsBalance-currsum-tesval)<5)then begin
-						Logtext(0,CUr.Code & "_ _" & LCr.SerNr & "_ _" & LCr.PointsBalance & "_ _" & lastpoints & "_ _" & currsum & "_ _" & credsum & "_ _" & CUr.Comment1);						
-						recordstore(LCr,true);
+						//Logtext(0,CUr.Code & "_ _" & LCr.SerNr & "_ _" & LCr.PointsBalance & "_ _" & lastpoints & "_ _" & currsum & "_ _" & credsum & "_ _" & CUr.Comment1);						
+						//recordstore(LCr,true);
 					end;
 					
 					//recordstore(LCr,true);
