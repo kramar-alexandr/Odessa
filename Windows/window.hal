@@ -5419,3 +5419,24 @@ begin
   EditField(200,v,-40,"Комм.",Normal,Comment,false,0);
   EndWindow;
 end;
+
+
+window LoyaltyCardRClass:1
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  real h,v,vm,vs;
+  WindowBegin("Определите отчет по накопительной карте",LoyaltyCardRClass,CGRcW,RcType);
+  SetWRect(20,80,400,250);
+  v = 6; vs = 20; h = 130;
+  //PeriodField(h,v,"Период");
+  EditFieldTL(h,v+=vs,100,"Накопит. карточка",M4UStr,Normal,50,f1,false,LoyaltyCardSClass);
+  EditFieldTL(h,v+=vs,100,"Клиент",M4UStr,Normal,50,f2,false,CUSClass);
+  //EditFieldTL(h,v+=vs,100,"Каиегор. кл.",M4UStr,Normal,11,f4,false,CCatSClass);
+  //EditFieldTL(h,v+=vs, 150,"Классификация",   M4UStr,Normal,50,f3,false,CClassSClass);
+  //EditFieldTL(h,v+=vs,100,"Склад",M4UStr,Normal,10,LastAcc,false,LocationSClass);
+  //ButtonFrame(h,vm=(v+=41),150,2,"Функция");
+  //RadioButton(h,v,0,0,"Сводный",ArtMode);
+  //RadioButton(h,v+=16,1,0,"Подробный",ArtMode);
+  //CheckBox(h,v+=30,0,"Показыв только карт-ки с транзакциями",flags[1]);
+  EndWindow;
+end;
