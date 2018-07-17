@@ -405,7 +405,7 @@ begin
 					end;
 				end;
 				if(dateerror>0 and disbalans>0)then begin
-					if(AbsoluteVal(disbalans-dateerror)<100)then begin
+					if(AbsoluteVal(disbalans-dateerror)<10)then begin
 						logtext(0,"Fixoints " & LCr.SerNr & " " & LCr.PointsBalance);
 					end;
 					/*if(AbsoluteVal(LCr.PointsBalance-pointsum-roundpointsum-tesval-notregbal)<10)then begin
