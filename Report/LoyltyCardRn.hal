@@ -158,7 +158,7 @@ begin
 	record LoyaltyCardVc LCr,lLCr;
 	boolean testf1,changef,TrHs1;
 	val lastpoints;
-	val currsum,credsum,tesval,notregbal,disbalans,pointsum,roundpointsum;
+	val currsum,credsum,tesval,notregbal,disbalans,pointsum,roundpointsum,dateerror;
 	string 255 skey,existother;
   roundmode rnd;
   
@@ -369,6 +369,7 @@ begin
 					resetloop(lLCr);
 				end;
 				pointsum = blankval;
+				dateerror = blankval;
 				roundpointsum = blankval;
 				if(len(LCr.SerNr)==13 and LCr.LCMLevel=="1")then begin
 					if(blank(existother))then begin
@@ -386,9 +387,15 @@ begin
 									if(IVr.InvType==kInvoiceTypeCredit)then begin
 										pointsum = pointsum - IVr.Points;
 										roundpointsum = roundpointsum - round(IVr.Points,rnd);
+										if(IVr.InvDate>=LCr.StartDate)then begin
+											dateerror = dateerror - round(IVr.Points,rnd);
+										end;
 									end else begin
 										pointsum = pointsum + IVr.Points;
 										roundpointsum = roundpointsum + round(IVr.Points,rnd);
+										if(IVr.InvDate>=LCr.StartDate)then begin
+											dateerror = dateerror + round(IVr.Points,rnd);
+										end;
 									end;
 								end;
 							end;
@@ -420,6 +427,7 @@ begin
 					OutString(1,0,existother,true);
 					OutString(1,0,pointsum,true);
 					OutString(1,0,roundpointsum,true);
+					OutString(1,0,dateerror,true);
 				EndFormat;
 
 
