@@ -371,7 +371,7 @@ begin
 					end;
 					resetloop(lLCr);
 				end;
-				pointsum = blankval;
+				/*pointsum = blankval;
 				dateerror = blankval;
 				roundpointsum = blankval;
 				if(len(LCr.SerNr)==13 and LCr.LCMLevel=="1")then begin
@@ -408,12 +408,7 @@ begin
 					if(AbsoluteVal(disbalans-dateerror)<10)then begin
 						logtext(0,"Fixoints " & LCr.SerNr & " " & LCr.PointsBalance);
 					end;
-					/*if(AbsoluteVal(LCr.PointsBalance-pointsum-roundpointsum-tesval-notregbal)<10)then begin
-						LCr.PointsBalance = roundpointsum + tesval + notregbal;
-						logtext(0,"Fixoints " & LCr.SerNr & " " & LCr.PointsBalance);
-						//recordstore(LCr,true);
-					end;*/
-				end;
+				end;*/
 				StartFormat(15);
 					OutString(0,"DblCUVc",CUr.Code,false);
 					OutString(70,"DblLCardVc",LCr.SerNr,false);
@@ -426,9 +421,9 @@ begin
 					OutString(1,0,CUr.RebCode,true);
 					OutString(1,0,LCr.CustName,true);
 					OutString(1,0,existother,true);
-					OutString(1,0,pointsum,true);
-					OutString(1,0,roundpointsum,true);
-					OutString(1,0,dateerror,true);
+					//OutString(1,0,pointsum,true);
+					//OutString(1,0,roundpointsum,true);
+					//OutString(1,0,dateerror,true);
 				EndFormat;
 
 
