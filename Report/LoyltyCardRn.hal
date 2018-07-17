@@ -297,7 +297,7 @@ begin
 				if(nonblank(CUr.Comment1))then begin
 					tesval = stringtoval(CUr.Comment1,M4Val);
 				end;
-				//disbalans = LCr.PointsBalance - currsum - tesval;
+				disbalans = LCr.PointsBalance - currsum - tesval;
 				/*if(AbsoluteVal(disbalans)<20)then begin
 					if(LCr.LCMLevel=="1")then begin
 						LCr.PointsBalance = currsum + tesval;
@@ -305,7 +305,7 @@ begin
 					end;
 				end;*/
 				
-				/*if(len(LCr.SerNr)==13 and LCr.LCMLevel=="1")then begin
+				if(len(LCr.SerNr)==13 and LCr.LCMLevel=="1")then begin
 					if(notregbal>0)then begin
 						if(LCr.PointsBalance<currsum)then begin
 							resetloop(IVr);
@@ -322,23 +322,28 @@ begin
 									IVr.LoyaltyCardNr = LCr.SerNr;
 									IVr.Points = IVr.Sum4;
 									IVr.LCMLevel = LCr.LCMLevel;
-									//recordstore(IVr,true);
+									recordstore(IVr,true);
 									if(IVr.InvType==kInvoiceTypeCredit)then begin
 										LCr.PointsBalance = LCr.PointsBalance - IVr.Points;
 									end else begin
 										LCr.PointsBalance = LCr.PointsBalance + IVr.Points;
 									end;
 								end;
-								disbalans = LCr.PointsBalance - currsum - tesval;
-								if(AbsoluteVal(disbalans)<20)then begin
-									LCr.PointsBalance = currsum - tesval;
-									recordstore(LCr,true);
-									Logtext(0,"Fixed " & LCr.SerNr);
+								if(AbsoluteVal(disbalans)>20)then begin
+									disbalans = LCr.PointsBalance - currsum - tesval;
+									if(AbsoluteVal(disbalans)<20)then begin
+										LCr.PointsBalance = currsum - tesval;
+										recordstore(LCr,true);
+										Logtext(0,"Fixed " & LCr.SerNr);
+									end else begin
+										Logtext(0,"Fixed " & LCr.SerNr);
+										recordstore(LCr,true); 
+									end;
 								end;
 							end;
 						end;
 					end;
-				end;*/
+				end;
 				disbalans = LCr.PointsBalance - currsum - tesval;
 				StartFormat(15);
 					OutString(0,"DblCUVc",CUr.Code,false);
@@ -348,7 +353,7 @@ begin
 					OutString(260,0,tesval,true);
 					OutString(320,0,currsum,true);
 					OutString(370,0,notregbal,true);
-					OutString(400,0,disbalans,true);
+					OutString(400,0,disbalans + notregbal,true);
 					OutString(1,0,CUr.RebCode,true);
 				EndFormat;
 
