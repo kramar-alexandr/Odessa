@@ -395,7 +395,7 @@ begin
 					end;
 				end;
 				if(roundpointsum>0)then begin
-					if(LCr.PointsBalance>(pointsum+tesval+notregbal))then begin
+					if(LCr.PointsBalance>(roundpointsum+pointsum))then begin
 						//LCr.PointsBalance = pointsum + tesval;
 						logtext(0,"Fixoints " & LCr.SerNr & " " & LCr.PointsBalance);
 						//recordstore(LCr,true);
