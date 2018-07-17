@@ -4468,8 +4468,9 @@ Begin
 						if(nonblank(CUr.Comment1))then begin
 							tesval = LCr.PointsBalance - currsum - evaltoval(CUr.Comment1);
 							tesval = AbsoluteVal(tesval);
+							Logtext(0,CUr.Code & "_ _" & LCr.SerNr & "_ _" & LCr.PointsBalance & "_ _" & lastpoints & "_ _" & currsum & "_ _" & credsum & "_ _" & CUr.Comment1 & "_ _" & tesval);
 							if(tesval<10)then begin
-								Logtext(0,CUr.Code & "_ _" & LCr.SerNr & "_ _" & LCr.PointsBalance & "_ _" & lastpoints & "_ _" & currsum & "_ _" & credsum & "_ _" & CUr.Comment1);
+								//Logtext(0,CUr.Code & "_ _" & LCr.SerNr & "_ _" & LCr.PointsBalance & "_ _" & lastpoints & "_ _" & currsum & "_ _" & credsum & "_ _" & CUr.Comment1);
 							end;
 						end;
 						//recordstore(LCr,true);
