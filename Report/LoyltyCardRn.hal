@@ -433,6 +433,7 @@ begin
 						OutString(1,0,CUr.RebCode,true);
 						OutString(1,0,LCr.CustName,true);
 						OutString(1,0,existother,true);
+						OutString(1,0,Lastsave,true);
 						//OutString(1,0,pointsum,true);
 						//OutString(1,0,roundpointsum,true);
 						//OutString(1,0,dateerror,true);
