@@ -157,7 +157,7 @@ begin
 	record LoyaltyCardVc LCr;
 	boolean testf1,changef,TrHs1;
 	val lastpoints;
-	val currsum,credsum,tesval;
+	val currsum,credsum,tesval,notregbal;
 	string 255 skey;
   
   StartReportJob(USetStr(19260));
@@ -216,6 +216,7 @@ begin
     OutString(120,0,"Текущие баллы",false);
     OutString(260,0,"Стартовый баланс клиента",true);
     OutString(320,0,"Сумма всех сч/ф",true);
+    OutString(370,0,"Неучтенные",true);
     OutString(400,0,"Дисбаланс по продажам",true);
     OutString(1,0,"Текущая скидка клиента",true);
   EndFormat;
@@ -269,6 +270,7 @@ begin
 				changef = false;
 				lastpoints = LCr.PointsBalance;
 				credsum = blankval;
+				notregbal = blankval;
 				while(loopkey("CustCode",IVr,1,TrHs1))begin
 					testf1 = true;
 					if(IVr.CustCode!=CUr.Code)then begin TrHs1 = false; testf1 = false; end;
@@ -278,8 +280,14 @@ begin
 					if(testf1)then begin
 						if(IVr.InvType==kInvoiceTypeCredit)then begin 
 							currsum = currsum - IVr.Sum4;
+							if(IVr.LoyaltyCardNr!=LCr.SerNr)then begin
+								notregbal = notregbal - IVr.Sum4;
+							end;
 						end else begin
 							currsum = currsum + IVr.Sum4;
+							if(IVr.LoyaltyCardNr!=LCr.SerNr)then begin
+								notregbal = notregbal + IVr.Sum4;
+							end;
 						end;
 					end;
 					
@@ -295,7 +303,8 @@ begin
 					OutString(120,0,LCr.PointsBalance,false);
 					OutString(260,0,tesval,true);
 					OutString(320,0,currsum,true);
-					OutString(400,0,LCr.PointsBalance - currsum - tesval,true);
+					OutString(370,0,notregbal,true);
+					OutString(400,0,LCr.PointsBalance - currsum - tesval + notregbal,true);
 					OutString(1,0,CUr.RebCode,true);
 				EndFormat;
 
