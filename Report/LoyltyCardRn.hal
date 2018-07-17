@@ -368,7 +368,7 @@ begin
 					end;
 					resetloop(lLCr);
 				end;
-				/*pointsum = blankval;
+				pointsum = blankval;
 				roundpointsum = blankval;
 				if(len(LCr.SerNr)==13 and LCr.LCMLevel=="1")then begin
 					if(blank(existother))then begin
@@ -395,12 +395,12 @@ begin
 					end;
 				end;
 				if(roundpointsum>0)then begin
-					if(AbsoluteVal(LCr.PointsBalance-pointsum-roundpointsum)<10)then begin
+					if(AbsoluteVal(LCr.PointsBalance-pointsum-roundpointsum-tesval)<10)then begin
 						LCr.PointsBalance = pointsum;
 						logtext(0,"Fixoints " & LCr.SerNr & " " & LCr.PointsBalance);
-						recordstore(LCr,true);
+						//recordstore(LCr,true);
 					end;
-				end;*/
+				end;
 				StartFormat(15);
 					OutString(0,"DblCUVc",CUr.Code,false);
 					OutString(70,"DblLCardVc",LCr.SerNr,false);
