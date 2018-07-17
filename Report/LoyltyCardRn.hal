@@ -158,8 +158,13 @@ begin
 	record LoyaltyCardVc LCr,lLCr;
 	boolean testf1,changef,TrHs1;
 	val lastpoints;
-	val currsum,credsum,tesval,notregbal,disbalans;
+	val currsum,credsum,tesval,notregbal,disbalans,pointsum,roundpointsum;
 	string 255 skey,existother;
+  roundmode rnd;
+  
+  rnd = DefaultValRoundoff;
+	rnd.decimals = 0;
+	rnd.mode = kRoundingModeTruncate;
   
   StartReportJob(USetStr(19260));
   points = 0;
@@ -363,6 +368,32 @@ begin
 					end;
 					resetloop(lLCr);
 				end;
+				pointsum = blankval;
+				roundpointsum = blankval;
+				if(len(LCr.SerNr)==13 and LCr.LCMLevel=="1")then begin
+					if(blank(existother))then begin
+						resetloop(IVr);
+							IVr.CustCode = CUr.Code;
+							TrHs1 = true;
+							while(loopkey("CustCode",IVr,1,TrHs1))begin
+								testf1 = true;
+								if(IVr.CustCode!=CUr.Code)then begin TrHs1 = false; testf1 = false; end;
+								if(IVr.OKFlag==0)then begin testf1 = false; end;
+								if(IVr.Invalid>0)then begin testf1 = false; end;
+								if(blank(IVr.LoyaltyCardNr!=LCr.SerNr))then begin testf1 = false; end;
+					
+								if(testf1)then begin
+									if(IVr.InvType==kInvoiceTypeCredit)then begin
+										pointsum = pointsum - IVr.Points;
+										roundpointsum = roundpointsum - round(IVr.Points,rnd);
+									end else begin
+										pointsum = pointsum + IVr.Points;
+										roundpointsum = roundpointsum - round(IVr.Points,rnd);
+									end;
+								end;
+							end;
+					end;
+				end;
 				StartFormat(15);
 					OutString(0,"DblCUVc",CUr.Code,false);
 					OutString(70,"DblLCardVc",LCr.SerNr,false);
@@ -375,6 +406,8 @@ begin
 					OutString(1,0,CUr.RebCode,true);
 					OutString(1,0,LCr.CustName,true);
 					OutString(1,0,existother,true);
+					OutString(1,0,pointsum,true);
+					OutString(1,0,roundpointsum,true);
 				EndFormat;
 
 
