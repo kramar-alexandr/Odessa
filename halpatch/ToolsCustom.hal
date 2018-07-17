@@ -4471,6 +4471,7 @@ Begin
 							Logtext(0,CUr.Code & "_ _" & LCr.SerNr & "_ _" & LCr.PointsBalance & "_ _" & lastpoints & "_ _" & currsum & "_ _" & credsum & "_ _" & CUr.Comment1 & "_ _" & tesval);
 							if(tesval<10)then begin
 								//Logtext(0,CUr.Code & "_ _" & LCr.SerNr & "_ _" & LCr.PointsBalance & "_ _" & lastpoints & "_ _" & currsum & "_ _" & credsum & "_ _" & CUr.Comment1);
+								recordstore(LCr,true);
 							end;
 						end;
 						//recordstore(LCr,true);
