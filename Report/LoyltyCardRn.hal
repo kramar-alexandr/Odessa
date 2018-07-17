@@ -322,7 +322,7 @@ begin
 									IVr.LoyaltyCardNr = LCr.SerNr;
 									IVr.Points = IVr.Sum4;
 									IVr.LCMLevel = LCr.LCMLevel;
-									//recordstore(IVr,true);
+									recordstore(IVr,true);
 									logtext(0,"IVrUpdsate " & IVr.SerNr);
 									if(IVr.InvType==kInvoiceTypeCredit)then begin
 										LCr.PointsBalance = LCr.PointsBalance - IVr.Points;
@@ -338,6 +338,7 @@ begin
 							if(AbsoluteVal(disbalans)<20)then begin
 								LCr.PointsBalance = currsum - tesval;
 							end;
+							recordstore(LCr,true);
 							
 						end;
 					end;
