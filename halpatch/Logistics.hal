@@ -649,7 +649,9 @@ begin
 	readfirstmain(SMr,1,true);
 	RecordCopy(oldSMr,SMr);
 	SMr.StopAutoComplite = 1;
-	TableSortAscending_StockMov(SMr,"ArtCode");
+	if(SMr.FrLocation=="1-KOC")then begin
+		TableSortAscending_StockMov(SMr,"ArtCode");
+	end;
 	StockMovBoxingQty(SMr);// Edit ************************** Thursday, 27 April 2017 10:12:29 Poprosili ubrat
 	//// Edit ************************** BPI Ukraine - KramarAlexandr - 03, 18 07 2018 vkluchil, no krome tovarov s classification STOP and SALE
 	RecordUpdate(oldSMr,SMr,true);
