@@ -573,6 +573,7 @@ begin
 	record INVc INr;
 	val dif;
 	record ItemStatusVc ISr;
+	boolean toboxing;
 		
 	mtrw = matrowcnt(SMr);
 	For(i=0;i<mtrw;i=i+1) begin
@@ -590,12 +591,20 @@ begin
 	  	
 	  	INr.Code = SMrw.ArtCode;
 	  	if(readfirstmain(INr,1,true))then begin
-	  		if(INr.AddUnittext3=="“")then begin
-	  			boxqty[SMrw.ArtCode] = INr.AddUnitCoef3;
-	  		end else begin
-	  			if(INr.AddUnittext2=="“")then begin
-						boxqty[SMrw.ArtCode] = INr.AddUnitCoef2;
+	  		toboxing = true;
+	  		if(setinset("SALE",INr.DispGroups))then begin toboxing = false; end;
+				if(setinset("STOP",INr.DispGroups))then begin toboxing = false; end;
+
+	  		if(toboxing)then begin
+					if(INr.AddUnittext3=="“")then begin
+						boxqty[SMrw.ArtCode] = INr.AddUnitCoef3;
+					end else begin
+						if(INr.AddUnittext2=="“")then begin
+							boxqty[SMrw.ArtCode] = INr.AddUnitCoef2;
+						end;
 					end;
+	  		end else begin
+	  			boxqty[SMrw.ArtCode] = 1;
 	  		end;
 	  	end;
 	  end;
@@ -641,7 +650,8 @@ begin
 	RecordCopy(oldSMr,SMr);
 	SMr.StopAutoComplite = 1;
 	TableSortAscending_StockMov(SMr,"ArtCode");
-	//StockMovBoxingQty(SMr);// Edit ************************** Thursday, 27 April 2017 10:12:29 Poprosili ubrat
+	StockMovBoxingQty(SMr);// Edit ************************** Thursday, 27 April 2017 10:12:29 Poprosili ubrat
+	//// Edit ************************** BPI Ukraine - KramarAlexandr - 03, 18 07 2018 vkluchil, no krome tovarov s classification STOP and SALE
 	RecordUpdate(oldSMr,SMr,true);
 
 
