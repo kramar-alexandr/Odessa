@@ -247,9 +247,9 @@ begin
 	TrHs = true;
 	while(loopkey(skey,LCr,1,TrHs))begin
 		testf = true;
-		if(len(LCr.SerNr)!=13)then begin
+		/*if(len(LCr.SerNr)!=13)then begin
 			testf = false;
-		end;
+		end;*/
 		if(nonblank(RepSpec.f1) and RepSpec.f1!=LCr.SerNr)then begin
 			TrHs = false; testf = false;
 		end;
@@ -412,8 +412,8 @@ begin
 						logtext(0,"Fixoints " & LCr.SerNr & " " & LCr.PointsBalance);
 					end;
 				end;*/
-				if(disbalans!=0)then begin
-					Lastsave = "-";
+				//if(disbalans!=0)then begin
+					/*Lastsave = "-";
 					rectr = BuildRecordIdStr(LCr,currentcompany);
 					RHistr.RecidStr  = rectr;
 					Accs = true;
@@ -428,9 +428,9 @@ begin
 							end;
 						end;
 					end;
-					resetloop(RHistr);
+					resetloop(RHistr);*/
 					
-					if(Lastsave=="SA 17/7/18")then begin
+					/*if(Lastsave=="SA 17/7/18")then begin
 						if(disbalans!=0)then begin
 							writeareatofile(blobArea,"Blob.txt",1);
 							SetAreaZeroSize(blobArea);
@@ -439,7 +439,7 @@ begin
 							//LCr.PointsBalance = LCr.PointsBalance - disbalans;
 							
 						end;
-					end;
+					end;*/
 					StartFormat(15);
 						OutString(0,"DblCUVc",CUr.Code,false);
 						OutString(70,"DblLCardVc",LCr.SerNr,false);
@@ -452,12 +452,12 @@ begin
 						OutString(1,0,CUr.RebCode,true);
 						OutString(1,0,LCr.CustName,true);
 						OutString(1,0,existother,true);
-						OutString(1,0,Lastsave,true);
+						//OutString(1,0,Lastsave,true);
 						//OutString(1,0,pointsum,true);
 						//OutString(1,0,roundpointsum,true);
 						//OutString(1,0,dateerror,true);
 					EndFormat;
-				end;
+				//end;
 
 
 			end;
