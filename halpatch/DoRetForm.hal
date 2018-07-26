@@ -42,6 +42,7 @@ BEGIN
   row SHVc SHrw;
   record ORVc ORr;// Edit ************************** BPI Ukraine - KramarAlexandr - Thursday, 26 July 2018 13:23:30
   row ORVc ORrw;// Edit ************************** BPI Ukraine - KramarAlexandr - Thursday, 26 July 2018 13:23:42
+  val totalsum;
   
   SHr.SerNr = Retr.SHNr;
   ReadFirstMain(SHr,1,true);
@@ -64,6 +65,7 @@ BEGIN
     	OUTFORMFIELD("MYF_ORDPRICE",ORrw.Price);// Edit ************************** BPI Ukraine - KramarAlexandr - Thursday, 26 July 2018 13:27:15
     	OUTFORMFIELD("MYF_ORDREBATE",ORrw.vRebate);
     	OUTFORMFIELD("MYF_ORDSUM",round(ORrw.Sum/ORrw.Quant*Retrw.Quant,defaultcurroundoff));// Edit ************************** BPI Ukraine - KramarAlexandr - Thursday, 26 July 2018 13:27:15
+    	totalsum = totalsum + round(ORrw.Sum/ORrw.Quant*Retrw.Quant,defaultcurroundoff);
     	
       INr.Code = Retrw.ArtCode;
       if (ReadFirstMain(INr,1,true)) then begin
@@ -144,7 +146,10 @@ BEGIN
       OUTFORMFIELD("F_BESTBEFORE",SHrw.BestBefore);
             
       EndFormRow;
-  end;    
+  end;   
+  
+  OUTFORMFIELD("MYF_ORDTOTALSUM",totalsum);
+   
   RETURN;
 END;
 
