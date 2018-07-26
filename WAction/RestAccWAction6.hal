@@ -777,7 +777,7 @@ begin
   CutPaper = chr(29) & chr(86) & chr(49); //cut chr(27) & chr(105);
   CashBox = chr(27) & chr(112) & chr(0) & chr(25) & chr(250); //ESC p   old chr(27) & chr(112) & chr(0);
   barcode = chr(29) & "k" & chr(73) & chr(len(IVp.OfficialSerNr)) & IVp.OfficialSerNr;// GS k CODE128 len IVp.OfficialSerNr
-  barcodeheight = chr(29) & "h" & chr(80);
+  barcodeheight = chr(29) & "h" & chr(55);
   
   Error = OutComPort(1,StandardMode);
   Error = OutComPort(1,chr(27) & chr(116) & chr(17)); //code page
