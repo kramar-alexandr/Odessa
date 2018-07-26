@@ -966,7 +966,7 @@ begin
 	
 	if(LMr.Code=="KV1" or LMr.Code=="KV2")then begin
 		s = barcode;
-		Error = OutComPort(1,s & chr(10)); s ="";
+		Error = OutComPort(1,s); s ="";
   end;
   
   
