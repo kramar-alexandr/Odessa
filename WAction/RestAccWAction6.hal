@@ -776,7 +776,7 @@ begin
   FormFeed =  chr(27) & chr(100) & chr(5);
   CutPaper = chr(29) & chr(86) & chr(49); //cut chr(27) & chr(105);
   CashBox = chr(27) & chr(112) & chr(0) & chr(25) & chr(250); //ESC p   old chr(27) & chr(112) & chr(0);
-  barcode = chr(29) & "k" & chr(73) & len(IVp.OfficialSerNr) & IVp.OfficialSerNr;// GS k CODE128 len IVp.OfficialSerNr
+  barcode = chr(29) & "k" & chr(73) & chr(len(IVp.OfficialSerNr)) & IVp.OfficialSerNr;// GS k CODE128 len IVp.OfficialSerNr
   
   Error = OutComPort(1,StandardMode);
   Error = OutComPort(1,chr(27) & chr(116) & chr(17)); //code page
@@ -964,9 +964,11 @@ begin
   	Error = OutComPort(1,s & chr(10)); s ="";
 	end;
 	
-	if(LMr.Code=="KV1" or LMr.Code=="KV2")then begin
-		s = barcode;
-		Error = OutComPort(1,s); s ="";
+	if(nonblank(IVp.OfficialSerNr))then begin
+		if(LMr.Code=="KV1" or LMr.Code=="KV2")then begin
+			s = barcode;
+			Error = OutComPort(1,s); s ="";
+		end;
   end;
   
   
