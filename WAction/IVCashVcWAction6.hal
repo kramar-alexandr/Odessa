@@ -2628,14 +2628,18 @@ begin
 	GetWindowRecord(wn,RepSpec);
 	IVr.OfficialSerNr = RepSpec.f1;
 	if(ReadFirstKey("OfficialSerNr",IVr,1,true))then begin
-		CloseWindow(wn);
-		RecordCopy(IVRetr,IVr);
-		IVVcRecordDuplicateDo(IVRetr,false,true);
-		PutWindowRecord(mwn,IVRetr);
-		IVDClass_RefreshStringList(mwn,IVRetr);
-		IVDClassToolIVReturn;
+		if(IVr.TransDate>=addDay(currentdate,-14))then begin
+			CloseWindow(wn);
+			RecordCopy(IVRetr,IVr);
+			IVVcRecordDuplicateDo(IVRetr,false,true);
+			PutWindowRecord(mwn,IVRetr);
+			IVDClass_RefreshStringList(mwn,IVRetr);
+			IVDClassToolIVReturn;
+		end else begin
+			messagebox(0,"Прошло больше 14 дней с момента продажи!")
+		end;
 	end else begin
-		Messagebox(0,"Счет-фактура не найден");
+		Messagebox(0,"Счет-фактура не найден!");
 		CloseWindow(wn);
 	end;
 
