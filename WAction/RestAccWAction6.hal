@@ -965,10 +965,10 @@ begin
 	end;
 	
 	if(nonblank(IVp.OfficialSerNr))then begin
-		if(LMr.Code=="KV1" or LMr.Code=="KV2")then begin
+		//if(LMr.Code=="KV1" or LMr.Code=="KV2")then begin
 			s = barcode;
 			Error = OutComPort(1,s); s ="";
-		end;
+		//end;
   end;
   
   
