@@ -63,7 +63,7 @@ BEGIN
     	
     	OUTFORMFIELD("MYF_ORDPRICE",ORrw.Price);// Edit ************************** BPI Ukraine - KramarAlexandr - Thursday, 26 July 2018 13:27:15
     	OUTFORMFIELD("MYF_ORDREBATE",ORrw.vRebate);
-    	OUTFORMFIELD("MYF_ORDSUM",round(ORrw.Sum/ORrw.Quant*Retrw.Quant,SetRoundModeD(2)));// Edit ************************** BPI Ukraine - KramarAlexandr - Thursday, 26 July 2018 13:27:15
+    	OUTFORMFIELD("MYF_ORDSUM",round(ORrw.Sum/ORrw.Quant*Retrw.Quant,defaultcurroundoff));// Edit ************************** BPI Ukraine - KramarAlexandr - Thursday, 26 July 2018 13:27:15
     	
       INr.Code = Retrw.ArtCode;
       if (ReadFirstMain(INr,1,true)) then begin
