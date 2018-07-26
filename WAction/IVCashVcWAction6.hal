@@ -71,6 +71,10 @@ external function Integer OpenCCPayWindow(string,longint,integer,val,val,val,str
 external procedure PCEftpos_Transaction_Request(Integer,val,val,Boolean,string,string,string);
 external procedure IVFinishAndPrint();
 external procedure DisplayIVItem(record IVVc,Integer);//Edit----------------------Dima  24.11.2015
+external procedure IVVcRecordDuplicateDo(var record IVVc,Boolean,Boolean);
+ external procedure IVDClassToolIVReturn();
+ 
+ SetLangMode(LangRussian,"RUS",0);	
 
 procedure SetPOSWindowDisplay_PaymentRow(string spec,val v)
 begin
@@ -2605,6 +2609,50 @@ begin
   LoyalCardNPTSSClassOnOKWindow = false;
   return;
 end;
+
+global
+updating procedure ProceedRetFromCheckNPTSSClassExecute(Integer wn)
+begin
+  Integer mwn,rownr;
+  record RcVc RepSpec;
+  record IVVc IVr;
+  record IVVc IVRetr;
+  record RestAccVc RestAccr;
+  record RestAccVc prevRestAccr;
+  string 255 tstr,t2;
+  record LoyaltyCardVc LoyaltyCardr;
+  record LocalMachineBlock LMb;
+  
+  DeselectWindow(wn,true);
+  mwn = MotherWindow(wn);
+	GetWindowRecord(wn,RepSpec);
+	IVr.OfficialSerNr = RepSpec.f1;
+	if(ReadFirstKey("OfficialSerNr",IVr,1,true))then begin
+		CloseWindow(wn);
+		RecordCopy(IVRetr,IVr);
+		IVVcRecordDuplicateDo(IVRetr,false,true);
+		PutWindowRecord(mwn,IVRetr);
+		IVDClass_RefreshStringList(mwn,IVRetr);
+		IVDClassToolIVReturn;
+	end else begin
+		Messagebox(0,"‘чет-фактура не найден");
+		CloseWindow(wn);
+	end;
+
+LProceedRetFromCheckNPTSSClass:;  
+  return;
+end;
+
+
+global
+updating procedure ProceedRetFromCheckNPTSSClass()
+begin  
+  ProceedRetFromCheckNPTSSClassExecute(CurWindow);
+  return;
+end;
+
+
+
 
 global
 updating procedure ProceedSerialNoScanNPTSSClassExecute(Integer wn)

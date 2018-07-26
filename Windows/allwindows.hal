@@ -12194,7 +12194,47 @@ begin
 end;
 
 
+window RetIVfromCheckBarNPTSSClass:1
+  wtag("language","ENG"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  real h,h2,h3,h4,hm,l,v,v3,vm,vs;
+  WindowBegin("Введите номер чека: ",RetIVfromCheckBarNPTSSClass,CGother,RcType);
+  UseView(RcVc);
+  Modality(kModalityGlobal);
+  SetWRect(80,200,420,400);
+  vs = 20;
+  EditFieldTL(h=110,v=6,150,"№ чека: ",M4Str,Normal,20,f1,false,0);
 
+  v3 = 33; vs = 37; h3 = 210; h4 = 400; hm = 280;
+
+  vm = -160; vs = 52; h2 = 55; v3 = 48; l = 57;
+
+  v = 80;
+  ColourPushButton(-300,v,-200,v+v3,"CancelAndOverrideLogout","ОТМЕНА",20);
+  ColourPushButton(-150,v,-50,v+v3,"ProceedRetFromCheckNPTSSClass","ОК",20);
+
+
+  /*vm = -160; l = 57;
+  v = 10;
+  h = hm-2; ColourPushButton(h,v,h+h2,v+v3,"NPTSPaymentToolKeyPad1","1_",2);
+  h = h+l; ColourPushButton(h,v,h+h2,v+v3,"NPTSPaymentToolKeyPad2","2_",2);
+  h = h+l; ColourPushButton(h,v,h+h2,v+v3,"NPTSPaymentToolKeyPad3","3_",2);
+  v = v+vs;
+  h = hm-2; ColourPushButton(h,v,h+h2,v+v3,"NPTSPaymentToolKeyPad4","4_",2);
+  h = h+l; ColourPushButton(h,v,h+h2,v+v3,"NPTSPaymentToolKeyPad5","5_",2);
+  h = h+l; ColourPushButton(h,v,h+h2,v+v3,"NPTSPaymentToolKeyPad6","6_",2);
+  v = v+vs;
+  h = hm-2; ColourPushButton(h,v,h+h2,v+v3,"NPTSPaymentToolKeyPad7","7_",2);
+  h = h+l; ColourPushButton(h,v,h+h2,v+v3,"NPTSPaymentToolKeyPad8","8_",2);
+  h = h+l; ColourPushButton(h,v,h+h2,v+v3,"NPTSPaymentToolKeyPad9","9_",2);
+  v = v+vs;
+  h = hm-2; ColourPushButton(h,v,h+h2,v+v3,"NPTSPaymentToolKeyDel","Del",2);
+  h = h+l; ColourPushButton(h,v,h+h2,v+v3,"NPTSPaymentToolKeyPad0","0_",2);
+  h = h+l; ColourPushButton(h,v,h+h2,v+v3,"IVDClassToolKeyPadPoint",".",2);
+  v = v+vs;
+  h = hm; ColourPushButton(h,v,h+3*h2,v+v3,"NPTSPaymentToolKeyEnter","Enter",2);*/
+  EndWindow;
+end;
 
 
 window OpenFileDialogClass:1

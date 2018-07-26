@@ -1070,6 +1070,7 @@ BEGIN
   wn = CurWindow;
   DeselectWindow(wn,true);
   GetWindowRecord(wn,IVr);
+	
   
   SubCashRows_IVVc(IVr,true,t,t2);
 /*

@@ -698,6 +698,29 @@ begin
   return;
 end;
 
+
+global
+procedure IVDClassTouchScreenRetIVfromCheck()
+begin
+  Integer wn,mwn,line,rownr;
+  record RcVc RepSpec;
+  record IVVc IVr;
+  string 255 tstr;
+  Boolean testf;
+  
+  mwn = CurWindow;
+  RecordClear(RepSpec);
+  GetWindowRecord(mwn,IVr);
+  testf = true;
+  if (IVr.OKFlag!=0) then begin testf = false; end;
+  if (IVr.Invalid!=0) then begin testf = false; end;
+  if (testf) then begin
+    wn = OpenWindow("RetIVfromCheckBarNPTSSClass",0,mwn,"","",RepSpec);
+//    WindowFieldGoto(wn,RepSpec,-1,"f1",false);    
+  end;
+  return;
+end;
+
 global
 procedure IVDClassTouchScreenReprint()
 begin
@@ -1051,9 +1074,12 @@ begin
       case 203:
         RebateVoucherItemsReturn;
         goto LIVDClassTouchScreenPasteButtonDo; //GOTO RUSWINDOWFUNCTION.hal
-	  case 204:
-			ChangeObjects(POSBrw.Code);
-			goto LIVDClassTouchScreenPasteButtonDo;
+			case 204:
+				ChangeObjects(POSBrw.Code);
+				goto LIVDClassTouchScreenPasteButtonDo;
+			case 205:
+				IVDClassTouchScreenRetIVfromCheck;
+				goto LIVDClassTouchScreenPasteButtonDo;
     end;
   end;
 LIVDClassTouchScreenPasteButtonDo:;
