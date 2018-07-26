@@ -26,6 +26,8 @@ external procedure GetWarrantyLength(string,var string);
 external procedure ItemBC39(string,var string);
 external procedure ItemBCEAN(string,var string);
 external procedure ItemBCEAN13(string,var string);
+external function roundmode SetRoundModeD(Integer);// Edit ************************** BPI Ukraine - KramarAlexandr - Thursday, 26 July 2018 13:34:09
+
 
 procedure PrintRetRows(record RcVc RepSpec,record RetVc Retr,record LangNrVc LangNrr)
 BEGIN
@@ -61,7 +63,7 @@ BEGIN
     	
     	OUTFORMFIELD("MYF_ORDPRICE",ORrw.Price);// Edit ************************** BPI Ukraine - KramarAlexandr - Thursday, 26 July 2018 13:27:15
     	OUTFORMFIELD("MYF_ORDREBATE",ORrw.vRebate);
-    	OUTFORMFIELD("MYF_ORDSUM",ORrw.Sum);// Edit ************************** BPI Ukraine - KramarAlexandr - Thursday, 26 July 2018 13:27:15
+    	OUTFORMFIELD("MYF_ORDSUM",round(ORrw.Sum/ORrw.Quant*Retrw.Quant,SetRoundModeD(2)));// Edit ************************** BPI Ukraine - KramarAlexandr - Thursday, 26 July 2018 13:27:15
     	
       INr.Code = Retrw.ArtCode;
       if (ReadFirstMain(INr,1,true)) then begin
