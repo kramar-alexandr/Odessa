@@ -777,6 +777,10 @@ begin
   CutPaper = chr(29) & chr(86) & chr(49); //cut chr(27) & chr(105);
   CashBox = chr(27) & chr(112) & chr(0) & chr(25) & chr(250); //ESC p   old chr(27) & chr(112) & chr(0);
   barcode = chr(29) & "k" & chr(73) & chr(len(IVp.OfficialSerNr)) & IVp.OfficialSerNr & chr(10);// GS k CODE128 len IVp.OfficialSerNr NL
+  if(LMr.Code=="RR1" or LMr.Code=="RR2")then begin 
+  	barcode = chr(29) & "k" & chr(73) & chr(len(IVp.OfficialSerNr)+2) & "{A" & IVp.OfficialSerNr & chr(10);// GS k CODE128 len IVp.OfficialSerNr NL
+	end;
+  
   barcodeheight = chr(29) & "h" & chr(55);
   
   Error = OutComPort(1,StandardMode);
