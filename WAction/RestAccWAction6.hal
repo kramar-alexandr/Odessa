@@ -979,7 +979,6 @@ begin
 			Error = OutComPort(1,s); s ="";
 		//end;
   end;
-  OutComPort(1,chr(10) & chr(10) & chr(10) & chr(10)); s ="";
   PrintLongLine;
   
   loop = 6;
