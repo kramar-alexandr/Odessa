@@ -776,7 +776,9 @@ begin
   FormFeed =  chr(27) & chr(100) & chr(5);
   CutPaper = chr(29) & chr(86) & chr(49); //cut chr(27) & chr(105);
   CashBox = chr(27) & chr(112) & chr(0) & chr(25) & chr(250); //ESC p   old chr(27) & chr(112) & chr(0);
-  barcode = chr(29) & "k" & chr(73) & chr(len(IVp.OfficialSerNr)) & IVp.OfficialSerNr;// GS k CODE128 len IVp.OfficialSerNr
+  barcode = chr(29) & "k" & chr(73) & chr(len(IVp.OfficialSerNr)) & IVp.OfficialSerNr & chr(10);// GS k CODE128 len IVp.OfficialSerNr NL
+ 
+  
   barcodeheight = chr(29) & "h" & chr(55);
   
   Error = OutComPort(1,StandardMode);
@@ -785,6 +787,10 @@ begin
   LMr.Code = IVp.MachineName;
   ReadFirstMain(LMr,1,true);
   
+  
+  if(LMr.Code=="RR1" or LMr.Code=="RR2")then begin 
+  	barcode = chr(29) & "k" & chr(73) & chr(len(IVp.OfficialSerNr)+2) & "{A" & IVp.OfficialSerNr;// GS k CODE128 len IVp.OfficialSerNr NL
+	end;
   M4PadString("N " & IVp.OfficialSerNr,20," ",false,s);
   M4PadString(IVp.TransDate & "  " & CurrentTime /*IVp.TransTime*/,20," ",true,L2);
   s =  EmphesizeOn & s & EmphesizeOff & L2;
@@ -973,7 +979,7 @@ begin
 			Error = OutComPort(1,s); s ="";
 		//end;
   end;
-  
+  PrintLongLine;
   
   loop = 6;
   while (loop>0) begin
