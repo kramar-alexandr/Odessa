@@ -225,8 +225,10 @@ global procedure ExportToExcelConsSaleRn(record RcVc RepSpec)	//Edit--------Dima
 begin
   record ConsSaleVc ConsSaler;
   row ConsSaleVc ConsSalerw;
-  Integer rwcnt,i,wn,cnt;
+  Integer rwcnt,i,k,wn,cnt,arrcnt;
   val total;
+	vector val Qty, SelPrice;
+	vector boolean Specf;
   
   ConsSaler.SerNr = RepSpec.long1;
   if (ReadFirstMain(ConsSaler,1,true)) then begin	  
@@ -259,20 +261,56 @@ begin
 	EndFormat;
 	Black_Divider(0,1);
 	cnt = 1;
+	
+	
+	
+	
 	for(i=0;i<rwcnt;i=i+1) begin
 		MatRowGet(ConsSaler,i,ConsSalerw)
 		if(ConsSalerw.SelQty!=0)then begin
-			StartFormat(15);			
+			Specf[ConsSalerw.Spec] = true;
+			Qty[ConsSalerw.Spec] = Qty[ConsSalerw.Spec] + ConsSalerw.SelQty;
+			SelPrice[ConsSalerw.Spec] = SelPrice[ConsSalerw.Spec] + ConsSalerw.SelPrice;
+		end;
+	end;	
+	
+	
+	for(i=0;i<rwcnt;i=i+1) begin
+		MatRowGet(ConsSaler,i,ConsSalerw)
+		if(ConsSalerw.SelQty!=0)then begin
+			if(Specf[ConsSalerw.Spec])then begin
+				StartFormat(15);
+					OutString(0,0,cnt,false);
+					OutString(2,0,ConsSalerw.Spec,false);
+					OutString(3,0,Qty[ConsSalerw.Spec],false);
+					OutString(5,0,SelPrice[ConsSalerw.Spec],false);
+					OutVal(6,0,SelPrice[ConsSalerw.Spec]*Qty[ConsSalerw.Spec],M4Val,false);
+				EndFormat;	
+				total = total + SelPrice[ConsSalerw.Spec]*Qty[ConsSalerw.Spec];
+				Specf[ConsSalerw.Spec] = false;
+				cnt = cnt + 1;
+			end;
+		end;
+	end;	
+	
+	
+	
+	
+	/*
+		StartFormat(15);
 			OutString(0,0,cnt,false);
 			OutString(2,0,ConsSalerw.Spec,false);
 			OutString(3,0,ConsSalerw.SelQty,false);
 			OutString(5,0,ConsSalerw.SelPrice,false);
 			OutVal(6,0,ConsSalerw.SelPrice*ConsSalerw.SelQty,M4Val,false);
 			total = total + ConsSalerw.SelPrice*ConsSalerw.SelQty;
-			EndFormat;	
-			cnt = cnt + 1;
-		end;
-	end;	
+		EndFormat;	
+		cnt = cnt + 1;
+	*/
+	
+	
+	
+	
 	StartFormat(15);
 		OutString(0,0,"",true);
 		OutString(2,0,"",true);
