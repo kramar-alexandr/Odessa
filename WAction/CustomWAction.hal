@@ -159,7 +159,7 @@ begin
   if(usercanaction("VievOnlyUKRVE",false))then begin
   	setwindowsubset(wn,"UKR");
   end;
-  if(usercanaction("VievOnlyW1VE",Sfalse))then begin
+  if(usercanaction("VievOnlyW1VE",false))then begin
   	setwindowsubset(wn,"W_1");
   end;
   	
