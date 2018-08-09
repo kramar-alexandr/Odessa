@@ -4263,6 +4263,7 @@ end;
 global updating procedure UpdateVESalesGroupMn(record RcVc RepSpec)
 begin	
 	record CUVc CUr;
+  record POVc POr;
 	
 	while(loopmain(CUr,1,true))begin
 		if(CUr.VEType>0)then begin
@@ -4282,7 +4283,27 @@ begin
 				CUr.AddKeySG1 = "UKR,WORLD,W_1";//Edit-------------------Vitalii 13:58 09.08.2018
 				recordstore(CUr,true);
 			end;
+      if (CUr.AddKeySG1=="UKR,WORLD") then begin
+        CUr.AddKeySG1 = "UKR,WORLD,W_1";//Edit-------------------Vitalii 13:58 09.08.2018
+				recordstore(CUr,true);
+      end;
 		end;
+	end;
+  
+  while(loopmain(POr,1,true))begin
+    if blank(POr.SalesGroup) then begin
+      CUr.Code = POr.VECode;
+      readfirstmain(CUr,1,true);
+      if(blank(CUr.SalesGroup))then begin
+        POr.SalesGroup = "UKR,WORLD,W_1";
+      end else begin
+        POr.SalesGroup = CUr.SalesGroup;
+      end;
+      if (POr.SalesGroup=="UKR,WORLD") then begin
+        POr.SalesGroup = "UKR,WORLD,W_1";
+      end;
+      recordstore(POr,true);
+    end;
 	end;
 
 return;
