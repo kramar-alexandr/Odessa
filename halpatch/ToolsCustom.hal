@@ -4224,7 +4224,7 @@ begin
 	
 	POr.SerNr = -1;
 	while(loopmain(POr,1,true))begin
-		if(blank(POr.SalesGroup))then begin
+		//if(blank(POr.SalesGroup))then begin
 			CUr.Code = POr.VECode;
 			if(readfirstmain(CUr,1,true))then begin
 				if(nonblank(CUr.SalesGroup))then begin
@@ -4232,7 +4232,7 @@ begin
 					recordstore(POr,true);
 				end;
 			end;
-		end;
+		//end;
 	end;
 
 return;
@@ -4245,7 +4245,7 @@ begin
 	
 	PUr.SerNr = -1;
 	while(loopmain(PUr,1,true))begin
-		if(blank(PUr.SalesGroup))then begin
+		//if(blank(PUr.SalesGroup))then begin
 			CUr.Code = PUr.VECode;
 			if(readfirstmain(CUr,1,true))then begin
 				if(nonblank(CUr.SalesGroup))then begin
@@ -4253,7 +4253,7 @@ begin
 					recordstore(PUr,true);
 				end;
 			end;
-		end;
+		//end;
 	end;
 
 return;
@@ -4291,7 +4291,6 @@ begin
 	end;
   
   while(loopmain(POr,1,true))begin
-    if blank(POr.SalesGroup) then begin
       CUr.Code = POr.VECode;
       readfirstmain(CUr,1,true);
       if(blank(CUr.SalesGroup))then begin
@@ -4303,7 +4302,7 @@ begin
         POr.SalesGroup = "UKR,WORLD,W_1";
       end;
       recordstore(POr,true);
-    end;
+    
 	end;
 
 return;
