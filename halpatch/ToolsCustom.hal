@@ -4266,16 +4266,20 @@ begin
 	
 	while(loopmain(CUr,1,true))begin
 		if(CUr.VEType>0)then begin
-			if(CUr.VECat=="UKR")then begin
+			if(CUr.VECat=="UKR") and (CUr.SalesGroup!="UKR") then begin//Edit-------------------Vitalii 13:58 09.08.2018
 				CUr.SalesGroup = "UKR";
 				recordstore(CUr,true);
 			end;
-			if(CUr.VECat=="WORLD")then begin
+			if(CUr.VECat=="WORLD") and (CUr.SalesGroup!="WORLD")then begin//Edit-------------------Vitalii 13:58 09.08.2018
 				CUr.SalesGroup = "WORLD";
 				recordstore(CUr,true);
 			end;
+      if(CUr.VECat=="W_1") and (CUr.SalesGroup!="W_1")then begin//Edit-------------------Vitalii 13:58 09.08.2018
+				CUr.SalesGroup = "W_1";
+				recordstore(CUr,true);
+			end;
 			if(blank(CUr.VECat))then begin
-				CUr.AddKeySG1 = "UKR,WORLD";
+				CUr.AddKeySG1 = "UKR,WORLD,W_1";//Edit-------------------Vitalii 13:58 09.08.2018
 				recordstore(CUr,true);
 			end;
 		end;
