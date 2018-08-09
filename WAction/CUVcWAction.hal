@@ -1269,15 +1269,15 @@ begin
   			setwindowsubset(wn,"WEB");
   	end;
   end;
-	if(usercanaction("VievOnlyWorldVE",false))then begin
+	/*if(usercanaction("VievOnlyWorldVE",false))then begin
   	setwindowsubset(wn,"WORLD");
   end;
   if(usercanaction("VievOnlyUKRVE",false))then begin
   	setwindowsubset(wn,"UKR");
   end;
-  if(usercanaction("VievOnlyW_1VE",false))then begin
+  if(usercanaction("VievOnlyW1VE",false))then begin
   	setwindowsubset(wn,"W_1");
-  end;
+  end;*/
   
   CULClassOnOpenWindow = false;
   return;
@@ -1294,7 +1294,7 @@ begin
   if(usercanaction("VievOnlyUKRVE",false))then begin
   	setwindowsubset(wn,"UKR");
   end;
-  if(usercanaction("VievOnlyW_1VE",false))then begin
+  if(usercanaction("VievOnlyW1VE,false))then begin
   	setwindowsubset(wn,"W_1");
   end;
   

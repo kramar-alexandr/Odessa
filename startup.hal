@@ -743,7 +743,7 @@ begin
   StrSetText(AllowPOSIVNegQty,"Отрицательное количество в сч/ф кассового терминала");
   StrSetText(VievOnlyWorldVE,"Просмотр только иностранных поставщиков");//++++++++++
   StrSetText(VievOnlyUKRVE,"Просмотр только украинских поставщиков");//+++++++++++++++
-  StrSetText(VievOnlyW_1VE,"Просмотр только иностранных поставщиков 1");
+  StrSetText(VievOnlyW1VE,"Просмотр только иностранных поставщиков 1");
   StrSetText(CuPerRnAllPeriod,"Разрешить ведомость расчетов с клиентами за весь период");
   StrSetText(CuPerRnForAllCustomers,"Разрешить ведомость расчетов с клиентами по всем клиентам");// Edit ************************** BPI Ukraine - KramarAlexandr - Tuesday, 10 July 2018 11:55:11
   StrSetText(OrdRnForAllCustomers,"Разрешить журнал счетов клиентов по всем клиентам");// Edit ************************** BPI Ukraine - KramarAlexandr - Tuesday, 10 July 2018 11:55:11
