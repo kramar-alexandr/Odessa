@@ -38,6 +38,9 @@ begin
   if(usercanaction("VievOnlyUKRVE",false))then begin
   	setwindowsubset(wn,"UKR");
   end;
+  if(usercanaction("VievOnlyW_1VE",false))then begin
+  	setwindowsubset(wn,"W_1");
+  end;
     
   PULClassOnOpenWindow = false;
   return;
