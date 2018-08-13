@@ -1308,6 +1308,8 @@ updating procedure IVDClassTouchScreenDeleteItem()
 begin
   Integer wn,matrowix;
   record IVVc IVr;
+	row IVVc IVrw;
+	integer i, rwcnt;
 
   wn = CurWindow;
   if (SelectedListLine(wn)>=0) then begin
@@ -1331,6 +1333,12 @@ begin
         MatRowDelete(IVr,matrowix);
         IVVcRebCodeCound(IVr);// Edit ************************** BPI Ukraine - KramarAlexandr - Thursday, 22 February 2018 11:40:40
         IVSumup(IVr,true);
+				rwcnt = matrowcnt(IVr);
+				for (i=rwcnt;i>=0;i=i-1) begin
+					matrowget(IVr,i,IVrw);
+					if(IVrw.stp==0)then begin MatRowDelete(IVr,i); end;
+				end;
+				
         PutWindowRecord(wn,IVr);
 
         if (GuiType==kGuiCocoa) then begin
