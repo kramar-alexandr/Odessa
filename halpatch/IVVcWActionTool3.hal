@@ -1966,7 +1966,9 @@ begin
 		if(CUr.Code!="EXPO" and CUr.Code!="EXPO1")then begin
 			if(CUr.CustCat=="WEB" or CUr.CustCat=="RETAI")then begin
 				if (CUr.RebCode!=IVr.RebCode) then begin
-					IVr.RebCode = CUr.RebCode;
+					if(IVr.BirthDayVaucher<=0)then begin
+						IVr.RebCode = CUr.RebCode;
+					end;
 					IVDUpdatePrices(IVr,false);
 				end;
 		
@@ -1986,7 +1988,9 @@ begin
 							if (readfirstmain(Rebr,1,true)) then begin
 								OTD_Rebcode = Rebr.vra0;
 								if (CU_Rebcode < OTD_Rebcode) then begin
-									IVr.RebCode = OTDrw.RebCode;
+									if(IVr.BirthDayVaucher<=0)then begin
+										IVr.RebCode = OTDrw.RebCode;
+									end;
 									changed = true;
 								end;
 							end;
@@ -1996,7 +2000,9 @@ begin
 								if (readfirstmain(Rebr,1,true)) then begin
 									OTD_Rebcode = Rebr.vra0;
 									if (CU_Rebcode < OTD_Rebcode) then begin
-										IVr.RebCode = OTDrw.RebCode;
+										if(IVr.BirthDayVaucher<=0)then begin
+											IVr.RebCode = OTDrw.RebCode;
+										end;
 										changed = true;
 									end;
 								end;

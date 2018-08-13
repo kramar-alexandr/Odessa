@@ -76,7 +76,7 @@ remote procedure RecalcDiscountIVD(var record IVVc);//Edit----------------------
 remote procedure IVVc_PastePriceList(var record IVVc);// Edit ************************** Wednesday, 4 February 2015 14:34:16
 remote function Boolean PasteCust2InInv(var record IVVc,record LocalMachineBlock,string,Boolean,var string,var string,var string,var string,var string);
 remote procedure IVDUpdatePrices(var record IVVc,Boolean);// Edit ************************** Monday, 14 December 2015 15:16:18
-external function Boolean IVDClassBirthDayVaucherEFAfter(Integer,Boolean);// Edit ************************** Thursday, 1 December 2016 09:12:30
+external updating function Boolean IVDClassBirthDayVaucherEFAfter(Integer,Boolean);// Edit ************************** Thursday, 1 December 2016 09:12:30
 remote procedure SendToServerArtCode(string,string,string);// Edit ************************** Tuesday, 11 April 2017 16:50:23
 remote function Boolean FindRebateVoucherForReturnIV(var record IVVc); //Edit***************************Sasha2,16:49 08.06.2017
 remote procedure IVVcRebCodeCound(var record IVVc);// Edit ************************** BPI Ukraine - KramarAlexandr - Thursday, 22 February 2018 11:36:52
@@ -3656,6 +3656,7 @@ begin
 
 return;
 end;
+
 
 
 

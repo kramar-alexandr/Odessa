@@ -13,7 +13,7 @@ external function string 40 DelAddrSClassSpecPName(string);
 //external function string 255 FindTaxAuthID(string,LongInt,Date);
 external function Boolean TouchScreenLook();
 remote procedure IVSumup(var record IVVc,Boolean);
-external function Boolean IVDClassAfterEditField(Integer,string,Integer, Integer,Integer);
+external updating function Boolean IVDClassAfterEditField(Integer,string,Integer, Integer,Integer);
 remote updating function LongInt IVCheckIfSaveAllowed(var record IVVc,record IVVc,LongInt,LongInt);
 external procedure IVDClassPasteItemButton(Integer);
 remote updating function Integer CreateMailFromIVD(record IVVc,var record MailVc,var string,Boolean,string);
