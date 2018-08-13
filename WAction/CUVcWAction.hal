@@ -1274,6 +1274,9 @@ begin
   end;
   if(usercanaction("VievOnlyUKRVE",false))then begin
   	setwindowsubset(wn,"UKR");
+  end;
+  if(usercanaction("VievOnlyW1VE",false))then begin
+  	setwindowsubset(wn,"W_1");
   end;*/
   
   CULClassOnOpenWindow = false;
@@ -1290,6 +1293,9 @@ begin
   end;
   if(usercanaction("VievOnlyUKRVE",false))then begin
   	setwindowsubset(wn,"UKR");
+  end;
+  if(usercanaction("VievOnlyW1VE",false))then begin
+  	setwindowsubset(wn,"W_1");
   end;
   
   POLClassOnOpenWindow = false;

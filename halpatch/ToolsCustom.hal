@@ -4224,7 +4224,7 @@ begin
 	
 	POr.SerNr = -1;
 	while(loopmain(POr,1,true))begin
-		if(blank(POr.SalesGroup))then begin
+		//if(blank(POr.SalesGroup))then begin
 			CUr.Code = POr.VECode;
 			if(readfirstmain(CUr,1,true))then begin
 				if(nonblank(CUr.SalesGroup))then begin
@@ -4232,7 +4232,7 @@ begin
 					recordstore(POr,true);
 				end;
 			end;
-		end;
+		//end;
 	end;
 
 return;
@@ -4245,7 +4245,7 @@ begin
 	
 	PUr.SerNr = -1;
 	while(loopmain(PUr,1,true))begin
-		if(blank(PUr.SalesGroup))then begin
+		//if(blank(PUr.SalesGroup))then begin
 			CUr.Code = PUr.VECode;
 			if(readfirstmain(CUr,1,true))then begin
 				if(nonblank(CUr.SalesGroup))then begin
@@ -4253,7 +4253,7 @@ begin
 					recordstore(PUr,true);
 				end;
 			end;
-		end;
+		//end;
 	end;
 
 return;
@@ -4263,22 +4263,46 @@ end;
 global updating procedure UpdateVESalesGroupMn(record RcVc RepSpec)
 begin	
 	record CUVc CUr;
+  record POVc POr;
 	
 	while(loopmain(CUr,1,true))begin
 		if(CUr.VEType>0)then begin
-			if(CUr.VECat=="UKR")then begin
+			if(CUr.VECat=="UKR") and (CUr.SalesGroup!="UKR") then begin//Edit-------------------Vitalii 13:58 09.08.2018
 				CUr.SalesGroup = "UKR";
 				recordstore(CUr,true);
 			end;
-			if(CUr.VECat=="WORLD")then begin
+			if(CUr.VECat=="WORLD") and (CUr.SalesGroup!="WORLD")then begin//Edit-------------------Vitalii 13:58 09.08.2018
 				CUr.SalesGroup = "WORLD";
 				recordstore(CUr,true);
 			end;
-			if(blank(CUr.VECat))then begin
-				CUr.AddKeySG1 = "UKR,WORLD";
+      if(CUr.VECat=="W_1") and (CUr.SalesGroup!="W_1")then begin//Edit-------------------Vitalii 13:58 09.08.2018
+				CUr.SalesGroup = "W_1";
 				recordstore(CUr,true);
 			end;
+			if(blank(CUr.VECat))then begin
+				CUr.AddKeySG1 = "UKR,WORLD,W_1";//Edit-------------------Vitalii 13:58 09.08.2018
+				recordstore(CUr,true);
+			end;
+      if (CUr.AddKeySG1=="UKR,WORLD") then begin
+        CUr.AddKeySG1 = "UKR,WORLD,W_1";//Edit-------------------Vitalii 13:58 09.08.2018
+				recordstore(CUr,true);
+      end;
 		end;
+	end;
+  
+  while(loopmain(POr,1,true))begin
+      CUr.Code = POr.VECode;
+      readfirstmain(CUr,1,true);
+      if(blank(CUr.SalesGroup))then begin
+        POr.SalesGroup = "UKR,WORLD,W_1";
+      end else begin
+        POr.SalesGroup = CUr.SalesGroup;
+      end;
+      if (POr.SalesGroup=="UKR,WORLD") then begin
+        POr.SalesGroup = "UKR,WORLD,W_1";
+      end;
+      recordstore(POr,true);
+    
 	end;
 
 return;
