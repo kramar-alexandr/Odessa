@@ -665,6 +665,7 @@ begin
 	record GCSVc GCSr;
 	record RLinkVc RLinkr;
 	record IVVc IVr;
+	record RebateVoucherVc RVr;
 	
 	blockload(WSSB);
 	if(blank(WSSB.AdressDelimeter))then begin
@@ -713,6 +714,20 @@ begin
     end;
   end; //Edit***************************Sasha2,11:24 18.08.2015 }
 	
+	if(ORr.PromoCode>0)then begin
+		RVr.VoucherSerNr = ORr.PromoCode;
+		if(!ReadFirstKey("VoucherSerNr",RVr,1,true))then begin 
+			RecordCheckError(31185,"",-1,"PromoCode");      
+			res = -1;
+			goto LORVcRecordCheck; 
+		end else begin
+			if(RVr.UsedFlag>0)then begin
+				RecordCheckError(31186,"",-1,"PromoCode");      
+				res = -1;
+				goto LORVcRecordCheck; 
+			end;
+		end;
+	end;//Edit_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-Anton 12:52 14.08.2018
 	
 	if(nonblank(ORr.GiftVouchers))then begin
 		instr = ORr.GiftVouchers;

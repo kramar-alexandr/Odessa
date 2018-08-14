@@ -81,6 +81,7 @@ remote procedure AlternativeRebateORVc(var record ORVc);//==============Alexandr
 remote procedure Rem_CalcOnePlusOneRebate(var record ORVc);// Edit ************************** BPI Ukraine - KramarAlexandr - Monday, 11 December 2017 09:53:12
 remote procedure AdNP_PasteRecipientWarehouseDescOR(var record ORVc);
 
+SetLangMode(LangRussian,"RUS",0);
 
 global //Edit***************************Sasha2,15:51 04.02.2015 {
 function Integer ORLClassRowColor(record ORVc ORr)
@@ -1473,6 +1474,55 @@ end;
 
 
 
+function Boolean ORDClassPromoCodeEFAfter(Integer wn,Integer changed)	//Edit_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-Anton 13:06 14.08.2018
+begin  
+  record ORVc ORr;
+	row ORVc ORrw;
+	record RebateVoucherVc Rvr;
+	record RebVc Rebr;
+	boolean testf;
+	longint rwcnt,i,rownr;
+	
+
+  if (changed!=0) then begin  
+    GetWindowRecord(wn,ORr);
+    if(ORr.PromoCode>0)then begin
+			testf = true;
+			RVr.VoucherSerNr = ORr.PromoCode;
+			if(!ReadFirstKey("VoucherSerNr",RVr,1,true))then begin 
+				MessageBox(0,"Выпущенного скидочного ваучера с таким кодом не существует!");
+				testf = false;
+			end else begin
+				if(RVr.UsedFlag>0)then begin
+					MessageBox(0,"Скидка уже использзована!");
+					testf = false;
+				end;
+			end;
+			if(testf)then begin
+				rwcnt = matrowcnt(ORr);
+				for (i=0;i<rwcnt;i=i+1) begin
+					matrowget(ORr,i,ORrw);
+					if(nonblank(ORrw.ArtCode))then begin
+						ORrw.vRebate = StringToVal(left(RVr.RebCode,len(RVr.RebCode)-1),M4Val);
+						matrowput(ORr,i,ORrw);
+						PutWindowRecord(wn,ORr);
+						ORrw.Sum = (ORrw.Price * ORrw.Quant) - (ORrw.Price * ORrw.Quant) * (ORrw.vRebate / 100); 
+						matrowput(ORr,i,ORrw);
+						PutWindowRecord(wn,ORr);
+						//ORDClassvRebateEFAfter(wn,i,1);
+					end;
+				end;
+			end;
+		end;
+		ORSumup(ORr);
+    PutWindowRecord(wn,ORr);
+  end;  
+  ORDClassPromoCodeEFAfter = true;
+  return;
+end;
+
+
+
 function Boolean ORDClassOrderQuantEFAfter(Integer wn,Integer fn,Integer rownr,Integer changedf)//Edit----------------------Dima  26.01.2016
 begin   
   record ORVc ORr,ORrBefore;
@@ -1543,7 +1593,8 @@ BEGIN
     case "NPPhone": res = ORDClassNPPhoneEFAfter(wn,changed);
     case "NPWarehouse": res = ORDClassNPWarehouseEFAfter(wn,changed);	//Edit----------------------Dima  15.04.2015
     case "OrderQuant": res = ORDClassOrderQuantEFAfter(wn,fn,rownr,changed);	//Edit----------------------Dima  20.08.2015
-	case "AdNPWarehouse": res = ORDClassAdNPWarehouseEFAfter(wn,changed);	//Edit----------------------Dima  15.04.2015
+		case "AdNPWarehouse": res = ORDClassAdNPWarehouseEFAfter(wn,changed);	//Edit----------------------Dima  15.04.2015
+		case "PromoCode": res = ORDClassPromoCodeEFAfter(wn,changed);
 
   end;
   ORDClassAfterEditField = res;

@@ -48,6 +48,11 @@ external function Integer GetVATLaw();
 remote function Boolean ORVc_AllowSales(record ORVc,var Integer,var LongInt);
 external function Boolean UserCanChangePendingRecord(Integer);
 remote procedure GetFullCurncyRate (var string,Date,var val,var val,var val,var val,var val);// Edit ************************** Friday, 14 August 2015 15:52:58
+external function Boolean TouchScreenLook();
+external updating function Boolean IVDClassBirthDayVaucherEFAfter(Integer,Boolean);// Edit ************************** Thursday, 1 December 2016 09:12:30
+external procedure IVDClass_RefreshStringList(Integer,record IVVc);
+external procedure WindowFieldGotoForTouchScreen(Integer,Integer,string,Boolean);
+
 
 SetLangMode(LangRussian,"RUS",0);
 
@@ -382,6 +387,8 @@ BEGIN
   Integer errcode,additionalday;
   Boolean testf;
   LongInt ErrorCode;
+	record RcVc RepSpec;
+	record RebateVoucherVc RVr;
 
   wn = CurWindow;
   DeselectWindow(wn,false);
@@ -435,6 +442,17 @@ BEGIN
               nwn = OpenWindow("IVDClass",1,0,"","",IVr);
               UpdateBrowses("ORVc");
               IVOpenPrepExists(IVr.CustCode);
+							GetWindowRecord(nwn,IVr);
+							if(ORr.PromoCode>0)then begin
+								RVr.VoucherSerNr = ORr.PromoCode;
+								if(ReadFirstKey("VoucherSerNr",RVr,1,true))then begin
+									RVr.UsedFlag = 1;
+									IVr.RebCode = RVr.RebCode;
+									putwindowrecord(nwn,IVr);
+									ReRunWindowDef(nwn);
+									recordstore(RVr,true);
+								end;
+							end;
               if (errcode>0) then begin
                 MessageBox(errcode,"");
               end;
