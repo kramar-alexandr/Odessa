@@ -336,6 +336,9 @@ begin
 				IVrw.VATCode = "15%";
 			matrowput(IVp,i,IVrw);
 		end; 
+		IVp.LoyaltyCardNr = "";
+		IVp.LCMLevel = "";
+		IVp.Points = blankval;
 		IVSumup(IVp,true);
 	end;
 
