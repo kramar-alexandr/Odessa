@@ -268,9 +268,9 @@ begin
 	for(i=0;i<rwcnt;i=i+1) begin
 		MatRowGet(ConsSaler,i,ConsSalerw)
 		if(ConsSalerw.SelQty!=0)then begin
-			Specf[ConsSalerw.Spec] = true;
-			Qty[ConsSalerw.Spec] = Qty[ConsSalerw.Spec] + ConsSalerw.SelQty;
-			SelPrice[ConsSalerw.Spec] = SelPrice[ConsSalerw.Spec] + ConsSalerw.SelPrice;
+			Specf[ConsSalerw.Spec & ConsSalerw.SelPrice] = true;
+			Qty[ConsSalerw.Spec & ConsSalerw.SelPrice] = Qty[ConsSalerw.Spec & ConsSalerw.SelPrice] + ConsSalerw.SelQty;
+			SelPrice[ConsSalerw.Spec & ConsSalerw.SelPrice] = ConsSalerw.SelPrice;
 		end;
 	end;	
 	
@@ -278,20 +278,20 @@ begin
 	for(i=0;i<rwcnt;i=i+1) begin
 		MatRowGet(ConsSaler,i,ConsSalerw)
 		if(ConsSalerw.SelQty!=0)then begin
-			if(Specf[ConsSalerw.Spec])then begin
+			if(Specf[ConsSalerw.Spec & ConsSalerw.SelPrice])then begin
 				StartFormat(15);
 					OutString(0,0,cnt,false);
 					OutString(2,0,ConsSalerw.Spec,false);
-					OutString(3,0,Qty[ConsSalerw.Spec],false);
-					OutString(5,0,SelPrice[ConsSalerw.Spec],false);
-					OutVal(6,0,SelPrice[ConsSalerw.Spec]*Qty[ConsSalerw.Spec],M4Val,false);
+					OutString(3,0,Qty[ConsSalerw.Spec & ConsSalerw.SelPrice],false);
+					OutString(5,0,SelPrice[ConsSalerw.Spec & ConsSalerw.SelPrice],false);
+					OutVal(6,0,SelPrice[ConsSalerw.Spec & ConsSalerw.SelPrice]*Qty[ConsSalerw.Spec & ConsSalerw.SelPrice],M4Val,false);
 				EndFormat;	
-				total = total + SelPrice[ConsSalerw.Spec]*Qty[ConsSalerw.Spec];
-				Specf[ConsSalerw.Spec] = false;
+				total = total + SelPrice[ConsSalerw.Spec & ConsSalerw.SelPrice]*Qty[ConsSalerw.Spec & ConsSalerw.SelPrice];
+				Specf[ConsSalerw.Spec & ConsSalerw.SelPrice] = false;
 				cnt = cnt + 1;
 			end;
 		end;
-	end;	
+	end;
 	
 	
 	
