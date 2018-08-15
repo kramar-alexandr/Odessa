@@ -716,7 +716,7 @@ begin
 										end;
 									end;
 									if(chan)then begin
-										logtext(0,"CustChange Rebate " & CUr.Code & " from " & CU_Rebcode & " to " & OTD_Rebcode & " loypo " & LCr.PointsBalance);
+										logtext(0,"CustChange Rebate " & CUr.Code & " from " & CUr.RebCode & " to " & OTDrw.RebCode & " loypo " & LCr.PointsBalance);
 										CUr.LastRebCode = CUr.RebCode;
 										CUr.RebCode = OTDrw.RebCode;
 										CUr.LastDateChangeDiscount = CurrentDate;
