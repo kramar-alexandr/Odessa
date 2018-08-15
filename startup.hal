@@ -534,6 +534,8 @@ begin
   Maintenance("Импорт заказов клиента",RozetkaMyTenVClass,RozetkaTestMn,modRozetka);
   
   Maintenance("Импорт соответствия кодов товаров",MyVClass,RybrayRequestMn,modRozetka);
+  
+  Maintenance("Пересчитать скидки клиентов",MyVClass,UpdateCURRebCodeMn,modRozetka);
 	
   Import("Импорт цен",PLImportIClass,PLImportIn,modDI); //Added********************Dima 20.11.2014
   Import("Импорт товаров",INImportIClass,INImportIn,modIN);//Added********************Dima 20.11.2014

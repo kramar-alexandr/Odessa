@@ -5777,7 +5777,7 @@ RecordBegin(IPVc,-,"");
   RecordField(NPRef,M4Str,255,0);//Edit_-_-_-_-_-_-_-_-Anton 15:37 20.06.2018
   RecordField(NonCashPmnt,M4Int,0,0);//Edit_-_-_-_-_-_-_-_-Anton 15:37 20.06.2018
 	RecordField(LastDateChangeDiscount,M4Date,0,0);//Edit_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-Anton 14:00 12.07.2018
-  
+  RecordField(LastRebCode,M4Str,10,0);
   
   MainKeyBegin(Code,1);
   StoreInBaseKey;
