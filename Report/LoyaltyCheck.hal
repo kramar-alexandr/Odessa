@@ -36,10 +36,10 @@ begin
 								
 									LCr.PointsBalance = LCr.PointsBalance - IVr.Points;
 									vLVBal[LCr.SerNr] = vLVBal[LCr.SerNr] - IVr.Points;
-									recordstore(LCr,true);
+									//recordstore(LCr,true);
 									IVr.Points = 0;
 									IVr.LoyaltyCardNr = "";
-									recordstore(IVr,true);
+									//recordstore(IVr,true);
 									outstring(390,0,LCr.PointsBalance,false);
 									outstring(1,0,IVr.Points,true);
 								
@@ -48,10 +48,10 @@ begin
 								
 									LCr.PointsBalance = LCr.PointsBalance + IVr.Points;
 									vLVBal[LCr.SerNr] = vLVBal[LCr.SerNr] + IVr.Points;
-									recordstore(LCr,true);
+									//recordstore(LCr,true);
 									IVr.Points = 0;
 									IVr.LoyaltyCardNr = "";
-									recordstore(IVr,true);
+									//recordstore(IVr,true);
 									outstring(390,0,LCr.PointsBalance,false);
 									outstring(1,0,IVr.Points,true);
 								
