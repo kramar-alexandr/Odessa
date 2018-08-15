@@ -1481,9 +1481,7 @@ BEGIN
   if (res == true and fieldname=="ProcessingQuant" and Logisticsb.AllowChangeFields==0) then begin
   	res = false;
   end;
-  if (fieldname=="GiftVouchers" and blank(ORr.OrderClass)) then begin
-  	res = false;
-  end;
+  
  
   
 LORDClassActiveEditField:;
@@ -1495,6 +1493,10 @@ LORDClassActiveEditField:;
 		case "OrdDate":
 			res = usercanaction("ViewCostPrice",false);	
 	end;
+	if (fieldname=="GiftVouchers" and blank(ORr.OrderClass)) then begin
+  	res = false;
+  end;
+	
 	if(currentuser=="SAUNOK")then begin// Edit ************************** Friday, 14 April 2017 10:39:22
 		res = true;
 	end;
