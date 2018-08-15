@@ -1481,7 +1481,7 @@ BEGIN
   if (res == true and fieldname=="ProcessingQuant" and Logisticsb.AllowChangeFields==0) then begin
   	res = false;
   end;
-  if (res == true and fieldname=="GiftVouchers" and ORr.OrderClass=="") then begin
+  if (fieldname=="GiftVouchers" and ORr.OrderClass=="") then begin
   	res = false;
   end;
  
