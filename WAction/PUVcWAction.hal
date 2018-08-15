@@ -409,9 +409,12 @@ begin
 		while (LoopKey("OKFlag",SHr,1,TrHs))begin
 			if(SHr.OKFlag==1)then begin TrHs = false; end;
 			if(SHr.Assembly==1 and TrHs)then begin
-				SHPackListrw.SHNr = SHr.SerNr;
-				matrowput(SHPackListr,i,SHPackListrw);
-				i = i + 1;
+				if(SHr.Location==SHPackListr.Location)then begin
+					SHPackListrw.SHNr = SHr.SerNr;
+					SHPackListrw.Location = SHr.Location;
+					matrowput(SHPackListr,i,SHPackListrw);
+					i = i + 1;
+				end;
 			end;
 		end;
 		resetloop(SHr);

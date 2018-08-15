@@ -6803,6 +6803,7 @@ RecordBegin(IPVc,-,"");
 		ArrayBegin(Math,-,1);
 		ArrayField(SHNr,M4Long,0,0);
 		ArrayField(Comment,M4Str,100,0);
+		ArrayField(Location,M4Code,100,0);
 		EndArray;	
 		MainKeyBegin(SerNr,0);
 		KeySegment(SerNr);

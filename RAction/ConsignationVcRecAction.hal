@@ -165,7 +165,35 @@ LConsignationVcRecordCheck:;
 END;
 
 
-
+updating procedure EditSHList(var record SHPackListVc SHPackListr)// Edit ************************** BPI Ukraine - KramarAlexandr - 03, 15 08 2018 y. î 18:55:07
+begin
+	row SHPackListVc SHPackListrw;
+	record SHVc SHr;
+  record RcVc RepSpec;
+  integer wn,rwcnt,i;
+	boolean testf,TrHs;
+	testf = true;
+  
+	if(testf)then begin
+		TrHs = true;
+		SHr.OKFlag = 0;
+		i = 0;
+		while (LoopKey("OKFlag",SHr,1,TrHs))begin
+			if(SHr.OKFlag==1)then begin TrHs = false; end;
+			if(SHr.Assembly==1 and TrHs)then begin
+				if(SHr.Location==SHPackListr.Location)then begin
+					SHPackListrw.SHNr = SHr.SerNr;
+					SHPackListrw.Location = SHr.Location;
+					matrowput(SHPackListr,i,SHPackListrw);
+					i = i + 1;
+				end;
+			end;
+		end;
+		resetloop(SHr);
+	end;
+  
+return;
+end;
 
 global
 updating function LongInt SHPackListVcRecordCheck(var record SHPackListVc SHPackListr,record SHPackListVc SHPackList2r,LongInt stat,LongInt long4)
@@ -200,7 +228,10 @@ BEGIN
     res = -1; 
     goto LSHPackListVcRecordCheck;
   end;
-    
+  
+  if(matrowcnt(SHPackListr)==0)then begin
+  	EditSHList(SHPackListr);
+  end;
    
 LSHPackListVcRecordCheck:;
   SHPackListVcRecordCheck = res;

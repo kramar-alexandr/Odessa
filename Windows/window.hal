@@ -5481,6 +5481,7 @@ begin
   MatrixBegin(30,v,-30,-10,-,6000);
   MatCol(1,40,"№ отгрузки",0,SHNr,false,0);
 	MatCol(1,200,"Комментарий",0,Comment,false,0);
+	MatCol(1,300,"Склад",0,Location,false,0);
   InsertRowTest;
   DeleteRowTest;
   EndMatrix;
