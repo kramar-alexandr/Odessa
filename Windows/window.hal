@@ -5485,7 +5485,7 @@ begin
   InsertRowTest;
   DeleteRowTest;
   EndMatrix;
-  SpecialMenu("Заполнить список отгрузок",'r',4,"EditSHList");
+  //SpecialMenu("Заполнить список отгрузок",'r',4,"EditSHList");
 	SpecialMenu("вигрузить в буфер список товаров для сбора",'r',4,"AddItemsFrShInCach");
   EndWindow;
 end;

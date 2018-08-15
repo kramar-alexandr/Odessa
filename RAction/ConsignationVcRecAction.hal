@@ -168,11 +168,21 @@ END;
 updating procedure EditSHList(var record SHPackListVc SHPackListr)// Edit ************************** BPI Ukraine - KramarAlexandr - 03, 15 08 2018 y. î 18:55:07
 begin
 	row SHPackListVc SHPackListrw;
+	record SHPackListVc oldSHPackListr;
 	record SHVc SHr;
   record RcVc RepSpec;
   integer wn,rwcnt,i;
 	boolean testf,TrHs;
+	vector boolean vSHExist;
 	testf = true;
+  
+  oldSHPackListr.SerNr = -1;
+  while(loopmain(oldSHPackListr,1,true))begin
+  	for(i=0;i<matrowcnt(oldSHPackListr);i=i+1)begin
+  		matrowget(oldSHPackListr,i,SHPackListrw);
+  		vSHExist[SHPackListrw.SHNr] = true;
+  	end;
+  end;
   
 	if(testf)then begin
 		TrHs = true;
@@ -182,10 +192,12 @@ begin
 			if(SHr.OKFlag==1)then begin TrHs = false; end;
 			if(SHr.Assembly==1 and TrHs)then begin
 				if(SHr.Location==SHPackListr.Location)then begin
-					SHPackListrw.SHNr = SHr.SerNr;
-					SHPackListrw.Location = SHr.Location;
-					matrowput(SHPackListr,i,SHPackListrw);
-					i = i + 1;
+					if(vSHExist[SHr.SerNr]==false)then begin
+						SHPackListrw.SHNr = SHr.SerNr;
+						SHPackListrw.Location = SHr.Location;
+						matrowput(SHPackListr,i,SHPackListrw);
+						i = i + 1;
+					end;
 				end;
 			end;
 		end;
