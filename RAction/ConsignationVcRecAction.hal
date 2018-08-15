@@ -165,6 +165,47 @@ LConsignationVcRecordCheck:;
 END;
 
 
+
+
+global
+updating function LongInt SHPackListVcRecordCheck(var record SHPackListVc SHPackListr,record SHPackListVc SHPackList2r,LongInt stat,LongInt long4)
+BEGIN
+  LongInt res;
+  Integer cnt;  
+  string 255 tstr,errstr;
+  record AccVc Accr;
+  record LocGrVc LocGrr;
+  record PISVc PISr;
+  record CUUserLabelBlock CUUerLb;
+  record CountryVc Countryr;
+
+  res = 0;
+	
+	if(SHPackListr.SerNr<0)then begin
+		SHPackListr.SerNr = NextSerNr("SHPackListVc",CurrentDate,-1,false,"");
+	end;
+	
+	if(blankdate(SHPackListr.ListDate))then begin
+		RecordCheckError(1058,"",-1,"ListDate");      
+    res = -1; 
+    goto LSHPackListVcRecordCheck;
+	end;
+	
+  if (blank(SHPackListr.Location)) then begin
+    RecordCheckError(1058,"",-1,"Location");      
+    res = -1; 
+    goto LSHPackListVcRecordCheck;
+  end;
+    
+   
+LSHPackListVcRecordCheck:;
+  SHPackListVcRecordCheck = res;
+  RETURN;
+END;
+
+
+
+
 global updating procedure ConsignationVcUpdateIH(record ConsignationVc Consignationr, boolean addflag)
 begin
 	record ItemHistVc IHr;

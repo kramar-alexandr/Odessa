@@ -1,0 +1,459 @@
+external function Boolean LoggedInTest();
+external procedure ExtractObjWithSeparator(string,string,Boolean,var Integer,var string);
+external function string 255 StrReplace(string,string,string);
+external function boolean MySendRawWebRequest(string, string, boolean, string, string, string, string, boolean, area, var area, integer);
+
+procedure ParseRootChilds(string SearchKey,area rawJson,var array LongInt rootChildLen,var area rootChildsArea)
+begin
+  LongInt keyPosition,i,arLen,squareBracketsOcassions,bracesOcassions,areaLen;
+  string 1 c,prevC;
+  Boolean openSqBr,closeSqBr,openBr,closeBr,skipCommand;
+  area childArea;
+  
+    keyPosition = FindStringInArea(SearchKey,rawJson);
+    if (keyPosition>-1) then begin
+      SETAREAZEROSIZE(rootChildsArea);
+      arLen = GetAreaLength(rawJson);
+      squareBracketsOcassions = 0;
+      bracesOcassions = 0;
+      for (i=(keyPosition + len(SearchKey));i<arLen;i=i+1) begin
+        c = GetStringFromArea(rawJson,i,1);
+        switch (c) begin
+          case "\"":
+            if (skipCommand==false) then begin
+              skipCommand = true;
+            end else begin
+              if (prevC!="\\") then begin
+                skipCommand = false;
+              end;
+            end;
+        end;
+        if (skipCommand==false) then begin
+          switch (c) begin
+            case "[":
+              if (openSqBr==false) then begin
+                openSqBr = true;
+              end;
+              squareBracketsOcassions = squareBracketsOcassions + 1;
+            case "]":
+              if (openSqBr and squareBracketsOcassions==1) then begin
+                closeSqBr = true;
+              end;
+              if (openSqBr) then begin
+                squareBracketsOcassions = squareBracketsOcassions - 1;
+              end;
+            case "{":
+              if (openBr==false) then begin
+                openBr = true;
+              end;
+              bracesOcassions = bracesOcassions + 1;
+            case "}":
+              if (openBr and bracesOcassions==1) then begin
+                closeBr = true;
+              end;
+              if (openBr) then begin
+                bracesOcassions = bracesOcassions - 1;
+              end;
+          end;
+        end;
+        prevC = c;
+        if (openSqBr and closeSqBr) then begin
+          i = arLen;
+        end;
+        if (openBr) then begin
+          ADDTEXTTOAREA(c,childArea);
+        end;
+        if (openBr and closeBr) then begin
+          openBr = false;
+          closeBr = false;
+          areaLen = GetAreaLength(childArea);
+          if (areaLen>0) then begin
+            rootChildLen[rootChildLen.length] = areaLen;
+            AddAreaToArea(childArea,rootChildsArea);
+            SETAREAZEROSIZE(childArea);
+          end;
+        end;
+      end;
+    end;
+  
+  return;
+end;
+
+global webpublic updating procedure WebPrivateGetReportCallBack()
+begin
+	record PrivatBankReportsVc PBReportsr;
+	record PrivatBankBlock PBb;
+	area a_reply,replyarea,tArea,rootChildsArea;
+	xml sopaxml;
+	string 200 session,path,transNumber;
+	boolean check;
+	json jobj;
+	string 100 node,tstr;
+	LongInt jsonNodeCnt,i,fromPos;
+	array LongInt rootChildLen;
+	
+	blockload(PBb);
+	webgetpostdata(a_reply);
+	//AddFileToArea	("WebPrivateGetReportCallBack.txt",a_reply,false);
+	
+	if (GetAreaLength(a_reply)>0) then begin
+    CreateFolder("PrivatBankReports");
+    ADDTEXTTOAREA("{\"root\":",tArea);
+    ADDTEXTTOAREA("}",a_reply);
+    INSERTAREABEFOREAREA(tArea,a_reply);
+
+    jobj = parsejsonarea(a_reply);
+    if (JSONNodeExists(jobj,"root")) then begin
+      jsonNodeCnt = JSONCountChildren(jobj,"root");
+      ParseRootChilds("\"root\":",a_reply,rootChildLen,rootChildsArea);
+      if (jsonNodeCnt==rootChildLen.length) then begin
+        fromPos = 0;
+        for (i=0;i<jsonNodeCnt;i=i+1) begin
+          transNumber = JSONGet(jobj,"root[0]/["  & i & "]/info/@number");
+          PBReportsr.PBNumber = transNumber;
+          if (NonBlank(transNumber) and not ReadFirstMain(PBReportsr,1,true)) then begin
+            path = "PrivatBankReports/" & transNumber & ".txt";
+            SETAREAZEROSIZE(tArea);
+            GetAreaFromArea(rootChildsArea,fromPos,rootChildLen[i],tArea);
+            fromPos = fromPos + rootChildLen[i];
+            writeareatofile(tArea,path,0);
+            RECORDNEW(PBReportsr);
+            PBReportsr.PBNumber = transNumber;
+            tstr = JSONGet(jobj,"root[0]/["  & i & "]/info/@postdate");
+            PBReportsr.TransDate = StringToDate(mid(tstr,6,2) & "/" & mid(tstr,4,2) & "/" & mid(tstr,0,4));
+            PBReportsr.TransTime = StringToTime(mid(tstr,9,2) & ":" & mid(tstr,12,2) & ":" & mid(tstr,15,2));
+            PBReportsr.RawFilePath = path;
+            PBReportsr.Sum = StringToVal(JSONGet(jobj,"root[0]/["  & i & "]/amount/@amt"),M4Val);
+            PBReportsr.Purpose = JSONGet(jobj,"root[0]/["  & i & "]/purpose");
+            PBReportsr.Name = JSONGet(jobj,"root[0]/["  & i & "]/debet/account/@name");
+            PBReportsr.State = JSONGet(jobj,"root[0]/["  & i & "]/info/@state");
+            PBReportsr.FlInfo = JSONGet(jobj,"root[0]/["  & i & "]/info/@flinfo");
+            PBReportsr.DocType = JSONGet(jobj,"root[0]/["  & i & "]/info/@doctype");
+            //LogText(0,PBReportsr.PBNumber & " : " & PBReportsr.TransDate & " : " & PBReportsr.TransTime & " : " & PBReportsr.RawFilePath
+            //& " : " & PBReportsr.Sum & " : " & PBReportsr.Purpose & " : " & PBReportsr.Name & " : " & PBReportsr.State & " : " & PBReportsr.FlInfo
+            //& " : " & PBReportsr.DocType);
+            RECORDSTORE(PBReportsr,true);
+          end;
+        end;
+      end;
+    end;
+
+	end;
+	writeareatofile(a_reply,"WebPrivateGetReportCallBack.txt",0);
+
+return;
+end;
+
+global updating procedure PrivateGetReport(record RcVc RepSpec)
+begin
+	record PrivatBankBlock PBb;
+	string 50 host,port,path;
+	area a_req,replyarea;
+	integer i;	
+	string 10 ssl,forDate; 
+  
+  record PrivatBankReportsVc PBReportsr;
+  
+  /*while(loopmain(PBReportsr,1,true))begin
+  	recorddelete(PBReportsr);
+  	stepback(PBReportsr);
+  end;*/
+  
+  blockload(PBb);
+		
+		if(PBb.UseNode)then begin
+
+			if (BlankDate(RepSpec.d1)) then begin
+			  forDate = DateToString(CurrentDate,"DD.MM.YYYY");
+			end else begin
+			  forDate = DateToString(RepSpec.d1,"DD.MM.YYYY");;
+			end;
+			
+			ssl = "true";
+			path = "/api/p24b/statements?stdate=" & forDate & "&endate=" & forDate & "&showInf";
+			if(nonblank(PBb.Account))then begin
+				path = "/api/p24b/statements?stdate=" & forDate & "&endate=" & forDate & "&acc=" & PBb.Account & "&showInf";
+			end;
+			
+			//PBb.Host = "z8farsqgafir.runscope.net";
+			//path = "/";
+		
+			addtexttoarea("host: 127.0.0.1" & chr(13) & chr(10),a_req);
+			addtexttoarea("Content-Type: application/xml" & chr(13) & chr(10),a_req);
+			AddTextToArea("" & chr(13) & chr(10),a_req);
+		
+			AddTextToArea("{\"host\" : \"" & PBb.Host & "\"," & chr(13),a_req);
+			AddTextToArea("\"port\" : " & PBb.Port & "," & chr(13),a_req);
+			AddTextToArea("\"https\" : " & ssl & "," & chr(13),a_req);
+			AddTextToArea("\"page\" : \"" & path & "\"," & chr(13),a_req);
+			AddTextToArea("\"method\" : \"" & "GET" & "\"," & chr(13),a_req);
+			AddTextToArea("\"callbackhost\" : \"" & "127.0.0.1" & "\"," & chr(13),a_req);
+			AddTextToArea("\"callbackport\" : \"" & "1080" & "\"," & chr(13),a_req);
+			AddTextToArea("\"callbackpage\" : \"" & "/WebPrivateGetReportCallBack.hal" & "\"," & chr(13),a_req);
+			AddTextToArea("\"contenttype\" : \"" & "application/json" & "\"," & chr(13),a_req);
+			AddTextToArea("\"Authorization\" : \"" & "Token " & PBb.SessionID & "\"," & chr(13),a_req);
+			AddTextToArea("\"Accept\" : \"" & "application/json" & "\"" & chr(13),a_req);
+			/*AddTextToArea("\"xmldata\" : ",a_req);
+			AddTextToArea("\"{",a_req);
+			AddTextToArea("\\\"clientId\\\": \\\"" & PBb.clientId & "\\\",",a_req);
+			AddTextToArea("\\\"clientSecret\\\": \\\"" & PBb.clientSecret & "\\\"",a_req);
+			AddTextToArea("}\"",a_req);*/
+			AddTextToArea("}" & chr(13),a_req);
+		
+			writeareatofile(a_req,"SoapRequest.txt",0);
+		
+		
+			logtext(0,"PrivateGetID " & currenttime & "  " & getarealength(replyarea));
+			if(MySendRawWebRequest("127.0.0.1","1070",false,"POST","/getProxyRequest","application/json","",false,a_req,replyarea,3))then begin  //WORK! 
+				logtext(0,"EndRequest");				
+			end else begin
+				logtext(0,"Hansa World: No Connection to NODE!!!");
+			end;
+		end;
+
+
+return;
+end;
+
+global webpublic updating procedure WebPrivateGetIDBusCallBack()
+begin
+	area a_reply,replyarea;
+	xml sopaxml;
+	string 200 session,path;
+	boolean check;
+	json jobj;
+	record PrivatBankBlock PBb;
+	string 100 node;
+	
+	blockload(PBb);
+	webgetpostdata(a_reply);
+	jobj = parsejsonarea(a_reply);
+	
+	node = "roles";
+	
+	logtext(0,JSONCountChildren(jobj,"roles"));
+	logtext(0,JSONGetChildNAME(jobj,"roles[0]",0));
+
+	
+	if(JSONNodeExists(jobj,node))then begin
+		logtext(0,JSONGet(jobj,node));
+		PBb.Roles = JSONGet(jobj,node);
+	end;
+	node = "message";
+	if(JSONNodeExists(jobj,node))then begin
+		logtext(0,JSONGet(jobj,node));
+		PBb.Roles = JSONGet(jobj,node);
+	end;
+	node = "roles[1]";
+	if(JSONNodeExists(jobj,node))then begin
+		logtext(0,JSONGet(jobj,node));
+		PBb.Roles = PBb.Roles & "," & JSONGet(jobj,node);
+	end;
+	node = "roles[2]";
+	if(JSONNodeExists(jobj,node))then begin
+		logtext(0,JSONGet(jobj,node));
+		PBb.Roles = PBb.Roles & "," & JSONGet(jobj,node);
+	end;
+	blockstore(PBb);
+	
+	writeareatofile(a_reply,"WebPrivateGetIDBusCallBack.txt",0);
+	
+
+	
+return;
+end;
+
+
+global webpublic updating procedure WebPrivateGetIDCallBack()
+begin
+	area a_reply,replyarea,a_req;
+	xml sopaxml;
+	string 200 session,path,ssl;
+	boolean check;
+	json jobj;
+	record PrivatBankBlock PBb;
+	string 100 node;
+	
+	blockload(PBb);
+	webgetpostdata(a_reply);
+	
+	writeareatofile(a_reply,"PrivateGetIDReply.txt",0);	
+	
+	jobj = parsejsonarea(a_reply);
+	node = "id";
+	if(JSONNodeExists(jobj,node))then begin
+		PBb.SessionID = JSONGet(jobj,node);
+		blockstore(PBb);
+	end;
+	node = "expiresIn";
+	if(JSONNodeExists(jobj,node))then begin
+		PBb.expiresIn = JSONGet(jobj,node);
+		blockstore(PBb);
+	end;
+	
+	ssl = "true";
+	
+	writeareatofile(a_reply,"WebPrivateGetIDCallBack.txt",0);
+	
+	
+	
+	path = "/api/p24BusinessAuth/createSession";
+				
+	setareazerosize(a_req);
+	addtexttoarea("host: 127.0.0.1" & chr(13) & chr(10),a_req);
+	addtexttoarea("Content-Type: application/xml" & chr(13) & chr(10),a_req);
+	AddTextToArea("" & chr(13) & chr(10),a_req);
+
+	AddTextToArea("{\"host\" : \"" & PBb.Host & "\"," & chr(13),a_req);
+	AddTextToArea("\"port\" : " & PBb.Port & "," & chr(13),a_req);
+	AddTextToArea("\"https\" : " & ssl & "," & chr(13),a_req);
+	AddTextToArea("\"page\" : \"" & path & "\"," & chr(13),a_req);
+	AddTextToArea("\"callbackhost\" : \"" & "127.0.0.1" & "\"," & chr(13),a_req);
+	AddTextToArea("\"callbackport\" : \"" & "1080" & "\"," & chr(13),a_req);
+	AddTextToArea("\"callbackpage\" : \"" & "/WebPrivateGetIDBusCallBack.hal" & "\"," & chr(13),a_req);
+	AddTextToArea("\"contenttype\" : \"" & "application/json" & "\"," & chr(13),a_req);
+
+	AddTextToArea("\"xmldata\" : ",a_req);
+	AddTextToArea("\"{",a_req);
+	AddTextToArea("\\\"sessionId\\\": \\\"" & PBb.SessionID & "\\\",",a_req);
+	AddTextToArea("\\\"login\\\": \\\"" & PBb.Login & "\\\",",a_req);
+	AddTextToArea("\\\"password\\\": \\\"" & PBb.Password & "\\\"",a_req);
+	AddTextToArea("}\"",a_req);
+	AddTextToArea("}" & chr(13),a_req);
+
+	writeareatofile(a_req,"WebPrivateGetIDCallBackRequest.txt",0);
+	
+	//millisleep(2000);
+	logtext(0,"PrivateGetID " & currenttime & "  " & getarealength(replyarea));
+	if(MySendRawWebRequest("127.0.0.1","1070",false,"POST","/getProxyRequest","application/json","",false,a_req,replyarea,3))then begin  //WORK! 
+		logtext(0,"EndRequest");
+	end;
+
+	
+return;
+end;
+
+global procedure PrivateGetIDOld()
+begin
+	record PrivatBankBlock PBb;
+	string 50 host,port,path,ssl;
+	area a_req,replyarea;
+	integer i;	
+		
+		blockload(PBb);
+		ssl = "true";
+		path = "link.privatbank.ua/api/auth/createSession";
+		
+		AddTextToArea("{",a_req);
+		AddTextToArea("\"clientId\": \"" & PBb.clientId & "\",",a_req);
+		AddTextToArea("\"clientSecret\": \"" & PBb.clientSecret & "\"",a_req);
+		AddTextToArea("}",a_req);
+				
+		logtext(0,"PrivateGetIDOld " & currenttime);
+		writeareatofile(a_req,"PrivateGetIDOld.txt",0);
+		SendAsyncWebRequest(PBb.Host,PBb.Port,PBb.Port,true,"POST",path,"application/json","",a_req,"PrivateGetIDReply",20);
+
+return;
+end;
+
+global procedure PrivateGetID()
+begin
+	record PrivatBankBlock PBb;
+	string 50 host,port,path;
+	area a_req,replyarea;
+	integer i;	
+	string 10 ssl; 
+  
+  blockload(PBb);
+		
+		if(PBb.UseNode)then begin
+
+			ssl = "true";
+			path = "/api/auth/createSession";
+		
+		
+			addtexttoarea("host: 127.0.0.1" & chr(13) & chr(10),a_req);
+			addtexttoarea("Content-Type: application/xml" & chr(13) & chr(10),a_req);
+			AddTextToArea("" & chr(13) & chr(10),a_req);
+		
+			AddTextToArea("{\"host\" : \"" & PBb.Host & "\"," & chr(13),a_req);
+			AddTextToArea("\"port\" : " & PBb.Port & "," & chr(13),a_req);
+			AddTextToArea("\"https\" : " & ssl & "," & chr(13),a_req);
+			AddTextToArea("\"page\" : \"" & path & "\"," & chr(13),a_req);
+			AddTextToArea("\"callbackhost\" : \"" & "127.0.0.1" & "\"," & chr(13),a_req);
+			AddTextToArea("\"callbackport\" : \"" & "1080" & "\"," & chr(13),a_req);
+			AddTextToArea("\"callbackpage\" : \"" & "/WebPrivateGetIDCallBack.hal" & "\"," & chr(13),a_req);
+			AddTextToArea("\"contenttype\" : \"" & "application/json" & "\"," & chr(13),a_req);
+		
+			AddTextToArea("\"xmldata\" : ",a_req);
+			AddTextToArea("\"{",a_req);
+			AddTextToArea("\\\"clientId\\\": \\\"" & PBb.clientId & "\\\",",a_req);
+			AddTextToArea("\\\"clientSecret\\\": \\\"" & PBb.clientSecret & "\\\"",a_req);
+			AddTextToArea("}\"",a_req);
+			AddTextToArea("}" & chr(13),a_req);
+		
+			writeareatofile(a_req,"SoapRequest.txt",0);
+		
+		
+			logtext(0,"PrivateGetID " & currenttime & "  " & getarealength(replyarea));
+			if(MySendRawWebRequest("127.0.0.1","1070",false,"POST","/getProxyRequest","application/json","",false,a_req,replyarea,3))then begin  //WORK! 
+				logtext(0,"EndRequest");				
+			end else begin
+				PrivateGetIDOld;
+				logtext(0,"Hansa World: No Connection to NODE!!!");
+			end;
+		end else begin
+			PrivateGetIDOld;
+		end;
+
+
+return;
+end;
+
+
+global updating procedure PrivateGetIDReply(Area a_reply,Area a_replyheader,boolean timeout)
+begin
+	xml sopaxml;
+	string 200 session;
+	boolean check;
+	json jobj;
+	record PrivatBankBlock PBb;
+	string 100 node;
+	
+	blockload(PBb);
+	
+	logtext(0,"PrivateGetIDReply");
+	writeareatofile(a_reply,"PrivateGetIDReply.txt",0);	
+	
+	jobj = parsejsonarea(a_reply);
+	node = "id";
+	if(JSONNodeExists(jobj,node))then begin
+		PBb.SessionID = JSONGet(jobj,node);
+		blockstore(PBb);
+	end;
+	
+	/*if(getarealength(a_reply)>0)then begin	
+		check = getstringfromarea(a_reply,0,18)=="<?xml version=\"1.0";
+		if(check)then begin
+			sopaxml = ParseXMLArea(a_reply);
+			//logtext(0,xmlget(sopaxml,"SOAP-ENV:Envelope/SOAP-ENV:Body/ns1:loginResponse/loginReturn"));
+			session = xmlget(sopaxml,"SOAP-ENV:Envelope/SOAP-ENV:Body/ns1:loginResponse/loginReturn");
+			if(nonblank(session))then begin
+				logtext(0,"HANSA SOAP session " & session);
+				blockload(Soap);
+					PBb.Session = session;
+					PBb.LastSesDate = currentdate;
+					PBb.LastSesTime = currenttime;
+				blockstore(Soap);
+			end else begin
+				logtext(0,"error session");
+			end;
+		end else begin
+			logtext(0,"error check " & getstringfromarea(a_reply,0,18));
+		end;
+	end else begin
+		logtext(0,"Error length");
+	end;*/
+	
+return;
+end;

@@ -11889,6 +11889,7 @@ begin
   EndWindow;
 end;
 
+
 window ConsSaleLClass:1
   wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
 begin

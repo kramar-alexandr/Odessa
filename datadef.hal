@@ -6792,6 +6792,31 @@ RecordBegin(IPVc,-,"");
   KeySegment(Comment);
   KeySegment(Code);
   EndRecord;
+	
+	
+	RecordBegin(SHPackListVc,-,"");//Edit_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-Anton 11:50 15.08.2018
+		RecordField(SerNr,M4Long,0,0);
+		RecordField(ListDate,M4Date,0,0);
+		RecordField(Location,M4Code,50,0);
+		RecordField(Pos,M4Code,50,0);
+		RecordField(Math,M4Matrix,0,0);
+		ArrayBegin(Math,-,1);
+		ArrayField(SHNr,M4Long,0,0);
+		ArrayField(Comment,M4Str,100,0);
+		EndArray;	
+		MainKeyBegin(SerNr,0);
+		KeySegment(SerNr);
+		KeyBegin(Location);
+		KeySegment(Location);
+		KeySegment(SerNr);
+		KeyBegin(ListDate);
+		KeySegment(ListDate);
+		KeySegment(Location);
+		KeySegment(SerNr);
+  EndRecord;
+	
+	
+	
 		
 return;
 end;

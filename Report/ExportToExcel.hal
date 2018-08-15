@@ -529,6 +529,98 @@ begin
 return;
 end;
 
+
+
+
+
+
+
+global procedure AddItemsFrShInCachRn(record RcVc RepSpec)	//Edit--------Dima  23.01.2015
+begin
+  record SHVc SHr;
+  row	SHVc SHrw;
+  Integer rwcnt,i,wn,lstrwcnt,j,k,ItCnt;
+	record SHPackListVc SHPackListr;
+	row SHPackListVc SHPackListrw;
+	array string 255 ArtCode;
+	vector string 255 Spec;
+	vector val Ordered;
+	vector boolean artCodef;
+  
+	
+	StartReportJob("ExportToExcel");
+	EndHeader;
+		
+	SetRepCol(2,50);
+	SetRepCol(3,100);
+	SetRepCol(4,150);
+	SetRepCol(5,200);
+	SetRepCol(6,250);
+	SetRepCol(7,300);
+	SetRepCol(8,350);
+	SetRepCol(9,400);
+
+
+
+	StartFormat(15);
+	OutString(0,0,"№",true);
+	OutString(2,0,"Товар",true);
+	OutString(5,0,"Описание",false);
+	OutString(7,0,"Зак.",false);
+
+	EndFormat;
+	Black_Divider(0,1);
+	
+	
+	
+	ItCnt = 0;
+	SHPackListr.SerNr = RepSpec.long1;
+	if (ReadFirstMain(SHPackListr,1,true)) then begin	 	
+		lstrwcnt = matrowcnt(SHPackListr);
+		for (j=0;j<lstrwcnt;j=j+1) begin
+			matrowget(SHPackListr,j,SHPackListrw);
+			SHr.SerNr = SHPackListrw.SHNr;
+			if (ReadFirstMain(SHr,1,true)) then begin	 
+				rwcnt=MatRowCnt(SHr);
+				for(i=0;i<rwcnt;i=i+1) begin
+					MatRowGet(SHr,i,SHrw);
+					ArtCode[ItCnt] = SHrw.ArtCode;
+					Spec[ArtCode[ItCnt]] = SHrw.Spec;
+					Ordered[ArtCode[ItCnt]] = Ordered[ArtCode[ItCnt]] + SHrw.Ordered;
+					artCodef[ArtCode[ItCnt]] = true;
+					ItCnt = ItCnt + 1;
+				end;	
+			end;
+		end;
+	end;
+	i = 0;
+	for (k=0;k<ItCnt;k=k+1)begin
+		if(artCodef[ArtCode[k]])then begin
+			StartFormat(15);			
+				OutString(0,0,i+1,false);
+				OutString(50,0,ArtCode[k],false);
+				OutString(100,0,Spec[ArtCode[k]],false);
+				OutString(200,0,Ordered[ArtCode[k]],false);
+			EndFormat;
+			i = i + 1;
+			artCodef[ArtCode[k]] = false;
+		end;
+	end;
+	EndJob;
+return;
+end;
+
+
+
+
+
+
+
+
+
+
+
+
 global procedure ExportTableToExcelSHRn(record RcVc RepSpec)	//Edit--------Dima  23.01.2015
 begin
   record SHVc SHr;

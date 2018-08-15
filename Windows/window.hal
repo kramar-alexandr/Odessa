@@ -5440,3 +5440,53 @@ begin
   //CheckBox(h,v+=30,0,"Показыв только карт-ки с транзакциями",flags[1]);
   EndWindow;
 end;
+
+
+
+window SHPLLClass:1
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  WindowBegin("Списки сборки товаров",SHPLLClass,CGmlist,-);
+  SpawnClass(SHPLDClass);
+  SetWRect(64,80,509,300);
+  Sizeable(-1,-1,0,0);
+  UseView(SHPackListVc);
+  RecordList(4,17,-21,-39);
+  RlColKey(4,2,"№",SerNr,false,SerNr);
+  RlColKey(100,100,"Дата",ListDate,false,ListDate);
+  RlColKey(200,200,"Склад",Location,false,Location);
+	RlCol(300,300,"Позиц.",Pos,false);
+  SearchField("Найти");
+  EndWindow;
+end;
+
+
+
+
+
+window SHPLDClass:2
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  real h1,h2,v,vs;
+  WindowBegin("Список сборки товаров",SHPLDClass,CGview,-);
+  SetWRect(64,80,709,900);
+  Sizeable(-1,-1,0,0);
+  UseView(SHPackListVc);
+  v = 10; vs = 20; h1 = 60; h2 = 400;
+  EditField(h1,v, 80,"№",Normal,SerNr,false,0);
+  EditField(h2,v,80,"Дата",Normal,ListDate,false,PasteCurDate);
+  EditField(h1,v+=vs,80,"Склад",Normal,Location,false,LocationSClass);
+  EditField(h2,v,80,"Позиц",Normal,Pos,false,DISlass);
+  v=v+40;
+  MatrixBegin(30,v,-30,-10,-,6000);
+  MatCol(1,40,"№ отгрузки",0,SHNr,false,0);
+	MatCol(1,200,"Комментарий",0,Comment,false,0);
+  InsertRowTest;
+  DeleteRowTest;
+  EndMatrix;
+  SpecialMenu("Заполнить список отгрузок",'r',4,"EditSHList");
+	SpecialMenu("вигрузить в буфер список товаров для сбора",'r',4,"AddItemsFrShInCach");
+  EndWindow;
+end;
+
+

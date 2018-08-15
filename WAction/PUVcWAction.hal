@@ -64,7 +64,7 @@ external function Boolean PUVcEFActiveTest(Integer,Integer,record PUVc);
 external procedure PrintEAN13PODsm();
 remote procedure CrConsigSaleSumUp(var record ConsSaleVc);
 
-
+SetLangMode(LangRussian,"RUS",0);	
 
 function val UnitCalcQty(string Unittext,val UnitXval,val UnitYval,val UnitZval,val defqty)
 BEGIN
@@ -377,6 +377,105 @@ begin
   
 return;
 end;
+
+
+
+global  ///Edit_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-Anton 16:47 15.08.2018
+updating procedure EditSHList()
+begin
+  record SHPackListVc SHPackListr;
+	row SHPackListVc SHPackListrw;
+	record SHVc SHr;
+  record RcVc RepSpec;
+  integer wn,rwcnt,i;
+	boolean testf,TrHs;
+	testf = true;
+  wn = CurWindow;
+  GetWindowRecord(wn,SHPackListr);
+  rwcnt = matrowcnt(SHPackListr);
+	for (i=0;i<rwcnt;i=i+1)begin
+		matrowget(SHPackListr,i,SHPackListrw);
+		SHr.SerNr = SHPackListrw.SHNr;
+		if(readfirstmain(SHr,1,true))then begin
+			testf = false;
+			i=rwcnt;
+			messagebox(0,"Создайте новый документ списка отгрузок!");
+		end;
+	end;
+	if(testf)then begin
+		TrHs = true;
+		SHr.OKFlag = 0;
+		i = 0;
+		while (LoopKey("OKFlag",SHr,1,TrHs))begin
+			if(SHr.OKFlag==1)then begin TrHs = false; end;
+			if(SHr.Assembly==1 and TrHs)then begin
+				SHPackListrw.SHNr = SHr.SerNr;
+				matrowput(SHPackListr,i,SHPackListrw);
+				i = i + 1;
+			end;
+		end;
+		resetloop(SHr);
+		PutwindowRecord(wn,SHPackListr);
+	end;
+  
+return;
+end;
+
+
+
+
+
+global  ///Edit_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-Anton 16:47 15.08.2018
+updating procedure AddItemsFrShInCach()
+begin
+  record SHPackListVc SHPackListr;
+	row SHPackListVc SHPackListrw;
+	record SHVc SHr;
+  record RcVc RepSpec;
+  integer wn,rwcnt,i,shrwcnt,j;
+	boolean testf,TrHs;
+	testf = true;
+  wn = CurWindow;
+  GetWindowRecord(wn,SHPackListr);
+  rwcnt = matrowcnt(SHPackListr);
+	if(rwcnt>0)then begin
+		RepSpec.long1 = SHPackListr.SerNr;
+		RepSpec.Media = mtClipBoard; 
+		RepSpec.repname = "AddItemsFrShInCachRn";
+		RepSpec.flags[0] = wn;
+		RunReport(RepSpec,0);
+	end else begin
+		MessageBox(0,"Список отгрузок пуст!")
+	end;
+return;
+end;
+
+
+
+
+/*
+
+global// added -------------------Dima  23.01.2015
+procedure ExportToExcelORDsm()
+begin
+  record ORVc ORr;
+  record RcVc RepSpec;
+  integer wn;
+  wn = CurWindow;
+  GetWindowRecord(wn,ORr);
+	RepSpec.Media = mtClipBoard; 
+  RepSpec.repname = "ExportTableToExcelORRn";
+  RepSpec.flags[0] = wn;
+  RepSpec.long1 = ORr.SerNr;
+  if(usercanaction("AllowExportTableToExcelOR",true))then begin
+		RunReport(RepSpec,0);
+  end;
+
+  
+return;
+end;
+
+*/
 
 global  // added -------------------Dima  27.11.2014
 procedure ExportAllToExcelConsSaleDsm()
