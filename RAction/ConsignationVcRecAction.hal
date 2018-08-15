@@ -186,6 +186,10 @@ BEGIN
 	end;
 	
 	if(blankdate(SHPackListr.ListDate))then begin
+		SHPackListr.ListDate = currentdate;
+	end;
+	
+	if(blankdate(SHPackListr.ListDate))then begin
 		RecordCheckError(1058,"",-1,"ListDate");      
     res = -1; 
     goto LSHPackListVcRecordCheck;
