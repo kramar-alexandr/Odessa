@@ -708,7 +708,7 @@ begin
 										Rebr.Code = OTDrw.RebCode;
 										if (readfirstmain(Rebr,1,true)) then begin
 											OTD_Rebcode = Rebr.vra0;
-											if (CU_Rebcode <= OTD_Rebcode) then begin
+											if (CU_Rebcode < OTD_Rebcode) then begin
 												chan = true;
 											end;
 										end;
