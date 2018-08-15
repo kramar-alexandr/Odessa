@@ -1481,8 +1481,10 @@ BEGIN
   if (res == true and fieldname=="ProcessingQuant" and Logisticsb.AllowChangeFields==0) then begin
   	res = false;
   end;
+  if (res == true and fieldname=="GiftVouchers" and ORr.OrderClass=="") then begin
+  	res = false;
+  end;
  
-  
   
 LORDClassActiveEditField:;
  	switch (fieldname) begin// Edit ************************** BPI Ukraine - KramarAlexandr - Wednesday, 29 November 2017 14:05:31
