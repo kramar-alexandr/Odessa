@@ -711,15 +711,16 @@ begin
 												OTD_Rebcode = Rebr.vra0;
 												if (CU_Rebcode < OTD_Rebcode) then begin
 													chan = true;
+													CUr.LastRebCode = CUr.RebCode;
+													CUr.RebCode = OTDrw.RebCode;
+													CUr.LastDateChangeDiscount = CurrentDate;
 												end;
 											end;
 										end;
 									end;
 									if(chan)then begin
-										logtext(0,"CustChange Rebate " & CUr.Code & " from " & CUr.RebCode & " to " & OTDrw.RebCode & " loypo " & LCr.PointsBalance);
-										CUr.LastRebCode = CUr.RebCode;
-										CUr.RebCode = OTDrw.RebCode;
-										CUr.LastDateChangeDiscount = CurrentDate;
+										logtext(0,"CustChange Rebate " & CUr.Code & " from " & CUr.LastRebCode & " to " & CUr.RebCode & " loypo " & LCr.PointsBalance);
+
 									
 										//RecordStore(CUr,true);
 									end;
