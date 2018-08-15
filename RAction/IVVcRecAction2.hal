@@ -693,34 +693,36 @@ begin
 			CUr.Code = LCr.CustCode;
 			if(readfirstmain(CUr,1,true))begin
 				if(CUr.Code!="NONAME" and CUr.Code!="EXPO" and CUr.Code!="EXPO1")then begin
-					if (CUr.ManualRecountClient==0) then begin
-						allsum = LCr.PointsBalance;
-						Rebr.Code = CUr.RebCode;
-						if (readfirstmain(Rebr,1,true)) then begin
-							CU_Rebcode = Rebr.vra0;
+					if(CUr.CustCat=="WEB" or CUr.CustCat=="RETAI")then begin
+						if (CUr.ManualRecountClient==0) then begin
+							allsum = LCr.PointsBalance;
+							Rebr.Code = CUr.RebCode;
+							if (readfirstmain(Rebr,1,true)) then begin
+								CU_Rebcode = Rebr.vra0;
 						
-							mtrw = matrowcnt(OTDr);
-							if (mtrw!=0) then begin
-								chan = false;
-								for (i = 0; i < mtrw; i = i + 1) begin
-									matrowget(OTDr,i,OTDrw);
-									if(allsum >= OTDrw.SumNotOneTime)then begin
-										Rebr.Code = OTDrw.RebCode;
-										if (readfirstmain(Rebr,1,true)) then begin
-											OTD_Rebcode = Rebr.vra0;
-											if (CU_Rebcode < OTD_Rebcode) then begin
-												chan = true;
+								mtrw = matrowcnt(OTDr);
+								if (mtrw!=0) then begin
+									chan = false;
+									for (i = 0; i < mtrw; i = i + 1) begin
+										matrowget(OTDr,i,OTDrw);
+										if(allsum >= OTDrw.SumNotOneTime)then begin
+											Rebr.Code = OTDrw.RebCode;
+											if (readfirstmain(Rebr,1,true)) then begin
+												OTD_Rebcode = Rebr.vra0;
+												if (CU_Rebcode < OTD_Rebcode) then begin
+													chan = true;
+												end;
 											end;
 										end;
 									end;
-								end;
-								if(chan)then begin
-									logtext(0,"CustChange Rebate " & CUr.Code & " from " & CU_Rebcode & " to " & OTD_Rebcode & " loypo " & LCr.PointsBalance);
-									CUr.LastRebCode = CUr.RebCode;
-									CUr.RebCode = OTDrw.RebCode;
-									CUr.LastDateChangeDiscount = CurrentDate;
+									if(chan)then begin
+										logtext(0,"CustChange Rebate " & CUr.Code & " from " & CU_Rebcode & " to " & OTD_Rebcode & " loypo " & LCr.PointsBalance);
+										CUr.LastRebCode = CUr.RebCode;
+										CUr.RebCode = OTDrw.RebCode;
+										CUr.LastDateChangeDiscount = CurrentDate;
 									
-									//RecordStore(CUr,true);
+										//RecordStore(CUr,true);
+									end;
 								end;
 							end;
 						end;
