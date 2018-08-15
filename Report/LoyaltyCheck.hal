@@ -12,21 +12,42 @@ begin
 		if(setinset("ROZETKA",IVr.Objects) or setinset("ROZETKA",IVr.PromotionCode2))then begin
 			if(nonblank(IVr.LoyaltyCardNr))then begin
 				if(IVr.Points!=0)then begin
-					startformat(15);
-						outstring(0,"DblIVVc",IVr.SerNr,false);
-						outstring(70,"DblCUVc",IVr.CustCode,false);
-						outstring(120,0,IVr.InvDate,false);
-						outstring(200,0,IVr.LoyaltyCardNr,false);
-						if(IVr.InvType!=kInvoiceTypeCredit)then begin
-							outstring(350,0,IVr.Sum4,false);
-							outstring(1,0,IVr.Points,false);
-							sum = sum + IVr.Points;
-						end else begin
-							outstring(350,0,IVr.Sum4,false);
-							outstring(1,0,IVr.Points,false);
-							sum = sum - IVr.Points;
+					LCr.SerNr = IVr.LoyaltyCardNr;
+					if(readfirstmain(LCr,1,true))then begin
+						if(LCr.PointsBalance>0)then begin
+							startformat(15);
+								outstring(0,"DblIVVc",IVr.SerNr,false);
+								outstring(70,"DblCUVc",IVr.CustCode,false);
+								outstring(120,0,IVr.InvDate,false);
+								outstring(200,0,IVr.LoyaltyCardNr,false);
+								outstring(250,0,LCr.PointsBalance,false);
+								if(IVr.InvType!=kInvoiceTypeCredit)then begin
+									outstring(350,0,IVr.Sum4,false);
+								
+									LCr.PointsBalance = LCr.PointsBalance - IVr.Points;
+									//recordstore(LCr,true);
+									IVr.Points = 0;
+									IVr.LoyaltyCardNr = "";
+									//recordstore(IVr,true);
+									outstring(390,0,LCr.PointsBalance,false);
+									outstring(1,0,IVr.Points,true);
+								
+								end else begin
+									outstring(350,0,IVr.Sum4,false);
+								
+									LCr.PointsBalance = LCr.PointsBalance + IVr.Points;
+									//recordstore(LCr,true);
+									IVr.Points = 0;
+									IVr.LoyaltyCardNr = "";
+									//recordstore(IVr,true);
+									outstring(390,0,LCr.PointsBalance,false);
+									outstring(1,0,IVr.Points,true);
+								
+								end;
+							endformat;
 						end;
-					endformat;
+					end;
+					
 				end;
 			end;
 		end;

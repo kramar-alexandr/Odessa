@@ -5131,8 +5131,8 @@ begin
     if (UserCanAction("ViewCostPrice",true)) then begin //Edit***************************Sasha2,10:38 10.11.2014
       EditField(160,v3,70,"Приб.%",Normal,GPProc,true,0);
       EditField(160,v2,70,"Итого прибыль",ViewOnly,TotGP,true,0);
-			EditField(160,v1,150,"Подарочные сертификаты",Normal,GiftVouchers,true,0);
     end;
+    EditField(160,v1,150,"Подарочные сертификаты",Normal,GiftVouchers,true,0);
     //EditField(290,v3,70,"Налог",ViewOnly,TAX2Sum,true,0);
     //EditField(290,v2,70,"Вн.налог",ViewOnly,TAX1Sum,true,0);
     //EditField(410,v3,100,"НДС",ViewOnly ,Sum3,true,0);
@@ -5140,8 +5140,8 @@ begin
     if (UserCanAction("ViewCostPrice",true)) then begin //Edit***************************Sasha2,10:38 10.11.2014
       EditField(290,v3,70,"Приб.%",Normal,GPProc,true,0);
       EditField(290,v2,70,"Итого прибыль",ViewOnly,TotGP,true,0);
-			EditField(160,v1,150,"Подарочные сертификаты",Normal,GiftVouchers,true,0);
     end;
+    EditField(160,v1,150,"Подарочные сертификаты",Normal,GiftVouchers,true,0);
     //EditField(410,v3,100,"НДС",ViewOnly ,Sum3,true,0);
   end;
   //EditField(410,v2,100,"База",ViewOnly,BaseSum4,true,0);
