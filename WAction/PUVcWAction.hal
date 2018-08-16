@@ -1571,4 +1571,58 @@ LPUDClassActiveEditField:;
   RETURN;
 END;
 
+// Edit Start ---------------------------------------------- Edit Start
+	//Thursday, 16 August 2018 15:03:53
+	
+global
+procedure DblPUVc(string dblstr,string l,Integer currepwn)
+begin
+  Integer wn;
+  record PUVc PUr;
+  boolean res;
+  date dt;
+  record UserVc Userr;
+   
+  PUr.SerNr = FirstInRange(l,10);
+  if (PUr.SerNr<=0) then begin
+    PUr.SerNr = FirstInRange(dblstr,10);
+  end;
+  if (ReadFirstMain(PUr,1,true)) then begin
+  	res = true;
+  	
+  	if(UserCanAction("VievAllSalesGroupDocuments", true)==false) then begin
+			Userr.Code = CurrentUser;
+			if(readFirstMain(Userr, 1, true))then begin
+				if(nonblank(Userr.SalesGroup))then begin
+					If(Userr.SalesGroup!=PUr.SalesGroup)then begin
+						res = false;
+					end;
+				end;
+			end;  
+		end;
+	
+		if(usercanaction("VievOnlyWorldVE",false))then begin
+			If(PUr.SalesGroup!="WORLD")then begin
+				res = false;
+			end;
+		end;
+		if(usercanaction("VievOnlyUKRVE",false))then begin
+			If(PUr.SalesGroup!="UKR")then begin
+				res = false;
+			end;
+		end;
+		if(usercanaction("VievOnlyW1VE",false))then begin
+			If(PUr.SalesGroup!="W_1")then begin
+				res = false;
+			end;
+		end;
+  	
+  	if(res)then begin
+			wn = OpenWindow("PUDClass",1,0,"","",PUr);
+    end;
+  end;     
+  return;
+end;
 
+	// Edit End ---------------------------------------------- Edit End
+	
