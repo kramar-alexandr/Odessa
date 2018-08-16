@@ -722,7 +722,7 @@ begin
 										logtext(0,"CustChange Rebate " & CUr.Code & " from " & CUr.LastRebCode & " to " & CUr.RebCode & " loypo " & LCr.PointsBalance);
 
 									
-										//RecordStore(CUr,true);
+										RecordStore(CUr,true);
 									end;
 								end;
 							end;
