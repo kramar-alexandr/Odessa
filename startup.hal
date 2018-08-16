@@ -752,7 +752,8 @@ begin
   StrSetText(CuPerRnAllPeriod,"Разрешить ведомость расчетов с клиентами за весь период");
   StrSetText(CuPerRnForAllCustomers,"Разрешить ведомость расчетов с клиентами по всем клиентам");// Edit ************************** BPI Ukraine - KramarAlexandr - Tuesday, 10 July 2018 11:55:11
   StrSetText(OrdRnForAllCustomers,"Разрешить журнал счетов клиентов по всем клиентам");// Edit ************************** BPI Ukraine - KramarAlexandr - Tuesday, 10 July 2018 11:55:11
-  StrSetText(AllowNegativePriceonIV,"Negative Unit Price on an SL Invoice");
+ 	StrSetText(ViewItemHistByAllLoc,"Разрешить историю товаров по всем складам");// Edit ************************** BPI Ukraine - KramarAlexandr - Thursday, 16 August 2018 14:36:44
+ 	StrSetText(AllowNegativePriceonIV,"Negative Unit Price on an SL Invoice");
   StrSetText(SMToTrans,"Запись операций из симуляций");
   StrSetText(ActOK,"Утвержение активностей");
   StrSetText(AT2WrofOK,"Утверждение выбытия ОС");
