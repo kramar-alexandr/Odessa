@@ -1573,7 +1573,7 @@ END;
 
 // Edit Start ---------------------------------------------- Edit Start
 	//Thursday, 16 August 2018 15:03:53
-	
+	//7827801
 global
 procedure DblPUVc(string dblstr,string l,Integer currepwn)
 begin
@@ -1601,6 +1601,7 @@ begin
 			end;  
 		end;
 	
+		messagebox(0,res);
 		if(usercanaction("VievOnlyWorldVE",false))then begin
 			If(PUr.SalesGroup!="WORLD")then begin
 				res = false;
