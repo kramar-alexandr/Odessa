@@ -1601,7 +1601,6 @@ begin
 			end;  
 		end;
 	
-		messagebox(0,res);
 		if(usercanaction("VievOnlyWorldVE",false))then begin
 			If(PUr.SalesGroup!="WORLD")then begin
 				res = false;
@@ -1624,6 +1623,72 @@ begin
   end;     
   return;
 end;
+
+global
+procedure DblPU(string dblstr,string l,Integer currepwn)
+begin
+  Integer wn;
+  record PUVc PUr;
+  boolean res;
+  date dt;
+  record UserVc Userr;
+
+  if (nonblank(dblstr)) then begin
+    PUr.SerNr = FirstInRange(dblstr,10);
+    if (ReadFirstMain(PUr,1,true)) then begin  
+    	res = true;
+    	if(usercanaction("VievOnlyWorldVE",false))then begin
+				If(PUr.SalesGroup!="WORLD")then begin
+					res = false;
+				end;
+			end;
+			if(usercanaction("VievOnlyUKRVE",false))then begin
+				If(PUr.SalesGroup!="UKR")then begin
+					res = false;
+				end;
+			end;
+			if(usercanaction("VievOnlyW1VE",false))then begin
+				If(PUr.SalesGroup!="W_1")then begin
+					res = false;
+				end;
+			end;
+    	if(res)then begin
+				wn = OpenWindow("PUDClass",1,0,"","",PUr);
+      end;
+      goto LDblPU;
+    end; 
+  end;
+  if (nonblank(l)) then begin
+    PUr.SerNr = FirstInRange(l,10);
+    if (ReadFirstMain(PUr,1,true)) then begin  
+    	res = true;
+    	
+    	if(usercanaction("VievOnlyWorldVE",false))then begin
+				If(PUr.SalesGroup!="WORLD")then begin
+					res = false;
+				end;
+			end;
+			if(usercanaction("VievOnlyUKRVE",false))then begin
+				If(PUr.SalesGroup!="UKR")then begin
+					res = false;
+				end;
+			end;
+			if(usercanaction("VievOnlyW1VE",false))then begin
+				If(PUr.SalesGroup!="W_1")then begin
+					res = false;
+				end;
+			end;
+    	
+    	if(res)then begin
+				wn = OpenWindow("PUDClass",1,0,"","",PUr);
+				goto LDblPU;
+      end;
+    end; 
+  end;
+LDblPU:;  
+  return;
+end;
+
 
 	// Edit End ---------------------------------------------- Edit End
 	
