@@ -63,6 +63,8 @@ external function Boolean PUVcRowEFActiveCheck(string,Integer,Integer,Integer);
 external function Boolean PUVcEFActiveTest(Integer,Integer,record PUVc);
 external procedure PrintEAN13PODsm();
 remote procedure CrConsigSaleSumUp(var record ConsSaleVc);
+external function Boolean IVCashDClassAfterEditField(Integer,string,Integer,Integer,Integer);
+
 
 SetLangMode(LangRussian,"RUS",0);	
 
@@ -1629,9 +1631,9 @@ procedure DblPU(string dblstr,string l,Integer currepwn)
 begin
   Integer wn;
   record PUVc PUr;
-  boolean res;
-  date dt;
-  record UserVc Userr;
+  boolean res;// Edit ************************** BPI Ukraine - KramarAlexandr - Friday, 17 August 2018 09:40:10
+  date dt;// Edit ************************** BPI Ukraine - KramarAlexandr - Friday, 17 August 2018 09:40:11
+  record UserVc Userr;// Edit ************************** BPI Ukraine - KramarAlexandr - Friday, 17 August 2018 09:40:12
 
   if (nonblank(dblstr)) then begin
     PUr.SerNr = FirstInRange(dblstr,10);
@@ -1689,6 +1691,70 @@ LDblPU:;
   return;
 end;
 
+global
+procedure DblCUVc(string dblstr,string l,Integer currepwn)
+begin
+  Integer wn;
+  record CUVc CUr;
+  record RcVc RepSpec;
+  record IVCashVc IVCashr;
+  integer wnpos;
+  string 255 wclass;
+  boolean res;// Edit ************************** BPI Ukraine - KramarAlexandr - Friday, 17 August 2018 09:40:10
+  date dt;// Edit ************************** BPI Ukraine - KramarAlexandr - Friday, 17 August 2018 09:40:11
+  record UserVc Userr;// Edit ************************** BPI Ukraine - KramarAlexandr - Friday, 17 August 2018 09:40:12
 
+  if (nonblank(l)) then begin
+    CUr.Code = l;
+  end else begin
+    CUr.Code = dblstr;
+  end;
+  if (nonblank(CUr.Code)) then begin
+    if (ReadFirstMain(CUr,1,true)) then begin  
+      GetWindowRecord(currepwn,RepSpec);
+      wnpos = RepSpec.UsedOnly;
+      
+      if (wnpos>0) then begin
+        if (WindowValid(wnpos)) then begin
+          wclass = GetWindowClass(wnpos);
+        end;
+      end;
+      
+      res = true;
+      
+      if(usercanaction("VievOnlyWorldVE",false))then begin
+				If(CUr.SalesGroup!="WORLD")then begin
+					res = false;
+				end;
+			end;
+			if(usercanaction("VievOnlyUKRVE",false))then begin
+				If(CUr.SalesGroup!="UKR")then begin
+					res = false;
+				end;
+			end;
+			if(usercanaction("VievOnlyW1VE",false))then begin
+				If(CUr.SalesGroup!="W_1")then begin
+					res = false;
+				end;
+			end;
+      
+      if(res)then begin
+				switch (wclass) begin
+					case "NPTSIVCashDClass":
+						WindowFieldGoto(wnpos,IVCashr,-1,"CustCode",false);
+						DeselectWindow(wnpos,false);
+						GetWindowRecord(wnpos,IVCashr);
+						IVCashr.CustCode = CUr.Code;
+						PutWindowRecord(wnpos,IVCashr);
+						IVCashDClassAfterEditField(wnpos,"CustCode",0,0,1);
+						CloseWindow(currepwn);
+					otherwise
+						wn = OpenWindow("CUDClass",1,0,"","",CUr);
+				end;
+      end;
+    end; 
+  end;
+  return;
+end;
 	// Edit End ---------------------------------------------- Edit End
 	
