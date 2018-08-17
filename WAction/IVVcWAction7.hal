@@ -1336,7 +1336,10 @@ begin
 				rwcnt = matrowcnt(IVr);
 				for (i=rwcnt;i>=0;i=i-1) begin
 					matrowget(IVr,i,IVrw);
-					if(IVrw.stp==0)then begin MatRowDelete(IVr,i); end;
+					if(IVrw.stp==0)then begin 
+						MatRowDelete(IVr,i); 
+						rwcnt = rwcnt-1;
+					end;
 				end;
 				
         PutWindowRecord(wn,IVr);
