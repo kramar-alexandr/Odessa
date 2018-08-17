@@ -69,7 +69,7 @@ begin
 						resetloop(POr);
 						while(LoopKey("SerNr",POr,1,TrHs))begin
 							testf = true;
-							if(usercanaction("VievOnlyW1VE",true) and POr.SalesGroup!="W_1")then begin testf = false; end;
+							if(usercanaction("VievOnlyW1VE",false)==true and POr.SalesGroup!="W_1")then begin testf = false; end;
 							if(nonblank(vecode) and POr.VECode!=vecode)then begin testf = false; end;
 							
 							if(testf)then begin
