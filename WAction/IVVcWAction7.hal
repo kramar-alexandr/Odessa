@@ -550,7 +550,7 @@ end;
 global
 function Boolean IVDClasstouchscreenitemEFAfter(Integer wn,Integer pastewn,Boolean changedf)
 begin  
-  string 255 inwarning;
+  string 255 inwarning,warning;
   record IVVc prevIVr;
   record IVVc IVr;
   row IVVc IVrw;
@@ -619,9 +619,9 @@ begin
         PutWindowString(wn,"ivcashcommandlastitemsernrf","");
       end;
     end else begin
-      if (IVVc_PasteArtCode(IVr,rownr,inwarning,inwarning,TouchScreenLook,sernrf)) then begin
-        if (nonblank(inwarning)) then begin
-          MessageBox(0,inwarning);
+      if (IVVc_PasteArtCode(IVr,rownr,warning,inwarning,TouchScreenLook,sernrf)) then begin
+        if (nonblank(warning)) then begin
+          MessageBox(0,warning);
         end;
         MatRowGet(IVr,rownr,IVrw);
         if (!equalf) then begin
