@@ -3733,6 +3733,21 @@ begin
 							if (status == USetStr(31063) or status == USetStr(31173) or status == USetStr(31177)) then begin
 								SHr.NPStatusCode = 1;
 							end;
+							if(status == USetStr(31187))then begin
+								SHr.NPStatusCode = 1;
+							end;
+							if(status == USetStr(31188) and SHr.ShipDate<addday(currentdate,-2))then begin
+								SHr.NPStatusCode = 1;
+							end;
+							if(status == USetStr(31189) and SHr.ShipDate<addday(currentdate,-2))then begin
+								SHr.NPStatusCode = 1;
+							end;
+							if(status == USetStr(31190))then begin
+								SHr.NPStatusCode = 1;
+							end;
+							if(status == USetStr(31191))then begin
+								SHr.NPStatusCode = 1;
+							end;
 							RecordUpdate(oldSHr,SHr,true);
 							UpdateORVcNewPostStatuses(SHr);
 						end else begin
@@ -3767,6 +3782,21 @@ begin
 								SHr.NPtimescan = scantime;
 							end;
 							if (status == USetStr(31063) or status == USetStr(31173)) then begin
+								SHr.NPStatusCode = 1;
+							end;
+							if(status == USetStr(31187))then begin
+								SHr.NPStatusCode = 1;
+							end;
+							if(status == USetStr(31188) and SHr.ShipDate<addday(currentdate,-2))then begin
+								SHr.NPStatusCode = 1;
+							end;
+							if(status == USetStr(31189) and SHr.ShipDate<addday(currentdate,-2))then begin
+								SHr.NPStatusCode = 1;
+							end;
+							if(status == USetStr(31190))then begin
+								SHr.NPStatusCode = 1;
+							end;
+							if(status == USetStr(31191))then begin
 								SHr.NPStatusCode = 1;
 							end;
 							if (status==USetStr(31171) and SHr.OKFlag==0) then begin// Edit ************************** Wednesday, 23 August 2017 16:59:49
