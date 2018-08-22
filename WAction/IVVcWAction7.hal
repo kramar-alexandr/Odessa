@@ -623,6 +623,9 @@ begin
         if (nonblank(warning)) then begin
           MessageBox(0,warning);
         end;
+        if (nonblank(inwarning)) then begin
+          MessageBox(0,inwarning);
+        end;
         MatRowGet(IVr,rownr,IVrw);
         if (!equalf) then begin
         	IVrw.Quant = 1; //Edit***************************Sasha2,15:01 07.11.2014
