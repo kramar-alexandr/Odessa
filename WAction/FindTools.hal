@@ -604,23 +604,27 @@ begin
 	INr1.Code = RepSpec.f2;
 	if(ReadFirstMain(INr1,1,true)) then begin
 		INr.Code = INr1.Code;
+		INr.WarnText1 = INr1.WarnText1;
 		key = true;
 	end else begin
 		RecordClear(INr1);
 		INr1.BarCode = RepSpec.f2;
 		if(ReadFirstKey("BarCode",INr1,1,true)) then begin
 			INr.Code = INr1.Code;
+			INr.WarnText1 = INr1.WarnText1;
 			key = true;
 		end else begin
 			RecordClear(INr1);
 			INr1.AlternativeCode = RepSpec.f2;
 			if(ReadFirstKey("AlternativeCode",INr1,1,true)) then begin
 				INr.Code = INr1.Code;
+				INr.WarnText1 = INr1.WarnText1;
 				key = true;
 			end else begin
 				Barcoder.Barcode = RepSpec.f2;
 				if (ReadFirstMain(Barcoder,1,true)) then begin
 					INr.Code = Barcoder.Itemcode;
+					INr.WarnText1 = INr1.WarnText1;
 					key = true;					
 				end;
 			end;
