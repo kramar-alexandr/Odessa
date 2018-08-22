@@ -633,6 +633,9 @@ begin
 	if(key) then begin
 			while	(curRow < rwcnt) begin
 				if(FindInMathGeneral("SHVc",mwn,INr.Code,curRow,RowNumber)==true) then begin
+						if(nonblank(INr.WarnText1))then begin
+							messagebox(0,INr.WarnText1);
+						end;
 						MatRowGet(SHr,RowNumber,SHrw);
 						if (SHrw.Ship < SHrw.Ordered) then begin
 							SHrw.Ship = SHrw.Ship+1;
