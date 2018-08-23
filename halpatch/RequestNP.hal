@@ -3999,6 +3999,28 @@ begin
 end;
 
 
+global function boolean IsNPStatusToClose(string status)
+begin
+	record NPCloseStatusBlock NPSCb;
+	row NPCloseStatusBlock NPSCrw;
+	boolean res;
+	integer i,rwcnt;
+	
+	if(nonblank(status))then begin
+		blockload(NPSCb);
+		rwcnt = matrowcnt(NPSCb);
+		For(i=0;i<rwcnt;i=i+1) begin
+			matrowget(NPSCb,i,NPSCrw);
+			if(status==NPSCrw.Text)then begin
+				res = true;
+			end;
+		end; 
+	end;
+	
+	IsNPStatusToClose = res;
+return;
+end;
+
 global updating procedure CloseNPShipment()
 begin
 area request,replyarea,mainRequest;
@@ -4023,13 +4045,7 @@ area request,replyarea,mainRequest;
   SHr.NPIntDocNumber = "000";
   While(LoopKey("NPIntDocNumber",SHr,1,TrHs)) begin
 		if (TrHs and (SHr.NPStatusCode==0)) then begin
-			logtext(0,"******************************************");
-			logtext(0,SHr.NPStatus & "|" & SHr.NPStatusCode);
-			logtext(0," Номер не знайдено " & SHr.NPStatus=="Номер не знайдено");
-			logtext(0," Відправлення отримано. Грошовий переказ видано одержувачу. " & SHr.NPStatus=="Відправлення отримано. Грошовий переказ видано одержувачу.");
-			logtext(0," Відправлення отримано " & SHr.NPStatus=="Відправлення отримано");
-
-			logtext(0,"******************************************");
+			logtext(0,SHr.NPStatus & "|" & SHr.NPStatusCode & "|" IsNPStatusToClose(SHr.NPStatus));
 		end;  
   end;
    
