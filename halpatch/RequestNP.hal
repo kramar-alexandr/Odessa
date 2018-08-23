@@ -4025,14 +4025,10 @@ area request,replyarea,mainRequest;
 		if (TrHs and (SHr.NPStatusCode==0)) then begin
 			logtext(0,"******************************************");
 			logtext(0,SHr.NPStatus & "|" & SHr.NPStatusCode);
-			logtext(0," 31063 " & SHr.NPStatus==ConvertStringFromCodePage("WINDOWS-1251",USetStr(31063)));
-			logtext(0," 31173 " & SHr.NPStatus==ConvertStringFromCodePage("WINDOWS-1251",USetStr(31173)));
-			logtext(0," 31177 " & SHr.NPStatus==ConvertStringFromCodePage("WINDOWS-1251",USetStr(31177)));
-			logtext(0," 31187 " & SHr.NPStatus==ConvertStringFromCodePage("WINDOWS-1251",USetStr(31187)));
-			logtext(0," 31188 " & SHr.NPStatus==ConvertStringFromCodePage("WINDOWS-1251",USetStr(31188)));
-			logtext(0," 31189 " & SHr.NPStatus==ConvertStringFromCodePage("WINDOWS-1251",USetStr(31189)));
-			logtext(0," 31190 " & SHr.NPStatus==ConvertStringFromCodePage("WINDOWS-1251",USetStr(31190)));
-			logtext(0," 31191 " & SHr.NPStatus==ConvertStringFromCodePage("WINDOWS-1251",USetStr(31191)));
+			logtext(0," Номер не знайдено " & SHr.NPStatus=="Номер не знайдено");
+			logtext(0," Відправлення отримано. Грошовий переказ видано одержувачу. " & SHr.NPStatus=="Відправлення отримано. Грошовий переказ видано одержувачу.");
+			logtext(0," Відправлення отримано " & SHr.NPStatus=="Відправлення отримано");
+
 			logtext(0,"******************************************");
 		end;  
   end;
