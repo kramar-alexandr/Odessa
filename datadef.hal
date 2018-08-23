@@ -6827,6 +6827,7 @@ RecordBegin(IPVc,-,"");
   	RecordField(InPost,M4Str,225,0);
   	RecordField(ENSend,M4Str,225,0);
   	RecordField(ENReceived,M4Str,225,0);
+  	RecordField(ENWaitFrom,M4Str,225,0);
   EndBlock;
 	
 		

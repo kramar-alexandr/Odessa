@@ -1873,10 +1873,12 @@ begin
   string 255 newtext,response;// Edit ************************** Wednesday, 16 August 2017 15:57:40
   integer i;
   row SHVc SHrw;
+  record NPStatusesBlock NSPb;
 
 	BlockLoad(SMSb);//Edit----------------------Dima  16.09.2015
 	BlockLoad(SMSOb);
-
+	BlockLoad(NSPb);
+	
   if ((SHr.OrderNr!=-1) and (SH2r.OKFlag==0)) then begin
     if (UpdateOrderFromShip(SHr,true,SH2r,true,false)) then begin end;
   end;
@@ -1948,10 +1950,10 @@ begin
 		if (nonblank(SHr.NPIntDocNumber)) then begin
 			logtext(0,"SH UPD SMS2 " & SHr.SerNr);
 			logtext(0,"SH UPD SMS1 NPStatus " & SHr.NPStatus);
-			if(nonblank(SHr.NPStatus) and blank(SH2r.NPStatus) and SHr.NPStatus!=USetStr(31178))then begin
+			if(nonblank(SHr.NPStatus) and blank(SH2r.NPStatus) and SHr.NPStatus!=NSPb.ENWaitFrom)then begin
 				response = SendSMSNewPost(SHr);
 			end;
-			if(SH2r.NPStatus==USetStr(31178) and SHr.NPStatus!=USetStr(31178) and nonblank(SHr.NPStatus))then begin
+			if(SH2r.NPStatus==NSPb.ENWaitFrom and SHr.NPStatus!=NSPb.ENWaitFrom and nonblank(SHr.NPStatus))then begin
 				response = SendSMSNewPost(SHr);
 			end;
 		end;  
