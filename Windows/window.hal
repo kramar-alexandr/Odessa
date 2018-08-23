@@ -5077,6 +5077,8 @@ begin
   SetWRect(64,80,500,300);
   v=6;vs = 20; h = 100;
   EditField(h,v,-20,"Прибыл в отделение",Normal,InPost,false,0);
+  EditField(h,v+=20,-20,"Отправлен",Normal,ENSend,false,0);
+  EditField(h,v+=20,-20,"Получен",Normal,ENReceived,false,0);
 
   EndWindow;
 end;

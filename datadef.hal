@@ -6825,6 +6825,8 @@ RecordBegin(IPVc,-,"");
 	
 	BlockBegin(NPStatusesBlock,-,""); // Edit ************************** BPI Ukraine - KramarAlexandr - Thursday, 23 August 2018 10:59:33
   	RecordField(InPost,M4Str,225,0);
+  	RecordField(ENSend,M4Str,225,0);
+  	RecordField(ENReceived,M4Str,225,0);
   EndBlock;
 	
 		

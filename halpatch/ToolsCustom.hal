@@ -1761,6 +1761,10 @@ updating procedure SetNewStatusesORVc(var record ORVc ORr)	//Edit---------------
 begin
 record IVVc IVr;
 record SHVc SHr;
+record NPStatusesBlock NPSb;
+
+blockload(NPSb);
+
   if (ORr.Reserved!=0) then begin
 		ORr.CustomStatusFlag = 1;	//Edit----------------------Dima  22.09.2015
 	end;
@@ -1784,13 +1788,13 @@ record SHVc SHr;
   				if (SHr.OKFlag!=0) then begin
         		ORr.CustomStatusFlag = 6;
       		
-						if (SHr.NPStatus == USetStr(31120)) then begin	//sent
+						if (SHr.NPStatus == NPSb.ENSend) then begin	//sent 31120
 							ORr.CustomStatusFlag = 7;
 						end;
-						if (SHr.NPStatus == USetStr(31063)) then begin //received
+						if (SHr.NPStatus == NPSb.ENReceived) then begin //received 31063
 							ORr.CustomStatusFlag = 8;
 						end;	
-						if (SHr.NPStatus == USetStr(31121)) then begin //delivered to the warehouse
+						if (SHr.NPStatus == NPSb.InPost) then begin //delivered to the warehouse
 							ORr.CustomStatusFlag = 8;
 
 						end; 
