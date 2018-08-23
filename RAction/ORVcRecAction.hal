@@ -2521,10 +2521,13 @@ global updating procedure UpdateORVcNewPostStatuses(record SHVc SHr)		//Edit----
 begin
 	record ORVc ORr,oldORr;
 	string 50 sent, received,received2;
+	record NPStatusesBlock NSPb;
+  
+  blockload(NSPb)
 	
-	sent = USetStr(31120);
-	received = USetStr(31121);
-	received2 = USetStr(31063);
+	sent = NSPb.ENSend;
+	received = NSPb.InPost;
+	received2 = NSPb.ENReceived;
 	
 	if (SHr.NPStatus == sent or SHr.NPStatus == received or SHr.NPStatus == received2) then begin
 	
