@@ -4046,6 +4046,10 @@ area request,replyarea,mainRequest;
   While(LoopKey("NPIntDocNumber",SHr,1,TrHs)) begin
 		if (TrHs and (SHr.NPStatusCode==0)) then begin
 			logtext(0,SHr.NPStatus & "|" & SHr.NPStatusCode & "|" & IsNPStatusToClose(SHr.NPStatus));
+			if(IsNPStatusToClose(SHr.NPStatus)==true)then begin
+				SHr.NPStatusCode = 1;
+				recordstore(SHr,true);
+			end;
 		end;  
   end;
    
