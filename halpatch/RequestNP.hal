@@ -20,6 +20,28 @@ external function string 255 StripCharacter(string,string);
 
 SetLangMode(LangRussian,"RUS",0); 
 
+global function boolean IsNPStatusToClose(string status)
+begin
+	record NPCloseStatusBlock NPSCb;
+	row NPCloseStatusBlock NPSCrw;
+	boolean res;
+	integer i,rwcnt;
+	
+	if(nonblank(status))then begin
+		blockload(NPSCb);
+		rwcnt = matrowcnt(NPSCb);
+		For(i=0;i<rwcnt;i=i+1) begin
+			matrowget(NPSCb,i,NPSCrw);
+			if(status==NPSCrw.Text)then begin
+				res = true;
+			end;
+		end; 
+	end;
+	
+	IsNPStatusToClose = res;
+return;
+end;
+
 
 function string 100 ConvertXmlVal(val inpval)
 begin
@@ -3677,6 +3699,9 @@ begin
   string 255 datetime,scandatetxt;
   time scantime;
   date scandate,resipientdate;
+  record NPStatusesBlock NPSb;
+  
+  blockload(NPSb);
   
   webgetpostdata(replyarea);
 	logtext(0,"WebGetNPGetCytiesRequestProxy");
@@ -3730,24 +3755,10 @@ begin
 								SHr.NPdatescan = scandate;
 								SHr.NPtimescan = scantime;
 							end;
-							if (status == USetStr(31063) or status == USetStr(31173) or status == USetStr(31177)) then begin
+							if (IsNPStatusToClose(status)) then begin
 								SHr.NPStatusCode = 1;
 							end;
-							if(status == USetStr(31187))then begin
-								SHr.NPStatusCode = 1;
-							end;
-							if(status == USetStr(31188) and SHr.ShipDate<addday(currentdate,-2))then begin
-								SHr.NPStatusCode = 1;
-							end;
-							if(status == USetStr(31189) and SHr.ShipDate<addday(currentdate,-2))then begin
-								SHr.NPStatusCode = 1;
-							end;
-							if(status == USetStr(31190))then begin
-								SHr.NPStatusCode = 1;
-							end;
-							if(status == USetStr(31191))then begin
-								SHr.NPStatusCode = 1;
-							end;
+							
 							RecordUpdate(oldSHr,SHr,true);
 							UpdateORVcNewPostStatuses(SHr);
 						end else begin
@@ -3781,25 +3792,10 @@ begin
 								SHr.NPdatescan = scandate;
 								SHr.NPtimescan = scantime;
 							end;
-							if (status == USetStr(31063) or status == USetStr(31173)) then begin
+							if (IsNPStatusToClose(status)) then begin
 								SHr.NPStatusCode = 1;
 							end;
-							if(status == USetStr(31187))then begin
-								SHr.NPStatusCode = 1;
-							end;
-							if(status == USetStr(31188) and SHr.ShipDate<addday(currentdate,-2))then begin
-								SHr.NPStatusCode = 1;
-							end;
-							if(status == USetStr(31189) and SHr.ShipDate<addday(currentdate,-2))then begin
-								SHr.NPStatusCode = 1;
-							end;
-							if(status == USetStr(31190))then begin
-								SHr.NPStatusCode = 1;
-							end;
-							if(status == USetStr(31191))then begin
-								SHr.NPStatusCode = 1;
-							end;
-							if (status==USetStr(31171) and SHr.OKFlag==0) then begin// Edit ************************** Wednesday, 23 August 2017 16:59:49
+							if (status==NPSb.InPost and SHr.OKFlag==0) then begin// Edit ************************** Wednesday, 23 August 2017 16:59:49
 								SHr.OKFlag = 1;
 								SHr.Sorting = "Ž’ƒ“†…Ž";
 							end;
@@ -3998,28 +3994,6 @@ begin
 	NPGetAreasRequestMn(RepSpec);
 end;
 
-
-global function boolean IsNPStatusToClose(string status)
-begin
-	record NPCloseStatusBlock NPSCb;
-	row NPCloseStatusBlock NPSCrw;
-	boolean res;
-	integer i,rwcnt;
-	
-	if(nonblank(status))then begin
-		blockload(NPSCb);
-		rwcnt = matrowcnt(NPSCb);
-		For(i=0;i<rwcnt;i=i+1) begin
-			matrowget(NPSCb,i,NPSCrw);
-			if(status==NPSCrw.Text)then begin
-				res = true;
-			end;
-		end; 
-	end;
-	
-	IsNPStatusToClose = res;
-return;
-end;
 
 global updating procedure CloseNPShipment()
 begin
