@@ -5376,6 +5376,19 @@ begin
 	EndWindow;
 end;
 
+window NPCloseStatusTCLass:1// Edit ************************** BPI Ukraine - KramarAlexandr - Thursday, 23 August 2018 10:34:04
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+	Integer h, v;
+	WindowBegin("Статусы закрытия НП",NPCloseStatusTCLass,CGHbl,HBlRecType);
+	SetBlid(NPCloseStatusBlock);
+	SetWRect(64,80,550,300);
+	MatrixBegin(20,27,-50,-40,-,10);
+	MatCol(1,14,"Статус",0,Text,false,0);
+	EndMatrix;
+	EndWindow;
+end;
+
 window NewPDLClass:1
   wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
 begin

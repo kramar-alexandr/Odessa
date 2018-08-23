@@ -6816,7 +6816,12 @@ RecordBegin(IPVc,-,"");
 		KeySegment(SerNr);
   EndRecord;
 	
-	
+	BlockBegin(NPCloseStatusBlock,-,""); // Edit Dima ************* 2018-02-20 03:47 PM
+		RecordField(Math,M4Matrix,0,0);
+		ArrayBegin(Math,-,1);
+		ArrayField(Text,M4Str,200,0);
+		EndArray;
+	EndBlock;
 	
 		
 return;

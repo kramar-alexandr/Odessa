@@ -30,6 +30,7 @@ begin
 	Register("Отделения","Отделения",NPWarehouseVc,modNPost);
 	Register("Улицы","Улицы",NPStreetVc,modNPost);
 	Register("Стандартные коробки","Стандартные коробки",StandBoxesVc,modNPost);
+  Setting("Статусы закрытия НП",NPCloseStatusTCLass,modNPost); // Edit ************************** BPI Ukraine - KramarAlexandr - Thursday, 23 August 2018 10:35:35
 
 
 	Register("ARVc","ARVc",ARVc,modDBMain);//Edit----------------------Dima  22.12.2015
