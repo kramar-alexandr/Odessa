@@ -376,6 +376,7 @@ begin
 	 SString(31190,"Відмова від отримання");
 	 SString(31191,"Видалено");
 	 
+	Maintenance("CloseNPShipment",FixItemCostVClass,CloseNPShipment,modNPost);
 	
 	Maintenance("Выровнять стоимость товара",FixItemCostVClass,FixSomeIHCostSM,modIN);
 	Maintenance("Закрыть старые OR",MyVClass,CloseOldOpenOrders,modSO);

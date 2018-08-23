@@ -3997,3 +3997,44 @@ begin
 	//NPUpdateENstatus1Mn(RepSpec);
 	NPGetAreasRequestMn(RepSpec);
 end;
+
+
+global updating procedure CloseNPShipment()
+begin
+area request,replyarea,mainRequest;
+  boolean TrHs;
+  string 200 getParam,host,page;
+  xml xdata;
+  longint i,k;
+  record NPSettingsBlock NPSettingsb;
+  record SHVc SHr,oldSHr;
+  array string 50 documents,tempArray;
+  array longint deliveries;
+  vector string 50 statuses;
+  string 200 docNumber,status;
+  integer steps;
+  integer repeat;
+	boolean testf,ssl;
+  string 20 port;
+  record ORVc ORr;
+ 
+  i = 0;
+  TrHs = true;  
+  SHr.NPIntDocNumber = "000";
+  While(LoopKey("NPIntDocNumber",SHr,1,TrHs)) begin
+		if (TrHs and (SHr.NPStatusCode==0)) then begin
+			logtext(0,SHr.NPStatus & "|" & SHr.NPStatusCode);
+			logtext(31063," 31063 " & SHr.NPStatus==USetStr(31063));
+			logtext(31173," 31173 " & SHr.NPStatus==USetStr(31173));
+			logtext(31177," 31177 " & SHr.NPStatus==USetStr(31177));
+			logtext(31187," 31187 " & SHr.NPStatus==USetStr(31187));
+			logtext(31188," 31188 " & SHr.NPStatus==USetStr(31188));
+			logtext(31189," 31189 " & SHr.NPStatus==USetStr(31189));
+			logtext(31190," 31190 " & SHr.NPStatus==USetStr(31190));
+			logtext(31191," 31191 " & SHr.NPStatus==USetStr(31191));
+		end;  
+  end;
+   
+
+return;
+end;
