@@ -451,14 +451,14 @@ BEGIN
   string 	255				cur_disc_one;
   
   
-  /*rwcnt = matrowcnt(IVp);
+  rwcnt = matrowcnt(IVp);
 	for (i=rwcnt;i>=0;i=i-1) begin
 		matrowget(IVp,i,IVrw);
 		if(IVrw.stp==0)then begin 
 			MatRowDelete(IVp,i); 
 			rwcnt = rwcnt-1;
 		end;
-	end;*/
+	end;
   
   if (long4==3) then begin TouchScreenFinishButtonf = true; end;
   res = 0;
