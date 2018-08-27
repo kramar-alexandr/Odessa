@@ -2613,7 +2613,7 @@ end;
 global
 updating procedure ProceedRetFromCheckNPTSSClassExecute(Integer wn)
 begin
-  Integer mwn,rownr;
+  Integer mwn,rownr,rwcnt,i;
   record RcVc RepSpec;
   record IVVc IVr;
   record IVVc IVRetr;
@@ -2622,6 +2622,7 @@ begin
   string 255 tstr,t2;
   record LoyaltyCardVc LoyaltyCardr;
   record LocalMachineBlock LMb;
+  row IVVc IVrw;
   
   DeselectWindow(wn,true);
   mwn = MotherWindow(wn);
@@ -2632,9 +2633,18 @@ begin
 			CloseWindow(wn);
 			RecordCopy(IVRetr,IVr);
 			IVVcRecordDuplicateDo(IVRetr,false,true);
+			rwcnt = matrowcnt(IVRetr);
+			for (i=rwcnt;i>=0;i=i-1) begin
+				matrowget(IVRetr,i,IVrw);
+				if(IVrw.stp==0)then begin 
+					MatRowDelete(IVRetr,i); 
+					rwcnt = rwcnt-1;
+				end;
+			end;
 			PutWindowRecord(mwn,IVRetr);
 			IVDClass_RefreshStringList(mwn,IVRetr);
 			IVDClassToolIVReturn;
+			
 		end else begin
 			messagebox(0,"Џрошло больше 14 дней с момента продажи!")
 		end;
