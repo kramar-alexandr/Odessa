@@ -1954,48 +1954,37 @@ begin
 	boolean changed;
 	record LoyaltyCardVc LCr;
 	
-	if (IVr.InvType!=kInvoiceTypeCredit) then begin
-		allsum = 0;
-		CUr.Code = IVr.CustCode;
-		if (nonblank(IVr.LoyaltyCardNr))then begin
-			LCr.SerNr =	IVr.LoyaltyCardNr;
-			if(readfirstmain(LCr,1,true))then begin end;
-		end;
-		if (readfirstmain(CUr,1,true)) then begin
-		end;
-		if(CUr.Code!="EXPO" and CUr.Code!="EXPO1")then begin
-			if(CUr.CustCat=="WEB" or CUr.CustCat=="RETAI")then begin
-				if (CUr.RebCode!=IVr.RebCode) then begin
-					if(IVr.BirthDayVaucher<=0)then begin
-						IVr.RebCode = CUr.RebCode;
+	if(setinset("ROZETKA",IVr.Objects)==false)then begin
+		if (IVr.InvType!=kInvoiceTypeCredit) then begin
+			allsum = 0;
+			CUr.Code = IVr.CustCode;
+			if (nonblank(IVr.LoyaltyCardNr))then begin
+				LCr.SerNr =	IVr.LoyaltyCardNr;
+				if(readfirstmain(LCr,1,true))then begin end;
+			end;
+			if (readfirstmain(CUr,1,true)) then begin
+			end;
+			if(CUr.Code!="EXPO" and CUr.Code!="EXPO1")then begin
+				if(CUr.CustCat=="WEB" or CUr.CustCat=="RETAI")then begin
+					if (CUr.RebCode!=IVr.RebCode) then begin
+						if(IVr.BirthDayVaucher<=0)then begin
+							IVr.RebCode = CUr.RebCode;
+						end;
+						IVDUpdatePrices(IVr,false);
 					end;
-					IVDUpdatePrices(IVr,false);
-				end;
 		
-				BlockLoad(OTDr);
-				sum = IVVcCountSum(IVr);
-				allsum = sum + LCr.PointsBalance;
-				Rebr.Code = CUr.RebCode;
-				if (readfirstmain(Rebr,1,true)) then begin
-					CU_Rebcode = Rebr.vra0;
-				end;
-				mtrw = matrowcnt(OTDr);
-				if (mtrw!=0) then begin
-					for (i = 0; i < mtrw; i = i + 1) begin
-						matrowget(OTDr,i,OTDrw);
-						if (sum >= OTDrw.Sum)then begin
-							Rebr.Code = OTDrw.RebCode;
-							if (readfirstmain(Rebr,1,true)) then begin
-								OTD_Rebcode = Rebr.vra0;
-								if (CU_Rebcode < OTD_Rebcode) then begin
-									if(IVr.BirthDayVaucher<=0)then begin
-										IVr.RebCode = OTDrw.RebCode;
-									end;
-									changed = true;
-								end;
-							end;
-						end else begin
-							if (allsum >= OTDrw.SumNotOneTime)then begin
+					BlockLoad(OTDr);
+					sum = IVVcCountSum(IVr);
+					allsum = sum + LCr.PointsBalance;
+					Rebr.Code = CUr.RebCode;
+					if (readfirstmain(Rebr,1,true)) then begin
+						CU_Rebcode = Rebr.vra0;
+					end;
+					mtrw = matrowcnt(OTDr);
+					if (mtrw!=0) then begin
+						for (i = 0; i < mtrw; i = i + 1) begin
+							matrowget(OTDr,i,OTDrw);
+							if (sum >= OTDrw.Sum)then begin
 								Rebr.Code = OTDrw.RebCode;
 								if (readfirstmain(Rebr,1,true)) then begin
 									OTD_Rebcode = Rebr.vra0;
@@ -2006,11 +1995,24 @@ begin
 										changed = true;
 									end;
 								end;
+							end else begin
+								if (allsum >= OTDrw.SumNotOneTime)then begin
+									Rebr.Code = OTDrw.RebCode;
+									if (readfirstmain(Rebr,1,true)) then begin
+										OTD_Rebcode = Rebr.vra0;
+										if (CU_Rebcode < OTD_Rebcode) then begin
+											if(IVr.BirthDayVaucher<=0)then begin
+												IVr.RebCode = OTDrw.RebCode;
+											end;
+											changed = true;
+										end;
+									end;
+								end;
 							end;
 						end;
-					end;
-					if(changed)then begin
-						IVDUpdatePrices(IVr,false);
+						if(changed)then begin
+							IVDUpdatePrices(IVr,false);
+						end;
 					end;
 				end;
 			end;
