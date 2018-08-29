@@ -556,7 +556,7 @@ moved to ForceUniquePP part above
 */
               end else begin
                 if (-IPrw.InvVal>ARPayr.RVal) then begin
-                	logtext(0,"1 " & -IPrw.InvVal & " " & ARPayr.RVal);
+                	logtext(0,"1 " & -IPrw.InvVal*100 & " " & ARPayr.RVal*100);
                   RecordCheckError(1254,"",i,"CUPNr");      
                   res = -1; 
                   goto LIPVcRecordCheck;
