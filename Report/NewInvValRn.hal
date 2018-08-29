@@ -136,7 +136,11 @@ begin
 						end;
 						ReadFirstMain(ISr,2,true);
 						OutString(pos+=75,0,ISr.Instock-ISr.RsrvQty,false); 
-						OutString(pos+=75,0,vdate[INr.Code],false); 
+						if(INr.ExpFlag02==1 or INr.FExpFlag02==1)then begin
+							OutString(pos+=75,0,vdate[INr.Code],false); 
+						end else begin
+							OutString(pos+=75,0,"",false); 
+						end;
 					EndFormat;
   			end;
 		  	Gray_Divider(0,1);	
