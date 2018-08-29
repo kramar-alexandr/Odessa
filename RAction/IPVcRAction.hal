@@ -36,6 +36,7 @@ external function Boolean Date2Test(string,Date,string,Integer);
 external function Boolean SerNrTestIPVc(LongInt,Date,var Boolean);
 external function Integer CashSerNumberTest(string,val,string,LongInt,var Boolean);
 external function roundmode SetRoundModeD(Integer);
+external function val AbsoluteVal(val);// Edit ************************** BPI Ukraine - KramarAlexandr - Wednesday, 29 August 2018 15:40:01
 
 function Boolean CheckIfPrepaymentError(record ARPayVc ARPayr,row IPVc IPrw,Date td)
 BEGIN
@@ -555,6 +556,12 @@ moved to ForceUniquePP part above
                 end;
 */
               end else begin
+              	if (-IPrw.InvVal>ARPayr.RVal) then begin// Edit ************************** BPI Ukraine - KramarAlexandr - Wednesday, 29 August 2018 15:40:06
+              		if(AbsoluteVal(-IPrw.InvVal-ARPayr.RVal)<0.01)then begin
+              			ARPayr.RVal = -IPrw.InvVal;
+              			recordstore(ARPayr,true);
+              		end;
+              	end;// Edit ************************** BPI Ukraine - KramarAlexandr - Wednesday, 29 August 2018 15:40:07
                 if (-IPrw.InvVal>ARPayr.RVal) then begin
                 	logtext(0,"1 " & -IPrw.InvVal*100 & " " & ARPayr.RVal*100);
                   RecordCheckError(1254,"",i,"CUPNr");      
