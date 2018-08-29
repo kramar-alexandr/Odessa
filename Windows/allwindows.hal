@@ -2485,15 +2485,16 @@ begin
     EditField(h1,v+=vs,82,"Дата заказа",Normal,ValidUntil,false,PasteCurDate);
   end;
   if (HasModIN) then begin
-    EditField(h1,v+=vs,82,"Заплан.отгрузка",Normal,PlanShip,false,PasteCurDate);
+    EditField(h1,v+=vs,75,"Заплан.отгрузка",Normal,PlanShip,false,PasteCurDate);
   end;
+  EditField(h2,v,75,"Заплан.получение",Normal,PlanDeliv,false,PasteCurDate);
   EditField(h2,v=vm,135,"Наша ссылка",Normal,OurContact,false,0);
   EditField(h2,v+=vs,135,"Внимание",Normal,VEContact,false,ContactSClass);
   if (HasObjects) then begin
     EditField(h2,v+=vs,135,"Объекты",Normal,Objects,false,ObjSClass);
   end;
   if (HasModIN) then begin
-    EditField(h2,v+=vs,135,"Внутр. номер",Normal,Reference,false,0); //Edit ------------Dima 27.01.2015
+    EditField(h3,v+=vs,135,"Внутр. номер",Normal,Reference,false,0); //Edit ------------Dima 27.01.2015
   end;
   if (HasSalesman) then begin
     EditField(h3,v=vm,80,"Продавец",Normal,SalesMan,false,UserSClass);

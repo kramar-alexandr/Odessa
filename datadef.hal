@@ -935,6 +935,7 @@ RecordBegin(INVc,-,"artikel5");
   RecordField(ShipCostRule,M4Int,0,0);// Edit ************************** Friday, July 4, 2014 at 17:13:54
   RecordField(CustomsCostRule,M4Int,0,0);// Edit ************************** Friday, July 4, 2014 at 17:13:54
   RecordField(ActOkFlag,M4Int,0,0);	//Edit----------------------Dima  11.03.2015
+  RecordField(PlanDeliv,M4Date,0,0);// Edit ************************** BPI Ukraine - KramarAlexandr - Wednesday, 29 August 2018 14:22:57
   ArrayBegin(Math,-,1);
   ArrayField(stp,M4Int,0,0);
   ArrayField(ovst,M4Int,0,0);

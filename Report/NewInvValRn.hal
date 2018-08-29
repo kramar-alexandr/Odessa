@@ -41,7 +41,7 @@ external function Boolean FillItemVarArray(string,string,date,var array string,v
 
 
 //Edit***************************Sasha2,10:48 09.09.2014 {
-procedure LoopNewInvVal(record RcVc RepSpec,array string positions)
+procedure LoopNewInvVal(record RcVc RepSpec,array string positions,vector date vdate)
 begin
   record INVc INr;
   record ItemStatusVc ISr;
@@ -127,7 +127,7 @@ begin
   			end else begin
   				StartFormat(15);
 						OutString(pos,0,INr.Code,false);
-						OutString(pos+=25,0,INr.Name,false);
+						OutString(pos+=75,0,INr.Name,false);
 						ISr.Code = INr.Code;
 						if (NonBlank(RepSpec.f2)) then begin
 							ISr.Location = RepSpec.f2;
@@ -135,7 +135,8 @@ begin
 							ISr.Location = ";;;";
 						end;
 						ReadFirstMain(ISr,2,true);
-						OutString(pos+=20,0,ISr.Instock-ISr.RsrvQty,false); 			
+						OutString(pos+=75,0,ISr.Instock-ISr.RsrvQty,false); 
+						OutString(pos+=75,0,vdate[INr.Code],false); 
 					EndFormat;
   			end;
 		  	Gray_Divider(0,1);	
@@ -146,6 +147,33 @@ begin
   return;
 end; //Edit***************************Sasha2,10:48 09.09.2014 }
 
+global procedure GetDateOfPlanDelivery(var vector date vdate)
+begin
+	record POVc POr;
+	boolean TrHs,testf;
+	integer rwcnt,i;
+	row POVc POrw;
+	
+	POr.PUFlag = 0;
+	TrHs = true;
+	while(loopkey("PUFlag",POr,1,TrHs))begin
+		testf = true;
+		if(POr.PUFlag>0)then begin TrHs = false; testf = false; end;
+		if(blankdate(POr.PlanDeliv))then begin testf = false; end;
+		
+		if(testf)then begin
+			rwcnt = matrowcnt(POr);
+			For(i=0;i<rwcnt;i=i+1) begin
+	  		matrowget(POr,i,POrw);
+	  		if(POrw.Quant>POrw.Shipd2)then begin
+	  			vdate[POrw.ArtCode] = POr.PlanDeliv;
+	  		end;
+			end; 
+		end;
+	end;
+
+return;
+end;
 
 global  //Edit***************************Sasha2,11:43 02.09.2014 {
 procedure NewInvValRn(record RcVc RepSpec)
@@ -160,6 +188,7 @@ begin
   array string 30 positions;
   boolean TrHs;
   integer step;
+	vector date vdate;// Edit ************************** BPI Ukraine - KramarAlexandr - Wednesday, 29 August 2018 14:33:23
   
   BlockLoad(CAb);
   
@@ -255,15 +284,17 @@ begin
 		
 		EndFormat;
   end else begin
+  	GetDateOfPlanDelivery(vdate);
   	StartFormat(15);
 		OutString(pos,0,USetStr(2302),false); //код
-		OutString(pos+=25,0,USetStr(2303),false); //найм.
-		OutString(pos+=20,0,USetStr(31021),false); //Дост.с учет.рез-ва
+		OutString(pos+=75,0,USetStr(2303),false); //найм.
+		OutString(pos+=75,0,USetStr(31021),false); //Дост.с учет.рез-ва
+		OutString(pos+=75,0,USetStr(15016),false);//Запланированая дата
 		EndFormat;
   end;
   Gray_Divider(0,1); 
 
-  LoopNewInvVal(RepSpec,positions);
+  LoopNewInvVal(RepSpec,positions,vdate);
   
 LInvValRn:; 
   EndJob;
