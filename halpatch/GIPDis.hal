@@ -352,6 +352,36 @@ BEGIN
       rwcnt = MatRowCnt(Rebr);
       for (i=0;i<rwcnt;i=i+1) begin
         MatRowGet(Rebr,i,Rebrw);
+        // Edit Start ---------------------------------------------- Edit Start
+	//Thursday, 30 August 2018 11:43:14
+	
+        if(nonblank(Rebrw.DispGroup))then begin
+        	if(setinset(Rebrw.DispGroup,INr.DispGroups))then begin
+        		if (Rebrw.CodeType==0) then begin
+							if (INr.Group==Rebrw.ITCode) then begin
+		//            GetStaffReb(INr,Rebrw.StaffCode,qtp,pricep,Rebr,rebvp,foundstaff);
+								GetStaffReb(INr,Rebrw.StaffCode,qtp,pricep,Rebr,i,rebvp,foundstaff);
+								res = true;
+								goto LGetRebate;
+							end;
+						end;
+						if (Rebrw.CodeType==1) then begin
+							if (INr.Code==Rebrw.ITCode) then begin
+								GetStaffReb(INr,Rebrw.StaffCode,qtp,pricep,Rebr,i,rebvp,foundstaff);
+								res = true;
+								goto LGetRebate;
+							end;
+						end;
+						if(blank(Rebrw.ITCode))then begin
+							GetStaffReb(INr,Rebrw.StaffCode,qtp,pricep,Rebr,i,rebvp,foundstaff);
+							res = true;
+							goto LGetRebate;
+						end;
+        	end;
+        end;
+        
+	// Edit End ---------------------------------------------- Edit End
+	
         if (Rebrw.CodeType==0) then begin
           if (INr.Group==Rebrw.ITCode) then begin
 //            GetStaffReb(INr,Rebrw.StaffCode,qtp,pricep,Rebr,rebvp,foundstaff);
@@ -421,6 +451,45 @@ BEGIN
       rwcnt = MatRowCnt(Rebr);
       for (i=0;i<rwcnt;i=i+1) begin
         MatRowGet(Rebr,i,Rebrw);
+        
+         // Edit Start ---------------------------------------------- Edit Start
+	//Thursday, 30 August 2018 11:43:14
+	
+        if(nonblank(Rebrw.DispGroup))then begin
+        	if(setinset(Rebrw.DispGroup,INr.DispGroups))then begin
+        		if (Rebrw.CodeType==0) then begin
+							if (INr.Group==Rebrw.ITCode) then begin
+		//            GetStaffReb(INr,Rebrw.StaffCode,qtp,pricep,Rebr,rebvp,foundstaff);
+									GetLocationReb(INr,location,qtp,pricep,Rebr,i,rebvp,foundstaff);
+									if(nonblank(Rebrw.StaffCode))then begin// Edit ************************** Friday, 24 March 2017 14:20:32
+										GetStaffReb(INr,Rebrw.StaffCode,qtp,pricep,Rebr,i,rebvp,foundstaff);
+									end;
+								res = true;
+								goto LGetRebateLocation;
+							end;
+						end;
+						if (Rebrw.CodeType==1) then begin
+							if (INr.Code==Rebrw.ITCode) then begin
+								GetLocationReb(INr,location,qtp,pricep,Rebr,i,rebvp,foundstaff);
+								if(nonblank(Rebrw.StaffCode))then begin// Edit ************************** Friday, 24 March 2017 14:20:32
+									GetStaffReb(INr,Rebrw.StaffCode,qtp,pricep,Rebr,i,rebvp,foundstaff);
+								end;
+								res = true;
+								goto LGetRebateLocation;
+							end;
+						end;
+						if(blank(Rebrw.ITCode))then begin
+							GetLocationReb(INr,location,qtp,pricep,Rebr,-1,rebvp,foundstaff);
+							if(nonblank(Rebr.StaffCode))then begin// Edit ************************** Friday, 24 March 2017 14:20:32
+								GetStaffReb(INr,Rebr.StaffCode,qtp,pricep,Rebr,-1,rebvp,foundstaff);
+							end;
+							res = true;
+							goto LGetRebateLocation;
+						end;
+        	end;
+        end;
+        
+	// Edit End ---------------------------------------------- Edit End
         if (Rebrw.CodeType==0) then begin
           if (INr.Group==Rebrw.ITCode) then begin
 //            GetStaffReb(INr,Rebrw.StaffCode,qtp,pricep,Rebr,rebvp,foundstaff);

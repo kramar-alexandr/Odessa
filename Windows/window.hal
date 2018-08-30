@@ -3729,6 +3729,7 @@ begin
   flip(0);
   MatCol(1,h=30,"Код",0,CodeType,false,SetSClass);
   MatCol(1,h=94,"Группа",0,ITCode,false,ITSClass);
+  MatCol(1,h+=70,"Класс.",0,DispGroup,false,DISClass);// Edit ************************** BPI Ukraine - KramarAlexandr - Thursday, 30 August 2018 11:38:21
   MatCol(1,h+=70,"Скидка",0,StaffCode,false,StaffSClass);
   MatCol(1,h+=70,"0",0,vra0,false,0);
   flipnr = 1;

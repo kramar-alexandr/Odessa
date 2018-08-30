@@ -5391,6 +5391,7 @@ RecordBegin(IPVc,-,"");
   ArrayField(locvra7,M41Val,0,0);// Edit ************************** Tuesday, 14 February 2017 11:46:12
   ArrayField(locvra8,M41Val,0,0);// Edit ************************** Tuesday, 14 February 2017 11:46:13
   ArrayField(locvra9,M41Val,0,0);// Edit ************************** Tuesday, 14 February 2017 11:46:13
+  ArrayField(DispGroup,M4USTR,255,DIVc);// Edit ************************** BPI Ukraine - KramarAlexandr - Thursday, 30 August 2018 11:35:14
   EndArray;
   MainKeyBegin(Code,0);
   KeySegment(Code);
