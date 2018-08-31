@@ -764,6 +764,9 @@ BEGIN
   if (UserCanAction("UnOKAll",false)) then begin
     res = true;
   end;
+  if (UserCanAction("UnOKStockMov",false)) then begin// Edit ************************** BPI Ukraine - KramarAlexandr - Friday, 31 August 2018 10:54:42
+		res = true;
+	end;
   StockMovDClassUpdateTest = res;
   RETURN;
 END;
@@ -986,6 +989,9 @@ begin
     if (UserCanAction("UnOKAll",false)) then begin
       res = true;
     end;
+    if (UserCanAction("UnOKStockMov",false)) then begin// Edit ************************** BPI Ukraine - KramarAlexandr - Friday, 31 August 2018 10:54:42
+      res = true;
+    end;
   end;  
   if (WindowState(wn)==insertmode) then begin
     GetWindowRecord(wn,StockMovr);
@@ -1030,7 +1036,11 @@ begin
     if (StockMovr.SentOKFlag!=0) then begin
     	if (UserCanAction("UnOKAll",false)==false) then begin		//Edit----------------------Dima  02.11.2015
       	res = false;		
+      	if (UserCanAction("UnOKStockMov",false)) then begin// Edit ************************** BPI Ukraine - KramarAlexandr - Friday, 31 August 2018 10:54:42
+					res = true;
+				end;
       end;
+      
     end;
     if (StockMovr.OKFlag!=0) then begin
       res = false;
@@ -1081,6 +1091,9 @@ begin
     if (StockMovr.OrdFlag!=0) then begin
     	if (UserCanAction("UnOKAll",false)==false) then begin		//Edit----------------------Dima  02.11.2015
 	      res = false;
+	      if (UserCanAction("UnOKStockMov",false)) then begin// Edit ************************** BPI Ukraine - KramarAlexandr - Friday, 31 August 2018 10:54:42
+					res = true;
+				end;
       end;
     end;
     if (StockMovr.OKFlag!=0) then begin

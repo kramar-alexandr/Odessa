@@ -882,6 +882,7 @@ begin
   StrSetText(UnOKOR,"Снимать OK со счетов");
   StrSetText(UnOKPO,"Снимать OK с заказов поставщикам");
   StrSetText(UnOKRevBud,"Снимать OK с прогнозов");
+  StrSetText(UnOKStockMov,"Снимать OK с перемещений");// Edit ************************** BPI Ukraine - KramarAlexandr - Friday, 31 August 2018 10:54:37  
   StrSetText(DoMinOrderQtyOR,"Сохранять счета клиентов с минимальным количеством");
   StrSetText(UpdatePOSEvent,"Разрешить обновлять сессии POS");
   StrSetText(AllowUsingAddonBarTab,"Использовать кнопку Добавить на счете ресторана");

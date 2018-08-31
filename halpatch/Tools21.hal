@@ -1213,9 +1213,8 @@ begin
     goto LIsUnOKAllowed_StockMovVc;
   end;  
 
-  if (UserCanAction("UnOKAll",false)) then begin
+  if (UserCanAction("UnOKAll",false) or UserCanAction("UnOKStockMov",false)) then begin
 		res = CheckUnOKStockMov(SMp,UnOk_OkFlag);		//Edit----------------------Dima  02.10.2015
-
   end else begin
     res = 20884;
     goto LIsUnOKAllowed_StockMovVc;
