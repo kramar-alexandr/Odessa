@@ -664,9 +664,6 @@ begin
     		    	ORrw.Quant = 0;
     		    end;
     		    logtext(0,"ORrw.Quant " & ORrw.Quant);
-    		    if (ORrw.Quant>0) then begin
-      		    
-      		  end;
     		    ORrw.OrderQuant = diff;
     		    MatRowPut(ORr,i,ORrw);
     		  end;
