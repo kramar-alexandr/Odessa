@@ -656,7 +656,14 @@ begin
     		  MatRowGet(ORr,i,ORrw);
     		  if (ORrw.AvailableQuant<ORrw.Quant) then begin
     		    diff = ORrw.Quant - ORrw.AvailableQuant;
+    		    if(diff>ORrw.Quant)then begin
+    		    	diff = ORrw.Quant;
+    		    end;
     		    ORrw.Quant = ORrw.Quant - diff;
+    		    if(ORrw.Quant<0)then begin
+    		    	ORrw.Quant = 0;
+    		    end;
+    		    logtext(0,"ORrw.Quant " & ORrw.Quant);
     		    if (ORrw.Quant>0) then begin
       		    
       		  end;
