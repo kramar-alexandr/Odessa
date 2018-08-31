@@ -1592,7 +1592,6 @@ begin
                   if(ISr.RsrvQty<0) then begin //Edit***************************Sasha2,14:04 28.10.2014 {
                     ISr.RsrvQty = 0;
                   end; //Edit***************************Sasha2,14:04 28.10.2014 }
-                  logtext(0,ORrw.ArtCode & " ISr.Instock " & ISr.Instock & " ISr.RsrvQty " & ISr.RsrvQty & " orsrved " & orsrved & " orsrv " & orsrv);
                   if ((orsrv)>(ISr.Instock-ISr.RsrvQty+orsrved) and orsrv>0) then begin // StockRsrvQty ?
                   	if(currentuser!="SA" and currentuser!="ALENA_BYST")then begin // Edit ************************** Friday, 28 August 2015 15:49:44
 											RecordCheckError(20011,"",i,"Quant");      

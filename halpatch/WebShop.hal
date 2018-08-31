@@ -645,7 +645,6 @@ begin
     
   blockload(WSb);
   
-  	logtext(0,"MakeReserveFromOrder " & orlocation);
     ORr.SerNr = OrSerNr;
     if (ReadFirstMain(ORr,1,true) and MatRowCnt(ORr)>0) then begin
       if (ORr.OKFlag==0 and ORr.Reserved==0) then begin
@@ -656,7 +655,6 @@ begin
     		  MatRowGet(ORr,i,ORrw);
     		  if (ORrw.AvailableQuant<ORrw.Quant) then begin
     		    diff = ORrw.Quant - ORrw.AvailableQuant;
-    		    logtext(0,"diff " & diff);
     		    if(diff>ORrw.Quant)then begin
     		    	diff = ORrw.Quant;
     		    end;
@@ -664,7 +662,6 @@ begin
     		    if(ORrw.Quant<0)then begin
     		    	ORrw.Quant = 0;
     		    end;
-    		    logtext(0,"ORrw.Quant " & ORrw.Quant);
     		    ORrw.OrderQuant = diff;
     		    MatRowPut(ORr,i,ORrw);
     		  end;
