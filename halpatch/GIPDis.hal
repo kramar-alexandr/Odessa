@@ -479,9 +479,9 @@ BEGIN
 							end;
 						end;
 						if(blank(Rebrw.ITCode))then begin
-							GetLocationReb(INr,location,qtp,pricep,Rebr,-1,rebvp,foundstaff);
+							GetLocationReb(INr,location,qtp,pricep,Rebr,i,rebvp,foundstaff);
 							if(nonblank(Rebr.StaffCode))then begin// Edit ************************** Friday, 24 March 2017 14:20:32
-								GetStaffReb(INr,Rebr.StaffCode,qtp,pricep,Rebr,-1,rebvp,foundstaff);
+								GetStaffReb(INr,Rebrw.StaffCode,qtp,pricep,Rebr,i,rebvp,foundstaff);
 							end;
 							res = true;
 							goto LGetRebateLocation;
