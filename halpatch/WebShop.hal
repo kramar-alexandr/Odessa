@@ -645,6 +645,7 @@ begin
     
   blockload(WSb);
   
+  	logtext(0,"MakeReserveFromOrder " & orlocation);
     ORr.SerNr = OrSerNr;
     if (ReadFirstMain(ORr,1,true) and MatRowCnt(ORr)>0) then begin
       if (ORr.OKFlag==0 and ORr.Reserved==0) then begin
