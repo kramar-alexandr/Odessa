@@ -1660,6 +1660,9 @@ Begin
 					end else begin
 						ORrw.AvailableQuant = ISr.Instock - (ISr.RsrvQty - ORrw.Quant);
 					end;
+					if(ORrw.AvailableQuant<0)then begin
+						ORrw.AvailableQuant = 0;
+					end;
 			end;
 			/*if(ORr.OrderClass=="WEB")then begin
 				ExtractObjWithSeparator(",",WSb.LocationQuer,true,pos,tstr);
