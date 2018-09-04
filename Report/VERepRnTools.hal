@@ -410,7 +410,11 @@ BEGIN
 										PO2rw.ArtCode = POrw.ArtCode;
 										if(POr.OKFlag==1)then begin
 											PO2rw.Quant = POrw.Quant;
-											PO2rw.Shipd1 = POrw.Quant - POrw.Shipd2;
+											if(isshipd)then begin
+												PO2rw.Shipd1 = POrw.Quant - POrw.Shipd2;
+											end else begin
+												PO2rw.Invd = POrw.Quant - POrw.Shipd2;
+											end;
 											ordOk = PO2rw.Shipd1;
 										end else begin
 											PO2rw.Price = POrw.Quant;
