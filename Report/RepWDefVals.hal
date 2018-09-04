@@ -1200,13 +1200,15 @@ BEGIN
   switch (fieldname) begin
     case "f1":
       GetWindowRecord(wn,RepSpec);
-      INr.Code = RepSpec.f1;
-      if(readfirstmain(INr,1,true)==false)then begin
-      	INr.BarCode = RepSpec.f1;
-      	if(readfirstkey("BarCode",INr,1,true))then begin
-      		RepSpec.f1 = INr.Code;
-      		PutWindowRecord(wn,RepSpec);
-      	end;
+      if(nonblank(RepSpec.f1))then begin
+				INr.Code = RepSpec.f1;
+				if(readfirstmain(INr,1,true)==false)then begin
+					INr.BarCode = RepSpec.f1;
+					if(readfirstkey("BarCode",INr,1,true))then begin
+						RepSpec.f1 = INr.Code;
+						PutWindowRecord(wn,RepSpec);
+					end;
+				end;
       end;
   end;
   ItemPUOrderReportRClassAfterEditField = res;
