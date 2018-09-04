@@ -199,8 +199,12 @@ record SMSstackVc SMSr;
 longint smsNr;
 
   RecordNew(SMSr);
+  
   SMSr.SerNr = NextSerNr("SMSstackVc",CurrentDate,-1,false,"");
   SMSr.Phone = phone;
+  if(left(phone,1)=="+")then begin
+  	SMSr.Phone = right(phone,len(phone)-1);
+  end;
   SMSr.Title = title;
   SMSr.Text = text;
   SMSr.CustCode = custcode;

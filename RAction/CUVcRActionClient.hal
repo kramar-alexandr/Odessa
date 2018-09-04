@@ -155,7 +155,7 @@ begin
 		Randomize;
 		CUr.Sorting = Random(10,99) & "-" & Random(10,99) & "-" & Random(10,99) & "-" & Random(10,99);
 		recordStore(CUr,true);
-		AddSMStoStack(Cur.Phone,title,CUr.Sorting,CUr.Code,"CUVc",CUr.Code,"","","");
+		AddSMStoStack(Cur.Phone,title,CUr.Sorting,CUr.Code,"CUVc",CUr.Code,"WEB","","");
 		error = "Клиент найден. СМС отправлено";
 	end else begin
 		error = "Клиент с таким телефоном не найден";
