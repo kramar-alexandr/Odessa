@@ -1188,6 +1188,34 @@ BEGIN
 END;
 
 global
+function Boolean ItemPUOrderReportRClassAfterEditField(Integer wn,string fieldname,Integer fn,Integer rownr,Integer changed)
+BEGIN
+  Boolean res;
+  Date d1,d2;
+  string 30 tstr;
+  record RcVc RepSpec;
+  record INVc INr;
+  
+  res = false;
+  switch (fieldname) begin
+    case "f1":
+      GetWindowRecord(wn,RepSpec);
+      INr.Code = RepSpec.f1;
+      if(readfirstmain(INr,1,true)==false)then begin
+      	INr.BarCode = RepSpec.f1;
+      	if(readfirstkey("BarCode",INr,1,true))then begin
+      		RepSpec.f1 = INr.Code;
+      		PutWindowRecord(wn,RepSpec);
+      	end;
+      end;
+      
+      
+  end;
+  ItemPUOrderReportRClassAfterEditField = res;
+  RETURN;
+END;
+
+global
 procedure CuArtSTRClassReportDef(var record RcVc RepSpec)
 begin
   Date d1,d2;
