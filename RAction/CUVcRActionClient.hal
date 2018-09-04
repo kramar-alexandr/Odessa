@@ -9,6 +9,7 @@ remote updating procedure  SendSMSFromStack();// Edit **************************
 remote procedure IVDUpdatePrices(var record IVVc,Boolean);// Edit ************************** BPI Ukraine - KramarAlexandr - Tuesday, 4 September 2018 16:25:54
 remote procedure IVSumup(var record IVVc,Boolean);// Edit ************************** BPI Ukraine - KramarAlexandr - Tuesday, 4 September 2018 16:25:54
 remote procedure IVVc_PasteLoyaltyCardNr(var record IVVc,record LocalMachineBlock);	//Edit----------------------Dima  24.06.2015
+external procedure IVDClass_RefreshStringList(Integer,record IVVc);// Edit ************************** BPI Ukraine - KramarAlexandr - Tuesday, 4 September 2018 16:34:12
 
 SetLangMode(LangRussian,"RUS",0);
 
@@ -227,6 +228,7 @@ begin
 			end; 
 			PutWindowRecord(mwn,IVr);
 			ReRunWindowDef(mwn);
+			IVDClass_RefreshStringList(mwn,IVr);
 		end else begin
 			error = "Неправильный код";
 			messagebox(0,error);
