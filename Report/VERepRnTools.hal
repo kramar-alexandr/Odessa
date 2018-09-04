@@ -333,6 +333,7 @@ BEGIN
   longint ordOk,ordUnOk;
   record DIVc DIr;
   string 100 vendors,temp;
+  boolean isshipd;
   
   vendors = "";
   pos = 0;
@@ -354,6 +355,11 @@ BEGIN
 	TrHs = true;
 	while (LoopKey("ActOkFlag",POr,1,TrHs)) begin	//Edit----------------------Dima  12.03.2015
 		testf = true;
+		isshipd = false;
+		
+		if(POr.POClass=="éíÉê")then begin
+			isshipd = true;
+		end;
 		if (POr.ActOkFlag==0) then begin TrHs = false; testf = false; end;
 
 		//if (nonblank(vendors) and (SetInSet(POr.VECode,vendors)==false)) then begin testf = false; end;
@@ -374,7 +380,11 @@ BEGIN
 											
 												if(POr.OKFlag==1)then begin
 													PO2rw.Quant = PO2rw.Quant + POrw.Quant;
-													PO2rw.Shipd1 = PO2rw.Shipd1 + (POrw.Quant - POrw.Shipd2);
+													if(isshipd)then begin
+														PO2rw.Shipd1 = PO2rw.Shipd1 + (POrw.Quant - POrw.Shipd2);
+													end else begin
+														PO2rw.Invd = PO2rw.Invd + (POrw.Quant - POrw.Shipd2);
+													end;
 													ordOk = POrw.Quant - POrw.Shipd2;
 												end else begin
 													PO2rw.Price = PO2rw.Price + POrw.Quant;

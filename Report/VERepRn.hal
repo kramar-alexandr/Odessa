@@ -262,9 +262,9 @@ BEGIN
   val strRest,gotval,curRest,TRWH,restok,restunok;
   val soldall,sold0,strRest0,gotval0,curRest0,SDqty0,saleopt0,saleroz0;
   boolean nofindf;
-  val OrdQty,POQty,POUnOkQty,retPU,SDqty,stin,stout,saleopt,saleroz;
+  val OrdQty,POQty,POUnOkQty,retPU,SDqty,stin,stout,saleopt,saleroz,POQtySh;
   val OrdQty0,POQty0,POUnOkQty0,OrdQtyRR,OrdQty1K,ProdIn,ProdOut; 
-  longint OrdQtyInt;
+  longint OrdQtyInt,OrdQtyIntSh;
   integer rw,pos,size,size2,startPos;
   string 255 tstr,frin,toin;
   string 20 loc;
@@ -387,7 +387,8 @@ RecordNew(ISr);
    	OutString(PosPos[i],0,"Ост.\(место\) " & positionsBal[i],false);	
    end;	   
 
-   OutString(360,0,"Заказ подпис.",false);
+   OutString(360,0,"Заказ отгр.",false);//old Заказ подпис.
+   OutString(380,0,"Заказ подпис.",false);
    //OutString(370,0,"",false);				//VendorsListOK
    OutString(400,0,"Заказ не подпис.",false);
    //OutString(370,0,"",false); 			//VendorsListUnOK
@@ -529,14 +530,18 @@ RecordNew(ISr);
   					POUnOkQty = PO2rw.Shipd2;
 					//POQty = POQty - PO2rw.Shipd2;
   					POQty = PO2rw.Shipd1;//Edit----------------------Dima  20.03.2015
+  					POQtySh = PO2rw.Invd;// Edit ************************** BPI Ukraine - KramarAlexandr - Tuesday, 4 September 2018 14:34:10
   					//VendorsListOK = SumupAllValuesByCode(PO2rw.Comment);		//Edit----------------------Dima  13.03.2015
   					//VendorsListUnOK = SumupAllValuesByCode(PO2rw.Spec);			
 						nofindf = false;
   				end;
   			end; 			
   			OrdQtyInt = 0;
+  			OrdQtyIntSh = 0;
+				OrdQtyIntSh = POQtySh;
 				OrdQtyInt = POQty;
   			OutStringID(360,"DblOpenRepRn",OrdQtyInt,false,INr.Code);
+  			OutStringID(380,"DblOpenRepRn",OrdQtyIntSh,false,INr.Code);
   			//OutString(368,0,VendorsListOK,false);
   			OrdQtyInt = 0;
 				OrdQtyInt = POUnOkQty;
