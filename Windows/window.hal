@@ -3585,6 +3585,43 @@ begin
   EndWindow;
 end;
 
+window DoInsertAkciaCodeRCLass:1
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  real h,h2,h3,h4,hm,l,v,v2,v3,vm,vs,xv1,xv2;
+  WindowBegin("Ввод промо кода",DoInsertAkciaCodeRCLass,CGOther,RcType);
+  //Modality(kModalityGlobal);
+  SetWRect(64,80,509,308);
+  vs=20;h=100;v=5;h2=200;
+
+  EditFieldTL(h,6 ,80,"Код",M4Str,Normal,80,f1,false,PromotionSClass);
+  v = v + 40 + v2;
+  
+  ColourPushButton(h,v+=2*vs,h2,v+3*vs,"CancelLoginKassir","Отмена",1);
+  ColourPushButton(h+200,v,h2+200,v+3*vs,"DoInsertAkciaCodeProceed","Ввод",2);
+
+  EndWindow;
+end;
+
+window ConfirmCUByPhoneRClass:1
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  real h,h2,h3,h4,hm,l,v,v2,v3,vm,vs,xv1,xv2;
+  WindowBegin("Введите номер телефона",ConfirmCUByPhoneRClass,CGOther,RcType);
+  //Modality(kModalityGlobal);
+  SetWRect(64,80,509,308);
+  vs=20;h=100;v=5;h2=200;
+
+  EditFieldTL(h,6 ,120,"Телефон",M4Str,Normal,80,f1,false,0);
+  EditFieldTL(h,26 ,120,"Код",M4Str,Normal,80,f2,false,0);
+  v = v + 40 + v2;
+  
+  ColourPushButton(h,v,h2,v+3*vs,"SearchCustomerByPhoneAngSetPassDsm","Отправить",2);
+  ColourPushButton(h+200,v,h2+200,v+3*vs,"SearchCustomerBySortingDsm","Проверить код",2);
+
+  EndWindow;
+end;
+
 window MagentoTestVClass:1 //Edit-------------------Vitalii 15:29 01.12.2016
  wtag("language","UKR"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
  begin

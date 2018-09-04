@@ -25,7 +25,6 @@ external function Boolean IsVATCodeDefined(string);
 external function Boolean ValidateBrazilianVATNr(string,string,Integer);
 external updating procedure GenerateRebateVouchers(string);// Edit ************************** Monday, 28 November 2016 11:22:21
 
-
 updating procedure AddToNumberLookupRegister(string phoneno,Integer compno,string custcode)
 begin
   record NormPhoneNumVc NormPhoneNumr;
@@ -1878,4 +1877,3 @@ begin
   CUVcRecordSync = res;
   return;
 end;
-

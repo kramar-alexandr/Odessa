@@ -4195,7 +4195,7 @@ if (HasTouchScreenLook==false) then begin
       SpecialMenu("Печать фискальный чек",'p',26,"PrintFiscalReceipt");	//Edit----------------------Dima  10.06.2015
       SpecialMenu("Выгрузить таблицу в буфер обмена",'',18,"ExportToExcelIVDsm");	//Edit----------------------Dima  01.09.2015
 			SpecialMenu("Оплата подарочним сертификатом",'',18,"GiftVoucherOpenDClass");
-			
+			SpecialMenu("Подтверждение клиента по телефону",'',27,"ConfirmCUByPhone");// Edit ************************** BPI Ukraine - KramarAlexandr - Tuesday, 4 September 2018 10:54:27
 
     //  SpecialMenu("TESTSendArgEInvoiceFECAESolicitar",' ',25,"TESTSendArgEInvoiceFECAESolicitar");
     //  SpecialMenu("Test Mex E-Invoices",'1',0,"TestMexEInvoices");
@@ -4338,6 +4338,7 @@ end else begin
 	SpecialMenu("Печать нефискального чека",'',26,"PrintNonFiscalReceipt");// Edit ************************** Tuesday, 1 August 2017 16:54:58
 	SpecialMenu("Печать фискальный чек",'p',26,"PrintFiscalReceipt");	//Edit----------------------Dima  10.06.2015
 	SpecialMenu("Создать карту лояльности",'',27,"CreateLoyCardfrIV");	//Edit----------------------Dima  10.06.2015
+	SpecialMenu("Подтверждение клиента по телефону",'',27,"ConfirmCUByPhone");// Edit ************************** BPI Ukraine - KramarAlexandr - Tuesday, 4 September 2018 10:54:27
 end;
   EndWindow;
 end;	//Edit by Victor }

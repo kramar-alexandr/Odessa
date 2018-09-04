@@ -2,6 +2,9 @@ remote function Boolean PasteCustInInv(var record IVVc);
 external procedure IVCashDClass_RefreshStringList(Integer,record IVCashVc);
 remote function Boolean PasteCustInCashInv(var record IVCashVc,string,string,var string);
 external function Boolean HasModSL();
+external procedure SimpleNormPhoneNumber(string, var string);// Edit ************************** BPI Ukraine - KramarAlexandr - вівторок, 6 лютого 2018 р. о 23:00:22
+remote updating function longint AddSMStoStack(string, string, string,string,string,longint,string,date,time);//Edit----------------------Dima  28.08.2015
+remote function Boolean PasteCust2InInv(var record IVVc,record LocalMachineBlock,string,Boolean,var string,var string,var string,var string,var string);
 
 SetLangMode(LangRussian,"RUS",0);
 
@@ -123,4 +126,95 @@ begin
   end;
   CUVcRecordUpdateClient = res;
   return;
+end;
+
+
+
+global updating procedure SearchCustomerByPhoneAngSetPassDsm()
+begin
+	record CUVc CUr;
+	string 100 Res;
+	record SMSTextBlock SMSb;
+	string 200 response,text,resString,ttn,np;
+	string 15 title,placeWord;
+	integer wn;
+	record RcVc RepSpec;
+	string 100 error,phone;
+	
+	wn = curwindow;
+	deselectwindow(wn,true);
+	getwindowrecord(wn,RepSpec);
+	
+	phone = RepSpec.f1;
+	
+	BlockLoad(SMSb); 
+	title = SMSb.Title2;
+	SimpleNormPhoneNumber(phone,Res);
+	CUr.Phone = Res;
+	if(readfirstkey("Phone",CUr,1,true))then begin
+		Randomize;
+		CUr.Sorting = Random(10,99) & "-" & Random(10,99) & "-" & Random(10,99) & "-" & Random(10,99);
+		recordStore(CUr,true);
+		AddSMStoStack(Cur.Phone,title,CUr.Sorting,CUr.Code,"CUVc",CUr.Code,"","","");
+		error = "Клиент найден. СМС отправлено";
+	end else begin
+		error = "Клиент с таким телефоном не найден";
+	end;
+	
+	messagebox(0,error);
+
+return;
+end;
+
+global updating procedure SearchCustomerBySortingDsm()
+begin
+	record CUVc CUr;
+	string 100 Res;
+	record SMSTextBlock SMSb;
+	string 200 response,text,resString,ttn,np;
+	string 15 title,placeWord;
+	integer wn,mwn;
+	record RcVc RepSpec;
+	string 100 error,code;
+	record IVVc IVr;
+	record IVVc IV2r;
+	record LocalMachineBlock LMb;
+	string 255 warning,tstr;
+  string 255 errstr,prepstr,invdatewarn,transdatewarn;
+  Integer err;
+  
+	wn = curwindow;
+	mwn = motherwindow(wn);
+	deselectwindow(wn,true);
+	getwindowrecord(wn,RepSpec);
+	
+	code = RepSpec.f2;
+	if(nonblank(code))then begin
+		CUr.Sorting = code;
+		if(readfirstkey("Sorting",CUr,1,true))then begin
+			CUr.Sorting = "";
+			recordStore(CUr,true);
+			GetWindowRecord(mwn,IVr);
+			GetPrevWindowRecord(mwn,IV2r);
+			BlockLoad(LMb);
+			IV2r.CustCode = IVr.CustCode;
+			IVr.CustCode = CUr.Code;
+			if (PasteCust2InInv(IVr,LMb,IV2r.CustCode,false,warning,errstr,prepstr,invdatewarn,transdatewarn)) then begin
+				if (nonblank(warning)) then begin
+					MessageBox(0,warning);
+				end;
+				if (err!=0) then begin
+					MessageBox(0,err);
+				end;
+			end;
+			PutWindowRecord(mwn,IVr);
+			ReRunWindowDef(mwn);
+		end else begin
+			error = "Неправильный код";
+			messagebox(0,error);
+		end;
+	end;
+	
+
+return;
 end;

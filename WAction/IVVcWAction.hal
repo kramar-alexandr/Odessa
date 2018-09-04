@@ -2300,6 +2300,20 @@ end; //Edit***************************Sasha2,17:00 17.08.2015 }
 
 
 global 
+procedure ConfirmCUByPhone()		//Edit----------------------Dima  10.06.2015
+begin
+	record RcVc RepSpec;
+	record IVVc IVr;
+	integer wn;
+	
+	wn = curwindow;
+	
+	recordnew(RepSpec);
+	OpenWindow("ConfirmCUByPhoneRClass",1,wn,"","",RepSpec);
+
+end;
+
+global 
 procedure CreateLoyCardfrIV()		//Edit----------------------Dima  10.06.2015
 begin
 	record LoyaltyCardVc LCr;

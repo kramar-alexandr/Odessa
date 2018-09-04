@@ -188,7 +188,7 @@ record SHvc SHr;
 				SHr.SerNr =  docSerNr;
 		  	if (ReadFirstMain(SHr,1,true)) then begin	
   				CreateRecordLink(SHr,CurrentCompany,SMSr,CurrentCompany);  
-  			end;  			
+  			end; 				  			
 	end;
 end;
 
