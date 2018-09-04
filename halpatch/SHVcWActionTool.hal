@@ -1896,6 +1896,9 @@ Begin
   			
   			ttn = SHr.NPIntDocNumber;
   			np = SHr.NPRecipientWarehouse;
+  			if(SHr.AdNPRecipientWarehouse>0 and SHr.ChckAdNPRcpntWarehouse>0)then begin
+  				np = SHr.AdNPRecipientWarehouse;
+  			end;
   			if(nonblank(SHr.TransportNumber))then begin
   				ttn = SHr.TransportNumber;
   			end;
