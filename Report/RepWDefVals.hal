@@ -1208,8 +1208,6 @@ BEGIN
       		PutWindowRecord(wn,RepSpec);
       	end;
       end;
-      
-      
   end;
   ItemPUOrderReportRClassAfterEditField = res;
   RETURN;
