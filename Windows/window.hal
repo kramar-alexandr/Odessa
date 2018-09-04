@@ -2590,6 +2590,7 @@ begin
   statictext(h2,vh+=vs,"Отгр.: %Place% - 'слово место/мест'",false);
   statictext(h2,vh+=vs,"Отгр.: %Seats% - кол-во мест",false);
   statictext(h2,vh+=vs,"Отгр.: %TTN% - номер ТТН",false);
+  statictext(h2,vh+=vs,"Отгр.: %NP% - номер отделения",false);
 
   Tile(2,200,false,"","Title2");
   v=6;
@@ -2654,7 +2655,8 @@ begin
   statictext(h2,vh+=vs,"Отгр.: %Place% - 'слово место/мест'",false);
   statictext(h2,vh+=vs,"Отгр.: %Seats% - кол-во мест",false);
   statictext(h2,vh+=vs,"Отгр.: %TTN% - номер ТТН",false);
-
+	statictext(h2,vh+=vs,"Отгр.: %NP% - номер отделения",false);
+	
   Tile(2,200,false,"","Title2");
   v=6;
   EditField(h,v+=vs,150,"Заголовок",Normal,Title2,false,0);
