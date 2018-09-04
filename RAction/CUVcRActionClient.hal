@@ -2,7 +2,7 @@ remote function Boolean PasteCustInInv(var record IVVc);
 external procedure IVCashDClass_RefreshStringList(Integer,record IVCashVc);
 remote function Boolean PasteCustInCashInv(var record IVCashVc,string,string,var string);
 external function Boolean HasModSL();
-external procedure SimpleNormPhoneNumber(string, var string);// Edit ************************** BPI Ukraine - KramarAlexandr - вґвторок, 6 лютого 2018 р. о 23:00:22
+remote procedure SimpleNormPhoneNumber(string, var string);// Edit ************************** BPI Ukraine - KramarAlexandr - вґвторок, 6 лютого 2018 р. о 23:00:22
 remote updating function longint AddSMStoStack(string, string, string,string,string,longint,string,date,time);//Edit----------------------Dima  28.08.2015
 remote function Boolean PasteCust2InInv(var record IVVc,record LocalMachineBlock,string,Boolean,var string,var string,var string,var string,var string);
 
