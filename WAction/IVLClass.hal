@@ -12,7 +12,27 @@ begin
   if(readFirstMain(Userr, 1, true))then begin
    	SetWindowSubset(wn,Userr.SalesGroup);
   end;
-  if(usercanaction("VievOnlyWorldVE",false))then begin
+    
+  IVLClassOnOpenWindow = false;
+  return;
+end;
+
+global
+function Boolean VILClassOnOpenWindow(Integer wn)
+begin
+  date dt;
+  record UserVc Userr;
+  
+  if(UserCanAction("VievAllSalesGroupDocuments", true)==false) then begin
+		Userr.Code = CurrentUser;
+		if(readFirstMain(Userr, 1, true))then begin
+			if(nonblank(Userr.SalesGroup))then begin
+				SetWindowSubset(wn,Userr.SalesGroup);
+			end;
+		end;  
+	end;
+	
+	if(usercanaction("VievOnlyWorldVE",false))then begin
   	setwindowsubset(wn,"WORLD");
   end;
   if(usercanaction("VievOnlyUKRVE",false))then begin
@@ -20,9 +40,9 @@ begin
   end;
   if(usercanaction("VievOnlyW1VE",false))then begin
   	setwindowsubset(wn,"W_1");
-  end; 
+  end;
     
-  IVLClassOnOpenWindow = false;
+  VILClassOnOpenWindow = false;
   return;
 end;
 
