@@ -521,6 +521,7 @@ RecordNew(ISr);
 				
 
   			POQty = POUnOkQty;
+  			POQtySh = blankval;
   			POUnOkQty = blankval;
   			nofindf = true;
   			rwcnt = MatRowCnt(PO2r);	
@@ -548,7 +549,7 @@ RecordNew(ISr);
   			OutStringID(400,"DblOpenRepRn",OrdQtyInt,false,INr.Code);
   			//OutString(410,0,VendorsListUnOK,false);									//Edit----------------------Dima  13.03.2015
 				
-				restok = restok + curRest + POQty + POUnOkQty;
+				restok = restok + curRest + POQty + POQtySh + POUnOkQty;
 				restunok = restunok + curRest + POUnOkQty;
   			///OutVal(440,0,restok,M4Val,false);
 				OutString(440,0,restok,false);				//Edit----------------------Dima  13.02.2015
