@@ -418,6 +418,7 @@ begin
 	
 	Maintenance("Заполнить SG POVc",MyVClass,FillGFPOVcMn,modPO);
 	Maintenance("Заполнить SG PUVc",MyVClass,FillGFPUVcMn,modPO);
+	Maintenance("Заполнить SG VIVc",MyVClass,FillGFVIVcMn,modPO);
 	
 	Maintenance("Обновить коммисионные цены",UpdateComPriceVClass,UpdateComPriceMn,modSO);
 	

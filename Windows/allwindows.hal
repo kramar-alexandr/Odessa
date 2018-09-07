@@ -7691,7 +7691,7 @@ begin
       EditField(h1,v+=vs,-20,"Комментарий",Normal,Comment,false,0);
       EditField(h2,v=vm,80,"Продавец",Normal,SalesMan,false,UserSClass);
       if (StandardHansa==false) then begin
-        EditField(h2,v+=vs,80,"Группа продажт",Normal,SalesGroup,false,SalesGroupSClass);
+        EditField(h2,v+=vs,80,"Группа продаж",Normal,SalesGroup,false,SalesGroupSClass);
         EditField(h2+160,v,80,"Org. Supp.",ViewOnly,OrgVE,false,0);
       end;
       EditField(h2,v+=vs,80,"Язык",Normal,LangCode,false,LangSClass);
