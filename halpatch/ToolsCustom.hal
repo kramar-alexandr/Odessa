@@ -4246,10 +4246,8 @@ global updating procedure FillGFVIVcMn(record RcVc RepSpec)
 begin	
 	record CUVc CUr;
 	record VIVc VIr;
-	
 	VIr.SerNr = -1;
 	while(loopmain(VIr,1,true))begin
-		//if(blank(PUr.SalesGroup))then begin
 			CUr.Code = VIr.VECode;
 			if(readfirstmain(CUr,1,true))then begin
 				if(nonblank(CUr.SalesGroup))then begin
@@ -4257,7 +4255,6 @@ begin
 					recordstore(VIr,true);
 				end;
 			end;
-		//end;
 	end;
 
 return;
@@ -4265,7 +4262,7 @@ end;
 
 
 
-global updating procedure FillGFVIVcMn(record RcVc RepSpec)
+global updating procedure FillGFPUVcMn(record RcVc RepSpec)
 begin	
 	record CUVc CUr;
 	record PUVc PUr;
