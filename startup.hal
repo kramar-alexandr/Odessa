@@ -377,6 +377,7 @@ begin
 	 SString(31189,"Відправлення отримано");
 	 SString(31190,"Відмова від отримання");
 	 SString(31191,"Видалено");
+	 SString(31192,"Недопустимое количество товара при создании реализации");
 	 
 	Maintenance("CloseNPShipment",FixItemCostVClass,CloseNPShipment,modNPost);
 	
