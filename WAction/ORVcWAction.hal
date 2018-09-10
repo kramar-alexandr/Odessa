@@ -82,6 +82,7 @@ remote procedure Rem_CalcOnePlusOneRebate(var record ORVc);// Edit *************
 remote procedure AdNP_PasteRecipientWarehouseDescOR(var record ORVc);
 external procedure ORSumup(var record ORVc);//Edit_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-Anton 11:36 10.09.2018
 external procedure ExtractObjWithSeparator(string,string,Boolean,var Integer,var string);//Edit_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-Anton 11:42 10.09.2018
+remote updating procedure AddItemsFromListORDsm(integer,var record ORVc,array integer, array string,integer);//Edit_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-Anton 17:05 10.09.2018
 
 
 SetLangMode(LangRussian,"RUS",0);
@@ -863,7 +864,7 @@ begin
   return;
 end;
  
-function Boolean ORDClassArtCodeEFAfter(Integer wn,Integer rownr,Integer changedf)
+global function Boolean ORDClassArtCodeEFAfter(Integer wn,Integer rownr,Integer changedf)
 begin  
   record ORVc ORr;
   string 255 inwarning,warning;
@@ -884,8 +885,14 @@ begin
   ORDClassArtCodeEFAfter = true;
   return;
 end;
+
+
+
+
+
+
  
-function Boolean ORDClassQuantEFAfter(Integer wn,Integer fn,Integer rownr,Integer changedf)
+global function Boolean ORDClassQuantEFAfter(Integer wn,Integer fn,Integer rownr,Integer changedf)
 begin   
   record ORVc ORr;
   Boolean chsum;
@@ -2944,21 +2951,21 @@ end;
 
 
 
-global updating procedure AddItemsFromListORDsm()
+global updating procedure PasteItemsFromListORDsm()
 begin
-	integer wn,i,mtrw,rwcnt;
+	integer wn;
+	integer i,mtrw,rwcnt;
 	record ORVc ORr;
 	row ORVc ORrw;
 	record NotepadVc Noter,newNoter;
 	integer notenr,pos;
 	string 100 tstr,qtstr;
   record RLinkVc RLr;
-  vector integer ItemCodeQTy;
-	array string 100 atstr;
 	boolean res;
+	array integer ItemCodeQTy;
+	array string 100 atstr;
 	
 	recordnew(newNoter);
-	
 	
 	wn = curwindow;
 	getwindowrecord(wn,ORr);
@@ -2973,28 +2980,19 @@ begin
 					ExtractObjWithSeparator(Chr(9),LineTextGet(Noter,i),true,pos,tstr);
 					ExtractObjWithSeparator(Chr(9),LineTextGet(Noter,i),true,pos,qtstr);
 					if(nonblank(tstr))then begin
-						ItemCodeQTy[tstr] = StringToInt(qtstr);
+						ItemCodeQTy[i] = StringToInt(qtstr);
 						atstr[i] = tstr;
 					end;
 				end;  
 			end;
 			notenr = notenr + 1;
 		end;
-		For(i=0;i<rwcnt;i=i+1) begin
-			ORrw.ArtCode = atstr[i];
-			ORrw.Quant = ItemCodeQTy[atstr[i]];
-			matrowput(ORr,i,ORrw);
-		end; 
+		AddItemsFromListORDsm(wn,ORr,ItemCodeQTy,atstr,rwcnt);
+		PutWindowRecord(wn,ORr);
 		ORSumUp(ORr);
-		putwindowrecord(wn,ORr);
-		For(i=0;i<rwcnt;i=i+1) begin
-			res = ORDClassArtCodeEFAfter(wn,i,1);
-			res = ORDClassLocationEFAfter(wn,i,1);
-			matrowput(ORr,i,ORrw);
-		end; 
+		PutWindowRecord(wn,ORr);
 	end else begin
 		messagebox(0,"Запись должна быть разокеена");
 	end;
-	
 return;
 end;

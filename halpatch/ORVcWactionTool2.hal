@@ -21,6 +21,12 @@ external function Boolean INVc_AllowSales(record INVc,var LongInt);
 external function string 20 FindCustRoute(string,string,string);
 remote procedure ORVc_GetPriceList(var record ORVc);
 remote function string 255 LookUpPromotionCode(date,string); //Edit***************************Sasha2,15:31 24.01.2017
+external procedure ORSumup(var record ORVc);//Edit_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-Anton 11:36 10.09.2018
+external procedure ExtractObjWithSeparator(string,string,Boolean,var Integer,var string);//Edit_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-Anton 11:42 10.09.2018
+external function Boolean ORDClassArtCodeEFAfter(Integer,Integer,Integer);
+external function Boolean ORDClassQuantEFAfter(Integer,Integer,Integer,Integer);
+remote function Boolean ORVc_PasteArtCode(var record ORVc,Integer,var string,var string,Boolean);
+
 
 global
 function Boolean PasteCustInOR(var record ORVc ORr)
@@ -544,3 +550,28 @@ LORVc_AllowSales:;
   ORVc_AllowSales = res;
   return;
 end;
+
+
+global updating procedure AddItemsFromListORDsm(integer wn, var record ORVc ORr, array integer ItemCodeQTy,array string atstr, integer rwcnt)
+begin
+	integer i,mtrw;
+	row ORVc ORrw;
+	record NotepadVc Noter,newNoter;
+	integer notenr,pos;
+	string 100 tstr,qtstr,inwar,war;
+  record RLinkVc RLr;
+	boolean res;
+	
+	
+	For(i=0;i<rwcnt;i=i+1) begin
+		ORrw.ArtCode = atstr[i];
+		ORrw.Quant = ItemCodeQTy[i];
+		matrowput(ORr,i,ORrw);
+	end; 
+	For(i=0;i<rwcnt;i=i+1) begin
+		res = ORVc_PasteArtCode(ORr,i,inwar,war,false);
+	end; 
+return;
+end;
+
+

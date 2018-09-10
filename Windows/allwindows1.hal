@@ -2523,7 +2523,7 @@ begin
 	SpecialMenu("Отправить в резерв/заказ на логистику",'',20,"SendToReservLogisticDsm");	// Edit ************************** Monday, 14 November 2016 15:13:12
 	SpecialMenu("Рассчитать скидку 1+1",'',20,"CalcOnePlusOneRebateDsm");	// Edit ************************** Monday, 14 November 2016 15:13:12
 	SpecialMenu("Создать список на добавление",'',20,"AddItemsInORDsm");//Edit_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-Anton 14:18 10.09.2018
-	SpecialMenu("Добавить товары согласно списку",'',20,"AddItemsFromListORDsm");//Edit_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-Anton 14:18 10.09.2018
+	SpecialMenu("Добавить товары согласно списку",'',20,"PasteItemsFromListORDsm");//Edit_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-Anton 14:18 10.09.2018
   end;
   EndWindow;
 
