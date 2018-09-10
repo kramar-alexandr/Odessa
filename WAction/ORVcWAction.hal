@@ -80,6 +80,9 @@ remote updating procedure ORHistBackDsmRemote(record ORVc);
 remote procedure AlternativeRebateORVc(var record ORVc);//==============Alexandr 25/09/2015
 remote procedure Rem_CalcOnePlusOneRebate(var record ORVc);// Edit ************************** BPI Ukraine - KramarAlexandr - Monday, 11 December 2017 09:53:12
 remote procedure AdNP_PasteRecipientWarehouseDescOR(var record ORVc);
+external procedure ORSumup(var record ORVc);//Edit_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-Anton 11:36 10.09.2018
+external procedure ExtractObjWithSeparator(string,string,Boolean,var Integer,var string);//Edit_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-Anton 11:42 10.09.2018
+
 
 SetLangMode(LangRussian,"RUS",0);
 
@@ -2901,5 +2904,97 @@ begin
 	getwindowrecord(wn,ORr);
 	Rem_CalcOnePlusOneRebate(ORr);
 	putwindowrecord(wn,ORr);
+return;
+end;
+
+
+
+global updating procedure AddItemsInORDsm()//EDIT_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-Anton 10:26 05.07.2018
+begin
+	integer wn,i,mtrw,rwcnt,j;
+	record ORVc ORr;
+	record NotepadVc Noter,newNoter;
+	integer notenr;
+  record RLinkVc RLr;
+	
+	wn = curwindow;
+	getwindowrecord(wn,ORr);
+	
+	recordnew(newNoter);
+	newNoter.SerNr = NextSerNr("NotepadVc",CurrentDate,-1,false,"");
+	newNoter.Classification = "ADD";
+	if (RecordStore(newNoter,false)) then begin
+		CreateRecordLink(ORr,CurrentCompany,newNoter,CurrentCompany); 
+		CreateRecordLink(newNoter,CurrentCompany,ORr,CurrentCompany);   
+		notenr = 1;
+		while (ReadRecordLink(ORr,notenr,newNoter,RLr)) begin
+			notenr = notenr + 1;
+		end;
+		if (ReadRecordLink(ORr,notenr-1,newNoter,RLr)) then begin
+			RLr.Comment = "Add List";
+			if (RecordStore(RLr,true)) then begin  end;
+		end;
+		OpenWindow("NotepadDClass",1,wn,"","",newNoter);
+	end else begin
+		messagebox(0,"Error store note");
+	end;
+
+return;
+end;
+
+
+
+global updating procedure AddItemsFromListORDsm()
+begin
+	integer wn,i,mtrw,rwcnt;
+	record ORVc ORr;
+	row ORVc ORrw;
+	record NotepadVc Noter,newNoter;
+	integer notenr,pos;
+	string 100 tstr,qtstr;
+  record RLinkVc RLr;
+  vector integer ItemCodeQTy;
+	array string 100 atstr;
+	boolean res;
+	
+	recordnew(newNoter);
+	
+	
+	wn = curwindow;
+	getwindowrecord(wn,ORr);
+	if(ORr.OKFlag==0)then begin
+		notenr = 1;
+		while (ReadRecordLink(ORr,notenr,Noter,RLr)) begin
+			if ("ADD"==Noter.Classification) then begin
+		
+				rwcnt = LineTextCnt(Noter);
+				for (i=0;i<rwcnt;i=i+1) begin
+					pos = 0;
+					ExtractObjWithSeparator(Chr(9),LineTextGet(Noter,i),true,pos,tstr);
+					ExtractObjWithSeparator(Chr(9),LineTextGet(Noter,i),true,pos,qtstr);
+					if(nonblank(tstr))then begin
+						ItemCodeQTy[tstr] = StringToInt(qtstr);
+						atstr[i] = tstr;
+					end;
+				end;  
+			end;
+			notenr = notenr + 1;
+		end;
+		For(i=0;i<rwcnt;i=i+1) begin
+			ORrw.ArtCode = atstr[i];
+			ORrw.Quant = ItemCodeQTy[atstr[i]];
+			matrowput(ORr,i,ORrw);
+		end; 
+		ORSumUp(ORr);
+		putwindowrecord(wn,ORr);
+		For(i=0;i<rwcnt;i=i+1) begin
+			res = ORDClassArtCodeEFAfter(wn,i,1);
+			res = ORDClassLocationEFAfter(wn,i,1);
+			matrowput(ORr,i,ORrw);
+		end; 
+	end else begin
+		messagebox(0,"Запись должна быть разокеена");
+	end;
+	
 return;
 end;

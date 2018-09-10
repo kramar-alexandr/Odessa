@@ -5580,8 +5580,10 @@ begin
   SpecialMenu("Пересчитать скидку",' ',11,"RecalcDiscountORDsm");
   SpecialMenu("Проверить наличие на складах товаров из счета",' ',7,"CheckItemsOnStockORDsm"); //Edit***************************Sasha2,15:20 12.08.2015
   SpecialMenu("Обновить товары валютного прейскуранта",' ',7,"UpdatePricesORDsm");
-  SpecialMenu("Статус товара",'I',2,"ItemStatusORDsm");
-  SpecialMenu("Поиск товара",'',1,"ItemSearchDsm");
+  //SpecialMenu("Статус товара",'I',2,"ItemStatusORDsm");
+  //SpecialMenu("Поиск товара",'',1,"ItemSearchDsm");
+	SpecialMenu("Создать список на добавление",'',1,"AddItemsInORDsm");
+	SpecialMenu("Добавить товары согласно списку",'',1,"AddItemsFromListORDsm");
   SpecialMenu("Поиск в текущей таблице",'f',1,"TableSearchDsm"); // edit ----------Dima 25.11.2014
   SpecialMenu("Статус счета",'r',5,"ORInfoRnORDsm");
   
@@ -5596,7 +5598,7 @@ begin
 	SpecialMenu("Создать СМС с реквизитами",'',20,"MakeSMSORDsm");	//Edit----------------------Dima  26.06.2015
 	SpecialMenu("Просмотреть доступные товары",'R',20,"GetAvailableItemsDsm");		//Edit----------------------Dima  26.06.2015
 	SpecialMenu("Отменить заказ на перемещение",'',20,"CancelStockMoveOrderDsm");	//Edit----------------------Dima  30.12.2015	
-	SpecialMenu("Обновить задолженность клиента",'',20,"CalcCustBalDsm");	// Edit ************************** Friday, 22 July 2016 10:42:12
+	//SpecialMenu("Обновить задолженность клиента",'',20,"CalcCustBalDsm");	// Edit ************************** Friday, 22 July 2016 10:42:12
 	SpecialMenu("Послать статус в Magento",'',20,"UpdateMagontoStatDsm");	// Edit ************************** Monday, 14 November 2016 15:13:12
 	SpecialMenu("Отправить в резерв/заказ на логистику",'',20,"SendToReservLogisticDsm");	// Edit ************************** Monday, 14 November 2016 15:13:12
 	SpecialMenu("Рассчитать скидку 1+1",'',20,"CalcOnePlusOneRebateDsm");	// Edit ************************** Monday, 14 November 2016 15:13:12
