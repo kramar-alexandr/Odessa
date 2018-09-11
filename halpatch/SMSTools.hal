@@ -17,6 +17,7 @@ begin
 			correctPhone = "";
 		end;
 	end;
+	logtext(0,"correctPhone " & correctPhone);
 	
 	NormalizePhone = correctPhone;
 	return;
