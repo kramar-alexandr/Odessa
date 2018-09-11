@@ -147,6 +147,7 @@ begin
 			xdata = ParseXMLArea(replyarea);
 
 			response = XmlGet(xdata,"RESPONSE/status");
+			logtext(0,"response " & response);
 			CheckEPochtaResponse(response);
 		
 			//if (writeLog) then begin 
