@@ -1025,7 +1025,7 @@ end;// Edit ***** 20 June 2013 15:17:00 Larisa
 
 
 
-global updating procedure ImportDIVcIn()
+/*global updating procedure ImportDIVcIn()
 begin
 	record DIVc DIr;
 	integer i;
@@ -1075,5 +1075,5 @@ begin
 		i = i + 1;
 	end;
 	return;
-end;
+end;*/
 

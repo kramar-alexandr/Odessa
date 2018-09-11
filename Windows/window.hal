@@ -5562,7 +5562,7 @@ begin
 end;
 
 
-window ImportDIVcINClass:1
+/*window ImportDIVcINClass:1
   wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
 begin
   real v;
@@ -5574,4 +5574,4 @@ begin
    StaticText(25,v+=20,"* (столбец)Код классификации",false);
    
   EndWindow;
-end;
+end;*/
