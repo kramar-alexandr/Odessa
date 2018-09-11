@@ -13,7 +13,11 @@ begin
 	if (Len(correctPhone)==10) then begin
 		correctPhone = "38" & Right(correctPhone,10);
 	end else begin
-		correctPhone = "";
+		if(Len(correctPhone)<10)then begin
+			correctPhone = "";
+		end else begin
+			correctPhone = phone;
+		end;
 	end;
 	
 	NormalizePhone = correctPhone;
