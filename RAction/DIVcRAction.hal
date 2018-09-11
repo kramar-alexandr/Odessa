@@ -1,0 +1,29 @@
+global
+function LongInt DIVcRecordDefaults(var record DIVc DIr,record DIVc DI2r,LongInt stat,LongInt long4)
+BEGIN
+  LongInt res;
+  
+  DIr.colnr = 0;
+  DIVcRecordDefaults = res; 
+  RETURN;
+END;
+
+global 
+function Boolean DIVcRecordShouldBeSynchronised(record DIVc DIr,string tagstr)
+begin
+  Boolean res;
+  
+  res = true;
+  DIVcRecordShouldBeSynchronised = res;
+  return;
+end;
+
+global 
+function Boolean DIVcRecordSync(record DIVc DIr,string tagstr)
+begin
+  Boolean res;
+  
+  res = true;
+  DIVcRecordSync = res;
+  return;
+end;

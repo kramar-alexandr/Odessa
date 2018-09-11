@@ -579,7 +579,7 @@ begin
 	Import("Залить MOQ",INMinOrderImportIClass,INMOQOrderImportIn,modIN); //Edit***************************Sasha2,14:54 15.02.2017
 	
 	Import("Изменение флагов экспорта прайсов",INImportExportFlagsIClass,INImportExportFlagsIn,modIN); //Edit***************************Sasha2,14:54 15.02.2017
-
+	Import("Импорт классификаций",ImportDIVcINClass,ImportDIVcIn,modDBMain);//Edit_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-Anton 11:24 18.07.2018
 	
 	Export("ExxportIN",CashInvCroEClass,ExpRegINEn,modDBMain);
 	Export("ExxportPLHist",UILogEClass,ExpRegPLHistEn,modDBMain);

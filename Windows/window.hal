@@ -5562,3 +5562,16 @@ begin
 end;
 
 
+window ImportDIVcINClass:1
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  real v;
+  WindowBegin("Classification import",ImportDIVcINClass,CGIcW,RcType);
+  SetWRect(80,80,600,200);
+   
+   StaticText(25,v=20,"* (Строка) Тип классификации",false);
+   StaticText(25,v+=20,"* (Строка) Формат кода классификации (будет использован для первой записи)",false);
+   StaticText(25,v+=20,"* (столбец)Код классификации",false);
+   
+  EndWindow;
+end;

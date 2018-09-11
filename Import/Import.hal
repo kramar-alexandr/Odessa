@@ -1,5 +1,6 @@
 external procedure ExtractObj(string,var Integer,var string);
 external function Boolean SetInSet2(string,string);
+remote procedure NextM4SerialNumber(string,var string);
 
 SetLangMode(LangRussian,"RUS",0);
 
@@ -990,3 +991,89 @@ begin
 	
   return;
 end;
+
+
+
+procedure FormatUpperCaseCode(var string field)// Edit ***** 20 June 2013 15:17:00 Larisa
+begin
+	string 255 tempfield,s;
+	integer i,ns;
+	
+	tempfield = UpperCase(field);
+	field = "";
+	for (i=0;i<len(tempfield);i=i+1) begin
+		s = mid(tempfield,i,1);
+		ns = asc(s);
+		if(ns>=32 and ns<=96)then begin
+			if(ns!=34 and ns!=44 and ns!=58)then begin
+				if(ns==32)then begin
+					field = field & chr(95);
+				end else begin
+					field = field & s;
+				end;
+			end;
+		end;
+		if(ns>=123 and ns<=126)then begin
+			field = field & s;
+		end;
+		if(ns>=1040 and ns<=1071)then begin
+			field = field & s;
+		end;
+	end;
+	return;
+end;// Edit ***** 20 June 2013 15:17:00 Larisa
+
+
+
+global updating procedure ImportDIVcIn()
+begin
+	record DIVc DIr;
+	integer i;
+	string 255 sfield0,color,size;
+	boolean TrHs;
+	string 255 CType, CFirstCode;
+	vector boolean NameCreatef;
+	
+	i = 0;
+	TrHs = true;
+	while (TestEOF()==false) begin
+		sfield0 = "";
+		sfield0 = ImportField;
+		FormatUpperCaseCode(sfield0);
+		if(nonblank(sfield0) and i==0)then begin 
+			CType = sfield0;
+		end;
+		if(nonblank(sfield0) and i==1)then begin 
+			CFirstCode = sfield0;
+		end;
+		if(blank(sfield0) and i==0)then begin 
+			TrHs = false;
+		end;
+		if(blank(sfield0) and i==1)then begin 
+			TrHs = false;
+		end;
+		if(i>1 and TrHs and NameCreatef[sfield0]!=true)then begin
+			if(i>2)then begin
+				RecordNew(DIr);
+				NextM4SerialNumber(CFirstCode,DIr.Code);
+				CFirstCode = DIr.Code;
+				NameCreatef[sfield0] = true;
+			end else begin
+				RecordNew(DIr);
+				DIr.Code = CFirstCode;
+				NameCreatef[sfield0] = true;
+			end;
+			DIr.CType = CType;
+			Dir.Name = sfield0;
+			if(!ReadFirstMain(DIr,1,true))then begin
+				recordStore(DIr,True);
+			end else begin
+				messagebox(0,"Такие коды классификаций уже заведены в системе!!!" & DIr.Code);
+			end;
+		end;
+		NextImportLine(true);
+		i = i + 1;
+	end;
+	return;
+end;
+
