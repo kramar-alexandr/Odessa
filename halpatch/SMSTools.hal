@@ -91,23 +91,25 @@ begin
 		login = SMSb.WEBLogin;
 		password = SMSb.WEBPassword;
   end;
-
+	
+	logtext(0,"ConvertXml(phone) " & ConvertXml(phone));
+	
 	Addtexttoarea("POST " & aWeb  & chr(13) & chr(10),aRequest);
  	AddTextToArea("" & chr(13) & chr(10),aRequest);
 
   AddTextToArea("<SMS>"& chr(13),aRequest);
-  AddTextToArea("   <operations><operation>" & "SEND" & "</operation></operations>" & chr(13),aRequest);
-  AddTextToArea("   <authentification>"  & chr(13),aRequest);
-  AddTextToArea("     <username>" & login & "</username>" & chr(13),aRequest);  
-  AddTextToArea("     <password>" & password & "</password>" & chr(13),aRequest); 
-  AddTextToArea("   </authentification>"  & chr(13),aRequest);  
-  AddTextToArea("   <message>"& chr(13),aRequest);
-  AddTextToArea("     <sender>" & title & "</sender>" & chr(13),aRequest); 
-  AddTextToArea("     <text>" & text & "</text>" & chr(13),aRequest);
-  AddTextToArea("   </message>" & chr(13),aRequest);
-  AddTextToArea("   <numbers>"& chr(13),aRequest);
-  AddTextToArea("     <number>" & ConvertXml(phone) & "</number>" & chr(13),aRequest); 
-  AddTextToArea("   </numbers>" & chr(13),aRequest);  
+  AddTextToArea("<operations><operation>" & "SEND" & "</operation></operations>" & chr(13),aRequest);
+  AddTextToArea("<authentification>"  & chr(13),aRequest);
+  AddTextToArea("<username>" & login & "</username>" & chr(13),aRequest);  
+  AddTextToArea("<password>" & password & "</password>" & chr(13),aRequest); 
+  AddTextToArea("</authentification>"  & chr(13),aRequest);  
+  AddTextToArea("<message>"& chr(13),aRequest);
+  AddTextToArea("<sender>" & title & "</sender>" & chr(13),aRequest); 
+  AddTextToArea("<text>" & text & "</text>" & chr(13),aRequest);
+  AddTextToArea("</message>" & chr(13),aRequest);
+  AddTextToArea("<numbers>"& chr(13),aRequest);
+  AddTextToArea("<number>" & ConvertXml(phone) & "</number>" & chr(13),aRequest); 
+  AddTextToArea("</numbers>" & chr(13),aRequest);  
   AddTextToArea("</SMS>" & chr(13),aRequest);  
 	AddTextToArea("" & chr(13) & chr(10),aRequest);
 	
