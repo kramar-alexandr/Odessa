@@ -158,7 +158,7 @@ begin
 	CUr.Phone = Res;
 	if(readfirstkey("Phone",CUr,1,true))then begin
 		Randomize;
-		CUr.Sorting = Random(10,99) & "-" & Random(10,99) & "-" & Random(10,99) & "-" & Random(10,99);
+		CUr.Sorting = Random(1000,9999);
 		recordStore(CUr,true);
 		AddSMStoStack(Cur.Phone,title,CUr.Sorting,CUr.Code,"CUVc",CUr.Code,"WEB","","");
 		SendSMSFromStack;
