@@ -15,8 +15,6 @@ begin
 	end else begin
 		if(Len(correctPhone)<10)then begin
 			correctPhone = "";
-		end else begin
-			correctPhone = phone;
 		end;
 	end;
 	
