@@ -10,7 +10,7 @@ begin
 
 	correctPhone = StripNonDigits(phone);
 
-	if (Len(correctPhone)>=10) then begin
+	if (Len(correctPhone)=10) then begin
 		correctPhone = "38" & Right(correctPhone,10);
 	end else begin
 		correctPhone = "";
