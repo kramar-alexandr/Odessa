@@ -327,8 +327,7 @@ begin
 			matrowget(Counterpartyr1, 0, Counterparty1rw);
 				ContactRecipient = Counterparty1rw.Ref;
 		end;
-		logtext(0,"CUr.NPRef" & CUr.NPRef);
-		if(nonblank(CUr.NPRef))then begin
+		if(nonblank(CUr.NPRef) and SHr.NotThisRecipient==0)then begin
 			Counterpartyr1.Ref = CUr.NPRef;
 			if(ReadFirstKey("Ref",Counterpartyr1,1,true))then begin
 				Recipient = Counterpartyr1.Ref;

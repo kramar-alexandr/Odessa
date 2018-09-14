@@ -4826,7 +4826,7 @@ begin
     EditField(h3,v,120,"",ViewOnly,NPSenderWarehouseDesc,false,0);
 	//EditField(h3+270,v,120,"",ViewOnly,ADDNPRecipientWarehouseDesc,false,0);
     //EditField(h2,v,150,"Адрес",Normal,NPSenderAddress,false,0);
-    StaticText(90,v+=40,"Получатель:",true);
+    StaticText(90,v+=40,"Получатель:",true);CheckBox(h1+40,v-20,0,"Получает не Юр.лицо",NotThisRecipient); 
     if (CurrentUser=="SA") then begin
     	EditField(h1,v+=5,100,"Фамилия",Normal,NPRecipientLastName,false,0);
     	EditField(h2-90,v,100,"Имя",Normal,NPRecipientFirstName,false,0);
