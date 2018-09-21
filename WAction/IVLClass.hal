@@ -76,6 +76,35 @@ begin
 end;
 
 global
+function Boolean RetPULClassOnOpenWindow(Integer wn)
+begin
+  date dt;
+  record UserVc Userr;
+  
+  if(UserCanAction("VievAllSalesGroupDocuments", true)==false) then begin
+		Userr.Code = CurrentUser;
+		if(readFirstMain(Userr, 1, true))then begin
+			if(nonblank(Userr.SalesGroup))then begin
+				SetWindowSubset(wn,Userr.SalesGroup);
+			end;
+		end;  
+	end;
+	
+	if(usercanaction("VievOnlyWorldVE",false))then begin
+  	setwindowsubset(wn,"WORLD");
+  end;
+  if(usercanaction("VievOnlyUKRVE",false))then begin
+  	setwindowsubset(wn,"UKR");
+  end;
+  if(usercanaction("VievOnlyW1VE",false))then begin
+  	setwindowsubset(wn,"W_1");
+  end;
+    
+  RetPULClassOnOpenWindow = false;
+  return;
+end;
+
+global
 function Boolean SHLClassOnOpenWindow(Integer wn)
 begin
   date dt;
