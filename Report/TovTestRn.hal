@@ -89,6 +89,8 @@ begin
 	vector boolean INInArr;
 	array string 50 InArr;
 	integer i;
+	record ItemHistVc IHr;
+	vector val ihqty;
 	
 	StartReportNoHeaderJob("Несовпадения по складу 1-КОС");
 	startformat(15);
@@ -266,6 +268,31 @@ begin
 						if(TrHs1 and IS2r.Code==ISr.Code)then begin
 							IS2r.Instock = 0;
 							recordstore(IS2r,true);
+						end else begin
+							TrHs1  = false;
+						end;
+					end;
+				end else begin
+					IHr.ArtCode = ISr.Code;
+					TrHs1 = true;
+					ClearVector(ihqty);
+					while(Loopmain(IHr,1,TrHs1))begin
+						if(IHr.ArtCode!=ISr.Code)then begin TrHs1 = false; end;
+						
+						if(TrHs1 and IHr.StockAffectf>0)then begin
+							ihqty[IHr.Location] = ihqty[IHr.Location] + IHr.Qty;
+						end;
+					end;
+					resetloop(IHr);
+					resetloop(IS2r);
+					IS2r.Code = ISr.Code;
+					TrHs1  = true;
+					while(loopmain(IS2r,1,TrHs1))begin
+						if(TrHs1 and IS2r.Code==ISr.Code)then begin
+							if(IS2r.Location!=";;;")then begin
+								IS2r.Instock = ihqty[IS2r.Location];
+								recordstore(IS2r,true);
+							end;
 						end else begin
 							TrHs1  = false;
 						end;
