@@ -82,9 +82,9 @@ end;
 global updating procedure TovTestRn(record RcVc RepSpec)
 begin
 	record PISVc PISr;
-	record ItemStatusVc ISr;
+	record ItemStatusVc ISr,IS2r;
 	record INVc INr;
-	boolean testf,TrHs,TrHs2;
+	boolean testf,TrHs,TrHs2,TrHs1;
 	vector val vect;
 	vector boolean INInArr;
 	array string 50 InArr;
@@ -255,6 +255,23 @@ begin
 			OutString(210,0,ISr.Location,false);
 			OutString(280,0,ISr.Instock,false);
 			endformat;
+			IS2r.Code = ISr.Code;
+			IS2r.Location = ";;;";
+			if(readfirstmain(IS2r,1,true))then begin
+				if(IS2r.Instock==0)then begin
+					resetloop(IS2r);
+					IS2r.Code = ISr.Code;
+					TrHs1  = true;
+					while(loopmain(IS2r,1,TrHs1))begin
+						if(TrHs1 and IS2r.Code==ISr.Code)then begin
+							IS2r.Instock = 0;
+							recordstore(IS2r,true);
+						end else begin
+							TrHs1  = false;
+						end;
+					end;
+				end;
+			end;
 		end;
 		
 		if(ISr.RsrvQty<0)then begin
