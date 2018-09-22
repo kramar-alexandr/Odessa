@@ -4599,3 +4599,21 @@ return;
 end;
 
 
+global updating procedure DelItemStatusVc()
+begin
+	record ItemStatusVc ISr;
+	record PISVc PISr;
+	
+	while(loopmain(ISr,1,true))begin
+		recorddelete(ISr);
+		stepback(ISr);
+	end;
+	
+	while(loopmain(PISr,1,true))begin
+		recorddelete(PISr);
+		stepback(PISr);
+	end;
+
+
+return;
+end;

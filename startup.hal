@@ -548,6 +548,9 @@ begin
   
   Maintenance("Пересчитать скидки клиентов",MyVClass,UpdateCURRebCodeMn,modRozetka);
 	
+	Maintenance("Delete ItemStatusVc PISVc",MyVClass,DelItemStatusVc,modDBMain); 
+
+	
   Import("Импорт цен",PLImportIClass,PLImportIn,modDI); //Added********************Dima 20.11.2014
   Import("Импорт товаров",INImportIClass,INImportIn,modIN);//Added********************Dima 20.11.2014
   //Import("Заменить группу товара",INReplaceGroupIClass,INReplaceGroupIn,modIN); The same as "Импорт Item/Group" //Added********************Dima 21.11.2014
