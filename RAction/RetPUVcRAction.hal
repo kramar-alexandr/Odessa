@@ -990,6 +990,9 @@ BEGIN
       goto LRetPUVcRecordCheck;
     end;
   end;
+  
+  RetPUp.SalesGroup = VEr.SalesGroup;// Edit ************************** BPI Ukraine - KramarAlexandr - Monday, 24 September 2018 09:12:29
+  
   if (nonblankdate(RetPUp.PlanSendDate)) then begin
     if (RetPUp.PlanSendDate<RetPUp.TransDate) then begin
       error = 1142;
