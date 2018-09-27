@@ -65,6 +65,7 @@ external updating function val NextLocOKNr(string);
 external procedure GetFullCurncyRate (var string,Date,var val,var val,var val,var val,var val);
 external procedure RetSumUp(var record RetVc);
 external function string 255 CheckTrans(var record TRVc,Integer,Boolean);
+external procedure AddCUToBlList( var record RetVc );
 external updating procedure SaveTrans(record TRVc);
 external procedure GetFullCurncyRateText(Boolean,var string,val,val,val,val,val);
 external function Boolean ExistStockTrans(string,Date,var Integer,var string,string,LongInt,record MainStockBlock);
@@ -1360,7 +1361,14 @@ BEGIN
   if ((Retr.OKFlag==0) and (Ret2r.OKFlag!=0)) then begin
   		UnOk_RetVc(Retr);
   end;  
+   
+  if ((Retr.OKFlag==0) and (Ret2r.OKFlag!=0)) then begin
+  		UnOk_RetVc(Retr);
+  end;  
   
+  if ( Retr.BlackFlag == 1) then begin
+		AddCUToBlList(Retr);
+  end;		
   RetVcRecordUpdate = res;
   RETURN;
 END;

@@ -57,6 +57,25 @@ BEGIN
   RETURN;
 END;
 
+global 
+updating procedure AddCUToBlList( var record RetVc Retr)
+begin
+record CUVc CUr;
+    CUr.Code = Retr.CustCode;
+	if(ReadFirstMain(CUr,1,false)) then begin
+	    if(SetInSet("BLACKLIST",CUr.Classification)) then begin
+			CUr.Classification = CUr.Classification & ",BLACKLIST";
+			RecordStore(CUr,true);
+		end else begin	
+			CUr.Classification = "BLACKLIST";
+			RecordStore(CUr,true);
+		end;	
+	end;	
+return;
+end; //Edit______________________________________________AntonBr 15:25 27.09.2018
+
+global 
+
 function Boolean RetDClassUnitXvalEFAfter(Integer wn,Integer fn, Integer rownr,Integer changed)
 BEGIN
   row RetVc Retrw;

@@ -3459,6 +3459,7 @@ RecordBegin(INVc,-,"artikel5");
   RecordField(Location,M4Code,10,LocationVc);
   FieldIsLocation(Location);
   RecordField(OKFlag,M4Mark,0,0);
+  RecordField(BlackFlag,M4Mark,0,0);
   RecordField(CurncyCode,M4Code,5,CurncyCodeVc);
   RecordField(ToRateB1,M4Rate,0,0);
   RecordField(InclVAT,M4Int,0,0);
