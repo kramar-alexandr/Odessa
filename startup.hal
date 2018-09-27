@@ -63,7 +63,7 @@ begin
   Report("Отчет по оплатам кассовых сч/ф",POSPaymentsRClass,POSPaymentsRn,0,modSL); //Edit***************************Sasha2,16:40 17.11.2014
   Report("Отчет по продажам",SalesRClass,SalesRn,0,modSL); //Edit----------------------Dima  14.03.2016
   Report("Отчет по балансу сертификатов",GivenCardsRecordRClass,GivenCardsRecordsRn,0,modSL); //GOSHA 4 Oct 2017
-
+  Report ("Клиенты Black List" , CUBLRClass, CUBLRn,0,modSL);
   Report("Продажи по регионам",SalesByCustRClass,SalesByCustRn,0,modSL); // Edit ************************** Tuesday, 6 September 2016 12:59:35
 
 	//Report("Отчет по продажам1",SalesRClass,Sales1Rn,0,modSL); //Edit----------------------Dima  14.03.2016

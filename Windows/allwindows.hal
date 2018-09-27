@@ -9117,6 +9117,14 @@ begin
 	EndWindow;
 end;
 
+window CUBLRClass:1
+wtag("language","ENG"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+  WindowBegin("Black List",CUBLRClass,CGRcW,RcType);
+  SetWRect(20,80,400,200);
+  Sizeable(-1,-1,0,0);
+  EndWindow;
+end;
 
 window PIDClass:1
   wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")

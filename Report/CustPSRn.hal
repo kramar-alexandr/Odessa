@@ -1,3 +1,4 @@
+SetLangMode(LangRussian,"RUS",0);
 external function Boolean HasModSL();
 external procedure GetOnAccBalance(record RcVc,string,string,Boolean,Integer,var val,var val,var val,var val,var val,var val,var val,record SMVc,
                    Array string,Array val,var Integer);
@@ -271,6 +272,45 @@ begin
   StartFormat(15);
   EndFormat;
   return;
+end;
+
+global updating procedure CUBLRn(record RcVc RepSpec) 
+begin 
+record CUVc CUr;
+record CClassVc CCVr;
+boolean TrHs, find; 
+StartReportJob( "CustomInfo" );
+Header(1,"Black List",1);
+EndHeader;
+startformat(15);
+								outstring(0,0,"Код Кл.",false);
+								outstring(100,0,"Имя Клиента", false);
+								outstring(200,0,"Классификация", false);
+								outstring(300,0,"Предупреждение Клиента", false);
+endformat;
+black_divider(0,1);
+TrHs = true;
+CUr.Code = "";
+
+	while(LoopMain(CUr,1,TrHs)) begin
+		find = false;
+		if(SetInSet("BLACKLIST",CUr.Classification))then begin find = true; end;
+		if(find) then begin
+			CCVr.Code = UpperCase(CUr.Classification);
+			if(ReadFirstMain(CCVr,1,true)) then begin
+				startformat(15);
+								outstring(0,0,CUr.Code ,false);
+								outstring(100,0,CUr.Name, false);
+								outstring(200,0,CCVr.Code, false);
+								outstring(300,0,CCVr.Comment, false);
+				endformat;
+				gray_divider(0,1);
+			end;
+		end;	
+	end;
+ResetLoop(CUr);	
+endjob; 
+return; 
 end;
 
 procedure PrintCustContract(string cusel)
