@@ -2795,7 +2795,8 @@ begin
   RlColKey(290,290,"Отправить(время)",CreationTime,false,CreationTime);
   RlColKey(350,350,"Источник",SourceType,false,SourceType);
   RlCol(400,400,"Заголовок",Title,false);
-  RlCol(470,470,"Текст",Text,false); //Edit***************************Sasha2,15:56 05.09.2017
+   RlCol(440,470,"Текст после изменения",TextAfter,false);
+  RlCol(470,470,"Текст до  изменения",Text,false); //Edit***************************Sasha2,15:56 05.09.2017
   RlCol(-240,-240,"Отправлен",SendDate,false);
   RlCol(-180,-180,"Отправлен",SendTime,false);
   RlColKey(-120,-120,"Sent",Sent,false,Sent);

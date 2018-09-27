@@ -3459,7 +3459,6 @@ RecordBegin(INVc,-,"artikel5");
   RecordField(Location,M4Code,10,LocationVc);
   FieldIsLocation(Location);
   RecordField(OKFlag,M4Mark,0,0);
-  RecordField(BlackFlag,M4Mark,0,0);
   RecordField(CurncyCode,M4Code,5,CurncyCodeVc);
   RecordField(ToRateB1,M4Rate,0,0);
   RecordField(InclVAT,M4Int,0,0);
@@ -3499,6 +3498,7 @@ RecordBegin(INVc,-,"artikel5");
   RecordField(OfficialSerNr2,M4Str,100,0);
   RecordField(OfficialSerNr2Serie,M4Str,30,0);
   RecordField(SalesGroup,M4Code,5,SalesGroupVc); //Edit by Victor 25.11.14
+  RecordField(BlackFlag,M4Mark,0,0); //Edit______________________________________________AntonBr 27.09.2018
   
   ArrayBegin(Math,-,1);
   ArrayField(ArtCode,M4Code,20,INVc);
@@ -4777,6 +4777,9 @@ RecordBegin(IPVc,-,"");
   RecordField(Error,M4Str,50,0);
   RecordField(OrderClass,M4Str,50,0);
   RecordField(ReSend,M4Mark,0,0);
+  RecordField(ReSend,M4Mark,0,0);
+  RecordField(TextBefore,M4Str,255,0);
+  
   MainKeyBegin(SerNr,0);
   KeySegment(SerNr);
   KeyBegin(Phone);

@@ -1366,9 +1366,7 @@ BEGIN
   		UnOk_RetVc(Retr);
   end;  
   
-  if ( Retr.BlackFlag == 1) then begin
-		AddCUToBlList(Retr);
-  end;		
+ 	
   RetVcRecordUpdate = res;
   RETURN;
 END;
@@ -1479,6 +1477,9 @@ BEGIN
       DeleteOffSerNr(Ret2r.SerNr,"RetVc");
     end;
   end;
+   if ( Retr.BlackFlag == 1) then begin
+		AddCUToBlList(Retr);
+  end;	
   RetVcRecordUpdateAfter = res;
   RETURN;
 END;

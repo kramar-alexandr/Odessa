@@ -4,6 +4,12 @@ remote updating	procedure	CrConsigBrak(record ConsignationVc,var array val);
 remote updating	procedure	CrConsigSale(record ConsignationVc,var array val);
 remote updating	procedure	CrConsigAll(record ConsignationVc);
 
+global 
+procedure SMSSendingORTOnOpenWindow(record RcVc RepSpec)
+begin
+return;
+end;
+
 global
 procedure ChngePasswordClassCancel()
 BEGIN

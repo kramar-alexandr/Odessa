@@ -195,7 +195,7 @@ record SHvc SHr;
 end;
 
 
-global updating function longint AddSMStoStack(string phone, string title, string text,string custcode,string docType,longint docSerNr,string OrderClass,date sendDate,time sendTime) 
+global updating function longint AddSMStoStack(string phone, string title,string textbefore, string text,string custcode,string docType,longint docSerNr,string OrderClass,date sendDate,time sendTime) 
 begin
 record SMSstackVc SMSr;
 longint smsNr;
@@ -208,6 +208,7 @@ longint smsNr;
   	SMSr.Phone = right(phone,len(phone)-1);
   end;
   SMSr.Title = title;
+  SMSr.TextBefore = textbefore;
   SMSr.Text = text;
   SMSr.CustCode = custcode;
   if (BlankDate(sendDate)) then begin

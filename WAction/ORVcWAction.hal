@@ -2553,10 +2553,12 @@ begin
 	
 	if(nonblank(ORr.OrderClass))then begin
 		RepSpec.f3 = SMSb.Title1;
-		RepSpec.f2 = ParseSMStext(SMSb.Requisites,ORr);  
+		RepSpec.f2 = ParseSMStext(SMSb.Requisites,ORr);
+		RepSpec.f4 = ParseSMStext(SMSOb.Requisites,ORr)	
   end else begin
   	RepSpec.f3 = SMSOb.Title1;
 		RepSpec.f2 = ParseSMStext(SMSOb.Requisites,ORr);  
+		RepSpec.f4 = ParseSMStext(SMSOb.Requisites,ORr);
   end;
   
   nwn = OpenWindow("SMSSendingORTClass",0,wn,"","",RepSpec);
@@ -2593,7 +2595,7 @@ begin
 	 
  // response = SendSMS(RepSpec.f1,text, RepSpec.f3,true,ORr.OrderClass);		//(Phone,Text,Title,  print Log?,..)
   
-  smsNr = AddSMStoStack(RepSpec.f1,RepSpec.f3,text,ORr.CustCode,"ORVc",ORr.SerNr,ORr.OrderClass,"","");
+  smsNr = AddSMStoStack(RepSpec.f1,RepSpec.f3,RepSpec.f4,text,ORr.CustCode,"ORVc",ORr.SerNr,ORr.OrderClass,"","");
 	response = CheckAndSendSMS(smsNr);  
   
   if (blank(response)) then begin    
