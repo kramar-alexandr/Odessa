@@ -58,18 +58,20 @@ BEGIN
 END;
 
 global 
-updating procedure AddCUToBlList( var record RetVc Retr)
+updating procedure AddCUToBlList(var record RetVc Retr)
 begin
 record CUVc CUr;
-    CUr.Code = Retr.CustCode;
-	if(ReadFirstMain(CUr,1,false)) then begin
-	    if(SetInSet("BLACKLIST",CUr.Classification)) then begin
-			CUr.Classification = CUr.Classification & ",BLACKLIST";
+  
+  CUr.Code = Retr.CustCode;
+	if(ReadFirstMain(CUr,1,true)) then begin
+	  if(SetInSet("BLACKLIST",CUr.Classification)==false) then begin
+	  	if(nonblank(CUr.Classification))then begin
+				CUr.Classification = CUr.Classification & ",BLACKLIST";
+			end else begin
+				CUr.Classification = "BLACKLIST";
+			end;
 			RecordStore(CUr,true);
-		end else begin	
-			CUr.Classification = "BLACKLIST";
-			RecordStore(CUr,true);
-		end;	
+		end;
 	end;	
 return;
 end; //Edit______________________________________________AntonBr 15:25 27.09.2018

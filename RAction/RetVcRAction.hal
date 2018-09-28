@@ -65,7 +65,6 @@ external updating function val NextLocOKNr(string);
 external procedure GetFullCurncyRate (var string,Date,var val,var val,var val,var val,var val);
 external procedure RetSumUp(var record RetVc);
 external function string 255 CheckTrans(var record TRVc,Integer,Boolean);
-external procedure AddCUToBlList( var record RetVc );
 external updating procedure SaveTrans(record TRVc);
 external procedure GetFullCurncyRateText(Boolean,var string,val,val,val,val,val);
 external function Boolean ExistStockTrans(string,Date,var Integer,var string,string,LongInt,record MainStockBlock);
@@ -77,6 +76,7 @@ external function Boolean SerNrTestRetVc(LongInt,Date,var Boolean);
 external function LongInt GetCurUserLastNr(string);
 remote procedure MyCreateCreditPayment(record IVVc); //Edit***************************Sasha2,15:20 18.02.2015
 external updating procedure UnOk_RetVc(var record RetVc);//Edit----------------------Dima  21.01.2016
+external procedure AddCUToBlList(var record RetVc);// Edit ************************** BPI Ukraine - KramarAlexandr - Friday, 28 September 2018 12:09:14
 
 SetLangMode(LangRussian,"RUS",0);
 
@@ -1357,11 +1357,7 @@ BEGIN
       end;
     end;
   end;
-  
-  if ((Retr.OKFlag==0) and (Ret2r.OKFlag!=0)) then begin
-  		UnOk_RetVc(Retr);
-  end;  
-   
+     
   if ((Retr.OKFlag==0) and (Ret2r.OKFlag!=0)) then begin
   		UnOk_RetVc(Retr);
   end;  
@@ -1477,9 +1473,15 @@ BEGIN
       DeleteOffSerNr(Ret2r.SerNr,"RetVc");
     end;
   end;
-   if ( Retr.BlackFlag == 1) then begin
-		AddCUToBlList(Retr);
+  // Edit Start ---------------------------------------------- Edit Start
+	//Friday, 28 September 2018 12:06:04
+	
+  if(Retr.BlackFlag==1 and Ret2r.BlackFlag==0) then begin// Edit ************************** BPI Ukraine - KramarAlexandr - Friday, 28 September 2018 12:05:40
+		AddCUToBlList(Retr);// Edit ************************** BPI Ukraine - KramarAlexandr - Friday, 28 September 2018 12:04:41
   end;	
+  
+	// Edit End ---------------------------------------------- Edit End
+	
   RetVcRecordUpdateAfter = res;
   RETURN;
 END;
