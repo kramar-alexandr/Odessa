@@ -273,7 +273,7 @@ begin
   EndFormat;
   return;
 end;
-
+//Edit_________________ABR 28.09.2018 15:06
 global updating procedure CUBLRn(record RcVc RepSpec) 
 begin 
 record CUVc CUr;
@@ -309,7 +309,7 @@ CUr.Code = "";
 				Black_Divider(0,1);
 				startformat(15);
 								outstring(200,0,"Код Возврата",false);
-								outstring(200,0,"Коментарий",false);
+								outstring(300,0,"Коментарий",false);
 				endformat;
 				Gray_Divider(0,1);		
 				gray_divider(0,1);
