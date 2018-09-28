@@ -278,18 +278,20 @@ global updating procedure CUBLRn(record RcVc RepSpec)
 begin 
 record CUVc CUr;
 record CClassVc CCVr;
-boolean TrHs, find; 
+record RetVc Retr;
+boolean TrHs, find, TrHs1, find1; 
 StartReportJob( "CustomInfo" );
 Header(1,"Black List",1);
 EndHeader;
 startformat(15);
 								outstring(0,0,"Код Кл.",false);
-								outstring(100,0,"Имя Клиента", false);
-								outstring(200,0,"Классификация", false);
-								outstring(300,0,"Предупреждение Клиента", false);
+								outstring(100,0,"Имя Клиента",false);
+								outstring(200,0,"Классификация",false);
+								outstring(300,0,"Предупреждение Клиента",false);
 endformat;
 black_divider(0,1);
 TrHs = true;
+TrHs1 = true;
 CUr.Code = "";
 
 	while(LoopMain(CUr,1,TrHs)) begin
@@ -299,12 +301,24 @@ CUr.Code = "";
 			CCVr.Code = UpperCase(CUr.Classification);
 			if(ReadFirstMain(CCVr,1,true)) then begin
 				startformat(15);
-								outstring(0,0,CUr.Code ,false);
-								outstring(100,0,CUr.Name, false);
-								outstring(200,0,CCVr.Code, false);
-								outstring(300,0,CCVr.Comment, false);
+								outstring(0,"DblCUVc",CUr.Code,false);
+								outstring(100,0,CUr.Name,false);
+								outstring(200,0,CUr.Classification,false);
+								outstring(300,0,CUr.WarnText1,false);
 				endformat;
 				gray_divider(0,1);
+				Retr.CustCode = CUr.Code;
+				while(LoopKey("CustCode",Retr,1,TrHs1)) begin
+					find1 = true;
+					if(Retr.CustCode != CUr.Code) then begin find1 = false; end; 
+					if(find1) then begin
+					    startformat(15);
+								outstring(200,"DblRetVc",Retr.SerNr,false);
+								outstring(300,0,Retr.Comment,false);
+						endformat;
+					end;
+				end;
+				ResetLoop(Retr);
 			end;
 		end;	
 	end;
@@ -312,6 +326,7 @@ ResetLoop(CUr);
 endjob; 
 return; 
 end;
+
 
 procedure PrintCustContract(string cusel)
 begin
