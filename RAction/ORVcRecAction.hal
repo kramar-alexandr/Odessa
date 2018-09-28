@@ -86,7 +86,7 @@ external updating function boolean NPDeleteCounterparty(record NPCounterparty2Vc
 external updating function boolean NPDeleteCounterparty1(record NPCounterparty1Vc);
 remote updating function boolean CheckCounterparty(var record ORVc,var string);
 external function LongInt DateDiff(Date,Date); //Edit***************************Sasha2,11:26 18.08.2015
-external updating function longint AddSMStoStack(string, string, string,string,string,longint,string,date,time);//Edit----------------------Dima  28.08.2015
+external updating function longint AddSMStoStack(string, string,string, string,string,string,longint,string,date,time);//Edit----------------------Dima  28.08.2015
 external function string 255 ParseSMStext(string, record ORVc);
 external updating function string 255  CheckAndSendSMS(longint);
 external procedure GetAvailableItems(var record ORVc);
@@ -2625,9 +2625,9 @@ begin
 	if (nonblank(text)) then begin
 		newtext = ParseSMStext(text,ORr);
 		if(nonblank(ORr.OrderClass))then begin
-			smsNr =	AddSMStoStack(phone,SMSb.Title3,newtext,ORr.CustCode,"ORVc",ORr.SerNr,ORr.OrderClass,"","");
+			smsNr =	AddSMStoStack(phone,SMSb.Title3,"",newtext,ORr.CustCode,"ORVc",ORr.SerNr,ORr.OrderClass,"","");
   	end else begin
-  		smsNr =	AddSMStoStack(phone,SMSOb.Title3,newtext,ORr.CustCode,"ORVc",ORr.SerNr,ORr.OrderClass,"","");
+  		smsNr =	AddSMStoStack(phone,SMSOb.Title3,"",newtext,ORr.CustCode,"ORVc",ORr.SerNr,ORr.OrderClass,"","");
   	end;
   end;
 end;
@@ -2654,10 +2654,10 @@ begin
 	
 	if(nonblank(ORr.OrderClass))then begin
 		text = ParseSMStext(SMSb.Requisites,ORr);  
-		smsNr = AddSMStoStack(phone,SMSb.Title1,text,ORr.CustCode,"ORVc",ORr.SerNr,ORr.OrderClass,"","");
+		smsNr = AddSMStoStack(phone,SMSb.Title1,"",text,ORr.CustCode,"ORVc",ORr.SerNr,ORr.OrderClass,"","");
   end else begin
   	text = ParseSMStext(SMSOb.Requisites,ORr);  
-  	smsNr = AddSMStoStack(phone,SMSOb.Title1,text,ORr.CustCode,"ORVc",ORr.SerNr,ORr.OrderClass,"","");
+  	smsNr = AddSMStoStack(phone,SMSOb.Title1,"",text,ORr.CustCode,"ORVc",ORr.SerNr,ORr.OrderClass,"","");
   end;
   
 	response = CheckAndSendSMS(smsNr); 

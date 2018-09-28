@@ -4777,7 +4777,6 @@ RecordBegin(IPVc,-,"");
   RecordField(Error,M4Str,50,0);
   RecordField(OrderClass,M4Str,50,0);
   RecordField(ReSend,M4Mark,0,0);
-  RecordField(ReSend,M4Mark,0,0);
   RecordField(TextBefore,M4Str,255,0);
   
   MainKeyBegin(SerNr,0);

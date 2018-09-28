@@ -69,7 +69,7 @@ external function string 30 GetCustomOfficialSerNr(); //Edit********************
 external updating procedure SHVcToPackListVc(var record SHVc);									//Edit----------------------Dima  07.05.2015
 external updating procedure PackListVcToSHVc(record PackListVc,var record SHVc);	//Edit----------------------Dima  19.05.2015
 external updating procedure AddPaymentToIPFromSH(record SHVc);
-external updating function longint AddSMStoStack(string, string, string,string,string,longint,string,date,time);//Edit----------------------Dima  16.09.2015
+external updating function longint AddSMStoStack(string, string,string, string,string,string,longint,string,date,time);//Edit----------------------Dima  16.09.2015
 external function string 255 ParseSMStext(string, record ORVc);//Edit----------------------Dima  16.09.2015
 external procedure Recalculate_CustomStatusFlagText(var record ORVc);	//Edit----------------------Dima  22.09.2015
 external updating procedure UpdateORVcNewPostStatuses(record SHVc );//_*_*_*_**************************
@@ -1911,12 +1911,12 @@ begin
 			if(nonblank(ORr.OrderClass))then begin
 				if (nonblank(SMSb.Text51)) then begin
 					newtext = ParseSMStext(SMSb.Text51,ORr);
-					AddSMStoStack(CUr.Phone,SMSb.Title5,newtext,ORr.CustCode,"SHVc",SHr.SerNr,ORr.OrderClass,"","");
+					AddSMStoStack(CUr.Phone,SMSb.Title5,"",newtext,ORr.CustCode,"SHVc",SHr.SerNr,ORr.OrderClass,"","");
 				end;	
   		end else begin
   			if (nonblank(SMSOb.Text51)) then begin
 					newtext = ParseSMStext(SMSOb.Text51,ORr);
-					AddSMStoStack(CUr.Phone,SMSOb.Title5,newtext,ORr.CustCode,"SHVc",SHr.SerNr,ORr.OrderClass,"","");
+					AddSMStoStack(CUr.Phone,SMSOb.Title5,"",newtext,ORr.CustCode,"SHVc",SHr.SerNr,ORr.OrderClass,"","");
 				end;
   		end;		  		
   	end;  
