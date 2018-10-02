@@ -288,6 +288,8 @@ startformat(15);
 								outstring(100,0,"Имя Клиента",false);
 								outstring(200,0,"Классификация",false);
 								outstring(300,0,"Предупреждение Клиента",false);
+								outstring(200,0,"Код Возврата",false);
+								outstring(300,0,"Коментарий",false);
 endformat;
 black_divider(0,1);
 TrHs = true;
@@ -300,25 +302,16 @@ CUr.Code = "";
 		if(find) then begin
 			CCVr.Code = UpperCase(CUr.Classification);
 			if(ReadFirstMain(CCVr,1,true)) then begin
-				startformat(15);
-								outstring(0,"DblCUVc",CUr.Code,false);
-								outstring(100,0,CUr.Name,false);
-								outstring(200,0,CUr.Classification,false);
-								outstring(300,0,CUr.WarnText1,false);
-				endformat;
-				Black_Divider(0,1);
-				startformat(15);
-								outstring(200,0,"Код Возврата",false);
-								outstring(300,0,"Коментарий",false);
-				endformat;
-				Gray_Divider(0,1);		
-				gray_divider(0,1);
 				Retr.CustCode = CUr.Code;
 				while(LoopKey("CustCode",Retr,1,TrHs1)) begin
 					find1 = true;
 					if(Retr.CustCode != CUr.Code) then begin find1 = false; end; 
 					if(find1) then begin
 					    startformat(15);
+							  outstring(0,"DblCUVc",CUr.Code,false);
+								outstring(100,0,CUr.Name,false);
+								outstring(200,0,CUr.Classification,false);
+								outstring(300,0,CUr.WarnText1,false);
 								outstring(200,"DblRetVc",Retr.SerNr,false);
 								outstring(300,0,Retr.Comment,false);
 						endformat;
