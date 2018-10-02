@@ -1,6 +1,5 @@
 external procedure PasteFromSysList(Integer,Integer);
 
-
 global
 procedure PromotionSClassArrayOnOpen(var Array string astr,var Integer acnt)
 BEGIN
@@ -174,7 +173,6 @@ BEGIN
   record NPActiveContSndBlock NPActiveContSndBlockr;
   row NPActiveContSndBlock NPActiveContSndBlockrw;
   record NPCounterpartySenderVc NPCounterpartySenderr;
-
   res = true;
   if (changed!=0) then begin
     GetWindowRecord(wn,NPActiveContSndBlockr);
@@ -252,4 +250,15 @@ begin
   RunReport(RepSpec,0);
 	
 return;
+end;
+//______________________________ABR 14:50 02.10.18 
+global 
+procedure WinMessageBox(Integer wn,string text)
+begin
+record RcVc RepSpec ;
+integer wrn;
+   RecordNew(RepSpec);
+   RepSpec.f1 = text;
+  wrn = OpenWindow("MBoxWClass",1,0,"","",RepSpec);
+  RETURN;
 end;
