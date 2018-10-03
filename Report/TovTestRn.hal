@@ -183,6 +183,7 @@ begin
 		if testf then begin
 			startformat(15);
 			OutString(0,"DblOpenINrsRn",InArr[i],false);
+			OutString(70,0,InArr[i],false);
 			OutString(140,0,vect[InArr[i]],false);
 			OutString(210,0,vect[InArr[i] & ":ŠŽ‘_2"],false);
 			OutString(280,0,vect[InArr[i] & ":Ž‘’_3"],false);
