@@ -91,19 +91,18 @@ begin
 	integer i;
 	record ItemHistVc IHr;
 	vector val ihqty;
-	val sum;
 	record LocationVc Locr;
 	array string 20 aloc;
 	integer acnt;
 	vector val locqty;
+	val sum;
+	boolean printf;
 	
 	while(loopmain(Locr,1,true))begin
 		aloc[acnt] = Locr.Code;
 		acnt = acnt + 1;
 	end;
-	
-	StartReportNoHeaderJob("Несовпадения по складу 1-КОС");
-	
+		
 	StartReportNoHeaderJob("Проверка ItemStatus");
 	startformat(15);
 		OutString(0,0,"Код",false);
@@ -115,26 +114,38 @@ begin
 	i = 0;
 	TrHs = true;
 	INr.Code = "";
-	while loopmain(INr,1,TrHs) begin
+	while loopmain(INr,1,true) begin
 		ClearVector(locqty);
+		sum = blankval;
 		ISr.Code = INr.Code;
-		ISr.Location = "1-KOC";
-		while (loopmain(ISr,2,TrHs)) begin
-			if (ISr.Code != INr.Code) then begin
-				TrHs2 = false;
+		printf = false;
+		TrHs = true;
+		while (loopmain(ISr,1,TrHs)) begin
+			if (ISr.Code!=INr.Code) then begin
+				TrHs = false;
 			end;
 			if(TrHs)then begin
 				locqty[ISr.Location] = ISr.Instock;
+				if(ISr.Location!=";;;")then begin
+					sum = sum + ISr.Instock;
+				end;
 			end;
 		end;
 		resetloop(ISr);
-		startformat(15);
-			OutString(0,0,INr.Code,false);
-			OutString(30,0,locqty[";;;"],false);
-			For(i=0;i<acnt;i=i+1) begin
-				OutString(60+i*30,0,aloc[i],false);
-			end; 
-		endformat;
+		
+		if(sum!=locqty[";;;"])then begin
+			printf = true;
+		end;
+		
+		if(printf)then begin
+			startformat(15);
+				OutString(0,0,INr.Code,false);
+				OutString(30,0,locqty[";;;"],false);
+				For(i=0;i<acnt;i=i+1) begin
+					OutString(60+i*30,0,locqty[aloc[i]],false);
+				end; 
+			endformat;
+		end;
 		
 	end;
 	
