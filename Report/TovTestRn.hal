@@ -154,6 +154,7 @@ begin
 				
 				if(TrHs1 and IHr.StockAffectf>0)then begin
 					ihqty[IHr.Location] = ihqty[IHr.Location] + IHr.Qty;
+					logtext(0,IHr.Location & " " & IHr.Qty);
 				end;
 			end;
 			resetloop(IHr);
