@@ -108,11 +108,11 @@ begin
 	end;
 	
 	while(loopmain(Posr,1,true))begin
-		if(Posr.Location=="1-KOC" or Posr.Location=="3-RAY")then begin
+		//if(Posr.Location=="1-KOC" or Posr.Location=="3-RAY")then begin
 			apos[pcnt] = Posr.Code;
 			posloccode[Posr.Code] = Posr.Location;
 			pcnt = pcnt + 1;
-		end;
+		//end;
 	end;
 		
 	StartReportNoHeaderJob("Проверка ItemStatus");
@@ -221,7 +221,6 @@ begin
 									OutString(90,0,locqty[IS2r.Location & ":" & apos[j]],false);
 									OutString(120,0,ihqty[IS2r.Location & ":" & apos[j]],false);
 									possum[IS2r.Location] = possum[IS2r.Location] + ihqty[IS2r.Location & ":" & apos[j]];
-									logtext(0,IS2r.Location & " possum[IS2r.Location] " & possum[IS2r.Location]);
 									possumbef[IS2r.Location] = possumbef[IS2r.Location] + locqty[IS2r.Location & ":" & apos[j]];
 								endformat;
 							end;
