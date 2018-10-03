@@ -208,6 +208,35 @@ begin
 							OutString(60,0,IS2r.Instock,false);
 						endformat;
 						
+						if(IS2r.Location=="1-KOC")then begin
+							startformat(15);
+								OutString(0,0,"",false);
+								OutString(0,0,"",false);
+								OutString(60,0,"ŠŽ‘_2",false);
+								OutString(90,0,locqty[IS2r.Location & ":ŠŽ‘_2"],false);
+							endformat;
+							startformat(15);
+								OutString(0,0,"",false);
+								OutString(0,0,"",false);
+								OutString(60,0,"4-NIZ",false);
+								OutString(90,0,locqty[IS2r.Location & ":Ž‘’_3"],false);
+							endformat;
+						end;
+						if(IS2r.Location=="3-RAY")then begin
+							startformat(15);
+								OutString(0,0,"",false);
+								OutString(0,0,"",false);
+								OutString(60,0,"3-RAY",false);
+								OutString(90,0,locqty[IS2r.Location & ":3-RAY"],false);
+							endformat;
+							startformat(15);
+								OutString(0,0,"",false);
+								OutString(0,0,"",false);
+								OutString(60,0,"4-NIZ",false);
+								OutString(90,0,locqty[IS2r.Location & ":4-NIZ"],false);
+							endformat;
+						end;
+						
 						//recordstore(IS2r,true);
 					end;
 				end else begin
