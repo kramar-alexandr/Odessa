@@ -231,7 +231,7 @@ begin
 							OutString(60,0,possumbef[IS2r.Location],false);
 						endformat;
 						startformat(15);
-							OutString(0,0,"possum",false);
+							OutString(0,0,"possumbef",false);
 							OutString(60,0,possumbef[IS2r.Location],false);
 						endformat;
 						startformat(15);
