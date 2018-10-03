@@ -108,7 +108,7 @@ begin
 		OutString(0,0,"Код",false);
 		OutString(30,0,"All",false);
 		For(i=0;i<acnt;i=i+1) begin
-			OutString(60+i*30,0,Locr.Code,false);
+			OutString(60+i*30,0,aloc[i],false);
 		end; 
 	endformat;
 	i = 0;
