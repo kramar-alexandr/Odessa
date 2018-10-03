@@ -158,10 +158,10 @@ begin
 			end;
 			resetloop(IHr);
 			resetloop(IS2r);
-			IS2r.Code = ISr.Code;
+			IS2r.Code = INr.Code;
 			TrHs1  = true;
 			while(loopmain(IS2r,1,TrHs1))begin
-				if(TrHs1 and IS2r.Code==ISr.Code)then begin
+				if(TrHs1 and IS2r.Code==INr.Code)then begin
 					if(IS2r.Location!=";;;")then begin
 						IS2r.Instock = ihqty[IS2r.Location];
 						
