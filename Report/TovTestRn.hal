@@ -126,6 +126,9 @@ begin
 			end;
 			if(TrHs)then begin
 				locqty[ISr.Location] = ISr.Instock;
+				if(ISr.Instock<0)then begin
+					printf = true;
+				end;
 				if(ISr.Location!=";;;")then begin
 					sum = sum + ISr.Instock;
 				end;
