@@ -126,6 +126,40 @@ begin
 			end;
 			if(TrHs)then begin
 				locqty[ISr.Location] = ISr.Instock;
+				if(ISr.Location=="1-KOC")then begin
+					PISr.ArtCode = INr.Code;
+					PISr.Location = ISr.Location;
+					PISr.Position = "ŠŽ‘_2";
+					ReadFirstMain(PISr,3,true);
+					locqty[ISr.Location & ":ŠŽ‘_2"] = PISr.Instock;
+					
+					PISr.ArtCode = INr.Code;
+					PISr.Location = ISr.Location;
+					PISr.Position = "Ž‘’_3";
+					ReadFirstMain(PISr,3,true);
+					locqty[ISr.Location & ":Ž‘’_3"] = PISr.Instock;
+					
+					if(ISr.Instock!=(locqty[ISr.Location & ":ŠŽ‘_2"] + locqty[ISr.Location & ":Ž‘’_3"]))then begin
+						printf = true;
+					end;
+				end;
+				if(ISr.Location=="3-RAY")then begin
+					PISr.ArtCode = INr.Code;
+					PISr.Location = ISr.Location;
+					PISr.Position = "3-RAY";
+					ReadFirstMain(PISr,3,true);
+					locqty[ISr.Location & ":3-RAY"] = PISr.Instock;
+					
+					PISr.ArtCode = INr.Code;
+					PISr.Location = ISr.Location;
+					PISr.Position = "4-NIZ";
+					ReadFirstMain(PISr,3,true);
+					locqty[ISr.Location & ":4-NIZ"] = PISr.Instock;
+					
+					if(ISr.Instock!=(locqty[ISr.Location & ":3-RAY"] + locqty[ISr.Location & ":4-NIZ"]))then begin
+						printf = true;
+					end;
+				end;
 				if(ISr.Instock<0)then begin
 					printf = true;
 				end;
