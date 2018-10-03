@@ -151,10 +151,10 @@ begin
 			ClearVector(ihqty);
 			while(Loopmain(IHr,1,TrHs1))begin
 				if(IHr.ArtCode!=INr.Code)then begin TrHs1 = false; end;
-				
+				logtext(0,IHr.Location & " " & IHr.Qty);
 				if(TrHs1 and IHr.StockAffectf>0)then begin
 					ihqty[IHr.Location] = ihqty[IHr.Location] + IHr.Qty;
-					logtext(0,IHr.Location & " " & IHr.Qty);
+					
 				end;
 			end;
 			resetloop(IHr);
