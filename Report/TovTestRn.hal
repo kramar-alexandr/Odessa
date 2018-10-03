@@ -209,6 +209,10 @@ begin
 							OutString(60,0,IS2r.Instock,false);
 							OutString(90,0,ihqty[";;;"],false);
 						endformat;
+						if(IS2r.Instock!=ihqty[";;;"])then begin
+							IS2r.Instock = ihqty[";;;"];
+							recordstore(IS2r,true);
+						end;
 					end;
 					if(IS2r.Location!=";;;")then begin
 						
@@ -220,6 +224,10 @@ begin
 							OutString(90,0,ihqty[IS2r.Location],false);
 						endformat;
 						IS2r.Instock = ihqty[IS2r.Location];
+						if(IS2r.Instock!=ihqty[IS2r.Location])then begin
+							IS2r.Instock = ihqty[IS2r.Location];
+							recordstore(IS2r,true);
+						end;
 						possum[IS2r.Location] = blankval;
 						possumbef[IS2r.Location] = blankval;
 						For(j=0;j<pcnt;j=j+1) begin
