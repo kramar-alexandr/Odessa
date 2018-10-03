@@ -240,7 +240,7 @@ begin
 							OutString(60,0,IS2r.Instock,false);
 						endformat;
 						
-						if(possum[ISr.Location]==IS2r.Instock and possum[ISr.Location]!=possumbef[IS2r.Location])then begin
+						if(possum[ISr.Location]==IS2r.Instock and possum[IS2r.Location]!=possumbef[IS2r.Location])then begin
 							startformat(15);
 								OutString(0,0,"CANBEFIXED!!!",false);
 							endformat;
