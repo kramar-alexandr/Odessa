@@ -221,6 +221,7 @@ begin
 									OutString(90,0,locqty[IS2r.Location & ":" & apos[j]],false);
 									OutString(120,0,ihqty[IS2r.Location & ":" & apos[j]],false);
 									possum[IS2r.Location] = possum[IS2r.Location] + ihqty[IS2r.Location & ":" & apos[j]];
+									logtext(0,IS2r.Location & " possum[IS2r.Location] " & possum[IS2r.Location]);
 									possumbef[IS2r.Location] = possumbef[IS2r.Location] + locqty[IS2r.Location & ":" & apos[j]];
 								endformat;
 							end;
