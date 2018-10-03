@@ -1,5 +1,6 @@
 //remote function Boolean FindSubString( string , string );
 external function Boolean FindSubString(string,string);	//Edit----------------------Dima  17.09.2015
+external procedure WinMessageBox(Integer,string); //Edit______________________________ABR 03.10.2018
   SetLangMode(LangRussian,"RUS",0); 
 
 /*
@@ -638,7 +639,7 @@ begin
 			while	(curRow < rwcnt) begin
 				if(FindInMathGeneral("SHVc",mwn,INr.Code,curRow,RowNumber)==true) then begin
 						if(nonblank(INr.WarnText1))then begin
-							messagebox(0,INr.WarnText1);
+							WinMessageBox(mwn,INr.WarnText1);//Edit_________________________________ABR 03.10.2018 10:15
 						end;
 						MatRowGet(SHr,RowNumber,SHrw);
 						if (SHrw.Ship < SHrw.Ordered) then begin

@@ -256,9 +256,12 @@ global
 procedure WinMessageBox(Integer wn,string text)
 begin
 record RcVc RepSpec ;
-integer wrn;
-   RecordNew(RepSpec);
-   RepSpec.f1 = text;
-  wrn = OpenWindow("MBoxWClass",1,0,"","",RepSpec);
+integer wrn,h,v;
+    RecordNew(RepSpec);
+    RepSpec.f1 = text;
+	  h=len(RepSpec.f1);
+		RepSpec.f2=left(text,40);
+		RepSpec.f3=right(text,h - 40);
+  wrn = OpenWindow("MBoxWClass",1,wn,"","",RepSpec);
   RETURN;
 end;
