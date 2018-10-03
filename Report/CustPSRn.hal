@@ -14,6 +14,7 @@ external procedure HTInvFrom(Integer,Integer, Date, var string);
 external procedure PSPrintCust(record RcVc,record CUVc,var val,var val,Integer,Integer);
 external function Boolean FindTheContract(Boolean,Integer,LongInt,LongInt,var record COVc,var Boolean);
 
+
 global
 procedure PrintCustCourseEvents(string custcode)
 begin
@@ -283,6 +284,7 @@ boolean TrHs, find, TrHs1, find1;
 StartReportJob( "CustomInfo" );
 Header(1,"Black List",1);
 EndHeader;
+
 startformat(15);
 								outstring(0,0,"Код Кл.",false);
 								outstring(100,0,"Имя Клиента",false);
