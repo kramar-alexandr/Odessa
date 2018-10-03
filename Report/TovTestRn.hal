@@ -186,6 +186,7 @@ begin
 
 				if(TrHs1 and IHr.StockAffectf>0)then begin
 					ihqty[IHr.Location] = ihqty[IHr.Location] + IHr.Qty;
+					ihqty[IHr.Location & ":" & IHr.Position] = ihqty[IHr.Location & ":" & IHr.Position] + IHr.Qty;
 					
 				end;
 			end;
@@ -211,6 +212,7 @@ begin
 									OutString(0,0,"",false);
 									OutString(60,0,apos[j],false);
 									OutString(90,0,locqty[IS2r.Location & ":" & apos[j]],false);
+									OutString(120,0,ihqty[IS2r.Location & ":" & apos[j]],false);
 								endformat;
 							end;
 						end;
