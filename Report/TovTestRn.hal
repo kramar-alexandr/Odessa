@@ -94,7 +94,7 @@ begin
 	record LocationVc Locr;
 	array string 20 aloc,apos;
 	integer acnt,pcnt;
-	vector val locqty,possum;
+	vector val locqty,possum,possumbef;
 	val sum;
 	boolean printf,posfnd;
 	record PosVc Posr;
@@ -204,7 +204,8 @@ begin
 							OutString(60,0,IS2r.Instock,false);
 						endformat;
 						
-						
+						possum[ISr.Location] = blankval;
+						possumbef[ISr.Location] = blankval;
 						For(j=0;j<pcnt;j=j+1) begin
 							if(posloccode[apos[j]]==IS2r.Location)then begin
 								startformat(15);
@@ -213,8 +214,16 @@ begin
 									OutString(60,0,apos[j],false);
 									OutString(90,0,locqty[IS2r.Location & ":" & apos[j]],false);
 									OutString(120,0,ihqty[IS2r.Location & ":" & apos[j]],false);
+									possum[IS2r.Location] = possum[IS2r.Location] + ihqty[IS2r.Location & ":" & apos[j]];
+									possumbef[IS2r.Location] = possumbef[IS2r.Location] + locqty[IS2r.Location & ":" & apos[j]];
 								endformat;
 							end;
+						end;
+						
+						if(possum[ISr.Location]==IS2r.Instock and possum[ISr.Location]!=possumbef[IS2r.Location])then begin
+							startformat(15);
+								OutString(0,0,"CANBEFIXED!!!",false);
+							endformat;
 						end;
 												
 						//recordstore(IS2r,true);
