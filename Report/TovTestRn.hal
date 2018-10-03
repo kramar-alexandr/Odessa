@@ -88,19 +88,28 @@ begin
 	vector val vect;
 	vector boolean INInArr;
 	array string 50 InArr;
-	integer i;
+	integer i,j;
 	record ItemHistVc IHr;
 	vector val ihqty;
 	record LocationVc Locr;
-	array string 20 aloc;
-	integer acnt;
-	vector val locqty;
+	array string 20 aloc,apos;
+	integer acnt,pcnt;
+	vector val locqty,possum;
 	val sum;
-	boolean printf;
+	boolean printf,posfnd;
+	record PosVc Posr;
+	vector boolean vposflag;
+	vector string 100 posloccode;
 	
 	while(loopmain(Locr,1,true))begin
 		aloc[acnt] = Locr.Code;
 		acnt = acnt + 1;
+	end;
+	
+	while(loopmain(Posr,1,true))begin
+		apos[pcnt] = Posr.Code;
+		posloccode[Posr.Code] = Posr.Location;
+		pcnt = pcnt + 1;
 	end;
 		
 	StartReportNoHeaderJob("èÓ‚ÂÍ‡ ItemStatus");
@@ -126,40 +135,24 @@ begin
 			end;
 			if(TrHs)then begin
 				locqty[ISr.Location] = ISr.Instock;
-				if(ISr.Location=="1-KOC")then begin
-					PISr.ArtCode = INr.Code;
-					PISr.Location = ISr.Location;
-					PISr.Position = "äéë_2";
-					ReadFirstMain(PISr,3,true);
-					locqty[ISr.Location & ":äéë_2"] = PISr.Instock;
-					
-					PISr.ArtCode = INr.Code;
-					PISr.Location = ISr.Location;
-					PISr.Position = "éëí_3";
-					ReadFirstMain(PISr,3,true);
-					locqty[ISr.Location & ":éëí_3"] = PISr.Instock;
-					
-					if(ISr.Instock!=(locqty[ISr.Location & ":äéë_2"] + locqty[ISr.Location & ":éëí_3"]))then begin
-						printf = true;
-					end;
+				
+				posfnd = false;
+				For(j=0;j<pcnt;j=j+1) begin
+	  			if(posloccode[apos[j]]==ISr.Location)then begin
+	  				PISr.ArtCode = INr.Code;
+						PISr.Location = ISr.Location;
+						PISr.Position = apos[j];
+						ReadFirstMain(PISr,3,true);
+						posfnd = true;
+						locqty[ISr.Location & ":" & apos[j]] = PISr.Instock;
+						possum[ISr.Location] = possum[ISr.Location] + PISr.Instock;
+	  			end;
+				end; 
+				
+				if(posfnd and possum[ISr.Location]!=ISr.Instock)then begin
+					printf = true;
 				end;
-				if(ISr.Location=="3-RAY")then begin
-					PISr.ArtCode = INr.Code;
-					PISr.Location = ISr.Location;
-					PISr.Position = "3-RAY";
-					ReadFirstMain(PISr,3,true);
-					locqty[ISr.Location & ":3-RAY"] = PISr.Instock;
-					
-					PISr.ArtCode = INr.Code;
-					PISr.Location = ISr.Location;
-					PISr.Position = "4-NIZ";
-					ReadFirstMain(PISr,3,true);
-					locqty[ISr.Location & ":4-NIZ"] = PISr.Instock;
-					
-					if(ISr.Instock!=(locqty[ISr.Location & ":3-RAY"] + locqty[ISr.Location & ":4-NIZ"]))then begin
-						printf = true;
-					end;
-				end;
+				
 				if(ISr.Instock<0)then begin
 					printf = true;
 				end;
@@ -208,35 +201,18 @@ begin
 							OutString(60,0,IS2r.Instock,false);
 						endformat;
 						
-						if(IS2r.Location=="1-KOC")then begin
-							startformat(15);
-								OutString(0,0,"",false);
-								OutString(0,0,"",false);
-								OutString(60,0,"äéë_2",false);
-								OutString(90,0,locqty[IS2r.Location & ":äéë_2"],false);
-							endformat;
-							startformat(15);
-								OutString(0,0,"",false);
-								OutString(0,0,"",false);
-								OutString(60,0,"4-NIZ",false);
-								OutString(90,0,locqty[IS2r.Location & ":éëí_3"],false);
-							endformat;
-						end;
-						if(IS2r.Location=="3-RAY")then begin
-							startformat(15);
-								OutString(0,0,"",false);
-								OutString(0,0,"",false);
-								OutString(60,0,"3-RAY",false);
-								OutString(90,0,locqty[IS2r.Location & ":3-RAY"],false);
-							endformat;
-							startformat(15);
-								OutString(0,0,"",false);
-								OutString(0,0,"",false);
-								OutString(60,0,"4-NIZ",false);
-								OutString(90,0,locqty[IS2r.Location & ":4-NIZ"],false);
-							endformat;
-						end;
 						
+						For(j=0;j<pcnt;j=j+1) begin
+							if(posloccode[apos[j]]==IS2r.Location)then begin
+								startformat(15);
+									OutString(0,0,"",false);
+									OutString(0,0,"",false);
+									OutString(60,0,apos[j],false);
+									OutString(90,0,locqty[IS2r.Location & ":" & apos[j]],false);
+								endformat;
+							end;
+						end;
+												
 						//recordstore(IS2r,true);
 					end;
 				end else begin
