@@ -251,6 +251,14 @@ begin
 											PISr.Instock = ihqty[IS2r.Location & ":" & apos[j]];
 											PISr.LeftQty = PISr.Instock;
 											recordstore(PISr,true);
+										end else begin
+											recordnew(PISr);
+											PISr.ArtCode = INr.Code;
+											PISr.Location = IS2r.Location;
+											PISr.Position = apos[j];
+											PISr.Instock = ihqty[IS2r.Location & ":" & apos[j]];
+											PISr.LeftQty = PISr.Instock;
+											recordstore(PISr,true);
 										end;
 									end;
 								end;
