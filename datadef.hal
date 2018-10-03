@@ -6958,31 +6958,37 @@ RecordBegin(IPVc,-,"");
   KeyBegin(ExportedFlag);
   KeySegment(ExportedFlag);
   KeySegment(SerNr);
+  
   SubsetKeyBegin2(OKFlag);// Edit ************************** BPI Ukraine - KramarAlexandr - Friday, 21 September 2018 18:45:12
   StoreInBaseKey;// Edit ************************** BPI Ukraine - KramarAlexandr - Friday, 21 September 2018 18:43:44
   AppendListFieldToKeyName(SalesGroup);// Edit ************************** BPI Ukraine - KramarAlexandr - Friday, 21 September 2018 18:43:43
   KeySegment(OKFlag);
   KeySegment(SerNr);
+  
   SubsetKeyBegin2(TransDate);  
   StoreInBaseKey;// Edit ************************** BPI Ukraine - KramarAlexandr - Friday, 21 September 2018 18:43:44
   AppendListFieldToKeyName(SalesGroup);// Edit ************************** BPI Ukraine - KramarAlexandr - Friday, 21 September 2018 18:43:43
   KeySegment(TransDate);
   KeySegment(SerNr);
+  
   SubsetKeyBegin2(PONr);// Edit ************************** BPI Ukraine - KramarAlexandr - Friday, 21 September 2018 18:46:29
   StoreInBaseKey;// Edit ************************** BPI Ukraine - KramarAlexandr - Friday, 21 September 2018 18:43:44
   AppendListFieldToKeyName(SalesGroup);// Edit ************************** BPI Ukraine - KramarAlexandr - Friday, 21 September 2018 18:43:43
   KeySegment(PONr);
   KeySegment(SerNr);
+  
   SubsetKeyBegin2(VECode);// Edit ************************** BPI Ukraine - KramarAlexandr - Friday, 21 September 2018 18:46:51
   StoreInBaseKey;// Edit ************************** BPI Ukraine - KramarAlexandr - Friday, 21 September 2018 18:43:44
   AppendListFieldToKeyName(SalesGroup);// Edit ************************** BPI Ukraine - KramarAlexandr - Friday, 21 September 2018 18:43:43
   KeySegment(VECode);
   KeySegment(SerNr);
-  KeyBegin(Comment);
+  
   SubsetKeyBegin2(Comment);
   StoreInBaseKey;// Edit ************************** BPI Ukraine - KramarAlexandr - Friday, 21 September 2018 18:43:44
   AppendListFieldToKeyName(SalesGroup);// Edit ************************** BPI Ukraine - KramarAlexandr - Friday, 21 September 2018 18:43:43
+  KeySegment(Comment);
   KeySegment(SerNr);
+  
   SubsetKeyBegin2(LocOK);// Edit ************************** BPI Ukraine - KramarAlexandr - Friday, 21 September 2018 18:45:51
   StoreInBaseKey;// Edit ************************** BPI Ukraine - KramarAlexandr - Friday, 21 September 2018 18:43:44
   AppendListFieldToKeyName(SalesGroup);// Edit ************************** BPI Ukraine - KramarAlexandr - Friday, 21 September 2018 18:43:43
@@ -6990,18 +6996,22 @@ RecordBegin(IPVc,-,"");
   KeySegment(OKFlag);
   KeySegment(TransDate);  
   KeySegment(SerNr);  
+  
   KeyBegin(PUNr);
   KeySegment(PUNr);
   KeySegment(SerNr);
+  
   SubsetKeyBegin2(RowPUNr);
   StoreInBaseKey;
   AppendMatrixFieldToKeyName(PUNr,0);
   KeySegment(SerNr);
+  
   SubsetKeyBegin2(RowPURow);
   StoreInBaseKey;
   AppendMatrixFieldToKeyName(PURow,0);
   KeySegment(PUNr);
   KeySegment(SerNr);
+  
   KeyBegin(VECodeTransDate);
   KeySegment(VECode);
   KeySegment(TransDate);  
@@ -7010,24 +7020,29 @@ RecordBegin(IPVc,-,"");
   KeySegment(OKFlag);
   KeySegment(TransDate);
   KeySegment(SerNr);
+  
   SubsetKeyBegin2(RowPONr);
   StoreInBaseKey;
   AppendMatrixFieldToKeyName(PONr,0);
   KeySegment(SerNr);
+  
   KeyBegin(SortingDate);
   KeySegment(Sorting);
   KeySegment(TransDate);
   KeySegment(SerNr);
+  
   SubsetKeyBegin2(VEName);// Edit ************************** BPI Ukraine - KramarAlexandr - Friday, 21 September 2018 18:47:22
   StoreInBaseKey;// Edit ************************** BPI Ukraine - KramarAlexandr - Friday, 21 September 2018 18:43:44
   AppendListFieldToKeyName(SalesGroup);// Edit ************************** BPI Ukraine - KramarAlexandr - Friday, 21 September 2018 18:43:43
   KeySegment(VEName);
   KeySegment(SerNr);
+  
   SubsetKeyBegin2(OfficialSerNr);// Edit ************************** BPI Ukraine - KramarAlexandr - Friday, 21 September 2018 18:41:37
   StoreInBaseKey;// Edit ************************** BPI Ukraine - KramarAlexandr - Friday, 21 September 2018 18:43:44
   AppendListFieldToKeyName(SalesGroup);// Edit ************************** BPI Ukraine - KramarAlexandr - Friday, 21 September 2018 18:43:43
   KeySegment(OfficialSerNr);
   KeySegment(SerNr);
+  
   KeyBegin(RegDate);
   KeySegment(RegDate);
   KeySegment(RegTime);
