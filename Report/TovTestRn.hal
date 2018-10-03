@@ -227,7 +227,7 @@ begin
 							end;
 						end;
 						
-						startformat(15);
+						/*startformat(15);
 							OutString(0,0,"possum",false);
 							OutString(60,0,possum[IS2r.Location],false);
 						endformat;
@@ -238,7 +238,7 @@ begin
 						startformat(15);
 							OutString(0,0,"IS2r.Instock",false);
 							OutString(60,0,IS2r.Instock,false);
-						endformat;
+						endformat;*/
 						
 						if(possum[IS2r.Location]==IS2r.Instock and possum[IS2r.Location]!=possumbef[IS2r.Location])then begin
 							startformat(15);
