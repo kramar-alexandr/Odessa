@@ -79,6 +79,70 @@ begin
 
 end;
 
+global updating procedure TestItemStatusRn(record RcVc RepSpec)
+begin
+	record PISVc PISr;
+	record ItemStatusVc ISr,IS2r;
+	record INVc INr;
+	boolean testf,TrHs,TrHs2,TrHs1;
+	vector val vect;
+	vector boolean INInArr;
+	array string 50 InArr;
+	integer i;
+	record ItemHistVc IHr;
+	vector val ihqty;
+	val sum;
+	record LocationVc Locr;
+	array string 20 aloc;
+	integer acnt;
+	vector val locqty;
+	
+	while(loopmain(Locr,1,true))begin
+		aloc[acnt] = Locr.Code;
+		acnt = acnt + 1;
+	end;
+	
+	StartReportNoHeaderJob("Несовпадения по складу 1-КОС");
+	
+	StartReportNoHeaderJob("Проверка ItemStatus");
+	startformat(15);
+		OutString(0,0,"Код",false);
+		OutString(30,0,"All",false);
+		For(i=0;i<acnt;i=i+1) begin
+			OutString(60+i*30,0,Locr.Code,false);
+		end; 
+	endformat;
+	i = 0;
+	TrHs = true;
+	INr.Code = "";
+	while loopmain(INr,1,TrHs) begin
+		ClearVector(locqty);
+		ISr.Code = INr.Code;
+		ISr.Location = "1-KOC";
+		while (loopmain(ISr,2,TrHs)) begin
+			if (ISr.Code != INr.Code) then begin
+				TrHs2 = false;
+			end;
+			if(TrHs)then begin
+				locqty[ISr.Location] = ISr.Instock;
+			end;
+		end;
+		resetloop(ISr);
+		startformat(15);
+			OutString(0,0,INr.Code,false);
+			OutString(30,0,locqty[";;;"],false);
+			For(i=0;i<acnt;i=i+1) begin
+				OutString(60+i*30,0,aloc[i],false);
+			end; 
+		endformat;
+		
+	end;
+	
+	endjob;
+return;
+end;
+
+
 global updating procedure TovTestRn(record RcVc RepSpec)
 begin
 	record PISVc PISr;
