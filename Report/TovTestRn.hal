@@ -217,7 +217,7 @@ begin
 							OutString(0,0,"",false);
 							OutString(30,0,IS2r.Location,false);
 							OutString(60,0,IS2r.Instock,false);
-							OutString(90,0,ihqty[IS2r.Instock],false);
+							OutString(90,0,ihqty[IS2r.Location],false);
 						endformat;
 						IS2r.Instock = ihqty[IS2r.Location];
 						possum[IS2r.Location] = blankval;
