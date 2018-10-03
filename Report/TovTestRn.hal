@@ -107,9 +107,11 @@ begin
 	end;
 	
 	while(loopmain(Posr,1,true))begin
-		apos[pcnt] = Posr.Code;
-		posloccode[Posr.Code] = Posr.Location;
-		pcnt = pcnt + 1;
+		if(Posr.Location=="1-KOC" or Posr.Location=="3-RAY")then begin
+			apos[pcnt] = Posr.Code;
+			posloccode[Posr.Code] = Posr.Location;
+			pcnt = pcnt + 1;
+		end;
 	end;
 		
 	StartReportNoHeaderJob("Проверка ItemStatus");
