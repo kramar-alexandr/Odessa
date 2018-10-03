@@ -135,7 +135,7 @@ begin
 			end;
 			if(TrHs)then begin
 				locqty[ISr.Location] = ISr.Instock;
-				
+				possum[ISr.Location] = blankval;
 				posfnd = false;
 				For(j=0;j<pcnt;j=j+1) begin
 	  			if(posloccode[apos[j]]==ISr.Location)then begin
