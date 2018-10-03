@@ -210,8 +210,8 @@ begin
 							OutString(60,0,IS2r.Instock,false);
 						endformat;
 						
-						possum[ISr.Location] = blankval;
-						possumbef[ISr.Location] = blankval;
+						possum[IS2r.Location] = blankval;
+						possumbef[IS2r.Location] = blankval;
 						For(j=0;j<pcnt;j=j+1) begin
 							if(posloccode[apos[j]]==IS2r.Location)then begin
 								startformat(15);
