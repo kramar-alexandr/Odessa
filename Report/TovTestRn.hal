@@ -191,6 +191,7 @@ begin
 				if(IHr.ArtCode!=INr.Code)then begin TrHs1 = false; end;
 
 				if(TrHs1 and IHr.StockAffectf>0)then begin
+					ihqty[";;;"] = ihqty[";;;"] + IHr.Qty;
 					ihqty[IHr.Location] = ihqty[IHr.Location] + IHr.Qty;
 					ihqty[IHr.Location & ":" & IHr.Position] = ihqty[IHr.Location & ":" & IHr.Position] + IHr.Qty;
 					
@@ -201,15 +202,24 @@ begin
 			TrHs1  = true;
 			while(loopmain(IS2r,1,TrHs1))begin
 				if(TrHs1 and IS2r.Code==INr.Code)then begin
+					if(IS2r.Location==";;;")then begin
+						startformat(15);
+							OutString(0,0,"",false);
+							OutString(30,0,IS2r.Location,false);
+							OutString(60,0,IS2r.Instock,false);
+							OutString(60,0,ihqty[";;;"],false);
+						endformat;
+					end;
 					if(IS2r.Location!=";;;")then begin
-						IS2r.Instock = ihqty[IS2r.Location];
+						
 						
 						startformat(15);
 							OutString(0,0,"",false);
 							OutString(30,0,IS2r.Location,false);
 							OutString(60,0,IS2r.Instock,false);
+							OutString(60,0,ihqty[IS2r.Instock],false);
 						endformat;
-						
+						IS2r.Instock = ihqty[IS2r.Location];
 						possum[IS2r.Location] = blankval;
 						possumbef[IS2r.Location] = blankval;
 						For(j=0;j<pcnt;j=j+1) begin
