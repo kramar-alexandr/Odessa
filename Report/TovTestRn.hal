@@ -223,7 +223,7 @@ begin
 							OutString(60,0,IS2r.Instock,false);
 							OutString(90,0,ihqty[IS2r.Location],false);
 						endformat;
-						IS2r.Instock = ihqty[IS2r.Location];
+						
 						if(IS2r.Instock!=ihqty[IS2r.Location])then begin
 							IS2r.Instock = ihqty[IS2r.Location];
 							recordstore(IS2r,true);
