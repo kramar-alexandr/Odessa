@@ -242,6 +242,18 @@ begin
 						if(possum[IS2r.Location]==IS2r.Instock and possum[IS2r.Location]!=possumbef[IS2r.Location])then begin
 							startformat(15);
 								OutString(0,0,"CANBEFIXED!!!",false);
+								For(j=0;j<pcnt;j=j+1) begin
+									if(posloccode[apos[j]]==IS2r.Location)then begin
+										PISr.ArtCode = INr.Code;
+										PISr.Location = IS2r.Location;
+										PISr.Position = apos[j];
+										if(ReadFirstMain(PISr,3,true))then begin
+											PISr.Instock = ihqty[IS2r.Location & ":" & apos[j]];
+											PISr.LeftQty = PISr.Instock;
+											recordstore(PISr,true);
+										end;
+									end;
+								end;
 							endformat;
 						end;
 												
