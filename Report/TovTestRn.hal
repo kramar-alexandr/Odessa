@@ -94,7 +94,7 @@ begin
 	record LocationVc Locr;
 	array string 20 aloc,apos;
 	integer acnt,pcnt;
-	vector val locqty,possum,possumbef;
+	vector val locqty,possum,possumbef,remihqty;
 	val sum;
 	boolean printf,posfnd;
 	record PosVc Posr;
@@ -128,7 +128,19 @@ begin
 	//INr.Code = "4050057";
 	INTrhs = true;
 	while loopmain(INr,1,INTrhs) begin
-	
+		
+		TrHs1 = true;
+		IHr.ArtCode = INr.Code;
+		ClearVector(remihqty);
+		while(Loopkey("ActiveQty",IHr,1,TrHs1))begin
+			if(IHr.ArtCode!=INr.Code)then begin TrHs1 = false; end;
+
+			if(TrHs1 and IHr.StockAffectf>0)then begin
+				remihqty[";;;"] = remihqty[";;;"] + IHr.RemQty;	
+			end;
+		end;
+		resetloop(IHr);
+		
 		if(INr.Code!="4050057")then begin
 			//INTrhs = false;
 		end;
@@ -157,6 +169,7 @@ begin
 	  			end;
 				end; 
 				
+				
 				if(posfnd and possum[ISr.Location]!=ISr.Instock)then begin
 					printf = true;
 				end;
@@ -170,6 +183,10 @@ begin
 			end;
 		end;
 		resetloop(ISr);
+		
+		if(remihqty[";;;"]!=locqty[";;;"])then begin
+			printf = true;
+		end;
 		
 		if(sum!=locqty[";;;"])then begin
 			printf = true;
@@ -211,7 +228,7 @@ begin
 						endformat;
 						if(IS2r.Instock!=ihqty[";;;"])then begin
 							IS2r.Instock = ihqty[";;;"];
-							recordstore(IS2r,true);
+							//recordstore(IS2r,true);
 						end;
 					end;
 					if(IS2r.Location!=";;;")then begin
@@ -226,7 +243,7 @@ begin
 						
 						if(IS2r.Instock!=ihqty[IS2r.Location])then begin
 							IS2r.Instock = ihqty[IS2r.Location];
-							recordstore(IS2r,true);
+							//recordstore(IS2r,true);
 						end;
 						possum[IS2r.Location] = blankval;
 						possumbef[IS2r.Location] = blankval;
@@ -268,7 +285,7 @@ begin
 										if(ReadFirstMain(PISr,3,true))then begin
 											PISr.Instock = ihqty[IS2r.Location & ":" & apos[j]];
 											PISr.LeftQty = PISr.Instock;
-											recordstore(PISr,true);
+											//recordstore(PISr,true);
 										end else begin
 											recordnew(PISr);
 											PISr.ArtCode = INr.Code;
@@ -276,7 +293,7 @@ begin
 											PISr.Position = apos[j];
 											PISr.Instock = ihqty[IS2r.Location & ":" & apos[j]];
 											PISr.LeftQty = PISr.Instock;
-											recordstore(PISr,true);
+											//recordstore(PISr,true);
 										end;
 									end;
 								end;
