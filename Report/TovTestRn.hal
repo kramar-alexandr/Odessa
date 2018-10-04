@@ -132,6 +132,7 @@ begin
 		TrHs1 = true;
 		IHr.ArtCode = INr.Code;
 		ClearVector(remihqty);
+		remihqty[";;;"] = blankval;
 		while(Loopkey("ActiveQty",IHr,1,TrHs1))begin
 			if(IHr.ArtCode!=INr.Code)then begin TrHs1 = false; end;
 
@@ -185,7 +186,7 @@ begin
 		resetloop(ISr);
 		
 		if(remihqty[";;;"]!=locqty[";;;"])then begin
-			printf = true;
+			//printf = true;
 		end;
 		
 		if(sum!=locqty[";;;"])then begin
