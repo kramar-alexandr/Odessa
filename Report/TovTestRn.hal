@@ -208,7 +208,7 @@ begin
 		end;
 		
 		if(sum!=locqty[";;;"])then begin
-			//printf = true;
+			printf = true;
 		end;
 		
 		if(printf)then begin
@@ -292,7 +292,7 @@ begin
 										if(ReadFirstMain(PISr,3,true))then begin
 											PISr.Instock = ihqty[IS2r.Location & ":" & apos[j]];
 											PISr.LeftQty = PISr.Instock;
-											//recordstore(PISr,true);
+											recordstore(PISr,true);
 										end else begin
 											recordnew(PISr);
 											PISr.ArtCode = INr.Code;
@@ -300,7 +300,7 @@ begin
 											PISr.Position = apos[j];
 											PISr.Instock = ihqty[IS2r.Location & ":" & apos[j]];
 											PISr.LeftQty = PISr.Instock;
-											//recordstore(PISr,true);
+											recordstore(PISr,true);
 										end;
 									end;
 								end;
