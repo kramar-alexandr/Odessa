@@ -841,7 +841,7 @@ begin
 		RVr.VoucherSerNr = IVr.BirthDayVaucher;
 		if(readfirstkey("VoucherSerNr",RVr,1,true))then begin
 		  CCode = IVr.CustCode;
-			if(UserCanAction("AllowAddingDiscToAllUser",false)==false  AND CCode!=RVr.SerNr) then begin 
+			if(UserCanAction("AllowAddingDiscToAllUser",false)==false  AND CCode!=RVr.CustCode) then begin 
 					error = 31193;
 					goto lIVDClassBirthDayVaucherEFAfter;
 			end;
