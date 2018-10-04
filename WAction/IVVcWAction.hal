@@ -819,7 +819,7 @@ global function Boolean IVDClassBirthDayVaucherEFAfter(Integer wn,Boolean change
 begin  
   record IVVc IVr;
   record RebateVoucherVc RVr;
-  longint error;
+  longint error, CCode;
 	integer i,mtrw;
 	row IVVc IVrw;
 	boolean credflag;
@@ -840,6 +840,11 @@ begin
     error = -1;
 		RVr.VoucherSerNr = IVr.BirthDayVaucher;
 		if(readfirstkey("VoucherSerNr",RVr,1,true))then begin
+		  CCode = IVr.CustCode;
+			if(UserCanAction("AllowAddingDiscToAllUser",false)==false  AND CCode!=RVr.SerNr) then begin 
+					error = 31193;
+					goto lIVDClassBirthDayVaucherEFAfter;
+			end;
 			if(RVr.UsedFlag>0 and credflag==false)then begin
 				error = 31151;
 				goto lIVDClassBirthDayVaucherEFAfter;
