@@ -180,7 +180,7 @@ begin
 						posfnd = true;
 						locqty[ISr.Location & ":" & apos[j]] = PISr.Instock;
 						
-						if(locqty[ISr.Location & ":" & apos[j]]!=ihlocqty[IHr.Location & ":" & IHr.Position])then begin
+						if(locqty[ISr.Location & ":" & apos[j]]!=ihlocqty[ISr.Location & ":" & apos[j]])then begin
 							printf = true;
 						end;
 						possum[ISr.Location] = possum[ISr.Location] + PISr.Instock;
