@@ -274,6 +274,76 @@ begin
   EndFormat;
   return;
 end;
+
+global procedure PaySRn(record RcVc RepSpec)
+begin
+record CUVc CUr;
+record UserVc Userr;
+record NewPDVc NewPDr;
+record IVVc IVr;
+record ORVc ORr;
+record ARVc ARr;
+date Cdate;
+boolean TrHs,TrHs1,find,TrHs2,find1,pay;
+StartReportJob( "Payment" );
+Header(1,"Способ оплаты",1);
+EndHeader;
+
+startformat(15);
+								outstring(0,0," №сч.клиента",false);
+								outstring(50,0,"дата заказа",false);
+								outstring(100,0,"код клиента",false);
+								outstring(150,0,"Ф.И.О. клиента",false);
+								outstring(250,0,"способ оплаты",false);
+								outstring(300,0,"сумма заказа",false);
+								outstring(350,0,"продавец",false);
+endformat;
+black_divider(0,1);
+TrHs = true;
+ORr.SerNr=999999;
+Cdate = AddDay(CurrentDate, -365);
+while(LoopBackKey("SerNr",ORr,1,TrHs)) begin
+	if(Cdate > ORr.OrdDate) then begin TrHs = false; end else begin
+		TrHs = true;
+	end;
+	find=true;
+	if(nonblank(RepSpec.f1) AND RepSpec.f1 != ORr.CustCode) then begin find=false; end;
+	if(nonblank(RepSpec.f2) AND RepSpec.f2 != ORr.SalesMan) then begin find=false; end;
+	if(nonblank(RepSpec.f3) AND RepSpec.f3 != ORr.OrderClass) then begin find=false; end;
+	if(nonblank(ORr.OrderClass)) then begin find=false; end;
+	if(find) then begin
+		CUr.Code = ORr.CustCode;
+		ReadfirstMain(CUr,1,true);
+		pay = true;
+		IVr.OrderNr = ORr.SerNr;
+		if(ReadFIrstKey("OrderNr",IVr,1,true))then begin
+			find1 = true;
+			if(IVr.OrderNr != ORr.SerNr) then begin find1=false; end;
+			if(find1) then begin
+				ARr.InvoiceNr = IVr.OrderNr;
+				if(ReadFirstMain(ARr,1,true))then  begin
+					 pay=false;
+				end;
+				if(!pay AND IVr.OKFlag == 1) then begin
+					startformat(15);
+									outstring(0,0,ORr.SerNr,false);
+									outstring(50,0,ORr.OrdDate,false);
+									outstring(100,"DblCUVc",ORr.CustCode,false);
+									outstring(150,0,CUr.Name,false);
+									outstring(250,0,ORr.NewPD,false);
+									outstring(300,0,ORr.PayDeal,false);
+									outstring(350,0,ORr.SalesMan,false);
+					endformat;
+				end;				
+			end;
+		end;
+	end;
+end;
+ResetLoop(ORr);	
+endjob; 
+return;
+end;
+
 //Edit_________________ABR 28.09.2018 15:06
 global updating procedure CUBLRn(record RcVc RepSpec) 
 begin 
