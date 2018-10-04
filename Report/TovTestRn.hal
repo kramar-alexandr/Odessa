@@ -100,7 +100,7 @@ begin
 	record PosVc Posr;
 	vector boolean vposflag;
 	vector string 100 posloccode;
-	boolean INTrhs;
+	boolean INTrhs,printfos;
 	
 	while(loopmain(Locr,1,true))begin
 		aloc[acnt] = Locr.Code;
@@ -150,6 +150,7 @@ begin
 		ISr.Code = INr.Code;
 		printf = false;
 		TrHs = true;
+		printfos = false;
 		while (loopmain(ISr,1,TrHs)) begin
 			if (ISr.Code!=INr.Code) then begin
 				TrHs = false;
@@ -186,6 +187,7 @@ begin
 						
 						if(locqty[ISr.Location & ":" & apos[j]]!=ihlocqty[ISr.Location & ":" & apos[j]])then begin
 								printf = true;
+								printfos = true;
 						end;
 						possum[ISr.Location] = possum[ISr.Location] + PISr.Instock;
 	  			end;
@@ -290,7 +292,7 @@ begin
 							end;
 						end;
 						
-						if(possum[IS2r.Location]==IS2r.Instock and possum[IS2r.Location]!=possumbef[IS2r.Location])then begin
+						if((possum[IS2r.Location]==IS2r.Instock and possum[IS2r.Location]!=possumbef[IS2r.Location]) or printfos)then begin
 							startformat(15);
 								OutString(0,0,"CANBEFIXED!!!",false);
 								For(j=0;j<pcnt;j=j+1) begin
