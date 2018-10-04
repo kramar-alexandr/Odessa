@@ -125,7 +125,7 @@ begin
 	endformat;
 	i = 0;
 	TrHs = true;
-	//INr.Code = "4050057";
+	INr.Code = "1000415";
 	INTrhs = true;
 	while loopmain(INr,1,INTrhs) begin
 		
@@ -141,8 +141,8 @@ begin
 		end;
 		resetloop(IHr);
 		
-		if(INr.Code!="4050057")then begin
-			//INTrhs = false;
+		if(INr.Code!="1000415")then begin
+			INTrhs = false;
 		end;
 		ClearVector(locqty);
 		sum = blankval;
