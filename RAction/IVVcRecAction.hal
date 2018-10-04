@@ -664,11 +664,11 @@ BEGIN
 		if(IVp.BirthDayVaucher>0)then begin
 			  RVr.VoucherSerNr = IVp.BirthDayVaucher;
 			  if(readfirstkey("VoucherSerNr",RVr,1,true))then begin
-					if(UserCanAction("AllowAddingDiscToAllUser",false)==false  AND IVp.CustCode!=RVr.CustCode) then begin 
+					/*if(UserCanAction("AllowAddingDiscToAllUser",false)==false  AND IVp.CustCode!=RVr.CustCode) then begin 
 						RecordCheckError(31193,"",-1,"BirthDayVaucher");
 						res = -1;
 						goto L99;
-					end;
+					end;*/
 			  	if(RVr.UsedFlag>0)then begin
 			  		RecordCheckError(31151,"",-1,"BirthDayVaucher");      
 						res = -1;
