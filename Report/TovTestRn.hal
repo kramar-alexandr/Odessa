@@ -98,9 +98,9 @@ begin
 	val sum;
 	boolean printf,posfnd;
 	record PosVc Posr;
-	vector boolean vposflag;
+	vector boolean vposflag,printfos;
 	vector string 100 posloccode;
-	boolean INTrhs,printfos;
+	boolean INTrhs;
 	
 	while(loopmain(Locr,1,true))begin
 		aloc[acnt] = Locr.Code;
@@ -150,7 +150,7 @@ begin
 		ISr.Code = INr.Code;
 		printf = false;
 		TrHs = true;
-		printfos = false;
+		ClearVector(printfos);
 		while (loopmain(ISr,1,TrHs)) begin
 			if (ISr.Code!=INr.Code) then begin
 				TrHs = false;
@@ -187,7 +187,8 @@ begin
 						
 						if(locqty[ISr.Location & ":" & apos[j]]!=ihlocqty[ISr.Location & ":" & apos[j]])then begin
 								printf = true;
-								printfos = true;
+								logtext(0,"printfos " & ISr.Location);
+								printfos[ISr.Location] = true;
 						end;
 						possum[ISr.Location] = possum[ISr.Location] + PISr.Instock;
 	  			end;
@@ -292,7 +293,7 @@ begin
 							end;
 						end;
 						
-						if((possum[IS2r.Location]==IS2r.Instock and possum[IS2r.Location]!=possumbef[IS2r.Location]) or printfos)then begin
+						if((possum[IS2r.Location]==IS2r.Instock and possum[IS2r.Location]!=possumbef[IS2r.Location]) or printfos[IS2r.Location])then begin
 							startformat(15);
 								OutString(0,0,"CANBEFIXED!!!",false);
 								For(j=0;j<pcnt;j=j+1) begin
