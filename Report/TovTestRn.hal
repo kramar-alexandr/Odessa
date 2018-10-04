@@ -94,7 +94,7 @@ begin
 	record LocationVc Locr;
 	array string 20 aloc,apos;
 	integer acnt,pcnt;
-	vector val locqty,possum,possumbef,remihqty,ihlocqty;
+	vector val locqty,possum,possumbef,remihqty,ihlocqty,ihpossum;
 	val sum;
 	boolean printf,posfnd;
 	record PosVc Posr;
@@ -162,11 +162,15 @@ begin
 				IHr.ArtCode = INr.Code;
 				TrHs1 = true;
 				ClearVector(ihlocqty);
+				ClearVector(ihpossum);
 				while(Loopkey("ArtCode",IHr,1,TrHs1))begin
 					if(IHr.ArtCode!=INr.Code)then begin TrHs1 = false; end;
 
 					if(TrHs1 and IHr.StockAffectf>0)then begin
 						ihlocqty[IHr.Location & ":" & IHr.Position] = ihlocqty[IHr.Location & ":" & IHr.Position] + IHr.Qty;
+						if(nonblank(IHr.Position))then begin
+							ihpossum[IHr.Location] = ihpossum[IHr.Location] + IHr.Qty;
+						end;
 					end;
 				end;
 				resetloop(IHr);
@@ -181,12 +185,17 @@ begin
 						locqty[ISr.Location & ":" & apos[j]] = PISr.Instock;
 						
 						if(locqty[ISr.Location & ":" & apos[j]]!=ihlocqty[ISr.Location & ":" & apos[j]])then begin
-							printf = true;
+								printf = true;
 						end;
 						possum[ISr.Location] = possum[ISr.Location] + PISr.Instock;
 	  			end;
 				end;
 				
+				if(printf)then begin
+					if(ihpossum[ISr.Location]!=possum[ISr.Location])then begin
+						printf = false;
+					end;
+				end;
 				
 				
 				if(posfnd and possum[ISr.Location]!=ISr.Instock)then begin
