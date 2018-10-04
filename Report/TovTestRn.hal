@@ -186,7 +186,7 @@ begin
 		resetloop(ISr);
 		
 		if(remihqty[";;;"]!=locqty[";;;"])then begin
-			printf = true;
+			//printf = true;
 		end;
 		
 		if(sum!=locqty[";;;"])then begin
