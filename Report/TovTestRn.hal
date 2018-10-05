@@ -404,6 +404,8 @@ begin
 				locqty[ISr.Location] = ISr.Instock;
 				if(locqty[ISr.Location]!=ihqty[ISr.Location])then begin
 					printf = true;
+					ISr.Instock = ihqty[ISr.Location];
+					recordstore(ISr,true);
 				end;
 			end;
 		end;
