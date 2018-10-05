@@ -323,13 +323,13 @@ while(LoopBackKey("SerNr",ORr,1,TrHs)) begin
 				end;
 				if(!pay) then begin
 					startformat(15);
-									outstring(0,"DblORVc",ORr.SerNr,false);
-									outstring(50,0,ORr.OrdDate,false);
-									outstring(100,"DblCUVc",ORr.CustCode,false);
-									outstring(150,0,ORr.Addr0,false);
-									outstring(250,0,ORr.NewPD,false);
-									outstring(300,0,ORr.Sum4,false);
-									outstring(350,0,ORr.SalesMan,false);
+						outstring(0,"DblORVc",ORr.SerNr,false);
+						outstring(50,0,ORr.OrdDate,false);
+						outstring(100,"DblCUVc",ORr.CustCode,false);
+						outstring(150,0,ORr.Addr0,false);
+						outstring(250,0,ORr.NewPD,false);
+						outstring(300,0,ORr.Sum4,false);
+						outstring(350,0,ORr.SalesMan,false);
 					endformat;
 					gray_divider(0,1);
 				end;				
