@@ -318,7 +318,7 @@ while(LoopBackKey("SerNr",ORr,1,TrHs)) begin
 		IVr.OrderNr = ORr.SerNr;
 		if(ReadFIrstKey("OrderNr",IVr,1,true))then begin
 				pay = false;
-				ARr.InvoiceNr = IVr.OrderNr;
+				ARr.InvoiceNr = IVr.SerNr;
 				if(ReadFirstMain(ARr,1,true))then begin
 					 pay = true;
 				end;
