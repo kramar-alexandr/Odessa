@@ -188,7 +188,8 @@ begin
   
   Report("Проверка склада",TovTestRClass,ChechIHRn,0,modIN);
   Report("Проверка ItemStatus",TovTestRClass,TestItemStatusRn,0,modDBMain);// Edit ************************** BPI Ukraine - KramarAlexandr - Wednesday, 3 October 2018 15:25:39
-  
+  Report("Проверка ItemStatus by IH",TovTestRClass,TestItemStatusByIHRn,0,modDBMain);// Edit ************************** BPI Ukraine - KramarAlexandr - Wednesday, 3 October 2018 15:25:39
+
   Report("Проверка баллов",TovTestRClass,LoyaltyCheckRn,0,modSL);
 		
 	SString(964,"");	
