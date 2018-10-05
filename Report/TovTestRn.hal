@@ -261,7 +261,7 @@ begin
 						endformat;
 						if(IS2r.Instock!=ihqty[";;;"])then begin
 							IS2r.Instock = ihqty[";;;"];
-							//recordstore(IS2r,true);
+							recordstore(IS2r,true);
 						end;
 					end;
 					if(IS2r.Location!=";;;")then begin
@@ -276,7 +276,7 @@ begin
 						
 						if(IS2r.Instock!=ihqty[IS2r.Location])then begin
 							IS2r.Instock = ihqty[IS2r.Location];
-							//recordstore(IS2r,true);
+							recordstore(IS2r,true);
 						end;
 						possum[IS2r.Location] = blankval;
 						possumbef[IS2r.Location] = blankval;
