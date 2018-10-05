@@ -396,6 +396,7 @@ begin
 		printf = false;
 		TrHs = true;
 		ClearVector(locqty);
+		ClearVector(locqty);
 		while (loopmain(ISr,1,TrHs)) begin
 			if (ISr.Code!=INr.Code) then begin
 				TrHs = false;
@@ -404,10 +405,25 @@ begin
 				locqty[ISr.Location] = ISr.Instock;
 				if(locqty[ISr.Location]!=ihqty[ISr.Location])then begin
 					printf = true;
-					logtext(0,INr.Code & " newq qty " & ihqty[ISr.Location] & " oldqty " & ISr.Instock);
-					ISr.Instock = ihqty[ISr.Location];
-					recordstore(ISr,true);
 				end;
+				
+				For(j=0;j<pcnt;j=j+1) begin
+	  			if(posloccode[apos[j]]==ISr.Location)then begin
+	  				PISr.ArtCode = INr.Code;
+						PISr.Location = ISr.Location;
+						PISr.Position = apos[j];
+						ReadFirstMain(PISr,3,true);
+						posfnd = true;
+						locqty[ISr.Location & ":" & apos[j]] = PISr.Instock;
+						if(PISr.Instock<0)then begin
+							printf = true;
+						end;
+						if(locqty[ISr.Location & ":" & apos[j]]!=ihqty[ISr.Location & ":" & apos[j]])then begin
+							printf = true;
+						end;
+	  			end;
+				end;
+				
 			end;
 		end;
 		resetloop(ISr);
@@ -421,6 +437,15 @@ begin
 					OutString(120,0,locqty[aTags[i]],false);
 					OutString(180,0,ihqty[aTags[i]],false);
 				endformat;
+				For(j=0;j<pcnt;j=j+1) begin
+	  			if(posloccode[apos[j]]==aTags[i])then begin
+	  				startformat(15);
+							OutString(180,0,apos[j],false);
+							OutString(240,0,locqty[aTags[i] & ":" & apos[j]],false);
+							OutString(280,0,ihqty[aTags[i] & ":" & apos[j]],false);
+						endformat;
+	  			end;
+				end;
 			end;
 			black_divider(0,1);
 		end;
