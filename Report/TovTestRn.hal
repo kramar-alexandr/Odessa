@@ -184,11 +184,11 @@ begin
 						ReadFirstMain(PISr,3,true);
 						posfnd = true;
 						locqty[ISr.Location & ":" & apos[j]] = PISr.Instock;
-						logtext(0,ISr.Location & " ocqty " & locqty[ISr.Location & ":" & apos[j]]);
-						logtext(0,ISr.Location & " ihlocqty " & ihlocqty[ISr.Location & ":" & apos[j]]);
+						if(PISr.Instock<0)then begin
+							printf = true;
+						end;
 						if(locqty[ISr.Location & ":" & apos[j]]!=ihlocqty[ISr.Location & ":" & apos[j]])then begin
 								printf = true;
-								logtext(0,"printfos " & ISr.Location);
 								printfos[ISr.Location] = true;
 						end;
 						possum[ISr.Location] = possum[ISr.Location] + PISr.Instock;
