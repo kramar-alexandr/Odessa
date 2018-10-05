@@ -311,7 +311,7 @@ while(LoopBackKey("SerNr",ORr,1,TrHs)) begin
 	testf=true;
 	if(nonblank(RepSpec.f1) AND RepSpec.f1 != ORr.CustCode) then begin testf=false; end;
 	if(nonblank(RepSpec.f2) AND RepSpec.f2 != ORr.SalesMan) then begin testf=false; end;
-	if(nonblank(RepSpec.f3) AND RepSpec.f3 != ORr.OrderClass) then begin testf=false; end;
+	if(nonblank(RepSpec.f3) AND RepSpec.f3 != ORr.NewPD) then begin testf=false; end;
 	if(nonblank(ORr.OrderClass)) then begin testf=false; end;
 	if(testf) then begin
 		pay = true;
