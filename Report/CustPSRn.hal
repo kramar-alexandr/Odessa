@@ -314,14 +314,15 @@ while(LoopBackKey("SerNr",ORr,1,TrHs)) begin
 	if(nonblank(RepSpec.f3) AND RepSpec.f3 != ORr.NewPD) then begin testf=false; end;
 	if(nonblank(ORr.OrderClass)) then begin testf=false; end;
 	if(testf) then begin
-		pay = true;
+		
 		IVr.OrderNr = ORr.SerNr;
 		if(ReadFIrstKey("OrderNr",IVr,1,true))then begin
+				pay = false;
 				ARr.InvoiceNr = IVr.OrderNr;
-				if(ReadFirstMain(ARr,1,true))then  begin
-					 pay=false;
+				if(ReadFirstMain(ARr,1,true))then begin
+					 pay = true;
 				end;
-				if(!pay) then begin
+				if(pay) then begin
 					startformat(15);
 						outstring(0,"DblORVc",ORr.SerNr,false);
 						outstring(50,0,ORr.OrdDate,false);
