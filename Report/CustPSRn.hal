@@ -302,12 +302,9 @@ EndHeader;
 	endformat;
 black_divider(0,1);
 TrHs = true;
-ORr.SerNr=999999;
-Cdate = AddDay(CurrentDate, -365);
-while(LoopBackKey("SerNr",ORr,1,TrHs)) begin
-	if(Cdate > ORr.OrdDate) then begin TrHs = false; end else begin
-		TrHs = true;
-	end;
+ORr.OrdDate = AddDay(CurrentDate, -365);
+while(LoopKey("OrdDate",ORr,1,TrHs)) begin
+
 	testf=true;
 	if(nonblank(RepSpec.f1) AND RepSpec.f1 != ORr.CustCode) then begin testf=false; end;
 	if(nonblank(RepSpec.f2) AND RepSpec.f2 != ORr.SalesMan) then begin testf=false; end;
