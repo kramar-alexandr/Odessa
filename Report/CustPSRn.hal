@@ -297,7 +297,7 @@ EndHeader;
 		outstring(100,0,"Код клиента",false);
 		outstring(150,0,"Ф.И.О. клиента",false);
 		outstring(250,0,"Cпособ оплаты",false);
-		outstring(-150,0,"Cумма заказа",false);
+		outstring(350,0,"Cумма заказа",false);
 		outstring(1,0,"Продавец",true);
 	endformat;
 black_divider(0,1);
@@ -326,7 +326,7 @@ while(LoopKey("OrdDate",ORr,1,TrHs)) begin
 						outstring(100,"DblCUVc",ORr.CustCode,false);
 						outstring(150,0,ORr.Addr0,false);
 						outstring(250,0,ORr.NewPD,false);
-						outstring(-150,0,ORr.Sum4,false);
+						outstring(350,0,ORr.Sum4,false);
 						outstring(1,0,ORr.SalesMan,true);
 					endformat;
 					gray_divider(0,1);
