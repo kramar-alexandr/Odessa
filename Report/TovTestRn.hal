@@ -404,6 +404,7 @@ begin
 				locqty[ISr.Location] = ISr.Instock;
 				if(locqty[ISr.Location]!=ihqty[ISr.Location])then begin
 					printf = true;
+					logtext(0,INr.Code & " newq qty " & ihqty[ISr.Location] & " oldqty " & ISr.Instock);
 					ISr.Instock = ihqty[ISr.Location];
 					recordstore(ISr,true);
 				end;
