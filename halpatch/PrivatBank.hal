@@ -200,7 +200,7 @@ begin
 			AddTextToArea("}\"",a_req);*/
 			AddTextToArea("}" & chr(13),a_req);
 		
-			writeareatofile(a_req,"SoapRequest.txt",0);
+			writeareatofile(a_req,"PBSoapRequest.txt",0);
 		
 		
 			logtext(0,"PrivateGetID " & currenttime & "  " & getarealength(replyarea));
