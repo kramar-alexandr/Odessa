@@ -1191,6 +1191,9 @@ begin
 			if (FindSubString("Самовывоз",ORr.ShipAddr1)) then begin
 				ORr.SelfDelivery = 1;
 			end;
+			if (FindSubString("Самовывоз",ORr.ShipAddr3)) then begin
+				ORr.SelfDelivery = 1;
+			end;
 			ORr.Advance = 0; //Edit----------------------Dima  18.12.2015			
 
 			nodeRowCnt = XmlCountChildren(xmlPost,"orders/order" & i );
