@@ -552,7 +552,7 @@ begin
   Maintenance("Пересчитать скидки клиентов",MyVClass,UpdateCURRebCodeMn,modRozetka);
 	
 	Maintenance("Delete ItemStatusVc PISVc",MyVClass,DelItemStatusVc,modDBMain); 
-
+  Maintenance("Обновить AgeStatus",UpASVClass,UpASMn,modSO);                  //Edit_________________ABR 11.10.18 16:00
 	
   Import("Импорт цен",PLImportIClass,PLImportIn,modDI); //Added********************Dima 20.11.2014
   Import("Импорт товаров",INImportIClass,INImportIn,modIN);//Added********************Dima 20.11.2014

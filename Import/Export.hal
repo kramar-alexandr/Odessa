@@ -509,7 +509,21 @@ vector string 100 oblast;
 		ExportString(CUr.RebCode);
 		ExportString(CUr.Name);
 		ExportString(CUr.NameUAH);
-		ExportString(CUr.AgeStatus);
+		if(CUr.ShopF==1 and CUr.MarketF==1 and CUr.WebShopF==1) then begin
+			ExportString("Магазин/Рынок/Интернетмагазин");
+		end else begin if(CUr.ShopF==1 and CUr.MarketF==1) then begin
+			ExportString("Магазин/Рынок"); end;
+		end else begin if(CUr.ShopF==1 and CUr.WebShopF==1) then begin
+			ExportString("Магазин/Интернетмагазин");end;
+		end else begin if(CUr.MarketF==1 and CUr.WebShopF==1) then begin
+			ExportString("ИнтернетМагазин/Рынок");end;
+		end else begin if(CUr.ShopF==1) then begin
+			ExportString("Магазин"); end;
+		end else begin if( CUr.MarketF==1) then begin
+			ExportString("Рынок"); end;
+		end else begin if(CUr.WebShopF==1) then begin
+			ExportString("Интернетмагазин"); end;
+		end;
 		ExportString(CUr.InvAddr0);
 		ExportString(CUr.InvAddr1);
 		ExportString(CUr.InvAddr2);

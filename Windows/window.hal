@@ -430,6 +430,7 @@ WindowBegin("CrConsigInAll",CrConsigInAllVClass,CGMnt,RcType);
   EndWindow;
 end;
 
+
 window UpdateORWebStatusesVClass:1 // Edit ************************** Friday, 17 October 2014 11:47:19
  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
  begin
@@ -5576,3 +5577,11 @@ begin
    
   EndWindow;
 end;*/
+
+window UpASVClass:1 // Edit ************************** Friday, 11 October 2018 11:47:19
+ wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+ begin
+WindowBegin("Update Age status",UpASVClass,CGMnt,RcType);
+  SetWRect(20,120,360,220);
+  EndWindow;
+end;

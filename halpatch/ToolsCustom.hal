@@ -177,6 +177,9 @@ begin
   integer i,mtrw,additionalday;
   boolean statusflag;
   record IVVc IVr;
+	record IVVc OldIVr;
+	record SHVc SHr;
+	record SHVc OldSHr;
   record LogisticsBlock LBr;
   
   	BlockLoad(SMSb);
@@ -270,6 +273,36 @@ begin
 							end;
 						end;
 						testf = false;//logtext(0,"RemoveReservedMarkMn false6");
+						IVr.OrderNr=ORr.SerNr;
+						TrHs=true;
+						while(LoopKey("OrderNr",IVr,1,TrHs)) begin
+							testf=true;
+							if(IVr.OrderNr!=ORr.SerNr) then begin testf=false; TrHs=false; end;
+							if(IVr.OKFlag!=0) then begin testf=false; end;
+							if(testf)	then begin
+							  RecordCopy(OldIVr,IVr);
+								MatRowDelete(IVr,MatRowCnt(IVr));
+								RecordUpdate(OldIVr,IVr,true)
+								RecordDelete(IVr);
+								StepBack(IVr);
+							end;
+						end;	
+						ResetLoop(IVr);
+						SHr.OrderNr=ORr.SerNr;
+						TrHs=true;
+						while(LoopKey("OrderNr",SHr,1,TrHs)) begin
+							testf=true;
+							if(SHr.OrderNr!=ORr.SerNr) then begin testf=false;TrHs=false; end;
+							if(SHr.OKFlag!=0) then begin testf=false; end;
+							if(testf)	then begin
+								RecordCopy(OldSHr,SHr);
+								MatRowDelete(SHr,MatRowCnt(SHr));
+								RecordUpdate(OldSHr,SHr,true)
+								RecordDelete(SHr);
+								StepBack(SHr);
+							end;
+						end;	
+						ResetLoop(SHr);
 					end;
 					if (testf) then begin
 					logtext(0,"RemoveReservedMarkMn 2 " & ORr.SerNr);
@@ -4633,3 +4666,24 @@ begin
 
 return;
 end;
+
+global updating procedure UpASMn()
+begin
+record CUVc CUr;
+record CUVc oldCUr;
+boolean TrHs;
+TrHs=true;
+CUr.Code ="";
+while(LoopMain(CUr,1,TrHs)) begin
+	if(CUr.AgeStatus==0) then begin CUr.ShopF=1; end;
+	if(CUr.AgeStatus==1) then begin CUr.MarketF=1; end;
+	if(CUr.AgeStatus==2) then begin CUr.ShopF=1;CUr.MarketF=1; end;
+	RecordStore(CUr,true);
+end;
+return;
+end;	
+	
+	
+	
+	
+	

@@ -5784,6 +5784,10 @@ RecordBegin(IPVc,-,"");
   RecordField(NonCashPmnt,M4Int,0,0);//Edit_-_-_-_-_-_-_-_-Anton 15:37 20.06.2018
 	RecordField(LastDateChangeDiscount,M4Date,0,0);//Edit_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-Anton 14:00 12.07.2018
   RecordField(LastRebCode,M4Str,10,0);
+	RecordField(ShopF,M4Mark,0,0);//Edit_________________ABR 12:54 11.10.18
+	RecordField(MarketF,M4Mark,0,0);//Edit_________________ABR 12:54 11.10.18
+	RecordField(WebShopF,M4Mark,0,0);//Edit_________________ABR 12:54 11.10.18
+	RecordField(WCCat,M4Code,5,0); //Edit_________________ABR 12:54 11.10.18
   
   MainKeyBegin(Code,1);
   StoreInBaseKey;
@@ -6046,6 +6050,7 @@ RecordBegin(IPVc,-,"");
   AppendListFieldToKeyName(AddKeySG1);// Edit ************************** Tuesday, 29 August 2017 18:33:23
   KeySegment(VECat);
   KeySegment(Code);
+	
   
 /*
   SubsetKeyBegin2(Area);

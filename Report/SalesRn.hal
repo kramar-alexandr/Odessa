@@ -1456,17 +1456,17 @@ vector string 100 oblast;
 					OutString(40,0,CUr.Region,false);
 				end;
 				OutString(60,0,CUr.Ethnicity,false);
-				if(CUr.AgeStatus==0 or CUr.AgeStatus==2)then begin
+				if(CUr.ShopF)then begin
 					OutString(90,0,"Да",false);
 				end else begin
 					OutString(90,0,"Нет",false);
 				end;
-				if(CUr.AgeStatus==1 or CUr.AgeStatus==2)then begin
+				if(CUr.MarketF==1)then begin
 					OutString(90,0,"Да",false);
 				end else begin
 					OutString(90,0,"Нет",false);
 				end;
-				if(nonblank(CUr.wwwAddr))then begin
+				if(nonblank(CUr.wwwAddr) or CUr.WebShopF==1)then begin
 					OutString(90,0,"Да",false);
 				end else begin
 					OutString(90,0,"Нет",false);
