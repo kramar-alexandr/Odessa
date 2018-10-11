@@ -291,45 +291,43 @@ StartReportJob( "Payment" );
 Header(1,"Способ оплаты",1);
 EndHeader;
 
-startformat(15);
-								outstring(0,0," №сч.клиента",false);
-								outstring(50,0,"дата заказа",false);
-								outstring(100,0,"код клиента",false);
-								outstring(150,0,"Ф.И.О. клиента",false);
-								outstring(250,0,"способ оплаты",false);
-								outstring(300,0,"сумма заказа",false);
-								outstring(350,0,"продавец",false);
-endformat;
+	startformat(15);
+		outstring(0,0," № сч.клиента",false);
+		outstring(50,0,"Дата заказа",false);
+		outstring(100,0,"Код клиента",false);
+		outstring(150,0,"Ф.И.О. клиента",false);
+		outstring(250,0,"Cпособ оплаты",false);
+		outstring(350,0,"Cумма заказа",false);
+		outstring(1,0,"Продавец",true);
+	endformat;
 black_divider(0,1);
 TrHs = true;
-ORr.SerNr=999999;
-Cdate = AddDay(CurrentDate, -365);
-while(LoopBackKey("SerNr",ORr,1,TrHs)) begin
-	if(Cdate > ORr.OrdDate) then begin TrHs = false; end else begin
-		TrHs = true;
-	end;
+ORr.OrdDate = AddDay(CurrentDate, -365);
+while(LoopKey("OrdDate",ORr,1,TrHs)) begin
+
 	testf=true;
 	if(nonblank(RepSpec.f1) AND RepSpec.f1 != ORr.CustCode) then begin testf=false; end;
 	if(nonblank(RepSpec.f2) AND RepSpec.f2 != ORr.SalesMan) then begin testf=false; end;
-	if(nonblank(RepSpec.f3) AND RepSpec.f3 != ORr.OrderClass) then begin testf=false; end;
+	if(nonblank(RepSpec.f3) AND RepSpec.f3 != ORr.NewPD) then begin testf=false; end;
 	if(nonblank(ORr.OrderClass)) then begin testf=false; end;
 	if(testf) then begin
-		pay = true;
+		
 		IVr.OrderNr = ORr.SerNr;
 		if(ReadFIrstKey("OrderNr",IVr,1,true))then begin
-				ARr.InvoiceNr = IVr.OrderNr;
-				if(ReadFirstMain(ARr,1,true))then  begin
-					 pay=false;
+				pay = false;
+				ARr.InvoiceNr = IVr.SerNr;
+				if(ReadFirstMain(ARr,1,true))then begin
+					 pay = true;
 				end;
-				if(!pay) then begin
+				if(pay) then begin
 					startformat(15);
-									outstring(0,0,ORr.SerNr,false);
-									outstring(50,0,ORr.OrdDate,false);
-									outstring(100,"DblCUVc",ORr.CustCode,false);
-									outstring(150,0,ORr.Addr0,false);
-									outstring(250,0,ORr.NewPD,false);
-									outstring(300,0,ORr.PayDeal,false);
-									outstring(350,0,ORr.SalesMan,false);
+						outstring(0,"DblORVc",ORr.SerNr,false);
+						outstring(50,0,ORr.OrdDate,false);
+						outstring(100,"DblCUVc",ORr.CustCode,false);
+						outstring(150,0,ORr.Addr0,false);
+						outstring(250,0,ORr.NewPD,false);
+						outstring(350,0,ORr.Sum4,false);
+						outstring(1,0,ORr.SalesMan,true);
 					endformat;
 					gray_divider(0,1);
 				end;				

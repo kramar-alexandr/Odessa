@@ -79,6 +79,8 @@ begin
 
 end;
 
+
+
 global updating procedure TestItemStatusRn(record RcVc RepSpec)
 begin
 	record PISVc PISr;
@@ -125,7 +127,7 @@ begin
 	endformat;
 	i = 0;
 	TrHs = true;
-	INr.Code = "1632100";
+	//INr.Code = "1632100";
 	INTrhs = true;
 	while loopmain(INr,1,INTrhs) begin
 		
@@ -143,7 +145,7 @@ begin
 		resetloop(IHr);
 		
 		if(INr.Code!="1632100")then begin
-			INTrhs = false;
+			//INTrhs = false;
 		end;
 		ClearVector(locqty);
 		sum = blankval;
@@ -160,7 +162,7 @@ begin
 				possum[ISr.Location] = blankval;
 				posfnd = false;
 				
-				IHr.ArtCode = INr.Code;
+				/*IHr.ArtCode = INr.Code;
 				TrHs1 = true;
 				ClearVector(ihlocqty);
 				ClearVector(ihpossum);
@@ -174,7 +176,7 @@ begin
 						end;
 					end;
 				end;
-				resetloop(IHr);
+				resetloop(IHr);*/
 				
 				For(j=0;j<pcnt;j=j+1) begin
 	  			if(posloccode[apos[j]]==ISr.Location)then begin
@@ -184,11 +186,11 @@ begin
 						ReadFirstMain(PISr,3,true);
 						posfnd = true;
 						locqty[ISr.Location & ":" & apos[j]] = PISr.Instock;
-						logtext(0,ISr.Location & " ocqty " & locqty[ISr.Location & ":" & apos[j]]);
-						logtext(0,ISr.Location & " ihlocqty " & ihlocqty[ISr.Location & ":" & apos[j]]);
+						if(PISr.Instock<0)then begin
+							printf = true;
+						end;
 						if(locqty[ISr.Location & ":" & apos[j]]!=ihlocqty[ISr.Location & ":" & apos[j]])then begin
 								printf = true;
-								logtext(0,"printfos " & ISr.Location);
 								printfos[ISr.Location] = true;
 						end;
 						possum[ISr.Location] = possum[ISr.Location] + PISr.Instock;
@@ -261,7 +263,7 @@ begin
 						endformat;
 						if(IS2r.Instock!=ihqty[";;;"])then begin
 							IS2r.Instock = ihqty[";;;"];
-							//recordstore(IS2r,true);
+							recordstore(IS2r,true);
 						end;
 					end;
 					if(IS2r.Location!=";;;")then begin
@@ -276,7 +278,7 @@ begin
 						
 						if(IS2r.Instock!=ihqty[IS2r.Location])then begin
 							IS2r.Instock = ihqty[IS2r.Location];
-							//recordstore(IS2r,true);
+							recordstore(IS2r,true);
 						end;
 						possum[IS2r.Location] = blankval;
 						possumbef[IS2r.Location] = blankval;
@@ -337,7 +339,122 @@ begin
 return;
 end;
 
+global updating procedure TestItemStatusByIHRn(record RcVc RepSpec)
+begin
+	record PISVc PISr;
+	record ItemStatusVc ISr,IS2r;
+	record INVc INr;
+	boolean testf,TrHs,TrHs2,TrHs1;
+	vector val vect;
+	vector boolean INInArr;
+	array string 50 InArr;
+	integer i,j;
+	record ItemHistVc IHr;
+	vector val ihqty;
+	record LocationVc Locr;
+	array string 20 aloc,apos,aTags;
+	integer acnt,pcnt;
+	vector val locqty,possum,possumbef,remihqty,ihlocqty,ihpossum;
+	val sum;
+	boolean printf,posfnd;
+	record PosVc Posr;
+	vector boolean vposflag,printfos;
+	vector string 100 posloccode;
+	boolean INTrhs;
+	
+	StartReportNoHeaderJob("Проверка ItemStatus");
+	
+	while(loopmain(Locr,1,true))begin
+		aloc[acnt] = Locr.Code;
+		acnt = acnt + 1;
+	end;
+	
+	while(loopmain(Posr,1,true))begin
+			apos[pcnt] = Posr.Code;
+			posloccode[Posr.Code] = Posr.Location;
+			pcnt = pcnt + 1;
+	end;
+		
+	
+	INTrhs = true;
+	while loopmain(INr,1,INTrhs) begin
+		IHr.ArtCode = INr.Code;
+		TrHs1 = true;
+		ClearVector(ihqty);
+		while(Loopkey("ArtCode",IHr,1,TrHs1))begin
+			if(IHr.ArtCode!=INr.Code)then begin TrHs1 = false; end;
 
+			if(TrHs1 and IHr.StockAffectf>0)then begin
+				ihqty[";;;"] = ihqty[";;;"] + IHr.Qty;
+				ihqty[IHr.Location] = ihqty[IHr.Location] + IHr.Qty;
+				ihqty[IHr.Location & ":" & IHr.Position] = ihqty[IHr.Location & ":" & IHr.Position] + IHr.Qty;
+			end;
+		end;
+		resetloop(IHr);
+		
+		ISr.Code = INr.Code;
+		printf = false;
+		TrHs = true;
+		ClearVector(locqty);
+		ClearVector(locqty);
+		while (loopmain(ISr,1,TrHs)) begin
+			if (ISr.Code!=INr.Code) then begin
+				TrHs = false;
+			end;
+			if(TrHs)then begin
+				locqty[ISr.Location] = ISr.Instock;
+				if(locqty[ISr.Location]!=ihqty[ISr.Location])then begin
+					printf = true;
+				end;
+				
+				For(j=0;j<pcnt;j=j+1) begin
+	  			if(posloccode[apos[j]]==ISr.Location)then begin
+	  				PISr.ArtCode = INr.Code;
+						PISr.Location = ISr.Location;
+						PISr.Position = apos[j];
+						ReadFirstMain(PISr,3,true);
+						posfnd = true;
+						locqty[ISr.Location & ":" & apos[j]] = PISr.Instock;
+						if(PISr.Instock<0)then begin
+							printf = true;
+						end;
+						if(locqty[ISr.Location & ":" & apos[j]]!=ihqty[ISr.Location & ":" & apos[j]])then begin
+							printf = true;
+						end;
+	  			end;
+				end;
+				
+			end;
+		end;
+		resetloop(ISr);
+		
+		if(printf)then begin
+			GetVectorTags(locqty,aTags);
+			For(i=0;i<aTags.length;i=i+1) begin
+	  		startformat(15);
+					OutString(0,0,INr.Code,false);
+					OutString(60,0,aTags[i],false);
+					OutString(120,0,locqty[aTags[i]],false);
+					OutString(180,0,ihqty[aTags[i]],false);
+				endformat;
+				For(j=0;j<pcnt;j=j+1) begin
+	  			if(posloccode[apos[j]]==aTags[i])then begin
+	  				startformat(15);
+							OutString(180,0,apos[j],false);
+							OutString(240,0,locqty[aTags[i] & ":" & apos[j]],false);
+							OutString(280,0,ihqty[aTags[i] & ":" & apos[j]],false);
+						endformat;
+	  			end;
+				end;
+			end;
+			black_divider(0,1);
+		end;
+		
+	end;
+	
+	endjob;
+return;
+end;
 
 global updating procedure TovTestRn(record RcVc RepSpec)
 begin
