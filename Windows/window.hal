@@ -5585,3 +5585,27 @@ WindowBegin("Update Age status",UpASVClass,CGMnt,RcType);
   SetWRect(20,120,360,220);
   EndWindow;
 end;
+
+window WCCatINClass:1	//Edit***************************Sasha2,14:41 15.02.2017
+  wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
+begin
+real h,v,vs;
+Integer i;
+  WindowBegin("Обновление клиентов",WCCatINClass,CGIcW,-);
+  SetWRect(20,80,470,600);
+	 SetWRect(20,80,470,300);
+  i=1; //номер колонки
+  h=10;  v=15;
+  StaticText(h,v,"Формат импорта",false);
+  h=20;  v=40;
+  StaticText(h,v,"Список колонок:",false);
+  v=v+30; vs=25;
+  StaticText(h,v, 	i & ". Код товара",false);
+	 StaticText(h+250,v,"Обязательное поле",false);
+	 i=i+1;
+  StaticText(h,v+=vs,i & ". Категория опт. клиента",false);
+	 StaticText(h+250,v,"Опционное поле",false);
+	 i=i+1;
+  StaticText(h,v+=40,"Примечание:   Все столбцы разделены <Tab>",false);
+	EndWindow;
+end;	

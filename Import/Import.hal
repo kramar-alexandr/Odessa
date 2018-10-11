@@ -1077,3 +1077,19 @@ begin
 	return;
 end;*/
 
+global
+updating procedure WCCatIn() //Edit***************************ABR,16:23 11.10.2018
+begin
+  record CUVc CUr;
+  string 255 sfield0,sfield1;
+  
+	while (TestEOF()==false) begin
+		sfield0 = ImportField;
+		sfield1 = ImportField;
+		CUr.Code=sfield0;
+    ReadFirstMain(CUr,1,true);
+  	CUr.WCCat=sfield1;
+		RecordStore(CUr,true);
+   NextImportLine(true);
+  end;
+end;

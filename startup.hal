@@ -587,6 +587,7 @@ begin
 	
 	Import("€зменение флагов экспорта прайсов",INImportExportFlagsIClass,INImportExportFlagsIn,modIN); //Edit***************************Sasha2,14:54 15.02.2017
 	//Import("€мпорт классификаций",ImportDIVcINClass,ImportDIVcIn,modDBMain);//Edit_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-Anton 11:24 18.07.2018
+	Import("обновление категории клиента",WCCatINClass,WCCatIn,modSO); //Edit***************************ABR,16:54 11.10.2018
 	
 	Export("ExxportIN",CashInvCroEClass,ExpRegINEn,modDBMain);
 	Export("ExxportPLHist",UILogEClass,ExpRegPLHistEn,modDBMain);
