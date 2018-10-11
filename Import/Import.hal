@@ -1087,9 +1087,10 @@ begin
 		sfield0 = ImportField;
 		sfield1 = ImportField;
 		CUr.Code=sfield0;
-    ReadFirstMain(CUr,1,true);
-  	CUr.WCCat=sfield1;
-		RecordStore(CUr,true);
-   NextImportLine(true);
+    if(ReadFirstMain(CUr,1,true))then begin
+			CUr.WCCat=sfield1;
+			RecordStore(CUr,true);
+		end;
+    NextImportLine(true);
   end;
 end;
