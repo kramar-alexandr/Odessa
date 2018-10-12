@@ -7060,7 +7060,20 @@ RecordBegin(IPVc,-,"");
   KeySegment(SerNr);
   EndRecord;
 		
+
+	RecordBegin(RulRateOptVc,-,"");
+	RecordField(CustType,M4Code,20,0);
+	RecordField(Math,M4Matrix,0,0);
+	
+	ArrayBegin(Math,-,1);
+	ArrayField(Sum,M4Val,0,0);
+	ArrayField(Rate,M4Rate,0,0);
+	ArrayField(ESum,M4Val,0,0);
+	EndArray;
+	
+	MainKeyBegin(CustType,0);
+  KeySegment(CustType);
+	EndRecord;
 return;
 end;
-
 

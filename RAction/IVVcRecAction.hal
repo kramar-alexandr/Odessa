@@ -2245,4 +2245,17 @@ LIVVcRecordRemoveTest:;
   IVVcRecordRemoveTest = res;  
   RETURN;
 end;
-
+global
+updating function LongInt RulRateOptVcRecordCheck(var record RulRateOptVc RulRateOptr,record RulRateOptVc RulRateOpt2r,LongInt stat,LongInt check)
+BEGIN
+LongInt res;
+res=0;
+if(blank(RulRateOptr.CustType)) then begin
+	res=-1;
+	MessageBox(0,"Тип клиента обязательное поле");
+	goto RulRateOptVcEnd;
+end;
+RulRateOptVcEnd:;
+RulRateOptVcRecordCheck = res;
+RETURN;
+END;

@@ -101,6 +101,7 @@ external function string 255 LookUpPromotionCode(date,string); //Edit***********
 external procedure NoDupObjs(string,var string); //Edit***************************Sasha2,16:04 24.01.2017
 external function Boolean FindSubString(string,string);// Edit ************************** Wednesday, 24 May 2017 15:21:31
 external procedure ExtractObjWithSeparator(string,string,Boolean,var Integer,var string); 
+external procedure CashS(string,date,vector val,array string);
 
 SetLangMode(LangRussian,"RUS",0);
 
@@ -3506,3 +3507,5 @@ begin
   ORVcRecordInIndex = res;
   return;
 end;
+
+

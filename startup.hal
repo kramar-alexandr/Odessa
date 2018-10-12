@@ -38,6 +38,7 @@ begin
   Register("APVc","APVc",APVc,modDBMain);
   
   Register("Города Клиентов","Города Клиентов",CityVc,modSL);
+	Register("Правила скидок для опта","Правила скидок для опта",RulRateOptVc,modSL);//Edit_________________ABR 13:57 12.10.18
 
   Setting("Настройки WebShop",WebShopSettingsTClass,modSO); //Edit***************************Sasha2,10:22 14.07.2014
   Setting("Настройки экспорта склада CSV",ExportStockCSVTClass,modSY);
@@ -104,7 +105,7 @@ begin
 	Report("Отчет по комиссии",CompareConsignationRClass,ComissionSalesRn,0,modSL);// Edit ************************** BPI Ukraine - KramarAlexandr - Wednesday, 27 December 2017 11:20:35
 	Report("Отчет по флагам экспорта товара",ProdExpFlagsRClass,ProdExpFlagsRn,0,modIN);
 	Report ("Счета клиентов с долгом по способам оплаты",PaySRClass,PaySRn,0,modSO); //Edit______________________________________________ABR 03.10.18 16:28
-	
+	Report("Оборот клиента за год",CashYRClass,CashYRn,0,modSO);//Edit______________________________________________ABR 11.10.18 17:49
 	Import("Импорт регистров БЕЗ ПЕРЕЗАПИСИ",ImportOfRegisterIClass,ImportOfRegister,modDBMain);	//Edit----------------------Dima  27.05.2015
 	Import("Импорт регистров C ПЕРЕЗАПИСЬЮ",ImportOfRegisterRewriteIClass,ImportOfRegisterRewriting,modDBMain);
 

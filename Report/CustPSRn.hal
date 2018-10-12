@@ -14,6 +14,49 @@ external procedure HTInvFrom(Integer,Integer, Date, var string);
 external procedure PSPrintCust(record RcVc,record CUVc,var val,var val,Integer,Integer);
 external function Boolean FindTheContract(Boolean,Integer,LongInt,LongInt,var record COVc,var Boolean);
 
+global
+procedure CashS(string code,date pdate,vector val vvalues,array string vcode) //Edit_________________ABR 12:39 12.10.18 в векторе сум ["В баз. валюте"] елемент - сума в базовой валюте 
+begin
+record IVVc IVr;
+record ARVc ARr;
+record ORVc ORr;
+array string 50 keys;
+boolean TrHs,testf;
+integer i;
+date fdate;
+fdate=AddDay(pdate,-365);
+i=0;
+TrHs=true;
+IVr.CustCode=code;
+while(LoopKey("CustCode",IVr,1,TrHs)) begin
+	testf=true;
+  if(IVr.CustCode!=code)then begin TrHs=false;testf=false; end;
+	if(fdate>IVr.PayDate OR pdate<IVr.PayDate) then begin testf=false; end;
+  if(testf) then begin
+			keys[i]=IVr.CurncyCode;
+			vvalues[keys[i]]=vvalues[keys[i]]+IVr.Sum4;
+			i=i+1;
+			vvalues["В баз. валюте"]=vvalues["В баз. валюте"]+IVr.BaseSum4;
+		ARr.InvoiceNr=IVr.InvoiceNr;
+		if(ReadFirstMain(ARr,1,true)) then begin
+			vvalues[ARr.ARCurncyCode]=vvalues[ARr.ARCurncyCode]-ARr.RVal;
+		end;	
+	end;	
+end;
+	GetVectorTags(vvalues,vcode);
+return;
+end;
+
+global
+function val CashSS(string code,date pdate,var val vval,array string vcode) 
+begin
+vector val values;
+CashS(code,pdate,values,vcode);
+//vval=values["В баз. валюте"];
+return;
+end;
+
+
 
 global
 procedure PrintCustCourseEvents(string custcode)
@@ -1355,3 +1398,47 @@ BEGIN
   EndJob;
   RETURN;
 END;
+
+global procedure CashYRn(record RcVc RepSpec)
+begin
+record CUVc CUr;
+vector val values;
+array string 50 vvalues;
+date Cdate;
+integer pos,i;
+pos=20;
+StartReportJob( "Cash" );
+Header(1,"Отчет по клиенту",1);
+EndHeader;
+	CUr.Code="1";
+if(nonblank(RepSpec.f1)) then begin
+	CUr.Code=RepSpec.f1;
+end;
+CashS(CUr.Code,CurrentDate,values,vvalues);
+if(ReadFirstMain(CUr,1,true)) then begin
+	startformat(15)
+		outstring(pos,0,"Код клиента",false); pos=pos+50;
+		outstring(pos,0,"Имя клиента",false); pos=pos+100;
+		outstring(pos,0,"Период",false); pos=pos+100;
+		outstring(pos,0,"Валюта",false); pos=pos+100;
+		outstring(pos,0,"Сума",false); pos=pos+100;
+	endformat;
+	Black_Divider(0,1);
+	pos=20;
+	startformat(15)
+		outstring(pos,0,CUr.Code,false); pos=pos+50;
+		outstring(pos,0,CUr.Name,false); pos=pos+100;
+		outstring(pos,0,CurrentDate & "/" & AddDay(CurrentDate,-365),false); pos=pos+100;
+	endformat;
+	Gray_Divider(0,1);
+	for(i=0;i<vvalues.length;i=i+1) begin
+		startformat(15)
+			outstring(pos,0,vvalues[i],false); 
+			outstring(pos+100,0,values[vvalues[i]],false); 
+		endformat;
+		Gray_Divider(0,1);
+	end;	
+end;
+endjob; 
+return;
+end;
