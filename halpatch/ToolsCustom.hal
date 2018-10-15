@@ -4675,7 +4675,7 @@ boolean TrHs;
 TrHs=true;
 CUr.Code ="";
 while(LoopMain(CUr,1,TrHs)) begin
-	if(blank(CUr.CustCat) and CUr.CUType==1)then begin
+	if(CUr.CustCat=="CUST" and CUr.CUType==1)then begin
 		if(CUr.AgeStatus==0) then begin CUr.ShopF=1; end;
 		if(CUr.AgeStatus==1) then begin CUr.MarketF=1; end;
 		if(CUr.AgeStatus==2) then begin CUr.ShopF=1;CUr.MarketF=1; end;
