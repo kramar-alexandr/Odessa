@@ -758,7 +758,7 @@ begin
 	val perereserv,newprereserv;
 	
 	SMr.OKFlag = 0;
-	SMr.TransDate = currentdate;
+	//SMr.TransDate = currentdate;// Edit ************************** BPI Ukraine - KramarAlexandr - Tuesday, 16 October 2018 10:08:43
 	SMr.FrLocation = IVr.Location;
 	
 	rwcnt = matrowcnt(IVr);

@@ -1613,7 +1613,7 @@ begin
 			if(mustreserv)then begin
 				SMr.Reserved = 1;
 			end;
-			SMr.TransDate = Currentdate;
+			//SMr.TransDate = Currentdate;
 			if(matrowcnt(SMr)>199)then begin
 				SMr.StopAutoComplite = 1;// Edit ************************** BPI Ukraine - KramarAlexandr - Wednesday, 3 January 2018 10:14:15
 			end;
