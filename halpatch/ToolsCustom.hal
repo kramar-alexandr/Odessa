@@ -29,6 +29,8 @@ external procedure ExpandStructure(record INVc,string,string,Integer,var val,var
 external function LongInt DateDiff(Date,Date);
 remote procedure IVVc_PasteRebCode(var record IVVc);
 external updating procedure UpdateOrdOut(record ORVc,Boolean,Boolean);
+external updating function LongInt SHVcRecordRemove(var record SHVc,record SHVc,LongInt,LongInt);// Edit ************************** BPI Ukraine - KramarAlexandr - Tuesday, 16 October 2018 09:57:07
+external updating function LongInt IVVcRecordRemove(var record IVVc,record IVVc,LongInt,LongInt);// Edit ************************** BPI Ukraine - KramarAlexandr - Tuesday, 16 October 2018 09:57:08
 
 SetLangMode(LangRussian,"RUS",0);
 
@@ -165,7 +167,7 @@ updating procedure RemoveReservedMarkMn()
 begin
   record ORVc ORr,OR2r;
   row ORVc ORrw;
-  boolean TrHs,testf,okedf;
+  boolean TrHs,testf,okedf,testf1,TrHs1;
   date mindate;
   LongInt res;
   record SMSstackVc SMSr;
@@ -273,36 +275,6 @@ begin
 							end;
 						end;
 						testf = false;//logtext(0,"RemoveReservedMarkMn false6");
-						IVr.OrderNr=ORr.SerNr;
-						TrHs=true;
-						while(LoopKey("OrderNr",IVr,1,TrHs)) begin
-							testf=true;
-							if(IVr.OrderNr!=ORr.SerNr) then begin testf=false; TrHs=false; end;
-							if(IVr.OKFlag!=0) then begin testf=false; end;
-							if(testf)	then begin
-							  RecordCopy(OldIVr,IVr);
-								MatRowDelete(IVr,MatRowCnt(IVr));
-								RecordUpdate(OldIVr,IVr,true)
-								RecordDelete(IVr);
-								StepBack(IVr);
-							end;
-						end;	
-						ResetLoop(IVr);
-						SHr.OrderNr=ORr.SerNr;
-						TrHs=true;
-						while(LoopKey("OrderNr",SHr,1,TrHs)) begin
-							testf=true;
-							if(SHr.OrderNr!=ORr.SerNr) then begin testf=false;TrHs=false; end;
-							if(SHr.OKFlag!=0) then begin testf=false; end;
-							if(testf)	then begin
-								RecordCopy(OldSHr,SHr);
-								MatRowDelete(SHr,MatRowCnt(SHr));
-								RecordUpdate(OldSHr,SHr,true)
-								RecordDelete(SHr);
-								StepBack(SHr);
-							end;
-						end;	
-						ResetLoop(SHr);
 					end;
 					if (testf) then begin
 					logtext(0,"RemoveReservedMarkMn 2 " & ORr.SerNr);
@@ -318,17 +290,57 @@ begin
 							RecordCopy(OR2r,ORr);
 							ORr.Reserved = 0;
 							if (RecordUpdate(OR2r,ORr,true)==0) then begin 
-									if(nonblank(ORr.OrderClass))then begin
-										if(nonblank(SMSb.Text42) and ORr.CustomStatusFlag==11) then begin
-											newtext = ParseSMStext(SMSb.Text42,ORr);  
-											AddSMStoStack(ORr.NPPhone,SMSb.Title4,"",newtext,ORr.CustCode,"ORVc",ORr.SerNr,ORr.OrderClass,CurrentDate,sendTime);
-										end;	
-									end else begin
-										if(nonblank(SMSOb.Text42) and ORr.CustomStatusFlag==11) then begin
-											newtext = ParseSMStext(SMSOb.Text42,ORr);  
-											AddSMStoStack(ORr.NPPhone,SMSOb.Title4,"",newtext,ORr.CustCode,"ORVc",ORr.SerNr,ORr.OrderClass,CurrentDate,sendTime);
-										end;
+								
+								// Edit Start ---------------------------------------------- Edit Start
+	//Tuesday, 16 October 2018 09:47:48
+	
+								IVr.OrderNr=ORr.SerNr;
+								TrHs1=true;
+								while(LoopKey("OrderNr",IVr,1,TrHs1)) begin
+									testf1=true;
+									if(IVr.OrderNr!=ORr.SerNr) then begin testf1=false; TrHs1=false; end;
+									if(IVr.OKFlag!=0) then begin testf=false; end;
+									if(testf1)	then begin
+										RecordCopy(OldIVr,IVr);
+										For(i=0;i<MatRowCnt(IVr);i=i+1) begin
+	  									MatRowDelete(IVr,0);
+										end; 
+										RecordUpdate(OldIVr,IVr,true);
+										IVVcRecordRemove(IVr,IVr,-1,-1);
+										RecordDelete(IVr);
+										StepBack(IVr);
 									end;
+								end;	
+								ResetLoop(IVr);
+								SHr.OrderNr=ORr.SerNr;
+								TrHs1=true;
+								while(LoopKey("OrderNr",SHr,1,TrHs1)) begin
+									testf1=true;
+									if(SHr.OrderNr!=ORr.SerNr) then begin testf1=false;TrHs1=false; end;
+									if(SHr.OKFlag!=0) then begin testf=false; end;
+									if(testf1)	then begin
+										RecordCopy(OldSHr,SHr);
+										IVVcRecordRemove(SHr,SHr,-1,-1);
+										RecordDelete(SHr);
+										StepBack(SHr);
+									end;
+								end;	
+								ResetLoop(SHr);
+								
+								
+	// Edit End ---------------------------------------------- Edit End
+	
+								if(nonblank(ORr.OrderClass))then begin
+									if(nonblank(SMSb.Text42) and ORr.CustomStatusFlag==11) then begin
+										newtext = ParseSMStext(SMSb.Text42,ORr);  
+										AddSMStoStack(ORr.NPPhone,SMSb.Title4,"",newtext,ORr.CustCode,"ORVc",ORr.SerNr,ORr.OrderClass,CurrentDate,sendTime);
+									end;	
+								end else begin
+									if(nonblank(SMSOb.Text42) and ORr.CustomStatusFlag==11) then begin
+										newtext = ParseSMStext(SMSOb.Text42,ORr);  
+										AddSMStoStack(ORr.NPPhone,SMSOb.Title4,"",newtext,ORr.CustCode,"ORVc",ORr.SerNr,ORr.OrderClass,CurrentDate,sendTime);
+									end;
+								end;
 								res = 0;
 								if (okedf) then begin
 									RecordCopy(OR2r,ORr);
