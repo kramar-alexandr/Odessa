@@ -14,6 +14,9 @@ external procedure HTInvFrom(Integer,Integer, Date, var string);
 external procedure PSPrintCust(record RcVc,record CUVc,var val,var val,Integer,Integer);
 external function Boolean FindTheContract(Boolean,Integer,LongInt,LongInt,var record COVc,var Boolean);
 
+SetLangMode(LangRussian,"RUS",0);
+
+
 global
 procedure CashS(string code,date pdate,vector val vvalues,array string vcode) //Edit_________________ABR 12:39 12.10.18 в векторе сум ["‚ баз. валюте"] елемент - сума в базовой валюте 
 begin
