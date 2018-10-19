@@ -1418,6 +1418,7 @@ CashS(CUr.Code,CurrentDate,values,vvalues);
 if(ReadFirstMain(CUr,1,true)) then begin
 	startformat(15)
 		outstring(pos,0,"Код клиента",false); pos=pos+50;
+		outstring(pos,0,"Категория опт.клиента",false);pos=pos+100;
 		outstring(pos,0,"Имя клиента",false); pos=pos+100;
 		outstring(pos,0,"Период",false); pos=pos+100;
 		outstring(pos,0,"Валюта",false); pos=pos+100;
@@ -1427,6 +1428,7 @@ if(ReadFirstMain(CUr,1,true)) then begin
 	pos=20;
 	startformat(15)
 		outstring(pos,0,CUr.Code,false); pos=pos+50;
+		outstring(pos,0,CUr.WCCat,false); pos=pos+100;
 		outstring(pos,0,CUr.Name,false); pos=pos+100;
 		outstring(pos,0,CurrentDate & "/" & AddDay(CurrentDate,-365),false); pos=pos+100;
 	endformat;

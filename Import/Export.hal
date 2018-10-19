@@ -453,6 +453,7 @@ vector string 100 oblast;
 	
 	ExportString("Код");
 	ExportString("Категория клиента");
+	ExportString("Категория опт. клиента");
 	ExportString("Скидка");
 	ExportString("Наименов.");
 	ExportString("ФИО Укр.");
@@ -506,6 +507,7 @@ vector string 100 oblast;
 	while(loopmain(CUr,1,true))begin
 		ExportString(CUr.Code);
 		ExportString(CUr.CustCat);
+		ExportString(CUr.WCCat);
 		ExportString(CUr.RebCode);
 		ExportString(CUr.Name);
 		ExportString(CUr.NameUAH);
