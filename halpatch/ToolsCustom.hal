@@ -314,7 +314,7 @@ begin
 								ResetLoop(IVr);
 								SHr.OrderNr=ORr.SerNr;
 								TrHs1=true;
-								while(LoopKey("OrderNr",SHr,1,TrHs1)) begin
+								while(LoopKey("OrderKey",SHr,1,TrHs1)) begin
 									testf1=true;
 									if(SHr.OrderNr!=ORr.SerNr) then begin testf1=false;TrHs1=false; end;
 									if(SHr.OKFlag!=0) then begin testf=false; end;
@@ -1613,7 +1613,7 @@ begin
 			if(mustreserv)then begin
 				SMr.Reserved = 1;
 			end;
-			//SMr.TransDate = Currentdate;
+			//SMr.TransDate = Currentdate;// Edit ************************** BPI Ukraine - KramarAlexandr - Tuesday, 16 October 2018 10:08:35
 			if(matrowcnt(SMr)>199)then begin
 				SMr.StopAutoComplite = 1;// Edit ************************** BPI Ukraine - KramarAlexandr - Wednesday, 3 January 2018 10:14:15
 			end;
