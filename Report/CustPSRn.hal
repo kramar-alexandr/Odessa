@@ -1422,25 +1422,25 @@ CashS(CUr.Code,CurrentDate,values,vvalues);
 if(ReadFirstMain(CUr,1,true)) then begin
 	startformat(15)
 		outstring(pos,0,"Код клиента",false); pos=pos+50;
-		outstring(pos,0,"Категория опт.клиента",false);pos=pos+100;
-		outstring(pos,0,"Имя клиента",false); pos=pos+100;
-		outstring(pos,0,"Период",false); pos=pos+100;
-		outstring(pos,0,"Валюта",false); pos=pos+100;
-		outstring(pos,0,"Сума",false); pos=pos+100;
+		outstring(pos,0,"Категория опт.клиента",false);pos=pos+90;
+		outstring(pos,0,"Имя клиента",false); pos=pos+90;
+		outstring(pos,0,"Период",false); pos=pos+90;
+		outstring(pos,0,"Валюта",false); pos=pos+90;
+		outstring(pos,0,"Сума",false); pos=pos+90;
 	endformat;
 	Black_Divider(0,1);
 	pos=20;
 	startformat(15)
 		outstring(pos,0,CUr.Code,false); pos=pos+50;
-		outstring(pos,0,CUr.WCCat,false); pos=pos+100;
-		outstring(pos,0,CUr.Name,false); pos=pos+100;
-		outstring(pos,0,CurrentDate & "/" & AddDay(CurrentDate,-365),false); pos=pos+100;
+		outstring(pos,0,CUr.WCCat,false); pos=pos+90;
+		outstring(pos,0,CUr.Name,false); pos=pos+90;
+		outstring(pos,0,CurrentDate & "/" & AddDay(CurrentDate,-365),false); pos=pos+90;
 	endformat;
 	Gray_Divider(0,1);
 	for(i=0;i<vvalues.length;i=i+1) begin
 		startformat(15)
 			outstring(pos,0,vvalues[i],false); 
-			outstring(pos+100,0,values[vvalues[i]],false); 
+			outstring(pos+90,0,values[vvalues[i]],false); 
 		endformat;
 		Gray_Divider(0,1);
 	end;	
