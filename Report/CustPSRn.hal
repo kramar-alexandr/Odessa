@@ -40,7 +40,7 @@ while(LoopKey("CustCode",IVr,1,TrHs)) begin
 			vvalues[keys[i]]=vvalues[keys[i]]+IVr.Sum4;
 			i=i+1;
 			vvalues["В баз. валюте"]=vvalues["В баз. валюте"]+IVr.BaseSum4;
-		ARr.InvoiceNr=IVr.InvoiceNr;
+		ARr.InvoiceNr=IVr.SerNr;
 		if(ReadFirstMain(ARr,1,true)) then begin
 			vvalues[ARr.ARCurncyCode]=vvalues[ARr.ARCurncyCode]-ARr.RVal;
 			vvalues["В баз. валюте"]=vvalues["В баз. валюте"]-ARr.BookRVal;
