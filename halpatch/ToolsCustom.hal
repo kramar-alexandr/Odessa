@@ -177,7 +177,7 @@ begin
   record SMSTextOptBlock SMSOb;
   string 200 newtext;
   integer i,mtrw,additionalday;
-  boolean statusflag;
+  boolean statusflag,deleteivflag;
   record IVVc IVr;
 	record IVVc OldIVr;
 	record SHVc SHr;
@@ -293,7 +293,7 @@ begin
 								
 								// Edit Start ---------------------------------------------- Edit Start
 	//Tuesday, 16 October 2018 09:47:48
-	
+								deleteivflag = false;
 								IVr.OrderNr=ORr.SerNr;
 								TrHs1=true;
 								while(LoopKey("OrderNr",IVr,1,TrHs1)) begin
@@ -307,6 +307,7 @@ begin
 										end; 
 										RecordUpdate(OldIVr,IVr,true);
 										IVVcRecordRemove(IVr,IVr,-1,-1);
+										deleteivflag = true;
 										RecordDelete(IVr);
 										StepBack(IVr);
 									end;
@@ -331,12 +332,12 @@ begin
 	// Edit End ---------------------------------------------- Edit End
 	
 								if(nonblank(ORr.OrderClass))then begin
-									if(nonblank(SMSb.Text42) and ORr.CustomStatusFlag==11) then begin
+									if(nonblank(SMSb.Text42) and deleteivflag) then begin
 										newtext = ParseSMStext(SMSb.Text42,ORr);  
 										AddSMStoStack(ORr.NPPhone,SMSb.Title4,"",newtext,ORr.CustCode,"ORVc",ORr.SerNr,ORr.OrderClass,CurrentDate,sendTime);
 									end;	
 								end else begin
-									if(nonblank(SMSOb.Text42) and ORr.CustomStatusFlag==11) then begin
+									if(nonblank(SMSOb.Text42) and deleteivflag) then begin
 										newtext = ParseSMStext(SMSOb.Text42,ORr);  
 										AddSMStoStack(ORr.NPPhone,SMSOb.Title4,"",newtext,ORr.CustCode,"ORVc",ORr.SerNr,ORr.OrderClass,CurrentDate,sendTime);
 									end;
