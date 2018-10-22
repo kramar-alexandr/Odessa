@@ -310,6 +310,7 @@ begin
 										deleteivflag = true;
 										RecordDelete(IVr);
 										StepBack(IVr);
+										okedf = true;
 									end;
 								end;	
 								ResetLoop(IVr);
