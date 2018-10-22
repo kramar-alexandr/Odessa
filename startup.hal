@@ -32,13 +32,12 @@ begin
 	Register("Стандартные коробки","Стандартные коробки",StandBoxesVc,modNPost);
   Setting("Статусы закрытия НП",NPCloseStatusTCLass,modNPost); // Edit ************************** BPI Ukraine - KramarAlexandr - Thursday, 23 August 2018 10:35:35
   Setting("Статусы НП",NPStatusesTClass,modNPost); // Edit ************************** BPI Ukraine - KramarAlexandr - Thursday, 23 August 2018 10:35:35
-
+	Setting("Правила скидок для опта",RulRateOptLClass,modSL);//Edit_________________ABR 13:57 12.10.18
 
 	Register("ARVc","ARVc",ARVc,modDBMain);//Edit----------------------Dima  22.12.2015
   Register("APVc","APVc",APVc,modDBMain);
   
   Register("Города Клиентов","Города Клиентов",CityVc,modSL);
-	Register("Правила скидок для опта","Правила скидок для опта",RulRateOptVc,modSL);//Edit_________________ABR 13:57 12.10.18
 
   Setting("Настройки WebShop",WebShopSettingsTClass,modSO); //Edit***************************Sasha2,10:22 14.07.2014
   Setting("Настройки экспорта склада CSV",ExportStockCSVTClass,modSY);
