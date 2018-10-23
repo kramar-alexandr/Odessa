@@ -165,7 +165,7 @@ begin
   Setting("Альтернативная скидка",AlternativeRebateLClass,modDI); //Edit***************************Sasha2,17:58 23.01.2017
   Setting("Оправители контрагентов по умолчанию",NPActiveContSenderTClass,modNPost); //Edit***************************Sasha2,19:11 05.09.2017
   Setting("Способы оплаты",NewPDLClass,modSO);// Edit ************************** BPI Ukraine - KramarAlexandr - Monday, 16 April 2018 17:44:42
-
+	Setting("Классификация контактов",CClassLClass,modSL);
   //Report("Статистика НДС по аванс. отчетам",ExpVATRClass,ExpVATRn,0,modCL);
   //Report("Журнал путевых листов",WLJRClass,WLJRn,0,modCL);
 
