@@ -881,8 +881,10 @@ BEGIN
       if (UserCanAction("ViewCostPrice",true)==false) then begin
         res = false;
       end;
-     
-      
+    case "WCCat": //Edit_________________ABR 22.10.18 12:33 
+      if(UserCanAction("AllowChangeRabateinCU",false)==true)then begin
+      	res = true;
+      end;
   end;
 
   CUDClassActiveEditField = res;

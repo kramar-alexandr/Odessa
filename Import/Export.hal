@@ -525,7 +525,9 @@ vector string 100 oblast;
 			ExportString("Рынок"); end;
 		end else begin if(CUr.WebShopF==1) then begin
 			ExportString("Интернетмагазин"); end;
-		end;
+		end else begin
+			ExportString("");
+		end;	
 		ExportString(CUr.InvAddr0);
 		ExportString(CUr.InvAddr1);
 		ExportString(CUr.InvAddr2);
