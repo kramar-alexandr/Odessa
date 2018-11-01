@@ -1269,7 +1269,7 @@ not needed any more
                       if((stat==insertmode and IVp.OKFlag!=0) or (stat==updatemode and IVp.OKFlag!=0 and IV2p.OKFlag==0))then begin  // Edit ************************** Wednesday, 3 February 2016 16:09:46
 												if (nonblank(IVrw.PosCode)) then begin
 													FindStockValueAtPosition(IVrw.ArtCode,location,IVrw.PosCode,PISr);
-													if (prev>PISr.LeftQty) then begin
+													if (prev>PISr.Instock) then begin
 														RecordCheckError(1397," " & IVrw.ArtCode,i,"PosCode");      
 														res = -1;
 														goto L99;
