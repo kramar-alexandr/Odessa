@@ -364,7 +364,9 @@ while(LoopKey("OrdDate",ORr,1,TrHs)) begin
 				pay = false;
 				ARr.InvoiceNr = IVr.SerNr;
 				if(ReadFirstMain(ARr,1,true))then begin
+					if(ARr.BookRVal>=10)then begin
 					 pay = true;
+					end;
 				end;
 				if(pay) then begin
 					startformat(15);
