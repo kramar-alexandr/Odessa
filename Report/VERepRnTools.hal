@@ -4,7 +4,7 @@ external function Boolean SetInSet2(string,string);
 	SetLangMode(LangRussian,"RUS",0);
 
 global
-procedure LookupInHist(string Item, Date StartDate, Date EndDate, string Loc,var val sold,var val strRest,var val gotval,var val curRest,var val TRWH,
+procedure LookupInHist(string Item, Date StartDate, Date EndDate, string Loc,var val teststock,var val sold,var val strRest,var val gotval,var val curRest,var val TRWH,
                         var val retPU,var val SDqty,var val stin,var val stout,var val saleopt,var val saleroz,var vector val LocBalValues,var vector val PosBalValues,var val ProdIn, var val ProdOut) 
 BEGIN 
   	record ItemHistVc IHr;
@@ -25,6 +25,7 @@ BEGIN
   	gotval = 0; // Получено
   	curRest = 0;  // Остаток на период
   	TRWH = 0;//Transit
+		teststock = 0;//остаток на складе test
   	saleopt = 0;
   	saleroz = 0;
   	SDqty = 0;
@@ -36,6 +37,7 @@ BEGIN
   	ProdIn = blankval;
   	ProdOut = blankval;
   	
+	
   	//if(blank(Loc))then begin
 			keyloop = "ArtCode";
   		intloop = 2;
@@ -58,6 +60,9 @@ BEGIN
 								strRest = strRest + IHr.Qty;
 								curRest = curRest + IHr.Qty;
 							end else begin
+							If(IHr.Location=="Y_ТЕСТ") then begin
+								teststock = teststock - IHr.Qty;
+							end;
 								TRWH = TRWH + IHr.Qty;
 							end;
 						//end;
@@ -74,7 +79,10 @@ BEGIN
 						//if (IHr.Location!="TRWH") then begin
 						if (true) then begin
 								if(IHr.Location!="Y_БРАК" and IHr.Location!="Y_НЕТ_СКЛ" and IHr.Location!="Y_ТЕСТ") then begin	//Edit----------------------Dima  18.01.2016
-									curRest = curRest + IHr.Qty;
+									curRest = curRest + IHr.Qty;	
+								end;
+								If(IHr.Location=="Y_ТЕСТ") then begin
+									teststock = teststock - IHr.Qty;
 								end;
 								if (IHr.FileName == "PUVc") then begin
 									gotval = gotval + IHr.Qty;									
