@@ -3757,7 +3757,7 @@ begin
   string 255 smstext;
   record SMSTextBlock SMSb;
   record SMSTextOptBlock SMSOb;
-  	
+  vector boolean phone	
   	blockload(SMSb);
   	blockload(SMSOb);
 		blockload(RebVchB);
@@ -3786,7 +3786,7 @@ begin
 					blockload(RebVchB);
 					if (NonBlank(custCode) and CUr.Code!=custCode) then begin TrHs = false; testf = false; end;
 					if (BlankDate(CUr.BirthDate)) then begin testf = false; end;
-					if (mid(CUr.Name,1,1) == "#" or mid(CUr.Mobile,1,1) == "#") then begin testf = false; end;
+					if (mid(CUr.Name,0,1) == "#" or mid(CUr.Mobile,0,1) == "#") then begin testf = false; end;
 					if (CUr.DateCreated>addday(currentdate,-1)) then begin testf = false; end;// Edit ************************** Thursday, 14 September 2017 09:54:05
 					if (curDate<AddDay(nextCUDR,-RebVchB.GenVauchersBeforeDays)) then begin testf = false; end;
 					if (curDate>AddDay(nextCUDR,workdayto)) then begin testf = false; end;
@@ -3814,8 +3814,10 @@ begin
 					if(readfirstkey("CustCode",RebateVoucherr,2,true))then begin
 						testf = false;
 					end;
+					if(phone[right(CUr.Mobile,10)]) then begin testf=false; end;
 					
 					if (testf) then begin
+						phone[right(CUr.Mobile,10)]=true; 
 						RECORDNEW(RebateVoucherr);
 						RebateVoucherr.TransDate = curDate;
 						RebateVoucherr.ReleasedAtYear = GetYear(curDate);
