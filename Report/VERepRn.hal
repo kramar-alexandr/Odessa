@@ -311,7 +311,7 @@ RecordNew(ISr);
 
   pos = 0;
   size2 =0;
-  ExtractObj(RepSpec.f5,pos,loc);
+  ExtractObjWithSeparator(",",RepSpec.f5,true,pos,loc);
   while(nonblank(loc))begin
 	  PosBalValues[loc] = i;		
   	positionsBal[size2] = loc;
@@ -319,7 +319,7 @@ RecordNew(ISr);
   	ReadFirstMain(POSr,1,true);
   	//LocationOfPosition[loc] = POSr.Location;
   	size2 = size2 + 1;  	
-  	ExtractObj(RepSpec.f5,pos,loc);
+  	ExtractObjWithSeparator(",",RepSpec.f5,true,pos,loc);
   end;
 
   
