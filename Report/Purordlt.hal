@@ -226,18 +226,21 @@ begin
 						if(readFirstMain(Userr, 1, true))then begin
 							if(nonblank(Userr.SalesGroup))then begin  
 								if((VEr.SalesGroup!=Userr.SalesGroup) and (VEr.AddKeySG1!=Userr.SalesGroup)) then begin testf = false; end;
+								
+								if(usercanaction("VievOnlyWorldVE",false))then begin
+									if((VEr.SalesGroup=="WORLD") or (VEr.AddKeySG1=="WORLD")) then begin testf = true; end;
+								end;
+								if(usercanaction("VievOnlyUKRVE",false))then begin
+									if((VEr.SalesGroup=="UKR") and (VEr.AddKeySG1=="UKR")) then begin testf = true; end;
+								end;
+								if(usercanaction("VievOnlyW1VE",false)) then begin
+									if((VEr.SalesGroup=="W_1") and (VEr.AddKeySG1=="W_1")) then begin testf = true; end;
+								end;
+								
 							end;
 						end;	
 					end;
-					if(usercanaction("VievOnlyWorldVE",false))then begin
-						if((VEr.SalesGroup!="WORLD") and (VEr.AddKeySG1!="WORLD")) then begin testf = false; end;
-					end;
-					if(usercanaction("VievOnlyUKRVE",false))then begin
-						if((VEr.SalesGroup!="UKR") and (VEr.AddKeySG1!="UKR")) then begin testf = false; end;
-					end;
-					if(usercanaction("VievOnlyW1VE",false)) then begin
-						if((VEr.SalesGroup!="W_1") and (VEr.AddKeySG1!="W_1")) then begin testf = false; end;
-					end;
+					
           if (nonblank(RepSpec.f5)) then begin
             if (testf) then begin
               testf = false;
