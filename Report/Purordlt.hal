@@ -221,7 +221,7 @@ begin
             end;
           end;
 					 
-					if(UserCanAction("VievAllSalesGroupDocuments", true)==false) then begin
+					/*if(UserCanAction("VievAllSalesGroupDocuments", true)==false) then begin
 						Userr.Code = CurrentUser;
 						if(readFirstMain(Userr, 1, true))then begin
 							if(nonblank(Userr.SalesGroup))then begin  
@@ -239,6 +239,16 @@ begin
 								
 							end;
 						end;	
+					end;*/
+					
+					if(usercanaction("VievOnlyWorldVE",false))then begin
+						if((VEr.SalesGroup!="WORLD") or (VEr.AddKeySG1!="WORLD")) then begin testf = false; end;
+					end;
+					if(usercanaction("VievOnlyUKRVE",false))then begin
+						if((VEr.SalesGroup=="UKR") and (VEr.AddKeySG1=="UKR")) then begin testf = false; end;
+					end;
+					if(usercanaction("VievOnlyW1VE",false)) then begin
+						if((VEr.SalesGroup=="W_1") and (VEr.AddKeySG1=="W_1")) then begin testf = false; end;
 					end;
 					
           if (nonblank(RepSpec.f5)) then begin
