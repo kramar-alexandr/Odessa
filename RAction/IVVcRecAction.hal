@@ -340,7 +340,15 @@ begin
 		IVp.LCMLevel = "";
 		IVp.Points = blankval;
 		IVSumup(IVp,true);
-	end;
+	end else begin
+		mtrw = matrowcnt(IVp);
+		For(i=0;i<mtrw;i=i+1) begin
+			matrowget(IVp,i,IVrw);
+				IVrw.VATCode = "0%";
+			matrowput(IVp,i,IVrw);
+		end; 
+		IVSumup(IVp,true);
+	end;	
 
 return;
 end;
