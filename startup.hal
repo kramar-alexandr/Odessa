@@ -63,7 +63,7 @@ begin
   Report("Отчет по оплатам кассовых сч/ф",POSPaymentsRClass,POSPaymentsRn,0,modSL); //Edit***************************Sasha2,16:40 17.11.2014
   Report("Отчет по продажам",SalesRClass,SalesRn,0,modSL); //Edit----------------------Dima  14.03.2016
   Report("Отчет по балансу сертификатов",GivenCardsRecordRClass,GivenCardsRecordsRn,0,modSL); //GOSHA 4 Oct 2017
-  Report ("Клиенты Black List" , CUBLRClass, CUBLRn,0,modSL);
+  Report("Клиенты Black List" , CUBLRClass, CUBLRn,0,modSL);
   Report("Продажи по регионам",SalesByCustRClass,SalesByCustRn,0,modSL); // Edit ************************** Tuesday, 6 September 2016 12:59:35
 
 	//Report("Отчет по продажам1",SalesRClass,Sales1Rn,0,modSL); //Edit----------------------Dima  14.03.2016
@@ -103,7 +103,7 @@ begin
 	//Report("Отчет по комиссии",CompareConsignationRClass,CompareConsignationRn,0,modSL);// Edit ************************** Tuesday, 24 October 2017 14:26:01
 	Report("Отчет по комиссии",CompareConsignationRClass,ComissionSalesRn,0,modSL);// Edit ************************** BPI Ukraine - KramarAlexandr - Wednesday, 27 December 2017 11:20:35
 	Report("Отчет по флагам экспорта товара",ProdExpFlagsRClass,ProdExpFlagsRn,0,modIN);
-	Report ("Счета клиентов с долгом по способам оплаты",PaySRClass,PaySRn,0,modSO); //Edit______________________________________________ABR 03.10.18 16:28
+	Report("Счета клиентов с долгом по способам оплаты",PaySRClass,PaySRn,0,modSO); //Edit______________________________________________ABR 03.10.18 16:28
 	Report("Оборот клиента за год",CashYRClass,CashYRn,0,modSO);//Edit______________________________________________ABR 11.10.18 17:49
 	Import("Импорт регистров БЕЗ ПЕРЕЗАПИСИ",ImportOfRegisterIClass,ImportOfRegister,modDBMain);	//Edit----------------------Dima  27.05.2015
 	Import("Импорт регистров C ПЕРЕЗАПИСЬЮ",ImportOfRegisterRewriteIClass,ImportOfRegisterRewriting,modDBMain);
@@ -382,6 +382,7 @@ begin
 	 SString(31190,"Відмова від отримання");
 	 SString(31191,"Видалено");
 	 SString(31192,"Недопустимое количество товара при создании реализации");
+	 SString(31193,"Введите реальную Карту лояльности или поставте клинта NONAME");
 	 
 	Maintenance("CloseNPShipment",FixItemCostVClass,CloseNPShipment,modNPost);
 	

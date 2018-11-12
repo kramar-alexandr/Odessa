@@ -73,6 +73,8 @@ external function Boolean IVPrintReceipt(Integer,var record IVVc,var record IVVc
 external procedure IVVc_PastePosition(var record IVVc,string);	//Edit----------------------Dima  12.01.2016
 remote procedure IVVcRebCodeCound(var record IVVc); // Edit Dima ************* 2018-02-20 02:35 PM
 
+SetLangMode(LangRussian,"RUS",0);	
+
 procedure ChangeIVSerialNr(Integer wnst,var record IVVc IVp)
 BEGIN
   if (wnst==1) then begin//Rs_insert
@@ -2316,6 +2318,101 @@ begin
 	recordnew(RepSpec);
 	OpenWindow("ConfirmCUByPhoneRClass",1,wn,"","",RepSpec);
 
+end;
+
+global
+procedure CorrectLoyCardfrIV()
+begin
+	record RcVc RepSpec;
+	record IVVc IVr;
+	integer wn;
+	
+	wn = curwindow;
+
+	OpenWindow("UpdateLCRClass",1,wn,"","",RepSpec);
+	
+end;	
+global
+function boolean UpdateLCRClassOnOpenWindow(integer wn)
+begin
+	record RcVc RepSpec;
+	record IVVc IVr;
+	integer mwn;
+	
+	mwn = motherwindow(wn);
+	getwindowrecord(wn,RepSpec);
+	getwindowrecord(mwn,IVr);
+	RepSpec.f2 = IVr.CustCode;
+	putwindowrecord(wn,RepSpec);
+end;
+
+global
+updating procedure SearchLoyCardDsm()
+begin
+	record LoyaltyCardVc LCr;
+	record RcVc RepSpec;
+	integer wn;
+	
+	wn = curwindow;
+	deselectwindow(wn,true);
+	getwindowrecord(wn,RepSpec);
+	
+	LCr.SerNr = RepSpec.f1;
+	if(ReadFirstMain(LCr,1,true)) then begin
+		messagebox(0,"такой код уже существует");
+	end else begin
+		if(LEN(RepSpec.f1) == 13) then begin
+			messagebox(0,"код введен корректно");
+		end else begin
+			messagebox(0,"код введен некоректно");
+		end;
+	end;
+return;
+end;
+
+global
+updating procedure CreateLCDsm()
+begin
+record LoyaltyCardVc LCr;
+record RcVc RepSpec;
+record IVVc IVr;
+integer wn,mwn;
+real ball;
+recordNew(LCr);
+
+ball=0;
+wn = curwindow;
+mwn = motherwindow(wn);
+deselectwindow(wn,true);
+getwindowrecord(wn,RepSpec);
+getwindowrecord(mwn,IVr);
+	LCr.SerNr = RepSpec.f1;
+	if(ReadFirstMain(LCr,1,true)) then begin
+		messagebox(0,"такой код уже существует");
+	end else begin
+		if(LEN(RepSpec.f1) == 13) then begin
+			LCr.CustCode = RepSpec.f2;
+			while(LoopKey("CustCode",LCr,1,true)) begin
+				if(LCr.Closed != 0 and LCr.CustCode == RepSpec.f2) then begin
+					ball=ball+LCr.PointsBalance;
+					LCr.Closed = 1;
+					RecordStore(LCr,true);
+				end;	
+			end;	
+		end else begin
+			messagebox(0,"код введен некоректно");
+		end;
+	end;
+	RecordNew(LCr);
+	LCr.SerNr = RepSpec.f1;
+	LCr.CustCode = RepSpec.f2;
+	LCr.PointsBalance = ball;
+	if(RecordStore(LCr,true)) then begin
+		messagebox(0,"карта создана");
+	end;	
+	IVr.LoyaltyCardNr = LCr.SerNr;
+	PutWindowRecord(mwn,IVr);
+return;
 end;
 
 global 

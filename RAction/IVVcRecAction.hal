@@ -467,7 +467,17 @@ BEGIN
 			rwcnt = rwcnt-1;
 		end;
 	end;
-  
+	
+	if(IVp.OKFlag != 0) then begin
+		if(IVp.Location == "3-RAY" or IVp.Location == "6-KV") then begin
+			if(IVp.CustCode != "NONAME" and LEN(IVp.LoyaltyCardNr) != 13) then begin
+				RecordCheckError(31193,"",-1,"LoyaltyCardNr");      
+				res = -1; 
+				goto L99;
+			end;
+		end;	
+  end;
+	
   if (long4==3) then begin TouchScreenFinishButtonf = true; end;
   res = 0;
   curcomp = CurrentCompany;    
