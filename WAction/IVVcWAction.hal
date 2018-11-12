@@ -2377,6 +2377,9 @@ record LoyaltyCardVc LCr;
 record RcVc RepSpec;
 record IVVc IVr;
 integer wn,mwn;
+boolean TrHs;
+string 200 name,lcmlevel,pointsto;
+date startdate,expdate;
 real ball;
 recordNew(LCr);
 
@@ -2392,26 +2395,41 @@ getwindowrecord(mwn,IVr);
 	end else begin
 		if(LEN(RepSpec.f1) == 13) then begin
 			LCr.CustCode = RepSpec.f2;
-			while(LoopKey("CustCode",LCr,1,true)) begin
-				if(LCr.Closed != 0 and LCr.CustCode == RepSpec.f2) then begin
+			LCr.SerNr ="";
+			TrHs = true;
+			while(LoopKey("CustCode",LCr,1,TrHs)) begin
+				if(LCr.CustCode != RepSpec.f2) then begin TrHs = false; end;
+				if(LCr.Closed == 0 and LCr.CustCode == RepSpec.f2) then begin 
+				
 					ball=ball+LCr.PointsBalance;
 					LCr.Closed = 1;
+					name = LCr.CustName;
+					lcmlevel = LCr.LCMLevel;
+					startdate = LCr.StartDate;
+					expdate = LCr.ExpiryDate; 
+					pointsto = LCr.PointsTo;
 					RecordStore(LCr,true);
 				end;	
 			end;	
 		end else begin
 			messagebox(0,"код введен некоректно");
 		end;
+		RecordNew(LCr);
+		LCr.SerNr = RepSpec.f1;
+		LCr.CustCode = RepSpec.f2;
+		LCr.PointsBalance = ball;
+		LCr.CustName = name;
+		LCr.LCMLevel = lcmlevel;
+		LCr.StartDate = startdate;
+		LCr.ExpiryDate = expdate;
+		LCr.PointsTo = pointsto;
+		if(RecordStore(LCr,true)) then begin
+			messagebox(0,"карта создана");
+		end;	
+		IVr.LoyaltyCardNr = LCr.SerNr;
+		PutWindowRecord(mwn,IVr);
+		CloseWindow(wn);
 	end;
-	RecordNew(LCr);
-	LCr.SerNr = RepSpec.f1;
-	LCr.CustCode = RepSpec.f2;
-	LCr.PointsBalance = ball;
-	if(RecordStore(LCr,true)) then begin
-		messagebox(0,"карта создана");
-	end;	
-	IVr.LoyaltyCardNr = LCr.SerNr;
-	PutWindowRecord(mwn,IVr);
 return;
 end;
 
