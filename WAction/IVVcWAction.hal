@@ -2347,30 +2347,6 @@ begin
 end;
 
 global
-updating procedure SearchLoyCardDsm()
-begin
-	record LoyaltyCardVc LCr;
-	record RcVc RepSpec;
-	integer wn;
-	
-	wn = curwindow;
-	deselectwindow(wn,true);
-	getwindowrecord(wn,RepSpec);
-	
-	LCr.SerNr = RepSpec.f1;
-	if(ReadFirstMain(LCr,1,true)) then begin
-		messagebox(0,"такой код уже существует");
-	end else begin
-		if(LEN(RepSpec.f1) == 13) then begin
-			messagebox(0,"код введен корректно");
-		end else begin
-			messagebox(0,"код введен некоректно");
-		end;
-	end;
-return;
-end;
-
-global
 updating procedure CreateLCDsm()
 begin
 record LoyaltyCardVc LCr;
@@ -2402,6 +2378,7 @@ getwindowrecord(mwn,IVr);
 				if(LCr.Closed == 0 and LCr.CustCode == RepSpec.f2) then begin 
 				
 					ball=ball+LCr.PointsBalance;
+					LCr.PointsBalance = 0;
 					LCr.Closed = 1;
 					name = LCr.CustName;
 					lcmlevel = LCr.LCMLevel;
@@ -2411,24 +2388,24 @@ getwindowrecord(mwn,IVr);
 					RecordStore(LCr,true);
 				end;	
 			end;	
+			RecordNew(LCr);
+			LCr.SerNr = RepSpec.f1;
+			LCr.CustCode = RepSpec.f2;
+			LCr.PointsBalance = ball;
+			LCr.CustName = name;
+			LCr.LCMLevel = lcmlevel;
+			LCr.StartDate = startdate;
+			LCr.ExpiryDate = expdate;
+			LCr.PointsTo = pointsto;
+			if(RecordStore(LCr,true)) then begin
+				messagebox(0,"карта создана");
+			end;	
+			IVr.LoyaltyCardNr = LCr.SerNr;
+			PutWindowRecord(mwn,IVr);
+			CloseWindow(wn);
 		end else begin
 			messagebox(0,"код введен некоректно");
 		end;
-		RecordNew(LCr);
-		LCr.SerNr = RepSpec.f1;
-		LCr.CustCode = RepSpec.f2;
-		LCr.PointsBalance = ball;
-		LCr.CustName = name;
-		LCr.LCMLevel = lcmlevel;
-		LCr.StartDate = startdate;
-		LCr.ExpiryDate = expdate;
-		LCr.PointsTo = pointsto;
-		if(RecordStore(LCr,true)) then begin
-			messagebox(0,"карта создана");
-		end;	
-		IVr.LoyaltyCardNr = LCr.SerNr;
-		PutWindowRecord(mwn,IVr);
-		CloseWindow(wn);
 	end;
 return;
 end;
