@@ -471,9 +471,14 @@ BEGIN
 	if(IVp.OKFlag != 0) then begin
 		if(IVp.Location == "3-RAY" or IVp.Location == "6-KV") then begin
 			if(IVp.CustCode != "NONAME" and LEN(IVp.LoyaltyCardNr) != 13) then begin
-				RecordCheckError(31193,"",-1,"LoyaltyCardNr");      
-				res = -1; 
-				goto L99;
+				LoyaltyCardr.SerNr = IVp.LoyaltyCardNr;
+				if(readfirstmain(LoyaltyCardr,1,true)) then begin
+					if(LoyaltyCardr.LCMLevel != "NONAME") then begin
+						RecordCheckError(31193,"",-1,"LoyaltyCardNr");      
+						res = -1; 
+						goto L99;
+					end;
+				end;	
 			end;
 		end;	
   end;
