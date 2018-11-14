@@ -1463,3 +1463,13 @@ BEGIN
 	end;
   return;
 end;
+
+global
+procedure SHLClassButtonFlags(Integer wn,var Boolean duplOK,var Boolean newOK,var Boolean saveOK,var Boolean restOK)
+begin
+	if(CurrentUser != "SA") then begin
+		duplOK = false;
+		newOK = false;
+	end;	
+  return;
+end;
