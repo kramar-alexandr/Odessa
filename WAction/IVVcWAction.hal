@@ -2523,3 +2523,16 @@ begin
   end;  
 return;
 end;
+
+global
+updating procedure RHistpasteItems()
+BEGIN
+  record IVVc IVr;
+  integer wn;
+	wn = curwindow;
+	GetWindowRecord(wn,IVr);
+	if(IVr.SerNr>0)then begin
+		RecordStore(IVr,true);	
+	end;
+  return;
+end;
