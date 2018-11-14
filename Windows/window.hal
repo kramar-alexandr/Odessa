@@ -4973,6 +4973,7 @@ begin
       SpecialMenu("Создать возврат товаров",'B',5,"RetFromSHSpec");
     end;
   end else begin
+	SpecialMenu("Дублировать из истории сч./ф.",' ',0,"SHHistpasteItems");
   SpecialMenu("Печать этикеток фрахта",'l',0,"PrintSHLabSHDsm");
   if (IsEnterprise) then begin
     SpecialMenu("Пересчитать вес",'w',1,"SHCalcWeightDsm");

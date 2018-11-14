@@ -1451,3 +1451,15 @@ begin
 	
 end;
 
+global
+updating procedure SHHistpasteItems()
+BEGIN
+  record SHVc SHr;
+  integer wn;
+	wn = curwindow;
+	GetWindowRecord(wn,SHr);
+	if(SHr.SerNr>0)then begin
+		RecordStore(SHr,true);	
+	end;
+  return;
+end;
