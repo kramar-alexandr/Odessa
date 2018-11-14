@@ -299,7 +299,8 @@ begin
 								while(LoopKey("OrderNr",IVr,1,TrHs1)) begin
 									testf1=true;
 									if(IVr.OrderNr!=ORr.SerNr) then begin testf1=false; TrHs1=false; end;
-									if(IVr.OKFlag!=0) then begin testf=false; end;
+									if(IVr.OKFlag!=0) then begin testf1=false; end;
+									
 									if(testf1)	then begin
 										RecordCopy(OldIVr,IVr);
 										For(i=0;i<MatRowCnt(IVr);i=i+1) begin
@@ -319,7 +320,8 @@ begin
 								while(LoopKey("OrderKey",SHr,1,TrHs1)) begin
 									testf1=true;
 									if(SHr.OrderNr!=ORr.SerNr) then begin testf1=false;TrHs1=false; end;
-									if(SHr.OKFlag!=0) then begin testf=false; end;
+									if(SHr.OKFlag!=0) then begin testf1=false; end;
+									
 									if(testf1)	then begin
 										RecordCopy(OldSHr,SHr);
 										IVVcRecordRemove(SHr,SHr,-1,-1);
