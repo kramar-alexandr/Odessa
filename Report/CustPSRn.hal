@@ -1463,7 +1463,7 @@ begin
 	StartReportJob( "ItHist" );
 	Header(1,"Отчет по удаленым записям",1);
 	EndHeader;
-	per = addday(currentdate,-730);
+	per = addday(currentdate,-60);
 	IHr.TransDate = currentdate;
 	TrHs=true;
 	While(LoopBackKey("TransDate",IHr,1,TrHs)) begin
