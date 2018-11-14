@@ -1472,17 +1472,21 @@ begin
 		if(IHr.FileName != "SHVc" and IHr.FileName != "IVVc") then begin testf=false; end;
 		if(testf) then begin
 			if(IHr.FileName == "SHVc") then begin
-				SHr.SerNr=IHr.ArtCode;
-				if(ReadFirstMain(SHr,1,true)) then begin testf=false; end;
+				SHr.SerNr = IHr.TransNr;
+				if(ReadFirstMain(SHr,1,true)) then begin testf = false; end;
 			end;
 			if(IHr.FileName == "IVVc") then begin
-				IVr.SerNr=IHr.ArtCode;
-				if(ReadFirstMain(IVr,1,true)) then begin testf=false; end;
+				IVr.SerNr = IHr.TransNr;
+				if(ReadFirstMain(IVr,1,true)) then begin testf = false; end;
 			end;
 		end;
 		if(testf) then begin
 			startformat(15);
 			outstring(10,0,IHr.ArtCode,false);
+			outstring(50,0,IHr.FileName,false);
+			outstring(100,0,IHr.TransNr,false);
+			outstring(150,0,IHr.TransDate,false);
+
 			endformat;
 		end;
 	end;
