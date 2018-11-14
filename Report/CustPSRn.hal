@@ -1464,9 +1464,9 @@ begin
 	Header(1,"Отчет по удаленым записям",1);
 	EndHeader;
 	per = addday(currentdate,-730);
-	IHr.SerNr = "";
+	IHr.TransDate = currentdate;
 	TrHs=true;
-	While(LoopBackKey("SerNr",IHr,1,TrHs)) begin
+	While(LoopBackKey("TransDate",IHr,1,TrHs)) begin
 		testf=true;
 		if(IHr.TransDate < per) then begin testf=false; TrHs=false; end;
 		if(IHr.FileName != "SHVc" and IHr.FileName != "IVVc") then begin testf=false; end;
