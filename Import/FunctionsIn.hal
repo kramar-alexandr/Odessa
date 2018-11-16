@@ -489,6 +489,7 @@ begin
   Userr.DisallowSalesForType = ImportField;
   Userr.AllowSaleAllItems = StringToInt(ImportField);
   Userr.SalesReportLocation = ImportField;
+  Userr.AllowObjTypes = ImportField;
   
   
 	// Edit End ---------------------------------------------- Edit End
