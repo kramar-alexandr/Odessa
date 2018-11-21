@@ -2180,6 +2180,7 @@ END;
 global
 updating function LongInt StockMovVcRecordCheck(var record StockMovVc SMp,record StockMovVc SM2p,LongInt stat,LongInt check)
 BEGIN
+	record UserVc Ur;
   LongInt res;
   LongInt oldnr,newnr;
   string 255 oldOfficialSerNr;
@@ -2198,6 +2199,18 @@ BEGIN
     RecordCheckError(error,errorstr,rownr,fieldstr);
     goto LStockMovVcRecordCheck;
   end;
+	Ur.Code = SMp.SendUser;
+	if(SMp.SentOKFlag!=0 and !readfirstmain(Ur,1,true)) then begin
+		res = -1;
+    RecordCheckError(31194,"",-1,"SendUser");
+    goto LStockMovVcRecordCheck;
+	end;
+	Ur.Code = SMp.ReceiveUser;
+	if(SMp.OKFlag!=0 and !readfirstmain(Ur,1,true)) then begin
+		res = -1;
+    RecordCheckError(31194,"",-1,"ReceiveUser");
+    goto LStockMovVcRecordCheck;
+	end;
 LStockMovVcRecordCheck:;
   if (res!=0) then begin 
     SMp.SerNr = oldnr; 
