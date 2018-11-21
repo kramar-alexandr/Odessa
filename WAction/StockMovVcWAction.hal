@@ -618,41 +618,6 @@ BEGIN
   RETURN;
 END; //Edit***************************Sasha2,12:39 10.02.2015 }
 
-function Boolean StockMovDClassSendUserEFAfter(Integer wn,Integer changed)
-BEGIN
-  record StockMovVc StockMovr;
-	record UserVc Ur;
-  Boolean res;
-	
-	res = true;
-  getwindowrecord(wn,StockMovr);
-	Ur.Code = StockMovr.SendUser;
-	if(!readfirstmain(Ur,1,true)) then begin
-	If(StockMovr.SentOKFlag==0) then begin
-		messagebox(0,"неверно введены данные");
-	end;
-  StockMovDClassSendUserEFAfter = res;
-  RETURN;
-END; //Edit****************** ABR 21.11.18
-
-function Boolean StockMovDClassReceiveUserEFAfter(Integer wn,Integer changed)
-BEGIN
-  record StockMovVc StockMovr;
-	record UserVc Ur;
-  Boolean res;
-	
-	res = true;
-  getwindowrecord(wn,StockMovr);
-	Ur.Code = StockMovr.ReceiveUser;
-	if(!readfirstmain(Ur,1,true)) then begin
-		If(StockMovr.OKFlag==0) then begin
-			messagebox(0,"неверно введены данные");
-		end;
-	end;
-  StockMovDClassReceiveUserEFAfter = res;
-  RETURN;
-END; //Edit****************** ABR 21.11.18
-
 global
 function Boolean StockMovDClassAfterEditField(Integer wn,string fieldname,Integer fn, Integer rownr,Integer changed)
 BEGIN
@@ -688,8 +653,6 @@ BEGIN
 		case "ActArrTime": res = StockMovDClassDurationTimeEFAfter(wn,changed!=0);
 		case "ProdSerNr": res = StockMovDClassProdSerNrEFAfter(wn,changed!=0);
 		case "OrdQuant": res = StockMovDClassOrdQuantEFAfter(wn,rownr,changed); //Edit***************************Sasha2,12:39 10.02.2015
-		case "SendUser": res = StockMovDClassSendUserEFAfter(wn,changed);
-		case "ReceiveUser": res = StockMovDClassReceiveUserEFAfter(wn,changed);
 	  end;
   end else begin //Edit-------------------Vitalii 10:44 25.12.2015
 	res = true;
@@ -946,10 +909,6 @@ BEGIN
           res = false;
         end;
       end;
-		case "SendUser":
-			if(StockMovr.SentOKFlag!=0) then begin res = false; end;
-		case "ReceiveUser":
-			if(StockMovr.OKFlag!=0) then begin res = false; end;	
     case "Comment":
       res = true;
     otherwise
@@ -978,8 +937,6 @@ BEGIN
 	 if (currentuser=="SAUNOK") then begin
 		res = true;
 	 end;
-	 if(fieldname=="SendUser" and StockMovr.SentOKFlag!=0) then begin res = false; end;
-	 if(fieldname=="ReceiveUser" and StockMovr.OKFlag!=0) then begin res = false; end;
   StockMovDClassActiveEditField = res;
   RETURN;
 END;
