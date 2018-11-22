@@ -384,6 +384,7 @@ begin
 	 SString(31191,"Видалено");
 	 SString(31192,"Недопустимое количество товара при создании реализации");
 	 SString(31193,"Введите реальную Карту лояльности или поставте клинта NONAME");
+	 SString(31194,"Некорректный ввод");
 	 
 	Maintenance("CloseNPShipment",FixItemCostVClass,CloseNPShipment,modNPost);
 	

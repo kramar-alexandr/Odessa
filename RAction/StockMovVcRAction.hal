@@ -2187,7 +2187,8 @@ BEGIN
   string 255 errorstr,fieldstr;
   Integer rownr;
   Boolean UnOKedCheckSerialf;
-
+  record UserVc Ur;
+	
   res = 0;
   StockMovSumUp(SMp); //Edit***************************Sasha2,10:12 25.02.2015
   oldnr = SMp.SerNr;
@@ -2198,6 +2199,18 @@ BEGIN
     RecordCheckError(error,errorstr,rownr,fieldstr);
     goto LStockMovVcRecordCheck;
   end;
+	Ur.Code = SMp.SendUser;
+	if(SM2p.SentOKFlag==0 and SMp.SentOKFlag!=0 and !readfirstmain(Ur,1,true)) then begin
+		res = -1;
+    RecordCheckError(31194,"",-1,"SendUser");
+    goto LStockMovVcRecordCheck;
+	end;
+	Ur.Code = SMp.ReceiveUser;
+	if(SM2p.OKFlag==0 and SMp.OKFlag!=0 and !readfirstmain(Ur,1,true)) then begin
+		res = -1;
+    RecordCheckError(31194,"",-1,"ReceiveUser");
+    goto LStockMovVcRecordCheck;
+	end;
 LStockMovVcRecordCheck:;
   if (res!=0) then begin 
     SMp.SerNr = oldnr; 
