@@ -160,11 +160,11 @@ begin
 	OutString(160,0,"Условия доставки",false);
 	OutString(210,0,"Способ оплаты",false);
     OutString(260,0,USetStr(2586),false);
-	OutString(380,0,"Маршрут",false);// Edit ************************** BPI Ukraine - KramarAlexandr - понеділок, 8 січня 2018 р. о 13:58:11
-    OutStringAdjustBiDi(400,0,"Себестоимость",false,M4Val,520);
-	OutString(430,0,"Сумма по заказу",false);
+	OutString(320,0,"Маршрут",false);// Edit ************************** BPI Ukraine - KramarAlexandr - понеділок, 8 січня 2018 р. о 13:58:11
+    OutStringAdjustBiDi(370,0,"Себестоимость",false,M4Val,520);
+	OutString(400,0,"Сумма по заказу",false);
+	OutString(450,0,"Утверждение",true); //Edit_________________ABR 29.11.18 10:45	
     OutString(1,0,"Готов к сборке",true);// Edit ************************** BPI Ukraine - KramarAlexandr - понеділок, 8 січня 2018 р. о 13:58:13
-	OutString(480,0,"Утверждение",true); //Edit_________________ABR 29.11.18 10:45	
     EndFormat;
   end;
   if RepSpec.ArtMode==1 then begin
@@ -176,11 +176,11 @@ begin
 	OutString(160,0,"Условия доставки",false);
 	OutString(210,0,"Способ оплаты",false);
     OutString(260,0,USetStr(2586),false);
-	OutString(380,0,"Маршрут",false);// Edit ************************** BPI Ukraine - KramarAlexandr - понеділок, 8 січня 2018 р. о 13:58:11
-    OutStringAdjustBiDi(420,0,USetStr(2590),true,M4Val,460);
-    OutStringAdjustBiDi(420,0,USetStr(2591),true,M4Val,520);
+	OutString(280,0,"Маршрут",false);// Edit ************************** BPI Ukraine - KramarAlexandr - понеділок, 8 січня 2018 р. о 13:58:11
+    OutStringAdjustBiDi(340,0,USetStr(2590),true,M4Val,460);
+    OutStringAdjustBiDi(340,0,USetStr(2591),true,M4Val,520);
+		OutString(450,0,"Утверждение",true); //Edit_________________ABR 29.11.18 10:45	
     OutString(1,0,"Готов к сборке",true);// Edit ************************** BPI Ukraine - KramarAlexandr - понеділок, 8 січня 2018 р. о 13:58:13
-		OutString(480,0,"Утверждение",true); //Edit_________________ABR 29.11.18 10:45
 		
 		
     EndFormat;
@@ -372,16 +372,15 @@ begin
 		OutString(160,0,ORr.ShipMode,false);
 		OutString(210,0,ORr.NewPD,false);
         OutString(260,0,SHr.Addr0,false);        
-        OutString(380,0,SHr.Sorting,false);// Edit *******************
-		 OutValBiDi(400,0,rowt,M4Val,false,520);
-		OutString(430,0,ORr.Sum4,false);
-    	OutString(1,0,Shr.Assembly,true);// Edit ************************** BPI Ukraine - KramarAlexandr - понеділок, 8 січня 2018 р. о 13:58:13
+        OutString(320,0,SHr.Sorting,false);// Edit *******************
+		 OutValBiDi(370,0,rowt,M4Val,false,520);
+		OutString(400,0,ORr.Sum4,false);
 			if(Shr.OKFlag!=0) then begin
-				OutString(480,0,"1",true); //Edit_________________ABR 29.11.18 10:45
+				OutString(450,0,"1",true); //Edit_________________ABR 29.11.18 10:45
 			end else begin 
-				OutString(480,0,"0",true); //Edit_________________ABR 29.11.18 10:45
+				OutString(450,0,"0",true); //Edit_________________ABR 29.11.18 10:45
 			end;	
-        
+        OutString(1,0,Shr.Assembly,true);// Edit ************************** BPI Ukraine - KramarAlexandr - понеділок, 8 січня 2018 р. о 13:58:13
         EndFormat;
         sht = sht + rowt;
         ORr.SerNr = SHr.OrderNr;
