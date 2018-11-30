@@ -57,7 +57,7 @@ remote procedure HandleSetEAN13PU(var record PUVc); //Edit**********************
 remote procedure HandlePrintEAN13PU(record PUVc,var array record PUVc,var array integer); //Edit***************************Sasha2,16:15 26.01.2015
 
 forward function Boolean PUDClassSwitchRow(Integer,Integer);
-external procedure PrintEAN13StockMovDsm();
+external procedure PrintEAN13StockMovDsm();//Edit_________________ABR//Edit_________________ABR
 external procedure Zebra_Printing(record RcVc);
 external function Boolean PUVcRowEFActiveCheck(string,Integer,Integer,Integer);
 external function Boolean PUVcEFActiveTest(Integer,Integer,record PUVc);
@@ -66,7 +66,7 @@ remote procedure CrConsigSaleSumUp(var record ConsSaleVc);
 external function Boolean IVCashDClassAfterEditField(Integer,string,Integer,Integer,Integer);
 
 
-SetLangMode(LangRussian,"RUS",0);	
+SetLangMode(LangRussian,"RUS",0);	//Edit_________________ABR//Edit_________________ABR
 
 function val UnitCalcQty(string Unittext,val UnitXval,val UnitYval,val UnitZval,val defqty)
 BEGIN
@@ -1032,7 +1032,7 @@ BEGIN
   Boolean res;
 
   if (currentuser!="SAUNOK") then begin //Edit-------------------Vitalii 10:43 25.12.2015
-	  switch (fieldname) begin
+	  switch (fieldname) begin//Edit_________________ABR//Edit_________________ABR
 		case "Location": res = PUDClassLocationEFAfter(wn,rownr,changed!=0);
 		case "CostPrice": res = PUDClassCostPriceEFAfter(wn,fn,rownr,changed);
 		case "BaseRate2": res = PUDClassBaseRate2EFAfter(wn,fn,rownr,changed);
@@ -1626,7 +1626,7 @@ begin
   return;
 end;
 
-global
+global//Edit_________________ABR//Edit_________________ABR
 procedure DblPU(string dblstr,string l,Integer currepwn)
 begin
   Integer wn;

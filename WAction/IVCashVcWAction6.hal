@@ -69,7 +69,7 @@ external function Integer OpenCCPayWindow(string,longint,integer,val,val,val,str
                           string,string,string,string,string,string,
                           string,Integer);
 external procedure PCEftpos_Transaction_Request(Integer,val,val,Boolean,string,string,string);
-external procedure IVFinishAndPrint();
+external procedure IVFinishAndPrint();//Edit_________________ABR//Edit_________________ABR
 external procedure DisplayIVItem(record IVVc,Integer);//Edit----------------------Dima  24.11.2015
 external procedure IVVcRecordDuplicateDo(var record IVVc,Boolean,Boolean);
  external procedure IVDClassToolIVReturn();
@@ -1300,7 +1300,7 @@ begin
   row IVVc IVrw;
   val paidSum;//Begin Edit by Victor 12.11.14
   
-  paidSum = 0;  
+  paidSum = 0;  //Edit_________________ABR//Edit_________________ABR
   wn = CurWindow;
   DeselectWindow(wn,true);
   mwn = MotherWindow(wn);
@@ -1520,7 +1520,7 @@ LProceedCashPayTouchScreenDClass:;
   //WindowFieldGoto(mwn,RepSpec,-1,"ivcashcommand",true);
   WindowFieldGotoForTouchScreen(mwn,-1,"ivcashcommand",true);
 
-LProceedCashPayTouchScreenDClass1:;  
+LProceedCashPayTouchScreenDClass1:; //Edit_________________ABR//Edit_________________ABR 
 	return;
 end;
 
@@ -2548,14 +2548,14 @@ begin
         IVVc_PasteLoyaltyCardNr(IVr,LMb);
         IVSumup(IVr,true);
 //      IVSumupSoftEditFields(mwn,IVr);
-				rownr = SelectedListLine(mwn);
+				rownr = SelectedListLine(mwn);//Edit_________________ABR//Edit_________________ABR
 				if (rownr<0 or rownr>MatRowCnt(IVr)-1) then begin
 					rownr = MatRowCnt(IVr)-1;
 					if(rownr<0)then begin
 						rownr = 0;//FIX Edit ************************** Monday, 14 December 2015 15:09:00
 					end;
 				end;
-				DisplayIVItem(IVr,rownr);
+				DisplayIVItem(IVr,rownr);//Edit_________________ABR//Edit_________________ABR
         PutWindowRecord(mwn,IVr);
         
 //        WindowDoOK(mwn,0);
@@ -2611,7 +2611,7 @@ begin
 end;
 
 global
-updating procedure ProceedRetFromCheckNPTSSClassExecute(Integer wn)
+updating procedure ProceedRetFromCheckNPTSSClassExecute(Integer wn)//Edit_________________ABR//Edit_________________ABR
 begin
   Integer mwn,rownr,rwcnt,i;
   record RcVc RepSpec;
@@ -2659,7 +2659,7 @@ end;
 
 
 global
-updating procedure ProceedRetFromCheckNPTSSClass()
+updating procedure ProceedRetFromCheckNPTSSClass()//Edit_________________ABR//Edit_________________ABR
 begin  
   ProceedRetFromCheckNPTSSClassExecute(CurWindow);
   return;

@@ -1,8 +1,8 @@
 remote procedure RecalcDiscountORD(var record ORVc);
-remote updating	procedure	CrConsigIn(record ConsignationVc,var array val);
-remote updating	procedure	CrConsigBrak(record ConsignationVc,var array val);
-remote updating	procedure	CrConsigSale(record ConsignationVc,var array val);
-remote updating	procedure	CrConsigAll(record ConsignationVc);
+remote updating	procedure	CrConsigIn(record ConsignationVc,var array val);//Edit_________________ABR//Edit_________________ABR
+remote updating	procedure	CrConsigBrak(record ConsignationVc,var array val);//Edit_________________ABR//Edit_________________ABR
+remote updating	procedure	CrConsigSale(record ConsignationVc,var array val);//Edit_________________ABR//Edit_________________ABR
+remote updating	procedure	CrConsigAll(record ConsignationVc);//Edit_________________ABR//Edit_________________ABR
 
 
 
@@ -74,7 +74,7 @@ BEGIN
 END;
 
 
-global 
+global //Edit_________________ABR//Edit_________________ABR
 updating procedure CrConsigInDsm()
 BEGIN
 	integer wn,i,rwcnt,mtrw;
@@ -90,7 +90,7 @@ BEGIN
  RETURN;
 END;
 
-global 
+global //Edit_________________ABR//Edit_________________ABR
 updating procedure CrConsigBrakDsm()
 BEGIN
 	integer wn,i,rwcnt,mtrw;
@@ -106,7 +106,7 @@ BEGIN
  RETURN;
 END;
 
-global 
+global //Edit_________________ABR//Edit_________________ABR
 updating procedure CrConsigSaleDsm()
 BEGIN
 	integer wn,i,rwcnt,mtrw;
@@ -122,7 +122,7 @@ BEGIN
  RETURN;
 END;
 
-global 
+global //Edit_________________ABR//Edit_________________ABR
 updating procedure CrConsigAllDsm()
 BEGIN
 	integer wn,i,rwcnt,mtrw;

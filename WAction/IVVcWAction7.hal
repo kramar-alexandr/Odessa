@@ -58,12 +58,12 @@ external procedure OpenGiftVoucherSalesTouchScreenDClass(Integer,string,string);
 external procedure OpenNPTSCashPaymentTClass(Integer,LongInt,val,val,string,string,string);
 external procedure OpenGiftVoucherTouchScreenDClass(Integer,Integer,LongInt,val,val,string,string,string);
 external procedure SetPOSWindowDisplay(string,string);
-external procedure SetPOSWindowDisplay_SendToSerialPortDevicesTotalSum(string);
+external procedure SetPOSWindowDisplay_SendToSerialPortDevicesTotalSum(string);//Edit_________________ABR//Edit_________________ABR
 external procedure M4PadString(string,Integer,string,Boolean,var string);
 remote procedure IVSumup(var record IVVc,Boolean);
 external function integer GetSelectedPOSItemRowIndex(integer);
 external procedure NPTSSearchItemExecute(Integer); //больше не используется
-forward procedure IV_CreateReportForSearch();
+forward procedure IV_CreateReportForSearch();//Edit_________________ABR//Edit_________________ABR
 forward procedure PCIdbl(string, string,Integer);
 remote function Boolean IVVc_PasteQuantity(var record IVVc,Integer);
 external procedure IVDClass_RefreshStringList(Integer,record IVVc);
@@ -81,7 +81,7 @@ remote procedure SendToServerArtCode(string,string,string);// Edit *************
 remote function Boolean FindRebateVoucherForReturnIV(var record IVVc); //Edit***************************Sasha2,16:49 08.06.2017
 remote procedure IVVcRebCodeCound(var record IVVc);// Edit ************************** BPI Ukraine - KramarAlexandr - Thursday, 22 February 2018 11:36:52
 
-global updating procedure LogoffKassir()
+global updating procedure LogoffKassir()//Edit_________________ABR//Edit_________________ABR
 begin
 record LocalMachineBlock LMb;
 record KassirLoginVc KLr,newKLr;
@@ -107,7 +107,7 @@ blockload(LMb);
 return;
 end;
 
-global updating procedure DoLogoffKassir()
+global updating procedure DoLogoffKassir()//Edit_________________ABR//Edit_________________ABR
 begin
 integer wn,mwn;
 
@@ -120,7 +120,7 @@ closewindow(wn);
 return;
 end;
 
-global updating procedure LoginKassir(string user)
+global updating procedure LoginKassir(string user)//Edit_________________ABR//Edit_________________ABR
 begin
 record LocalMachineBlock LMb;
 record KassirLoginVc KLr,newKLr;
@@ -141,7 +141,7 @@ blockload(LMb);
 return;
 end;
 
-global updating procedure ProceedLoginKassir()
+global updating procedure ProceedLoginKassir()//Edit_________________ABR//Edit_________________ABR
 begin
 	integer wn,mwn;
 	record RcVc RepSpec;
@@ -192,7 +192,7 @@ lProceedLoginKassir:;
 return;
 end;
 
-global updating procedure CancelLoginKassir()
+global updating procedure CancelLoginKassir()//Edit_________________ABR//Edit_________________ABR
 begin
 	integer wn;
 	wn = curwindow;
@@ -240,7 +240,7 @@ begin
   return;
 end; //Edit***************************Sasha2,15:53 08.06.2017 }
 
-global updating procedure DoInsertPromoCodeProceed()
+global updating procedure DoInsertPromoCodeProceed()//Edit_________________ABR//Edit_________________ABR
 begin
 	integer wn,mwn;
 	record RcVc RepSpec;
@@ -274,7 +274,7 @@ lDoInsertPromoCodeProceed:;
 return;
 end;
 
-global updating procedure DoInsertAkciaCodeProceed()
+global updating procedure DoInsertAkciaCodeProceed()//Edit_________________ABR//Edit_________________ABR
 begin
 	integer wn,mwn;
 	record RcVc RepSpec;
@@ -306,7 +306,7 @@ lDoInsertAkciaCodeProceed:;
 return;
 end;
 
-global procedure DoInsertPromoCode()
+global procedure DoInsertPromoCode()//Edit_________________ABR//Edit_________________ABR
 begin
 	record RcVc RepSpec;
 	integer nwn,mwn;
@@ -318,7 +318,7 @@ begin
 return;
 end;
 
-global procedure DoInsertAkciaCode()
+global procedure DoInsertAkciaCode()//Edit_________________ABR//Edit_________________ABR
 begin
 	record RcVc RepSpec;
 	integer nwn,mwn;
@@ -620,7 +620,7 @@ begin
       end;
     end else begin
       if (IVVc_PasteArtCode(IVr,rownr,warning,inwarning,TouchScreenLook,sernrf)) then begin
-        if (nonblank(warning)) then begin
+        if (nonblank(warning)) then begin//Edit_________________ABR//Edit_________________ABR
           MessageBox(0,warning);
         end;
         if (nonblank(inwarning)) then begin
@@ -703,7 +703,7 @@ end;
 
 
 global
-procedure IVDClassTouchScreenRetIVfromCheck()
+procedure IVDClassTouchScreenRetIVfromCheck()//Edit_________________ABR//Edit_________________ABR
 begin
   Integer wn,mwn,line,rownr;
   record RcVc RepSpec;
@@ -792,7 +792,7 @@ begin
 end;
 
 global
-procedure ChangeObjects(string New_Obj)
+procedure ChangeObjects(string New_Obj)//Edit_________________ABR//Edit_________________ABR
 begin
 	integer	wn;
 	record IVVc	IVr;
@@ -1065,7 +1065,7 @@ begin
         nwn = OpenWindow("NPTSSearchBFCURClass",0,wn,"","",RepSpec);
         WindowFieldGoto(nwn,RepSpec,-1,"f1",true);
         goto LIVDClassTouchScreenPasteButtonDo;
-      case 200:
+      case 200://Edit_________________ABR//Edit_________________ABR
         DoLoginKassir;
         goto LIVDClassTouchScreenPasteButtonDo;
       case 201:
@@ -1082,7 +1082,7 @@ begin
 				goto LIVDClassTouchScreenPasteButtonDo;
 			case 205:
 				IVDClassTouchScreenRetIVfromCheck;
-				goto LIVDClassTouchScreenPasteButtonDo;
+				goto LIVDClassTouchScreenPasteButtonDo;//Edit_________________ABR//Edit_________________ABR
     end;
   end;
 LIVDClassTouchScreenPasteButtonDo:;
@@ -1311,8 +1311,8 @@ updating procedure IVDClassTouchScreenDeleteItem()
 begin
   Integer wn,matrowix;
   record IVVc IVr;
-	row IVVc IVrw;
-	integer i, rwcnt;
+	row IVVc IVrw;//Edit_________________ABR//Edit_________________ABR
+	integer i, rwcnt;//Edit_________________ABR//Edit_________________ABR
 
   wn = CurWindow;
   if (SelectedListLine(wn)>=0) then begin
@@ -1336,8 +1336,8 @@ begin
         MatRowDelete(IVr,matrowix);
         IVVcRebCodeCound(IVr);// Edit ************************** BPI Ukraine - KramarAlexandr - Thursday, 22 February 2018 11:40:40
         IVSumup(IVr,true);
-				rwcnt = matrowcnt(IVr);
-				for (i=rwcnt;i>=0;i=i-1) begin
+				rwcnt = matrowcnt(IVr);//Edit_________________ABR//Edit_________________ABR
+				for (i=rwcnt;i>=0;i=i-1) begin//Edit_________________ABR//Edit_________________ABR
 					matrowget(IVr,i,IVrw);
 					if(IVrw.stp==0)then begin 
 						MatRowDelete(IVr,i); 
@@ -1929,14 +1929,14 @@ begin
 LkInvoiceRowTypeNormal1:;
         tstr = ValToString(IVrw.Quant,M4UVal,"",".",0) & "*" & ValToString(IVrw.Price,M4Val,"",".",0)  & " (" & IVrw.Quant*IVrw.Price & ")";	//Edit----------------------Dima  05.03.2015
         
-        if (nonblank(IVrw.vRebate)) then begin
+        if (nonblank(IVrw.vRebate)) then begin//Edit_________________ABR//Edit_________________ABR
 					tstr = tstr & "  " & ValToString(IVrw.vRebate,M4UVal,"",".",0) & "%";
 					tstr = tstr & "  (" & IVrw.Price*IVrw.Quant*IVrw.vRebate/100 & ") ";
 				end;
         
         M4PadString(ValToString(IVrw.Sum,M4Val,"",".",0),50-len(tstr)," ",true,t2);	//Edit----------------------Dima  19.02.2015
         tstr = tstr & t2; 
-        totalString = ValToString(IVr.Sum4,M4Val,ThousandSeparator,DecimalSeparator,0); 
+        totalString = ValToString(IVr.Sum4,M4Val,ThousandSeparator,DecimalSeparator,0);//Edit_________________ABR//Edit_________________ABR 
 //        SetPOSWindowDisplay(IVrw.ArtCode & " " & IVrw.Spec,tstr);
 				SendToServerArtCode(IVrw.ArtCode,currentuser,curmachinename);// Edit ************************** Tuesday, 11 April 2017 16:46:36
         //For WebImages!!!

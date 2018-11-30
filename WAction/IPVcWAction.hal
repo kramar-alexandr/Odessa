@@ -23,7 +23,7 @@ external function Integer GetVATLaw();
 remote procedure IPVc_PasteBankCurncy(var record IPVc,Integer);
 external updating procedure RecLAction_rlIPDPrint(record RcVc,var record IPVc,Boolean);
 remote function Boolean PasteInvIn2IPr(var record IPVc,Integer,Date,var val,Boolean,var Boolean);
-remote procedure OPExpandPay(var record OPVc,Integer);
+remote procedure OPExpandPay(var record OPVc,Integer);//Edit_________________ABR//Edit_________________ABR
 
 global
 procedure IPSumup(var record IPVc IPr)
@@ -592,7 +592,7 @@ begin
 return;
 end;
 
-function Boolean IPDClassTakeOnRateEFAfter(Integer wn,Integer changed)
+function Boolean IPDClassTakeOnRateEFAfter(Integer wn,Integer changed)//Edit_________________ABR//Edit_________________ABR
 begin  
   record IPVc IPr;
 	boolean res;

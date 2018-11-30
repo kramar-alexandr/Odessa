@@ -12,7 +12,7 @@ remote updating function LongInt RecordAction_raPastePUInVI(record PUVc,var reco
 external procedure RecordActionPU_Print(var record PUVc,string);
 remote function Integer SendForAcceptance_PUVc(var record PUVc,var record RcVc);
 
-SetLangMode(LangRussian,"RUS",0);
+SetLangMode(LangRussian,"RUS",0);	//Edit_________________ABR//Edit_________________ABR
 
 global
 procedure PrintPUL(Integer wn,Boolean previewf)
@@ -502,7 +502,7 @@ begin
 end;
 
 global
-function Boolean UserHasLimitedAccess(var string person,var string salesgroup)
+function Boolean UserHasLimitedAccess(var string person,var string salesgroup)//Edit_________________ABR//Edit_________________ABR
 BEGIN
   Boolean res;
   record UserVc Userr;
@@ -529,7 +529,7 @@ BEGIN
 END;
 
 global
-procedure ORJRClassReportDefaults(Integer wn)
+procedure ORJRClassReportDefaults(Integer wn)//Edit_________________ABR//Edit_________________ABR
 BEGIN
   record RcVc RepSpec;
   

@@ -775,7 +775,7 @@ begin
       res = false;
     end;
   end;
-  if (CurrentUser=="SA") then begin
+  if (CurrentUser=="SA") then begin//Edit_________________ABR//Edit_________________ABR
 		res = true;
 	end;
   

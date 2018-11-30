@@ -451,7 +451,7 @@ begin
   end;
 
   tstr = ValToString(IVrw.Quant,M4UVal,"",".",0) & "*" & ValToString(IVrw.Price,M4Val,"",".",0)  & " (" & IVrw.Quant*IVrw.Price & ")";	//Edit----------------------Dima  05.03.2015        
-  if (nonblank(IVrw.vRebate)) then begin
+  if (nonblank(IVrw.vRebate)) then begin//Edit_________________ABR//Edit_________________ABR
 			tstr = tstr & "  " & ValToString(IVrw.vRebate,M4UVal,"",".",0) & "%";		//Edit----------------------Dima  19.02.2015
 			tstr = tstr & "  (" & IVrw.Price*IVrw.Quant*IVrw.vRebate/100 & ") ";
 	end;       

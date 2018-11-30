@@ -68,7 +68,7 @@ external function Boolean SetUnitFactor(string,var val,val,val,val,var val,var v
 external function val CalculateSerialNrQuantity(string,string,string,Boolean,val,val,val,val);
 external procedure DisplayIVItem(record IVVc,Integer);
 remote procedure PastePDInInv(var record IVVc,string,Boolean);
-external function Boolean MakeFiscalReceipt(record IVVc);
+external function Boolean MakeFiscalReceipt(record IVVc);//Edit_________________ABR//Edit_________________ABR
 external function Boolean IVPrintReceipt(Integer,var record IVVc,var record IVVc,Integer,Boolean,Boolean,Integer,Integer); //Edit***************************Sasha2,16:59 17.08.2015
 external procedure IVVc_PastePosition(var record IVVc,string);	//Edit----------------------Dima  12.01.2016
 remote procedure IVVcRebCodeCound(var record IVVc); // Edit Dima ************* 2018-02-20 02:35 PM
@@ -439,7 +439,7 @@ begin
 //    DeselectWindow(wn,false);//what for ? 
     GetWindowRecord(wn,IVr);
     IVVc_PasteQuantity2(IVr,rownr,serportf,LSPDr);
-	IVVcRebCodeCound(IVr);
+	IVVcRebCodeCound(IVr);//Edit_________________ABR//Edit_________________ABR
     PutWindowRecord(wn,IVr);
     DisplayIVItem2(IVr,rownr,serportf,LSPDr);
   end;
@@ -1426,14 +1426,14 @@ LIVDClassivcashcommandOnEnterKey1:;
   WindowFieldGotoForTouchScreen(wn,-1,"ivcashcommand",false);
 LIVDClassivcashcommandOnEnterKey:;  
 	
-	logtext(0,"end " & getcurtick);
+	logtext(0,"end " & getcurtick);//Edit_________________ABR//Edit_________________ABR
   IVDClassivcashcommandOnEnterKey = res;
   return;
 end;
 
 
 global
-function Boolean IVDClassrebateserfOnEnterKey(Integer wn,Integer rownr)
+function Boolean IVDClassrebateserfOnEnterKey(Integer wn,Integer rownr)//Edit_________________ABR//Edit_________________ABR
 begin
 	record IVVc IVr;
 	

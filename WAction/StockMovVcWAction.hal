@@ -40,7 +40,7 @@ remote updating procedure StockMovBoxingQty(var record StockMovVc);// Edit *****
 
 
 
-	SetLangMode(LangRussian,"RUS",0);
+	SetLangMode(LangRussian,"RUS",0); //Edit____________________________________________________________ABR
 
 
 global
@@ -820,7 +820,7 @@ BEGIN
   Integer orwcnt,rwcnt;
   record LogisticsBlock Logisticsb;	//Edit----------------------Dima  25.01.2016
   
-  BlockLoad(Logisticsb);  
+  BlockLoad(Logisticsb);   //Edit_______________________________________________ABR
  
   res = true;
   GetWindowRecord(wn,StockMovr);   
@@ -828,7 +828,7 @@ BEGIN
   if(StockMovr.AutoCompliteFlag>0 and StockMovr.StopAutoComplite==0 and changed>0)then begin
   	res = false;
   	Messagebox(31156,"");
-  end;
+  end;	//Edit_______________________________________________________________________ABR
    
   GetPrevWindowRecord(wn,StockMov2r);
 
@@ -947,8 +947,8 @@ BEGIN
           res = false;
         end;
       end;
-    case "Comment":
-      res = true;
+    case "Comment": //Edit_______________________________________________________________________ABR______________ABR
+      res = true;//Edit_______________________________________________________________________ABR______________ABR_ABR
     otherwise
       switch (wnst) begin
         case Rs_update:
@@ -976,7 +976,7 @@ BEGIN
 	if(fieldname=="ReceiveUser" and StockMovr.OKFlag!=0) then begin res = false; end;	 
 	if (currentuser=="SAUNOK") then begin
 		res = true;
-	end;
+	end;//Edit_________________ABR//Edit_________________ABR//Edit_________________ABR
   StockMovDClassActiveEditField = res;
   RETURN;
 END;
@@ -1674,7 +1674,7 @@ begin
 return;
 end;
 
-global updating procedure BoxingStockMovItemDsm()
+global updating procedure BoxingStockMovItemDsm()//Edit_________________ABR//Edit_________________ABR//Edit_________________ABR
 begin
 	record StockMovVc SMr;
 	integer wn;

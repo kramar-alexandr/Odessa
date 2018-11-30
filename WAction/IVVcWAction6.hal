@@ -13,7 +13,7 @@ external function Boolean IVVc_PasteQuantity(var record IVVc,Integer);
 external procedure DisplayIVItem(record IVVc,Integer);
 external procedure IVPasteItem(string,Integer,LongInt);
 external function Integer ArgEInvLock(record IVVc,integer);
-remote procedure IVVcRebCodeCound(var record IVVc);
+remote procedure IVVcRebCodeCound(var record IVVc);//Edit_________________ABR//Edit_________________ABR
 
 global
 function Boolean IVDClassExportFlagButtonAfter(Integer wn,Boolean changedf)

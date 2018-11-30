@@ -48,13 +48,13 @@ external function Integer GetVATLaw();
 remote function Boolean ORVc_AllowSales(record ORVc,var Integer,var LongInt);
 external function Boolean UserCanChangePendingRecord(Integer);
 remote procedure GetFullCurncyRate (var string,Date,var val,var val,var val,var val,var val);// Edit ************************** Friday, 14 August 2015 15:52:58
-external function Boolean TouchScreenLook();
+external function Boolean TouchScreenLook();//Edit_________________ABR//Edit_________________ABR
 external updating function Boolean IVDClassBirthDayVaucherEFAfter(Integer,Boolean);// Edit ************************** Thursday, 1 December 2016 09:12:30
 external procedure IVDClass_RefreshStringList(Integer,record IVVc);
 external procedure WindowFieldGotoForTouchScreen(Integer,Integer,string,Boolean);
 
 
-SetLangMode(LangRussian,"RUS",0);
+SetLangMode(LangRussian,"RUS",0);//Edit_________________ABR//Edit_________________ABR
 
 global
 procedure RoundBelCash(string curncycode,var val rsum)
@@ -333,8 +333,8 @@ BEGIN
   sum = 0;
 
   if (ProgramType!=typStdAccounts) then begin
-  	Cur.Code = custcode;
-  	readfirstmain(CUr,1,true);
+  	Cur.Code = custcode;//Edit_________________ABR//Edit_________________ABR
+  	readfirstmain(CUr,1,true);//Edit_________________ABR//Edit_________________ABR
     ARPayr.CustCode = custcode;
     if (ReadFirstKey("CustCode",ARPayr,1,true)) then begin
 
@@ -350,7 +350,7 @@ BEGIN
     	end;// Edit ************************** Friday, 14 August 2015 15:51:05
 
 
-    	if(CUr.CustCat=="WEB")then begin
+    	if(CUr.CustCat=="WEB")then begin//Edit_________________ABR//Edit_________________ABR
     		if(sum>10)then begin
     		 MessageBox(0,USetStr(2025));
     		end;
@@ -382,20 +382,20 @@ global
 updating procedure IVFromORDsm()
 BEGIN
   record ORVc ORr;
-	row ORVc ORrw;
+	row ORVc ORrw;//Edit_________________ABR//Edit_________________ABR
   record IVVc IVr;
   Integer wn,r,nwn,rownr,rwcnt,i;
   Integer errcode,additionalday;
   Boolean testf;
   LongInt ErrorCode;
-	record RcVc RepSpec;
-	record RebateVoucherVc RVr;
+	record RcVc RepSpec;//Edit_________________ABR//Edit_________________ABR
+	record RebateVoucherVc RVr;//Edit_________________ABR//Edit_________________ABR
 
   wn = CurWindow;
   DeselectWindow(wn,false);
   if (WindowState(wn)==Rs_normal) then begin
     GetWindowRecord(wn,ORr);
-    	if(blank(ORr.NewPD) and blank(ORr.OrderClass))then begin
+    	if(blank(ORr.NewPD) and blank(ORr.OrderClass))then begin//Edit_________________ABR//Edit_________________ABR
     		if(usercanaction("UnOkAll",false)==false)then begin
     			messagebox(31182,"");
     			beep;
@@ -456,8 +456,8 @@ BEGIN
               nwn = OpenWindow("IVDClass",1,0,"","",IVr);
               UpdateBrowses("ORVc");
               IVOpenPrepExists(IVr.CustCode);
-							GetWindowRecord(nwn,IVr);
-							if(ORr.PromoCode>0)then begin
+							GetWindowRecord(nwn,IVr);//Edit_________________ABR//Edit_________________ABR
+							if(ORr.PromoCode>0)then begin//Edit_________________ABR//Edit_________________ABR
 								RVr.VoucherSerNr = ORr.PromoCode;
 								if(ReadFirstKey("VoucherSerNr",RVr,1,true))then begin
 									RVr.UsedFlag = 1;
@@ -497,7 +497,7 @@ BEGIN
     Beep;
   end;
   
-  lIVFromORDsm:;
+  lIVFromORDsm:;//Edit_________________ABR//Edit_________________ABR
   
   
   RETURN;
@@ -1326,7 +1326,8 @@ BEGIN
       if (ORr.OKFlag!=0) then begin
         switch (fieldname) begin
           case "LangCode": ;
-          case "PromotionCode": ;
+          case "PromotionCode": ;//Edit_________________ABR//Edit_________________ABR
+					
           otherwise
             res = false;
             goto LORDClassActiveEditField;
@@ -1377,7 +1378,7 @@ BEGIN
       if (UserCanAction("ChangeUnitPrices",true)==false) then begin res = false; end;
     case "RRPPrice":
       if (UserCanAction("ViewCostPrice",true)==false) then begin res = false; end;// Edit ************************** Wednesday, 13 July 2016 14:03:16
-    case "vRebate":
+    case "vRebate"://Edit_________________ABR//Edit_________________ABR
       if (UserCanAction("ChangeUnitPrices",true)==false) then begin res = false; end;
     case "Sum":
       if (UserCanAction("ChangeUnitPrices",true)==false) then begin res = false; end;
@@ -1411,7 +1412,7 @@ BEGIN
       end else begin
         if (UserCanAction("ChangeORItemSpec",true)==false) then begin res = false; end;
       end;
-    case "PromotionCode": res = true;
+    case "PromotionCode": res = true;//Edit_________________ABR//Edit_________________ABR
   end;
   
   if(res and ORr.SerNr>0 and usercanaction("AllowEditORwithIV",false)==false)then begin// Edit ************************** Wednesday, 16 August 2017 10:03:43
@@ -1464,7 +1465,7 @@ BEGIN
     if (OR2r.OKFlag!=0) then begin
       switch (fieldname) begin
         case "PlanShip": res = true;
-        case "PromotionCode": res = true;
+        case "PromotionCode": res = true;//Edit_________________ABR//Edit_________________ABR
         otherwise res = false;
       end;
       if (rownr>=0) then begin
@@ -1492,7 +1493,7 @@ BEGIN
     end;
   end;
    
-  if (res == true and fieldname=="ProcessingQuant" and Logisticsb.AllowChangeFields==0) then begin
+  if (res == true and fieldname=="ProcessingQuant" and Logisticsb.AllowChangeFields==0) then begin//Edit_________________ABR//Edit_________________ABR
   	res = false;
   end;
   
@@ -1948,7 +1949,7 @@ BEGIN
   if (ORr.OKFlag!=0) then begin
     res = false;
   end;
-  if (ORr.Closed!=0) then begin
+  if (ORr.Closed!=0) then begin//Edit_________________ABR//Edit_________________ABR
     res = false;
   end;
   if (UserCanAction("ChangeReserved",true)==false) then begin
@@ -1960,7 +1961,7 @@ END;
 
 
 global
-function Boolean ORDClassPrepaymentReceivedButtonAction(Integer wn,Integer value)
+function Boolean ORDClassPrepaymentReceivedButtonAction(Integer wn,Integer value)//Edit_________________ABR//Edit_________________ABR
 BEGIN
   Boolean res;
   record ORVc ORr;
@@ -1977,7 +1978,7 @@ BEGIN
   RETURN;
 END;
 
-global
+global//Edit_________________ABR//Edit_________________ABR
 function Boolean ORDClassPrivatePaymentRecButtonAction(Integer wn,Integer value)
 BEGIN
   Boolean res;

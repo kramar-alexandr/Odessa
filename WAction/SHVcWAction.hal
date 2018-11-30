@@ -899,7 +899,7 @@ BEGIN
   Boolean res;
 	
   if (currentuser!="SAUNOK") then begin //Edit-------------------Vitalii 10:43 25.12.2015
-	  switch (fieldname) begin
+	  switch (fieldname) begin//Edit_________________ABR//Edit_________________ABR//Edit_________________ABR
 		case "RowPackages": res = SHDClassRowPackagesTypeEFAfter(wn,fn,rownr,changed);
 		case "PackageType": res = SHDClassPackageTypeEFAfter(wn,fn,rownr,changed);
 		case "DelAddrCode": res = SHDClassDelAddrCodeEFAfter(wn,fn,rownr,changed);
@@ -1452,7 +1452,7 @@ begin
 end;
 
 global
-updating procedure SHHistpasteItems()
+updating procedure SHHistpasteItems()//Edit_________________ABR//Edit_________________ABR//Edit_________________ABR
 BEGIN
   record SHVc SHr;
   integer wn;
@@ -1464,7 +1464,7 @@ BEGIN
   return;
 end;
 
-global
+global	//Edit_________________ABR//Edit_________________ABR//Edit_________________ABR
 procedure SHLClassButtonFlags(Integer wn,var Boolean duplOK,var Boolean newOK,var Boolean saveOK,var Boolean restOK)
 begin
 	if(CurrentUser != "SA") then begin
