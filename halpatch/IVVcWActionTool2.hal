@@ -408,7 +408,7 @@ BEGIN
         end;
         BlockLoad(DefCashRec);
         //IVrw.PayMode = DefCashRec.DefGCRPayMode;// Edit ************************** Monday, 22 February 2016 10:34:51
-        //IVrw.VATCode = DefCashRec.DefGCRVATCode;          
+        //IVrw.VATCode = DefCashRec.DefGCRVATCode;       //Edit_________________ABR//Edit_________________ABR   
         IVrw.Spec = GCSr.Comment;
         if (GetPMRow(IVrw.PayMode,PMrw)) then begin end;
         IVrw.SalesAcc = PMrw.AccNr;

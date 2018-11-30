@@ -751,7 +751,7 @@ begin
   if (blank(IVr.Location)) then begin
     IVr.Location = LMb.DefLocation;
     IVr.PromotionCode2 = LookUpPromotionCode(IVr.InvDate,IVr.Location); //Edit***************************Sasha2,15:32 24.01.2017
-  end else begin
+  end else begin//Edit_________________ABR//Edit_________________ABR
 		IVr.PromotionCode2 = LookUpPromotionCode(IVr.InvDate,IVr.Location);// Edit ************************** Tuesday, 21 February 2017 18:47:28
   end;
   IVr.BranchID = LMb.BranchID;
@@ -776,8 +776,8 @@ begin
   end;
   
 	if (LMb.NotPutFiscalFlag==0) then begin		//Edit----------------------Dima  17.02.2016
-  	IVr.FiscalFlag = 1; 
-  end;	
+  	IVr.FiscalFlag = 1; //Edit_________________ABR//Edit_________________ABR
+  end;	//Edit_________________ABR//Edit_________________ABR
   
   IVDefaultsClient = res;
   RETURN;

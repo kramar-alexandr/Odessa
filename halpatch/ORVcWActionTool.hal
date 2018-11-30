@@ -19,7 +19,7 @@ external procedure GetUserObject(string,var string);
 external procedure RemoveOldPersObjects(string,var string);
 external function val DivRateToBase1(string,val,val,val,val,val,val,roundmode);
 external procedure GetSalesGroup(string,var string);
-external procedure GetPriceList(string,Date,Time,var string,var Integer);
+external procedure GetPriceList(string,Date,Time,var string,var Integer);//Edit_________________ABR//Edit_________________ABR
 external procedure GetItemVATCode(string,Integer,var string,Boolean);
 external procedure RemoveOldCustObjects(string,var string);
 external procedure SetSalesMan(var string,string);
@@ -68,7 +68,7 @@ external procedure SetNewORCustomStatusFlagOnWeb(record ORVc);// Edit **********
 external procedure CreateORHistoryVcFromORVc(record ORVc,record ORVc,boolean);// Edit ************************** Wednesday, 1 March 2017 10:54:05
 external procedure ExtractObjWithSeparator(string,string,Boolean,var Integer,var string); //Edit***************************Sasha2,11:03 14.01.2015
 
-SetLangMode(LangRussian,"RUS",0);
+SetLangMode(LangRussian,"RUS",0);//Edit_________________ABR//Edit_________________ABR
 
 
 global
@@ -177,11 +177,11 @@ BEGIN
       warning = USetStr(ErrorCode);
     end;
     
-    PLr.PLCode = "RRP";
-    PLr.ArtCode = ORRw.ArtCode;
-    if(readfirstmain(PLr,2,true))then begin
-    	ORRw.RRPPrice = PLr.ExVatPrice;
-    end;
+    PLr.PLCode = "RRP";//Edit_________________ABR//Edit_________________ABR
+    PLr.ArtCode = ORRw.ArtCode;//Edit_________________ABR//Edit_________________ABR
+    if(readfirstmain(PLr,2,true))then begin//Edit_________________ABR//Edit_________________ABR
+    	ORRw.RRPPrice = PLr.ExVatPrice;//Edit_________________ABR//Edit_________________ABR
+    end;//Edit_________________ABR//Edit_________________ABR
     
     ORrw.OrderType = ORr.OrderType;
     ORrw.Price = price;
@@ -343,7 +343,7 @@ BEGIN
 	val remqty;
 	record RebVc Rebr;// Edit ************************** BPI Ukraine - KramarAlexandr - Tuesday, 5 December 2017 10:36:04
 	row RebVc Rebrw;// Edit ************************** BPI Ukraine - KramarAlexandr - Tuesday, 5 December 2017 10:41:41
-	integer mtrw,i,j;
+	integer mtrw,i,j;//Edit_________________ABR//Edit_________________ABR
 	
   MatRowGet(ORr,rownr,ORrw);
   location = ORrw.Location;
@@ -412,9 +412,9 @@ BEGIN
       end;
     end;
     //ORrw.vRebate = vreb;// Edit ************************** Wednesday, 18 January 2017 17:19:58
-    if(blank(ORr.OrderClass))then begin
-    	ORrw.vRebate = vreb;
-    end;
+    if(blank(ORr.OrderClass))then begin//Edit_________________ABR//Edit_________________ABR
+    	ORrw.vRebate = vreb;//Edit_________________ABR//Edit_________________ABR
+    end;//Edit_________________ABR//Edit_________________ABR
     // Edit Start ---------------------------------------------- Edit Start
 	//Tuesday, 5 December 2017 10:46:23
 		
@@ -736,8 +736,8 @@ procedure ORVc_PasteOrdDate(var record ORVc ORp)
 BEGIN
   record OrdSettBlock OSbr;
   LongInt week;
-  date d;
-  Time blankt;
+  date d;//Edit_________________ABR//Edit_________________ABR
+  Time blankt;//Edit_________________ABR//Edit_________________ABR
 
   BlockLoad(OSbr);
   ORGetRate(ORp);
@@ -745,7 +745,7 @@ BEGIN
     ORp.DespatchDate = ORp.OrdDate;
   end;
   ORUpdateTax1Reb(ORp,ORp.OrdDate);
-  GetPriceList(ORp.CustCat,ORp.OrdDate,blankt,ORp.PriceList,ORp.InclVAT);
+  GetPriceList(ORp.CustCat,ORp.OrdDate,blankt,ORp.PriceList,ORp.InclVAT);//Edit_________________ABR//Edit_________________ABR
   ORSumup(ORp);
   RETURN;
 END;
@@ -792,10 +792,10 @@ BEGIN
   end;
   rwcnt = MatRowCnt(ORp);
   if(ORp.OrderClass=="WEB")then begin// Edit ************************** Monday, 19 December 2016 15:33:43
-  	if(blank(ORp.RebCode))then begin
-  		ORp.RebCode = "0%";
-  	end;
-  end;
+  	if(blank(ORp.RebCode))then begin//Edit_________________ABR//Edit_________________ABR
+  		ORp.RebCode = "0%";//Edit_________________ABR//Edit_________________ABR
+  	end;//Edit_________________ABR//Edit_________________ABR
+  end;//Edit_________________ABR//Edit_________________ABR
   for (i=0;i<rwcnt;i=i+1) begin
     MatRowGet(ORp,i,ORrw);
     if (nonblank(ORrw.ArtCode)) then begin
@@ -1146,18 +1146,18 @@ BEGIN
   record RebVc Rebr;
   record CUVc CUr;
   record UserVc Userr;
-  string 255 tstr,tstr2,oldpricelist;
+  string 255 tstr,tstr2,oldpricelist;//Edit_________________ABR//Edit_________________ABR
   val bal,limit;
-  Integer InclVAT;
+  Integer InclVAT;//Edit_________________ABR//Edit_________________ABR
   record FreightBlock FreightRec;
   record INVc INr;
   record CCatVc CCatr;
   Boolean limitdaysf;
-  Time blankt;
+  Time blankt;//Edit_________________ABR//Edit_________________ABR
   
   warning = "";
   errstr = "";
-  oldpricelist = ORp.PriceList;
+  oldpricelist = ORp.PriceList;//Edit_________________ABR//Edit_________________ABR
   if ((efstr!=custcode) and (nonblank(efstr))) then begin
     tstr = ORp.Objects;
     RemoveOldCustObjects(efstr,ORp.Objects);
@@ -1219,8 +1219,8 @@ BEGIN
       ORp.DelCountry = "";
     end;
     if (CUr.CustCat=="WEB" or CUr.CustCat=="RETAI") then begin		//Edit----------------------Dima  18.12.2015
-    	ORp.OrderClass = CUr.CustCat;
-    end;
+    	ORp.OrderClass = CUr.CustCat;//Edit_________________ABR//Edit_________________ABR
+    end;//Edit_________________ABR//Edit_________________ABR
     ORp.Region = CUr.Region;
     ORp.Sorting = FindCustRoute(ORp.CustCode,ORp.Location,ORp.DelAddrCode);
     ORp.InvoiceToCode = CUr.InvoiceToCode;
@@ -1241,18 +1241,18 @@ BEGIN
 				ORp.Objects = AddObjectToObjectList(ORp.Objects,Userr.PersObjx);
 				ORp.SalesGroup = Userr.SalesGroup;
 			end;   
-    end;
+    end;//Edit_________________ABR//Edit_________________ABR
     ORp.LangCode = CUr.LangCode;
     ORp.ShipDeal = CUr.ShipDeal;
     ORp.ShipMode = CUr.ShipMode;
     ORp.Comment = CUr.OrderComment;
     ORVc_PastePayDeal(ORp);
-    if (blank(ORp.PriceList) or oldpricelist!=CUr.PLCode) then begin
-      ORp.PriceList = CUr.PLCode;
-    end;
-    if (blank(ORp.PriceList)) then begin
-      ORp.PriceList = CCatr.PLCode;
-    end;
+    if (blank(ORp.PriceList) or oldpricelist!=CUr.PLCode) then begin//Edit_________________ABR//Edit_________________ABR
+      ORp.PriceList = CUr.PLCode;//Edit_________________ABR//Edit_________________ABR
+    end;//Edit_________________ABR//Edit_________________ABR
+    if (blank(ORp.PriceList)) then begin//Edit_________________ABR//Edit_________________ABR
+      ORp.PriceList = CCatr.PLCode;//Edit_________________ABR//Edit_________________ABR
+    end;//Edit_________________ABR//Edit_________________ABR
     ORp.RebCode = CUr.RebCode;
     if (blank(ORp.RebCode)) then begin
       ORp.RebCode = CCatr.RebCode;
@@ -1264,12 +1264,12 @@ BEGIN
     end;
     ORp.Phone = CUr.Phone;
     ORp.Fax = CUr.Fax;
-    tstr = ORp.PriceList;
-    GetPriceList(ORp.CustCat,ORp.OrdDate,blankt,tstr,InclVAT);
-    ORp.InclVAT = InclVAT;
-    if (nonblank(tstr)) then begin
-      ORp.PriceList = tstr;
-    end;
+    tstr = ORp.PriceList;//Edit_________________ABR//Edit_________________ABR
+    GetPriceList(ORp.CustCat,ORp.OrdDate,blankt,tstr,InclVAT);//Edit_________________ABR//Edit_________________ABR
+    ORp.InclVAT = InclVAT;//Edit_________________ABR//Edit_________________ABR
+    if (nonblank(tstr)) then begin//Edit_________________ABR//Edit_________________ABR
+      ORp.PriceList = tstr;//Edit_________________ABR//Edit_________________ABR
+    end;//Edit_________________ABR//Edit_________________ABR
     ORp.VATNr = CUr.VATNr;
     ORp.NoTax1 = CUr.NoTax1;
     ORp.NoTax2 = CUr.NoTax2;
@@ -1304,9 +1304,9 @@ BEGIN
           errstr = USetStr(1164);
         end;
       end;
-    end;    
-    if (oldpricelist!=ORp.PriceList) then begin
-      ORDUpdatePrices(ORp,false);
+    end;    //Edit_________________ABR//Edit_________________ABR
+    if (oldpricelist!=ORp.PriceList) then begin//Edit_________________ABR//Edit_________________ABR
+      ORDUpdatePrices(ORp,false);//Edit_________________ABR//Edit_________________ABR
     end;
   end;
   AddPerceptionTaxesRows_ORVc(ORp);
@@ -1350,7 +1350,7 @@ end;
 
 
 
-global
+global//Edit_________________ABR//Edit_________________ABR
 procedure ORVc_PasteNPPhone(var record ORVc ORp)		//Edit----------------------Dima  15.04.2015
 begin
 	record NPCounterparty2Vc NPCr;
@@ -1743,7 +1743,7 @@ begin
 end;
 
 
-global updating procedure CheckWaitingTimeForGoods()
+global updating procedure CheckWaitingTimeForGoods()//Edit_________________ABR//Edit_________________ABR
 begin
 	record ORVc ORr,oldORr;
 	boolean TrHs;
@@ -1846,7 +1846,7 @@ begin
 	return;
 end;
 
-global procedure Rem_CalcOnePlusOneRebate(var record ORVc ORr)
+global procedure Rem_CalcOnePlusOneRebate(var record ORVc ORr)//Edit_________________ABR//Edit_________________ABR
 begin
 	record RebVc Rebr;// Edit ************************** BPI Ukraine - KramarAlexandr - Tuesday, 5 December 2017 10:36:04
 	row RebVc Rebrw;// Edit ************************** BPI Ukraine - KramarAlexandr - Tuesday, 5 December 2017 10:41:41

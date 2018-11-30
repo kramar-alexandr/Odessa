@@ -683,7 +683,7 @@ BEGIN
       accnr = Bud2r.AccNumber;
   end;
   otype = "";
-  if (nonblank(accnr) and GetWindowFileName(cwn)!="IVVc") then begin
+  if (nonblank(accnr) and GetWindowFileName(cwn)!="IVVc") then begin//Edit_________________ABR//Edit_________________ABR
     if (GetWindowClass(cwn)=="PRDClass") then begin 
       FindOTforPRClass(accnr,typ);
     end else begin
@@ -693,7 +693,7 @@ BEGIN
     if (objam>=fn) then begin
       ExtractElemFromSet(typ,fn,otype);
     end;
-  end else begin// Edit ************************** BPI Ukraine - KramarAlexandr - Thursday, 19 April 2018 10:26:28
+  end else begin// Edit Start************************** BPI Ukraine - KramarAlexandr - Thursday, 19 April 2018 10:26:28
   	if(GetWindowFileName(cwn)=="ORVc")then begin
   		if(currow==-1)then begin
   			USr.Code = currentuser;
@@ -719,7 +719,7 @@ BEGIN
 					end;
   			end;
   		end;
-  	end;
+  	end;//Edit_________________ABR/END/Edit_________________ABR
   end;
   
   ObjBTSClassArrayOnOpenRemote(otype,astr,acnt);

@@ -168,11 +168,11 @@ BEGIN
   Integer vatcnt;  
   val t,cc,uprice;
   Integer vt;
-  VAL cost1,cost2,cost3,cost4,cost5,ShipCost,CustomsCost;
-	record SysFormatBlock SFb;
-	record INVc INr;
+  VAL cost1,cost2,cost3,cost4,cost5,ShipCost,CustomsCost;//Edit_________________ABR//Edit_________________ABR
+	record SysFormatBlock SFb;//Edit_________________ABR//Edit_________________ABR
+	record INVc INr;//Edit_________________ABR//Edit_________________ABR
 	
-	BlockLoad(SFb);
+	BlockLoad(SFb);//Edit_________________ABR//Edit_________________ABR
 	
   if (UseTaxTemplatesforTaxCalc) then begin
     POSumup_TaxTemplate(POp);
@@ -186,8 +186,8 @@ BEGIN
   POp.Cost3 = blankval;
   POp.Cost4 = blankval;
   POp.Cost5 = blankval;
-  POp.TotVolume = blankval;
-  POp.TotWeight = blankval;
+  POp.TotVolume = blankval;//Edit_________________ABR//Edit_________________ABR
+  POp.TotWeight = blankval;//Edit_________________ABR//Edit_________________ABR
   POp.CustomsCost = blankval;
   rwcnt = MatRowCnt(POp);
   if (rwcnt>0) then begin
@@ -216,24 +216,24 @@ BEGIN
 //    DivPIFactor(POrw.Quant,POrw.PIFactor,q); //why extra cost should be per supplier unit not ours ? 
     q = POrw.Quant;
     t = q*POrw.ShipCost;
-    ShipCost = ShipCost + t;
+    ShipCost = ShipCost + t;//Edit_________________ABR//Edit_________________ABR
     //POp.ShipCost = t + POp.ShipCost;
     t = q*POrw.RowCost1;
-    cost1 = cost1 + t;
+    cost1 = cost1 + t;//Edit_________________ABR//Edit_________________ABR
     //POp.Cost1 = t + POp.Cost1;
     t = q*POrw.RowCost2;
-    cost2 = cost2 + t;
+    cost2 = cost2 + t;//Edit_________________ABR//Edit_________________ABR
     //POp.Cost2 = t + POp.Cost2;
     t = q*POrw.RowCost3;
-    cost3 = cost3 + t;
+    cost3 = cost3 + t;//Edit_________________ABR//Edit_________________ABR
     //POp.Cost3 = t + POp.Cost3;
     t = q*POrw.RowCost4;
-    cost4 = cost4 + t;
+    cost4 = cost4 + t;//Edit_________________ABR//Edit_________________ABR
     //POp.Cost4 = t + POp.Cost4;
     t = q*POrw.RowCost5;
-    cost5 = cost5 + t;
+    cost5 = cost5 + t;//Edit_________________ABR//Edit_________________ABR
     //POp.Cost5 = t + POp.Cost5;
-		CustomsCost = CustomsCost + stringtoval(POrw.CustomsCost,M45Val) * q;
+		CustomsCost = CustomsCost + stringtoval(POrw.CustomsCost,M45Val) * q;//Edit_________________ABR//Edit_________________ABR
     
     POp.TotVolume = POp.TotVolume + POrw.Volume;// Edit ************************** Wednesday, July 9, 2014 at 11:34:42
     POp.TotWeight = POp.TotWeight + POrw.Weight;// Edit ************************** Wednesday, July 9, 2014 at 11:34:41
@@ -254,13 +254,13 @@ BEGIN
     //POp.CustomsCost = t + POp.CustomsCost;   
   end;
   
-	POp.ShipCost = ShipCost;
-	POp.Cost1 = cost1;
-	POp.Cost2 = cost2;
-	POp.Cost3 = cost3;
-	POp.Cost4 = cost4;
-	POp.Cost5 = cost5;
-	POp.CustomsCost = CustomsCost;
+	POp.ShipCost = ShipCost;//Edit_________________ABR//Edit_________________ABR
+	POp.Cost1 = cost1;//Edit_________________ABR//Edit_________________ABR
+	POp.Cost2 = cost2;//Edit_________________ABR//Edit_________________ABR
+	POp.Cost3 = cost3;//Edit_________________ABR//Edit_________________ABR
+	POp.Cost4 = cost4;//Edit_________________ABR//Edit_________________ABR
+	POp.Cost5 = cost5;//Edit_________________ABR//Edit_________________ABR
+	POp.CustomsCost = CustomsCost;//Edit_________________ABR//Edit_________________ABR
   
   CalcVATBaseVAT(SMr,POp.InclVAT,POp.NoTAXonVAT,vatcnt,ms,taxsum);
   POp.TAX1Sum = taxsum;  
@@ -277,13 +277,13 @@ BEGIN
   end;    
   ms2 = Round(ms2,rndtotal);
   POp.ShipCost = Round(POp.ShipCost,SetRoundModeD(2));		//Edit----------------------Dima  24.03.2015
-  POp.Cost1 = Round(POp.Cost1,SetRoundModeD(2));
-  POp.Cost2 = Round(POp.Cost2,SetRoundModeD(2));
-  POp.Cost3 = Round(POp.Cost3,SetRoundModeD(2));
-  POp.Cost4 = Round(POp.Cost4,SetRoundModeD(2));
-  POp.Cost5 = Round(POp.Cost5,SetRoundModeD(2));
+  POp.Cost1 = Round(POp.Cost1,SetRoundModeD(2));//Edit_________________ABR//Edit_________________ABR
+  POp.Cost2 = Round(POp.Cost2,SetRoundModeD(2));//Edit_________________ABR//Edit_________________ABR
+  POp.Cost3 = Round(POp.Cost3,SetRoundModeD(2));//Edit_________________ABR//Edit_________________ABR
+  POp.Cost4 = Round(POp.Cost4,SetRoundModeD(2));//Edit_________________ABR//Edit_________________ABR
+  POp.Cost5 = Round(POp.Cost5,SetRoundModeD(2));//Edit_________________ABR//Edit_________________ABR
   POp.CustomsCost = Round(POp.CustomsCost,SetRoundModeD(2));	//Edit----------------------Dima  24.03.2015      
-//  POp.CustomsCost = Round(POp.CustomsCost,SetRoundModeD(5));
+//  POp.CustomsCost = Round(POp.CustomsCost,SetRoundModeD(5));//Edit_________________ABR//Edit_________________ABR
   POp.Sum1 = s;
   POp.Sum3 = ms;
   POp.Sum4 = ms2;
@@ -845,7 +845,7 @@ BEGIN
   	POrw.Weight = INr.Weight * POrw.Quant;// Edit ************************** Wednesday, July 9, 2014 at 11:37:01
   	POrw.NetWeight = INr.NetWeight * POrw.Quant; //Edit***************************Sasha2,15:20 19.01.2017
 	  if(NonBlank(POrw.UnitCode))then begin// Edit ************************** Tuesday, 31 March 2015 12:47:24
-			if (NonBlank(POrw.AddUnittext2)) then begin 
+			if (NonBlank(POrw.AddUnittext2)) then begin //Edit_________________ABR/START/Edit_________________ABR
 				if (POrw.AddUnittext2 != POrw.UnitCode) then begin
 					POrw.AddUnitQty2 = POrw.Quant / INr.AddUnitCoef2;
 				end else begin
@@ -874,7 +874,7 @@ BEGIN
 				end; 
 			end; //Edit***************************Sasha2,9:46 27.06.2014 }
 		end;
-	//end;
+	//end;//Edit_________________ABR/END/Edit_________________ABR
   MatRowPut(POp,rownr,POrw);
   if (PODchrsum(POp,rownr)) then begin
   end;
@@ -883,7 +883,7 @@ BEGIN
 END;
 
 global  
-procedure POVc_PastVolumeWeight(var record POVc POp,Integer rownr)
+procedure POVc_PastVolumeWeight(var record POVc POp,Integer rownr)//Edit_________________ABR//Edit_________________ABR
 BEGIN
   Boolean res,pifound;
   record INVc INr;
@@ -1261,7 +1261,7 @@ begin
     POrw.QtyPack = INr.AddUnitCoef3;	//Edit by Victor 30.01.15
     POrw.QtyBox = INr.AddUnitCoef2;	//Edit by Victor 30.01.15
     
-    if(INr.AddUnittext3=="MOQ")then begin
+    if(INr.AddUnittext3=="MOQ")then begin//Edit_________________ABR/START/Edit_________________ABR
 			POrw.MOQ = INr.AddUnitCoef3;
 		end;
 		if(INr.AddUnittext4=="MOQ")then begin
@@ -1279,7 +1279,7 @@ begin
   		POrw.Volume = INr.Volume*POrw.Quant;// Edit ************************** Wednesday, July 9, 2014 at 11:37:02
 			POrw.Weight = INr.Weight*POrw.Quant;// Edit ************************** Wednesday, July 9, 2014 at 11:37:01
 			POrw.NetWeight = INr.NetWeight*POrw.Quant;// Edit ************************** Wednesday, July 9, 2014 at 11:37:01
-  	end;
+  	end;//Edit_________________ABR/END/Edit_________________ABR
   	POrw.AlternativeCode = INr.AlternativeCode; //Edit***************************Sasha2,13:54 06.11.2014
     if (pifound) then begin
       POrw.VEArtCode = PIr.VEItemCode;
@@ -1296,7 +1296,7 @@ begin
     POrw.VEQuant = t;    
     POrw.Objects = FindINObjects(INr.Objects,INr.Group);
     POrw.PalletNr = CalcPalletsNr(POrw.Quant,POrw.ArtCode);
-    POrw.BarCode = INr.BarCode;
+    POrw.BarCode = INr.BarCode;//Edit_________________ABR//Edit_________________ABR
     PackRowFieldMatrix(POrw,"TaxMatrix",TMr);
     MatRowPut(POp,rownr,POrw);
     if (pifound) then begin

@@ -457,7 +457,7 @@ BEGIN
     case kCostModelQueued: RepSpec.flags[10] = 0;
     otherwise              RepSpec.flags[10] = 1;
   end;
-  RepSpec.flags[10] = 1;
+  RepSpec.flags[10] = 1;//Edit_________________ABR//Edit_________________ABR
   
   RETURN;
 END;
@@ -1188,7 +1188,7 @@ BEGIN
 END;
 
 global
-function Boolean ItemPUOrderReportRClassAfterEditField(Integer wn,string fieldname,Integer fn,Integer rownr,Integer changed)
+function Boolean ItemPUOrderReportRClassAfterEditField(Integer wn,string fieldname,Integer fn,Integer rownr,Integer changed)//Edit_________________ABR//Edit_________________ABR
 BEGIN
   Boolean res;
   Date d1,d2;
@@ -1215,7 +1215,7 @@ BEGIN
   RETURN;
 END;
 
-global
+global//Edit_________________ABR//Edit_________________ABR
 procedure CuArtSTRClassReportDef(var record RcVc RepSpec)
 begin
   Date d1,d2;

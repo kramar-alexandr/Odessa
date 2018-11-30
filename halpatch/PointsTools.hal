@@ -1,4 +1,4 @@
-external updating procedure	UpdateDiscount(record LoyaltyCardVc);
+external updating procedure	UpdateDiscount(record LoyaltyCardVc);//Edit_________________ABR//Edit_________________ABR
 
 global
 function val GetLCardStartBalance(string card,string location,date tilldate)
@@ -168,18 +168,18 @@ begin
   record IVVc IVr;
   record IVCashVc IVCashr;
   record RestAccVc RestAccr;
-  record OneTimeDiscBlock	OTDr;
-  row OneTimeDiscBlock	OTDrw;
-  integer mtrw, i;
-  record CUVc CUr;
-  val CU_Rebcode;
-  val OTD_Rebcode;
+  record OneTimeDiscBlock	OTDr;//Edit_________________ABR//Edit_________________ABR
+  row OneTimeDiscBlock	OTDrw;//Edit_________________ABR//Edit_________________ABR
+  integer mtrw, i;//Edit_________________ABR//Edit_________________ABR
+  record CUVc CUr;//Edit_________________ABR//Edit_________________ABR
+  val CU_Rebcode;//Edit_________________ABR//Edit_________________ABR
+  val OTD_Rebcode;//Edit_________________ABR//Edit_________________ABR
   val qty;
   boolean testf;
   string 20 nextlevel;
-  record RebVc Rebr;
+  record RebVc Rebr;//Edit_________________ABR//Edit_________________ABR
   
-  logtext(0, " AddPointsHist WORKED");
+  logtext(0, " AddPointsHist WORKED");//Edit_________________ABR//Edit_________________ABR
   
   RecordNew(PHr);
   qty = 0;
@@ -187,7 +187,7 @@ begin
   PHr.FileName = filename;
   switch (filename) begin
     case "IVVc":
-			logtext(0, "CASE IVVc");
+			logtext(0, "CASE IVVc");//Edit_________________ABR//Edit_________________ABR
       IVr.SerNr = transnr;
       if (ReadFirstMain(IVr,1,true)) begin end;
       PHr.TransDate = IVr.TransDate;
@@ -213,7 +213,7 @@ begin
 		
 		// here
 		
-		logtext(0, "CREDIT");
+		logtext(0, "CREDIT");//Edit_________________ABR//Edit_________________ABR
 		
       end else begin 
         qty = IVr.Points;
@@ -245,7 +245,7 @@ begin
         if (RecordUpdate(oldLoyaltyCardr,LoyaltyCard2r,false)==0) then begin end;
       end;
 	
-	if (qty >= 0) then begin // Edit Dima ************* 2018-02-22 03:41 PM
+	if (qty >= 0) then begin // Edit Start Dima ************* 2018-02-22 03:41 PM
 		BlockLoad(OTDr);
 		mtrw = matrowcnt(OTDr);
 		for (i = 0; i < mtrw; i = i + 1) begin
@@ -273,8 +273,8 @@ begin
 			end;
 		end;
 	end else begin
-		UpdateDiscount(LoyaltyCardr); // Edit Dima ************* 2018-02-23 05:27 PM
-	end;
+		UpdateDiscount(LoyaltyCardr); // Edit END Dima ************* 2018-02-23 05:27 PM
+	end;//Edit_________________ABR//Edit_________________ABR
     case "IVCashVc": 
       IVCashr.SerNr = transnr;
       if (ReadFirstMain(IVCashr,1,true)) begin end;
@@ -377,15 +377,15 @@ updating procedure LoyaltyCardPointsRedemption(string LoyaltyCardNr,val Points,B
 begin
   record LoyaltyCardVc LCr,oldLCr;
 
-  logtext(0, "LoyaltyCardPointsRedemption WORKED");
+  logtext(0, "LoyaltyCardPointsRedemption WORKED");//Edit_________________ABR//Edit_________________ABR
   LCr.SerNr = LoyaltyCardNr;
   if (ReadFirstMain(LCr,1,true)) then begin 
     RecordCopy(oldLCr,LCr);
     if (negf) then begin
-		logtext(0, " LoyaltyCardPointsRedemption + Points" );
+		logtext(0, " LoyaltyCardPointsRedemption + Points" );//Edit_________________ABR//Edit_________________ABR
       LCr.PointsBalance = LCr.PointsBalance + Points;
     end else begin
-		logtext(0, " LoyaltyCardPointsRedemption - Points");
+		logtext(0, " LoyaltyCardPointsRedemption - Points");//Edit_________________ABR//Edit_________________ABR
       LCr.PointsBalance = LCr.PointsBalance - Points;
     end;
     RecordUpdate(oldLCr,LCr,true);
@@ -437,13 +437,13 @@ begin
   Integer i,rwcnt;
   row IVVc IVrw;
   
-  logtext(0, " IVVc_LoyaltyCardPointsRedemption");
+  logtext(0, " IVVc_LoyaltyCardPointsRedemption");//Edit_________________ABR//Edit_________________ABR
   rwcnt = MatRowCnt(IVp);
   for (i=0;i<rwcnt;i=i+1) begin
     MatRowGet(IVp,i,IVrw);
     switch (IVrw.stp) begin
       case kInvoiceRowTypeLoyaltyPointsPayment:
-		logtext(0, "InvoiceRowTypeLoyaltyPointsPayment");
+		logtext(0, "InvoiceRowTypeLoyaltyPointsPayment");//Edit_________________ABR//Edit_________________ABR
         LoyaltyCardPointsRedemption(IVp.LoyaltyCardNr,IVrw.Points,negf);
         UpdatePointHistory("IVVc",IVp.SerNr,IVp.CustCode,IVp.TransDate,IVp.Location,IVp.LoyaltyCardNr,IVrw.Points);
     end;

@@ -442,11 +442,11 @@ BEGIN
           errstrno = 1908;
           goto LIVVc_GiftCertificateReceive;
         end;
-        rwcnt = MatRowCnt(IVp);
-        for (i=0;i<rwcnt;i=i+1) begin
-          MatRowGet(IVp,i,IV2rw);
-          if (IV2rw.stp==kInvoiceRowTypeGiftVoucherPayment) then begin
-            rs = rs + IV2rw.Sum;
+        rwcnt = MatRowCnt(IVp);//Edit_________________ABR//Edit_________________ABR
+        for (i=0;i<rwcnt;i=i+1) begin//Edit_________________ABR//Edit_________________ABR
+          MatRowGet(IVp,i,IV2rw);//Edit_________________ABR//Edit_________________ABR
+          if (IV2rw.stp==kInvoiceRowTypeGiftVoucherPayment) then begin//Edit_________________ABR//Edit_________________ABR
+            rs = rs + IV2rw.Sum;//Edit_________________ABR//Edit_________________ABR
           end;
         end;
   //      rs = MulRateToBase1(IVp.CurncyCode,IVrw.Sum,frrate,torate1,torate2,baserate1,baserate2,DefaultCurRoundOff);//currency??      

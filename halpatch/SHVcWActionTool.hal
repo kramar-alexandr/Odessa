@@ -28,16 +28,16 @@ external procedure CalcSHWeight(var record SHVc,Boolean);
 external function Boolean RefillShipRow(var Array record StockMovVc,var Integer,var record SHVc,record SHVc,record INVc,var Integer,Integer,Integer,var array string,var array string,var array string,var array val,var Integer);
 external procedure SerialNrDimensions(string,string,var val,var val,var val);
 external procedure SumUpPackList(var record PackListVc);//Edit----------------------Dima  29.04.2015
-external procedure NP_SumUpRowWeight(var record SHVc);
+external procedure NP_SumUpRowWeight(var record SHVc);//Edit_________________ABR//Edit_________________ABR
 external procedure NP_SumUpRowVolumes(var record SHVc);//Edit----------------------Dima  07.05.2015
 external procedure CurValToOtherCur(Date,string,val,string,var val,roundmode);	//Edit----------------------Dima  15.05.2015
 //external function string 255 SendSMS(string, string, string,boolean,string);//Edit----------------------Dima  30.06.2015
-external updating function string 255 SendSMS(record SMSstackVc, boolean);
+external updating function string 255 SendSMS(record SMSstackVc, boolean);//Edit_________________ABR//Edit_________________ABR
 external updating function longint AddSMStoStack(string,string, string, string,string,string,longint,string,date,time);//Edit----------------------Dima  28.08.2015
 external function string 255 ParseSMStext(string, record ORVc);// Edit ************************** Friday, 2 June 2017 11:44:04
 external function string 255 ReplaceAllSubStringInString(string, string, string);//Edit----------------------Dima  02.07.2015
 
-SetLangMode(LangRussian,"RUS",0); 
+SetLangMode(LangRussian,"RUS",0); //Edit_________________ABR//Edit_________________ABR
 
 procedure SHChangeShip(record SHVc SHr,Integer rownr)
 BEGIN
@@ -892,8 +892,8 @@ BEGIN
   Retr.CustCode = SHr.CustCode;
   Retr.CustName = SHr.Addr0;
   if(nonblank(SHr.SalesGroup))then begin	//Edit by Victor 26.11.14
-  	Retr.SalesGroup = SHr.SalesGroup;
-  end;
+  	Retr.SalesGroup = SHr.SalesGroup;//Edit_________________ABR//Edit_________________ABR
+  end;//Edit_________________ABR//Edit_________________ABR
   if (blank(defreturnlocation)) then begin
     Retr.Location = SHr.Location;
   end else begin
@@ -948,7 +948,7 @@ BEGIN
       Retrw.BestBefore = SHrw.BestBefore;
       Retrw.PosCode = SHrw.PosCode;
       if (blank(Retrw.PosCode) and  SHr.Location=="1-KOC") then begin //Edit***************************Sasha2,17:34 14.12.2015 {
-        Retrw.PosCode = "ŠŽ‘_2";
+        Retrw.PosCode = "ŠŽ‘_2";//Edit_________________ABR//Edit_________________ABR
       end; //Edit***************************Sasha2,17:34 14.12.2015 }
       Retrw.Coefficient = SHrw.Coefficient;
       Retrw.BBCostPrice = SHrw.BBCostPrice;
@@ -1253,7 +1253,7 @@ return;
 end;
 
 global
-procedure NP_SumUpRowWeight(var record SHVc SHp)
+procedure NP_SumUpRowWeight(var record SHVc SHp)//Edit_________________ABR//Edit_________________ABR
 begin
 	SHp.NPWeight = SHp.NPRowWeight1 + SHp.NPRowWeight2 + SHp.NPRowWeight3 + SHp.NPRowWeight4 + SHp.NPRowWeight5;
 return;

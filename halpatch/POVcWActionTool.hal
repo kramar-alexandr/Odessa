@@ -579,8 +579,8 @@ BEGIN
   PUp.PUFromPORate = POSetb.PUFromPORate;
   
   if(nonblank(POp.SalesGroup))then begin	//Edit by Victor 26.11.14
-  	PUp.SalesGroup = POp.SalesGroup;
-  end;
+  	PUp.SalesGroup = POp.SalesGroup;//Edit_________________ABR//Edit_________________ABR
+  end;//Edit_________________ABR//Edit_________________ABR
   
   PUp.ShipCostRule = POp.ShipCostRule;// Edit ************************** Wednesday, July 9, 2014 at 11:28:07
   PUp.CustomsCostRule = POp.CustomsCostRule;// Edit ************************** Wednesday, July 9, 2014 at 11:28:06
@@ -1987,7 +1987,7 @@ LPastePOInDropSH:;
   return;
 end;
 
-procedure POCalcOneRow(record SysFormatBlock SysFormatRec,record POVc POr,Integer rownr,roundmode roundoff,val totvalp,val calcvalp,var val rowcalcvalp,var val restp,integer column)
+procedure POCalcOneRow(record SysFormatBlock SysFormatRec,record POVc POr,Integer rownr,roundmode roundoff,val totvalp,val calcvalp,var val rowcalcvalp,var val restp,integer column)//Edit_________________ABR//Edit_________________ABR
 BEGIN    
   row POVc POrw;
   val temp,rv,q;
@@ -2003,28 +2003,28 @@ BEGIN
 					temp = q*INr.Weight;
 				end;
 			otherwise
-				temp = q*POrw.Price;
-		end;
+				temp = q*POrw.Price;//Edit_________________ABR//Edit_________________ABR
+		end;//Edit_________________ABR//Edit_________________ABR
   end;// Edit ************************** Wednesday, July 9, 2014 at 17:31:43
   if(column==6)then begin// Edit ************************** Wednesday, July 9, 2014 at 17:31:40
-		switch (POr.ShipCostRule) begin 
-			case 1:
-					temp = POrw.Weight;
-			case 2:
-					temp = POrw.Volume;
-			otherwise
+		switch (POr.ShipCostRule) begin //Edit_________________ABR//Edit_________________ABR
+			case 1://Edit_________________ABR//Edit_________________ABR
+					temp = POrw.Weight;//Edit_________________ABR//Edit_________________ABR
+			case 2://Edit_________________ABR//Edit_________________ABR
+					temp = POrw.Volume;//Edit_________________ABR//Edit_________________ABR
+			otherwise//Edit_________________ABR//Edit_________________ABR
 				temp = q*POrw.Price;
-		end;
+		end;//Edit_________________ABR//Edit_________________ABR
   end;// Edit ************************** Wednesday, July 9, 2014 at 17:31:43
   if(column==7)then begin// Edit ************************** Wednesday, July 9, 2014 at 17:31:40
-		switch (POr.CustomsCostRule) begin 
-			case 1:
-					temp = POrw.Weight;
-			case 2:
-						temp = POrw.Volume;
-			otherwise
-				temp = q*POrw.Price;
-		end;
+		switch (POr.CustomsCostRule) begin //Edit_________________ABR//Edit_________________ABR
+			case 1://Edit_________________ABR//Edit_________________ABR
+					temp = POrw.Weight;//Edit_________________ABR//Edit_________________ABR
+			case 2://Edit_________________ABR//Edit_________________ABR
+						temp = POrw.Volume;//Edit_________________ABR//Edit_________________ABR
+			otherwise//Edit_________________ABR//Edit_________________ABR
+				temp = q*POrw.Price;//Edit_________________ABR//Edit_________________ABR
+		end;//Edit_________________ABR//Edit_________________ABR
   end;// Edit ************************** Wednesday, July 9, 2014 at 17:31:43
 
   temp = temp*calcvalp;
@@ -2236,9 +2236,9 @@ BEGIN
   record INVc INr;
   val costdef,costsum,costbegin;// Edit ************************** Wednesday, 4 February 2015 12:46:43
   integer minqtyi;// Edit ************************** Wednesday, 4 February 2015 12:46:43
-  val minq,maxq;
+  val minq,maxq;//Edit_________________ABR//Edit_________________ABR
   
-  costdef = 0;
+  costdef = 0;//Edit_________________ABR//Edit_________________ABR
     
   BlockLoad(SFb);
   switch(column) begin
@@ -2265,36 +2265,36 @@ BEGIN
 				switch (POr.ExtraCostsCalculation) begin 
 					case 1:
 						if (ReadFirstItem(POrw.ArtCode,INr,false,false)) then begin
-							rv = POrw.Weight;
-						end;
-					otherwise
-						rv = q*POrw.Price;
+							rv = POrw.Weight;//Edit_________________ABR//Edit_________________ABR
+						end;//Edit_________________ABR//Edit_________________ABR
+					otherwise//Edit_________________ABR//Edit_________________ABR
+						rv = q*POrw.Price;//Edit_________________ABR//Edit_________________ABR
 				end;
-				totval = totval + rv;
+				totval = totval + rv;//Edit_________________ABR//Edit_________________ABR
       end;// Edit ************************** Wednesday, July 9, 2014 at 16:57:54
       
       if(column==6)then begin// Edit ************************** Wednesday, July 9, 2014 at 16:57:52
-				switch (POr.ShipCostRule) begin 
-					case 1:
-							rv = POrw.Weight;
-					case 2:
-							rv = POrw.Volume;
+				switch (POr.ShipCostRule) begin //Edit_________________ABR//Edit_________________ABR
+					case 1://Edit_________________ABR//Edit_________________ABR
+							rv = POrw.Weight;//Edit_________________ABR//Edit_________________ABR
+					case 2://Edit_________________ABR//Edit_________________ABR
+							rv = POrw.Volume;//Edit_________________ABR//Edit_________________ABR
 					otherwise
 						rv = q*POrw.Price;
-				end;
-				totval = totval + rv;
+				end;//Edit_________________ABR//Edit_________________ABR
+				totval = totval + rv;//Edit_________________ABR//Edit_________________ABR
       end;
       if(column==7)then begin// Edit ************************** Wednesday, July 9, 2014 at 16:57:52
-				switch (POr.CustomsCostRule) begin 
-					case 1:
-							rv = POrw.Weight;
-					case 2:
-							rv = POrw.Volume;
-					otherwise
-						rv = q*POrw.Price;
-				end;
+				switch (POr.CustomsCostRule) begin //Edit_________________ABR//Edit_________________ABR
+					case 1://Edit_________________ABR//Edit_________________ABR
+							rv = POrw.Weight;//Edit_________________ABR//Edit_________________ABR
+					case 2://Edit_________________ABR//Edit_________________ABR
+							rv = POrw.Volume;//Edit_________________ABR//Edit_________________ABR
+					otherwise//Edit_________________ABR//Edit_________________ABR
+						rv = q*POrw.Price;//Edit_________________ABR//Edit_________________ABR
+				end;//Edit_________________ABR//Edit_________________ABR
 				totval = totval + rv;
-      end;
+      end;//Edit_________________ABR//Edit_________________ABR
       
       
     end;
@@ -2306,29 +2306,29 @@ BEGIN
     MatRowGet(POr,i,POrw);
     
     if(minq>POrw.Quant and POrw.Quant>0 and nonblank(POrw.ArtCode) and rowcalcval>0.07)then begin// Edit ************************** Wednesday, 4 February 2015 12:50:49
-			minq = POrw.Quant;
-			minqtyi = i;
-    end;
+			minq = POrw.Quant;//Edit_________________ABR//Edit_________________ABR
+			minqtyi = i;//Edit_________________ABR//Edit_________________ABR
+    end;//Edit_________________ABR//Edit_________________ABR
     
     if ((POrw.stp==3) or (POrw.ovst!=0) or (blank(POrw.ArtCode)) or (column==7 and POrw.TREO==kTREO)) then begin
       goto LSKIPPOROW;
     end;
-    POCalcOneRow(SFb,POr,i,DefaultCurRoundOff,totval,calcval,rowcalcval,rest,column);
+    POCalcOneRow(SFb,POr,i,DefaultCurRoundOff,totval,calcval,rowcalcval,rest,column);//Edit_________________ABR//Edit_________________ABR
     switch (column) begin
-      case 1: POrw.RowCost1 = rowcalcval; costsum = costsum + rowcalcval * POrw.Quant;
-      case 2: POrw.RowCost2 = rowcalcval; costsum = costsum + rowcalcval * POrw.Quant;
-      case 3: POrw.RowCost3 = rowcalcval; costsum = costsum + rowcalcval * POrw.Quant;
-      case 4: POrw.RowCost4 = rowcalcval; costsum = costsum + rowcalcval * POrw.Quant;
-      case 5: POrw.RowCost5 = rowcalcval; costsum = costsum + rowcalcval * POrw.Quant;
-      case 6: POrw.ShipCost = rowcalcval;costsum = costsum + rowcalcval * POrw.Quant;
+      case 1: POrw.RowCost1 = rowcalcval; costsum = costsum + rowcalcval * POrw.Quant;//Edit_________________ABR//Edit_________________ABR
+      case 2: POrw.RowCost2 = rowcalcval; costsum = costsum + rowcalcval * POrw.Quant;//Edit_________________ABR//Edit_________________ABR
+      case 3: POrw.RowCost3 = rowcalcval; costsum = costsum + rowcalcval * POrw.Quant;//Edit_________________ABR//Edit_________________ABR
+      case 4: POrw.RowCost4 = rowcalcval; costsum = costsum + rowcalcval * POrw.Quant;//Edit_________________ABR//Edit_________________ABR
+      case 5: POrw.RowCost5 = rowcalcval; costsum = costsum + rowcalcval * POrw.Quant;//Edit_________________ABR//Edit_________________ABR
+      case 6: POrw.ShipCost = rowcalcval;costsum = costsum + rowcalcval * POrw.Quant;//Edit_________________ABR//Edit_________________ABR
       case 7: POrw.CustomsCost = ValToString(rowcalcval,M45Val,SFb.thousSep,SFb.decimalPt,0);
-      				costsum = costsum + stringtoval(POrw.CustomsCost,M45Val) * POrw.Quant;
+      				costsum = costsum + stringtoval(POrw.CustomsCost,M45Val) * POrw.Quant;//Edit_________________ABR//Edit_________________ABR
     end;
     //costsum = costsum + rowcalcval * POrw.Quant;// Edit ************************** Wednesday, 4 February 2015 12:34:33
     MatRowPut(POr,i,POrw);
 LSKIPPOROW:;
   end;
-    
+    //Edit_________________ABR/Start/Edit_________________ABR
   matrowget(POr,minqtyi,POrw);
   	switch (column) begin
       case 1: POrw.RowCost1 = POrw.RowCost1 - (costsum - costbegin)/POrw.Quant;
@@ -2340,7 +2340,7 @@ LSKIPPOROW:;
       case 7: POrw.CustomsCost = ValToString((stringtoval(POrw.CustomsCost,M45Val) - (costsum - costbegin)/POrw.Quant),M45Val,SFb.thousSep,SFb.decimalPt,0);
     end;
   MatRowPut(POr,minqtyi,POrw);
-  
+  //Edit_________________ABR/END/Edit_________________ABR
 //!!!  PUSortByVal(POr,locPOr,column,roworder);
   rwcnt = MatRowCnt(locPOr);
   for (i=0;i<rwcnt;i=i+1) begin

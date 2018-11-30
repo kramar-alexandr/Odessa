@@ -49,17 +49,17 @@ external procedure StockMovSumUp(var record StockMovVc);
 external function LongInt GetCurUserLastNr(string);
 external procedure IVVc_PasteSalesMan(var record IVVc,string);
 external procedure GetObjs(string,string,var string);//Edit-------------------Vitalii 15:15 28.11.2016
-external function string 255 StrReplace(string,string,string);
-external procedure GetCurUser(var record UserVc);
+external function string 255 StrReplace(string,string,string);//Edit_________________ABR//Edit_________________ABR
+external procedure GetCurUser(var record UserVc);//Edit_________________ABR//Edit_________________ABR
 external updating procedure RecalcORMn(record RcVc); //Edit***************************Sasha2,14:27 19.04.2017
 external procedure NormalizeObjstr(var string);//Edit-------------------Vitalii 13:53 12.10.2017
 remote updating procedure GiftVoucherPasterow(record IVVc,string,longint);//Edit_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-Anton 13:08 11.07.2018
-external procedure ExtractObj(string,var Integer,var string);
-external function Boolean GetPMRow(string,var row PMBlock);
+external procedure ExtractObj(string,var Integer,var string);//Edit_________________ABR//Edit_________________ABR
+external function Boolean GetPMRow(string,var row PMBlock);//Edit_________________ABR//Edit_________________ABR
 
 
 
-SetLangMode(LangRussian,"RUS",0);	
+SetLangMode(LangRussian,"RUS",0);	//Edit_________________ABR//Edit_________________ABR
 
 
 global
@@ -1152,10 +1152,10 @@ LAddPrepaymentRow:;
   return;
 end;
 
-global updating
+global updating//Edit_________________ABR//Edit_________________ABR
 function Boolean PasteOrdInInv(var record IVVc IVp,var record ORVc ORp,Boolean addon,string lastcu,record RcVc RepSpec,var val orsum,Boolean addperceptionf,Boolean withholdingf,Boolean NLCostOnShipTestf,
                                var Integer err,Boolean maintf,array record XSrsVc aXSrsr,var Integer axsrscnt)
-BEGIN
+BEGIN//Edit_________________ABR/VAR Add in top ^/Edit_________________ABR
   record MainStockBlock MSb;
   record CostAccBlock CAb;
   record DownPayBlock DPb;
@@ -1172,7 +1172,7 @@ BEGIN
   Integer AllowInvBeforeShip;
   val remn,t;
   val pr,coef;
-  val s,rowsum,sumpp;
+  val s,rowsum,sumpp;//Edit_________________ABR//Edit_________________ABR
   val from,to1,to2,base1,base2;
   val FrBase,FrGP,FrPrice;
   string 255 tstr,curcode;
@@ -1185,7 +1185,7 @@ BEGIN
   record SHVc SHr;
   record SHVc lastSHr;
   Boolean found,subvatf;
-  Integer hiddenrow,k;
+  Integer hiddenrow,k;//Edit_________________ABR//Edit_________________ABR
   Integer acnt,adscnt,oldstyle;
   array record SHVc aSHr;
   array record SHVc aDropSHr;
@@ -1199,13 +1199,13 @@ BEGIN
   Integer ordtype; 
   record ARPayHistVc ARPHr;
   record UserVc USr;//Edit-------------------Vitalii 15:11 28.11.2016
-  record ObjVc Objr;
-  string 255 obj,ot,instr,curstr;
-	record DefCashBlock DCb;
-  row PMBlock PMrw;
+  record ObjVc Objr;//Edit_________________ABR//Edit_________________ABR
+  string 255 obj,ot,instr,curstr;//Edit_________________ABR//Edit_________________ABR
+	record DefCashBlock DCb;//Edit_________________ABR//Edit_________________ABR
+  row PMBlock PMrw;//Edit_________________ABR//Edit_________________ABR
   val paidsum;// Edit ************************** Friday, 1 April 2016 14:29:45
-  integer rwcnt2;
-	record GCSVc GCSr;
+  integer rwcnt2;//Edit_________________ABR//Edit_________________ABR
+	record GCSVc GCSr;//Edit_________________ABR//Edit_________________ABR
 
   
   lastrwcnt = MatRowCnt(IVp);
@@ -1237,11 +1237,11 @@ BEGIN
     end;
   end;
 
-	IVp.OrderNr = ORp.SerNr;
+	IVp.OrderNr = ORp.SerNr;//Edit_________________ABR//Edit_________________ABR
   if(IVp.OrderNr > -1)then begin	//Edit by Victor 23.01.15 ***
-	  IVp.UpdStockFlag = 0;
-  end else begin
-    IVp.UpdStockFlag = ARAccRec.InvUpdStock;
+	  IVp.UpdStockFlag = 0;//Edit_________________ABR//Edit_________________ABR
+  end else begin//Edit_________________ABR//Edit_________________ABR
+    IVp.UpdStockFlag = ARAccRec.InvUpdStock;//Edit_________________ABR//Edit_________________ABR
   end;	// *** end;
   
   IVp.SVONr = -1;
@@ -1324,7 +1324,8 @@ L20PasteOrdInInv:;
   IVp.ClientContact = ORp.CustContact;
   IVp.OurContact = ORp.OurContact;
   IVp.BankCode = ORp.BankCode;
-  IVp.PromotionCode2 = ORp.PromotionCode2; //Edit***************************Sasha2,16:50 24.01.2017
+	
+  IVp.PromotionCode2 = ORp.PromotionCode2; //Edit Start***************************Sasha2,16:50 24.01.2017
   //Edit-------------------Vitalii 14:47 28.11.2016
   //GetCurUser(USr);
   USr.Code = currentuser;
@@ -1346,11 +1347,11 @@ L20PasteOrdInInv:;
 		end;
 	
 		IVp.SalesMan = ORp.SalesMan;
-    if (maintf==false) then begin
+    if (maintf==false) then begin//Edit_________________ABR/NOT EDIT!!!!!!!!/Edit_________________ABR
 			IVp.Objects = ORp.Objects;
-		end;//Edit-------------------Vitalii 15:14 28.11.2016
+		end;//Edit END-------------------Vitalii 15:14 28.11.2016
   end;
-  RecordStore(ORp,true);
+  RecordStore(ORp,true);//Edit_________________ABR//Edit_________________ABR
   
   
   IVp.RefStr = ORp.RefStr;
@@ -1372,11 +1373,11 @@ L20PasteOrdInInv:;
   IVp.BaseRate1 = ORp.BaseRate1;
   IVp.BaseRate2 = ORp.BaseRate2;
   if nonblank(IVp.Objects) then begin //Edit-------------------Vitalii 13:58 12.10.2017
-    IVp.Objects = IVp.Objects & "," ORp.Objects;
-    NormalizeObjstr(IVp.Objects);
-  end else begin
-    IVp.Objects = ORp.Objects;
-  end;
+    IVp.Objects = IVp.Objects & "," ORp.Objects;//Edit_________________ABR//Edit_________________ABR
+    NormalizeObjstr(IVp.Objects);//Edit_________________ABR//Edit_________________ABR
+  end else begin//Edit_________________ABR//Edit_________________ABR
+    IVp.Objects = ORp.Objects;//Edit_________________ABR//Edit_________________ABR
+  end;//Edit_________________ABR//Edit_________________ABR
   switch (IVTb.IVFromORRate) begin
     case kIVRateFromOrder:
 //        above;
@@ -1433,8 +1434,8 @@ L20PasteOrdInInv:;
     IVp.FiscalFlag = CUr.FiscalFlag;
   end;  
   if(ORp.NPPaymentType==0 and ORp.OrderClass=="WEB")then begin// Edit ************************** Wednesday, 8 February 2017 12:24:41
-  	IVp.FiscalFlag = 1;
-  end;
+  	IVp.FiscalFlag = 1;//Edit_________________ABR//Edit_________________ABR
+  end;//Edit_________________ABR//Edit_________________ABR
   if (CUr.OnHoldFlag!=0) then begin goto LPasteOrdInInv; end;
   if (CUr.blockedFlag!=0) then begin goto LPasteOrdInInv; end;
   if (blank(IVp.VATNr)) then begin IVp.VATNr = CUr.VATNr; end;
@@ -1871,7 +1872,7 @@ LPasteOrdInInv:;
 //  IVp.OfficialSerNr = FindNextLegalSerNr(IVp,CUr.Classification);  //POSN
   //if (OSb.ConToPrepWhenInv!=0) then begin// Edit ************************** Wednesday, 12 October 2016 13:39:57
     AddPrepaymentRows(IVp,ORp.SerNr);
-  //end;
+  //end;//Edit_________________ABR//Edit_________________ABR
   if (res==false) then begin
     for (i=0;i<rwcnt;i=i+1) begin
       MatRowGet(ORp,i,ORrw);
@@ -1903,7 +1904,7 @@ LPasteOrdInInv:;
       end;
     end;
   end;
-	
+//Edit_________________ABR/START/Edit_________________ABR	
 	sumpp = 0;
 	rwcnt2 = matrowcnt(IVp);
 	for (i=0;i<rwcnt2;i=i+1) begin
@@ -1941,7 +1942,7 @@ LPasteOrdInInv:;
 			end;
 			ExtractObj(instr,k,curstr);
 		end;
-	end;
+	end;//Edit_________________ABR/END/Edit_________________ABR
   IVSumup(IVp,true);
   PasteOrdInInv = res;
   return;
@@ -1975,9 +1976,9 @@ begin
   IVp.OrderType = ORr.OrderType;
   
   RecordNew(RepSpecRecalcOR); //Edit***************************Sasha2,14:29 19.04.2017 {
-  RepSpecRecalcOR.f1 = ordnr;
-  RepSpecRecalcOR.flags[0] = 1;
-  RepSpecRecalcOR.flags[1] = 1;
+  RepSpecRecalcOR.f1 = ordnr;//Edit_________________ABR//Edit_________________ABR
+  RepSpecRecalcOR.flags[0] = 1;//Edit_________________ABR//Edit_________________ABR
+  RepSpecRecalcOR.flags[1] = 1;//Edit_________________ABR//Edit_________________ABR
   RecalcORMn(RepSpecRecalcOR); //Edit***************************Sasha2,14:29 19.04.2017 }
   
   ORr.SerNr = ordnr;

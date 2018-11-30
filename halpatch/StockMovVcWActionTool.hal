@@ -51,7 +51,7 @@ BEGIN
       StockMovrw.UnitYval = INr.Height;
       StockMovrw.UnitZval = INr.Depth;
 			StockMovrw.Quant = 0;				//Edit--------------------------Dima 02.02.2015
-			if (nonblank(StockMovp.ThrouLocation)) then begin
+			if (nonblank(StockMovp.ThrouLocation)) then begin//Edit_________________ABR//Edit_________________ABR
 					StockMovrw.SentQuant = 0;	//Edit--------------------------Dima 02.02.2015
 			end;
 			StockMovrw.BarCode = INr.BarCode; //Edit***************************Sasha2,11:32 11.02.2015
@@ -506,8 +506,8 @@ begin
   record DurationVc Durationr;
   string 255 tstr;
   record LocationVc Locr;
-	integer i,rwcnt;
-	row  StockMovVc StockMovrw;
+	integer i,rwcnt;//Edit_________________ABR//Edit_________________ABR
+	row  StockMovVc StockMovrw;//Edit_________________ABR//Edit_________________ABR
 
   Durationr.FromLocation = StockMovr.FrLocation;
   Durationr.ViaLocation  = StockMovr.ThrouLocation;

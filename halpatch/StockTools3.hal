@@ -24,7 +24,7 @@ external function Boolean ShouldItemUpdateStock(string);
 external function Boolean ExpandStructItem(string,string,val,var record SHVc);
 external procedure FindStockValue(string,string,var record ItemStatusVc);
 external updating procedure UpdateInShipment(string,string,Date,val);
-external function val AbsoluteVal(val);
+external function val AbsoluteVal(val);//Edit_________________ABR//Edit_________________ABR
 
 /* INRS
 
@@ -304,7 +304,7 @@ begin
     //Error in PISVc record: incorrect positions for TRANSIT location//Edit----------------------Dima  19.01.2016
     if (SMp.ThrouLocation != frlocation) then begin	//Edit----------------------Dima  19.01.2016
     	UpdatePosition(StockMovrw.ArtCode,frlocation,frpos,t2,q2,pins);
-    end;	
+    end;	//Edit_________________ABR//Edit_________________ABR
   end;
   return;
 end;
@@ -608,7 +608,7 @@ begin
         end;
       end;
     end;
-  //end;
+  //end;//Edit_________________ABR//Edit_________________ABR
   return;
 end;
 
@@ -1114,13 +1114,13 @@ begin
       if (nonblank(SHrw.ArtCode)) then begin
         isstruct = false;
         if (SHrw.stp!=kInvoiceRowTypeStructuredItemComponent) then begin
-          isstruct = ExpandStructItem(SHrw.ArtCode,SHrw.Recepy,SHrw.Ordered,RecSHr);
+          isstruct = ExpandStructItem(SHrw.ArtCode,SHrw.Recepy,SHrw.Ordered,RecSHr);//Edit_________________ABR//Edit_________________ABR
         end;
         if (isstruct==false) then begin
           if (SH2p.OKFlag==0) then begin
-            t = -SHrw.Ordered;
+            t = -SHrw.Ordered;//Edit_________________ABR//Edit_________________ABR
           end else begin
-            t = SHrw.Ordered;
+            t = SHrw.Ordered;//Edit_________________ABR//Edit_________________ABR
           end;
           if (remove) then begin
             t = -t;
@@ -1131,9 +1131,9 @@ begin
           for (j=0;j<shrwcnt;j=j+1) begin
             MatRowGet(RecSHr,j,SH2rw);
             if (SH2p.OKFlag==0) then begin
-              t = -SH2rw.Ordered;
+              t = -SH2rw.Ordered;//Edit_________________ABR//Edit_________________ABR
             end else begin
-              t = SH2rw.Ordered;
+              t = SH2rw.Ordered;//Edit_________________ABR//Edit_________________ABR
             end;
             if (remove) then begin
               t = -t;
@@ -1161,13 +1161,13 @@ begin
       if (nonblank(SHrw.ArtCode)) then begin
         isstruct = false;
         if (SHrw.stp!=kInvoiceRowTypeStructuredItemComponent) then begin
-          isstruct = ExpandStructItem(SHrw.ArtCode,SHrw.Recepy,SHrw.Ordered,RecSHr);
+          isstruct = ExpandStructItem(SHrw.ArtCode,SHrw.Recepy,SHrw.Ordered,RecSHr);//Edit_________________ABR//Edit_________________ABR
         end;
         if (isstruct==false) then begin
           if (SHp.OKFlag!=0) then begin
-            t = -SHrw.Ordered;
+            t = -SHrw.Ordered;//Edit_________________ABR//Edit_________________ABR
           end else begin
-            t = SHrw.Ordered;
+            t = SHrw.Ordered;//Edit_________________ABR//Edit_________________ABR
           end;
           if (remove) then begin
             t = -t;
@@ -1178,9 +1178,9 @@ begin
           for (j=0;j<shrwcnt;j=j+1) begin
             MatRowGet(RecSHr,j,SH2rw);
             if (SHp.OKFlag!=0) then begin
-              t = -SH2rw.Ordered;
+              t = -SH2rw.Ordered;//Edit_________________ABR//Edit_________________ABR
             end else begin
-              t = SH2rw.Ordered;
+              t = SH2rw.Ordered;//Edit_________________ABR//Edit_________________ABR
             end;
             if (remove) then begin
               t = -t;
