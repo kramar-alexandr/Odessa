@@ -412,7 +412,7 @@ begin
 			
 		end;
 	end;
-	
+	/*
 	while(loopmain(Locr,1,true))begin
 		aloc[acnt] = Locr.Code;
 		acnt = acnt + 1;
@@ -499,7 +499,7 @@ begin
 			black_divider(0,1);
 		end;
 		
-	end;
+	end;*/
 	
 	endjob;
 return;
