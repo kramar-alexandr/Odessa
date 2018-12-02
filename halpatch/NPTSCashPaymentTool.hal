@@ -79,7 +79,7 @@ begin
   tot = RepSpec.vals0 + tot_invcur_cashreceived;
   
   for (i=0;i<acrncnt;i=i+1) begin //Edit***************************Sasha2,13:10 10.11.2014 {
-    tempchangegiven = achangegiven[i];
+    tempchangegiven = achangegiven[i];//Edit_________________ABR/Begin/Edit_________________ABR
 
     if (GetFullCurncyPurchaseRate(acrncy[i],CurrentDate,fr,to1,to2,br1,br2)==false) then begin
       GetFullCurncyRate(acrncy[i],CurrentDate,fr,to1,to2,br1,br2);
@@ -98,7 +98,7 @@ begin
     	achangegiven[i] = BlankVal;
     end;
   end; //Edit***************************Sasha2,13:10 10.11.2014 }
-  
+  //Edit_________________ABR/END/Edit_________________ABR
   for (i=0;i<acrncnt;i=i+1) begin
     tempchangegiven = achangegiven[i];
 

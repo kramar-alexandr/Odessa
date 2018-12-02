@@ -613,7 +613,7 @@ END;
 
 
 
-global
+global//Edit_________________ABR//Edit_________________ABR
 function Boolean AmendLineNPTSSClassActiveEditField(Integer wn,string fieldname,Integer fn,Integer wnst,Integer rownr,Integer changed)
 begin
 	boolean res;
@@ -708,8 +708,8 @@ BEGIN
         case "IntCode": res = true;
         case "BankCode": res = true;
         case "Status": res = true;
-        case "MachineName": res = true;
-        case "PromotionCode": res = true;
+        case "MachineName": res = true;//Edit_________________ABR//Edit_________________ABR
+        case "PromotionCode": res = true;//Edit_________________ABR//Edit_________________ABR
         case "Objects": res = UserCanAction("UnOKAll",false); //Edit***************************Sasha2,15:34 04.09.2017
       end;
     end else begin
@@ -1048,18 +1048,18 @@ BEGIN
       if (IVrw.CurncyCode!=IVr.CurncyCode) then begin   
         if (IVr.CurncyCode==bascur.BaseCur1) then begin
           //cash = cash + MulRateToBase1(IVrw.CurncyCode,IVrw.Sum,IVrw.FrRate,IVrw.ToRateB1,IVrw.ToRateB2,IVrw.BaseRate1,IVrw.BaseRate2,DefaultCurRoundOff);// Edit ************************** Wednesday, 12 November 2014 15:47:42
-          cash = cash + IVrw.Sum;
+          cash = cash + IVrw.Sum;//Edit_________________ABR//Edit_________________ABR
           bcurf = true;
         end;
         if (IVr.CurncyCode==bascur.BaseCur2) then begin
           //cash = cash + MulRateToBase2(IVrw.CurncyCode,IVrw.Sum,IVrw.FrRate,IVrw.ToRateB1,IVrw.ToRateB2,IVrw.BaseRate1,IVrw.BaseRate2,DefaultCurRoundOff);// Edit ************************** Wednesday, 12 November 2014 15:47:40
-          cash = cash + IVrw.Sum;
+          cash = cash + IVrw.Sum;//Edit_________________ABR//Edit_________________ABR
           bcurf = true;
         end;
         if (bcurf==false) then begin
           CurValToOtherCur(IVr.InvDate,IVrw.CurncyCode,IVrw.Sum,IVr.CurncyCode,v,DefaultCurRoundOff);
           //cash = cash + v;// Edit ************************** Wednesday, 12 November 2014 15:48:32
-          cash = cash + IVrw.Sum;
+          cash = cash + IVrw.Sum;//Edit_________________ABR//Edit_________________ABR
         end;
       end else begin
         cash = cash + IVrw.Sum;

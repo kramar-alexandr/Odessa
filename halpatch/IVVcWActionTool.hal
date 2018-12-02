@@ -154,8 +154,8 @@ begin
         if (MatRowCnt(IVr)>0) then begin 
           IVDUpdatePrices(IVr,false);
         end;  
-      end;
-      IVSumup(IVr,true);
+      end;//Edit_________________ABR//Edit_________________ABR
+      IVSumup(IVr,true);//Edit_________________ABR//Edit_________________ABR
       //end;
     end else begin
       IVr.LCMLevel = "";
@@ -386,7 +386,7 @@ BEGIN
   
   
 //	AlternativeRebateIVVc(IVr);// Edit ************************** Friday, 5 May 2017 16:02:03
-  IVDchsum(IVr,rownr);
+  IVDchsum(IVr,rownr);//Edit_________________ABR//Edit_________________ABR
   if (IVDchrsum(IVr,rownr)) then begin
     IVDchsum(IVr,rownr);
   end;
@@ -432,8 +432,8 @@ BEGIN
     end;
   end;
   if (nonblank(IVr.Position)) then begin			//Edit----------------------Dima  12.01.2016
-		IVrw.PosCode = IVr.Position;				
-	end;
+		IVrw.PosCode = IVr.Position;			//Edit_________________ABR//Edit_________________ABR	
+	end;//Edit_________________ABR//Edit_________________ABR
   exportflag = IVr.ExportFlag;
   if (IVr.InvType==kInvoiceTypeCredit or IVr.InvType==kInvoiceTypeCreditSpecialSales) then begin
     exportflag = exportflag + AddPortugueseType;
@@ -588,19 +588,19 @@ done below
   end;
   
   if (IVr.AllowSaleAllGoods==0) then begin				//Edit----------------------Dima  26.01.2016
-  	User.Code = CurrentUser;
-  	ReadFirstMain(User,1,true);
-  	if (nonblank(User.AllowSalesForType)) then begin
-			if (ItemHasClassification(INr,User.AllowSalesForType)==false) then begin
-				warning = USetStr(31139) & ":  " & IVrw.ArtCode;
-			end;
-		end;
-  	if (nonblank(User.DisallowSalesForType)) then begin
-			if (ItemHasClassification(INr,User.DisallowSalesForType)==true) then begin
-				warning = USetStr(31139) & ":  " & IVrw.ArtCode;
-			end;
-		end;	
-  end;	
+  	User.Code = CurrentUser;//Edit_________________ABR//Edit_________________ABR
+  	ReadFirstMain(User,1,true);//Edit_________________ABR//Edit_________________ABR
+  	if (nonblank(User.AllowSalesForType)) then begin//Edit_________________ABR//Edit_________________ABR
+			if (ItemHasClassification(INr,User.AllowSalesForType)==false) then begin//Edit_________________ABR//Edit_________________ABR
+				warning = USetStr(31139) & ":  " & IVrw.ArtCode;//Edit_________________ABR//Edit_________________ABR
+			end;//Edit_________________ABR//Edit_________________ABR
+		end;//Edit_________________ABR//Edit_________________ABR
+  	if (nonblank(User.DisallowSalesForType)) then begin//Edit_________________ABR//Edit_________________ABR
+			if (ItemHasClassification(INr,User.DisallowSalesForType)==true) then begin//Edit_________________ABR//Edit_________________ABR
+				warning = USetStr(31139) & ":  " & IVrw.ArtCode;//Edit_________________ABR//Edit_________________ABR
+			end;//Edit_________________ABR//Edit_________________ABR
+		end;	//Edit_________________ABR//Edit_________________ABR
+  end;	//Edit_________________ABR//Edit_________________ABR
   
   sernrf = INr.SerNrf;
   AddItemWithholdingTaxesRows_IVVc(IVr,rownr,INr);

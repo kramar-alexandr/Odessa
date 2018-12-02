@@ -170,7 +170,7 @@ BEGIN
   record LocalMachineBlock LMb;
   Boolean savef;
   LongInt VEIVNr;
-  string 255 clockinaction,warning,msg;
+  string 255 clockinaction,warning,msg;//Edit_________________ABR//Edit_________________ABR
   Boolean accpetancef;
   record RcVc acptRepSpec;
   string 255 mailboxnr,mailboxname;
@@ -179,12 +179,12 @@ BEGIN
   record SelCountryBlock SCb;
   record StandardServerBlock StdSrvb;
   Boolean SetServerBuildProductCodef;
-  record NPSettingsBlock NPSettingsb;
-  integer diff;
-	record KassirLoginVc KLr,newKLr; 
+  record NPSettingsBlock NPSettingsb;//Edit_________________ABR//Edit_________________ABR
+  integer diff;//Edit_________________ABR//Edit_________________ABR
+	record KassirLoginVc KLr,newKLr; //Edit_________________ABR//Edit_________________ABR
 
   
-  BlockLoad(NPSettingsb); 
+  BlockLoad(NPSettingsb); //Edit_________________ABR//Edit_________________ABR
   
   if (ClientMode and IsStandardProduct) then begin
     BlockLoad(StdSrvb);
@@ -212,7 +212,7 @@ BEGIN
   end;
   BlockLoad(LMb);
   
-  if (TouchScreenLook) then begin //
+  if (TouchScreenLook) then begin ////Edit_________________ABR/Begin/Edit_________________ABR
 		if(nonblank(LMb.LocalMachineCode))then begin// Edit ************************** Tuesday, 6 December 2016 15:41:14
 			KLr.LocalMachine = LMb.LocalMachineCode;
 			if(readlastkey("LocalMachine",KLr,1,true))then begin
@@ -229,7 +229,7 @@ BEGIN
 				end;
 			end;
 		end;
-  end;
+  end;//Edit_________________ABR/end/Edit_________________ABR
   
   savef = true;
   if (CompileType!=ctWindowsCE and CompileType!=ctSeries80 and CompileType!=ctSeries60 and CompileType!=ctNokiaE90 and CompileType!=ctBPadCE and CompileType!=ctWindowsCELandscape) then begin
@@ -563,7 +563,7 @@ not ready yet
   
   
   if (!ServerMode) then begin				//Edit----------------------Dima  25.03.2016
-  	Userr.Code = CurrentUser;
+  	Userr.Code = CurrentUser;//Edit_________________ABR/begin/Edit_________________ABR
   	if (ReadFirstMain(Userr,1,true)) then begin
   	if (Userr.AccessGroup=="ADMIN"  and NonBlankDate(NPSettingsb.APIkeyDueDate)) then begin
   		diff = DateDiff(NPSettingsb.APIkeyDueDate,CurrentDate);
@@ -586,7 +586,7 @@ not ready yet
 			end;
 		end;
 		end;
-	end;  
+	end;  //Edit_________________ABR/End/Edit_________________ABR
   
 //  OnLogin2;
 LOnLogin:;
@@ -624,9 +624,9 @@ BEGIN
   end;
   
   
-  //if(ClientMode and (currentuser=="KV_1" or currentuser=="KV_2" or currentuser=="RAY_1" or currentuser=="RAY_2") and currenttime>stringtotime("18:00:00"))then begin
-  //	messagebox(31097,"");
-  //end;
+  //if(ClientMode and (currentuser=="KV_1" or currentuser=="KV_2" or currentuser=="RAY_1" or currentuser=="RAY_2") and currenttime>stringtotime("18:00:00"))then begin//Edit_________________ABR//Edit_________________ABR
+  //	messagebox(31097,"");//Edit_________________ABR//Edit_________________ABR
+  //end;//Edit_________________ABR//Edit_________________ABR
   
   OnLogout = true;
   RETURN;  

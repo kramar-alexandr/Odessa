@@ -241,9 +241,9 @@ BEGIN
     OPrw.BankCurncy = crncy;
   end;
   
-	if (rownr==0) then begin
+	if (rownr==0) then begin//Edit_________________ABR//Edit_________________ABR
 			OPp.BankName = VEr.Name;		//Edit----------------------Dima  26.03.2015
-	end;  
+	end;  //Edit_________________ABR//Edit_________________ABR
   
   MatRowPut(OPp,rownr,OPrw);
   RETURN;

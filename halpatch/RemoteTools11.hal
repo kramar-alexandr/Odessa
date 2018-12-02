@@ -910,11 +910,11 @@ begin
     IVp.ShipMode = CUr.ShipMode;
     IVp.OrgCust = "";
     if (HasPriceLists) then begin
-    	if(nonblank(CUr.PLCode)) then begin
+    	if(nonblank(CUr.PLCode)) then begin//Edit_________________ABR//Edit_________________ABR
       	IVp.PriceList = CUr.PLCode;
-      end else begin
-      	IVp.PriceList = "RRP";
-      end;
+      end else begin//Edit_________________ABR//Edit_________________ABR
+      	IVp.PriceList = "RRP";//Edit_________________ABR//Edit_________________ABR
+      end;//Edit_________________ABR//Edit_________________ABR
       IVp.RebCode = CUr.RebCode;
       if (blank(IVp.RebCode)) then begin
         IVp.RebCode = CCatr.RebCode;
@@ -924,11 +924,11 @@ begin
       IVp.PayDeal = CUr.PayDeal;
       PastePDInInv(IVp,"",true);
     end;
-    if(nonblank(CUr.PLCode)) then begin
+    if(nonblank(CUr.PLCode)) then begin//Edit_________________ABR//Edit_________________ABR
       	IVp.PriceList = CUr.PLCode;
-		end else begin
-			IVp.PriceList = "RRP";
-		end;
+		end else begin//Edit_________________ABR//Edit_________________ABR
+			IVp.PriceList = "RRP";//Edit_________________ABR//Edit_________________ABR
+		end;//Edit_________________ABR//Edit_________________ABR
     if (blank(IVp.PriceList)) then begin
       IVp.PriceList = CCatr.PLCode;
     end;
@@ -996,14 +996,14 @@ begin
     IVp.NoTax2 = CUr.NoTax2;
     curcode = IVp.CurncyCode;
     if(nonblank(CUr.CurncyCode))then begin	//	********** Edit by Victor 04.11.14	********
-	    curcode = CUr.CurncyCode;
-	end;
+	    curcode = CUr.CurncyCode;//Edit_________________ABR//Edit_________________ABR
+	end;//Edit_________________ABR//Edit_________________ABR
 	
 	IVVcRebCodeCound(IVp);// Edit ************************** BPI Ukraine - KramarAlexandr - Wednesday, 7 March 2018 11:09:50
 	
 	if (Modb.TouchScreenLook!=0 and LMb.TouchScreenLook!=0) then begin		//	********** Edit by Victor 31.10.14	********
-		curcode = "UAH_R";
-	end;
+		curcode = "UAH_R";//Edit_________________ABR//Edit_________________ABR
+	end;//Edit_________________ABR//Edit_________________ABR
     GetFullCurncyRate(curcode,IVp.InvDate,fr,to1,to2,br1,br2);
     IVp.CurncyCode = curcode;
     IVp.FrRate = fr;
@@ -1616,7 +1616,7 @@ end;
 
 
 global 			//Edit----------------------Dima  12.02.2015
-function Boolean ifCustomerWithCurrentPhoneExist(string code,var string existCode)
+function Boolean ifCustomerWithCurrentPhoneExist(string code,var string existCode)//Edit_________________ABR//Edit_________________ABR
 begin
   record CUVc CUr;
   Boolean TrHs,res;
@@ -1657,7 +1657,7 @@ end;
 // phone number is a string
 // it takes a string, that represents the phone number and deletes all symbols except numbers '+' and '#'
 
-global updating procedure NormalizeNumberMn(record RcVc RepSpec)
+global updating procedure NormalizeNumberMn(record RcVc RepSpec)//Edit_________________ABR//Edit_________________ABR
 begin
 	record CUVc	CUr,CU2r;	// record of the client
 	string 255 	Res;

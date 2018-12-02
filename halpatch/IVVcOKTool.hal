@@ -1171,7 +1171,7 @@ BEGIN
   Integer i,rwcnt;
   Boolean cashf;
   Integer sign;
-  val basepayment;
+  val basepayment;//Edit_________________ABR//Edit_________________ABR
   
   sign = 1;
   if (IVp.InvType==kInvoiceTypeCredit or IVp.InvType==kInvoiceTypeCreditSpecialSales or ARp.RVal<0) then begin //Edit----------------------Dima  22.01.2016
@@ -1182,8 +1182,8 @@ BEGIN
     MatRowGet(IVp,i,IVrw);
     if ((IVrw.stp==kInvoiceRowTypeGiftVoucherPayment) or (IVrw.stp==kInvoiceRowTypeCashPayment) or (IVrw.stp==kInvoiceRowTypeCreditCardPayment) or (IVrw.stp==kInvoiceRowTypeLoyaltyPointsPayment) or (IVrw.stp==kInvoiceRowTypeChequePayment)) then begin
       ARp.RVal = ARp.RVal - sign*AbsoluteVal(IVrw.Sum); 				//Edit----------------------Dima  22.01.2016
-      basepayment = MulRateToBase1(IVp.CurncyCode,AbsoluteVal(IVrw.Sum),IVp.FrRate,IVp.ToRateB1,IVp.ToRateB2,IVp.BaseRate1,IVp.BaseRate2,DefaultCurRoundOff);
-      ARp.BookRVal = ARp.BookRVal - sign*basepayment; 
+      basepayment = MulRateToBase1(IVp.CurncyCode,AbsoluteVal(IVrw.Sum),IVp.FrRate,IVp.ToRateB1,IVp.ToRateB2,IVp.BaseRate1,IVp.BaseRate2,DefaultCurRoundOff);//Edit_________________ABR//Edit_________________ABR
+      ARp.BookRVal = ARp.BookRVal - sign*basepayment; //Edit_________________ABR//Edit_________________ABR
       cashf = true;
     end;
   end;

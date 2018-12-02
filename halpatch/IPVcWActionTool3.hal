@@ -568,10 +568,10 @@ begin
     if (ARAccRec.ARUseObj!=0) then begin
       IPrw.Objects = CUr.Objects;
     end;
-		if (rownr==0) then begin
+		if (rownr==0) then begin//Edit_________________ABR//Edit_________________ABR
 				IPp.Comment = CUr.Name;		//Edit------------------------------Dima 02.02.2015
 
-		end;
+		end;//Edit_________________ABR//Edit_________________ABR
     MatRowPut(IPp,rownr,IPrw);
     IPSumup(IPp);
     res = true;
@@ -767,9 +767,9 @@ begin
 
   MatRowGet(IPp,rownr,IPrw);  
   ChangeIPRecVal(rownr,IPrw,IPp.TransDate);
-	if (nonblank(IPp.TakeOnRate) and (IPrw.BankCurncy != IPrw.RecCurncy)) then begin												
+	if (nonblank(IPp.TakeOnRate) and (IPrw.BankCurncy != IPrw.RecCurncy)) then begin	//Edit_________________ABR//Edit_________________ABR											
 		IPrw.BankVal = IPrw.RecVal/IPp.TakeOnRate;		//Edit----------------------Dima  04.02.2015		
-	end;
+	end;//Edit_________________ABR//Edit_________________ABR
 
   if (nonblank(IPrw.VATCode)) then begin
     if (IPrw.InvoiceNr<0) then begin

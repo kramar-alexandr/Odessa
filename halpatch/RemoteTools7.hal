@@ -28,10 +28,10 @@ external updating procedure AddSM(record SMVc,Boolean);
 external procedure CurValToOtherCur(Date,string,val,string,var val,roundmode);
 external procedure GetARAcc(string,var string);
 external procedure GetFullCurncyRate (var string,Date,var val,var val,var val,var val,var val);
-external function Boolean PasteInvIn2OPr(var record OPVc,Integer,Date,Integer,val,var string,Boolean,var Boolean);
+external function Boolean PasteInvIn2OPr(var record OPVc,Integer,Date,Integer,val,var string,Boolean,var Boolean);//Edit_________________ABR//Edit_________________ABR
 external procedure OPVc_PasteRecVal(var record OPVc,Integer);						//Edit----------------------Dima  26.03.2015
-external procedure OPVc_PasteRecCurncy(var record OPVc,Integer);
-external procedure OPSumup(var record OPVc,Boolean);
+external procedure OPVc_PasteRecCurncy(var record OPVc,Integer);//Edit_________________ABR//Edit_________________ABR
+external procedure OPSumup(var record OPVc,Boolean);//Edit_________________ABR//Edit_________________ABR
 
 global
 procedure ChangeSVIPRecCur(row IPVc iprp,Date tdp,val maxvalp)
@@ -224,31 +224,31 @@ end;
 
 	
 
-global
+global//Edit_________________ABR//Edit_________________ABR
 procedure RecordAction_raExpandPay(var record IPVc IPp,Integer rownr)
 begin
   row IPVc IP0rw;
   row IPVc newIPrw;
-  Integer i,rwcnt,currow,customerRows;
+  Integer i,rwcnt,currow,customerRows;//Edit_________________ABR//Edit_________________ABR
   record ARVc ARr;
   record IVVc IVr;
   Boolean loopf,testf,installmentf;
   LongInt lastpos;
   record BaseCurBlock BCb;
-  val v,remv,chk,cashvalue;  
+  val v,remv,chk,cashvalue;  //Edit_________________ABR//Edit_________________ABR
   record IPTBlock IPTb;
-	string 7 bankCurcode;
+	string 7 bankCurcode;//Edit_________________ABR//Edit_________________ABR
 	time addTime;										//Edit----------------------Dima  12.08.2015
 
   BlockLoad(BCb);
   BlockLoad(IPTb);
   rwcnt = MatRowCnt(IPp);
   currow = rwcnt;
-  customerRows = 0;
+  customerRows = 0;//Edit_________________ABR//Edit_________________ABR
   MatRowGet(IPp,rownr,IP0rw);
-  addTime = IP0rw.AddTime;
+  addTime = IP0rw.AddTime;//Edit_________________ABR//Edit_________________ABR
 
-	////Edit--------------------------------------------------------------------Dima  05.02.2015
+	////Edit BEGIN--------------------------------------------------------------------Dima  05.02.2015
 	bankCurcode = IP0rw.BankCurncy;
 	cashvalue = IP0rw.BankVal;
 	if (IP0rw.BankCurncy != IP0rw.RecCurncy) then begin
@@ -265,7 +265,7 @@ begin
 			IP0rw.BankCurncy = BCb.BaseCur1;
 	end;
 	MatRowPut(IPp,rownr,IP0rw);
-	//Edit----------------------------------------------------------------------Dima  05.02.2015
+	//Edit END----------------------------------------------------------------------Dima  05.02.2015
 
   remv = IP0rw.RecVal;	
 
@@ -303,7 +303,7 @@ begin
         newIPrw.InvoiceNr = ARr.InvoiceNr;
         newIPrw.AddTime = addTime;//Edit----------------------Dima  12.08.2015
         MatRowPut(IPp,currow,newIPrw);
-        customerRows = customerRows + 1;
+        customerRows = customerRows + 1;//Edit_________________ABR//Edit_________________ABR
         if (PasteInvIn2IPr(IPp,currow,IPp.TransDate,chk,false,installmentf)) then begin
         end;     
 
@@ -326,7 +326,7 @@ begin
     newIPrw.RecVal = remv;
     MatRowPut(IPp,currow,newIPrw);
     IPVc_PasteRecVal(IPp,currow);
-    customerRows = customerRows + 1;
+    customerRows = customerRows + 1;//Edit_________________ABR//Edit_________________ABR
   end;
 
 	RewriteIPMatrix(IPp,bankCurcode,cashvalue,customerRows);	//Edit----------------------Dima  05.02.2015

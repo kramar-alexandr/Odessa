@@ -872,7 +872,7 @@ begin
 end;
 
 global
-function Boolean PODClassShipCostRuleButtonAfter(Integer wn,Boolean changedf)
+function Boolean PODClassShipCostRuleButtonAfter(Integer wn,Boolean changedf)//Edit_________________ABR//Edit_________________ABR
 begin        
   record POVc POr;  
   Boolean res;
@@ -892,7 +892,7 @@ begin
 end;
 
 global
-function Boolean PODClassCustomsCostRuleButtonAfter(Integer wn,Boolean changedf)
+function Boolean PODClassCustomsCostRuleButtonAfter(Integer wn,Boolean changedf)//Edit_________________ABR//Edit_________________ABR
 begin        
   record POVc POr;  
   Boolean res;
@@ -2229,7 +2229,7 @@ end;
 
 
 global 
-updating procedure SetEAN13PODsm()
+updating procedure SetEAN13PODsm()//Edit_________________ABR//Edit_________________ABR
 begin 
 	integer wn;
 	record POVc POr;

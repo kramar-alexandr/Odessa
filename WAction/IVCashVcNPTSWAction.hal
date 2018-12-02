@@ -353,7 +353,7 @@ begin
   Integer nwn;
   transaction Boolean gNPTSIVCashCUDisplayDClassf;
   record CashierDefBlock CDb;
-  val totalRebate, totSumNoRebate;
+  val totalRebate, totSumNoRebate;//Edit_________________ABR//Edit_________________ABR
   
   ClearStringList(wn);
   width = StringListWidth(wn);
@@ -789,7 +789,7 @@ begin
       RepSpec.long2 = rownr;
       RepSpec.CurncyCode = BCb.BaseCur1;
       RepSpec.AccStr = "GC";
-      RepSpec.f6 = "Ћплата под. серт.";
+      RepSpec.f6 = "Ћплата под. серт.";//Edit_________________ABR//Edit_________________ABR
       PutWindowRecord(nwn,RepSpec);
       WindowFieldGoto(nwn,RepSpec,-1,"f1",true);
     end;
@@ -801,7 +801,7 @@ begin
 end;
 
 global 
-procedure GiftVoucherOpenDClass ()
+procedure GiftVoucherOpenDClass ()//Edit_________________ABR//Edit_________________ABR
 begin
 	Integer wn,mwn;
 	record RcVc RepSpec;

@@ -26,7 +26,7 @@ external procedure NextOfficialSerNr(string,LongInt,Date,string,var string);
 external function string 50 NextLegalSerNr(string,LongInt,Date,string,string,string);
 external procedure IVVc_PasteRebCode(var record IVVc); //Edit--------------------Dima 29.01.2015
 external procedure GetLocationReb(record INVc,string,val,var val,record RebVc,Integer,var val,var Boolean);// Edit ************************** Tuesday, 14 February 2017 13:01:05
-external function Boolean GetItemPriceDiscount3(string,val,var record INVc,string,val,val,val,val,val,string,string,string,string,
+external function Boolean GetItemPriceDiscount3(string,val,var record INVc,string,val,val,val,val,val,string,string,string,string,//Edit_________________ABR//Edit_________________ABR
                                                 var val,var string,var val,var string,var val,var string,Integer,var Boolean,Date,Time,
                                                 string,Boolean,var Boolean,string,var string,var val,string,string,var string);
                                                 
@@ -725,7 +725,7 @@ BEGIN
   string 20 StaffCode;
   val vra0,vra1,vra2,vra3;
   record INVc INr;// Edit ************************** Tuesday, 14 February 2017 13:05:01
-  boolean tr;
+  boolean tr;//Edit_________________ABR//Edit_________________ABR
   
   BlockLoad(GenOptr);
   rwcnt = MatRowCnt(Rebp);
@@ -737,7 +737,7 @@ BEGIN
                                      CodeType,ITCode,StaffCode,vra0,vra1,vra2,vra3);    
         if (ITCode==Rebrw.ITCode) then begin
           //GetStaffRebate(Rebrw.StaffCode,vra0,vra1,vra2,vra3,Rebrw,rebv);// Edit ************************** Tuesday, 14 February 2017 13:01:29
-          GetLocationReb(INr,IVp.Location,vra0,vra1,Rebp,i,rebv,tr);
+          GetLocationReb(INr,IVp.Location,vra0,vra1,Rebp,i,rebv,tr);//Edit_________________ABR//Edit_________________ABR
           RecalcInvoiceRows(IVp,ITCode,rebv,GenOptr.UseDiscount,aCodeType,aITCode,aStaffCode,avra0,avra1,avra2,avra3,acnt);
         end;
       case 1:
@@ -745,7 +745,7 @@ BEGIN
                                      CodeType,ITCode,StaffCode,vra0,vra1,vra2,vra3);    
         if (ITCode==Rebrw.ITCode) then begin
           //GetStaffRebate(Rebrw.StaffCode,vra0,vra1,vra2,vra3,Rebrw,rebv);// Edit ************************** Tuesday, 14 February 2017 12:58:35
-					GetLocationReb(INr,IVp.Location,vra0,vra1,Rebp,i,rebv,tr);
+					GetLocationReb(INr,IVp.Location,vra0,vra1,Rebp,i,rebv,tr);//Edit_________________ABR//Edit_________________ABR
           RecalcInvoiceRows(IVp,ITCode,rebv,GenOptr.UseDiscount,aCodeType,aITCode,aStaffCode,avra0,avra1,avra2,avra3,acnt);
         end;
     end;  
@@ -757,7 +757,7 @@ global
 procedure RecalcDiscountIVD(var record IVVc IVp)
 BEGIN
   record RebVc Rebr;
-	record CUVc CUr;
+	record CUVc CUr;//Edit_________________ABR//Edit_________________ABR
   Array Integer aCodeType;
   Array string 20 aITCode;
   Array string 20 aStaffCode;
@@ -766,7 +766,7 @@ BEGIN
   Array val avra2;
   Array val avra3;
   Integer acnt;
-  record RebateVoucherVc RVr;
+  record RebateVoucherVc RVr;//Edit_________________ABR//Edit_________________ABR
 
   RecordNew(Rebr);
   Rebr.Code = IVp.RebCode;
@@ -776,18 +776,18 @@ BEGIN
     RecalcIVITHandle(IVp,Rebr,aCodeType,aITCode,aStaffCode,avra0,avra1,avra2,avra3,acnt);
   end; 
 
-	CUr.Code = IVp.CustCode;
+	CUr.Code = IVp.CustCode;//Edit_________________ABR//Edit_________________ABR
 	if(ReadFirstMain(CUr,1,true)) then begin			//Edit-------------------------------------Dima  29.01.2015
-			IVp.RebCode = CUr.RebCode;
-			IVVc_PasteRebCode(IVp);
-	end;
-	if(IVp.BirthDayVaucher>0)then begin
-		RVr.VoucherSerNr = IVp.BirthDayVaucher;
-		if(readfirstkey("VoucherSerNr",RVr,1,true))then begin
-			IVp.RebCode = RVr.RebCode;
-			IVVc_PasteRebCode(IVp);
-		end;
-	end;
+			IVp.RebCode = CUr.RebCode;//Edit_________________ABR//Edit_________________ABR
+			IVVc_PasteRebCode(IVp);//Edit_________________ABR//Edit_________________ABR
+	end;//Edit_________________ABR//Edit_________________ABR
+	if(IVp.BirthDayVaucher>0)then begin//Edit_________________ABR//Edit_________________ABR
+		RVr.VoucherSerNr = IVp.BirthDayVaucher;//Edit_________________ABR//Edit_________________ABR
+		if(readfirstkey("VoucherSerNr",RVr,1,true))then begin//Edit_________________ABR//Edit_________________ABR
+			IVp.RebCode = RVr.RebCode;//Edit_________________ABR//Edit_________________ABR
+			IVVc_PasteRebCode(IVp);//Edit_________________ABR//Edit_________________ABR
+		end;//Edit_________________ABR//Edit_________________ABR
+	end;//Edit_________________ABR//Edit_________________ABR
   
   IVSumup(IVp,true);   
   RETURN;
@@ -844,7 +844,7 @@ BEGIN
   string 20 StaffCode;
   val vra0,vra1,vra2,vra3;
   record INVc INr;// Edit ************************** Tuesday, 14 February 2017 13:05:01
-  boolean tr;
+  boolean tr;//Edit_________________ABR//Edit_________________ABR
   
   BlockLoad(GenOptr);
   rwcnt = MatRowCnt(Rebp);
@@ -884,7 +884,7 @@ begin
   Array val avra2;
   Array val avra3;
   Integer acnt;
-  record CUVc CUr;
+  record CUVc CUr;//Edit_________________ABR/BEGIN/Edit_________________ABR
   integer i,mtrw;
   row ORVc ORrw;
   string 255 tstr,tax2code,location,itemtaxtemplatecode,dummystr;
@@ -893,11 +893,11 @@ begin
 	Boolean calcprice;
   Integer exportflag;
   Boolean dummyf;
-  Time blankt;
+  Time blankt;//Edit_________________ABR/END/Edit_________________ABR
 	 
   RecordNew(Rebr);
   
-  CUr.Code = ORp.CustCode;
+  CUr.Code = ORp.CustCode;//Edit_________________ABR/BEGIN/Edit_________________ABR
   if(readfirstmain(CUr,1,true))then begin
   	if(ORp.RebCode!=CUr.RebCode)then begin 
   		ORp.RebCode = CUr.RebCode;
@@ -927,7 +927,7 @@ begin
       end;
 		end;  
 	end; 
-  
+  //Edit_________________ABR/END/Edit_________________ABR
   /*Rebr.Code = ORp.RebCode;
   if (ReadFirstMain(Rebr,1,true)) then begin
     CreateITHandle(Rebr,aCodeType,aITCode,aStaffCode,avra0,avra1,avra2,avra3,acnt);

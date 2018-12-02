@@ -28,13 +28,13 @@ external function Boolean GetItemStatus(string,string,string,Integer,var val,var
 external procedure GetUserName(string,var string);
 external procedure NextM4Number(string,var string);
 external procedure NP_PasteRecipientWarehouseDesc(var record SHVc);//Edit----------------------Dima  05.05.2015
-external procedure NP_PasteSenderWarehouseDesc(var record SHVc);
+external procedure NP_PasteSenderWarehouseDesc(var record SHVc);//Edit_________________ABR//Edit_________________ABR
 external procedure NP_PasteSender(var record SHVc);	//Edit----------------------Dima  27.04.2015
 external updating procedure RecalcORMn(record RcVc); //Edit***************************Sasha2,14:27 19.04.2017
 external procedure AdNP_PasteRecipientWarehouseDesc(var record SHVc);//Edit----------------------Dima  05.05.2015
 
 
-SetLangMode(LangRussian,"RUS",0);
+SetLangMode(LangRussian,"RUS",0);//Edit_________________ABR//Edit_________________ABR
 
 
 global
@@ -707,10 +707,10 @@ BEGIN
   Boolean limitdaysf;
   record SerNrTrackBlock SNrb;
   record OrdSettBlock OSb;
-  record NPSettingsBlock NPSettingsb;
+  record NPSettingsBlock NPSettingsb;//Edit_________________ABR//Edit_________________ABR
   boolean checklimitflocal;// Edit ************************** Wednesday, 12 October 2016 11:05:28
   
-	BlockLoad(NPSettingsb);  
+	BlockLoad(NPSettingsb);  //Edit_________________ABR//Edit_________________ABR
   
   frin = FirstInRange(onlyforitems,20);
   toin = LastInRange(onlyforitems,20);
@@ -866,7 +866,7 @@ LPasteOrdInShipLimitMes:
   SHp.ORCOType = SalesContractType(ORr.ORCONr);
   SHp.Manager = ORr.SalesMan; //Edit***************************Sasha2,15:45 27.01.2015
   
-  if (ORr.DeliveryNewPost==1) then begin
+  if (ORr.DeliveryNewPost==1) then begin//Edit_________________ABR/BEGIN/Edit_________________ABR
   	if(ORr.OrderClass=="WEB")then begin// Edit ************************** Wednesday, 17 May 2017 15:45:47
 			SHp.NPSender = NPSettingsb.DefSenderRef;			//Edit----------------------Dima  16.04.2015
 			SHp.NPSenderWarehouse = NPSettingsb.DefSenderWarehouse;
@@ -956,19 +956,19 @@ LPasteOrdInShipLimitMes:
 		if(blank(ORr.OrderClass))then begin
 			SHp.Assembly = 1;
 		end;
-  end;
+  end;//Edit_________________ABR/END/Edit_________________ABR
   rwcnt = MatRowCnt(ORr);
   srw = 0;
   for (i=0;i<rwcnt;i=i+1) begin
     MatRowGet(ORr,i,ORrw);
     remn = ORrw.Quant - ORrw.Shipd1;
     
-    if(userCanAction("SHBeforeIV",true))then begin
-			if (ORrw.Invd==0 and nonblank(ORrw.ArtCode)) then begin
-					res = 31167;
-					goto LPasteOrdInShip;
-			end;
-		end;
+    if(userCanAction("SHBeforeIV",true))then begin//Edit_________________ABR//Edit_________________ABR
+			if (ORrw.Invd==0 and nonblank(ORrw.ArtCode)) then begin//Edit_________________ABR//Edit_________________ABR
+					res = 31167;//Edit_________________ABR//Edit_________________ABR
+					goto LPasteOrdInShip;//Edit_________________ABR//Edit_________________ABR
+			end;//Edit_________________ABR//Edit_________________ABR
+		end;//Edit_________________ABR//Edit_________________ABR
 		
     
 LPasteSupersessionIN:;
@@ -1044,8 +1044,8 @@ L10PasteOrdInShip:;
       SHrw.Source = ORrw.Source;
       SHrw.PosCode = ORrw.Position;
       if (SHp.Location == "1-KOC") then begin		//Latin liters	//Edit-----===============================-----------------Dima  07.12.2015
-				SHrw.PosCode = Locr.DefaultCashierPosCode;
-			end;    
+				SHrw.PosCode = Locr.DefaultCashierPosCode;//Edit_________________ABR//Edit_________________ABR
+			end;    //Edit_________________ABR//Edit_________________ABR
       SHrw.DespatchRowTime = ORrw.DespatchRowTime;
       SHrw.SalesAcc = ORrw.SalesAcc;
       if (nonblankdate(ORrw.DespatchRowDate)) then begin
@@ -1199,7 +1199,7 @@ BEGIN
   array string 40 aserialnr;
   array val aqty;
   Integer acnt;
-  record SHVc oldSHr;
+  record SHVc oldSHr;//Edit_________________ABR//Edit_________________ABR
   
   res = -1;
   RecordNew(SHp);
@@ -1219,9 +1219,9 @@ BEGIN
   end;
   
   RecordNew(RepSpecRecalcOR); //Edit***************************Sasha2,14:29 19.04.2017 {
-  RepSpecRecalcOR.f1 = SHp.OrderNr;
-  RepSpecRecalcOR.flags[0] = 1;
-  RepSpecRecalcOR.flags[1] = 1;
+  RepSpecRecalcOR.f1 = SHp.OrderNr;//Edit_________________ABR//Edit_________________ABR
+  RepSpecRecalcOR.flags[0] = 1;//Edit_________________ABR//Edit_________________ABR
+  RepSpecRecalcOR.flags[1] = 1;//Edit_________________ABR//Edit_________________ABR
   RecalcORMn(RepSpecRecalcOR); //Edit***************************Sasha2,14:29 19.04.2017 }
   
   ORr.SerNr = SHp.OrderNr;
@@ -1238,7 +1238,7 @@ BEGIN
     end;
   end;
 	
-	
+	//Edit_________________ABR/Begin/Edit_________________ABR
 	if(usercanaction("AllowMultySH",false)==false)then begin
 		oldSHr.OrderNr = ordnr;
 		if(readfirstkey("OrderKey",oldSHr,1,true))then begin
@@ -1246,7 +1246,7 @@ BEGIN
       goto LRecordAction_raPasteOrdInShip;
 		end;
 	end;
-	
+	//Edit_________________ABR/END/Edit_________________ABR
   res = PasteOrdInShip(aStockMovr,asmcnt,ORr,SHp,true,"",0,"","",aincode,aloc,aserialnr,aqty,acnt);
   if (EarlierReservationsExists(ORr)) then begin
     warning = USetStr(20562);

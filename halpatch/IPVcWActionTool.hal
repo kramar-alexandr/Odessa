@@ -31,8 +31,8 @@ external function Boolean GetAccCur(string,var string);
 external procedure CurValToOtherCur(Date,string,val,string,var val,roundmode);
 external function Boolean GetPMCurrency(string,var string);
 external procedure GetFullCurncyRate (var string,Date,var val,var val,var val,var val,var val);
-external procedure ServerToClientMessage(string);
-external function val AbsoluteVal(val);
+external procedure ServerToClientMessage(string);//Edit_________________ABR//Edit_________________ABR
+external function val AbsoluteVal(val);//Edit_________________ABR//Edit_________________ABR
 
 /*
 procedure GetIPVAT(record AccBlock ARAb,record IVVc IVp,var val payvp,var val vatvalp,var string vatcode,var string taxtemplatecode)
@@ -683,9 +683,9 @@ calculated in  GetIPVAT
     end;
   end;
 
-	if (rownr==0) then begin
+	if (rownr==0) then begin//Edit_________________ABR//Edit_________________ABR
 		IPp.Comment = IVr.Addr0;			//Edit-----------------------Dima 02.02.2015
-	end;	
+	end;	//Edit_________________ABR//Edit_________________ABR
   PasteInvIn2IPr = res;
   RETURN;  
 END;

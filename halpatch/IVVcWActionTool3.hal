@@ -39,7 +39,7 @@ external procedure FindUserMailboxName(string,var string,var string);
 external function Boolean FindCustomerRelation(string,string,var record CUVc);
 external procedure GetPayDealText(string,string,var string);
 remote function string 255 LookUpPromotionCode(date,string); //Edit***************************Sasha2,15:31 24.01.2017
-external procedure IVDUpdatePrices(var record IVVc,Boolean);
+external procedure IVDUpdatePrices(var record IVVc,Boolean);//Edit_________________ABR//Edit_________________ABR
 
 function val FEIVQuantFract(LongInt curfeivnr,LongInt ordernr,LongInt ivsernr,Integer rownr)
 BEGIN
@@ -1269,16 +1269,16 @@ BEGIN
   record CUVc CUr;
   record DefCashBlock DefCashRec;	//	Edit by Victor 31.10.14
 	
-	if (nonblank(prevpaydeal)) then begin
+	if (nonblank(prevpaydeal)) then begin//Edit_________________ABR//Edit_________________ABR
     prevPDr.Code = prevpaydeal;
     if (GetPD(prevPDr)) then begin
     end;
   end;
   
   if(blank(IVp.PayDeal)) then begin	//	Edit by Victor 31.10.14
-  	BlockLoad(DefCashRec);
-    IVp.PayDeal = DefCashRec.DefCashPayDeal;
-  end;
+  	BlockLoad(DefCashRec);//Edit_________________ABR//Edit_________________ABR
+    IVp.PayDeal = DefCashRec.DefCashPayDeal;//Edit_________________ABR//Edit_________________ABR
+  end;//Edit_________________ABR//Edit_________________ABR
   
   PDr.Code = IVp.PayDeal;
   if (GetPD(PDr)) then begin
@@ -1446,9 +1446,9 @@ begin
   Boolean calcprice,dummyf;
   row LocationAccBlock LAbrw;
   record CashierDefBlock CashierDefb;//Edit----------------------Dima  26.01.2016
-  record LocationVc Locr;
+  record LocationVc Locr;//Edit_________________ABR//Edit_________________ABR
   
-  BlockLoad(CashierDefb);
+  BlockLoad(CashierDefb);//Edit_________________ABR//Edit_________________ABR
   
   if (rownr<0) then begin
     IVr.PromotionCode2 = LookUpPromotionCode(IVr.InvDate,IVr.Location); //Edit***************************Sasha2,11:31 25.01.2017
@@ -1465,13 +1465,13 @@ begin
       end;
       
       IVr.Position = "";										//Edit----------------------Dima  26.01.2016
-  		//if (CashierDefb.PutPositionForPOS != 0) then begin
-  		if (true) then begin
-  			Locr.Code = IVr.Location;				
-  			if (ReadFirstMain(Locr,1,true)) then begin
-					IVr.Position = Locr.DefaultCashierPosCode;
-				end;
-			end;       
+  		//if (CashierDefb.PutPositionForPOS != 0) then begin//Edit_________________ABR//Edit_________________ABR
+  		if (true) then begin//Edit_________________ABR
+  			Locr.Code = IVr.Location;		//Edit_________________ABR//Edit_________________ABR		
+  			if (ReadFirstMain(Locr,1,true)) then begin//Edit_________________ABR//Edit_________________ABR
+					IVr.Position = Locr.DefaultCashierPosCode;//Edit_________________ABR//Edit_________________ABR
+				end;//Edit_________________ABR//Edit_________________ABR
+			end;       //Edit_________________ABR//Edit_________________ABR
 /*
       GetItemPriceDiscount3(IVrw.ArtCode,IVrw.Quant,INr,IVr.CurncyCode,
                             IVr.FrRate,IVr.ToRateB1,IVr.ToRateB2,IVr.BaseRate1,IVr.BaseRate2,
@@ -1922,7 +1922,7 @@ end;
 // Edit Dima ************* 2018-02-20 02:00 PM
 
 global
-function integer IVVcCountSum(record IVVc IVr)
+function integer IVVcCountSum(record IVVc IVr)//Edit_________________ABR//Edit_________________ABR
 begin
 	row IVVc 				IVrw;
 	integer 				sum, i, mtrw;
@@ -1942,7 +1942,7 @@ begin
 end;
 
 global
-procedure IVVcRebCodeCound(var record IVVc IVr)
+procedure IVVcRebCodeCound(var record IVVc IVr)//Edit_________________ABR//Edit_________________ABR
 begin
 	row OneTimeDiscBlock	OTDrw;
 	record CUVc				CUr;

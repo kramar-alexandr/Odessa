@@ -21,7 +21,7 @@ external procedure GetStructureCostPrice(string,var val);
 external function Boolean GetFirstItem(var string,var record INVc);
 external procedure SetDefProjectUnit(string,var string);
 external function Boolean GetRebateLocation(record INVc,var val,var val,string,string,var val,var Boolean,Date,string);// Edit ************************** Tuesday, 14 February 2017 11:39:24
-external procedure IVDchsum(var record IVVc,Integer);
+external procedure IVDchsum(var record IVVc,Integer);//Edit_________________ABR//Edit_________________ABR
 
 /*  This code will calculate the price if the price is not in the prices register, I don't think it should work that way
 function Boolean GetPurchaseItem(string artcode,var record PIVc PIp)
@@ -695,7 +695,7 @@ L44GetItemPriceDiscount3:;
     lang2 = langcode;
     if (GetItemNameStr(1,descstr,lang2,INr.Name,theitemcode)) then begin end;
     if (nomorepricing==false) then begin
-      rebfound = GetRebateLocation(INr,tprice,qtp,custcat,rebcode,tdisc,foundstaff,tdp,location);
+      rebfound = GetRebateLocation(INr,tprice,qtp,custcat,rebcode,tdisc,foundstaff,tdp,location);//Edit_________________ABR//Edit_________________ABR
       if (foundstaff) then begin
         discount = tdisc;
       end else begin
@@ -1407,7 +1407,7 @@ begin
 end;
 
 
-global procedure AlternativeRebateIVVc(var record IVVc IVr)begin
+global procedure AlternativeRebateIVVc(var record IVVc IVr)begin//Edit_________________ABR//Edit_________________ABR
 row IVVc IVrw;
 record AlternativeRebateVc AlRebr;
 row AlternativeRebateVc AlRebrw;
@@ -1578,7 +1578,7 @@ boolean trigtestf,targtestf;
 return;
 end;
 
-global procedure AlternativeRebateORVc(var record ORVc ORr)begin
+global procedure AlternativeRebateORVc(var record ORVc ORr)begin//Edit_________________ABR//Edit_________________ABR
 row ORVc ORrw;
 record AlternativeRebateVc AlRebr;
 row AlternativeRebateVc AlRebrw;

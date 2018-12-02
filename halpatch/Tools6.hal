@@ -323,14 +323,14 @@ BEGIN
 LSKIPPUROWPUSumUp:;    
   end;
   PUr.SumQuant = Round(totqty,SetRoundModeD(2));
-  PUr.ShipCost = Round(PUr.ShipCost,SetRoundModeD(2));
-  PUr.Cost1 = Round(PUr.Cost1,SetRoundModeD(2));
-  PUr.Cost2 = Round(PUr.Cost2,SetRoundModeD(2));
-  PUr.Cost3 = Round(PUr.Cost3,SetRoundModeD(2));
-  PUr.Cost4 = Round(PUr.Cost4,SetRoundModeD(2));
-  PUr.Cost5 = Round(PUr.Cost5,SetRoundModeD(2));
+  PUr.ShipCost = Round(PUr.ShipCost,SetRoundModeD(2));//Edit_________________ABR//Edit_________________ABR
+  PUr.Cost1 = Round(PUr.Cost1,SetRoundModeD(2));//Edit_________________ABR//Edit_________________ABR
+  PUr.Cost2 = Round(PUr.Cost2,SetRoundModeD(2));//Edit_________________ABR//Edit_________________ABR
+  PUr.Cost3 = Round(PUr.Cost3,SetRoundModeD(2));//Edit_________________ABR//Edit_________________ABR
+  PUr.Cost4 = Round(PUr.Cost4,SetRoundModeD(2));//Edit_________________ABR//Edit_________________ABR
+  PUr.Cost5 = Round(PUr.Cost5,SetRoundModeD(2));//Edit_________________ABR//Edit_________________ABR
   PUr.CustomsCost = Round(PUr.CustomsCost,SetRoundModeD(2));	//Edit----------------------Dima  24.03.2015
-  //PUr.CustomsCost = Round(PUr.CustomsCost,SetRoundModeD(5));
+  //PUr.CustomsCost = Round(PUr.CustomsCost,SetRoundModeD(5));//Edit_________________ABR//Edit_________________ABR
   PUr.ExtraCost = Round(PUr.ExtraCost,DefaultRoundMode);
   PUr.SumCostPrice = Round(PUr.SumCostPrice,SetRoundModeD(2));//rndtotal should not be rounded, cause creating TR doesnt to it
   PUr.TotUPrice = Round(PUr.TotUPrice,SetRoundModeD(2));

@@ -1,17 +1,17 @@
-remote function val ItemInStock(var record INVc,string);	
-remote function val ItemInStockUseReserv(var record INVc,string);	
+remote function val ItemInStock(var record INVc,string);	//Edit_________________ABR//Edit_________________ABR
+remote function val ItemInStockUseReserv(var record INVc,string);	//Edit_________________ABR//Edit_________________ABR
 
-SetLangMode(LangRussian,"RUS",0);
+SetLangMode(LangRussian,"RUS",0);//Edit_________________ABR//Edit_________________ABR
 
 
 global function string 255 INSClassInStock(var record INVc INr)	// Edit by Victor 29.10.14
 begin
-  transaction string 255 gLocation;
+  transaction string 255 gLocation;//Edit_________________ABR//Edit_________________ABR
   
-  if (blank(gLocation)) then begin
-    gLocation = ";;;";
+  if (blank(gLocation)) then begin//Edit_________________ABR//Edit_________________ABR
+    gLocation = ";;;";//Edit_________________ABR//Edit_________________ABR
   end;
-  INSClassInStock = ItemInStock(INr,gLocation);
+  INSClassInStock = ItemInStock(INr,gLocation);//Edit_________________ABR//Edit_________________ABR
   return;
 end;
 // Edit Start ---------------------------------------------- Edit Start
@@ -19,18 +19,18 @@ end;
 	
 global function string 255 IN1SClassInStock(var record INVc INr)	// Edit by Victor 29.10.14
 begin
-  transaction string 255 gLocation;
+  transaction string 255 gLocation;//Edit_________________ABR//Edit_________________ABR
   
   if (blank(gLocation)) then begin
-    gLocation = ";;;";
+    gLocation = ";;;";//Edit_________________ABR//Edit_________________ABR
   end;
-  IN1SClassInStock = ItemInStock(INr,gLocation);// Put stock!
+  IN1SClassInStock = ItemInStock(INr,gLocation);// Put stock!//Edit_________________ABR//Edit_________________ABR
   return;
 end;
 
 global function string 255 IN1SClassInStockNIZ(var record INVc INr)	// Edit by Victor 29.10.14
 begin
-  transaction string 255 gLocation;
+  transaction string 255 gLocation;//Edit_________________ABR//Edit_________________ABR
   
   IN1SClassInStockNIZ = ItemInStockUseReserv(INr,"3-RAY");// Put stock!// Edit ************************** Wednesday, 5 April 2017 13:06:10
   return;
@@ -38,7 +38,7 @@ end;
 
 global function string 255 IN1SClassInStockKV(var record INVc INr)	//Edit by Victor 21.01.15
 begin
-  transaction string 255 gLocation;
+  transaction string 255 gLocation;//Edit_________________ABR//Edit_________________ABR
   
   IN1SClassInStockKV = ItemInStockUseReserv(INr,"6-KV");// Edit ************************** Wednesday, 5 April 2017 13:06:11
   return;
@@ -47,7 +47,7 @@ end;
 
 global function string 255 IN1SClassInStockEXPO(var record INVc INr)	//Edit----------------------Dima  01.03.2016
 begin
-  transaction string 255 gLocation;
+  transaction string 255 gLocation;//Edit_________________ABR//Edit_________________ABR
   
   IN1SClassInStockEXPO = ItemInStockUseReserv(INr,USetStr(31141));// Edit ************************** Wednesday, 5 April 2017 13:06:25
   return;
@@ -57,21 +57,21 @@ end;
 	// Edit End ---------------------------------------------- Edit End
 	
 
-procedure AddToUsersArray(var Array string auser,var Integer acnt,string UserStr)
+procedure AddToUsersArray(var Array string auser,var Integer acnt,string UserStr)//Edit_________________ABR//Edit_________________ABR
 begin
   Integer i;
   
-  for (i=0;i<acnt;i=i+1) begin
-    if (auser[i]==UserStr) then begin goto LAddToUsersArray; end;
+  for (i=0;i<acnt;i=i+1) begin//Edit_________________ABR//Edit_________________ABR
+    if (auser[i]==UserStr) then begin goto LAddToUsersArray; end;//Edit_________________ABR//Edit_________________ABR
   end;
-  auser[acnt] = UserStr;
-  acnt = acnt + 1;
-LAddToUsersArray:;  
+  auser[acnt] = UserStr;//Edit_________________ABR//Edit_________________ABR
+  acnt = acnt + 1;//Edit_________________ABR//Edit_________________ABR
+LAddToUsersArray:;  //Edit_________________ABR//Edit_________________ABR
   return;
 end;
 
 global
-procedure UserNPTSSClassArrayOnOpen(var Array string auser,var Integer acnt)
+procedure UserNPTSSClassArrayOnOpen(var Array string auser,var Integer acnt)//Edit_________________ABR//Edit_________________ABR
 begin
   record UserVc Userr;
   record GlobalUserVc GlobalUserr;

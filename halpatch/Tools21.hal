@@ -720,7 +720,7 @@ BEGIN
     if (IVp.InvType==kInvoiceTypeCredit or IVp.InvType==kInvoiceTypeCreditSpecialSales) then begin ivsum = -ivsum; end;
     ARr.InvoiceNr = IVp.SerNr;
     if (ReadFirstMain(ARr,1,true)) then begin
-    	logtext(0,"ARr.RVal " & ARr.RVal & " _ ivsum " & ivsum);
+    	logtext(0,"ARr.RVal " & ARr.RVal & " _ ivsum " & ivsum);//Edit_________________ABR//Edit_________________ABR
       if (ARr.RVal!=ivsum) then begin
         res = 22059;
         goto LIsUnOKAllowed_IVVc;
@@ -737,7 +737,7 @@ BEGIN
     IPrsr.TransType = kIPrsTransTypeReceipt;
 		if (ReadFirstKey("IVKey",IPrsr,2,true)) then begin
 			res = 22058;
-			goto LIsUnOKAllowed_IVVc;
+			goto LIsUnOKAllowed_IVVc; 
 		end;
     IPrsr.IVNr = IVp.SerNr;
     IPrsr.TransType = kIPrsTransTypePurgeNLTransaction;
@@ -1168,7 +1168,7 @@ LIsUnOKAllowed_PUVc:;
   return;
 end;
 
-/*
+/*//Edit_________________ABR
 global
 function Integer IsUnOKAllowed_StockMovVc(record StockMovVc SMp)
 begin  
@@ -1194,7 +1194,7 @@ LIsUnOKAllowed_StockMovVc:;
   IsUnOKAllowed_StockMovVc = res;
   return;
 end;
-*/
+*///Edit_________________ABR//Edit_________________ABR
 
 
 

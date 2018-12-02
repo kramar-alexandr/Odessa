@@ -1,10 +1,10 @@
-external function boolean MySendRawWebRequest(string, string, boolean, string, string, string, string, boolean, area, var area, integer);
-external function string 255 ConvertXml(string);
-external procedure GetXMLArea(var area);
-external procedure GetXMLArea_check(var area,string);
+external function boolean MySendRawWebRequest(string, string, boolean, string, string, string, string, boolean, area, var area, integer);//Edit_________________ABR//Edit_________________ABR
+external function string 255 ConvertXml(string);//Edit_________________ABR//Edit_________________ABR
+external procedure GetXMLArea(var area);//Edit_________________ABR//Edit_________________ABR
+external procedure GetXMLArea_check(var area,string);//Edit_________________ABR//Edit_________________ABR
 
 
-function string 15 NormalizePhone(string phone)
+function string 15 NormalizePhone(string phone)//Edit_________________ABR//Edit_________________ABR
 begin
 	string 15 correctPhone;
 
@@ -24,7 +24,7 @@ end;
 
 
 
-global procedure SendSMSEmail(string phone, string message, string smsTitle)
+global procedure SendSMSEmail(string phone, string message, string smsTitle)//Edit_________________ABR//Edit_________________ABR
 begin
 	area subject,body;
 	string 15 correctPhone;
@@ -121,7 +121,7 @@ end;
 
 
 global updating
-function string 255 SendSMS(record SMSstackVc SMSr, boolean writeLog)
+function string 255 SendSMS(record SMSstackVc SMSr, boolean writeLog)//Edit_________________ABR//Edit_________________ABR
 begin
   area replyarea,mainRequest;
   string 200 host,page,response;
@@ -176,7 +176,7 @@ begin
 end;
 
 
-global updating function CreateSMSlinks(record SMSstackVc SMSr,string docType,longint docSerNr)
+global updating function CreateSMSlinks(record SMSstackVc SMSr,string docType,longint docSerNr)//Edit_________________ABR//Edit_________________ABR
 begin
 record ORVc ORr;
 record SHvc SHr;
@@ -195,7 +195,7 @@ record SHvc SHr;
 end;
 
 
-global updating function longint AddSMStoStack(string phone, string title,string textbefore, string text,string custcode,string docType,longint docSerNr,string OrderClass,date sendDate,time sendTime) 
+global updating function longint AddSMStoStack(string phone, string title,string textbefore, string text,string custcode,string docType,longint docSerNr,string OrderClass,date sendDate,time sendTime) //Edit_________________ABR//Edit_________________ABR
 begin
 record SMSstackVc SMSr;
 longint smsNr;
@@ -278,7 +278,7 @@ end;
 /*
 //Previous function without writing to SMSstackVc
 global 
-function string 255 SendSMS(string phone,string text,string title, boolean writeLog,string ordclass)
+function string 255 SendSMS(string phone,string text,string title, boolean writeLog,string ordclass)//Edit_________________ABR//Edit_________________ABR
 begin
   area replyarea,mainRequest;
   string 200 host,page,response;
@@ -318,4 +318,4 @@ begin
   return;
 end;
 
-*/
+*///Edit_________________ABR//Edit_________________ABR

@@ -23,9 +23,9 @@ remote procedure ORVc_GetPriceList(var record ORVc);
 remote function string 255 LookUpPromotionCode(date,string); //Edit***************************Sasha2,15:31 24.01.2017
 external procedure ORSumup(var record ORVc);//Edit_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-Anton 11:36 10.09.2018
 external procedure ExtractObjWithSeparator(string,string,Boolean,var Integer,var string);//Edit_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-Anton 11:42 10.09.2018
-external function Boolean ORDClassArtCodeEFAfter(Integer,Integer,Integer);
-external function Boolean ORDClassQuantEFAfter(Integer,Integer,Integer,Integer);
-remote function Boolean ORVc_PasteArtCode(var record ORVc,Integer,var string,var string,Boolean);
+external function Boolean ORDClassArtCodeEFAfter(Integer,Integer,Integer);//Edit_________________ABR//Edit_________________ABR
+external function Boolean ORDClassQuantEFAfter(Integer,Integer,Integer,Integer);//Edit_________________ABR//Edit_________________ABR
+remote function Boolean ORVc_PasteArtCode(var record ORVc,Integer,var string,var string,Boolean);//Edit_________________ABR//Edit_________________ABR
 
 
 global
@@ -92,9 +92,9 @@ BEGIN
     ORr.InclVAT = inclvat;
     ORr.ExportFlag = CUr.ExportFlag;
     ORr.PayDeal = CUr.PayDeal;
-    if(usercanaction("DoNotSetSalesManInOR",false)==false)then begin
+    if(usercanaction("DoNotSetSalesManInOR",false)==false)then begin//Edit_________________ABR//Edit_________________ABR
     	ORr.SalesMan = CUr.SalesMan;// Edit ************************** Monday, 30 October 2017 11:15:02
-    end;
+    end;//Edit_________________ABR//Edit_________________ABR
     // Edit Start ---------------------------------------------- Edit Start
 	//Tuesday, 10 April 2018 12:16:43
 	
@@ -552,7 +552,7 @@ LORVc_AllowSales:;
 end;
 
 
-global updating procedure AddItemsFromListORDsm(integer wn, var record ORVc ORr, array integer ItemCodeQTy,array string atstr, integer rwcnt)
+global updating procedure AddItemsFromListORDsm(integer wn, var record ORVc ORr, array integer ItemCodeQTy,array string atstr, integer rwcnt) //Edit_________________ABR//Edit_________________ABR
 begin
 	integer i,mtrw;
 	row ORVc ORrw;

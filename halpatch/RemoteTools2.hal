@@ -110,12 +110,12 @@ BEGIN
   record VITBlock VITb;
   string 255 curncy;
   record POSettingBlock POSb;
-  val sum;
-  record BaseCurBlock BCb;
+  val sum;//Edit_________________ABR//Edit_________________ABR
+  record BaseCurBlock BCb;//Edit_________________ABR//Edit_________________ABR
 
   BlockLoad(POSb);
   BlockLoad(VITb);
-  BlockLoad(BCb);
+  BlockLoad(BCb);//Edit_________________ABR//Edit_________________ABR
   res = true;
   firstf = true;
   VIr.SerNr = -1;  
@@ -907,7 +907,7 @@ begin
   return;
 end; //Edit***************************Sasha2,11:45 18.02.2015 }
 
-global
+global//Edit_________________ABR//Edit_________________ABR
 updating function Integer RecordAction_raPasteRetInInv(var record IVVc IVp,LongInt retnr)
 BEGIN
   record SRBlock SRRec;
@@ -1472,7 +1472,7 @@ END;
 
 
 
-global procedure CashBackRemote(record IPVc IPr,var record IPVc IP2r)
+global procedure CashBackRemote(record IPVc IPr,var record IPVc IP2r)//Edit_________________ABR//Edit_________________ABR
 begin
 	row IPVc IPrw;
   Integer wn,rwcnt,i,k,j;
