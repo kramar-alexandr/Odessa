@@ -390,6 +390,24 @@ begin
 				startformat(15);
 					outstring(0,0,SHr.SerNr,false);
 				endformat;
+				foundf = true;
+				IHr.FileName = "SHVc";
+				IHr.TransNr = SHr.SerNr;
+				IHr.Row = i;
+				qty = 0;
+				while (LoopKey("FNTransNr",IHr,3,foundf)) begin
+					if (IHr.FileName!="SHVc") then begin foundf = false; end;
+					if (IHr.TransNr!=SHr.SerNr) then begin foundf = false; end;
+					if (IHr.Row!=i) then begin foundf = false; end;
+					if (foundf) then begin
+						startformat(15);
+							outstring(0,"DblItemHistVc",IHr.SerNr,false);
+							outstring(50,0,IHr.ArtCode,false);
+							outstring(100,0,IHr.Qty,false);
+						endformat;
+					end;
+				end;
+				resetloop(IHr);
 			end;
 			
 		end;
