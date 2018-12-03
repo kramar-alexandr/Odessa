@@ -1882,7 +1882,7 @@ BEGIN
     end else begin
       if (transreceivef or checkreceivef) then begin
         if (blank(SMp.ThrouLocation)) then begin
-          errcode = CheckStockMovRow(SMp,StockMovrw,INr,MSb,SNrb,i,SMp.FrLocation,SMp.ToLocation,false,check,error,errorstr,rownr,fieldstr,UnOKedCheckSerialf,rsrv//Edit_________________ABR//Edit_________________ABR);
+          errcode = CheckStockMovRow(SMp,StockMovrw,INr,MSb,SNrb,i,SMp.FrLocation,SMp.ToLocation,false,check,error,errorstr,rownr,fieldstr,UnOKedCheckSerialf,rsrv);//Edit_________________ABR//Edit_________________ABR);
         end else begin
           errcode = CheckStockMovRow(SMp,StockMovrw,INr,MSb,SNrb,i,SMp.ThrouLocation,SMp.ToLocation,false,check,error,errorstr,rownr,fieldstr,UnOKedCheckSerialf,rsrv);//Edit_________________ABR//Edit_________________ABR
         end;
