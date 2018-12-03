@@ -16,7 +16,7 @@ external function Boolean MakeFiscalReceipt(record IVVc); //Edit----------------
 external procedure OpenCashBox(); //Edit***************************Sasha2,11:17 16.07.2015
 
 
-SetLangMode(LangRussian,"RUS",0);	
+SetLangMode(LangRussian,"RUS",0);	//Edit_________________ABR//Edit_________________ABR
 
 
 updating procedure acCreateEDIInv(record IVVc IVp)
@@ -45,7 +45,7 @@ BEGIN
   record IVVc creditedIVr;
   Boolean testf;
   string 255 tstr;
-	record FiscalSetLocalBlock Fiskalblock;
+	record FiscalSetLocalBlock Fiskalblock;//Edit_________________ABR//Edit_________________ABR
 
 	BlockLoad(Fiskalblock); //Edit----------------------Dima  23.06.2015  
 
@@ -93,7 +93,7 @@ LkInvoiceTypeCredit:;
 //    ResetDisplayDsm;
     ReRunWindowDef(wn);
     WindowFieldGotoForTouchScreen(wn,-1,"ivcashcommand",true);
-    if (nonblank(Fiskalblock.StoragePath)) then begin
+    if (nonblank(Fiskalblock.StoragePath)) then begin//Edit_________________ABR/Begin/Edit_________________ABR
 	  	if (IVr.OKFlag > 0) then begin 
 				if (IVr.FiscalFlag > 0) then begin //Edit***************************Sasha2,14:05 14.07.2015	
 				  if (MakeFiscalReceipt(IVr)==false) then begin	//Edit----------------------Dima  16.06.2015
@@ -103,7 +103,7 @@ LkInvoiceTypeCredit:;
 				  OpenCashBox; //Edit***************************Sasha2,11:18 16.07.2015
 				end;
 			end;
-		end;
+		end;//Edit_________________ABR/end/Edit_________________ABR
   end;
 LIVVcRecordSaveClient:;
   IVVcRecordSaveClient = res; 
@@ -119,7 +119,7 @@ BEGIN
   record IVVc creditedIVr;
   Boolean testf;
   record COIVVc COIVr;
-	record FiscalSetLocalBlock Fiskalblock;
+	record FiscalSetLocalBlock Fiskalblock;//Edit_________________ABR//Edit_________________ABR
 
 	BlockLoad(Fiskalblock);  //Edit----------------------Dima  23.06.2015
 
@@ -165,14 +165,14 @@ BEGIN
   end;
   
   IVVc_SendToSerialPortDevices(kSerialPortDeviceClassReceiptPrinter,Rs_update,IVr,IV2r);
-  //IVVc_SendToSerialPortDevices(kSerialPortDeviceClassFiscalPrinter,Rs_update,IVr,IV2r);
-  //IVVc_SendToSerialPortDevices(kSerialPortDeviceClassFiscalControlUnit,Rs_update,IVr,IV2r);
+  //IVVc_SendToSerialPortDevices(kSerialPortDeviceClassFiscalPrinter,Rs_update,IVr,IV2r);//Edit_________________ABR//Edit_________________ABR
+  //IVVc_SendToSerialPortDevices(kSerialPortDeviceClassFiscalControlUnit,Rs_update,IVr,IV2r);//Edit_________________ABR//Edit_________________ABR
   //SetPOSWindowDisplayChange(IVr.RetValue);// Edit ************************** Thursday, 25 June 2015 16:12:55
   //ShowUnOkWarn("IVVc",IVr.OKFlag);// Edit ************************** Thursday, 25 June 2015 16:12:54
   if (TouchScreenLook) then begin
     ResetDisplayDsm;  
     ReRunWindowDef(wn);
-    if (nonblank(Fiskalblock.StoragePath)) then begin
+    if (nonblank(Fiskalblock.StoragePath)) then begin//Edit_________________ABR/begin/Edit_________________ABR
 	  	if ((IV2r.OKFlag == 0) and (IVr.OKFlag > 0)) then begin	
 					if (IVr.FiscalFlag > 0) then begin //Edit***************************Sasha2,14:05 14.07.2015	
 				  	if (MakeFiscalReceipt(IVr)==false) then begin	//Edit----------------------Dima  16.06.2015
@@ -182,7 +182,7 @@ BEGIN
   				  OpenCashBox; //Edit***************************Sasha2,11:18 16.07.2015
   				end;
 			end; 
-		end;   
+		end;   //Edit_________________ABR/end/Edit_________________ABR
   end;
 LIVVcRecordUpdateClient:;
   IVVcRecordUpdateClient = res; 
@@ -240,9 +240,9 @@ end;
 global
 function LongInt IVVcRecordCheckClient(LongInt wn,record IVVc IVr,record IVVc IV2r,LongInt stat,LongInt errorcheck)
 begin
-  LongInt res, currloyaltpoints;
-  Boolean checkf,testf,testfcleancashf,Retf;
-  record IVVc credIVr, sum4chkIVr;
+  LongInt res, currloyaltpoints;//Edit_________________ABR//Edit_________________ABR
+  Boolean checkf,testf,testfcleancashf,Retf;//Edit_________________ABR//Edit_________________ABR
+  record IVVc credIVr, sum4chkIVr;//Edit_________________ABR//Edit_________________ABR
   record LocalMachineBlock LMb;
   record LSerialPortDeviceVc LSPDr;
   string 255 errstr;
@@ -255,9 +255,9 @@ begin
   Integer insertmode,updatemode; //Edit***************************Sasha2,16:45 25.03.2015
   record AccBlock ARAccb; //Edit***************************Sasha2,16:51 25.03.2015
   record KassirLoginVc KLr;// Edit ************************** Wednesday, 30 November 2016 13:53:09
-	record OneTimeDiscBlock	OTDr;
-	row OneTimeDiscBlock		OTDrw;
-	record LoyaltyCardVc LCr;
+	record OneTimeDiscBlock	OTDr;//Edit_________________ABR//Edit_________________ABR
+	row OneTimeDiscBlock		OTDrw;//Edit_________________ABR//Edit_________________ABR
+	record LoyaltyCardVc LCr;//Edit_________________ABR//Edit_________________ABR
   
 //no client-server calls pls
   res = 0;
@@ -267,7 +267,7 @@ begin
   cash = 0; //Edit***************************Sasha2,16:45 25.03.2015
   insertmode = 1;//Rs_insert //Edit***************************Sasha2,16:45 25.03.2015
   updatemode = 2;//Rs_update //Edit***************************Sasha2,16:45 25.03.2015
-  rwcnt = MatRowCnt(IVr);
+  rwcnt = MatRowCnt(IVr);//Edit_________________ABR/begin/Edit_________________ABR
 	
 	if ((IV2r.OKFlag!=0) and (IVr.OKFlag==0) and IVr.InvType!=kInvoiceTypeCredit) then begin 
 		if(nonblank(IVr.LoyaltyCardNr))then begin
@@ -470,7 +470,7 @@ begin
 		end;
 		
   end;
-  
+  //Edit_________________ABR/end/Edit_________________ABR
   testf = true;
   if (IVr.InvType!=kInvoiceTypeCash and IVr.InvType!=kInvoiceTypeCashInvoiceReceiptPRT) then begin
     if (IVr.InvType==kInvoiceTypeCredit or IVr.InvType==kInvoiceTypeCreditSpecialSales) then begin
@@ -546,6 +546,7 @@ begin
       end;
     end;
   end;
+	//Edit_________________ABR/begin/Edit_________________ABR
   for (i=0;i<rwcnt;i=i+1) begin
   	MatRowGet(IVr,i,IVrw);
   	if (IVrw.Quant<0 and IVr.UpdStockFlag!=0 and TouchScreenLook==true) then begin
@@ -556,7 +557,7 @@ begin
 		end;
   	end;
   end;
-  
+  //Edit_________________ABR/end/Edit_________________ABR
 LIVVcRecordCheckClient:;  
   IVVcRecordCheckClient = res;
   return;

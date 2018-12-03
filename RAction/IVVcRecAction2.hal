@@ -102,7 +102,7 @@ external updating procedure UpdateSalesData(record IVVc);	//Edit----------------
 external procedure SetNewORCustomStatusFlagOnWeb(record ORVc);// Edit ************************** Friday, 18 November 2016 09:45:15
 external procedure NoDupObjs(string,var string); //Edit***************************Sasha2,16:04 24.01.2017
 external procedure CreateORHistoryVcFromORVc(record ORVc,record ORVc,boolean);// Edit ************************** Wednesday, 1 March 2017 10:54:05
-external procedure ExtractObjWithSeparator(string,string,Boolean,var Integer,var string);
+external procedure ExtractObjWithSeparator(string,string,Boolean,var Integer,var string);//Edit_________________ABR//Edit_________________ABR
 external procedure NoDupObjs(string,var string); //Edit***************************Sasha2,16:04 24.01.2017 
 external procedure MyCreateCreditPayment(record IVVc); //Edit***************************Sasha2,15:20 18.02.2015
 external updating procedure RemoveReservesFromStockMov(record IVVc);// Edit ************************** BPI Ukraine - KramarAlexandr - Thursday, 21 December 2017 10:38:43
@@ -187,7 +187,7 @@ begin
   return;
 end; //Edit***************************Sasha2,9:51 25.01.2017 }
 
-global updating procedure CloseRebVaucher(longint vauchernr,longint ivsernr)
+global updating procedure CloseRebVaucher(longint vauchernr,longint ivsernr)//Edit_________________ABR//Edit_________________ABR
 begin
   record RebateVoucherVc RVr;
   
@@ -201,7 +201,7 @@ begin
 return;
 end;
 
-global updating procedure OpenRebVaucher(longint vauchernr,longint ivsernr)
+global updating procedure OpenRebVaucher(longint vauchernr,longint ivsernr)//Edit_________________ABR//Edit_________________ABR
 begin
   record RebateVoucherVc RVr;
   
@@ -361,7 +361,7 @@ begin
 END;
 
 
-updating procedure DeleteSalesData(record IVVc IVr)
+updating procedure DeleteSalesData(record IVVc IVr)//Edit_________________ABR//Edit_________________ABR
 begin
 	boolean TrHs;
 	record SalesDataVc SalesData;
@@ -673,7 +673,7 @@ begin
   return;
 end;
 
-global updating procedure UpdateCURRebCodeMn()
+global updating procedure UpdateCURRebCodeMn()//Edit_________________ABR/begin/Edit_________________ABR
 begin
 	integer 	  			sum,i,mtrw,allsum; // Edit Dima ************* 2018-02-21 11:17 AM
 	row OneTimeDiscBlock	OTDrw;
@@ -804,7 +804,7 @@ begin
 
 return;
 end;
-
+//Edit_________________ABR/end/Edit_________________ABR
 global
 updating function LongInt IVVcRecordSaveAfter(var record IVVc IVr,record IVVc IV2r,LongInt long3,LongInt long4)
 BEGIN
@@ -816,9 +816,9 @@ BEGIN
 	
 
 
-  if (IVr.OKFlag!=0 and IVr.InvType!=kInvoiceTypeCredit) then begin
-  	RecalcCustomRebate(IVr);
-  end;
+  if (IVr.OKFlag!=0 and IVr.InvType!=kInvoiceTypeCredit) then begin//Edit_________________ABR//Edit_________________ABR
+  	RecalcCustomRebate(IVr);//Edit_________________ABR//Edit_________________ABR
+  end;//Edit_________________ABR//Edit_________________ABR
   
   if (IVr.Invalid==0) then begin
     if (IVr.OKFlag!=0) then begin
@@ -862,7 +862,7 @@ BEGIN
       AddPointsHist(IVr.SerNr,"IVVc",IVr.InvType);
       IVVc_LoyaltyCardPointsRedemption(IVr,false);
     end;
-  end;
+  end;//Edit_________________ABR/begin/Edit_________________ABR
   
   
   SHr.OrderNr = IVr.OrderNr;			//Edit----------------------Dima  02.12.2015
@@ -891,13 +891,14 @@ BEGIN
 	
 	if(IVr.OKFlag==1 and IVr.BirthDayVaucher>0)then begin
 		CloseRebVaucher(IVr.BirthDayVaucher,IVr.SerNr);
+		//Edit_________________ABR/end/Edit_________________ABR
   end;
-	UpdateSalesData(IVr);	//Edit----------------------Dima  10.03.2016  
+	UpdateSalesData(IVr);	//Edit begin----------------------Dima  10.03.2016  
   
   if((GetDateId(IVr.InvDate)==6 or GetDateId(IVr.InvDate)==7) and IVr.OKFlag!=0 and IVr.UpdStockFlag==1)then begin
 		RemoveReservesFromStockMov(IVr);// Edit ************************** BPI Ukraine - KramarAlexandr - Thursday, 21 December 2017 10:37:02
   end;
-  
+  //Edit_________________ABR/end/Edit_________________ABR
 LIVVcRecordSaveAfter:;
   IVVcRecordSaveAfter = res; 
   RETURN;
@@ -1346,20 +1347,20 @@ BEGIN
   record RLinkVc oldRLinkr;
   Integer notenr;
   record ORVc ORr,oldORr;// Edit ************************** Wednesday, 1 March 2017 10:57:42
-  record SHVc SHr;
+  record SHVc SHr;//Edit_________________ABR/begin/Edit_________________ABR
 	
   
   if (IVr.OKFlag!=0 and IV2r.OKFlag==0 and IVr.InvType!=kInvoiceTypeCredit) then begin
 		RecalcCustomRebate(IVr);
   end;
-  
+  //Edit_________________ABR/end/Edit_________________ABR
   ihef = ItemHistExists("IVVc",IVr.SerNr);
   if (IVr.OKFlag==1) then begin
     if (ihef==false) then begin
       CheckCUBalDate(IVr.CustCode,IVr.TransDate);    
       SalesmanStats(IVr,IV2r,true);
     end;    
-    
+    //Edit_________________ABR/begin/Edit_________________ABR
     ORr.SerNr = IVr.OrderNr;									//Edit----------------------Dima  22.09.2015
     SHr.OrderNr = IVr.OrderNr;
     if(IVr.OrderNr>-1 and IVr.OKFlag!=0)then begin
@@ -1378,7 +1379,7 @@ BEGIN
 				end;
 			end;
 		end;
-    
+    //Edit_________________ABR/end/Edit_________________ABR
   end;  
   if (IVr.OKFlag!=0) and (IV2r.OKFlag==0) then begin
     if (ihef==false) then begin
@@ -1540,7 +1541,7 @@ BEGIN
         CancelApprovalRequestActivities(kAcceptanceIV,"IVVc",IVr.SerNr,IVr.CustCode);
       end;
   end;
-  
+  //Edit_________________ABR/begin/Edit_________________ABR
   if(IVr.OKFlag==1 and IV2r.OKFlag==0 and IVr.BirthDayVaucher>0)then begin
 		CloseRebVaucher(IVr.BirthDayVaucher,IVr.SerNr);
   end;
@@ -1556,7 +1557,7 @@ BEGIN
 	if((GetDateId(IVr.InvDate)==6 or GetDateId(IVr.InvDate)==7) and IVr.OKFlag!=0 and IV2r.OKFlag==0 and IVr.UpdStockFlag==1)then begin
 		RemoveReservesFromStockMov(IVr);// Edit ************************** BPI Ukraine - KramarAlexandr - Thursday, 21 December 2017 10:37:02
   end;
-  
+  //Edit_________________ABR/end/Edit_________________ABR
 LIVVcRecordUpdateAfter:;
   IVVcRecordUpdateAfter = res; 
   RETURN;

@@ -35,7 +35,7 @@ external function Integer PMCheckType(string,var string,var string);
 external function Boolean Date2Test(string,Date,string,Integer);
 external function Boolean SerNrTestIPVc(LongInt,Date,var Boolean);
 external function Integer CashSerNumberTest(string,val,string,LongInt,var Boolean);
-external function roundmode SetRoundModeD(Integer);
+external function roundmode SetRoundModeD(Integer);//Edit_________________ABR//Edit_________________ABR
 external function val AbsoluteVal(val);// Edit ************************** BPI Ukraine - KramarAlexandr - Wednesday, 29 August 2018 15:40:01
 
 function Boolean CheckIfPrepaymentError(record ARPayVc ARPayr,row IPVc IPrw,Date td)
@@ -71,12 +71,13 @@ BEGIN
         GetFullCurncyRate(IPrw.InvCurncy,td,ipfr,ipto1,ipto2,ipbr1,ipbr2);
         iprate = ipto1/ipfr;
       end;
-      
+      //Edit_________________ABR/begin/Edit_________________ABR
 			logtext(0,"CheckIfPrepaymentError iprate " & iprate*100 & "  preprate " & preprate*100);
 			iprate = round(iprate,SetRoundModeD(2));
 			preprate = round(preprate,SetRoundModeD(2));
 			logtext(0,"CheckIfPrepaymentError iprate " & iprate*100 & "  preprate " & preprate*100);
-      if (iprate!=preprate) then begin
+			//Edit_________________ABR/end/Edit_________________ABR
+		 if (iprate!=preprate) then begin
         res = true;
       end;
     end;
@@ -285,13 +286,15 @@ L12:;
     if ((IPrw.stp==1) or (IPrw.stp==5) or (IPrw.stp==6) or (IPrw.stp==7)) begin
         if (IPrw.ovst==0) then begin
           if (blank(IPrw.RecVal)) then begin
+					//Edit_________________ABR/begin/Edit_________________ABR
             if (stat==updatemode) then begin
 	            tstr = chr(13) &  chr(13) & USetStr(31125) & IPp.SerNr;
 	          end else begin 
 	          	tstr = "";
 	          end;          
             RecordCheckError(1854,tstr,i,"RecVal");  //Edit----------------------Dima  30.12.2015    
-            //RecordCheckError(1854,"",i,"RecVal");      
+            //RecordCheckError(1854,"",i,"RecVal");   
+//Edit_________________ABR/end/Edit_________________ABR						
             res = -1; 
             goto LIPVcRecordCheck;
           end;
@@ -412,7 +415,7 @@ some mistery code, what if customer has Sales Currency Defined?
             goto LIPVcRecordCheck;
           end;
           RecordClear(IVr);
-  /*      if (nonblank(IPrw.InvoiceOfficialSerNr)) then begin
+  /*      if (nonblank(IPrw.InvoiceOfficialSerNr)) then begin//Edit_________________ABR//Edit_________________ABR
             IVr.OfficialSerNr = IPrw.InvoiceOfficialSerNr;
             if (ReadFirstKey("OfficialSerNr",IVr,1,true)==false) then begin
               RecordCheckError(1290," " & IPrw.InvoiceOfficialSerNr,i,"InvoiceOfficialSerNr");  //Edit----------------------Dima  17.08.2015    
@@ -420,7 +423,7 @@ some mistery code, what if customer has Sales Currency Defined?
               goto LIPVcRecordCheck;  
             end;
           end;
-  */
+  *///Edit_________________ABR//Edit_________________ABR
           RecordClear(IVr);
           if (IPrw.InvoiceNr>0) then begin
             IVr.SerNr = IPrw.InvoiceNr;
@@ -528,13 +531,14 @@ some mistery code, what if customer has Sales Currency Defined?
                end;
               end;
               if (ARHistr.CustCode!=IPrw.CustCode) then begin
+							//Edit_________________ABR/begin/Edit_________________ABR
               	if (stat==updatemode) then begin
 	                tstr = chr(13) &  chr(13) & USetStr(31125) & IPp.SerNr;
 	              end else begin 
 	              	tstr = "";
 	              end;
                 RecordCheckError(1218,tstr,i,"CUPNr"); 
-                //RecordCheckError(1218,"",i,"CUPNr"); 
+                //RecordCheckError(1218,"",i,"CUPNr"); //Edit_________________ABR/end/Edit_________________ABR
                 res = -1; 
                 goto LIPVcRecordCheck;
               end;
@@ -563,7 +567,7 @@ moved to ForceUniquePP part above
               		end;
               	end;// Edit ************************** BPI Ukraine - KramarAlexandr - Wednesday, 29 August 2018 15:40:07
                 if (-IPrw.InvVal>ARPayr.RVal) then begin
-                	logtext(0,"1 " & -IPrw.InvVal*100 & " " & ARPayr.RVal*100);
+                	logtext(0,"1 " & -IPrw.InvVal*100 & " " & ARPayr.RVal*100);//Edit_________________ABR//Edit_________________ABR
                   RecordCheckError(1254,"",i,"CUPNr");      
                   res = -1; 
                   goto LIPVcRecordCheck;
@@ -597,12 +601,13 @@ moved to ForceUniquePP part above
                 MatRowGet(IPp,j,IP2rw);
                 if ((IP2rw.CUPNr!=-1) and (IP2rw.InvoiceNr==-1) and (IP2rw.CUPNr==IPrw.CUPNr)) then begin
                   if (IP2rw.CustCode!=IPrw.CustCode) then begin
+									//Edit_________________ABR/begin/Edit_________________ABR
               			if (stat==updatemode) then begin
 	              		  tstr = chr(13) &  chr(13) & USetStr(31125) & IPp.SerNr;
 	              		end else begin 
 	              			tstr = "";
 	              		end;                  
-                    //RecordCheckError(1218,"",i,"CUPNr");      
+                    //RecordCheckError(1218,"",i,"CUPNr"); //Edit_________________ABR/end/Edit_________________ABR     
                     res = -1; 
                     goto LIPVcRecordCheck;
                   end;                
@@ -631,7 +636,7 @@ moved to ForceUniquePP part above
                   end;
                 end;
                 if (-amount>ARPayr.RVal) then begin
-                	logtext(0,"2 " & -amount & " " & ARPayr.RVal);
+                	logtext(0,"2 " & -amount & " " & ARPayr.RVal);//Edit_________________ABR//Edit_________________ABR
                   RecordCheckError(1254,"",i,"CUPNr");      
                   res = -1; 
                   goto LIPVcRecordCheck;
@@ -743,13 +748,14 @@ we don't have to check pmobject since it goes to diffrent account then OPrw.Obje
                   if (IPrsr.CustCode==CUr.Code)  then begin tmpf = true; end;
                 end;  
                 if (tmpf==false) then begin
+								//Edit_________________ABR/begin/Edit_________________ABR
               		if (stat==updatemode) then begin
 	              	  tstr = chr(13) &  chr(13) & USetStr(31125) & IPp.SerNr;
 	              	end else begin 
 	              		tstr = "";
 	              	end;    
                 	RecordCheckError(1218,tstr,i,"CUPNr");                
-									//RecordCheckError(1218,"",i,"InvoiceNr");      
+									//RecordCheckError(1218,"",i,"InvoiceNr"); //Edit_________________ABR/end/Edit_________________ABR     
                   res = -1; 
                   goto LIPVcRecordCheck;
                 end;  

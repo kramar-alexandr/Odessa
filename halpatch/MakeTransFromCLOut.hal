@@ -137,10 +137,10 @@ BEGIN
     if (nonblank(objstr)) then begin objstr = objstr & ","; end;
       objstr = objstr & rowobjects;
     end;
-    logtext(0,"objstr old " & objstr);
+    logtext(0,"objstr old " & objstr);//Edit_________________ABR//Edit_________________ABR
   objstr = AddObjectToObjectList255(pmrw.Objects,objstr); //Edit***************************Sasha2,12:02 04.02.2015
   
-  logtext(0,"objstr new " & objstr);
+  logtext(0,"objstr new " & objstr);//Edit_________________ABR//Edit_________________ABR
   
   nilv = -1;
   res = 1085;
@@ -704,14 +704,14 @@ LFOREND:;
               if (ReadFirstMain(VIr,1,true)) then begin
                 rs = MulRateToBase1(VIr.CurncyCode,CLOutrw.Sum,VIr.FrRate,VIr.ToRateB1,VIr.ToRateB2,VIr.BaseRate1,VIr.BaseRate2,DefaultCurRoundOff);
                 if (CheckTTRPerRow("CLOutVc",VIr.APAcc,CLOutp.Objects,true,taccnumber,1)) then begin end;      
-                tobj = CLOutp.Objects; //Edit***************************Sasha2,12:11 04.02.2015 {
+                tobj = CLOutp.Objects; //Edit begin***************************Sasha2,12:11 04.02.2015 {
                 if (nonblank(tobj)) then begin
                   if (nonblank(pmrw.Objects)) then begin
                     tobj = tobj & "," & pmrw.Objects;
                   end;
                 end else begin
                   tobj = pmrw.Objects;
-                end; //Edit***************************Sasha2,12:11 04.02.2015 }
+                end; //Edit end***************************Sasha2,12:11 04.02.2015 }
                 AddEuroCurncyTrRow(gTRp,VIr.APAcc,tobj/*CLOutp.Objects*/,"",tstr,rs,false,true,totsum,
                                    VIr.CurncyCode,VIr.FrRate,VIr.ToRateB1,VIr.ToRateB2,VIr.BaseRate1,VIr.BaseRate2,totsum,nilv,-1,false,taccnumber); //Edit***************************Sasha2,12:13 04.02.2015
 

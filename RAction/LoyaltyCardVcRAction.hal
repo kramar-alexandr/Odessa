@@ -114,13 +114,13 @@ begin
   record PointsHistVc PointsHistr;
   record LCMemberLevelVc LCMemberLevelr;
   record CUVc CUr;
-  record LoyaltyCardVc LCr;
-  integer counter;
-  boolean testf, TrHs;
+  record LoyaltyCardVc LCr;//Edit_________________ABR//Edit_________________ABR
+  integer counter;//Edit_________________ABR//Edit_________________ABR
+  boolean testf, TrHs;//Edit_________________ABR//Edit_________________ABR
   
   res = 0;
   
-	if (LoyaltyCardr.Closed==0) then begin
+	if (LoyaltyCardr.Closed==0) then begin//Edit_________________ABR/Begin/Edit_________________ABR
 		counter = 0;
 		LCr.CustCode = LoyaltyCardr.CustCode;
 		TrHs = true;
@@ -145,7 +145,7 @@ begin
 			end;
 		end;
 	end;
-    
+    //Edit_________________ABR/end/Edit_________________ABR
   if (blank(LoyaltyCardr.CustCode)) then begin
     RecordCheckError(1058,LoyaltyCardr.CustCode,-1,"CustCode");      
     res = -1; 

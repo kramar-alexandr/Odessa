@@ -1198,13 +1198,13 @@ begin
   Date blankd,td,td1;
   record IVVc lIVr;
   record CYBlock CYb;
-  record LocationVc Locr;
-  record CashierDefBlock CashierDefb;
+  record LocationVc Locr;//Edit_________________ABR//Edit_________________ABR
+  record CashierDefBlock CashierDefb;//Edit_________________ABR//Edit_________________ABR
  
   BlockLoad(ARAccRec);      
   BlockLoad(IIRec);
   BlockLoad(CYb);
-  BlockLoad(CashierDefb);
+  BlockLoad(CashierDefb);//Edit_________________ABR//Edit_________________ABR
   
   IVr.SerNr = -1;
   IVr.InvType = kInvoiceTypeNormal;
@@ -1255,7 +1255,7 @@ begin
   IVr.OurContact = USr.CurOurContact;
   IVr.Location = USr.Location;
   if (UserCanAction("DoNotSetSalesManInOR",false)==false or CurrentUser=="EXPO" or CurrentUser=="KV_1" or CurrentUser=="KV_2" or CurrentUser=="RAY_1" or CurrentUser=="RAY_2") then begin // Edit ************************** Friday, 7 April 2017 13:28:39
-		IVr.Objects = USr.PersObjx;
+		IVr.Objects = USr.PersObjx;//Edit_________________ABR//Edit_________________ABR
 		IVr.SalesMan = USr.Code;
   	GetSalesGroup(IVr.SalesMan,tstr);
   	IVr.SalesGroup = tstr;
@@ -1327,7 +1327,7 @@ begin
     IVr.AcceptanceStatus = kAcceptanceStateNotStarted;
   end;
   IVr.Status = kRecordStatusNone;
-  
+//Edit_________________ABR/begin/Edit_________________ABR  
   
   //if (CashierDefb.PutPositionForPOS != 0) then begin
   if(true)then begin
@@ -1337,7 +1337,7 @@ begin
 		end;
 	end;  
 	IVr.PromotionCode2 = LookUpPromotionCode(IVr.InvDate,IVr.Location); //Edit***************************Sasha2,15:32 24.01.2017
-	
+	//Edit_________________ABR/end/Edit_________________ABR
   IVVcRecordDefaults = res;  
   RETURN;
 END;

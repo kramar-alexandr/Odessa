@@ -42,8 +42,8 @@ BEGIN
 
   res = 0;
   if(currentuser=="SA")then begin// Edit ************************** Sunday, 17 January 2016 10:42:00
-  	goto LLocationVcRecordCheck;
-  end;
+  	goto LLocationVcRecordCheck;//Edit_________________ABR//Edit_________________ABR
+  end;//Edit_________________ABR//Edit_________________ABR
   if (len(Locationr.Code)<=0) then begin
     RecordCheckError(1058,"",-1,"Code");      
     res = -1; 

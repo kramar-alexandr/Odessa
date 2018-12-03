@@ -319,11 +319,11 @@ BEGIN
       end;
       otxt = otxt & IPrw.Objects;
     end; 
-    if (nonblank(IPp.AdditionalObjects)) then begin	//Edit----------------------Dima  28.07.2015
+    if (nonblank(IPp.AdditionalObjects)) then begin	//Edit begin----------------------Dima  28.07.2015
     	if (nonblank(otxt)) then begin	 otxt = otxt & ","; 	 end; 
     	otxt = otxt & IPp.AdditionalObjects;  
     end;
-    
+    //Edit_________________ABR/end/Edit_________________ABR
     GetFullCurncyRate(IPrw.BankCurncy,IPp.TransDate,fr,to1,to2,br1,br2);
     if (nonblank(IPrw.ToRateB1BankVal)) then begin
       br1 = IPrw.ToRateB1BankVal;

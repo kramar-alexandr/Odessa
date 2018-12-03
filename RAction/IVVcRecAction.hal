@@ -73,7 +73,7 @@ external function Boolean HasModNL();
 external function Boolean HasIncomeAndExpenseBook();
 external updating function Boolean DoXMLExport_IVVc(var record IVVc);
 
-SetLangMode(LangRussian,"RUS",0);	
+SetLangMode(LangRussian,"RUS",0);	//Edit_________________ABR/begin/Edit_________________ABR
 
 global
 function string 20 GetCustomOfficialSerNr()
@@ -120,7 +120,7 @@ begin
   GetCustomOfficialSerNr = ofsernr;
   return;
 end;
-
+//Edit_________________ABR/end/Edit_________________ABR
 function Boolean CheckIfNextLegalSerNr(LongInt curivnr,string OfficialSerNr,Date invdate,record CUVc CUr)
 begin
   Boolean res;
@@ -354,7 +354,7 @@ return;
 end;
 
 global updating
-procedure	UpdateDiscount(record LoyaltyCardVc LoyaltyCardr)
+procedure	UpdateDiscount(record LoyaltyCardVc LoyaltyCardr)//Edit_________________ABR//Edit_________________ABR
 begin
   row OneTimeDiscBlock		OTDrw;				// Edit Dima ************* 2018-02-23 01:36 PM
   record CUVc				CU2r;
@@ -398,7 +398,7 @@ BEGIN
   LongInt res;
   row IVVc IVrw;
   row IVVc IV2rw;
-  record IVVc locIVr,credIVr;
+  record IVVc locIVr,credIVr;//Edit_________________ABR//Edit_________________ABR
   record CUVc CUr;
   record AccVc Accr;
   record TRVc TRr;
@@ -446,7 +446,7 @@ BEGIN
   record BrazilEInvTypeVc BEInvTyper;
   record CYBlock CYb;
   Boolean TouchScreenFinishButtonf;
-  record RebateVoucherVc RVr;
+  record RebateVoucherVc RVr;//Edit_________________ABR/begin/Edit_________________ABR
   
   row OneTimeDiscBlock		OTDrw;				// Edit Dima ************* 2018-02-23 01:36 PM
   record CUVc				CU2r;
@@ -482,7 +482,7 @@ BEGIN
 			end;
 		end;	
   end;
-	
+	//Edit_________________ABR/end/Edit_________________ABR
   if (long4==3) then begin TouchScreenFinishButtonf = true; end;
   res = 0;
   curcomp = CurrentCompany;    
@@ -496,7 +496,7 @@ BEGIN
     end;
   end;
   if (unokf) then begin
-		if(IVp.Sum4>2000)then begin
+		if(IVp.Sum4>2000)then begin//Edit_________________ABR/begin/Edit_________________ABR
 			CUr.Code = IVp.CustCode;
 			if(readfirstmain(CUr,1,true))then begin
 				if(IVp.SerNr==CUr.IVVcNr)then begin
@@ -517,12 +517,13 @@ BEGIN
 				rwcnt = rwcnt-1;
 			end;
 		end;
-		
+		//Edit_________________ABR/end/Edit_________________ABR
     errcode = IsUnOKAllowed_IVVc(IVp);
     if (errcode!=0) then begin
       RecordCheckError(errcode,"",-1,"TransDate");      
       res = -1; 
     end;
+		//Edit_________________ABR/begin/Edit_________________ABR
     if (NonBlank(IV2p.CustCode)) then begin //Edit***************************Sasha2,16:43 25.02.2015 {
       LoyaltyCardr.CustCode = IV2p.CustCode;
       if (ReadFirstKey("CustCode",LoyaltyCardr,1,true)) then begin
@@ -560,6 +561,7 @@ BEGIN
         end;
       end;
     end; //Edit***************************Sasha2,16:43 25.02.2015 }
+		//Edit_________________ABR/end/Edit_________________ABR
     goto L99;
   end;
   if ((ProgramType==typFirstOffice) or 
@@ -619,7 +621,7 @@ BEGIN
     res = -1; 
     goto L99;
   end;
-  if (blank(IVp.OfficialSerNr)) then begin
+  if (blank(IVp.OfficialSerNr)) then begin//Edit_________________ABR/begin/Edit_________________ABR
     IVp.OfficialSerNr = GetCustomOfficialSerNr;//Edit***************************Sasha2,11:31 08.01.2015
   end;
   if (blank(IVp.OfficialSerNr)) then begin	//Edit by Victor 08.01.15
@@ -627,7 +629,7 @@ BEGIN
     res = -1; 
     goto L99;
   end;
-  
+  //Edit_________________ABR/end/Edit_________________ABR
   if (check) then begin  
   if (IVp.PayDate<IVp.InvDate) then begin
     RecordCheckError(22118,"",-1,"PayDate");      
@@ -682,7 +684,7 @@ BEGIN
 */    
   end;  
   end;  
-  
+//Edit_________________ABR/begin/Edit_________________ABR  
   //if(stat==insertmode)then begin
 		if(IVp.BirthDayVaucher>0)then begin
 			  RVr.VoucherSerNr = IVp.BirthDayVaucher;
@@ -710,7 +712,7 @@ BEGIN
 			  end;
 		end;
   //end;
-  
+  //Edit_________________ABR/end/Edit_________________ABR
   
   if (check) then begin  
   if (IVp.OrderNr>0) then begin
@@ -1176,13 +1178,13 @@ LSkipOfficialSerNrCheck:;
       end;
     end;    
   end;    
-  /*if (IVp.ExportFlag==0 and blank(IVp.CAE)) then begin
+  /*if (IVp.ExportFlag==0 and blank(IVp.CAE)) then begin//Edit_________________ABR//Edit_________________ABR
     if (UserCanAction("DisallowDomSales",false)) then begin
       RecordCheckError(20056,"",-1,"CustCode");   
       res = -1; 
       goto L99;
     end; 
-  end;*/
+  end;*///Edit_________________ABR//Edit_________________ABR
   if (IVp.ExportFlag!=0 and blank(IVp.CAE)) then begin
     if (UserCanAction("DisallowExpSales",false)) then begin
       RecordCheckError(20049,"",-1,"CustCode");   
@@ -1369,7 +1371,7 @@ L12:;
       res = -1; 
       goto L99;
     end;
-  end; 
+  end; //Edit_________________ABR/begin/Edit_________________ABR
    
   test3f = false; //Edit***************************Sasha2,16:43 25.02.2015 {
   if (blank(IVp.LoyaltyCardNr)) then begin test3f = true; end;
@@ -1404,6 +1406,7 @@ L12:;
       end;
     end;
   end; //Edit***************************Sasha2,16:43 25.02.2015 }
+	//Edit_________________ABR/end/Edit_________________ABR
   if (HasLocalization("ARG")==false) then begin
     errcode = CheckVATNrMask(IVp.VATNr,CUr.CountryCode,CUr.CustType,tstr);
     if (errcode!=0) then begin
@@ -1508,7 +1511,7 @@ L12:;
     IVp.BranchID = CurBranchID;
   end;
   
-  AddRozetkaVATIV(IVp);
+  AddRozetkaVATIV(IVp);//Edit_________________ABR//Edit_________________ABR
   
   if (check) then begin
     if (stat==Rs_update) then begin
@@ -1516,7 +1519,7 @@ L12:;
         if (IsDoingManagerOverride) then begin
 //          IVp.SalesMan = OriginalLogin; //why would u want to store Manger overriding as salesman ? 
         end else begin
-          if (blank(IVp.SalesMan) and UserCanAction("DoNotSetSalesManInOR",false)==false) then begin
+          if (blank(IVp.SalesMan) and UserCanAction("DoNotSetSalesManInOR",false)==false) then begin//Edit_________________ABR//Edit_________________ABR
             IVp.SalesMan = CurrentUser;
           end;
           IVp.MachineName = CurMachineName;
@@ -1804,7 +1807,7 @@ LkInvoiceTypeCredit:;
       end;
     end;
   end;
-  
+//Edit_________________ABR/begin/Edit_________________ABR  
   if  ((IVp.OKFlag==1) and (IV2p.OKFlag==0)) then begin
   	ORr.SerNr = IVp.OrderNr;		//Edit----------------------Dima  23.11.2015
   	if (ReadFirstMain(ORr,1,true)) then begin
@@ -1815,9 +1818,10 @@ LkInvoiceTypeCredit:;
 			end;
 		end;
 	end;
+	//Edit_________________ABR/end/Edit_________________ABR
 
   RecordNew(TRr);
-  
+  //Edit_________________ABR/begin/Edit_________________ABR
   if (TouchScreenFinishButtonf) then begin //Edit***************************Sasha2,15:43 25.03.2015 {
     testf = false;
     if (IVp.Sum4>=0) then begin
@@ -1845,6 +1849,7 @@ LkInvoiceTypeCredit:;
       goto L99;
     end;
   end; //Edit***************************Sasha2,15:43 25.03.2015 }
+	//Edit_________________ABR/end/Edit_________________ABR
 
   if (transf) then begin
     if (HasLocalization("ARG,HRV,POL,PRT") and (IsStandardProduct)) then begin
@@ -2007,7 +2012,7 @@ LkInvoiceTypeCash:;
     end;
   end;  
 LIVVcRecordCheck_GenTrans:;
-
+//Edit_________________ABR/begin/Edit_________________ABR
   if (IVp.OKFlag!=0 and UserCanAction("AllowOKInvoicesWithZeroSum",false) == false) then begin			//Edit----------------------Dima  02.04.2015
   	rwcnt = MatRowCnt(IVp);
   	for(i=0;i<rwcnt;i=i+1) begin
@@ -2019,7 +2024,7 @@ LIVVcRecordCheck_GenTrans:;
 		  end;
   	end; 
   end; 
-
+//Edit_________________ABR/end/Edit_________________ABR
 //  if (HasModNL==false) then begin gentrans = false; end;
   if (gentrans==false) then begin transf = false; end;
   if (IsStandardProduct) then begin
@@ -2137,7 +2142,7 @@ BEGIN
   boolean foundfpay;// Edit ************************** Wednesday, 26 July 2017 13:46:20
   record IPVc IPr;// Edit ************************** Wednesday, 26 July 2017 13:46:21
   row IPVc IPrw;// Edit ************************** Wednesday, 26 July 2017 13:46:22
-  integer i,rwcnt;
+  integer i,rwcnt;//Edit_________________ABR//Edit_________________ABR
   
   res = 1;
   BlockLoad(DBLockRec);
@@ -2152,6 +2157,7 @@ BEGIN
         goto LIVVcRecordRemoveTest;
       end;  
     end;
+		//Edit_________________ABR/begin/Edit_________________ABR
     if(IVr.InvType==kInvoiceTypeCredit and IVr.CredInv>0)then begin
     	
     	IPrsr.IVNr = IVr.CredInv;
@@ -2186,6 +2192,7 @@ BEGIN
     	end;
        
     end;
+		//Edit_________________ABR/end/Edit_________________ABR
   end;
   if (IVr.OKFlag!=0) then begin
     if (IVr.TransDate>DBLockRec.DeleteBeforeDate) then begin
@@ -2260,16 +2267,16 @@ BEGIN
     goto LIVVcRecordRemoveTest;
   end;
   if (UserCanAction("AllowDeleteIVVc",true)==false) then begin // Edit Dima ************* 2018-02-09 02:30 PM
-	res = 0;
-	messagebox(31179,"");
-	goto LIVVcRecordRemoveTest;
-  end;
+	res = 0;//Edit_________________ABR//Edit_________________ABR
+	messagebox(31179,"");//Edit_________________ABR//Edit_________________ABR
+	goto LIVVcRecordRemoveTest;//Edit_________________ABR//Edit_________________ABR
+  end;//Edit_________________ABR//Edit_________________ABR
 LIVVcRecordRemoveTest:;
   IVVcRecordRemoveTest = res;  
   RETURN;
 end;
 global
-updating function LongInt RulRateOptVcRecordCheck(var record RulRateOptVc RulRateOptr,record RulRateOptVc RulRateOpt2r,LongInt stat,LongInt check)
+updating function LongInt RulRateOptVcRecordCheck(var record RulRateOptVc RulRateOptr,record RulRateOptVc RulRateOpt2r,LongInt stat,LongInt check)//Edit_________________ABR//Edit_________________ABR
 BEGIN
 LongInt res;
 res=0;

@@ -311,10 +311,10 @@ BEGIN
 	array val incost;// Edit ************************** Thursday, 23 April 2015 11:06:54
 	array integer inrow;// Edit ************************** Wednesday, 21 October 2015 16:19:30
 	integer ci,totout;// Edit ************************** Thursday, 23 April 2015 11:06:55
-	val totcost;
+	val totcost;//Edit_________________ABR//Edit_________________ABR
 	array integer totqty;// Edit ************************** Wednesday, 21 October 2015 16:26:04
 	val subTotalRelVal,totRelVal,addcostforpeace,totweight,totvolume,addcostforpeace1,newaddcostforpeace,newaddcostforpeace1;// Edit ************************** BPI Ukraine - KramarAlexandr - Thursday, 7 December 2017 11:03:31
-	boolean testblankperc,added;
+	boolean testblankperc,added;//Edit_________________ABR//Edit_________________ABR
 	
   rowno = -1;
   extracom = "";
@@ -487,13 +487,13 @@ BEGIN
       res = 1748; 
       goto LProdVcRecordCheck;
     end;	
-    */
-    if (Locr.RequirePos!=0) then begin		//Edit----------------------Dima  09.12.2015
+    *///Edit_________________ABR
+    if (Locr.RequirePos!=0) then begin		//Edit start----------------------Dima  09.12.2015
     		res = CheckPositionsInProduction(Prodp,rowno);
     		if(res != 0) then begin
         	fieldnam = "PosCode"; 
         	goto LProdVcRecordCheck;					
-				end;
+				end;//Edit_________________ABR/end/Edit_________________ABR
     end;
     
   end;  
@@ -1034,7 +1034,7 @@ BEGIN
 			end; 		
 		end;
 
-	// Edit End ---------------------------------------------- Edit End	
+
 	
 	
 		if (check!=0) then begin
@@ -1059,7 +1059,7 @@ BEGIN
 			end;
 		end;
 
-	
+		// Edit End ---------------------------------------------- Edit End	
   if (transf) then begin
     if (stat==updatemode) then begin
       sernr = Prod2p.SerNr;
@@ -1267,7 +1267,7 @@ BEGIN
     if (testf) then begin
       if (ShouldItemUpdateStock(Prodrw.Item)==false) then begin t3 = blankval; end;
       UpdateInstock("ProdVc",Prodp.SerNr,Prodrw.Item,location,Prodp.ProdDate,t3,t,t,t,t,q2,t2,t,t);
-//      UpdatePosition(Prodrw.Item,location,Prodrw.PosCode,t2,q2,t);
+//      UpdatePosition(Prodrw.Item,location,Prodrw.PosCode,t2,q2,t);//Edit_________________ABR//Edit_________________ABR
       UpdatePosition(Prodrw.Item,location,Prodrw.PosCode,t3,q2,t);	//Edit----------------------Dima  09.12.2015
     end;
   end;

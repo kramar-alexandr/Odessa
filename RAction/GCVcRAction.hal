@@ -33,10 +33,11 @@ begin
         goto LGCVcRecordCheck;  
       end;
     end;
-  end else begin
+  end else begin//Edit_________________ABR/begin/Edit_________________ABR
   	RecordCheckError(1796,"",-1,"BarCode");   // Edit ************************** Friday, 7 July 2017 15:03:06
 		res = -1; 
-		goto LGCVcRecordCheck;  
+		goto LGCVcRecordCheck; 
+//Edit_________________ABR/end/Edit_________________ABR		
   end;
   if (TestEnablerFile("EnMarketplace")==false) then begin
     if (GCr.Amount==0) then begin

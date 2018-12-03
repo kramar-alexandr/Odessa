@@ -321,9 +321,9 @@ BEGIN
   record HotelBlock Hotelb;
   record TaxMatrixVc TMr;
   Integer IPBookVAT;
-  boolean certificatef;
+  boolean certificatef;//Edit_________________ABR//Edit_________________ABR
   val tvatcur;// Edit ************************** Monday, 21 August 2017 16:59:19
-  string 255 objstrmy;
+  string 255 objstrmy;//Edit_________________ABR//Edit_________________ABR
                                           
   nilv = -1;
   errstrno = 1085;// Transactions could not be generated, please check settings 
@@ -981,9 +981,9 @@ LkInvoiceTypeCash:;
             if (CheckTTRPerRow("IVVc",SalesVATAcc,objstr,dc2,taccnumber,0)) then begin end;
             /*AddEuroTrRow(gTRp,SalesVATAcc,objstr,AddVATCodeToVATAccRows(VATCoderw.VATCode),tstr,tvat,baserate1,baserate2,true,dc2,TotSum,NegativeAmountsOnIVTrans(IVp.InvType,tvat),
             taccnumber,"","");*/// Edit ************************** Monday, 21 August 2017 16:55:06
-            //messagebox(0,tvatcur);
+            //messagebox(0,tvatcur);//Edit_________________ABR//Edit_________________ABR
             AddEuroCurncyTrRow(gTRp,SalesVATAcc,objstr,AddVATCodeToVATAccRows(VATCoderw.VATCode),tstr,tvat,true,dc2,TotSum,
-                               IVp.CurncyCode,frrate,torate1,torate2,baserate1,baserate2,tvatcur,nilv,-1,NegativeAmountsOnIVTrans(IVp.InvType,tvat),"");
+                               IVp.CurncyCode,frrate,torate1,torate2,baserate1,baserate2,tvatcur,nilv,-1,NegativeAmountsOnIVTrans(IVp.InvType,tvat),"");//Edit_________________ABR//Edit_________________ABR
           end;
         end;
         if (tax1val!=0) then begin

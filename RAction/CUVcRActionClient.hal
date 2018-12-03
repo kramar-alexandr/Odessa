@@ -11,7 +11,7 @@ remote procedure IVSumup(var record IVVc,Boolean);// Edit **********************
 remote procedure IVVc_PasteLoyaltyCardNr(var record IVVc,record LocalMachineBlock);	//Edit----------------------Dima  24.06.2015
 external procedure IVDClass_RefreshStringList(Integer,record IVVc);// Edit ************************** BPI Ukraine - KramarAlexandr - Tuesday, 4 September 2018 16:34:12
 
-SetLangMode(LangRussian,"RUS",0);
+SetLangMode(LangRussian,"RUS",0);//Edit_________________ABR//Edit_________________ABR
 
 global
 function LongInt CUVcRecordDefaultsClient(LongInt wn,var record CUVc CUr,record CUVc CU2r,LongInt stat,LongInt long4)
@@ -23,7 +23,7 @@ begin
   record CCatVc CCatr; //Edit***************************Sasha2,13:40 15.02.2017
   Boolean addInfoF; //Edit***************************Sasha2,13:38 15.02.2017
   
-  BlockLoad(LMb); //Edit***************************Sasha2,12:51 15.02.2017 {
+  BlockLoad(LMb); //Edit Begin***************************Sasha2,12:51 15.02.2017 {
   if (NonBlank(LMb.DefLocation)) then begin
     if (LMb.DefLocation=="3-RAY") then begin
       if (Blank(CUr.Region)) then begin
@@ -61,13 +61,13 @@ begin
     if (addInfoF) then begin
       CUr.CurncyCode = "UAH_R";
     end;
-  end; //Edit***************************Sasha2,12:51 15.02.2017 }
+  end; //Edit End***************************Sasha2,12:51 15.02.2017 }
 
   /*if (TestModule("modPL") or TestModule("modPO") or TestModule("modAT2") or TestModule("modIN")) then begin
     CUr.CUType = 0;
     CUr.VEType = 1;
     treatedf = true;
-  end;*/
+  end;*///Edit_________________ABR//Edit_________________ABR
   if (TestModule("modHRM")) then begin
     CUr.EmployeeType = 1;
     CUr.CUType = 0;
@@ -135,7 +135,7 @@ end;
 
 
 
-global updating procedure SearchCustomerByPhoneAngSetPassDsm()
+global updating procedure SearchCustomerByPhoneAngSetPassDsm()//Edit_________________ABR//Edit_________________ABR
 begin
 	record CUVc CUr;
 	string 100 Res;
@@ -172,7 +172,7 @@ begin
 return;
 end;
 
-global updating procedure SearchCustomerBySortingDsm()
+global updating procedure SearchCustomerBySortingDsm()//Edit_________________ABR//Edit_________________ABR
 begin
 	record CUVc CUr;
 	string 100 Res;

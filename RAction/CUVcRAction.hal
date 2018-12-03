@@ -151,8 +151,8 @@ BEGIN
   CUr.AllowLogin = CSb.AllowLogin;
   
   
-  CUr.RebCode = "0%";
-	CUr.LastDateChangeDiscount = CurrentDate;
+  CUr.RebCode = "0%";//Edit_________________ABR//Edit_________________ABR
+	CUr.LastDateChangeDiscount = CurrentDate;//Edit_________________ABR//Edit_________________ABR
   if (IsBooks==false) or (ValuePack(1)) then begin
     if (CSb.CurrentUserasSalesman!=0) then begin
       Userr.Code = CurrentUser;
@@ -479,7 +479,7 @@ BEGIN
   if (CUr.CUType!=0) then begin
     if (CSVcExists(CUr.Code,true)) then begin
       if (long3>0) then begin
-        MessageBox(1121,"CSVcExists");
+        MessageBox(1121,"CSVcExists");//Edit_________________ABR//Edit_________________ABR
       end;
       res = 0;
       goto LCUVcRecordRemoveTest;
@@ -497,7 +497,7 @@ BEGIN
   if (nonblank(CUr.Code)) then begin
     if (ActVcExists(CUr.Code)) then begin
       if (long3>0) then begin
-        MessageBox(1121,"ActVcExists");
+        MessageBox(1121,"ActVcExists");//Edit_________________ABR//Edit_________________ABR
       end;
       res = 0;
       goto LCUVcRecordRemoveTest;
@@ -505,7 +505,7 @@ BEGIN
   end;
   if (QTVcExists(CUr.Code)) then begin
     if (long3>0) then begin
-      MessageBox(1121,"QTVcExists");
+      MessageBox(1121,"QTVcExists");//Edit_________________ABR//Edit_________________ABR
     end;
     res = 0;
     goto LCUVcRecordRemoveTest;
@@ -722,13 +722,13 @@ begin
     str = cucode;
     l = -1;
   end;
-  return;
-end;
+  return;//Edit_________________ABR//Edit_________________ABR
+end;//Edit_________________ABR//Edit_________________ABR
 
 
 
 global
-updating procedure CreateLoyaltyCardFromCUVc(record CUVc CUr)
+updating procedure CreateLoyaltyCardFromCUVc(record CUVc CUr)//Edit_________________ABR//Edit_________________ABR
 begin
   record IVVc IVr;
 	record LoyaltyCardVc LCr;
@@ -1008,7 +1008,7 @@ LCustomerWithPhoneExists:;
 end; //Edit***************************Sasha2,12:04 07.11.2014 }
 
 global
-function Boolean CustomerWithEmailExists(string cucode,string eMail,string CustCat)
+function Boolean CustomerWithEmailExists(string cucode,string eMail,string CustCat)//Edit_________________ABR//Edit_________________ABR
 begin
   Boolean res;
   record CUVc CUr;
@@ -1198,7 +1198,7 @@ BEGIN
   record BankFileBlock bfr;
   record CUUserLabelBlock CUUerLb;
   record TaxTemplateVc TTr;
-  record UserVc Userr;
+  record UserVc Userr;//Edit_________________ABR//Edit_________________ABR
   
   
 
@@ -1209,12 +1209,12 @@ BEGIN
   updatemode = 2;
   BlockLoad(CSb);
   
-  if(blank(CUr.FreightNr) and stat==insertmode)then begin
-  	Userr.Code = currentuser;
-  	readfirstmain(Userr,1,true);
+  if(blank(CUr.FreightNr) and stat==insertmode)then begin//Edit_________________ABR//Edit_________________ABR
+  	Userr.Code = currentuser;//Edit_________________ABR//Edit_________________ABR
+  	readfirstmain(Userr,1,true);//Edit_________________ABR//Edit_________________ABR
   	
-  	CUr.FreightNr = Userr.Location;
-  end;
+  	CUr.FreightNr = Userr.Location;//Edit_________________ABR//Edit_________________ABR
+  end;//Edit_________________ABR//Edit_________________ABR
   
   oldnr = CUr.Code;
   if (blank(CUr.Code)) then begin
@@ -1530,7 +1530,7 @@ BEGIN
   if (stat==updatemode) then begin
     if ((CUr.CUType==0) and (CU2r.CUType!=0)) then begin
       if (CSVcExists(CUr.Code,false)) then begin
-        RecordCheckError(1121," CSVcExists " & CUr.Code,-1,"Code");      
+        RecordCheckError(1121," CSVcExists " & CUr.Code,-1,"Code"); //Edit_________________ABR//Edit_________________ABR     
         res = -1; 
         goto LCUVcRecordCheck;
       end;
@@ -1764,7 +1764,7 @@ BEGIN
     end;
   end;
   if nonblank(CUr.eMail) then begin
-    if (CustomerWithEmailExists(CUr.Code,CUr.eMail,CUr.CustCat)) then begin
+    if (CustomerWithEmailExists(CUr.Code,CUr.eMail,CUr.CustCat)) then begin//Edit_________________ABR//Edit_________________ABR
       RecordCheckError(20766,tstr,-1,"eMail"); 
       res = -1; 
       goto LCUVcRecordCheck;

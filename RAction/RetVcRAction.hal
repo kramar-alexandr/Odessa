@@ -1358,9 +1358,9 @@ BEGIN
     end;
   end;
      
-  if ((Retr.OKFlag==0) and (Ret2r.OKFlag!=0)) then begin
-  		UnOk_RetVc(Retr);
-  end;  
+  if ((Retr.OKFlag==0) and (Ret2r.OKFlag!=0)) then begin//Edit_________________ABR//Edit_________________ABR
+  		UnOk_RetVc(Retr);//Edit_________________ABR//Edit_________________ABR
+  end;  //Edit_________________ABR//Edit_________________ABR
   
  	
   RetVcRecordUpdate = res;

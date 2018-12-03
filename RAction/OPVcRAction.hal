@@ -599,7 +599,7 @@ we don't have to check pmobject since it goes to diffrent account then OPrw.Obje
               end;
                 
               
-              //if ((t*koef) < (Round(amount,SetRoundModeD(2))*koef)) then begin
+              //if ((t*koef) < (Round(amount,SetRoundModeD(2))*koef)) then begin//Edit_________________ABR//Edit_________________ABR
               if (Round((t*koef),SetRoundModeD(3)) < (Round(amount,SetRoundModeD(3))*koef)) then begin   	//Edit----------------------Dima  09.04.2015
                 tstr = " " & amount & USetStr(20061);
                 tstr = tstr & " " & t;

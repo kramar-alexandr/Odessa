@@ -46,13 +46,13 @@ external function Boolean GetAccName(string,var string,Integer);
 external function Integer TypeOfCurncy(var string,var Integer);
 external procedure GetFullCurncyRateText(Boolean,var string,val,val,val,val,val);
 external procedure GetFullCurncyRate (var string,Date,var val,var val,var val,var val,var val);
-external updating procedure UnOk_StockMovVc(var record StockMovVc, boolean);
-external  function boolean CheckRemoveLogistics(record StockMovVc,var longint);
-external updating procedure WriteProcessQtyBackToORVc(row StockMovVc,var row StockMovVc,boolean,record StockMovVc);
-external updating procedure CreateLinksToOrders(record StockMovVc);
-external updating procedure ReserveReceivedItems(record StockMovVc);
-external updating procedure CheckDifferenceForWritingToORVc(var record StockMovVc,record StockMovVc);
-external updating procedure UnOk_StockMovVc(var record StockMovVc, boolean);
+external updating procedure UnOk_StockMovVc(var record StockMovVc, boolean);//Edit_________________ABR//Edit_________________ABR
+external  function boolean CheckRemoveLogistics(record StockMovVc,var longint);//Edit_________________ABR//Edit_________________ABR
+external updating procedure WriteProcessQtyBackToORVc(row StockMovVc,var row StockMovVc,boolean,record StockMovVc);//Edit_________________ABR//Edit_________________ABR
+external updating procedure CreateLinksToOrders(record StockMovVc);//Edit_________________ABR//Edit_________________ABR
+external updating procedure ReserveReceivedItems(record StockMovVc);//Edit_________________ABR//Edit_________________ABR
+external updating procedure CheckDifferenceForWritingToORVc(var record StockMovVc,record StockMovVc);//Edit_________________ABR//Edit_________________ABR
+external updating procedure UnOk_StockMovVc(var record StockMovVc, boolean);//Edit_________________ABR//Edit_________________ABR
 external procedure FoundUniqueOrdersFromStockMov(record StockMovVc,var array longint);//Edit----------------------Dima  28.12.2015
 external updating procedure UpdateOrdersOrdFlag(record StockMovVc,boolean);// Edit ************************** Tuesday, 19 September 2017 15:13:49
 
@@ -96,10 +96,10 @@ BEGIN
   StockMovr.OfficialSerNrSerie = "";
   
   Userr.Code = CurrentUser;		//Edit by Victor 26.11.14
-  if (ReadFirstMain(Userr,1,true)) then begin
-	  StockMovr.SalesGroup = Userr.SalesGroup;
+  if (ReadFirstMain(Userr,1,true)) then begin//Edit_________________ABR//Edit_________________ABR
+	  StockMovr.SalesGroup = Userr.SalesGroup;//Edit_________________ABR//Edit_________________ABR
 		StockMovr.FrLocation = Userr.Location;		//Edit-----------------Dima 02.02.2015
-	end;
+	end;//Edit_________________ABR//Edit_________________ABR
 
   StockMovVcRecordDefaults = res; 
   RETURN;
@@ -111,8 +111,8 @@ BEGIN
   LongInt res;
   string 10 curcode;
   val fr,to1,to2,br1,br2;
-  integer i,rwcnt;
-  row StockMovVc SMrw;
+  integer i,rwcnt;//Edit_________________ABR//Edit_________________ABR
+  row StockMovVc SMrw;//Edit_________________ABR//Edit_________________ABR
   Date bd;
   Time bt;
 
@@ -159,16 +159,16 @@ BEGIN
     StockMovr.PlanSendTime = "";
     StockMovr.PlanSendDate = "";
   end;
-  rwcnt = MatRowCnt(StockMovr);
-  for(i=0;i<rwcnt;i=i+1) begin
-		MatRowGet(StockMovr,i,SMrw);
-		if (nonblank(SMrw.ORSerial)) then begin
-			SMrw.ORSerial = "";
-			SMrw.ORRowUID = blankval;
-			SMrw.OrderProcessing = blankval;
-			MatRowPut(StockMovr,i,SMrw);
-		end;
-	end;
+  rwcnt = MatRowCnt(StockMovr);//Edit_________________ABR//Edit_________________ABR
+  for(i=0;i<rwcnt;i=i+1) begin//Edit_________________ABR//Edit_________________ABR
+		MatRowGet(StockMovr,i,SMrw);//Edit_________________ABR//Edit_________________ABR
+		if (nonblank(SMrw.ORSerial)) then begin//Edit_________________ABR//Edit_________________ABR
+			SMrw.ORSerial = "";//Edit_________________ABR//Edit_________________ABR
+			SMrw.ORRowUID = blankval;//Edit_________________ABR//Edit_________________ABR
+			SMrw.OrderProcessing = blankval;//Edit_________________ABR//Edit_________________ABR
+			MatRowPut(StockMovr,i,SMrw);//Edit_________________ABR//Edit_________________ABR
+		end;//Edit_________________ABR//Edit_________________ABR
+	end;//Edit_________________ABR//Edit_________________ABR
 	
   StockMovVcRecordDuplicate = res; 
   RETURN;
@@ -440,7 +440,7 @@ LMakeTransFromStockMov:;
 END;
 
 global
-function Integer CheckStockMovRowFromPosition(record StockMovVc SMp,record StockMovVc SM2p,row StockMovVc StockMovrw,record LocationVc LocFrRec,record INVc INr,
+function Integer CheckStockMovRowFromPosition(record StockMovVc SMp,record StockMovVc SM2p,row StockMovVc StockMovrw,record LocationVc LocFrRec,record INVc INr,//Edit_________________ABR//Edit_________________ABR
                                               Integer rownr,Boolean sentquantf,var LongInt error,var string errorstr,var integer errorrownr,
                                               var string fieldstr,boolean UnOKedCheckSerialf)
 BEGIN
@@ -460,14 +460,14 @@ BEGIN
   end;
   if (LocFrRec.RequirePos!=0 and currentuser!="SAUNOK") then begin// Edit ************************** Thursday, 21 January 2016 09:59:09
     if (blank(frpos)) then begin
-	 if (SM2p.OrdFlag==0) or (SM2p.SentOKFlag==0) then begin
+	 if (SM2p.OrdFlag==0) or (SM2p.SentOKFlag==0) then begin//Edit_________________ABR//Edit_________________ABR
 	  error = 1854;
       errorstr = frpos;
       errorrownr = -1;
       fieldstr = "FrPos";                 
       res = 1854; 
       goto LCheckStockMovRowFromPosition;
-	 end;
+	 end;//Edit_________________ABR//Edit_________________ABR
     end;      
     if (INr.ItemType==1) then begin
       if (frpos==LocFrRec.WHMDefPUPosCode) or (frpos==LocFrRec.WHMDefProdPosCode) then begin
@@ -606,9 +606,9 @@ END;
 global
 function LongInt StockMovVcRecordRemoveTest(var record StockMovVc StockMovr,record StockMovVc StockMov2r,LongInt long3,LongInt long4)
 BEGIN
-  LongInt res,ORsernr;
+  LongInt res,ORsernr;//Edit_________________ABR//Edit_________________ABR
   record DBLockBlock DBLockRec;
-  integer rownr;
+  integer rownr;//Edit_________________ABR//Edit_________________ABR
 
   res = 1;
   BlockLoad(DBLockRec);
@@ -638,10 +638,10 @@ BEGIN
   end;
   
   if(CheckRemoveLogistics(StockMovr,ORsernr)==false) then begin		//Edit----------------------Dima  06.10.2015         
-        MessageBox(31123,ORsernr);              
-        res = 0; 
-        goto LStockMovVcRecordRemoveTest;  
-	end;
+        MessageBox(31123,ORsernr);         //Edit_________________ABR//Edit_________________ABR     
+        res = 0; //Edit_________________ABR//Edit_________________ABR
+        goto LStockMovVcRecordRemoveTest;  //Edit_________________ABR//Edit_________________ABR
+	end;//Edit_________________ABR//Edit_________________ABR
   
   
 LStockMovVcRecordRemoveTest:;
@@ -653,12 +653,12 @@ global
 updating function LongInt StockMovVcRecordRemove(var record StockMovVc StockMovr,record StockMovVc StockMov2r,LongInt stat,LongInt long4)
 BEGIN
   LongInt res;
-  integer rwcnt,i,rwcnt2,j,k;
-  row ORVc ORrw;
-  row StockMovVc StockMovrw;
-  record ORVc ORr;
-  array longint orders;
-  boolean needstore;
+  integer rwcnt,i,rwcnt2,j,k;//Edit_________________ABR//Edit_________________ABR
+  row ORVc ORrw;//Edit_________________ABR//Edit_________________ABR
+  row StockMovVc StockMovrw;//Edit_________________ABR//Edit_________________ABR
+  record ORVc ORr;//Edit_________________ABR//Edit_________________ABR
+  array longint orders;//Edit_________________ABR//Edit_________________ABR
+  boolean needstore;//Edit_________________ABR//Edit_________________ABR
 
   if (StockMovr.IntORNo!=-1) then begin
     if (UpdateIntOrderFromStockMov(StockMov2r,StockMovr,false)) then begin end;
@@ -673,7 +673,7 @@ BEGIN
     DeleteOffSerNr(StockMovr.SerNr,"StockMovVc");
   end;  
   
-  FoundUniqueOrdersFromStockMov(StockMovr,orders);			//Edit----------------------Dima  28.12.2015
+  FoundUniqueOrdersFromStockMov(StockMovr,orders);			//Edit start----------------------Dima  28.12.2015
   rwcnt = MatRowCnt(StockMovr);  
   
   for(k=0;k<orders.length;k=k+1) begin
@@ -700,8 +700,8 @@ BEGIN
 				RecordStore(ORr,true);
 			end;			
 						
-		end;	//Edit----------------------Dima  20.08.2015
-	end;
+		end;	
+	end;//Edit end----------------------Dima  20.08.2015
 		    
   StockMovVcRecordRemove = res;
   RETURN;
@@ -732,8 +732,8 @@ BEGIN
   record INVc INr; //Edit***************************Sasha2,14:25 11.02.2015
   integer rwcnt,i; //Edit***************************Sasha2,14:25 11.02.2015
   record ItemStatusVc ISr; //Edit***************************Sasha2,11:56 25.08.2015
-  record PISVc PISr;
-  string 30 position;
+  record PISVc PISr;//Edit_________________ABR//Edit_________________ABR
+  string 30 position;//Edit_________________ABR//Edit_________________ABR
 
   ihef = ItemHistExists("StockMovVc",StockMovr.SerNr);
   if ((StockMovr.SentOKFlag==0)) then begin
@@ -774,6 +774,7 @@ BEGIN
       AddPortugueseSAFTHashToStockMov(StockMovr);
     end;
   end;
+	//Edit_________________ABR/start/Edit_________________ABR
   rwcnt = MatRowCnt(StockMovr); //Edit***************************Sasha2,14:27 11.02.2015 {
   for (i=0;i<rwcnt;i=i+1) begin
     MatRowGet(StockMovr,i,StockMovrw);
@@ -854,7 +855,7 @@ BEGIN
     	UnOk_StockMovVc(StockMovr,false);
   end;    	
 
-
+//Edit_________________ABR/end/Edit_________________ABR
 
   StockMovVcRecordUpdate = res;
   RETURN;
@@ -867,9 +868,9 @@ global
 updating function LongInt StockMovVcRecordSaveAfter(var record StockMovVc StockMovr,record StockMovVc StockMov2r,LongInt stat,LongInt long4)
 BEGIN
   LongInt res;
-  integer rwcnt,i;
-  row StockMovVc StockMovrw;
-  record ItemStatusVc ISr;
+  integer rwcnt,i;//Edit_________________ABR//Edit_________________ABR
+  row StockMovVc StockMovrw;//Edit_________________ABR//Edit_________________ABR
+  record ItemStatusVc ISr;//Edit_________________ABR//Edit_________________ABR
 
   StockMovUpdateStock(StockMovr,StockMov2r,true,false,false);
   StockMovUpdateCostPrice(StockMovr,StockMov2r);//Cost Price before history
@@ -922,10 +923,10 @@ BEGIN
   row StockMovVc StockMovrw,StockMovrw2; //Edit***************************Sasha2,14:25 11.02.2015
   record INVc INr; //Edit***************************Sasha2,14:25 11.02.2015
   integer rwcnt,i; //Edit***************************Sasha2,14:25 11.02.2015
-  record ItemStatusVc ISr;
-  record StockMovVc SMempty;
-  record PISVc PISr;
-  string 30 position;
+  record ItemStatusVc ISr;//Edit_________________ABR//Edit_________________ABR
+  record StockMovVc SMempty;//Edit_________________ABR//Edit_________________ABR
+  record PISVc PISr;//Edit_________________ABR//Edit_________________ABR
+  string 30 position;//Edit_________________ABR//Edit_________________ABR
   
   if (blankdate(StockMovr.RegDate)) then begin
     StockMovr.RegDate = CurrentDate;
@@ -955,7 +956,7 @@ BEGIN
     AddPortugueseSAFTHashToStockMov(StockMovr);
   end;
   
-  RecordNew(SMempty);
+  RecordNew(SMempty);//Edit_________________ABR/start/Edit_________________ABR
   RecordCopy(SMempty,StockMovr);	//Edit----------------------Dima  28.12.2015
 
   rwcnt = MatRowCnt(StockMovr); //Edit***************************Sasha2,14:27 11.02.2015 {
@@ -1040,7 +1041,7 @@ BEGIN
   
   
   CheckDifferenceForWritingToORVc(StockMovr,SMempty);//Edit----------------------Dima  28.12.2015
- 
+ //Edit_________________ABR/end/Edit_________________ABR
   StockMovVcRecordSave = res;
   RETURN;
 END;

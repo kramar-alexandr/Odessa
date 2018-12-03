@@ -678,13 +678,13 @@ begin
         end;
       case kInvoiceRowTypeLoyaltyPointsPayment:
         //cash = cash + MulRateToBase1(IVrw.CurncyCode,IVrw.Sum,IVrw.FrRate,IVrw.ToRateB1,IVrw.ToRateB2,IVrw.BaseRate1,IVrw.BaseRate2,DefaultCurRoundOff);// Edit ************************** Wednesday, 12 November 2014 16:02:24
-        cash = cash + IVrw.Sum;
+        cash = cash + IVrw.Sum;//Edit_________________ABR//Edit_________________ABR
       case kInvoiceRowTypeCashPayment:
         //cash = cash + MulRateToBase1(IVrw.CurncyCode,IVrw.Sum,IVrw.FrRate,IVrw.ToRateB1,IVrw.ToRateB2,IVrw.BaseRate1,IVrw.BaseRate2,DefaultCurRoundOff);// Edit ************************** Wednesday, 12 November 2014 16:02:42
-        cash = cash + IVrw.Sum;
+        cash = cash + IVrw.Sum;//Edit_________________ABR//Edit_________________ABR
       case kInvoiceRowTypeChequePayment:
         //cash = cash + MulRateToBase1(IVrw.CurncyCode,IVrw.Sum,IVrw.FrRate,IVrw.ToRateB1,IVrw.ToRateB2,IVrw.BaseRate1,IVrw.BaseRate2,DefaultCurRoundOff);// Edit ************************** Wednesday, 12 November 2014 16:02:48
-        cash = cash + IVrw.Sum;
+        cash = cash + IVrw.Sum;//Edit_________________ABR//Edit_________________ABR
       case kInvoiceRowTypeCreditCardPayment:
         cash = cash + IVrw.Sum;      
       case kInvoiceRowTypeLoan:
@@ -1266,6 +1266,7 @@ not needed any more
                       if (blank(location)) then begin
                         location = MSb.MainStock;
                       end;
+											//Edit_________________ABR/begin/Edit_________________ABR
                       if((stat==insertmode and IVp.OKFlag!=0) or (stat==updatemode and IVp.OKFlag!=0 and IV2p.OKFlag==0))then begin  // Edit ************************** Wednesday, 3 February 2016 16:09:46
 												if (nonblank(IVrw.PosCode)) then begin
 													FindStockValueAtPosition(IVrw.ArtCode,location,IVrw.PosCode,PISr);
@@ -1276,13 +1277,14 @@ not needed any more
 													end;
 												end;
                       end;
+											//Edit_________________ABR/end/Edit_________________ABR
                       if (IVp.SVONr==-1) then begin
                         if (SNrb.BulkSerialNos!=0) then begin
                           FindStockValueInclStockReserv(IVp.OrderNr,IVrw.ArtCode,"",location,ISr,stockreservq);
                         end else begin
                           FindStockValueInclStockReserv(IVp.OrderNr,IVrw.ArtCode,IVrw.SerialNr,location,ISr,stockreservq);
                         end;                               
-                         
+                         //Edit_________________ABR/begin/Edit_________________ABR
           							if (IVp.OKFlag!=0) then begin				//Edit----------------------Dima  18.12.2015
 													switch (INr.ItemType) begin
 														case 1:
@@ -1567,7 +1569,7 @@ not needed any more
               end;
             end;
             
-            if (IVp.AllowSaleAllGoods==0) then begin				//Edit----------------------Dima  26.01.2016
+            if (IVp.AllowSaleAllGoods==0) then begin				//Edit begin----------------------Dima  26.01.2016
             	if (nonblank(User.AllowSalesForType)) then begin
 								if (ItemHasClassification(INr,User.AllowSalesForType)==false) then begin
               		RecordCheckError(31139,":  " & IVrw.ArtCode,i,"ArtCode");      
@@ -1583,7 +1585,7 @@ not needed any more
 								end;
 							end;	
             end;	
-            
+            //Edit_________________ABR/end/Edit_________________ABR
       case kInvoiceRowTypeDownpayment:
         if (lightFlag==false) then begin
           testf = false;

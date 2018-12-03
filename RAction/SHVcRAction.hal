@@ -68,7 +68,7 @@ external function val FindPUBaseRate2forSerialNr(string,string);
 external function string 30 GetCustomOfficialSerNr(); //Edit***************************Sasha2,11:42 08.01.2015
 external updating procedure SHVcToPackListVc(var record SHVc);									//Edit----------------------Dima  07.05.2015
 external updating procedure PackListVcToSHVc(record PackListVc,var record SHVc);	//Edit----------------------Dima  19.05.2015
-external updating procedure AddPaymentToIPFromSH(record SHVc);
+external updating procedure AddPaymentToIPFromSH(record SHVc);//Edit_________________ABR//Edit_________________ABR
 external updating function longint AddSMStoStack(string, string,string, string,string,string,longint,string,date,time);//Edit----------------------Dima  16.09.2015
 external function string 255 ParseSMStext(string, record ORVc);//Edit----------------------Dima  16.09.2015
 external procedure Recalculate_CustomStatusFlagText(var record ORVc);	//Edit----------------------Dima  22.09.2015
@@ -76,10 +76,10 @@ external updating procedure UpdateORVcNewPostStatuses(record SHVc );//_*_*_*_***
 external updating procedure UpdateSalesDataFromSH(record SHVc);//Edit----------------------Dima  10.03.2016
 external updating procedure UpdateSalesData(record IVVc);	//Edit----------------------Dima  10.03.2016
 external procedure SetNewORCustomStatusFlagOnWeb(record ORVc);// Edit ************************** Friday, 18 November 2016 09:45:15
-external procedure CreateORHistoryVcFromORVc(record ORVc,record ORVc,boolean);
+external procedure CreateORHistoryVcFromORVc(record ORVc,record ORVc,boolean);//Edit_________________ABR//Edit_________________ABR
 external function string 200 SendSMSNewPost(record SHVc);// Edit ************************** Wednesday, 16 August 2017 15:58:13
 
-SetLangMode(LangRussian,"RUS",0);
+SetLangMode(LangRussian,"RUS",0);//Edit_________________ABR/start/Edit_________________ABR
 
 
 function string 100 RusifyOblast(string oblast)
@@ -170,7 +170,7 @@ begin
 return;
 end;
 
-
+//Edit_________________ABR/end/Edit_________________ABR
 function Boolean StockMovOKedForSH(LongInt shnr,var LongInt stmovnr)
 begin
   Boolean res;
@@ -311,7 +311,7 @@ begin
   record RcVc RepSpec;
   string 10 location,loc2,loc3,tstr;
   LongInt oldnr,newnr;
-  Integer i,rwcnt,rwcnt2;
+  Integer i,rwcnt,rwcnt2;//Edit_________________ABR//Edit_________________ABR
   Boolean blankf,testf,test2f;
   Boolean transf;
   Boolean orfound,gentrans;
@@ -329,7 +329,7 @@ begin
   Integer errcode;
   LongInt sernr,stmovnr,dummyl;
   record PISVc PISr;
-  string 255 objstr,errstr,accnr,oldOfficialSerNr,tstr2,tstr3,c;
+  string 255 objstr,errstr,accnr,oldOfficialSerNr,tstr2,tstr3,c;//Edit_________________ABR//Edit_________________ABR
   record CostAccBlock CAb;
   record AccBlock ARAccRec;
   Boolean unokf;
@@ -345,14 +345,14 @@ begin
   Array string 255 otcheckaccs;
   Array string 255 otcheckobjtyps;
   Integer otcheckcnt;
-  Boolean initotcheckf,nonequivalent;   
+  Boolean initotcheckf,nonequivalent;   //Edit_________________ABR//Edit_________________ABR
   record CUUserLabelBlock CUUerLb;
   record CountryVc Countryr;
   record AccVc Accr;
   record IVVc IVr;	//Edit----------------------Dima  27.03.2015
-  val totQty;
-  boolean TrHs;
-  array string 20 Artcodes;
+  val totQty;//Edit_________________ABR//Edit_________________ABR
+  boolean TrHs;//Edit_________________ABR//Edit_________________ABR
+  array string 20 Artcodes;//Edit_________________ABR//Edit_________________ABR
   record DMVc DMr;// Edit ************************** Tuesday, 29 August 2017 09:48:27
   
   res = 0;
@@ -544,7 +544,7 @@ begin
       end;
     end;
   end;
-  if (blank(SHp.OfficialSerNr)) then begin
+  if (blank(SHp.OfficialSerNr)) then begin//Edit_________________ABR//Edit_________________ABR
     SHp.OfficialSerNr = GetCustomOfficialSerNr;//Edit***************************Sasha2,11:31 08.01.2015
   end;
   if (blank(SHp.OfficialSerNr)) then begin	
@@ -1279,8 +1279,8 @@ begin
             if (LocRec.RequirePos!=0) then begin
               FindStockValueAtPosition(SHrw.ArtCode,loc2,SHrw.PosCode,PISr);
               if (SHrw.Ship>PISr.Instock) then begin// Edit ************************** Monday, 2 October 2017 14:52:36 ????
-              //if (SHrw.Ship>PISr.LeftQty) then begin
-              	logtext(1397,SHrw.ArtCode & " " & SHrw.Ship & " " & PISr.LeftQty & " " & SHrw.PosCode);
+              //if (SHrw.Ship>PISr.LeftQty) then begin//Edit_________________ABR//Edit_________________ABR
+              	logtext(1397,SHrw.ArtCode & " " & SHrw.Ship & " " & PISr.LeftQty & " " & SHrw.PosCode);//Edit_________________ABR//Edit_________________ABR
                 error = 1397;
                 errorstr = "";
                 rownr = i;
@@ -1573,7 +1573,7 @@ end;
 global
 function LongInt SHVcRecordDefaults(var record SHVc SHr,record SHVc SH2r,LongInt stat,LongInt long4)
 begin
-  LongInt res;  
+  LongInt res;  //Edit_________________ABR//Edit_________________ABR
       
   SHr.SerNr = -1;
   SHr.OrderNr = -1;
@@ -1623,8 +1623,8 @@ global
 updating function LongInt SHVcRecordSave(var record SHVc SHr,record SHVc SH2r,LongInt stat,LongInt long4)
 begin
   LongInt res;
-  record PackListVc PackListr;
-  record ORVc ORr;
+  record PackListVc PackListr;//Edit_________________ABR//Edit_________________ABR
+  record ORVc ORr;//Edit_________________ABR//Edit_________________ABR
 
   if (blankdate(SHr.RegDate)) then begin
     SHr.RegDate = CurrentDate;
@@ -1640,20 +1640,20 @@ begin
   SHOK(SHr);
   if (blank(SHr.OfficialSerNr)) then begin
     SHr.OfficialSerNr = GetCustomOfficialSerNr; //Edit***************************Sasha2,16:56 28.01.2015 	
-    //FindNextSHVcOfficialSerialNr(SHr,-1);
+    //FindNextSHVcOfficialSerialNr(SHr,-1);//Edit_________________ABR//Edit_________________ABR
   end;
   AddPortugueseSAFTHashToSH(SHr);
   
-  ORr.SerNr=SHr.OrderNr;						//Edit----------------------Dima  20.04.2015
+  ORr.SerNr=SHr.OrderNr;						//Edit- start---------------------Dima  20.04.2015
   if (ReadFirstMain(ORr,1,true)) then begin
   	if (ORr.DeliveryNewPost>0) then begin
   		SHVcToPackListVc(SHr);		
   		PackListr.SerNr = SHr.SerNr;
   		if (ReadFirstMain(PackListr,1,true)) then begin
-  			PackListVcToSHVc(PackListr,SHr);  //Edit----------------------Dima  19.05.2015
+  			PackListVcToSHVc(PackListr,SHr);  
   		end;
   	end;     	
-  end;
+  end;//Edit----end------------------Dima  19.05.2015
   SHVcRecordSave = res; 
   return;
 end;
@@ -1723,7 +1723,7 @@ LUpdateSerialNumberQuantity:;
 end;
 
 
-global updating procedure SetLastShipDate(record SHVc SHr)	//Edit----------------------Dima  31.08.2015
+global updating procedure SetLastShipDate(record SHVc SHr)	//Edit START----------------------Dima  31.08.2015
 begin
 	record ORVc ORr;
 	record SHVc SHr2;
@@ -1751,16 +1751,16 @@ begin
 	end;  
 end;
 
-
+//Edit_________________ABR/END/Edit_________________ABR
 global
 updating function LongInt SHVcRecordSaveAfter(var record SHVc SHr,record SHVc SH2r,LongInt stat,LongInt long4)
 begin
   LongInt res;
-	record ORVc ORr,oldORr;
+	record ORVc ORr,oldORr;//Edit_________________ABR//Edit_________________ABR
 	record IVVc IVr;//Edit----------------------Dima  22.09.2015
 		
 	
-  ORr.SerNr = SHr.OrderNr;									//Edit----------------------Dima  22.09.2015
+  ORr.SerNr = SHr.OrderNr;									//Edit Begin----------------------Dima  22.09.2015
   IVr.OrderNr = SHr.OrderNr;
   if (ReadFirstKey("OrderNr",IVr,1,true)) then begin
 	  if(ReadFirstMain(ORr,1,true)) then begin
@@ -1783,6 +1783,7 @@ begin
 			SetNewORCustomStatusFlagOnWeb(ORr);
 		end;	
 	end;	
+	//Edit_________________ABR/END/Edit_________________ABR
 
   if (SHr.OKFlag!=0) then begin
     SHUpdateItemHist(SHr);
@@ -1792,7 +1793,7 @@ begin
     SetLastShipDate(SHr);//Edit----------------------Dima  31.08.2015
 //    SHOKStockMovemnts(SHr.SerNr);		
 
-		ORr.SerNr = SHr.OrderNr;					//Edit----------------------Dima  22.09.2015
+		ORr.SerNr = SHr.OrderNr;					//Edit Begin----------------------Dima  22.09.2015
 		if(ReadFirstMain(ORr,1,true)) then begin
 					ORr.CustomStatusFlag = 6;
 					Recalculate_CustomStatusFlagText(ORr);
@@ -1802,7 +1803,7 @@ begin
 					end;
 					RecordStore(ORr,true);
 					SetNewORCustomStatusFlagOnWeb(ORr);
-		end;	
+		end;	//Edit_________________ABR/End/Edit_________________ABR
 		
   end;
   if (SHr.OrderNr!=-1) then begin
@@ -1816,7 +1817,7 @@ begin
     UpdateOffSerNr(SHr.SerNr,"SHVc",0,SHr.OfficialSerNr,false);
   end;
   
-  if (SHr.Assembly>0) then begin	//Edit----------------------Dima  16.07.2015
+  if (SHr.Assembly>0) then begin	//Edit Begin----------------------Dima  16.07.2015
   	  ORr.SerNr=SHr.OrderNr;				//Edit----------------------Dima  19.05.2015
   		if (ReadFirstMain(ORr,1,true)) then begin
   			if ((ORr.NPPaymentType == 0) and ORr.PrepaymentReceived==1 and ORr.PrivatePaymentRec==0) then begin
@@ -1825,7 +1826,7 @@ begin
 			end;		
 	end;
 		
-  
+  //Edit_________________ABR/End/Edit_________________ABR
   SHVcRecordSaveAfter = res; 
   return;
 end;
@@ -1865,19 +1866,19 @@ global
 updating function LongInt SHVcRecordUpdate(var record SHVc SHr,record SHVc SH2r,LongInt stat,LongInt long4)
 begin
   LongInt res;
-  record PackListVc PackListr;
-  record ORVc ORr;  
-  record SMSTextBlock SMSb;
-  record SMSTextOptBlock SMSOb;
-  record CUVc CUr;
+  record PackListVc PackListr;//Edit_________________ABR//Edit_________________ABR
+  record ORVc ORr;  //Edit_________________ABR//Edit_________________ABR
+  record SMSTextBlock SMSb;//Edit_________________ABR//Edit_________________ABR
+  record SMSTextOptBlock SMSOb;//Edit_________________ABR//Edit_________________ABR
+  record CUVc CUr;//Edit_________________ABR//Edit_________________ABR
   string 255 newtext,response;// Edit ************************** Wednesday, 16 August 2017 15:57:40
-  integer i;
-  row SHVc SHrw;
-  record NPStatusesBlock NSPb;
+  integer i;//Edit_________________ABR//Edit_________________ABR
+  row SHVc SHrw;//Edit_________________ABR//Edit_________________ABR
+  record NPStatusesBlock NSPb;//Edit_________________ABR//Edit_________________ABR
 
 	BlockLoad(SMSb);//Edit----------------------Dima  16.09.2015
-	BlockLoad(SMSOb);
-	BlockLoad(NSPb);
+	BlockLoad(SMSOb);//Edit_________________ABR//Edit_________________ABR
+	BlockLoad(NSPb);//Edit_________________ABR//Edit_________________ABR
 	
   if ((SHr.OrderNr!=-1) and (SH2r.OKFlag==0)) then begin
     if (UpdateOrderFromShip(SHr,true,SH2r,true,false)) then begin end;
@@ -1895,7 +1896,7 @@ begin
   end;
   AddPortugueseSAFTHashToSH(SHr);
 
-  ORr.SerNr=SHr.OrderNr;				//Edit----------------------Dima  19.05.2015
+  ORr.SerNr=SHr.OrderNr;				//Edit Begin----------------------Dima  19.05.2015
   if (ReadFirstMain(ORr,1,true)) then begin
   	if (ORr.DeliveryNewPost>0) then begin
   		SHVcToPackListVc(SHr);		
@@ -1961,7 +1962,7 @@ begin
 	
 	
 	// Edit End ---------------------------------------------- Edit End
-	
+	//Edit_________________ABR/End/Edit_________________ABR
   SHVcRecordUpdate = res; 
   return;
 end;
@@ -2002,15 +2003,15 @@ begin
   Integer errcode;
   record OrdSettBlock OSb;
   record AutoActionBlock AAb;
-  record ORVc ORr,oldORr;
-	record PackListVc PcLr;
-  record NPAreaVc NPAr;
-	string 100 oblast;
-	vector string 100 oblv;
+  record ORVc ORr,oldORr;//Edit_________________ABR//Edit_________________ABR
+	record PackListVc PcLr;//Edit_________________ABR//Edit_________________ABR
+  record NPAreaVc NPAr;//Edit_________________ABR//Edit_________________ABR
+	string 100 oblast;//Edit_________________ABR//Edit_________________ABR
+	vector string 100 oblv;//Edit_________________ABR//Edit_________________ABR
 	
-	while(loopmain(NPAr,1,true))begin
-		oblv[NPAr.Ref] = RusifyOblast(NPAr.Area);
-	end;
+	while(loopmain(NPAr,1,true))begin//Edit_________________ABR//Edit_________________ABR
+		oblv[NPAr.Ref] = RusifyOblast(NPAr.Area);//Edit_________________ABR//Edit_________________ABR
+	end;//Edit_________________ABR//Edit_________________ABR
   
   
   ihef = ItemHistExists("SHVc",SHr.SerNr);
@@ -2039,7 +2040,7 @@ begin
         end;
       end;
     end;
-    SetLastShipDate(SHr);//Edit----------------------Dima  31.08.2015
+    SetLastShipDate(SHr);//Edit Begin----------------------Dima  31.08.2015
     
     
 		ORr.SerNr = SHr.OrderNr;					//Edit----------------------Dima  22.09.2015
@@ -2064,17 +2065,17 @@ begin
 				RecordStore(ORr,true);
 		end;
 		
-		UpdateSalesDataFromSH(SHr); //Edit----------------------Dima  10.03.2016  
+		UpdateSalesDataFromSH(SHr); //Edit-END---------------------Dima  10.03.2016  
   end;
 
   if ((SHr.OKFlag==0) and (SH2r.OKFlag!=0)) then begin//unok
     UnOKDelivery(SHr,SH2r,true);
     
-    //return costs back 
-    IVr.OrderNr = SHr.OrderNr;
-    if (ReadFirstKey("OrderNr",IVr,1,true)) then begin
+    //return costs back //Edit_________________ABR//Edit_________________ABR
+    IVr.OrderNr = SHr.OrderNr;//Edit_________________ABR//Edit_________________ABR
+    if (ReadFirstKey("OrderNr",IVr,1,true)) then begin//Edit_________________ABR//Edit_________________ABR
     	UpdateSalesData(IVr);	//Edit----------------------Dima  10.03.2016
-    end;	
+    end;	//Edit_________________ABR//Edit_________________ABR
     
   end;
   if (nonblank(SHr.OfficialSerNr)) then begin
@@ -2103,11 +2104,11 @@ begin
   res = 0;
   if (SHr.OKFlag==0) then begin // Edit Dima ************* 2018-02-09 02:51 PM
      res = 1;
-	if (UserCanAction("AllowDeleteSHVc",true)==false) then begin
-		messagebox(31179,"");
-		res = 0;
-	goto LSHVcRecordRemoveTest;
-  end;
+	if (UserCanAction("AllowDeleteSHVc",true)==false) then begin//Edit_________________ABR//Edit_________________ABR
+		messagebox(31179,"");//Edit_________________ABR//Edit_________________ABR
+		res = 0;//Edit_________________ABR//Edit_________________ABR
+	goto LSHVcRecordRemoveTest;//Edit_________________ABR//Edit_________________ABR
+  end;//Edit_________________ABR//Edit_________________ABR
     goto LSHVcRecordRemoveTest;
   end;
   BlockLoad(DBLockRec);
@@ -2150,7 +2151,7 @@ global
 updating function LongInt SHVcRecordRemove(var record SHVc SHr,record SHVc SH2r,LongInt stat,LongInt long4)
 begin
   LongInt res;
-  record IVVc IVr;
+  record IVVc IVr;//Edit_________________ABR//Edit_________________ABR
 
   if (SHr.OrderNr!=-1) then begin
     if (UpdateOrderFromShip(SH2r,false,SHr,true,false)) then begin end;
@@ -2162,12 +2163,12 @@ begin
     SHDeleteStockMovemnts(SHr.SerNr);
   end;
   
-  //return costs back 
+  //return costs back //Edit_________________ABR/begin/Edit_________________ABR
   IVr.OrderNr = SHr.OrderNr;
   if (ReadFirstKey("OrderNr",IVr,1,true)) then begin
   	UpdateSalesData(IVr);	//Edit----------------------Dima  10.03.2016
   end;  
-  
+  //Edit_________________ABR/end/Edit_________________ABR
   SHVcRecordRemove = res; 
   return;
 end;
@@ -2205,7 +2206,7 @@ begin
 end;
 
 
-global updating procedure UpdateCURegionsMn(record RcVc RepSpec)
+global updating procedure UpdateCURegionsMn(record RcVc RepSpec)//Edit_________________ABR//Edit_________________ABR
 begin
 	record SHVc SHr;
 	boolean TrHs;

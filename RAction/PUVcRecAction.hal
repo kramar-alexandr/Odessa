@@ -133,9 +133,9 @@ begin
   PUr.CurncyCode = curcode;
   
   Userr.Code = CurrentUser;		//Edit by Victor 26.11.14
-  if (ReadFirstMain(Userr,1,true)) then begin
-	  PUr.SalesGroup = Userr.SalesGroup;
-	end;
+  if (ReadFirstMain(Userr,1,true)) then begin//Edit_________________ABR//Edit_________________ABR
+	  PUr.SalesGroup = Userr.SalesGroup;//Edit_________________ABR//Edit_________________ABR
+	end;//Edit_________________ABR//Edit_________________ABR
 	
   PUr.FrRate = fr;
   PUr.ToRateB1 = to1; 

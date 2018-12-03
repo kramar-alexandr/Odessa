@@ -31,7 +31,7 @@ external updating procedure CustStatUp(string,LongInt,string,string,string,strin
 external updating procedure DeleteTransaction(LongInt,Integer);
 external procedure GetARAcc(string,var string);
 external function Integer PMCheckType(string,var string,var string);
-external updating procedure SetORStatusFinished(record IPVc);
+external updating procedure SetORStatusFinished(record IPVc);//Edit_________________ABR//Edit_________________ABR
 
 function LongInt IPRemovTest(record IPVc IPp,LongInt errmf)
 BEGIN
@@ -748,7 +748,7 @@ global
 updating function LongInt IPVcRecordSave(var record IPVc IPr,record IPVc IP2r,LongInt stat,LongInt long4)
 BEGIN
   LongInt res;
-  record UserVc Userr;     
+  record UserVc Userr;     //Edit_________________ABR//Edit_________________ABR
 
   SetIPFlags(IPr);
   if (blanktime(IPr.RegTime)) then begin
@@ -763,10 +763,10 @@ BEGIN
     FindNextIPVcOfficialSerialNr(IPr);
   end;
   
-  Userr.Code = CurrentUser;
-  if(readFirstMain(Userr, 1, true))then begin
-   	IPr.SalesGroup = Userr.SalesGroup;
-  end; 
+  Userr.Code = CurrentUser;//Edit_________________ABR//Edit_________________ABR
+  if(readFirstMain(Userr, 1, true))then begin//Edit_________________ABR//Edit_________________ABR
+   	IPr.SalesGroup = Userr.SalesGroup;//Edit_________________ABR//Edit_________________ABR
+  end; //Edit_________________ABR//Edit_________________ABR
   
   IPVcRecordSave = res;
   RETURN;

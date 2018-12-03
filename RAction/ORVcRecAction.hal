@@ -76,7 +76,7 @@ external function LongInt GetCurUserLastNr(string);
 external function Boolean GetCustAndBal(var record CUVc,var val,var val,Integer,Integer,Integer,Integer,Integer,Integer,var Boolean);
 external function Boolean ORCheckForSalesmanPrice(record ORVc,Integer,string,string,var string);
 external function Boolean INVc_AllowSales(record INVc,var LongInt);
-external function string 30 GetCustomOfficialSerNr(); //Edit***************************Sasha2,11:42 08.01.2015
+external function string 30 GetCustomOfficialSerNr(); //Edit begin**************************Sasha2,11:42 08.01.2015
 external function Boolean GetForeignCurncyRate(string,var val,var val,var val,Date,var Date);//Edit---------------------Dima 29.01.2015
 //external updating function boolean NPCreateCounterparty(record NPCounterparty2Vc);	//Edit----------------------Dima  15.04.2015
 //external updating procedure GetRecipientContactPerson(string ,string );
@@ -345,7 +345,7 @@ end;
 
 
 
-
+//Edit_________________ABR/end/Edit_________________ABR
 procedure SetORAcceptanceFlag(var record ORVc ORr,record ORVc prevORr,LongInt stat)
 begin
   val bc1v;
@@ -620,12 +620,12 @@ begin
   record MainStockBlock MSb;  
   row ORVc ORrw;
   row ORVc OR2rw;
-  Integer i,j,rwcnt,errcode,k;
+  Integer i,j,rwcnt,errcode,k;//Edit_________________ABR//Edit_________________ABR
   LongInt oldnr,ErrorCode;
   LongInt newnr;
   val bal;
   val limit,rsrvd;
-  string 255 tstr,errstr,instr,curstr;
+  string 255 tstr,errstr,instr,curstr;//Edit_________________ABR//Edit_________________ABR
   Boolean gentrans,transf,unokf,testf,test2f;
   record OrdSettBlock OSb;
   string 20 location,oldOfficialSerNr;
@@ -649,12 +649,12 @@ begin
   val TotDownPaymentval;
   Array string 255 otcheckaccs;
   Array string 255 otcheckobjtyps;
-  Integer otcheckcnt,number;
+  Integer otcheckcnt,number; //Edit_________________ABR//Edit_________________ABR
   record OTCheckBlock OTCheckr;
   Boolean initotcheckf;  
   record CUUserLabelBlock CUUerLb;
   record CountryVc Countryr;
-  record NPCityVc NPCityr;
+  record NPCityVc NPCityr;//Edit_________________ABR/begin/Edit_________________ABR
   record NPWarehouseVc NPWarehouser;
   string 80 tmpStr, resStr;
   string 20 char, nextChar;
@@ -672,12 +672,12 @@ begin
 	if(blank(WSSB.AdressDelimeter))then begin
 		WSSB.AdressDelimeter = "###";
 	end;
-	
+	//Edit_________________ABR/end/Edit_________________ABR
 	
   res = 0;
   insertmode = 1;//Rs_insert
   updatemode = 2;//Rs_update
-  
+  //Edit_________________ABR/begin/Edit_________________ABR
   if(ORr.CustCode!="NONAME" and ORr.OrderClass=="RETAI")then begin
 			ORr.OrderClass = "WEB";
 	end;
@@ -812,7 +812,7 @@ begin
 			end; 
 		end;
   end;
-  
+  //Edit_________________ABR/end/Edit_________________ABR
   if (ORr.OKFlag==0) then begin
     if (stat==updatemode) then begin
       if (OR2r.OKFlag==1) then begin unokf = true; end;
@@ -836,7 +836,7 @@ begin
     if (stat==updatemode) then begin
       if (OR2r.Closed==0) then begin 
         if (SOHasOpenDwnPayInvoices(ORr,TotDownPaymentval)) then begin 
-          RecordCheckError(29090," " & TotDownPaymentval,-1,"CustCode");      
+          RecordCheckError(29090," " & TotDownPaymentval,-1,"CustCode");//Edit_________________ABR//Edit_________________ABR      
           res = -1;
           goto LORVcRecordCheck;            
         end else begin
@@ -901,7 +901,7 @@ begin
         goto LORVcRecordCheck;
       end;  
     end;
-    if (OR2r.OKFlag!=0) and (ORr.OKFlag!=1)  then begin
+    if (OR2r.OKFlag!=0) and (ORr.OKFlag!=1)  then begin//Edit_________________ABR//Edit_________________ABR
       if (UserCanAction("UnOKOR",true)==false) and (UserCanAction("UnOKAll",true)==false) then begin
         RecordCheckError(1274,StringFromStringSet(3,"UnOKOR"),-1,"SerNr");      
         res = -1;
@@ -909,7 +909,7 @@ begin
       end;
     end;  
   end;
-  
+  //Edit_________________ABR/begin/Edit_________________ABR
   if(blankdate(ORr.DebtUpdateDate) and nonblank(ORr.CustCode))then begin
   	CalcCustBalrem(ORr);// Edit ************************** Friday, 22 July 2016 11:20:19
   end;
@@ -918,12 +918,13 @@ begin
   		CalcCustBalrem(ORr);// Edit ************************** Friday, 22 July 2016 11:20:19
   	end;
   end;
-  
+  //Edit_________________ABR/end/Edit_________________ABR
   if (blank(ORr.CustCode)) then begin
     RecordCheckError(1058,"",-1,"CustCode");      
     res = -1;
     goto LORVcRecordCheck;
   end;
+	//Edit_________________ABR/begin/Edit_________________ABR
   if (blank(ORr.OfficialSerNr)) then begin
     ORr.OfficialSerNr = GetCustomOfficialSerNr; //Edit***************************Sasha2,11:44 08.01.2015
   end;
@@ -932,7 +933,7 @@ begin
     res = -1; 
     goto LORVcRecordCheck; 
   end;
-  
+  //Edit_________________ABR/end/Edit_________________ABR
   CUr.Code = ORr.CustCode;
   if (ReadFirstMain(CUr,1,true)==false) then begin
     RecordCheckError(1120,ORr.CustCode,-1,"CustCode");      
@@ -980,11 +981,11 @@ begin
         ORr.RegTime = CurrentTime;
       end;
   end;
-  
+  //Edit_________________ABR/begin/Edit_________________ABR
   if(blank(CUr.InvAddr0)) then begin
   	messagebox(31062, "");
   end;
-
+//Edit_________________ABR/end/Edit_________________ABR
   BlockLoad(LINrb);  		
   /*if (nonblank(ORr.OfficialSerNr)) then begin		// Comment by Victor 08.01.15 *****
     GetLegalInvNrRow(ORr.OfficialSerNr,LINrbrw);
@@ -1322,13 +1323,13 @@ begin
       end;
     end;
   end;
-  /*if (ORr.ExportFlag==0) then begin
+  /*if (ORr.ExportFlag==0) then begin //Edit_________________ABR//Edit_________________ABR
     if (UserCanAction("DisallowDomSales",false)) then begin
       RecordCheckError(20056,"",-1,"CustCode");   
       res = -1; 
       goto LORVcRecordCheck;
     end; 
-  end;*/
+  end;*///Edit_________________ABR//Edit_________________ABR
   if (ORr.ExportFlag!=0) then begin
     if (UserCanAction("DisallowExpSales",false)) then begin
       RecordCheckError(20049,"",-1,"CustCode");   
@@ -1368,7 +1369,7 @@ begin
   end;
   for (i=0;i<rwcnt;i=i+1) begin
     MatRowGet(ORr,i,ORrw);
-    
+    //Edit_________________ABR/begin/Edit_________________ABR
     if(nonblank(ORrw.ArtCode) and ORrw.RRPPrice==0)then begin
     	PLr.ArtCode = ORrw.ArtCode;
     	PLr.PLCode = "RRP";
@@ -1377,7 +1378,7 @@ begin
     		MatRowPut(ORr,i,ORrw);
     	end;
     end;
-    
+    //Edit_________________ABR/end/Edit_________________ABR
     switch (ORrw.stp) begin
       case 1:
         if (nonblank(ORrw.Spec) and blank(ORrw.ArtCode) and blank(ORrw.Quant)) then begin
@@ -1395,6 +1396,7 @@ begin
                 res = -1;
                 goto LORVcRecordCheck;
               end;
+							//Edit_________________ABR/begin/Edit_________________ABR
             end else begin
               tstr = ORrw.SalesAcc;
               ConvertSalesAcc(tstr,ORr.ExportFlag);
@@ -1406,6 +1408,7 @@ begin
                   goto LORVcRecordCheck;
                 end;
               end;
+							//Edit_________________ABR/end/Edit_________________ABR
             end;
           end else begin
             if (nonblank(ORrw.SalesAcc)) then begin
@@ -1414,7 +1417,7 @@ begin
                 RecordCheckError(1931,"",i,"SalesAcc");      
                 res = -1;
                 goto LORVcRecordCheck;
-              end;
+              end;//Edit_________________ABR//Edit_________________ABR
             end;
           end;
         end;
@@ -1459,6 +1462,7 @@ begin
           end;
         end;
         if (nonblank(ORrw.ArtCode)) then begin
+				//Edit_________________ABR/begin/Edit_________________ABR
         	if(usercanaction("DoMinOrderQtyOR",false)==false)then begin
         		SHr.OrderNr = ORr.SerNr;
         		if(readfirstkey("OrderKey",SHr,1,true)==false)then begin
@@ -1477,6 +1481,7 @@ begin
 							end; //Edit***************************Sasha2,11:33 10.05.2017 }
 						end;
           end;
+					//Edit_________________ABR/end/Edit_________________ABR
           if (HasLocalization("PRT")) then begin
             if (ORrw.vRebate<0) then begin
               RecordCheckError(22034,"",i,"vRebate");      
@@ -1590,7 +1595,7 @@ begin
                       end;
                     end;
                   end;
-                  if(ISr.RsrvQty<0) then begin //Edit***************************Sasha2,14:04 28.10.2014 {
+                  if(ISr.RsrvQty<0) then begin //Edit begin***************************Sasha2,14:04 28.10.2014 {
                     ISr.RsrvQty = 0;
                   end; //Edit***************************Sasha2,14:04 28.10.2014 }
                   if ((orsrv)>(ISr.Instock-ISr.RsrvQty+orsrved) and orsrv>0) then begin // StockRsrvQty ?
@@ -1607,7 +1612,7 @@ begin
 												goto LORVcRecordCheck;
                     	end;
                     end;
-                  end;// Edit ************************** Friday, 28 August 2015 15:49:51
+                  end;// Edit end************************** Friday, 28 August 2015 15:49:51
                 case 2:
 //                  checkit
               end;
@@ -1720,7 +1725,7 @@ begin
             end;
           end;
         end;
-        
+        //Edit_________________ABR//Edit_________________ABR
         if (ORrw.OrderQuant>0) then begin							//Edit----------------------Dima  06.10.2015
           if (ORrw.NecessaryQuant < ORrw.OrderQuant + ORrw.Quant) then begin
               RecordCheckError(31122,"",i,"OrderQuant");      
@@ -1733,10 +1738,11 @@ begin
               res = -1;
               goto LORVcRecordCheck;
         end;
+				//Edit_________________ABR/end/Edit_________________ABR
     end;
 LORVcRecordRowCheck:;
   end;
-  
+  //Edit_________________ABR/begin/Edit_________________ABR
   AddRozetkaVATOR(ORr);// Edit ************************** Wednesday, 23 August 2017 10:26:50
   
   rwcnt = MatRowCnt(ORr);
@@ -1873,7 +1879,7 @@ LORVcRecordRowCheck:;
       ORr.NPLastName = resStr;		  		
     end;
   end;
-  
+  //Edit_________________ABR/end/Edit_________________ABR
 LORVcRecordCheck:;
   if (res!=0) then begin 
     ORr.SerNr = oldnr; 
@@ -1896,21 +1902,23 @@ begin
   Integer i,rwcnt;
   record ARPayHistVc ARPayHr;
   record OPPVc OPPr;
-  record IVVc IVr;
+  record IVVc IVr;//Edit_________________ABR//Edit_________________ABR
   
   res = 1;
   SHr.OrderNr = ORp.SerNr;
   if (ReadFirstKey("OrderKey",SHr,1,true)) then begin //Edit***************************Sasha2,13:50 19.04.2017 {
-    if (errmf!=0) then begin MessageBox(1560,""); end;
+    if (errmf!=0) then begin MessageBox(1560,""); end;//Edit_________________ABR//Edit_________________ABR
     res = 0;
     goto LORRemoveTest;
   end; 
+	//Edit_________________ABR/begin/Edit_________________ABR
   IVr.OrderNr = ORp.SerNr;
   if (ReadFirstKey("OrderNr",IVr,1,true)) then begin
     if (errmf!=0) then begin MessageBox(1560,""); end;
     res = 0;
     goto LORRemoveTest;
   end; //Edit***************************Sasha2,13:50 19.04.2017 }
+	//Edit_________________ABR/end/Edit_________________ABR
   rwcnt = MatRowCnt(ORp);
   for (i=0;i<rwcnt;i=i+1) begin
     MatRowGet(ORp,i,ORrw);
@@ -1939,9 +1947,9 @@ begin
   if(currentuser!="SA")then begin// Edit ************************** Tuesday, 15 September 2015 14:51:55
 		if (ReadFirstKey("OrderNr",ARPayHr,1,true)) then begin
 			if (errmf!=0) then begin MessageBox(1876," " & ORp.SerNr); end;
-			res = 0;
-			goto LORRemoveTest;
-		end;
+			res = 0;//Edit_________________ABR//Edit_________________ABR
+			goto LORRemoveTest;//Edit_________________ABR//Edit_________________ABR
+		end;//Edit_________________ABR//Edit_________________ABR
   end;
   if (ORp.OKFlag!=0) then begin
     BlockLoad(DBLockRec);
@@ -2037,9 +2045,9 @@ begin
           t2 = -t2;
           t3 = -t3;
           if (ORp.Closed!=0) then begin// Edit ************************** BPI Ukraine - KramarAlexandr - Friday, 4 May 2018 11:49:53
-          	t2 = blankval;
-          	t3 = blankval;
-          end;
+          	t2 = blankval;//Edit_________________ABR//Edit_________________ABR
+          	t3 = blankval;//Edit_________________ABR//Edit_________________ABR
+          end;//Edit_________________ABR//Edit_________________ABR
         end else begin
           if (ORp.Closed!=0) then begin  // if ord is closed then nothing left to deliver
 //            if (MSb.UpdateAvailable==1) then begin
@@ -2747,7 +2755,7 @@ global
 updating function LongInt ORVcRecordUpdate(var record ORVc ORr,record ORVc OR2r,LongInt stat,LongInt long4)
 begin
   LongInt res;
-	val fr,to1,to2;//Edit---------------------------Dima 29.01.2015
+	val fr,to1,to2;//Edit BEGIN---------------------------Dima 29.01.2015
 	Date edt;	//Edit--------------------------------Dima 29.01.2015
 	record NPCounterparty2Vc NPCounterpartyr;
 	record NPCounterparty1Vc NPCounterpartyr1;
@@ -2755,7 +2763,7 @@ begin
 	row ORVc ORrw;
 	integer rwcnt,additionalday;
 	string 255 error;
-		
+		//Edit_________________ABR/END/Edit_________________ABR
   ORr.Prntdf = 0;
   HandlePromotionObjectsOR(ORr,OR2r,2); //Edit***************************Sasha2,10:31 25.01.2017
   AutDelNonStockItem(ORr);
@@ -2766,7 +2774,7 @@ begin
   SetORFlags(ORr);
   SetORAcceptanceFlag(ORr,OR2r,stat);
   RecalculateWeightORVc(ORr,false);
-  if (ORr.OrderClass == "WEB") then begin //Edit***************************Sasha2,11:57 15.07.2014
+  if (ORr.OrderClass == "WEB") then begin //Edit BEGIN***************************Sasha2,11:57 15.07.2014
   	MoreORVcHandling(ORr,OR2r); 
   end; //Edit***************************Sasha2,11:57 15.07.2014
   if (Blank(ORr.SalesMan) and UserCanAction("DoNotSetSalesManInOR",false)==false) then begin // Edit ************************** BPI Ukraine - KramarAlexandr - Monday, 11 June 2018 15:31:19
@@ -2887,7 +2895,7 @@ begin
 		ORr.ReservToDate = addday(currentdate,3 + additionalday);
   end;    
 
- 
+ //Edit_________________ABR/END/Edit_________________ABR
   ORVcRecordUpdate = res; 
   return;
 end;
@@ -2897,6 +2905,7 @@ updating function LongInt ORVcRecordUpdateAfter(var record ORVc ORr,record ORVc 
 begin
   LongInt res;
   val bc1v;
+	//Edit_________________ABR/Begin/Edit_________________ABR
   record SHVc SHr,oldSHr;
   boolean invoiceAccepted;
   string 50 oldstatus,newstatus;
@@ -2976,7 +2985,7 @@ begin
 				RecordUpdate(oldSHr,SHr,true);//Edit----------------------Dima  16.07.2015
 			end;
 		end;
-	end;	// end edit
+	end;	//Edit_________________ABR/end/Edit_________________ABR
 
 //  ORObjectStats(ORr,OR2r); it is stored only and not used ever
   UpdateVARItemsOR(ORr);
@@ -3002,10 +3011,10 @@ begin
       end;
   end;
   
-  if(OR2r.FeedBackStatus!=ORr.FeedBackStatus and ORr.FeedBackStatus > OR2r.FeedBackStatus) then begin 
+  if(OR2r.FeedBackStatus!=ORr.FeedBackStatus and ORr.FeedBackStatus > OR2r.FeedBackStatus) then begin //Edit_________________ABR//Edit_________________ABR
   	SendNoticeSMS(ORr);			//Edit----------------------Dima  31.08.2015
-  end;  
-  CreateORHistoryVcFromORVc(ORr,OR2r,true);
+  end;  //Edit_________________ABR//Edit_________________ABR
+  CreateORHistoryVcFromORVc(ORr,OR2r,true);//Edit_________________ABR//Edit_________________ABR
   
   ORVcRecordUpdateAfter = res; 
   return;
@@ -3126,7 +3135,7 @@ begin
   RecalculateWeightORVc(ORr,false);
 //  MakeActFromSubSys_ORVc(ORr,false,false);  done below in CreateActFromOR
   if (blank(ORr.OfficialSerNr)) then begin
-    ORr.OfficialSerNr = GetCustomOfficialSerNr; //Edit***************************Sasha2,16:56 28.01.2015
+    ORr.OfficialSerNr = GetCustomOfficialSerNr; //Edit Begin***************************Sasha2,16:56 28.01.2015
     //FindNextORVcOfficialSerialNr(ORr); //Edit***************************Sasha2,16:56 28.01.2015
   end;
   if (blank(ORr.OptUAHRate)) then begin		//Edit--------------------------Dima  29.01.2015
@@ -3176,6 +3185,7 @@ begin
 	end;    
   TableSortOR2(ORr);//Edit----------------------Dima  07.07.2015
   SetRowsUID(ORr);	//Edit----------------------Dima  14.08.2015
+	//Edit_________________ABR/end/Edit_________________ABR
   ORVcRecordSave = res; 
   return;
 end;
@@ -3193,7 +3203,7 @@ begin
     UpdateOffSerNr(ORr.SerNr,"ORVc",0,ORr.OfficialSerNr,false);
   end;
   
-  CreateORHistoryVcFromORVc(ORr,OR2r,false);
+  CreateORHistoryVcFromORVc(ORr,OR2r,false);//Edit_________________ABR//Edit_________________ABR
   
   ORVcRecordSaveAfter = res; 
   return;
@@ -3246,7 +3256,7 @@ begin
   //if (UserCanAction("DoNotSetSalesManInOR",false)==false) then begin //Edit***************************Sasha2,15:40 19.12.2016
     ORr.SalesMan = USr.Code;
     ORr.SalesGroup = USr.SalesGroup;  
-  //end;
+  //end;//Edit_________________ABR//Edit_________________ABR
   if (SingleUserMode) then begin
     ORr.SerNr = NextSerNr("ORVc",ORr.OrdDate,-1,false,"");
   end;
@@ -3273,13 +3283,13 @@ begin
   ORr.LocalMachineCode = CurMachineName;
   ORr.OfficialSerNr = "";
   ORr.OfficialSerNrSerie = "";
-  ORr.Advance = 0;
+  ORr.Advance = 0;//Edit_________________ABR//Edit_________________ABR
   
-  if(ORr.OrderClass=="WEB")then begin
+  if(ORr.OrderClass=="WEB")then begin//Edit_________________ABR//Edit_________________ABR
 		ORr.NPPayer = NPSettingsb.DefPayer;// Edit ************************** Monday, 17 October 2016 15:03:50
-  end else begin
+  end else begin//Edit_________________ABR//Edit_________________ABR
   	ORr.NPPayer = NPSettingsb.DefPayer1;// Edit ************************** Monday, 17 October 2016 15:03:50
-  end;
+  end;//Edit_________________ABR//Edit_________________ABR
   ORr.PromotionCode2 = LookUpPromotionCode(ORr.OrdDate,ORr.Location); //Edit***************************Sasha2,15:32 24.01.2017
   
   ORVcRecordDefaults = res;  
@@ -3287,7 +3297,7 @@ begin
 end;
 
 global
-function val GetINCostPrice(string pricelist,string artcode,Boolean bbf)
+function val GetINCostPrice(string pricelist,string artcode,Boolean bbf)//Edit_________________ABR//Edit_________________ABR
 begin
   val res;
   record INVc INr;
@@ -3306,7 +3316,7 @@ begin
         if (ReadFIrstMain(PLDr,1,true)) then begin
           PLr.PLCode = pricelist;
           PLr.ArtCode = artcode;
-          if (ReadFIrstMain(PLr,2,true)) then begin
+          if (ReadFIrstMain(PLr,2,true)) then begin//Edit_________________ABR//Edit_________________ABR
             switch (PLDr.DepPrice) begin
               case 2:
                 if (nonblank(PLr.CostPrice)) then begin
@@ -3318,7 +3328,7 @@ begin
       end;
     end;
   end;
-  GetINCostPrice = res;
+  GetINCostPrice = res;//Edit_________________ABR//Edit_________________ABR
   return;
 end;
 
@@ -3424,9 +3434,9 @@ begin
   ORr.TransTime = ""; //Edit***************************Sasha2,13:50 15.07.2014
   ORr.SyncFlag = 0; //Edit***************************Sasha2,13:50 15.07.2014
   ORr.CustomStatusFlag = 0; //Edit***************************Sasha2,13:50 15.07.2014
-  ORr.PrepaymentReceived = 0;
-  ORr.PrivatePaymentRec = 0;
-  ORr.WaitingForItemsDate = "";
+  ORr.PrepaymentReceived = 0;//Edit_________________ABR//Edit_________________ABR
+  ORr.PrivatePaymentRec = 0;//Edit_________________ABR//Edit_________________ABR
+  ORr.WaitingForItemsDate = "";//Edit_________________ABR//Edit_________________ABR
   ORr.WaitingForItemsTime = "";//Edit----------------------Dima  17.12.2015
   
   ORVcRecordDuplicate = res;  
@@ -3488,7 +3498,7 @@ begin
   if (ORr.OSFlag==0) then begin 
     if (indexname=="ActArtCodeOSFlag")  then begin res = 0; end;
   end;
-  
+  //Edit_________________ABR/begin/Edit_________________ABR
   if (ORr.Closed>0  or (ORr.CustomStatusFlag==9 or ORr.CustomStatusFlag==10)) then begin 		//Edit----------------------Dima  26.08.2015
     if (indexname=="ActShipSerNr")  then begin res = 0; end;
     if (indexname=="ActShipInvFlag")  then begin res = 0; end;
@@ -3504,7 +3514,8 @@ begin
 
   end;  //Edit--------------------------------------------------------------------------------------------------------------Dima  26.08.2015
  //LogText(0, ORr.SerNr & "   " & ORr.CustomStatusFlag & "    " & indexname & "   index   " & res);
-  ORVcRecordInIndex = res;
+  //Edit_________________ABR/end/Edit_________________ABR
+	ORVcRecordInIndex = res;
   return;
 end;
 
