@@ -527,7 +527,7 @@ begin
       end;  
       /*if ((nonblank(RepSpec.f4)) and (RepSpec.f4<>ORr.Location)) then begin // Edit ************************** Thursday, 18 June 2015 11:25:22
         testf = false; 
-      end;*/
+      end;*///Edit_________________ABR//Edit_________________ABR
       if ((nonblank(RepSpec.ObjStr)) and (SetInSet(RepSpec.ObjStr,ORr.Objects)==false)) then begin testf = false; end;
       if (ORr.OKFlag==0) then begin
         if (RepSpec.flags[7]==0) then begin testf = false; end;
@@ -568,10 +568,10 @@ L30:;
         rwcnt = MatRowCnt(ORr);
         for (i=0 ;i<rwcnt ;i=i+1) begin
           testf = true;
-          testf1= true;
+          testf1= true;//Edit_________________ABR//Edit_________________ABR
           MatRowGet(ORr,i,ORrw);
           
-          
+          //Edit_________________ABR/begin/Edit_________________ABR
           if (nonblank(RepSpec.f4))then begin // Edit ************************** Thursday, 18 June 2015 11:25:22
 						if(nonblank(ORrw.Location))then begin
 							if (RepSpec.f4<>ORrw.Location) then begin // Edit ************************** Thursday, 18 June 2015 11:25:22
@@ -582,7 +582,7 @@ L30:;
 								testf1 = false; 
 							end;
 						end;
-					end;
+					end;//Edit_________________ABR/end/Edit_________________ABR
 
           if (ORrw.Quant < ORrw.Shipd1) then begin
             goto LNext;
@@ -722,7 +722,7 @@ LNext:;
                 if (nonblank(RepSpec.Stext)) then begin
                   if (CheckPlanShipRows(RepSpec.Stext,ORr)==false) then begin testf = false; end;
                 end;  
-                //if (ORrw.rowGP<=0) then begin testf = false; end;//instock// Edit ************************** Thursday, 18 June 2015 13:40:20
+                //if (ORrw.rowGP<=0) then begin testf = false; end;//instock// Edit begin ************************** Thursday, 18 June 2015 13:40:20
                 
                 testf1 = true;// Edit ************************** Thursday, 18 June 2015 11:34:36;
                 
@@ -738,7 +738,7 @@ LNext:;
 									end;
 								end;
 								
-                if (testf and testf1) then begin// Edit ************************** Thursday, 18 June 2015 11:34:22
+                if (testf and testf1) then begin// Edit end ************************** Thursday, 18 June 2015 11:34:22
                   StartFormat(15);
                   OutLongInt(0,"DblORVc",ORr.SerNr,false);
                  // OutDate(50,0,ORr.OrdDate,false);
@@ -766,11 +766,11 @@ LNext:;
                       OutVal(260,0,ORrw.Quant,M4UVal,true);
                       TotQty = TotQty + ORrw.Quant;
                       //OutVal(320,0,ORrw.Shipd1-ORrw.Shipd2,M4UVal,true);// Edit ************************** Tuesday, 16 June 2015 14:54:25
-                      if(ORr.Reserved>0 and ORr.Closed==0)then begin
-												OutVal(320,0,ORrw.Quant-ORrw.Shipd2,M4UVal,true);
-                      end else begin
-                      	OutVal(320,0,blankval,M4UVal,true);
-                      end;
+                      if(ORr.Reserved>0 and ORr.Closed==0)then begin//Edit_________________ABR//Edit_________________ABR
+												OutVal(320,0,ORrw.Quant-ORrw.Shipd2,M4UVal,true);//Edit_________________ABR//Edit_________________ABR
+                      end else begin//Edit_________________ABR//Edit_________________ABR
+                      	OutVal(320,0,blankval,M4UVal,true);//Edit_________________ABR//Edit_________________ABR
+                      end;//Edit_________________ABR//Edit_________________ABR
                       OutVal(360,0,ORrw.Shipd2,M4UVal,true);
                       TotLev = TotLev + ORrw.Shipd2;
                       TotinPick = TotinPick + (ORrw.Shipd1-ORrw.Shipd2);
@@ -943,7 +943,7 @@ BEGIN
         OutString(130,0,USetStr(2637),false);
         OutString(260,0,USetStr(2631),true);
         //OutString(320,0,USetStr(5511),true);//***********// Edit ************************** Tuesday, 16 June 2015 14:47:18
-        OutString(320,0,USetStr(12804),true);
+        OutString(320,0,USetStr(12804),true);//Edit_________________ABR//Edit_________________ABR
         OutString(360,0,USetStr(2632),true);
         OutString(400,0,USetStr(2630),true);
         OutString(440,0,USetStr(2342),true);

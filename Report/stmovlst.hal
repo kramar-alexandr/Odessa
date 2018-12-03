@@ -6,7 +6,7 @@ external procedure HT2Per(Date, Date , var string);
 external procedure GetCurRateText(var string,val,val,val);
 external procedure ExtractObj(string,var Integer,var string);// Edit ************************** Wednesday, 13 July 2016 09:57:55
 
-SetLangMode(LangRussian,"RUS",0);
+SetLangMode(LangRussian,"RUS",0);//Edit_________________ABR//Edit_________________ABR
 
 global
 procedure StockMovJRn(record RcVc RepSpec)
@@ -26,7 +26,7 @@ begin
   string 255 frin,toin,posstr; //Edit***************************Sasha2,17:35 11.02.2016
   row StockMovVc SMrw;
   record LetVc Letr;// Edit ************************** Tuesday, 12 July 2016 15:52:10
-  integer pos;
+  integer pos;//Edit_________________ABR//Edit_________________ABR
   
   BlockLoad(MainStockRec);
   afr = FirstInRange(RepSpec.f1,50);
@@ -122,29 +122,29 @@ begin
       OutString(0,0,USetStr(5243),false);
       OutString(330,0,USetStr(5246),false);   // Currency
       OutString(400,0,USetStr(5247),false);   // Rate
-      OutString(450,0,"Собрал",false);
-      OutString(500,0,"Получил",false);
+      OutString(450,0,"Собрал",false);//Edit_________________ABR//Edit_________________ABR
+      OutString(500,0,"Получил",false);//Edit_________________ABR//Edit_________________ABR
       EndFormat;
       Gray_Divider(0,1);
   end;
   if (RepSpec.ArtMode==0) then begin         //Overview
       StartFormat(15);
       OutString(0,0,USetStr(5241),false);    //Ser.No
-      OutString(45,0,USetStr(5242),false);   //Trans. Date
+      OutString(45,0,USetStr(5242),false);   //Trans. Date//Edit_________________ABR//Edit_________________ABR
       OutString(135,0,USetStr(5243),false);  //Comment
       OutString(225,0,USetStr(5244),false);  //From Stock
       OutString(275,0,USetStr(5239),false);  //Via Stock
       OutString(330,0,USetStr(5245),false);  //To Stock
       //OutStringAdjustBiDi(415,0,USetStr(5249),true,M4Val,455);   //Qty// Edit ************************** Thursday, 5 February 2015 18:03:38
-      OutStringAdjustBiDi(375,0,USetStr(5249),true,M4Val,455);   //Qty
-      OutStringAdjustBiDi(415,0,USetStr(5256),true,M4Val,455);   //Qty
+      OutStringAdjustBiDi(375,0,USetStr(5249),true,M4Val,455);   //Qty//Edit_________________ABR//Edit_________________ABR
+      OutStringAdjustBiDi(415,0,USetStr(5256),true,M4Val,455);   //Qty//Edit_________________ABR//Edit_________________ABR
       switch (RepSpec.flags[4]) begin
         case 0: OutStringAdjustBiDi(1,0,USetStr(5266),true,M4Val,510);
         case 1: OutStringAdjustBiDi(1,0,USetStr(5267),true,M4Val,510);
         case 2: OutStringAdjustBiDi(1,0,USetStr(5253),true,M4Val,510);
       end;
-      OutString(450,0,"Собрал",false);
-      OutString(500,0,"Получил",false);
+      OutString(450,0,"Собрал",false);//Edit_________________ABR//Edit_________________ABR
+      OutString(500,0,"Получил",false);//Edit_________________ABR//Edit_________________ABR
       EndFormat;
       Gray_Divider(0,1);
   end;
@@ -203,7 +203,7 @@ begin
         testf = false;
       end;
     end;
-    
+//Edit_________________ABR/Begin/Edit_________________ABR    
     if(testf)then begin
 			RecordClear(Letr);
 			AddToText(SMr.SerNr & ";",Letr);
@@ -236,6 +236,7 @@ begin
 					end;
 			end;
     end;
+		//Edit_________________ABR/end/Edit_________________ABR
 
     if (testf) then begin
       if ((RepSpec.flags[1]==1) and (SMr.OrdFlag!=0)) then begin
@@ -257,12 +258,12 @@ begin
         testf = false;
       end;
     end;
-    
+    //Edit_________________ABR/begin/Edit_________________ABR
     if (testf) then begin //Edit***************************Sasha2,17:33 11.02.2016 {
       if (NonBlank(RepSpec.f5) and SMr.FrPos!=RepSpec.f5) then begin testf = false; end; //Edit***************************Sasha2,17:12 11.02.2016
       if (NonBlank(RepSpec.f6) and SMr.ToPos!=RepSpec.f6) then begin testf = false; end;  //Edit***************************Sasha2,17:12 11.02.2016
     end; //Edit***************************Sasha2,17:33 11.02.2016 }
-
+//Edit_________________ABR/end/Edit_________________ABR
     if (testf) then begin
       if (nonblank(RepSpec.f4)) then begin
         testf = false;
@@ -282,7 +283,7 @@ begin
            OutLongInt(0,"DblStockMov",SMr.SerNr,false);
            OutDate(130,0,SMr.TransDate,false);
            OutDate(220,0,SMr.RegDate,false);
-           if (NonBlank(SMr.FrPos)) then begin //Edit***************************Sasha2,17:37 11.02.2016 {
+           if (NonBlank(SMr.FrPos)) then begin //Edit begin***************************Sasha2,17:37 11.02.2016 {
              posstr = "(" & SMr.FrPos & ")";
            end else begin
              posstr = "";
@@ -294,7 +295,7 @@ begin
            end else begin
              posstr = "";
            end; //Edit***************************Sasha2,17:37 11.02.2016 }
-           OutString(430,0,SMr.ToLocation & posstr,false); //Edit***************************Sasha2,17:37 11.02.2016
+           OutString(430,0,SMr.ToLocation & posstr,false); //Edit end***************************Sasha2,17:37 11.02.2016
            EndFormat;
            StartFormat(15);
            OutString(0,0,SMr.Comment,false);
@@ -414,7 +415,7 @@ begin
            end;
            StartFormat(15);
            OutLongInt(0,"DblStockMov",SMr.SerNr,false);
-           OutDate(45,0,SMr.TransDate,false);
+           OutDate(45,0,SMr.TransDate,false);//Edit_________________ABR//Edit_________________ABR
            OutString(135,0,Left(SMr.Comment,20),false);
            OutString(225,0,SMr.FrLocation,false);
            OutString(275,0,SMr.ThrouLocation,false);
@@ -426,7 +427,7 @@ begin
 						OutString(500,0,SMr.ReceiveUser,false);//25/08/2017 Alexandr
            EndFormat;
            totqty = totqty + sumqty;
-           totqty1 = totqty1 + sumqty1;
+           totqty1 = totqty1 + sumqty1;//Edit_________________ABR//Edit_________________ABR
            totsum = totsum + rowsum;
        end;
    end;

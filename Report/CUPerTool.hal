@@ -238,12 +238,12 @@ change does not increase invoice values
       MatRowGet(IVr,i,IVrw);
       if(RepSpec.flags[2]==0)then begin// Edit ************************** Wednesday, 29 April 2015 12:22:13
 				switch (IVrw.stp) begin
-					case 14: cashv = cashv + MulRateToBase1(IVr.CurncyCode,IVrw.Sum,IVr.FrRate,IVr.ToRateB1,IVr.ToRateB2,IVr.BaseRate1,IVr.BaseRate2,DefaultCurRoundOff);
+					case 14: cashv = cashv + MulRateToBase1(IVr.CurncyCode,IVrw.Sum,IVr.FrRate,IVr.ToRateB1,IVr.ToRateB2,IVr.BaseRate1,IVr.BaseRate2,DefaultCurRoundOff);//Edit_________________ABR//Edit_________________ABR
 					case 15: cashv = cashv + MulRateToBase1(IVrw.CurncyCode,IVrw.Sum,IVrw.FrRate,IVr.ToRateB1,IVr.ToRateB2,IVr.BaseRate1,IVr.BaseRate2,DefaultCurRoundOff);// Edit ************************** Wednesday, 29 April 2015 12:18:30
-					case 16: cashv = cashv + MulRateToBase1(IVr.CurncyCode,IVrw.Sum,IVr.FrRate,IVr.ToRateB1,IVr.ToRateB2,IVr.BaseRate1,IVr.BaseRate2,DefaultCurRoundOff);
-				end;
-      end else begin
-      	switch (IVrw.stp) begin
+					case 16: cashv = cashv + MulRateToBase1(IVr.CurncyCode,IVrw.Sum,IVr.FrRate,IVr.ToRateB1,IVr.ToRateB2,IVr.BaseRate1,IVr.BaseRate2,DefaultCurRoundOff);//Edit_________________ABR//Edit_________________ABR
+				end;//Edit_________________ABR//Edit_________________ABR
+      end else begin//Edit_________________ABR//Edit_________________ABR
+      	switch (IVrw.stp) begin//Edit_________________ABR//Edit_________________ABR
 					case 14: cashv = cashv + IVrw.Sum;
 					case 15: cashv = cashv + IVrw.Sum;//MulRateToBase1(IVrw.CurncyCode,IVrw.Sum,IVrw.FrRate,IVrw.ToRateB1,IVrw.ToRateB2,IVrw.BaseRate1,IVrw.BaseRate2,DefaultCurRoundOff);// Edit ************************** Wednesday, 29 April 2015 12:18:30
 					case 16: cashv = cashv + IVrw.Sum;
@@ -252,8 +252,8 @@ change does not increase invoice values
     end;
     if ((IVr.RetnValue>0 and IVr.Sum4>0) or (IVr.RetnValue<0 and IVr.Sum4<0)) then begin
     	if(RepSpec.flags[2]==0)then begin// Edit ************************** Wednesday, 29 April 2015 12:27:16
-				cashv = cashv - MulRateToBase1(IVr.CurncyCode,IVr.RetnValue,IVr.FrRate,IVr.ToRateB1,IVr.ToRateB2,IVr.BaseRate1,IVr.BaseRate2,DefaultCurRoundOff);
-      end else begin
+				cashv = cashv - MulRateToBase1(IVr.CurncyCode,IVr.RetnValue,IVr.FrRate,IVr.ToRateB1,IVr.ToRateB2,IVr.BaseRate1,IVr.BaseRate2,DefaultCurRoundOff);//Edit_________________ABR//Edit_________________ABR
+      end else begin//Edit_________________ABR//Edit_________________ABR
       	cashv = cashv - IVr.RetnValue;
       end;// Edit ************************** Wednesday, 29 April 2015 12:27:17
     end;
@@ -308,8 +308,8 @@ change does not increase invoice values
       tstr = CreateInvoiceNumber(IVr.SerNr,IVr.OfficialSerNr);
       OutString(pos2,"DblCustPS2",tstr,false);
       if (RepSpec.Media==mtFile) or (RepSpec.Media==mtExcel) or (RepSpec.Media==mtClipboard) then begin// Edit ************************** BPI Ukraine - KramarAlexandr - Tuesday, 10 July 2018 10:17:05
-        OutString(2,0,"",true);
-      end;
+        OutString(2,0,"",true);//Edit_________________ABR//Edit_________________ABR
+      end;//Edit_________________ABR//Edit_________________ABR
       OutVal(3,0,v,M4Val,true);
       if (RepSpec.flags[2]==1) then begin 
         OutString(7,0,IVr.CurncyCode,false); 
@@ -355,8 +355,8 @@ change does not increase invoice values
       tstr = CreateInvoiceNumber(IVr.SerNr,IVr.OfficialSerNr);
       OutString(pos2,"DblCustPS2",tstr,false);   
       if (RepSpec.Media==mtFile) or (RepSpec.Media==mtExcel) or (RepSpec.Media==mtClipboard) then begin// Edit ************************** BPI Ukraine - KramarAlexandr - Tuesday, 10 July 2018 10:17:05
-        OutString(2,0,"",true);
-      end;         
+        OutString(2,0,"",true);//Edit_________________ABR//Edit_________________ABR
+      end;         //Edit_________________ABR//Edit_________________ABR
       OutVal(3,0,v,M4Val,true);
       if (RepSpec.Media==mtFile) or (RepSpec.Media==mtExcel) or (RepSpec.Media==mtClipboard) then begin
         OutString(4,0,"",true);
@@ -463,8 +463,8 @@ change does not increase invoice values
         OutString(pos2,"DblCustPS2",tstr,false);
       end;
       if (RepSpec.Media==mtFile) or (RepSpec.Media==mtExcel) or (RepSpec.Media==mtClipboard) then begin// Edit ************************** BPI Ukraine - KramarAlexandr - Tuesday, 10 July 2018 10:17:05
-        OutString(2,0,"",true);
-      end;
+        OutString(2,0,"",true);//Edit_________________ABR//Edit_________________ABR
+      end;//Edit_________________ABR//Edit_________________ABR
       if (cash) then begin
         OutVal(3,0,v,M4Val,true);
         if (RepSpec.flags[2]==1) then begin

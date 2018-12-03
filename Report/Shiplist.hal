@@ -6,7 +6,7 @@ external procedure HTOKF(Integer, Integer, var string);
 external procedure HTNr(Integer,Integer,LongInt,LongInt,var string);
 external procedure HT2Per(Date, Date , var string);
 
-SetLangMode(LangRussian,"RUS",0);
+SetLangMode(LangRussian,"RUS",0);//Edit_________________ABR//Edit_________________ABR
 
 procedure RepShip(record RcVc RepSpec,record SHVc SHp,var val ordtot,var val shptot)
 begin
@@ -154,15 +154,15 @@ begin
   if RepSpec.ArtMode==0 then begin
     StartFormat(15);
     OutString(0,0,USetStr(2582),false);
-    OutString(40,0,USetStr(2583),false);
-    OutString(80,0,USetStr(2584),false);
-    OutString(120,0,USetStr(2585),false);
-	OutString(160,0,"Условия доставки",false);
-	OutString(210,0,"Способ оплаты",false);
+    OutString(40,0,USetStr(2583),false);//Edit_________________ABR//Edit_________________ABR
+    OutString(80,0,USetStr(2584),false);//Edit_________________ABR//Edit_________________ABR
+    OutString(120,0,USetStr(2585),false);//Edit_________________ABR//Edit_________________ABR
+	OutString(160,0,"Условия доставки",false);//Edit_________________ABR//Edit_________________ABR
+	OutString(210,0,"Способ оплаты",false);//Edit_________________ABR//Edit_________________ABR
     OutString(260,0,USetStr(2586),false);
 	OutString(320,0,"Маршрут",false);// Edit ************************** BPI Ukraine - KramarAlexandr - понеділок, 8 січня 2018 р. о 13:58:11
-    OutStringAdjustBiDi(370,0,"Себестоимость",false,M4Val,520);
-	OutString(400,0,"Сумма по заказу",false);
+    OutStringAdjustBiDi(370,0,"Себестоимость",false,M4Val,520);//Edit_________________ABR//Edit_________________ABR
+	OutString(400,0,"Сумма по заказу",false);//Edit_________________ABR//Edit_________________ABR
 	OutString(450,0,"Утверждение",true); //Edit_________________ABR 29.11.18 10:45	
     OutString(1,0,"Готов к сборке",true);// Edit ************************** BPI Ukraine - KramarAlexandr - понеділок, 8 січня 2018 р. о 13:58:13
     EndFormat;
@@ -170,15 +170,15 @@ begin
   if RepSpec.ArtMode==1 then begin
     StartFormat(15);
     OutString(0,0,USetStr(2582),false);
-    OutString(40,0,USetStr(2583),false);
-    OutString(80,0,USetStr(2584),false);
-    OutString(120,0,USetStr(2585),false);
-	OutString(160,0,"Условия доставки",false);
-	OutString(210,0,"Способ оплаты",false);
+    OutString(40,0,USetStr(2583),false);//Edit_________________ABR//Edit_________________ABR
+    OutString(80,0,USetStr(2584),false);//Edit_________________ABR//Edit_________________ABR
+    OutString(120,0,USetStr(2585),false);//Edit_________________ABR//Edit_________________ABR
+	OutString(160,0,"Условия доставки",false);//Edit_________________ABR//Edit_________________ABR
+	OutString(210,0,"Способ оплаты",false);//Edit_________________ABR//Edit_________________ABR
     OutString(260,0,USetStr(2586),false);
 	OutString(280,0,"Маршрут",false);// Edit ************************** BPI Ukraine - KramarAlexandr - понеділок, 8 січня 2018 р. о 13:58:11
-    OutStringAdjustBiDi(340,0,USetStr(2590),true,M4Val,460);
-    OutStringAdjustBiDi(340,0,USetStr(2591),true,M4Val,520);
+    OutStringAdjustBiDi(340,0,USetStr(2590),true,M4Val,460);//Edit_________________ABR//Edit_________________ABR
+    OutStringAdjustBiDi(340,0,USetStr(2591),true,M4Val,520);//Edit_________________ABR//Edit_________________ABR
 		OutString(450,0,"Утверждение",true); //Edit_________________ABR 29.11.18 10:45	
     OutString(1,0,"Готов к сборке",true);// Edit ************************** BPI Ukraine - KramarAlexandr - понеділок, 8 січня 2018 р. о 13:58:13
 		
@@ -231,7 +231,7 @@ begin
     testf = false;
    end;
    
-   if(RepSpec.flags[3]>0)then begin// Edit ************************** BPI Ukraine - KramarAlexandr - понеділок, 8 січня 2018 р. о 13:52:55
+   if(RepSpec.flags[3]>0)then begin// Edit begin ************************** BPI Ukraine - KramarAlexandr - понеділок, 8 січня 2018 р. о 13:52:55
    	if(RepSpec.flags[3]==1 and SHr.Assembly==0)then begin
    		testf = false;
    	end;
@@ -241,7 +241,7 @@ begin
    end;
    if(nonblank(RepSpec.f6) and SHr.Sorting!=RepSpec.f6)then begin// Edit ************************** BPI Ukraine - KramarAlexandr - понеділок, 8 січня 2018 р. о 13:56:05
    	testf = false;
-   end;
+   end;//Edit_________________ABR/end/Edit_________________ABR
    
    if (testf) then begin
     if nonblank(RepSpec.TransStr) then begin
@@ -362,24 +362,24 @@ begin
             rowt = rowt+sum;
           end;
         end;
-		ORr.SerNr = SHr.OrderNr;
-		ReadFirstMain(ORr,1,true);
+		ORr.SerNr = SHr.OrderNr;//Edit_________________ABR//Edit_________________ABR
+		ReadFirstMain(ORr,1,true);//Edit_________________ABR//Edit_________________ABR
         StartFormat(15);
         OutLongInt(0,"DblSHVc",SHr.SerNr,false);
-        OutDate(40,0,SHr.ShipDate,false);
-        OutLongInt(80,0,SHr.OrderNr,false);
-        OutString(120,0,SHr.CustCode,false);
-		OutString(160,0,ORr.ShipMode,false);
-		OutString(210,0,ORr.NewPD,false);
+        OutDate(40,0,SHr.ShipDate,false);//Edit_________________ABR//Edit_________________ABR
+        OutLongInt(80,0,SHr.OrderNr,false);//Edit_________________ABR//Edit_________________ABR
+        OutString(120,0,SHr.CustCode,false);//Edit_________________ABR//Edit_________________ABR
+		OutString(160,0,ORr.ShipMode,false);//Edit_________________ABR//Edit_________________ABR
+		OutString(210,0,ORr.NewPD,false);//Edit_________________ABR//Edit_________________ABR
         OutString(260,0,SHr.Addr0,false);        
         OutString(320,0,SHr.Sorting,false);// Edit *******************
-		 OutValBiDi(370,0,rowt,M4Val,false,520);
-		OutString(400,0,ORr.Sum4,false);
-			if(Shr.OKFlag!=0) then begin
+		 OutValBiDi(370,0,rowt,M4Val,false,520);//Edit_________________ABR//Edit_________________ABR
+		OutString(400,0,ORr.Sum4,false);//Edit_________________ABR//Edit_________________ABR
+			if(Shr.OKFlag!=0) then begin//Edit_________________ABR//Edit_________________ABR
 				OutString(450,0,"1",true); //Edit_________________ABR 29.11.18 10:45
-			end else begin 
+			end else begin //Edit_________________ABR//Edit_________________ABR
 				OutString(450,0,"0",true); //Edit_________________ABR 29.11.18 10:45
-			end;	
+			end;	//Edit_________________ABR//Edit_________________ABR
         OutString(1,0,Shr.Assembly,true);// Edit ************************** BPI Ukraine - KramarAlexandr - понеділок, 8 січня 2018 р. о 13:58:13
         EndFormat;
         sht = sht + rowt;

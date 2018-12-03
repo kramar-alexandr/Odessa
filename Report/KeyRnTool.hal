@@ -425,7 +425,7 @@ begin
   return;
 end;
 
-procedure KLPerBalExecute(string functionname,record RcVc RepSpec,string tmpaccstr,string object,var val dSbp,var val dPbp,var val dEbp,
+procedure KLPerBalExecute(string functionname,record RcVc RepSpec,string tmpaccstr,string object,var val dSbp,var val dPbp,var val dEbp,//Edit_________________ABR//Edit_________________ABR
                    var val cSbp,var val cPbp,var val cEbp,Integer keycoltype)
 BEGIN
   record AccVc Accr;
@@ -441,6 +441,7 @@ BEGIN
   val v;
   Integer sorting;
   vector Boolean vaccusedf;
+	//Edit_________________ABR/begin/Edit_________________ABR
   string 20 curcode;// Edit ************************** Monday, 23 March 2015 15:56:04
   string 200 accstr;
   
@@ -457,7 +458,7 @@ BEGIN
     RepSpec.CurncyCode = curcode;
 	// Edit End ---------------------------------------------- Edit End
 	
-	
+	//Edit_________________ABR/end/Edit_________________ABR
   if (GetOwnerPrc(RepSpec.sStartDate,ed,prc)) then begin end;
   dSbp = 0;
   dPbp = 0;
@@ -471,7 +472,7 @@ BEGIN
 // This may need support for ConsAccNumber and percentage etc.
 		
 		
-    Accr.AccNumber = firstinrange(accstr,20);
+    Accr.AccNumber = firstinrange(accstr,20);//Edit_________________ABR//Edit_________________ABR
     Accs = ReadFirstMain(Accr,1,true);
 
 //Trace("accstr " & accstr," TRrw.DebVal " & TRrw.DebVal & " Accr.AccNumber " & Accr.AccNumber);                

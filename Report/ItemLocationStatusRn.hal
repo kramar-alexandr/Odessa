@@ -81,7 +81,7 @@ begin
   val totinstock,tottotsale,totaverage,totfreestock,totonorder,totpurord;
   Boolean locfoundf,foundf,testf,firstf;
   array val sales;
-  val reserv;
+  val reserv;//Edit_________________ABR//Edit_________________ABR
   
   if (RepSpec.flags[12]==1) then begin
     x = 0;

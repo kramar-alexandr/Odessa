@@ -6,7 +6,7 @@ SetLangMode(LangRussian,"RUS",0);	// Edit ************************** Tuesday, 13
 global
 procedure GiftCerRn(record RcVc RepSpec)
 begin
-  boolean testf,TrHs,sold,received,TrHs1;
+  boolean testf,TrHs,sold,received,TrHs1;//Edit_________________ABR//Edit_________________ABR
   string 255 tstr;
   date sdate,edate,solddate;
   integer rw;
@@ -18,14 +18,14 @@ begin
   record RestAccVc RestAccr;
   string 20 fc,lc,custcode;
   string 10 floc,lloc,location;
-  string 60 custname,comment;
+  string 60 custname,comment;//Edit_________________ABR//Edit_________________ABR
   val totam,am,totnet,net;
   array longint aser;
   array val anet;
   array val aamount;
   array string 20 acucode;
   array string 60 acuname;
-  array string 200 acomment;
+  array string 200 acomment;//Edit_________________ABR//Edit_________________ABR
   array date asolddate;
   array date arcvdate;
   array date aissdate;
@@ -80,27 +80,27 @@ begin
   SetRepCol(3,160);
   SetRepCol(4,170);
   SetRepCol(5,235);
-  SetRepCol(6,300);
+  SetRepCol(6,300);//Edit_________________ABR
   
   StartFormat(15);
   OutString(0,0,USetStr(12731),false);
   OutString(2,0,USetStr(12732),true);
- // OutString(3,0,USetStr(12738),true);
-  OutString(3,0,"Остаток",true);
+ // OutString(3,0,USetStr(12738),true);//Edit_________________ABR//Edit_________________ABR
+  OutString(3,0,"Остаток",true);//Edit_________________ABR//Edit_________________ABR
   OutString(4,0,USetStr(12724),false);
   OutString(5,0,USetStr(12734),false);
  	
- 	OutString(6,0,"Коммент.",false);
+ 	OutString(6,0,"Коммент.",false);//Edit_________________ABR//Edit_________________ABR
   
 //  OutString(6,0,USetStr(12735),false);
   switch (RepSpec.flags[2]) begin
     case 0: 
-      /*OutString(370,0,USetStr(12739),true);
+      /*OutString(370,0,USetStr(12739),true);//Edit_________________ABR//Edit_________________ABR
       OutString(425,0,USetStr(12736),true);
-      OutString(1,0,USetStr(12740),true);*/
-      OutString(420,0,"Дата созд.",true);
-      OutString(450,0,"Дата выдач.",true);
-      OutString(1,0,"Дата обн.",true);
+      OutString(1,0,USetStr(12740),true);*///Edit_________________ABR//Edit_________________ABR
+      OutString(420,0,"Дата созд.",true);//Edit_________________ABR//Edit_________________ABR
+      OutString(450,0,"Дата выдач.",true);//Edit_________________ABR//Edit_________________ABR
+      OutString(1,0,"Дата обн.",true);//Edit_________________ABR//Edit_________________ABR
       
     case 1: OutString(1,0,USetStr(12739),true);
     case 2: OutString(1,0,USetStr(12736),true);
@@ -130,8 +130,8 @@ begin
       received = ReadLastKey("GCSSerNr",GCRr,1,true);// Edit ************************** Tuesday, 13 December 2016 15:21:55
       solddate = blankdatemy;// Edit ************************** Tuesday, 13 December 2016 15:23:48
       location = "";// Edit ************************** Tuesday, 13 December 2016 15:23:58
-      custcode = "";
-      custName = "";
+      custcode = "";//Edit_________________ABR//Edit_________________ABR
+      custName = "";//Edit_________________ABR//Edit_________________ABR
       
       if (sold) then begin
         switch (GCSr.FileName) begin
@@ -208,7 +208,7 @@ begin
     if (testf) then begin
       aser[maxp] = GCr.SerNr;
       aamount[maxp] = GCr.Amount;
-      acomment[maxp] = GCr.Comment;
+      acomment[maxp] = GCr.Comment;//Edit_________________ABR//Edit_________________ABR
       astatus[maxp] = 0; 
       if (sold) then begin
         astatus[maxp]=1; 
@@ -217,9 +217,9 @@ begin
         asolddate[maxp] = solddate;
         if(received)then begin// Edit ************************** Tuesday, 13 December 2016 15:40:00
 					arcvdate[maxp] = GCRr.TransDate;
-        end else begin
+        end else begin//Edit_________________ABR//Edit_________________ABR
 					arcvdate[maxp] = blankdatemy;// Edit ************************** Tuesday, 13 December 2016 15:40:08
-        end;
+        end;//Edit_________________ABR//Edit_________________ABR
         aissdate[maxp] = GCr.TransDate;
 /*        
         switch (RepSpec.flags[2]) begin
@@ -229,7 +229,7 @@ begin
           case 3: asolddate[maxp] = GCRr.TransDate;          
         end;
         
-*/      
+*/      //Edit_________________ABR/begin/Edit_________________ABR
 				if(received)then begin
 					lpGCRr.GCSSerNr = GCr.SerNr;
 					TrHs1 = true;
@@ -265,14 +265,14 @@ begin
 						for (ivi=0;ivi<rwcnt;ivi=ivi+1) begin
 							MatRowGet(IVr,ivi,IVrw);
 							if (IVrw.GCNr==GCr.SerNr) then begin
-								MulVATIV(IVrw.VATCode,IVrw.Sum,vatv,t1,IVr.InclVAT,IVr.NoTAXonVAT);
+								MulVATIV(IVrw.VATCode,IVrw.Sum,vatv,t1,IVr.InclVAT,IVr.NoTAXonVAT);//Edit_________________ABR/end/Edit_________________ABR
 								anet[maxp] = GCr.Amount - vatv;
 								i = rwcnt;
-							end;
-						end;
-					end;*/
-        end else begin
-        	anet[maxp] = GCr.Amount;
+							end;//Edit_________________ABR//Edit_________________ABR
+						end;//Edit_________________ABR//Edit_________________ABR
+					end;*///Edit_________________ABR//Edit_________________ABR
+        end else begin//Edit_________________ABR//Edit_________________ABR
+        	anet[maxp] = GCr.Amount;//Edit_________________ABR//Edit_________________ABR
         end;
       end else begin
         astatus[maxp]=0; 
@@ -280,10 +280,10 @@ begin
         acuname[maxp]="";
         if(received)then begin// Edit ************************** Tuesday, 13 December 2016 15:40:00
 					arcvdate[maxp] = GCRr.TransDate;
-        end else begin
+        end else begin//Edit_________________ABR//Edit_________________ABR
 					arcvdate[maxp] = blankdatemy;// Edit ************************** Tuesday, 13 December 2016 15:40:08
-        end;
-        //arcvdate[maxp] = GCRr.TransDate;
+        end;//Edit_________________ABR//Edit_________________ABR
+        //arcvdate[maxp] = GCRr.TransDate;//Edit_________________ABR//Edit_________________ABR
         aissdate[maxp] = GCr.TransDate;
         switch (RepSpec.flags[2]) begin
           case 0: asolddate[maxp] = solddate;
@@ -295,7 +295,7 @@ begin
       if (received) then begin
         astatus[maxp]=2; 
       end;  
-      logtext(0,arcvdate[maxp]);
+      logtext(0,arcvdate[maxp]);//Edit_________________ABR//Edit_________________ABR
       maxp=maxp+1;
     end;
   end;
@@ -337,11 +337,11 @@ begin
     OutVal(3,0,anet[i],M4Val,true);
     OutString(4,"DblCUVc",acucode[i],false);
     OutString(5,0,Left(acuname[i],15),false);
-    OutString(6,0,Left(acomment[i],50),false);
+    OutString(6,0,Left(acomment[i],50),false);//Edit_________________ABR//Edit_________________ABR
     switch (RepSpec.flags[2]) begin
       case 0:
-        OutDate(420,0,aissdate[i],true);
-        OutDate(450,0,asolddate[i],true);
+        OutDate(420,0,aissdate[i],true);//Edit_________________ABR//Edit_________________ABR
+        OutDate(450,0,asolddate[i],true);//Edit_________________ABR//Edit_________________ABR
         OutDate(1,0,arcvdate[i],true);
       otherwise      
         switch (astatus[i]) begin

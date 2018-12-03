@@ -35,7 +35,7 @@ external procedure CUGetEndBalance(record CUVc,string,string,Date,var val,Boolea
 external procedure GetBaseCurncy(Integer,var string);
 
 
-SetLangMode(LangRussian,"RUS",0);
+SetLangMode(LangRussian,"RUS",0);//Edit_________________ABR//Edit_________________ABR
 
 procedure CUPer_PrintTotals(record RcVc RepSpec,record CUVc CUp,record BaseCurBlock bascur,
                             Boolean custout,val SumDebet,val SumCredit,val startbal,
@@ -127,18 +127,18 @@ begin
   OutString(0,0,USetStr(3184),false);
   OutString(pos1,0,USetStr(2435),false);
   OutString(pos2,0,USetStr(2436),false);
-  if (RepSpec.Media==mtFile) or (RepSpec.Media==mtExcel) or (RepSpec.Media==mtClipboard) then begin
-  	OutString(pos1,0,"Object",false);
-  end;
+  if (RepSpec.Media==mtFile) or (RepSpec.Media==mtExcel) or (RepSpec.Media==mtClipboard) then begin//Edit_________________ABR//Edit_________________ABR
+  	OutString(pos1,0,"Object",false);//Edit_________________ABR//Edit_________________ABR
+  end;//Edit_________________ABR//Edit_________________ABR
   OutStringAdjust(3,0,USetStr(2490),true,M4Val);
   if (RepSpec.Media==mtFile) or (RepSpec.Media==mtExcel) or (RepSpec.Media==mtClipboard) then begin
     OutStringAdjust(3,0,"",true,M4Val);
   end;
   
   OutStringAdjust(4,0,USetStr(2491),true,M4Val);
-  if (RepSpec.Media==mtFile) or (RepSpec.Media==mtExcel) or (RepSpec.Media==mtClipboard) then begin
-    OutStringAdjust(3,0,"",true,M4Val);
-  end;
+  if (RepSpec.Media==mtFile) or (RepSpec.Media==mtExcel) or (RepSpec.Media==mtClipboard) then begin//Edit_________________ABR//Edit_________________ABR
+    OutStringAdjust(3,0,"",true,M4Val);//Edit_________________ABR//Edit_________________ABR
+  end;//Edit_________________ABR//Edit_________________ABR
   if (HasMultiCurrency) then begin 
     if (inbase==0) then begin
       OutString(420,0,USetStr(3201) & "/" & USetStr(3200),true);
@@ -540,7 +540,7 @@ begin
   Date td;
   val t;
   record SMVc fwdCurTotalsr;  //addcurencytotals
-  string 255 repspeccurncy,f1str;
+  string 255 repspeccurncy,f1str;//Edit_________________ABR//Edit_________________ABR
 
   BlockLoad(BCb);
   pos1 = 90;
@@ -550,26 +550,26 @@ begin
     pos1 = 60;
     pos2 = 180;
   end;
-  if(RepSpec.sStartDate<AddDay(CurrentDate,-31))then begin
-	if(UserCanAction("CuPerRnAllPeriod",true)==false) then begin
-		RepSpec.sStartDate = AddDay(CurrentDate,-31);
-		if(RepSpec.sEndDate<RepSpec.sStartDate)then begin RepSpec.sEndDate = CurrentDate; end;
-    end;
-  end;
+  if(RepSpec.sStartDate<AddDay(CurrentDate,-31))then begin//Edit_________________ABR//Edit_________________ABR
+	if(UserCanAction("CuPerRnAllPeriod",true)==false) then begin//Edit_________________ABR//Edit_________________ABR
+		RepSpec.sStartDate = AddDay(CurrentDate,-31);//Edit_________________ABR//Edit_________________ABR
+		if(RepSpec.sEndDate<RepSpec.sStartDate)then begin RepSpec.sEndDate = CurrentDate; end;//Edit_________________ABR//Edit_________________ABR
+    end;//Edit_________________ABR//Edit_________________ABR
+  end;//Edit_________________ABR//Edit_________________ABR
   SplitEclass(RepSpec.f4,ac);
   frcc = FirstInRange(RepSpec.f1,20);
   tocc = LastInRange(RepSpec.f1,20);
   RecordNew(CurTotalsr);
   StartReportJob(USetStr(2480));
-  if(blank(RepSpec.f1))then begin
-	if(UserCanAction("CuPerRnForAllCustomers",true)==false) then begin
-		EndHeader;
-		StartFormat(15);
-			outstring(0,0,"Введите имя конкретного клиента!!!",false);
-		EndFormat;
-		goto LCuPerRn;
-    end;
-  end;
+  if(blank(RepSpec.f1))then begin//Edit_________________ABR//Edit_________________ABR
+	if(UserCanAction("CuPerRnForAllCustomers",true)==false) then begin//Edit_________________ABR//Edit_________________ABR
+		EndHeader;//Edit_________________ABR//Edit_________________ABR
+		StartFormat(15);//Edit_________________ABR//Edit_________________ABR
+			outstring(0,0,"Введите имя конкретного клиента!!!",false);//Edit_________________ABR//Edit_________________ABR
+		EndFormat;//Edit_________________ABR//Edit_________________ABR
+		goto LCuPerRn;//Edit_________________ABR//Edit_________________ABR
+    end;//Edit_________________ABR//Edit_________________ABR
+  end;//Edit_________________ABR//Edit_________________ABR
    rw = 1;    
    HT2Per(RepSpec.sStartDate,RepSpec.sEndDate,tstr);
    Header(rw,tstr,1);
@@ -589,12 +589,12 @@ begin
      Header(rw,tstr,1);
      rw = rw + 1;
    end;
-   switch (RepSpec.flags[1]) begin
-     case 1: tstr = USetStr(6648);
-     case 2: tstr = USetStr(6651);
-     otherwise tstr = "";
-   end;
-   if (nonblank(tstr)) then begin
+   switch (RepSpec.flags[1]) begin//Edit_________________ABR//Edit_________________ABR
+     case 1: tstr = USetStr(6648);//Edit_________________ABR//Edit_________________ABR
+     case 2: tstr = USetStr(6651);//Edit_________________ABR//Edit_________________ABR
+     otherwise tstr = "";//Edit_________________ABR//Edit_________________ABR
+   end;//Edit_________________ABR//Edit_________________ABR
+   if (nonblank(tstr)) then begin//Edit_________________ABR//Edit_________________ABR
      Header(rw,tstr,1);
      rw = rw + 1;
    end;
@@ -724,15 +724,15 @@ as i can see it is needed
             EndBal = EndBal + v;            
 //            DiffBal = EndBal + StartBal;
             DiffBal = EndBal - StartBal;
-            RepSpec.CurncyCode = repspeccurncy;
+            RepSpec.CurncyCode = repspeccurncy;//Edit_________________ABR//Edit_________________ABR
           end else begin
             RepSpec.CurncyCode = repspeccurncy;
             if (notfullmonthf) then begin
 //              CUGetStartBalance(CUr,"balance",RepSpec.CurncyCode,AddDay(RepSpec.sStartDate,-1),StartBal,basecurf);//need to exclude start day
               CUGetStartBalance(CUr,"balance",RepSpec.CurncyCode,AddDay(RepSpec.sStartDate,0),StartBal,basecurf);//need to exclude start day, which is done inside CUGetStartBalance
               CUGetEndBalance(CUr,"balance",RepSpec.CurncyCode,RepSpec.sEndDate,EndBal,basecurf);
-              CUGetEndBalance(CUr,"paidvalue",RepSpec.CurncyCode,RepSpec.sEndDate,v,blank(CUr.CurncyCode) or CUr.CurncyCode==BCb.BaseCur1);
-              EndBal = EndBal + v;
+              CUGetEndBalance(CUr,"paidvalue",RepSpec.CurncyCode,RepSpec.sEndDate,v,blank(CUr.CurncyCode) or CUr.CurncyCode==BCb.BaseCur1);//Edit_________________ABR//Edit_________________ABR
+              EndBal = EndBal + v;//Edit_________________ABR//Edit_________________ABR
             end else begin
               CUGetStartBalance(CUr,"balance",RepSpec.CurncyCode,RepSpec.sStartDate,StartBal,basecurf);
               CUGetEndBalance(CUr,"balance",RepSpec.CurncyCode,RepSpec.sEndDate,EndBal,basecurf);
@@ -820,9 +820,9 @@ L33:;
             end;
             CustListTrans_SortOnInvoice(RepSpec,0,CUr,StartBal,TotSumDebet,TotSumCredit,CurTotalsr,pos1,pos2,custout);
           end;
-        end else begin
-          if (notfullmonthf) then begin
-          end;
+        end else begin//Edit_________________ABR//Edit_________________ABR
+          if (notfullmonthf) then begin//Edit_________________ABR//Edit_________________ABR
+          end;//Edit_________________ABR//Edit_________________ABR
         end;
       end;
     end;

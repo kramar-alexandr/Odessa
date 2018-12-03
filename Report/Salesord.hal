@@ -12,7 +12,7 @@ external procedure HTSaleMan(string, var string);
 external procedure ExtractObj(string,var Integer,var string);// Edit ************************** Wednesday, 13 July 2016 09:57:55
 	
 	
-	SetLangMode(LangRussian,"RUS",0);
+	SetLangMode(LangRussian,"RUS",0);//Edit_________________ABR//Edit_________________ABR
 
 
 procedure HTOrdStatus2(Integer invnotd, Integer finished,Integer pardelv,Integer noti,Integer delnotinv, var string res)
@@ -175,13 +175,13 @@ begin
 	
   record ORVc ORr;
   row ORVc ORrw;
-  Boolean TrHs, TrHs1;
-  Boolean testf,test2f,test3f;
+  Boolean TrHs, TrHs1;//Edit_________________ABR//Edit_________________ABR
+  Boolean testf,test2f,test3f;//Edit_________________ABR//Edit_________________ABR
   val iv;
   val TotSum;
   LongInt afr;
   LongInt ato;
-  string 255 tstr, tstr1;
+  string 255 tstr, tstr1;//Edit_________________ABR//Edit_________________ABR
   Integer rw,keys;
   string 20 frc,toc,mykey;
   Integer i,rwcnt;
@@ -190,7 +190,7 @@ begin
   array val av3;
   array string 20 acur;
   Integer curcnt;
-  record LetVc Letr;// Edit ************************** Tuesday, 12 July 2016 15:52:10
+  record LetVc Letr;// Edit BEGIN ************************** Tuesday, 12 July 2016 15:52:10
   boolean foundf;// Edit ************************** Tuesday, 12 July 2016 15:54:12
   string 50 closelocation;
   record UserVc USr;
@@ -215,7 +215,7 @@ begin
   	if(nonblank(USr.Location))then begin
   		RepSpec.f4 = USr.Location;
   	end;
-  end;
+  end;//Edit_________________ABR/END/Edit_________________ABR
 
 
   frc = FirstInRange(RepSpec.f2,20);
@@ -284,7 +284,7 @@ begin
     rw = rw + 1;
   end;
   EndHeader;
-  
+  //Edit_________________ABR/BEGIN/Edit_________________ABR
   if(blank(RepSpec.f2))then begin
 		if(UserCanAction("OrdRnForAllCustomers",true)==false) then begin
 			StartFormat(15);
@@ -293,7 +293,7 @@ begin
 			goto LOrdRn;
 		end;
   end;
-  
+  //Edit_________________ABR/END/Edit_________________ABR
   if ((RepSpec.ArtMode==2) or (RepSpec.ArtMode==0)) then begin
     if (RepSpec.flags[10]==1) then begin
       StartFormat(15);
@@ -303,7 +303,7 @@ begin
       OutString(290,0,USetStr(18352),false);
       OutString(350,0,USetStr(18353),false);
       if (HasMultiCurrency) then begin
-        OutString(430,0,USetStr(2567),true);
+        OutString(430,0,USetStr(2567),true);//Edit_________________ABR//Edit_________________ABR
       end else begin
         OutString(1,0,USetStr(2567),true);
       end;
@@ -311,12 +311,12 @@ begin
     end else begin
       StartFormat(15);
       OutString(0,0,USetStr(2562),false);
-	  OutString(60,0,"‘чета-фактуры",false);
-      OutString(130,0,USetStr(2563),false);
-      OutString(180,0,USetStr(2564),false);
-	  OutString(300,0,"Cпособ оплаты",false);
+	  OutString(60,0,"‘чета-фактуры",false);//Edit_________________ABR//Edit_________________ABR
+      OutString(130,0,USetStr(2563),false);//Edit_________________ABR//Edit_________________ABR
+      OutString(180,0,USetStr(2564),false);//Edit_________________ABR//Edit_________________ABR
+	  OutString(300,0,"Cпособ оплаты",false);//Edit_________________ABR//Edit_________________ABR
       if (HasMultiCurrency) then begin
-        OutString(437,0,USetStr(2567),true);
+        OutString(437,0,USetStr(2567),true);//Edit_________________ABR//Edit_________________ABR
       end else begin
         OutString(1,0,USetStr(2567),true);
       end;
@@ -328,7 +328,7 @@ begin
       OutString(0,0,USetStr(2562),false);     
       OutString(130,0,USetStr(2563),false);
       OutString(310,0,USetStr(18352),false);
-      OutString(480,0,USetStr(18353),false);
+      OutString(480,0,USetStr(18353),false);//Edit_________________ABR//Edit_________________ABR
       EndFormat;
     end else begin
       StartFormat(15);
@@ -344,7 +344,7 @@ begin
   end;
   TrHs = true;
   while (LoopKey(mykey,ORr,keys,TrHs)) begin
-  	foundf = true;
+  	foundf = true;//Edit_________________ABR//Edit_________________ABR
     if (RepSpec.flags[5] == 0) then begin
       if (ato <> -1) then begin
         if (ORr.SerNr > ato) then begin
@@ -360,7 +360,7 @@ begin
       end;
     end;
     
-    
+    //Edit_________________ABR/BEGIN/Edit_________________ABR
     RecordClear(Letr);
 		AddToText(ORr.Comment & ";",Letr);
 		AddToText(ORr.Location & ";",Letr);
@@ -412,7 +412,7 @@ begin
     
 	// Edit End ---------------------------------------------- Edit End
 	
-    if (TrHs and foundf) then begin
+    if (TrHs and foundf) then begin//Edit_________________ABR/END/Edit_________________ABR
       testf = false;
       if (RepSpec.flags[4]==1) then begin /* Invoiced not delivered*/
         test2f = true;
@@ -573,10 +573,10 @@ L30:;
             StartFormat(15);
             OutString(0,"DblORVc",ORr.SerNr,false);
             OutString(40,0,ORr.OrderClass,false);// Edit ************************** Wednesday, 13 July 2016 09:51:26
-            OutDate(80,0,ORr.OrdDate,false);
+            OutDate(80,0,ORr.OrdDate,false);//Edit_________________ABR//Edit_________________ABR
             OutString(110,"DblCUVc",ORr.CustCode,false);// Edit ************************** Thursday, 11 May 2017 11:24:17
-            OutString(150,0,ORr.Addr0,false);
-            OutString(200,0,ORr.Objects,false);
+            OutString(150,0,ORr.Addr0,false);//Edit_________________ABR//Edit_________________ABR
+            OutString(200,0,ORr.Objects,false);//Edit_________________ABR//Edit_________________ABR
             if (ORr.TREONr>0) then begin
               OutString(290,0,ORr.TREONr,false);
             end;
@@ -589,12 +589,13 @@ L30:;
             end;
             EndFormat;
           end else begin
-			tstr1 = "";
-			test3f = true;
-			IVr.OrderNr = ORr.SerNr;
-			TrHs1 = true;
+			tstr1 = "";//Edit_________________ABR//Edit_________________ABR
+			test3f = true;//Edit_________________ABR//Edit_________________ABR
+			IVr.OrderNr = ORr.SerNr;//Edit_________________ABR//Edit_________________ABR
+			TrHs1 = true;//Edit_________________ABR//Edit_________________ABR
             StartFormat(15);
             OutString(0,"DblORVc",ORr.SerNr,false);
+						//Edit_________________ABR/BEGIN/Edit_________________ABR
             OutString(40,0,ORr.OrderClass,false);// Edit ************************** Wednesday, 13 July 2016 09:51:25
 			while(loopkey("OrderNr",IVr,1,TrHs1))begin//Edit_-_-_-_-_-_-_-_-Anton 17:16 15.05.2018
 				if(IVr.OrderNr==ORr.SerNr)then begin
@@ -620,7 +621,7 @@ L30:;
 			OutString(300,0,ORr.NewPD,false);//Edit_-_-_-_-_-_-_-Anton 16:57 23.04.2018
             OutString(340,0,ORr.Objects,false);// Edit ************************** Thursday, 11 May 2017 15:41:04
             OutString(390,0,ORr.CustomStatusFlagText,false);// Edit ************************** Wednesday, 13 July 2016 09:49:06
-            
+            //Edit_________________ABR/END/Edit_________________ABR
             if (HasMultiCurrency) then begin
               OutVal(440,0,iv,M4Val,true);
               OutString(445,0,ORr.CurncyCode,false);
@@ -648,7 +649,7 @@ L30:;
     end;
   end;
   
-LOrdRn:;  
+LOrdRn:;  //Edit_________________ABR//Edit_________________ABR
 
   EndJob;
   return;

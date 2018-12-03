@@ -32,7 +32,7 @@ begin
   val qty;
   val instock;
   record PLVc PLLr;
-  val totalSum;  
+  val totalSum;  //Edit_________________ABR//Edit_________________ABR
 
   rw = 1;
   fromart = FirstInRange(RepSpec.f1,20);
@@ -43,7 +43,7 @@ begin
   vatflag = 0;
   itemout = false;
   lastgroup = "";
-  totalSum = 0;
+  totalSum = 0;//Edit_________________ABR//Edit_________________ABR
 
   StartReportJob(USetStr(2324));
   HTArtSel(RepSpec.f1,RepSpec.f3,tstr);
@@ -270,12 +270,12 @@ begin
      end;
      OutString(260,0,INr.Unittext,false);
      OutString(300,0,INr.VATCode,false);
-     
+//Edit_________________ABR/begin/Edit_________________ABR     
      instock = GetStockQty(INr.Code,RepSpec.f5,CurrentDate,false);
      if (instock==0) then begin
        instock = blankval; 
      end;
-     
+     //Edit_________________ABR/end/Edit_________________ABR
      if nonblank(RepSpec.FirstAcc) then begin 
        PLLr.PLCode = RepSpec.FirstAcc;
        PLLr.ArtCode = INr.Code;
@@ -321,7 +321,7 @@ begin
   Gray_Divider(0,1);
   StartFormat(15);
   OutValBiDi(0,0,qty,M40Val,false,85);
-  OutString(320,0,USetStr(2375) &": "& totalSum,false);
+  OutString(320,0,USetStr(2375) &": "& totalSum,false);//Edit_________________ABR//Edit_________________ABR
   EndFormat;
   EndJob;
   return;

@@ -5,9 +5,9 @@ external function Boolean SetInSet2(string,string);
 external function val MulRateToBase1(var string,val,val,val,val,val,val,roundmode);
 external function val GetLCardStartBalance(string,string,date); 
 external procedure HTCustCat(string,var string);
-external function val AbsoluteVal(val);
+external function val AbsoluteVal(val);//Edit_________________ABR//Edit_________________ABR
 
-SetLangMode(LangRussian,"RUS",0);
+SetLangMode(LangRussian,"RUS",0);//Edit_________________ABR//Edit_________________ABR
 
 
 procedure PrintLCard(record RcVc RepSpec,var boolean printcard,record PointsHistVc PHr, var val points, var val invoices,var val bal)
@@ -142,7 +142,7 @@ begin
 end;  
 
 global
-updating procedure LoyaltyCardRn(record RcVc RepSpec)
+updating procedure LoyaltyCardRn(record RcVc RepSpec)//Edit_________________ABR//Edit_________________ABR
 begin 
   record PointsHistVc PHr;
   record CUVc CUr;
@@ -154,7 +154,7 @@ begin
   val invoices,cinvoices,tinvoices,startbal;
   val tbal;
   string 20 card,customer;
-	record IVVc IVr;
+	record IVVc IVr;//Edit_________________ABR/begin/Edit_________________ABR
 	record LoyaltyCardVc LCr,lLCr;
 	boolean testf1,changef,TrHs1,Accs;
 	val lastpoints;
@@ -168,7 +168,7 @@ begin
   rnd = DefaultValRoundoff;
 	rnd.decimals = 0;
 	rnd.mode = kRoundingModeTruncate;
-  
+  //Edit_________________ABR/end/Edit_________________ABR
   StartReportJob(USetStr(19260));
   points = 0;
   cpoints = 0;
@@ -197,7 +197,7 @@ begin
   end; 
   EndHeader;
  
- /* if (RepSpec.ArtMode==0) then begin
+ /* if (RepSpec.ArtMode==0) then begin//Edit_________________ABR//Edit_________________ABR
     StartFormat(15);
     OutString(0,0,USetStr(19261),false);
     OutString(80,0,USetStr(19262),false);
@@ -216,7 +216,7 @@ begin
     OutString(360,0,USetStr(19264),true);
     OutString(1,0,USetStr(19265),true);
     EndFormat;
-  end; */
+  end; *///Edit_________________ABR/Begin/Edit_________________ABR
   
   StartFormat(15);
     OutString(0,0,"Клиент",false);
@@ -231,9 +231,9 @@ begin
     OutString(1,0,"Коммент",true);
     OutString(1,0,"Активные карты",true);
   EndFormat;
-  
+  //Edit_________________ABR/End/Edit_________________ABR
   Black_Divider(0,1);
-  
+  //Edit_________________ABR/Begin/Edit_________________ABR
 	skey = "SerNr";
 	if(nonblank(RepSpec.f1))then begin
 		LCr.SerNr = RepSpec.f1;
@@ -463,7 +463,7 @@ begin
 			end;
 		end;
 	end;
-  /* if (nonblank(RepSpec.f1)) then begin 
+  /* if (nonblank(RepSpec.f1)) then begin //Edit_________________ABR/end/Edit_________________ABR
     printcard = false;
     PHr.LMCardNr = RepSpec.f1;
     TrHs = true;
@@ -586,8 +586,8 @@ begin
         PrintLCard(RepSpec,printcard,PHr,points,invoices,startbal);
       end;
     end; 
-  end;*/
-  /*cpoints = cpoints + points;
+  end;*///Edit_________________ABR//Edit_________________ABR
+  /*cpoints = cpoints + points;//Edit_________________ABR//Edit_________________ABR
   cinvoices = cinvoices + invoices;
   tpoints = tpoints + points;
   tinvoices = tinvoices + invoices;
@@ -641,7 +641,7 @@ begin
       OutVal(1,0,tpoints+tbal,M4Val,true);
       EndFormat;
     end;
-  end;  */
+  end;  *///Edit_________________ABR//Edit_________________ABR
 
   EndJob;
   return;

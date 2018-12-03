@@ -14,7 +14,7 @@ external procedure HTInvFrom(Integer,Integer, Date, var string);
 external procedure PSPrintCust(record RcVc,record CUVc,var val,var val,Integer,Integer);
 external function Boolean FindTheContract(Boolean,Integer,LongInt,LongInt,var record COVc,var Boolean);
 
-SetLangMode(LangRussian,"RUS",0);
+SetLangMode(LangRussian,"RUS",0);//Edit_________________ABR/begin/Edit_________________ABR
 
 
 global
@@ -59,7 +59,7 @@ CashS(code,pdate,values,vcode);
 //vval=values["В баз. валюте"];
 return;
 end;
-
+//Edit_________________ABR/end/Edit_________________ABR
 
 
 global
@@ -390,7 +390,7 @@ end;
 // ____________________________________end_____________________
 
 //Edit_________________ABR 28.09.2018 15:06
-global updating procedure CUBLRn(record RcVc RepSpec) 
+global updating procedure CUBLRn(record RcVc RepSpec) //Edit_________________ABR/begin/Edit_________________ABR
 begin 
 record CUVc CUr;
 record CClassVc CCVr;
@@ -444,7 +444,7 @@ CUr.Code = "";
 ResetLoop(CUr);	
 endjob; 
 return; 
-end;
+end;//Edit_________________ABR/end/Edit_________________ABR
 
 
 procedure PrintCustContract(string cusel)
@@ -1223,7 +1223,7 @@ BEGIN
   record IVVc IVr; //Edit***************************Sasha2,14:37 13.12.2016
   row IVVc IVrw; //Edit***************************Sasha2,15:13 13.12.2016
   integer rwcnt,i,pos,sign; //Edit***************************Sasha2,15:19 13.12.2016
-  val totSum,totQty;
+  val totSum,totQty;//Edit_________________ABR//Edit_________________ABR
   
   // ArtMode==1, All invoices 
   // ArtMode==0, Last 5 invoices 
@@ -1401,13 +1401,13 @@ BEGIN
   
   
   
-  Black_Divider(0,1);
+  Black_Divider(0,1);//Edit_________________ABR//Edit_________________ABR
   
   EndJob;
   RETURN;
 END;
 
-global procedure CashYRn(record RcVc RepSpec)
+global procedure CashYRn(record RcVc RepSpec)//Edit_________________ABR//Edit_________________ABR
 begin
 record CUVc CUr;
 vector val values;
@@ -1454,7 +1454,7 @@ return;
 end;
 
 global
-procedure ItHistRn()
+procedure ItHistRn()//Edit_________________ABR//Edit_________________ABR
 begin
 	record ItemHistVc IHr;
 	record SHVc SHr;

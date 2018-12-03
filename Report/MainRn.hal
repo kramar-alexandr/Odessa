@@ -1288,7 +1288,7 @@ BEGIN
   record RcVc RepSpec;
   Integer oldcomp;
   
-  //logtext(0,specRepSpec.f7);
+  //logtext(0,specRepSpec.f7);//Edit_________________ABR//Edit_________________ABR
   specRepSpec.ObjStr = specRepSpec.f7;// Edit ************************** Thursday, 3 November 2016 18:14:38
   
   RepSpec = specRepSpec;

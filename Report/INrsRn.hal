@@ -371,7 +371,7 @@ LPrintItemHist_PerLocationExcel:;
           if (RepSpec.flags[21]==1) then begin  
             PrintCustName(IHr.FileName,IHr.TransNr,210);    
           end;
-		  OutString(350,0,IHr.Position,false);
+		  OutString(350,0,IHr.Position,false);//Edit_________________ABR//Edit_________________ABR
           OutVal(480,0,IHr.Qty,M4UVal,true);
         case 1:
           OutString(0,0,INr.Code,false);
@@ -383,7 +383,7 @@ LPrintItemHist_PerLocationExcel:;
           if (RepSpec.flags[21]==1) then begin     
             PrintCustName(IHr.FileName,IHr.TransNr,200);  
           end;      
-          OutString(290,0,IHr.Position,false);
+          OutString(290,0,IHr.Position,false);//Edit_________________ABR//Edit_________________ABR
 		  OutVal(300,0,IHr.Qty,M4UVal,true);
           if (outf) then begin
             OutVal(400,0,-Round(bal/IHr.Qty,SetRoundModeD(5)),M45Val,true);
@@ -426,7 +426,7 @@ LPrintItemHist_PerLocationExcel:;
           if (RepSpec.flags[21]==1) then begin  
             PrintCustName(IHr.FileName,IHr.TransNr,210);        
           end;
-          OutString(300,0,IHr.Position,false);
+          OutString(300,0,IHr.Position,false);//Edit_________________ABR//Edit_________________ABR
 		  OutValBiDi(480,0,IHr.Qty,M4UVal,true,520);                
         case 1:
           OutDate(0,0,IHr.TransDate,false);
@@ -435,7 +435,7 @@ LPrintItemHist_PerLocationExcel:;
           if (RepSpec.flags[21]==1) then begin
             PrintCustName(IHr.FileName,IHr.TransNr,200);                  
           end;
-          OutString(250,0,IHr.Position,false);
+          OutString(250,0,IHr.Position,false);//Edit_________________ABR//Edit_________________ABR
 		  OutValBiDi(300,0,IHr.Qty,M4UVal,true,340);
           if (outf) then begin
             OutValBiDi(400,0,-Round(bal/IHr.Qty,SetRoundModeD(5)),M45Val,true,440);
@@ -617,15 +617,16 @@ begin
     itemcpin = itemcpin + cp;
     if (RepSpec.flags[9]==1) then begin      
       switch (RepSpec.ArtMode) begin
-        case 0:
+        case 0://Edit_________________ABR//Edit_________________ABR
 		  if (IHr.FileName<>"StockTakeVc") then begin //Edit-------------------Vitalii 15:34 12.01.2016
-		    bal = bal + IHr.Qty;
-		  end;
+		    bal = bal + IHr.Qty;//Edit_________________ABR//Edit_________________ABR
+		  end;//Edit_________________ABR
+			
         case 1: bal = cp;
         case 3:
 		  if (IHr.FileName<>"StockTakeVc") then begin //Edit-------------------Vitalii 15:34 12.01.2016
-		    bal = bal + IHr.Qty;
-		  end;
+		    bal = bal + IHr.Qty;//Edit_________________ABR//Edit_________________ABR
+		  end;//Edit_________________ABR//Edit_________________ABR
       end;
       if (RepSpec.flags[15]!=0) then begin
         PrintItemHist_PerLocation(RepSpec,INr,IHr,MSb,false,bal);
@@ -957,12 +958,12 @@ begin
     case "WSVc": 
       if (RepSpec.flags[7]!=0) then begin
         ItemHistList_Out(RepSpec,sumIHr,INr,MSb,CAb,itemheaderf,fwdqty,fwdtotcp,fwdqty2,itemqout,itemcpout,itemq2out,bal);
-      end;
+      end;//Edit_________________ABR//Edit_________________ABR
 	//Edit-------------------Vitalii 14:49 12.01.2016
-	case "StockTakeVc":
-      if (RepSpec.flags[23]!=0) then begin
-        ItemHistList_In(RepSpec,sumIHr,INr,MSb,CAb,itemheaderf,fwdqty,fwdtotcp,fwdqty2,itemqin,itemcpin,itemq2in,bal);
-      end; 
+	case "StockTakeVc"://Edit_________________ABR//Edit_________________ABR
+      if (RepSpec.flags[23]!=0) then begin//Edit_________________ABR//Edit_________________ABR
+        ItemHistList_In(RepSpec,sumIHr,INr,MSb,CAb,itemheaderf,fwdqty,fwdtotcp,fwdqty2,itemqin,itemcpin,itemq2in,bal);//Edit_________________ABR//Edit_________________ABR
+      end; //Edit_________________ABR//Edit_________________ABR
   end;         
   return;
 end;
@@ -1241,11 +1242,11 @@ begin
           end else begin
             if (RepSpec.TransStr!=IHr.Location) then begin testf = false; end;
           end;
-        end;
+        end;//Edit_________________ABR//Edit_________________ABR
         
         if (nonblank(RepSpec.f11)) then begin		//Edit----------------------Dima  27.01.2016
-					if (RepSpec.f11!=IHr.Position or RepSpec.TransStr!=IHr.Location) then begin testf=false; end;
-				end;         
+					if (RepSpec.f11!=IHr.Position or RepSpec.TransStr!=IHr.Location) then begin testf=false; end;//Edit_________________ABR//Edit_________________ABR
+				end;  //Edit_________________ABR//Edit_________________ABR       
         if (RepSpec.flags[14]!=0) then begin
           if (IHr.StockAffectf==0) then begin 
             if (Left(IHr.FileName,3)!="Fut") then begin
@@ -1261,12 +1262,12 @@ begin
               if (IHr.ItemType==kItemTypeStocked) and (IHr.StockAffectf==0) then begin testf = false; end;
             end;
           end else begin
-            if (IHr.ItemType!=kItemTypeStocked) or (IHr.StockAffectf==0) then begin
-				testf = false;
-				if (IHr.FileName=="StockTakeVc") and (RepSpec.flags[23]<>0) then begin
-					testf = true;
-				end;
-			end;
+            if (IHr.ItemType!=kItemTypeStocked) or (IHr.StockAffectf==0) then begin//Edit_________________ABR//Edit_________________ABR
+				testf = false;//Edit_________________ABR//Edit_________________ABR
+				if (IHr.FileName=="StockTakeVc") and (RepSpec.flags[23]<>0) then begin//Edit_________________ABR//Edit_________________ABR
+					testf = true;//Edit_________________ABR//Edit_________________ABR
+				end;//Edit_________________ABR//Edit_________________ABR
+			end;//Edit_________________ABR//Edit_________________ABR
 /*            
 StartFormat(15);
  OutString(0,0,"jarek",false);
@@ -1469,25 +1470,25 @@ begin
   val bal;
   val LocSumQIn,LocSumQOut,LocSumQFwd,LocSumCPIn,LocSumCPOut,LocSumCPFwd,LocSumQ2;
   record POSVc POSr;//Edit----------------------Dima  27.01.2016
-  record UserVc Usr;
+  record UserVc Usr;//Edit_________________ABR//Edit_________________ABR
 	
-	if(usercanaction("ViewItemHistByAllLoc",false)==false)then begin
-		Usr.Code = currentuser;
-		readfirstmain(Usr,1,true);
-		if nonblank(Usr.Location) then begin
-			RepSpec.f6 = Usr.Location;
-		end;
-  end;
+	if(usercanaction("ViewItemHistByAllLoc",false)==false)then begin//Edit_________________ABR//Edit_________________ABR
+		Usr.Code = currentuser;//Edit_________________ABR//Edit_________________ABR
+		readfirstmain(Usr,1,true);//Edit_________________ABR//Edit_________________ABR
+		if nonblank(Usr.Location) then begin//Edit_________________ABR//Edit_________________ABR
+			RepSpec.f6 = Usr.Location;//Edit_________________ABR//Edit_________________ABR
+		end;//Edit_________________ABR//Edit_________________ABR
+  end;//Edit_________________ABR//Edit_________________ABR
   frloc = FirstInRange(RepSpec.f6,20);
   toloc = LastInRange(RepSpec.f6,20);
   
   if (nonblank(RepSpec.f11)) then begin				//Edit----------------------Dima  27.01.2016
-		POSr.Code = RepSpec.f11;
-		if (ReadFirstMain(POSr,1,true)) then begin
-			frloc = POSr.Location;		//filter "by position" includes filter "by location"
-			toloc = POSr.Location;
-		end;
-	end;  
+		POSr.Code = RepSpec.f11;//Edit_________________ABR//Edit_________________ABR
+		if (ReadFirstMain(POSr,1,true)) then begin//Edit_________________ABR//Edit_________________ABR
+			frloc = POSr.Location;		//filter "by position" includes filter "by location"//Edit_________________ABR//Edit_________________ABR
+			toloc = POSr.Location;//Edit_________________ABR//Edit_________________ABR
+		end;//Edit_________________ABR//Edit_________________ABR
+	end;  //Edit_________________ABR//Edit_________________ABR
   BlockLoad(MSb);
   BlockLoad(CAb);
   ItemHistHeader(RepSpec);

@@ -138,7 +138,7 @@ begin
   OutString(70,0,tstr,false);
   OutDate(150,0,IVr.InvDate,false);
   OutDate(220,0,IVr.PayDate,false);
-  OutDate(280,0,IVr.TransDate,false);
+  OutDate(280,0,IVr.TransDate,false);//Edit_________________ABR//Edit_________________ABR
   OutString(310,0,IVr.TransTime,false);//Edit----------------------Dima  12.08.2015
   OutLongInt(350,0,IVr.OrderNr,false);
   if (IVr.OKFlag==0) then begin
@@ -153,7 +153,7 @@ begin
   end;
   if(RepSpec.Media==mtExcel)then begin// Edit ************************** Friday, 10 November 2017 13:35:53
   	OutString(460,0,IVr.InvComment,false);// Edit ************************** Friday, 10 November 2017 13:35:54
-  end;
+  end;//Edit_________________ABR//Edit_________________ABR
   EndFormat;
   StartFormat(15);
   OutString(70,0,IVr.CustCat,false);
@@ -598,22 +598,22 @@ begin
   string 255 frin,toin;
   time timeFrom, timeTo;//Edit----------------------Dima  12.08.2015
 	record UserVc User;// Edit ************************** Monday, 31 July 2017 13:45:11
-  integer rozi;
-  boolean rozetkaf;
+  integer rozi;//Edit_________________ABR//Edit_________________ABR
+  boolean rozetkaf;//Edit_________________ABR//Edit_________________ABR
 	
-	User.Code = currentuser;
-	readfirstmain(User,1,true);
-	if(nonblank(User.Location))then begin
+	User.Code = currentuser;//Edit_________________ABR//Edit_________________ABR
+	readfirstmain(User,1,true);//Edit_________________ABR//Edit_________________ABR
+	if(nonblank(User.Location))then begin//Edit_________________ABR//Edit_________________ABR
 		RepSpec.LastAcc = User.Location;// Edit ************************** Monday, 31 July 2017 13:46:28
-	end;
+	end;//Edit_________________ABR//Edit_________________ABR
 	
   RepSpec.sStartDate2 = FirstInRange(RepSpec.Period2Str2,10);
   RepSpec.sEndDate2 = LastInRange(RepSpec.Period2Str2,10);
   totinv = 0;
   runnr = 1;
 
-	timeFrom = StringToTime(RepSpec.d1Code);
-	timeTo = StringToTime(RepSpec.d2Code);	
+	timeFrom = StringToTime(RepSpec.d1Code);//Edit_________________ABR//Edit_________________ABR
+	timeTo = StringToTime(RepSpec.d2Code);	//Edit_________________ABR//Edit_________________ABR
 	
   
   Split2Str2(RepSpec.f6,froffic,tooffic,40);  
@@ -743,9 +743,9 @@ begin
       OutString(0,0,USetStr(2352),false);//0
       OutString(30,0,"",false);//Edit-------------------Vitalii 17:53 12.10.2017
       OutString(60,0,USetStr(5100),false);//Edit----------------------Dima  12.08.2015
-      OutString(90,0,USetStr(2353),false);//60
+      OutString(90,0,USetStr(2353),false);//60//Edit_________________ABR//Edit_________________ABR
       OutString(120,0,"%",false);//90 //Edit***************************Sasha2,9:36 03.06.2015
-      OutString(150,0,USetStr(2354),false);//110
+      OutString(150,0,USetStr(2354),false);//110//Edit_________________ABR//Edit_________________ABR
       if (overviewpervatcodef) then begin
         OutString(170,0,USetStr(2358),false);//280
       end else begin
@@ -778,9 +778,9 @@ begin
       OutString(0,0,USetStr(2352),false);//0
       OutString(30,0,"",false);//Edit-------------------Vitalii 17:54 12.10.2017
       OutString(60,0,USetStr(5100),false);//Edit----------------------Dima  12.08.2015
-      OutString(90,0,USetStr(2353),false);//60
+      OutString(90,0,USetStr(2353),false);//60//Edit_________________ABR//Edit_________________ABR
       OutString(120,0,"%",false);//90 //Edit***************************Sasha2,9:36 03.06.2015
-      OutString(150,0,USetStr(2354),false);//110
+      OutString(150,0,USetStr(2354),false);//110//Edit_________________ABR//Edit_________________ABR
       OutString(280,0,USetStr(2358),false);
       if (RepSpec.flags[15]!=0) then begin
         OutStringAdjust(5,0,USetStr(2328),true,M4Val);
@@ -926,9 +926,9 @@ begin
         end;
       end;
       
-      if(nonblank(RepSpec.f7) and RepSpec.f7!=IVr.NewPD)then begin
-				testf = false;    
-			end;
+      if(nonblank(RepSpec.f7) and RepSpec.f7!=IVr.NewPD)then begin//Edit_________________ABR//Edit_________________ABR
+				testf = false;    //Edit_________________ABR//Edit_________________ABR
+			end;//Edit_________________ABR//Edit_________________ABR
       
       
       CUr.Code = IVr.CustCode;// Edit ************************** Wednesday, 15 July 2015 15:11:18
@@ -1150,7 +1150,7 @@ begin
         end;
       end;
       if (testf) then begin
-        if (RepSpec.flags[8]==1) then begin
+        if (RepSpec.flags[8]==1) then begin//Edit_________________ABR/begin/Edit_________________ABR
           if (IVr.FiscalFlag==1) then begin
             testf = false;
           end;
@@ -1163,7 +1163,7 @@ begin
           end;
         end;
       end;
-      if (testf) then begin
+      if (testf) then begin//Edit_________________ABR/end/Edit_________________ABR
        if (nonblank(RepSpec.FirstAcc)) then begin
           if (RepSpec.FirstAcc<>IVr.PRCode) then begin
             testf = false;
@@ -1236,7 +1236,7 @@ begin
       end;
 */
       if (testf) then begin
-        rwcnt = MatRowCnt(IVr);
+        rwcnt = MatRowCnt(IVr);//Edit_________________ABR/begin/Edit_________________ABR
         rozetkaf = false;
         for (rozi=0;rozi<rwcnt;rozi=rozi+1) begin
           MatRowGet(IVr,rozi,IVrw);
@@ -1246,7 +1246,7 @@ begin
               rozi = rwcnt;
             end;
           end;
-        end;
+        end;//Edit_________________ABR/end/Edit_________________ABR
         if ((RepSpec.ArtMode==0) or (RepSpec.ArtMode==4)) then begin
           switch (GCSr.FileName) begin
             case "IVVc":
@@ -1296,7 +1296,7 @@ LkInvoiceTypeCredit1:;
                   rwcnt = MatRowCnt(IVr);
                   for (i=0;i<rwcnt;i=i+1) begin
                     MatRowGet(IVr,i,IVrw);
-                    if (IVrw.stp==kInvoiceRowTypeNormal or IVrw.stp==kInvoiceRowTypeGiftVoucherSold) then begin
+                    if (IVrw.stp==kInvoiceRowTypeNormal or IVrw.stp==kInvoiceRowTypeGiftVoucherSold) then begin//Edit_________________ABR//Edit_________________ABR
                       iv = iv + IVrw.Sum;
                       ivnvat = ivnvat + IVrw.Sum;
                       ivvat = ivvat + IVrw.Sum;
@@ -1420,13 +1420,13 @@ LkInvoiceTypeCredit1:;
                   end else begin
                     OutStringOvst(0,"DblCustPS2",CreateInvoiceNumber(IVr.SerNr,IVr.OfficialSerNr),false,IVr.Invalid);
                   end;
-                  if (rozetkaf) then begin
-                    OutString(30,0,"Rozetka",false);
-                  end else begin
-                    OutString(30,0,"",false);
-                  end;
+                  if (rozetkaf) then begin//Edit_________________ABR//Edit_________________ABR
+                    OutString(30,0,"Rozetka",false);//Edit_________________ABR//Edit_________________ABR
+                  end else begin//Edit_________________ABR//Edit_________________ABR
+                    OutString(30,0,"",false);//Edit_________________ABR//Edit_________________ABR
+                  end;//Edit_________________ABR//Edit_________________ABR
                   OutString(60,0,IVr.TransTime,false);//Edit----------------------Dima  12.08.2015
-                  OutDate(90,0,IVr.InvDate,false);
+                  OutDate(90,0,IVr.InvDate,false);//Edit_________________ABR//Edit_________________ABR
                   OutString(120,0,CUr.RebCode,false); //Edit***************************Sasha2,9:30 03.06.2015
                   OutString(150,"DblCUVc",CUr.Code,false);// Edit ************************** Thursday, 11 May 2017 11:42:06
                   OutStringCut(200,170,0,IVr.Addr0,false,0);//Edit***************************Sasha2,9:30 03.06.2015
@@ -1443,7 +1443,7 @@ LkInvoiceTypeCredit1:;
                   if (IVr.InvType==kInvoiceTypeInterest) then begin
                     tstr = USetStr(2364);
                   end;
-                  OutString(350,0,tstr,false);
+                  OutString(350,0,tstr,false);//Edit_________________ABR//Edit_________________ABR
   
                   OutVal(5,0,VATrw.DebVal,M4Val,true);
                   MulVATIV(VATrw.VATCode,VATrw.DebVal,vatv,t1,IVr.InclVAT,IVr.NoTAXonVAT);
@@ -1460,7 +1460,7 @@ LkInvoiceTypeCredit1:;
                   OutString(390,0,VATbrw.Comment,false);
                   if(RepSpec.Media==mtExcel)then begin// Edit ************************** Friday, 10 November 2017 13:35:53
 										OutString(460,0,IVr.InvComment,false);// Edit ************************** Friday, 10 November 2017 13:35:54
-									end;
+									end;//Edit_________________ABR//Edit_________________ABR
                   EndFormat;
                 end;
               end;
@@ -1475,13 +1475,13 @@ LkInvoiceTypeCredit1:;
               end else begin
                 OutStringOvst(0,"DblCustPS2",CreateInvoiceNumber(IVr.SerNr,IVr.OfficialSerNr),false,IVr.Invalid);
               end;
-              if (rozetkaf) then begin
-                OutString(30,0,"Rozetka",false);
-              end else begin
-                OutString(30,0,"",false);
-              end;
+              if (rozetkaf) then begin//Edit_________________ABR//Edit_________________ABR
+                OutString(30,0,"Rozetka",false);//Edit_________________ABR//Edit_________________ABR
+              end else begin//Edit_________________ABR//Edit_________________ABR
+                OutString(30,0,"",false);//Edit_________________ABR//Edit_________________ABR
+              end;//Edit_________________ABR//Edit_________________ABR
               OutString(60,0,IVr.TransTime,false);//Edit----------------------Dima  12.08.2015
-              OutDate(90,0,IVr.InvDate,false);
+              OutDate(90,0,IVr.InvDate,false);//Edit_________________ABR//Edit_________________ABR
               OutString(120,0,CUr.RebCode,false); //Edit***************************Sasha2,9:30 03.06.2015
               OutString(150,"DblCUVc",CUr.Code,false);// Edit ************************** Thursday, 11 May 2017 11:42:06
               OutStringCut(200,220,0,IVr.Addr0,false,0); //Edit***************************Sasha2,9:34 03.06.2015
@@ -1498,7 +1498,7 @@ LkInvoiceTypeCredit1:;
               if (IVr.InvType==kInvoiceTypeInterest) then begin
                 tstr = USetStr(2364);
               end;
-              OutString(350,0,tstr,false);
+              OutString(350,0,tstr,false);//Edit_________________ABR//Edit_________________ABR
               if (RepSpec.flags[15]!=0) then begin
                 OutVal(5,0,ivnvat,M4Val,true);
                 OutVal(6,0,iv,M4Val,true);
@@ -1512,7 +1512,7 @@ LkInvoiceTypeCredit1:;
               end;
               if(RepSpec.Media==mtExcel)then begin// Edit ************************** Friday, 10 November 2017 13:35:53
 								OutString(460,0,IVr.InvComment,false);// Edit ************************** Friday, 10 November 2017 13:35:54
-							end;
+							end;//Edit_________________ABR//Edit_________________ABR
               EndFormat;
               if (RepSpec.flags[16]!=0) then begin
                 if (nonblank(IVr.OfficialSerNr)) then begin
@@ -1531,7 +1531,7 @@ LkInvoiceTypeCredit1:;
             StartFormat(15);
             OutString(0,"DblCustPS2",CreateInvoiceNumber(IVr.SerNr,IVr.OfficialSerNr),false);
             OutString(150,"DblCUVc",CUr.Code,false);// Edit ************************** Thursday, 11 May 2017 11:42:06
-            OutString(200,0,Left(IVr.Addr0,16),false);
+            OutString(200,0,Left(IVr.Addr0,16),false);//Edit_________________ABR//Edit_________________ABR
             OutVal(430,0,ivnvat,M4Val,true);
             if (HasMultiCurrency) then begin 
               OutString(465,0,IVr.CurncyCode,true);
@@ -1542,13 +1542,13 @@ LkInvoiceTypeCredit1:;
           if (RepSpec.ArtMode==4) then begin
             StartFormat(15);
             OutString(0,"DblCustPS2",CreateInvoiceNumber(IVr.SerNr,IVr.OfficialSerNr),false);
-            if (rozetkaf) then begin
-              OutString(30,0,"Rozetka",false);
-            end else begin
-              OutString(30,0,"",false);
-            end;
+            if (rozetkaf) then begin//Edit_________________ABR//Edit_________________ABR
+              OutString(30,0,"Rozetka",false);//Edit_________________ABR//Edit_________________ABR
+            end else begin//Edit_________________ABR//Edit_________________ABR
+              OutString(30,0,"",false);//Edit_________________ABR//Edit_________________ABR
+            end;//Edit_________________ABR//Edit_________________ABR
             OutString(60,0,IVr.TransTime,false);//Edit----------------------Dima  12.08.2015
-            OutDate(90,0,IVr.InvDate,false);
+            OutDate(90,0,IVr.InvDate,false);//Edit_________________ABR//Edit_________________ABR
             OutString(120,0,CUr.RebCode,false); //Edit***************************Sasha2,9:30 03.06.2015
             OutString(150,"DblCUVc",CUr.Code,false);// Edit ************************** Thursday, 11 May 2017 11:42:06
             OutStringCut(200,275,0,IVr.Addr0,false,0); //Edit***************************Sasha2,9:35 03.06.2015
@@ -1579,7 +1579,7 @@ LkInvoiceTypeCredit1:;
             end;
             if(RepSpec.Media==mtExcel)then begin// Edit ************************** Friday, 10 November 2017 13:35:53
 							OutString(460,0,IVr.InvComment,false);// Edit ************************** Friday, 10 November 2017 13:35:54
-						end;
+						end;//Edit_________________ABR//Edit_________________ABR
             EndFormat;
             StartFormat(15);
             if (RepSpec.flags[16]!=0) then begin
@@ -1610,16 +1610,16 @@ LkInvoiceTypeCredit1:;
         if (RepSpec.ArtMode==3) then begin
           StartFormat(15);
           OutString(0,"DblCustPS2",CreateInvoiceNumber(IVr.SerNr,IVr.OfficialSerNr),false);
-          if (rozetkaf) then begin
-            OutString(30,0,"Rozetka",false);
-          end else begin
-            OutString(30,0,"",false);
-          end;
+          if (rozetkaf) then begin//Edit_________________ABR//Edit_________________ABR
+            OutString(30,0,"Rozetka",false);//Edit_________________ABR//Edit_________________ABR
+          end else begin//Edit_________________ABR//Edit_________________ABR
+            OutString(30,0,"",false);//Edit_________________ABR//Edit_________________ABR
+          end;//Edit_________________ABR//Edit_________________ABR
           OutString(60,0,IVr.TransTime,false);//Edit----------------------Dima  12.08.2015
-          OutDate(90,0,IVr.InvDate,false);
+          OutDate(90,0,IVr.InvDate,false);//Edit_________________ABR//Edit_________________ABR
           OutString(120,0,CUr.RebCode,false); //Edit***************************Sasha2,9:30 03.06.2015
           OutString(150,"DblCUVc",CUr.Code,false);// Edit ************************** Thursday, 11 May 2017 11:42:06
-          OutString(200,0,IVr.Addr0,false);
+          OutString(200,0,IVr.Addr0,false);//Edit_________________ABR//Edit_________________ABR
 //          OpM44o(120,295,0,&IVr.Addr0,M4Str,false,false);
           tstr = "";
           if (IVr.InvType==kInvoiceTypeNormal or IVr.InvType==kInvoiceTypeNormalSpecialSales) then begin

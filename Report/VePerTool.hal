@@ -990,9 +990,9 @@ begin
               end else begin
                 lossv = cuscurval - lossv;
                 if (lossv<0) then begin
-                  //totloss = totloss + lossv;
+                  //totloss = totloss + lossv;//Edit_________________ABR//Edit_________________ABR
                 end else begin
-                  //totgain = totgain + lossv;
+                  //totgain = totgain + lossv;//Edit_________________ABR//Edit_________________ABR
                 end;
 //              StopAlert("lossv " & lossv & " cuscurval " & cuscurval & " v2 " & v2);
                 cuscurval = v2 + lossv;
@@ -1032,9 +1032,9 @@ begin
                 if (OPrw.VISerNr!=-1) then begin
                   lossv = cuscurval - lossv;
                   if (lossv>0) then begin
-                    //totloss = totloss + lossv;
+                    //totloss = totloss + lossv;//Edit_________________ABR//Edit_________________ABR
                   end else begin
-                    //totgain = totgain - lossv;
+                    //totgain = totgain - lossv;//Edit_________________ABR//Edit_________________ABR
                   end;
                   if (VEr.VECurncyCode!=OPrw.PInvCurncy) then begin
                     cuscurval = v2;
@@ -1043,9 +1043,9 @@ begin
                   if (OPrw.PrepayNr!=-1) then begin
                     lossv = cuscurval - lossv;
                     if (lossv<0) then begin
-                      //totloss = totloss + lossv;
+                      //totloss = totloss + lossv;//Edit_________________ABR//Edit_________________ABR
                     end else begin
-                      //totgain = totgain + lossv;
+                      //totgain = totgain + lossv;//Edit_________________ABR//Edit_________________ABR
                     end;
                   end else begin
                     lossv = BlankVal;

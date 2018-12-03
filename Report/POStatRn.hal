@@ -574,7 +574,7 @@ BEGIN
         MatRowGet(POr,i,POrw);
         if (RepSpec.ArtMode <> 2) then begin
           StartFormat(15);
-          OutString(15,"DblINVc",POrw.ArtCode,false);
+          OutString(15,"DblINVc",POrw.ArtCode,false);//Edit_________________ABR//Edit_________________ABR
           OutString(95,0,POrw.Spec,false);
           OutValBiDi(250,0,POrw.Quant,M4UVal,true,290);
           OutValBiDi(310,0,POrw.Shipd2,M4UVal,true,350);

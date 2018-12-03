@@ -32,9 +32,9 @@ begin
   CLInr.SerNr = IPrsr.TransNr;
   if (ReadFirstMain(CLInr,1,true)) then begin
     if (CLInr.Invalid!=0) then begin goto LCustListTransCLIn; end;
-    if (nonblank(RepSpec.CurncyCode)) then begin
-      if (CLInr.CurncyCode!=RepSpec.CurncyCode) then begin goto LCustListTransCLIn; end;
-    end;
+    if (nonblank(RepSpec.CurncyCode)) then begin//Edit_________________ABR//Edit_________________ABR
+      if (CLInr.CurncyCode!=RepSpec.CurncyCode) then begin goto LCustListTransCLIn; end;//Edit_________________ABR//Edit_________________ABR
+    end;//Edit_________________ABR//Edit_________________ABR
     trwcnt = MatRowCnt(CLInr);
     for (tcnt=0;tcnt<trwcnt;tcnt=tcnt+1) begin
       MatRowGet(CLInr,tcnt,CLInrw);
@@ -207,9 +207,9 @@ begin
   CLOutr.SerNr = IPrsr.TransNr;
   if (ReadFirstMain(CLOutr,1,true)) then begin
     if (CLOutr.Invalid!=0) then begin goto L44; end;
-    if (nonblank(RepSpec.CurncyCode)) then begin
-      if (CLOutr.CurncyCode!=RepSpec.CurncyCode) then begin goto L44; end;
-    end;
+    if (nonblank(RepSpec.CurncyCode)) then begin//Edit_________________ABR//Edit_________________ABR
+      if (CLOutr.CurncyCode!=RepSpec.CurncyCode) then begin goto L44; end;//Edit_________________ABR//Edit_________________ABR
+    end;//Edit_________________ABR//Edit_________________ABR
     trwcnt = MatRowCnt(CLOutr);
     for (tcnt=0;tcnt<trwcnt;tcnt=tcnt+1) begin
       MatRowGet(CLOutr,tcnt,CLOutrw);
@@ -477,7 +477,7 @@ procedure CUPerIPLine(record RcVc RepSpec,Integer pos1,Integer pos2,string curnc
                       LongInt prepayno,val v,var val lossv,val balp,Boolean onaccf)
 begin
   string 255 tstr,t2;
-  record IVVc IVr;
+  record IVVc IVr;//Edit_________________ABR//Edit_________________ABR
 
   if (RepSpec.flags[8]!=0) then begin
     if (onaccf) then begin
@@ -503,8 +503,8 @@ begin
       if (IPrsr.IVNr==-1) then begin
         t2 = prepayno;
       end else begin
-        if (HasLocalization("POL") and (IsStandardProduct)) then begin
-          if (nonblank(InvoiceOfficialSerNr)) then begin
+        if (HasLocalization("POL") and (IsStandardProduct)) then begin//Edit_________________ABR//Edit_________________ABR
+          if (nonblank(InvoiceOfficialSerNr)) then begin//Edit_________________ABR//Edit_________________ABR
             t2 = InvoiceOfficialSerNr;
           end else begin
             IVr.SerNr = IPrsr.IVNr;
@@ -519,11 +519,11 @@ begin
       end;  
       if (prepayno==-1) and (IPrsr.IVNr==-1) then begin t2 = ""; end;
       tstr = tstr & t2;
-      tstr = tstr & ")";
+      tstr = tstr & ")";//Edit_________________ABR//Edit_________________ABR
     end;
   end;
   OutString(pos2,"DblCuPerIP",tstr,false);
-  OutString(190,0,IPr.AdditionalObjects,false);
+  OutString(190,0,IPr.AdditionalObjects,false);//Edit_________________ABR//Edit_________________ABR
   if (v>=0) then begin
     OutString(3,0,"",true);
     OutString(5,0,"",false);
@@ -545,11 +545,11 @@ begin
   end;
   OutVal(1,0,balp,M4Val,true);
   EndFormat;
-  if (RepSpec.flags[15]!=0) then begin
-    StartFormat(15);
-    OutString(pos1,0,IPr.OfficialSerNr,false);
-    EndFormat;
-  end;
+  if (RepSpec.flags[15]!=0) then begin//Edit_________________ABR//Edit_________________ABR
+    StartFormat(15);//Edit_________________ABR//Edit_________________ABR
+    OutString(pos1,0,IPr.OfficialSerNr,false);//Edit_________________ABR//Edit_________________ABR
+    EndFormat;//Edit_________________ABR//Edit_________________ABR
+  end;//Edit_________________ABR//Edit_________________ABR
   return;
 end;
 
@@ -685,18 +685,18 @@ CURRENCIES-TODO
                       basecurval = IPrw.BankVal; //must show same as on prepayment account
                     end;
                   end;
-                  if (blank(IPrw.B1BankVal)==false) then begin
+                  if (blank(IPrw.B1BankVal)==false) then begin//Edit_________________ABR//Edit_________________ABR
                     basecurval = IPrw.B1BankVal;
                   end;
                 end else begin
-                  if ((bascur.BaseCur1==IPrw.BankCurncy) or blank(IPrw.BankCurncy)) then begin
+                  if ((bascur.BaseCur1==IPrw.BankCurncy) or blank(IPrw.BankCurncy)) then begin//Edit_________________ABR//Edit_________________ABR
 //                    if (RepSpec.flags[2]==0) then begin
-                      basecurval = IPrw.BankVal; //must show same as on prepayment account, and BankVal does not have amount posted to On Acc Acc 
+                      basecurval = IPrw.BankVal; //must show same as on prepayment account, and BankVal does not have amount posted to On Acc Acc//Edit_________________ABR//Edit_________________ABR 
 //                    end;
                   end else begin
                     basecurval = MulWithRateToBase1(IPrw.InvCurncy,IPr.TransDate,IPrw.InvVal,DefaultCurRoundOff);
                   end;
-                  if (blank(IPrw.B1BankVal)==false) then begin
+                  if (blank(IPrw.B1BankVal)==false) then begin//Edit_________________ABR//Edit_________________ABR
                     basecurval = IPrw.B1BankVal;
                   end;
                 end;
@@ -744,13 +744,13 @@ CURRENCIES-TODO
                       end;                
                     end else begin
                       lossv = 0;
-                      if ((bascur.BaseCur1==IPrw.BankCurncy or blank(IPrw.BankCurncy)) and blank(IPrw.B1BankVal)) then begin
+                      if ((bascur.BaseCur1==IPrw.BankCurncy or blank(IPrw.BankCurncy)) and blank(IPrw.B1BankVal)) then begin//Edit_________________ABR//Edit_________________ABR
 //                        lossv = basecurval - MulWithRateToBase1(IPrw.InvCurncy,IPr.TransDate,IPrw.InvVal,DefaultCurRoundOff);
-                        if (blank(IPrw.B1BankVal)==false) then begin
-                          lossv = basecurval - IPrw.B1BankVal;
-                        end else begin
-                          lossv = basecurval - IPrw.BankVal;
-                        end;
+                        if (blank(IPrw.B1BankVal)==false) then begin//Edit_________________ABR//Edit_________________ABR
+                          lossv = basecurval - IPrw.B1BankVal;//Edit_________________ABR//Edit_________________ABR
+                        end else begin//Edit_________________ABR//Edit_________________ABR
+                          lossv = basecurval - IPrw.BankVal;//Edit_________________ABR//Edit_________________ABR
+                        end;//Edit_________________ABR//Edit_________________ABR
                       end;
                     end;
                   end;
@@ -854,9 +854,9 @@ CURRENCIES-TODO
                     end;
                     lossv = -lossv;
                     if (RepSpec.flags[2]!=0) then begin
-                      CUPerIPLine(RepSpec,pos1,pos2,curncy,IPrsr.CustDate,IPr,IPrw.InvoiceOfficialSerNr,IPrsr,prepayno,t,lossv,balp,loop!=0);
+                      CUPerIPLine(RepSpec,pos1,pos2,curncy,IPrsr.CustDate,IPr,IPrw.InvoiceOfficialSerNr,IPrsr,prepayno,t,lossv,balp,loop!=0);//Edit_________________ABR//Edit_________________ABR
                     end else begin
-                      CUPerIPLine(RepSpec,pos1,pos2,curncy,IPrsr.CustDate,IPr,IPrw.InvoiceOfficialSerNr,IPrsr,prepayno,t,lossv,balp,loop!=0);
+                      CUPerIPLine(RepSpec,pos1,pos2,curncy,IPrsr.CustDate,IPr,IPrw.InvoiceOfficialSerNr,IPrsr,prepayno,t,lossv,balp,loop!=0);//Edit_________________ABR//Edit_________________ABR
                     end;
                   end else begin
                     v = v + t;
@@ -940,12 +940,12 @@ L11IP:;
           end else begin
             balp = balp - ipav2[curi];
           end;
-          CUPerIPLine(RepSpec,pos1,pos2,ipacur[curi],IPrsr.CustDate,IPr,"",IPrsr,-1,v,lossv,balp,loop!=0);
+          CUPerIPLine(RepSpec,pos1,pos2,ipacur[curi],IPrsr.CustDate,IPr,"",IPrsr,-1,v,lossv,balp,loop!=0);//Edit_________________ABR//Edit_________________ABR
 //          CUPerIPLine(RepSpec,pos1,pos2,ipacur[curi],IPrsr.TransDate,IPr,IPrsr,prepayno,ipav1[curi],lossv,balp);          
         end;
       end else begin
         balp = balp - v;
-        CUPerIPLine(RepSpec,pos1,pos2,curncy,IPrsr.CustDate,IPr,IPrw.InvoiceOfficialSerNr,IPrsr,prepayno,v,lossv,balp,loop!=0);
+        CUPerIPLine(RepSpec,pos1,pos2,curncy,IPrsr.CustDate,IPr,IPrw.InvoiceOfficialSerNr,IPrsr,prepayno,v,lossv,balp,loop!=0);//Edit_________________ABR//Edit_________________ABR
       end;
     end;
   end;

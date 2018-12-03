@@ -19,7 +19,7 @@ external procedure HTCustClassType(string,var string);
 external function Boolean SetInSet2(string,string);
 external procedure ItemClassTypef(string,string,var Boolean);
 
-SetLangMode(LangRussian,"RUS",0);
+SetLangMode(LangRussian,"RUS",0);//Edit_________________ABR//Edit_________________ABR
 
 procedure FindLastST(record RcVc RepSpec,string item,Integer SerNrf,Date fromdate,var Date lastdatep,var val unitsp,var val instock,
                     var array val counteda,var array string batcha,var array string posa,var Integer arrcnt,
@@ -51,7 +51,7 @@ BEGIN
       keys = 2;
     end;
     IHr.ArtCode = item;
-    //IHr.TransDate = CurrentDate;
+    //IHr.TransDate = CurrentDate;//Edit_________________ABR//Edit_________________ABR
     IHr.TransDate = RepSpec.RegDate;// Edit ************************** BPI Ukraine - KramarAlexandr - Tuesday, 9 January 2018 16:05:59
     TrHs = true;
     while (LoopBackKey(keystr,IHr,keys,TrHs)) begin
@@ -441,7 +441,7 @@ begin
     if (nonblank(orgRepSpec.LastAcc)) then begin
       if (PISr.Position!=orgRepSpec.LastAcc) then begin found = false; end;
     end;
-    if (found) then begin	
+    if (found) then begin	//Edit_________________ABR//Edit_________________ABR
       RecordCopy(RepSpec,orgRepSpec);
       RepSpec.LastAcc = PISr.Position;     
       DoSTCompOneItem(RepSpec,INr,varf,PISr.Variety,itemout,instock,instock2,counted,diff,totinprice);
@@ -660,8 +660,8 @@ BEGIN
 //      OutString(280,0,USetStr(2779),false);
         if (RepSpec.flags[0]!=0) then  begin OutString(330,0,USetStr(7593),true); end;
         OutString(300,0,"Место",true);// Edit ************************** Wednesday, 4 January 2017 15:40:42
-        OutString(330,0,USetStr(2765),true);
-        OutString(4,0,"На складе",true);
+        OutString(330,0,USetStr(2765),true);//Edit_________________ABR//Edit_________________ABR
+        OutString(4,0,"На складе",true);//Edit_________________ABR//Edit_________________ABR
         
         OutString(5,0,USetStr(2771),true);
         OutString(1,0,USetStr(2772),true);

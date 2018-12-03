@@ -84,7 +84,7 @@ procedure PurOrdJRn(record RcVc RepSpec)
 begin
   record POVc POr;
   record CUVc VEr;
-	record UserVc Userr;
+	record UserVc Userr;//Edit_________________ABR//Edit_________________ABR
   Boolean TrHs;
   val iv;
   val TotSum;
@@ -98,7 +98,7 @@ begin
   array string 20 acur;
   Integer curcnt;
   record LetVc Letr;// Edit ************************** Tuesday, 12 July 2016 15:52:10
-  integer pos;
+  integer pos;//Edit_________________ABR//Edit_________________ABR
 	
 
   rw = 1;
@@ -179,8 +179,8 @@ begin
       if (DateInRange(POr.TransDate,RepSpec.sStartDate,RepSpec.sEndDate)==false) then begin testf = false; end;
       
       
-      if(testf)then begin
-				// Edit Start ---------------------------------------------- Edit Start
+      if(testf)then begin// Edit Start ---------------------------------------------- Edit Start
+				
 		//Tuesday, 12 July 2016 15:52:33
 		 
 				RecordClear(Letr);
@@ -208,9 +208,9 @@ begin
 						end;
 				end;
 			
-		// Edit End ---------------------------------------------- Edit End
+		
 	
-      end;
+      end;// Edit End ---------------------------------------------- Edit End
       
       if (testf) then begin
         VEr.Code = POr.VECode;
@@ -220,7 +220,7 @@ begin
               testf = false;
             end;
           end;
-					 
+					 //Edit_________________ABR/BEGIN/Edit_________________ABR
 					/*if(UserCanAction("VievAllSalesGroupDocuments", true)==false) then begin
 						Userr.Code = CurrentUser;
 						if(readFirstMain(Userr, 1, true))then begin
@@ -250,7 +250,7 @@ begin
 					if(usercanaction("VievOnlyW1VE",false)) then begin
 						if((VEr.SalesGroup!="W_1") and (VEr.AddKeySG1!="W_1")) then begin testf = false; end;
 					end;
-					
+					//Edit_________________ABR/END/Edit_________________ABR
           if (nonblank(RepSpec.f5)) then begin
             if (testf) then begin
               testf = false;
@@ -277,7 +277,7 @@ begin
           OutLongInt(0,"DblPOVc",POr.SerNr,false);
           OutDate(60,0,POr.TransDate,false);
           OutString(100,0,POr.VECode,false);// Edit ************************** Tuesday, 12 July 2016 11:38:25
-          OutString(190,0,POr.Addr0,false);
+          OutString(190,0,POr.Addr0,false);//Edit_________________ABR//Edit_________________ABR
           OutVal(2,0,iv,M4Val,true);
           OutString(445,0,POr.CurncyCode,false);
           EndFormat;
