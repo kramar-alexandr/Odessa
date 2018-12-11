@@ -367,7 +367,7 @@ begin
 	
 	StartReportNoHeaderJob("Проверка ItemStatus");
 	
-	SHr.ShipDate = stringtodate("01/10/2018");
+	/*SHr.ShipDate = stringtodate("01/10/2018");
 	while(loopkey("ShipDate",SHr,1,true))begin
 		mtrw = matrowcnt(SHr);
 		for(i=0;i<mtrw;i=i+1)begin
@@ -411,8 +411,8 @@ begin
 			end;
 			
 		end;
-	end;
-	/*
+	end;*/
+	
 	while(loopmain(Locr,1,true))begin
 		aloc[acnt] = Locr.Code;
 		acnt = acnt + 1;
@@ -424,6 +424,9 @@ begin
 			pcnt = pcnt + 1;
 	end;
 		
+	For(j=0;j<acnt;j=j+1) begin
+		locqty[Locr.Code] = 0;
+	end;
 	
 	INTrhs = true;
 	while loopmain(INr,1,INTrhs) begin
@@ -446,6 +449,9 @@ begin
 		TrHs = true;
 		ClearVector(locqty);
 		ClearVector(locqty);
+		For(j=0;j<acnt;j=j+1) begin
+			locqty[Locr.Code] = 0;
+		end;
 		while (loopmain(ISr,1,TrHs)) begin
 			if (ISr.Code!=INr.Code) then begin
 				TrHs = false;
@@ -499,7 +505,7 @@ begin
 			black_divider(0,1);
 		end;
 		
-	end;*/
+	end;
 	
 	endjob;
 return;
