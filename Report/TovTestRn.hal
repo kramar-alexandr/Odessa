@@ -483,6 +483,14 @@ begin
 		end;
 		resetloop(ISr);
 		
+		if(printf==false)then begin
+			For(j=0;j<acnt;j=j+1) begin
+				if(locqty[aloc[j]]!=ihqty[aloc[j]])then begin
+					printf = true;
+				end;
+			end;
+		end;
+		
 		if(printf)then begin
 			GetVectorTags(locqty,aTags);
 			For(i=0;i<aTags.length;i=i+1) begin
