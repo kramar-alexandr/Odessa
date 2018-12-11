@@ -11816,7 +11816,7 @@ window ItemStatusDClass:1
   wtag("language","RUS"), wtag("product","*"), wtag("productcode","*"), wtag("device","computer")
 begin
   real h,v;
-  WindowBegin("Item Status",ItemStatusDClass,CGview,-);
+  WindowBegin("Item Status 1",ItemStatusDClass,CGview,-);
   SetWRect(64,80,450,420);
   UseView(ItemStatusVc);
   h = 120;
