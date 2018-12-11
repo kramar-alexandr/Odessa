@@ -424,6 +424,9 @@ begin
 			pcnt = pcnt + 1;
 	end;
 		
+	For(j=0;j<acnt;j=j+1) begin
+		locqty[Locr.Code] = 0;
+	end;
 	
 	INTrhs = true;
 	while loopmain(INr,1,INTrhs) begin
@@ -446,6 +449,9 @@ begin
 		TrHs = true;
 		ClearVector(locqty);
 		ClearVector(locqty);
+		For(j=0;j<acnt;j=j+1) begin
+			locqty[Locr.Code] = 0;
+		end;
 		while (loopmain(ISr,1,TrHs)) begin
 			if (ISr.Code!=INr.Code) then begin
 				TrHs = false;
