@@ -4034,10 +4034,51 @@ end;
 webpublic global updating procedure WEbDelNPCounterpartyMn()
 begin
 	record NPCounterparty2Vc NPCPr;
+	boolean TrHs;
 	
 	setcompany(1,false);
 	
-	while(loopmain(NPCPr,1,true))begin
+	TrHs = true;
+	while(loopmain(NPCPr,1,TrHs))begin
+		if(left(NPCPr.LastName,5)=="Белый")then begin
+			TrHs = false;
+		end;
+		logtext(0,NPCPr.LastName);
+		recorddelete(NPCPr);
+		stepback(NPCPr);
+	end;
+	
+	resetloop(NPCPr);
+	TrHs = true;
+	NPCPr.LastName = "Белых";
+	while(loopmain(NPCPr,1,TrHs))begin
+		if(left(NPCPr.LastName,3)=="ООО")then begin
+			TrHs = false;
+		end;
+		logtext(0,NPCPr.LastName);
+		recorddelete(NPCPr);
+		stepback(NPCPr);
+	end;
+	
+	resetloop(NPCPr);
+	TrHs = true;
+	NPCPr.LastName = "Опак";
+	while(loopmain(NPCPr,1,TrHs))begin
+		if(left(NPCPr.LastName,9)=="Сухоручко")then begin
+			TrHs = false;
+		end;
+		logtext(0,NPCPr.LastName);
+		recorddelete(NPCPr);
+		stepback(NPCPr);
+	end;
+	
+	resetloop(NPCPr);
+	TrHs = true;
+	NPCPr.LastName = "Сухоцкий";
+	while(loopmain(NPCPr,1,TrHs))begin
+		if(left(NPCPr.LastName,3)=="ООО")then begin
+			TrHs = false;
+		end;
 		logtext(0,NPCPr.LastName);
 		recorddelete(NPCPr);
 		stepback(NPCPr);
