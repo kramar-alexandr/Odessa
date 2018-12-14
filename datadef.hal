@@ -1172,7 +1172,7 @@ RecordBegin(INVc,-,"artikel5");
   StoreInBaseKey;
   AppendMatrixFieldToKeyName(ArtCode,0);
   KeySegment(SerNr);
-  KeyBegin(ActOkFlag);
+  KeyBegin(ActOkFlag);// Edit ************************** BPI Ukraine - KramarAlexandr - 05, 14 12 2018 y. at 8:02:32 PM
   KeySegment(ActOkFlag);
 	KeySegment(SerNr);  
   EndRecord;
