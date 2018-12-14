@@ -4029,3 +4029,19 @@ area request,replyarea,mainRequest;
 
 return;
 end;
+
+
+webpublic global updating procedure WEbDelNPCounterpartyMn()
+begin
+	record NPCounterparty2Vc NPCPr;
+	
+	setcompany(1,false);
+	
+	while(loopmain(NPCPr,1,true))begin
+		logtext(0,NPCPr.LastName);
+		recorddelete(NPCPr);
+		stepback(NPCPr);
+	end;
+
+return;
+end;
