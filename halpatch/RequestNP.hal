@@ -4064,6 +4064,18 @@ begin
 	TrHs = true;
 	NPCPr.LastName = "Опак";
 	while(loopmain(NPCPr,1,TrHs))begin
+		if(left(NPCPr.LastName,5)=="Палас")then begin
+			TrHs = false;
+		end;
+		logtext(0,NPCPr.LastName);
+		recorddelete(NPCPr);
+		stepback(NPCPr);
+	end;
+	
+	resetloop(NPCPr);
+	TrHs = true;
+	NPCPr.LastName = "Палиенко";
+	while(loopmain(NPCPr,1,TrHs))begin
 		if(left(NPCPr.LastName,9)=="Сухоручко")then begin
 			TrHs = false;
 		end;
