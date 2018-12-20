@@ -1943,8 +1943,6 @@ begin
 				
 				if (IVrw.stp==kInvoiceRowTypeNormal) then begin
 					sum = sum + IVrw.Sum;
-					logtext(0,sum);
-			messagebox(0,"gd");
 				end;
 			end;
 		end else begin
