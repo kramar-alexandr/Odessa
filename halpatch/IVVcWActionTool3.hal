@@ -1940,7 +1940,6 @@ begin
 		if(test) then begin 
 			for (i = 0; i < mtrw; i = i + 1) begin
 				matrowget(IVr,i,IVrw);
-				
 				if (IVrw.stp==kInvoiceRowTypeNormal) then begin
 					sum = sum + IVrw.Sum;
 				end;
