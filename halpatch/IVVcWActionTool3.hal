@@ -1926,14 +1926,33 @@ function integer IVVcCountSum(record IVVc IVr)//Edit_________________ABR//Edit__
 begin
 	row IVVc 				IVrw;
 	integer 				sum, i, mtrw;
-	
+	record PromotionVc Pr;
+	boolean test,testf;
+	test=false;
+	testf = true;
 	sum = 0;
 	mtrw = matrowcnt(IVr);
+	Pr.Code = "";
 	if (mtrw!=0) then begin
-		for (i = 0; i < mtrw; i = i + 1) begin
-			matrowget(IVr,i,IVrw);
-			if (IVrw.stp==kInvoiceRowTypeNormal) then begin
-				sum = sum + IVrw.Price * IVrw.Quant;
+		while(LoopMain(Pr,1,testf)) begin
+			if(IVr.InvDate > Pr.PromStrDate and Pr.PromEndDate > IVr.InvDate) then begin test = true; testf = false;	end;
+		end;
+		if(test) then begin 
+			for (i = 0; i < mtrw; i = i + 1) begin
+				matrowget(IVr,i,IVrw);
+				
+				if (IVrw.stp==kInvoiceRowTypeNormal) then begin
+					sum = sum + IVrw.Sum;
+					logtext(0,sum);
+			messagebox(0,"gd");
+				end;
+			end;
+		end else begin
+			for (i = 0; i < mtrw; i = i + 1) begin
+				matrowget(IVr,i,IVrw);
+				if (IVrw.stp==kInvoiceRowTypeNormal) then begin
+					sum = sum + IVrw.Price * IVrw.Quant;
+				end;
 			end;
 		end;
 	end;
