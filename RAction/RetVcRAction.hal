@@ -207,6 +207,7 @@ BEGIN
     if (stat==insertmode) then begin transf = true; end;
     if (stat==updatemode) then begin
       if (Ret2p.OKFlag==0) then begin transf = true; end;
+			Retp.BPISign = CurrentUser;
     end;
   end;
   if (stat==updatemode) then begin

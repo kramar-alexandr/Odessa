@@ -4474,7 +4474,7 @@ begin
     EditField(h,vm=v,135,"Офиц. номер",Normal,OfficialSerNr,false,LegalInvNrSClass);
   end;
   if (HasTREO) then begin
-    EditField(h+230,vm,95,"TREO Но.",Normal,TREONr,false,0);
+    EditField(h+230,vm,95,"Подпись",ViewOnly,BPISign,false,0);
   end;
   CheckBox(h4=-100,v,0,"OK",OKFlag);
   CheckBox(h4,v+15,0,"Готов к сборке",Assembly);

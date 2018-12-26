@@ -1986,6 +1986,7 @@ begin
   Tile(0,74,false,"",TransDate);
   EditField(75,vm=(v=6),95,"Номер",Normal,SerNr,false,TSerSClass);
   EditField(75,v+=20,95,"Поставщик",Normal,VECode,false,VESClass);
+	EditField(255,v,50,"Подпись",Normal,BPISign,false,0);
   EnterSkip(TransDate);
   EditField(h=255,v=vm,-40,"Наим-ие",Normal,VEName,false,0);
   if (CurrentUser=="SAUNOK") then begin
@@ -5771,6 +5772,7 @@ begin
   if (HasOfficialSerNr) then begin
     EditField(h,vm=(v+=20),135,"Оф. номер",Normal,OfficialSerNr,false,LegalInvNrSClass);
   end;
+	EditField(h,vm,135,"Подпись",ViewOnly,BPISign,false,0);
 //  EditField(h+210,v,82, "Employee",Normal,EMCode,false,UserSClass);
   CheckBox(h4=-100,v,0,"ОК",OKFlag);
   TileButton(1,"Условия");
