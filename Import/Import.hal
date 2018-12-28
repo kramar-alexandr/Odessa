@@ -720,12 +720,12 @@ begin
   			  storeF = true;
   			end;
 				
-				if (NonBlank(rebCode)) then begin //Edit***************************Anton ,15:47 28.12.2018
+				if (NonBlank(rebCode) and CUr.RebCode!=rebCode) then begin //Edit***************************Anton ,15:47 28.12.2018
   			  CUr.RebCode = rebCode;
   			  storeF = true;
   			end; 
 				
-				if (NonBlank(webCategory)) then begin //Edit***************************Anton ,15:47 28.12.2018
+				if (NonBlank(webCategory) and CUr.WCCat!=webCategory) then begin //Edit***************************Anton ,15:47 28.12.2018
   			  CUr.WCCat = webCategory;
   			  storeF = true;
   			end; 
@@ -738,17 +738,18 @@ begin
   			  end;
   			end;
 				
-  			if (storeF) then begin
-  				logtext(0,"Importom updated customer " & CUr.Code);
-  			  RecordStore(CUr,true);
-  			end;
-  			
-  			/*if (NonBlank(text)) then begin //Edit***************************Anton ,15:47 28.12.2018
+				if (NonBlank(text)) then begin //Edit***************************Anton ,15:47 28.12.2018
 					AddToText(Chr(13) & Chr(10),CUr);
   			  AddToText(text,CUr);
 					storeF = true;
-					RecordStore(CUr,true);
-				end;	*/
+				end;
+				
+  			if (storeF) then begin
+  				logtext(0,"Importom updated customer " & CUr.Code & "_" & CUr.Name);
+  			  RecordStore(CUr,true);
+  			end;
+  			
+  			
 			end;
 		end;
 		
