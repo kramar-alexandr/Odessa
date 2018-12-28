@@ -662,6 +662,7 @@ begin
 
 	while (TestEOF()==false) begin
 	code = ImportField;
+	logtext(0,"UpdateCUImportIn " & code);
 		if (nonblank(code)) then begin
 		  CUr.Code = code;
   		if (ReadFirstMain(CUr,1,true)) then begin		
