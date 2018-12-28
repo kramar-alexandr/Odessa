@@ -647,7 +647,7 @@ global
 updating procedure UpdateCUImportIn() //Edit***************************Sasha2,14:13 15.02.2017
 begin
   record CUVc CUr;
-  string 70 code,country,region,city,phone,email,birthday,location,toNextRebateStr,manager;
+  string 70 code,country,region,city,phone,email,birthday,location,toNextRebateStr,manager,rebCode,webCategory,text;
   string 200 name,address1;
   Boolean storeF;
   record UserVc User;
@@ -678,7 +678,9 @@ begin
   			location = ImportField;
   			toNextRebateStr = ImportField; //Edit***************************Sasha2,15:47 10.03.2017
   			manager = ImportField;// Edit ************************** BPI Ukraine - KramarAlexandr - Monday, 22 January 2018 17:29:38
-  			
+				rebCode = ImportField; //Edit_________________ABR 13:49 28.12.18 
+  			webCategory = ImportField; //Edit_________________ABR 13:49 28.12.18 
+				text = ImportField; //Edit_________________ABR 13:49 28.12.18 
   			if (NonBlank(country) and CUr.CountryCode!=country) then begin
   			  CUr.CountryCode = country;
   			  storeF = true;
@@ -715,6 +717,22 @@ begin
   			  CUr.MinOrdSum = StringToVal(toNextRebateStr,M4Val);
   			  storeF = true;
   			end;
+				
+				if (NonBlank(rebCode)) then begin //Edit***************************Anton ,15:47 28.12.2018
+  			  CUr.RebCode = rebCode;
+  			  storeF = true;
+  			end; 
+				
+				if (NonBlank(webCategory)) then begin //Edit***************************Anton ,15:47 28.12.2018
+  			  CUr.WCCat = webCategory;
+  			  storeF = true;
+  			end; 
+				
+				if (NonBlank(text)) then begin //Edit***************************Anton ,15:47 28.12.2018
+					AddToText(Chr(13) & Chr(10),CUr);
+  			  AddToText(text,CUr);
+					storeF = true;
+				end;	
 				if (NonBlank(manager) and CUr.Department!=manager) then begin// Edit ************************** BPI Ukraine - KramarAlexandr - Monday, 22 January 2018 17:30:24
   			  if(userv[manager])then begin
 						CUr.Department = manager;
