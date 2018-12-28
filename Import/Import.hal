@@ -743,12 +743,12 @@ begin
   			  RecordStore(CUr,true);
   			end;
   			
-  			if (NonBlank(text)) then begin //Edit***************************Anton ,15:47 28.12.2018
+  			/*if (NonBlank(text)) then begin //Edit***************************Anton ,15:47 28.12.2018
 					AddToText(Chr(13) & Chr(10),CUr);
   			  AddToText(text,CUr);
 					storeF = true;
 					RecordStore(CUr,true);
-				end;	
+				end;	*/
 			end;
 		end;
 		
