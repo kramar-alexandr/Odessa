@@ -1383,7 +1383,7 @@ begin
 				
 			  
 			  if(testf or kievself) then begin
-				MakeReserveFromOrder(ORr.SerNr,ORr.Location,kievself);
+					MakeReserveFromOrder(ORr.SerNr,ORr.Location,kievself);
 			  end;
 			end; //Edit***************************Sasha2,17:49 05.12.2016 }
 		end;
