@@ -681,6 +681,7 @@ begin
 				rebCode = ImportField; //Edit_________________ABR 13:49 28.12.18 
   			webCategory = ImportField; //Edit_________________ABR 13:49 28.12.18 
 				text = ImportField; //Edit_________________ABR 13:49 28.12.18 
+				
   			if (NonBlank(country) and CUr.CountryCode!=country) then begin
   			  CUr.CountryCode = country;
   			  storeF = true;
@@ -741,6 +742,7 @@ begin
   			end;
 				
   			if (storeF) then begin
+  				logtext(0,"Importom updated customer " & CUr.Code);
   			  RecordStore(CUr,true);
   			end;
 			end;
