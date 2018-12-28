@@ -629,7 +629,7 @@ return;
 end;
 
 global //Edit***************************Sasha2,17:49 05.12.2016 {
-updating procedure MakeReserveFromOrder(LongInt OrSerNr,string orlocation)
+updating procedure MakeReserveFromOrder(LongInt OrSerNr,string orlocation,boolean kievself)
 begin
   record ORVc ORr,OR2r;
   row ORVc ORrw;
@@ -671,7 +671,9 @@ begin
     		  ORr.Reserved = 1;    		  
     		end;
     		RecordUpdate(OR2r,ORr,true);
-    		
+    		if(kievself)then begin
+    			WSb.LocationQuer = "6-KV";
+    		end;
     		if(WSb.AutoRes1KOC>0 and nonblank(WSb.LocationQuer) and ORr.OrderClass=="WEB")then begin
 					if(foundf)then begin
 						pos = 0;
@@ -724,7 +726,15 @@ begin
 											if(SMr.FrLocation!=tstr)then begin testf = false; end;
 											if(SMr.FrPos!=apos[j] and nonblank(apos[j]))then begin testf = false; end;// Edit ************************** Wednesday, 10 May 2017 10:37:13
 											if(SMr.ToLocation!=orlocation)then begin testf = false; end;
-											
+											if(kievself)then begin
+												if(SMr.SelfDelivFlag==0)then begin
+													testf = false;
+												end;
+											end else begin
+												if(SMr.SelfDelivFlag==1)then begin
+													testf = false;
+												end;
+											end;
 											
 						
 											if(testf)then begin
@@ -750,10 +760,17 @@ begin
 											SMr.AutoCompliteFlag = 1;
 											SMr.SerNr = NextSerNr("StockMovVc",CurrentDate,-1,false,"");
 											SMr.Comment = "Аторезервирование товаров интернет магазина";
+											if(kievself)then begin
+												SMr.SelfDelivFlag = 1;
+												SMr.Comment = "Аторезервирование самовывоза КИЕВ";
+											end;
 											SMr.Reserved = 1;
 											recordstore(SMr,true);
 										end;
 										logtext(0,"Аторезервирование товаров интернет магазина " & tstr);
+										if(kievself)then begin
+											logtext(0,"Аторезервирование самовывоза КИЕВ " & tstr);
+										end;
 										AddOrderForStockMove(SMr,ORr,false);
 									end;
 								end;
@@ -911,7 +928,7 @@ begin
 	record PLVc PLr;
 	record NPAreaVc NPArear;
 	string 50 oblast,storeidtag,email,phone;
-	
+	boolean kievself;
 	
 	GetAreaFromArea(getarea,0,GetAreaLength(getarea),aPost);
 	blockload(ESCb);
@@ -1354,15 +1371,19 @@ begin
 			end;
 			if (recordSaved) then begin //Edit***************************Sasha2,17:49 05.12.2016 {
 			  testf = true;
-		    if (ORr.SelfDelivery==1 and (FindSubString("КИЕВ",UpperCase(ORr.ShipAddr1)) or FindSubString("КИЇВ",UpperCase(ORr.ShipAddr1)))) then begin testf = false; end;
+			  kievself = false;
+		    if (ORr.SelfDelivery==1 and (FindSubString("КИЕВ",UpperCase(ORr.ShipAddr1)) or FindSubString("КИЇВ",UpperCase(ORr.ShipAddr1)))) then begin
+		     testf = false;
+		     kievself = true;
+		    end;
 		    
 			if (storeidtag=="R")then begin
 					//testf = false;
 			end;
 				
 			  
-			  if(testf) then begin
-				MakeReserveFromOrder(ORr.SerNr,ORr.Location);
+			  if(testf or kievself) then begin
+				MakeReserveFromOrder(ORr.SerNr,ORr.Location,kievself);
 			  end;
 			end; //Edit***************************Sasha2,17:49 05.12.2016 }
 		end;
