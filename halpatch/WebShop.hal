@@ -654,9 +654,7 @@ begin
     		for (i=0;i<rwcnt;i=i+1) begin
     		  MatRowGet(ORr,i,ORrw);
     		  if(kievself)then begin
-						if(ORrw.AvailableQuant = 0)then begin
-							process = false;
-						end;
+						ORrw.AvailableQuant = 0;
 					end;
     		  if (ORrw.AvailableQuant<ORrw.Quant) then begin
     		    diff = ORrw.Quant - ORrw.AvailableQuant;
