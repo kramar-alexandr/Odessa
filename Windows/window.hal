@@ -3868,7 +3868,7 @@ Integer i;
   StaticText(h+75,v,"Необязательное поле",false);
 	i=i+1;
 
-  StaticText(h,v+=vs,i & "Категория птового клиента",false);
+  StaticText(h,v+=vs,i & "Категория оптового клиента",false);
   StaticText(h+75,v,"Необязательное поле",false);
 	i=i+1;
 
