@@ -683,6 +683,11 @@ begin
   			webCategory = ImportField; //Edit_________________ABR 13:49 28.12.18 
 				text = ImportField; //Edit_________________ABR 13:49 28.12.18 
 				
+				if (NonBlank(name) and CUr.Name!=name) then begin
+  			  CUr.Name = country;
+  			  storeF = true;
+  			end;
+				
   			if (NonBlank(country) and CUr.CountryCode!=country) then begin
   			  CUr.CountryCode = country;
   			  storeF = true;
