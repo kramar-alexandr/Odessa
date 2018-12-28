@@ -3864,16 +3864,16 @@ Integer i;
 	 StaticText(h+150,v,"Необязательное поле",false);
 	 i=i+1;
 
-  StaticText(h,v+=40,"Reb Code",false);
-  StaticText(h+75,v+=15,"Необязательное поле",false);
+ 	StaticText(h,v+=vs,i & "Reb Code",false);
+  StaticText(h+75,v,"Необязательное поле",false);
 	i=i+1;
 
-  StaticText(h,v+=40,"Категория птового клиента",false);
-  StaticText(h+75,v+=15,"Необязательное поле",false);
+  StaticText(h,v+=vs,i & "Категория птового клиента",false);
+  StaticText(h+75,v,"Необязательное поле",false);
 	i=i+1;
 
-  StaticText(h,v+=40,"Заметки",false);
-  StaticText(h+75,v+=15,"Необязательное поле",false);
+  StaticText(h,v+=vs,i & "Заметки",false);
+  StaticText(h+75,v,"Необязательное поле",false);
 	i=i+1;
 
   StaticText(h,v+=40,"Примечание:   Все столбцы разделены <Tab>",false);
