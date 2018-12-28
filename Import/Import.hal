@@ -684,7 +684,7 @@ begin
 				text = ImportField; //Edit_________________ABR 13:49 28.12.18 
 				
 				if (NonBlank(name) and CUr.Name!=name) then begin
-  			  CUr.Name = country;
+  			  CUr.Name = name;
   			  storeF = true;
   			end;
 				
