@@ -708,6 +708,11 @@ begin
 											MatRowGet(ORr,i,ORrw);
 											if ((ORrw.OrderQuant - ORrw.ProcessingQuant)>0) then begin
 												process = true;
+												if(kievself)then begin
+													if(ORrw.Price<500)then begin
+														process = false;
+													end;
+												end;
 											end;
 										end;
 									end;
