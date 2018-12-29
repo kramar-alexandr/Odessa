@@ -3864,7 +3864,7 @@ Integer i;
 	 StaticText(h+150,v,"Необязательное поле",false);
 	 i=i+1;
 
- 	StaticText(h,v+=vs,i & "Reb Code",false);
+ 	StaticText(h,v+=vs,i & "Скидка",false);
   StaticText(h+75,v,"Необязательное поле",false);
 	i=i+1;
 
