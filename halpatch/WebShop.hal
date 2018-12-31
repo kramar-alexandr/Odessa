@@ -1384,6 +1384,10 @@ begin
 		     testf = false;
 		     kievself = true;
 		    end;
+		    if (ORr.SelfDelivery==1 and (FindSubString("Šˆ…‚",UpperCase(ORr.ShipAddr3)) or FindSubString("Šˆº‚",UpperCase(ORr.ShipAddr3)))) then begin
+		     testf = false;
+		     kievself = true;
+		    end;
 		    
 			if (storeidtag=="R")then begin
 					//testf = false;
