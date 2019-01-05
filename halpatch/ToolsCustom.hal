@@ -371,7 +371,7 @@ begin
 end; //Edit***************************Sasha2,17:06 14.08.2015 }
 
 
-global webpublic procedure WebReservBackNewYearOrders()
+global webpublic updating procedure WebReservBackNewYearOrders()
 begin
 	record ORVc ORr,OldORr;
 	string 100 statuss;
@@ -402,6 +402,14 @@ begin
 					 testf = false;
 					end;
 					//96549 //31195
+					
+					if(ORr.CustomStatusFlag!=0)then begin
+						recordcopy(OldORr,ORr);
+							ORr.Reserved = 1;
+							logtext(0,chr(9) & "Reserveds" & chr(9) & ORr.SerNr & chr(9) & ORr.OrdDate & chr(9) & ORr.Addr0 & chr(9) & ORr.CustomStatusFlagText & chr(9) & ORr.SalesMan & chr(9) & ORr.Comment);
+						recordupdate(OldORr,ORr,true);
+					end;
+					
 					if(testf)then begin
 						logtext(0,chr(9) & ORr.SerNr & chr(9) & ORr.OrdDate & chr(9) & ORr.Addr0 & chr(9) & ORr.CustomStatusFlagText & chr(9) & ORr.SalesMan & chr(9) & ORr.Comment);
 					end;
