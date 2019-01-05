@@ -395,10 +395,10 @@ begin
 					 testf = false;
 					end;
 					
-					if (ORr.SelfDelivery==1 and (FindSubString("…„›",UpperCase(ORr.ShipAddr1)))) then begin
+					if (ORr.SelfDelivery==1 and (FindSubString("ξαεδϋ",UpperCase(ORr.ShipAddr1)))) then begin
 					 testf = false;
 					end;
-					if (ORr.SelfDelivery==1 and (FindSubString("…„›",UpperCase(ORr.ShipAddr3)))) then begin
+					if (ORr.SelfDelivery==1 and (FindSubString("ξαεδϋ",UpperCase(ORr.ShipAddr3)))) then begin
 					 testf = false;
 					end;
 					//96549
