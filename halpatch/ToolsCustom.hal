@@ -395,6 +395,13 @@ begin
 					 testf = false;
 					end;
 					
+					if (ORr.SelfDelivery==1 and (FindSubString("…„›",UpperCase(ORr.ShipAddr1)))) then begin
+					 testf = false;
+					end;
+					if (ORr.SelfDelivery==1 and (FindSubString("…„›",UpperCase(ORr.ShipAddr3)))) then begin
+					 testf = false;
+					end;
+					//96549
 					if(testf)then begin
 						logtext(0,ORr.SerNr & chr(9) & ORr.OrdDate & chr(9) & ORr.Addr0 & chr(9) & ORr.CustomStatusFlagText & chr(9) & ORr.SalesMan & chr(9) & ORr.Comment);
 					end;
