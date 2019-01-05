@@ -383,7 +383,7 @@ begin
 	while(loopkey("OrdDate",ORr,1,true))begin
 		if(ORr.ReservToDate<=CurrentDate)then begin
 			if(ORr.OrderClass=="WEB")then begin
-				if(ORr.Reserved==0 and ORr.Closed==0)then begin
+				if(ORr.Reserved==0 and ORr.Closed==0 and ORr.CustomStatusFlag!=10)then begin
 					logtext(0,ORr.SerNr & " " & ORr.OrdDate & " " & ORr.Addr0 & " " & ORr.CustomStatusFlagText);
 				end;
 				if(ORr.Reserved==0 and ORr.Closed==1)then begin
