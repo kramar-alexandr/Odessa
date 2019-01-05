@@ -376,7 +376,7 @@ begin
 	
 	ORr.OrdDate = stringtodate("20/12/2018");
 	while(loopkey("OrdDate",ORr,1,true))begin
-		if(ReservToDate<=CurrentDate)then begin
+		if(ORr.ReservToDate<=CurrentDate)then begin
 			if(ORr.OrderClass=="WEB")then begin
 				if(ORr.Reserved==0 and (ORr.Closed==0 or (ORr.Closed==1 and left(ORr.Comment,len(USetStr(31101)))==USetStr(31101))))then begin
 					logtext(0,ORr.SerNr & " " & ORr.OrdDate & " " & ORr.Addr0 & " " & ORr.CustomStatusFlagText);
