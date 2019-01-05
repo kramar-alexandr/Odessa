@@ -370,6 +370,22 @@ begin
 end; //Edit***************************Sasha2,17:06 14.08.2015 }
 
 
+global webpublic procedure WebReservBackNewYearOrders()
+begin
+	record ORVc ORr;
+	
+	ORr.OrdDate = stringtodate("20/12/2018");
+	while(loopkey("OrdDate",ORr,1,true))begin
+		if(ORr.OrderClass=="WEB")then begin
+			if(ORr.Reserved==0 and (ORr.Closed==0 or (ORr.Closed==1 and left(ORr.Comment,len(USetStr(31101)))==USetStr(31101))))then begin
+				logtext(0,ORr.SerNr & " " & ORr.Addr0 & " " & ORr.CustomStatusFlagText);
+			end;
+		end;
+	end;
+
+return;
+end;
+
 global function CreateEAN128(var string str)
 begin
 string 255 res,res1;
