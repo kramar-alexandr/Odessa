@@ -31,6 +31,7 @@ remote procedure IVVc_PasteRebCode(var record IVVc);
 external updating procedure UpdateOrdOut(record ORVc,Boolean,Boolean);
 external updating function LongInt SHVcRecordRemove(var record SHVc,record SHVc,LongInt,LongInt);// Edit ************************** BPI Ukraine - KramarAlexandr - Tuesday, 16 October 2018 09:57:07
 external updating function LongInt IVVcRecordRemove(var record IVVc,record IVVc,LongInt,LongInt);// Edit ************************** BPI Ukraine - KramarAlexandr - Tuesday, 16 October 2018 09:57:08
+external function Boolean FindSubString(string,string);// Edit ************************** BPI Ukraine - KramarAlexandr - 06, 05 01 2019 y. at 2:23:57 PM
 
 SetLangMode(LangRussian,"RUS",0);
 
@@ -372,9 +373,10 @@ end; //Edit***************************Sasha2,17:06 14.08.2015 }
 
 global webpublic procedure WebReservBackNewYearOrders()
 begin
-	record ORVc ORr;
+	record ORVc ORr,OldORr;
 	string 100 statuss;
 	integer lnl;
+	boolean testf;
 	
 	statuss = USetStr(31101);
 	lnl = len(statuss);
@@ -384,7 +386,18 @@ begin
 		if(ORr.ReservToDate<=CurrentDate)then begin
 			if(ORr.OrderClass=="WEB")then begin
 				if(ORr.Reserved==0 and ORr.Closed==0 and ORr.CustomStatusFlag!=10)then begin
-					logtext(0,ORr.SerNr & chr(9) & ORr.OrdDate & chr(9) & ORr.Addr0 & chr(9) & ORr.CustomStatusFlagText & chr(9) & ORr.SalesMan);
+					testf = true;
+					
+					if (ORr.SelfDelivery==1 and (FindSubString("Šˆ…‚",UpperCase(ORr.ShipAddr1)) or FindSubString("Šˆº‚",UpperCase(ORr.ShipAddr1)))) then begin
+					 testf = false;
+					end;
+					if (ORr.SelfDelivery==1 and (FindSubString("Šˆ…‚",UpperCase(ORr.ShipAddr3)) or FindSubString("Šˆº‚",UpperCase(ORr.ShipAddr3)))) then begin
+					 testf = false;
+					end;
+					
+					if(testf)then begin
+						logtext(0,ORr.SerNr & chr(9) & ORr.OrdDate & chr(9) & ORr.Addr0 & chr(9) & ORr.CustomStatusFlagText & chr(9) & ORr.SalesMan);
+					end;
 				end;
 				if(ORr.Reserved==0 and ORr.Closed==1)then begin
 					if(left(ORr.Comment,lnl)==statuss)then begin
