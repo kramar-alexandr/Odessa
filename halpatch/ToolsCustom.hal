@@ -403,12 +403,12 @@ begin
 					end;
 					//96549 //31195
 					if(testf)then begin
-						logtext(0,ORr.SerNr & chr(9) & ORr.OrdDate & chr(9) & ORr.Addr0 & chr(9) & ORr.CustomStatusFlagText & chr(9) & ORr.SalesMan & chr(9) & ORr.Comment);
+						logtext(0,chr(9) & ORr.SerNr & chr(9) & ORr.OrdDate & chr(9) & ORr.Addr0 & chr(9) & ORr.CustomStatusFlagText & chr(9) & ORr.SalesMan & chr(9) & ORr.Comment);
 					end;
 				end;
 				if(ORr.Reserved==0 and ORr.Closed==1)then begin
 					if(left(ORr.Comment,lnl)==statuss)then begin
-						logtext(0,ORr.SerNr & chr(9) & ORr.OrdDate & chr(9) & ORr.Addr0 & chr(9) & ORr.CustomStatusFlagText & chr(9) & ORr.SalesMan & chr(9) & ORr.Comment);
+						logtext(0,chr(9) & ORr.SerNr & chr(9) & ORr.OrdDate & chr(9) & ORr.Addr0 & chr(9) & ORr.CustomStatusFlagText & chr(9) & ORr.SalesMan & chr(9) & ORr.Comment);
 					end;
 				end;				
 			end;
