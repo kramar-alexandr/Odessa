@@ -2215,6 +2215,12 @@ BEGIN
 		end;
 	end;	
 	//Edit_________________ABR/end/Edit_________________ABR
+	if(SM2p.SentOKFlag==0 and SMp.SentOKFlag!=0) then begin
+		SMp.BPISignP = SMp.SendUser;
+	end;
+	if(SM2p.OKFlag==0 and SMp.OKFlag!=0) then begin
+		SMp.BPISign = SMp.ReceiveUser;
+	end;
 LStockMovVcRecordCheck:;
   if (res!=0) then begin 
     SMp.SerNr = oldnr; 
