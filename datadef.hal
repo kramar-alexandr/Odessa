@@ -3150,8 +3150,8 @@ RecordBegin(INVc,-,"artikel5");
   RecordField(SendUser,M4Code,50,UserVc);//25/08/2017 Alexandr
   RecordField(ReceiveUser,M4Code,50,UserVc);//25/08/2017 Alexandr
   RecordField(BPISign,M4Str,50,0);// Edit ************************** BPI Ukraine - KramarAlexandr - Friday, 28 December 2018 12:10:20
-	 RecordField(BPISignP,M4Str,50,0);// Edit ************************** BPI Ukraine - KramarAlexandr - Friday, 28 December 2018 12:10:20
   RecordField(SelfDelivFlag,M4Int,0,0);// Edit ************************** BPI Ukraine - KramarAlexandr - Friday, 28 December 2018 12:10:42
+	RecordField(BPISignP,M4Str,50,0);// Edit ************************** BPI Ukraine - KramarAlexandr - Friday, 28 December 2018 12:10:20
   ArrayBegin(Math,-,1);
   ArrayField(ArtCode,M4Code,20,INVc);
   ArrayField(Quant,M4UVal,0,0);
