@@ -5354,7 +5354,9 @@ begin
     end;
     EditField(h3,v,80,"на склад",Normal,ToLocation,false,LocationSClass);
   end;
-  CheckBox(h3-100,v=v+vs,0,"Перемещать включая резерв",MoveIncludingReserve);//Edit----------------------Dima  18.06.2015
+  CheckBox(h3-500,v=v+vs,0,"Перемещать включая резерв",MoveIncludingReserve);//Edit----------------------Dima  18.06.2015
+	EditField(h3-200,v,80,"Подпись пол.",ViewOnly,BPISign,false,LocationSClass);
+	EditField(h3,v,80,"Подпись отпр.",ViewOnly,BPISignP,false,LocationSClass);
   tilenr = 1;
   if (HasPositions or HasModWHM or HasLocalization("PRT")) then begin
     TileButton(tilenr,"Позиции"); tilenr = tilenr + 1;
