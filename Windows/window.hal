@@ -578,7 +578,7 @@ Integer i;
   StaticText(h,v+=vs,i & ". Вес",false);
 	 StaticText(h+150,v,"Необязательное поле",false);
 	 i=i+1;
-	StaticText(h,v+=vs,i & ". Вес Нетто",false);
+	StaticText(h,v+=vs,i & ". Вес за ед.",false);
 	 StaticText(h+150,v,"Необязательное поле",false);
 	 i=i+1;
 	 
