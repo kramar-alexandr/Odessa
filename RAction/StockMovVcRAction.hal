@@ -2186,10 +2186,12 @@ BEGIN
   string 255 oldOfficialSerNr;
   LongInt error;
   string 255 errorstr,fieldstr;
-  Integer rownr;
+  Integer rownr,updatemode,insertmode;
   Boolean UnOKedCheckSerialf;
   record UserVc Ur;//Edit_________________ABR//Edit_________________ABR
 	
+	updatemode = 2;
+	insertmode = 1;
   res = 0;
   StockMovSumUp(SMp); //Edit***************************Sasha2,10:12 25.02.2015
   oldnr = SMp.SerNr;
@@ -2215,12 +2217,22 @@ BEGIN
 		end;
 	end;	
 	//Edit_________________ABR/end/Edit_________________ABR
-	if(SM2p.SentOKFlag==0 and SMp.SentOKFlag!=0) then begin
-		SMp.BPISignP = SMp.SendUser;
-	end;
-	if(SM2p.OKFlag==0 and SMp.OKFlag!=0) then begin
-		SMp.BPISign = SMp.ReceiveUser;
-	end;
+	if(stat==updatemode) then begin 
+		if(SM2p.SentOKFlag==0 and SMp.SentOKFlag!=0) then begin
+			SMp.BPISignP = CurrentUser;
+		end;
+		if(SM2p.OKFlag==0 and SMp.OKFlag!=0) then begin
+			SMp.BPISign = CurrentUser;
+		end;
+	end;	
+	if(stat==insertmode) then begin 
+		if(SMp.SentOKFlag!=0) then begin
+			SMp.BPISignP = CurrentUser;
+		end;
+		if(SMp.OKFlag!=0) then begin
+			SMp.BPISign = CurrentUser;
+		end;
+	end;	
 LStockMovVcRecordCheck:;
   if (res!=0) then begin 
     SMp.SerNr = oldnr; 
