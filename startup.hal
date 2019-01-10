@@ -918,6 +918,8 @@ begin
   StrSetText(AllowDeleteIVVc, "Разрешить удалять счёт-фактуру клиента"); // Edit Dima ************* 2018-02-09 02:25 PM
   StrSetText(AllowDeleteSHVc, "Разрешить удалять документ отгрузка"); // Edit Dima ************* 2018-02-09 02:47 PM
 	StrSetText(AllowAddingDiscToAllUser,"Разрешить давать скидку любому клиенту"); ////Edit_________________ABR 04.10.18 13:53
+  StrSetText(AllowEditSHByRow,"Перенести данные из Зак. в Своб. построчно");// Edit ************************** BPI Ukraine - KramarAlexandr - Thursday, 10 January 2019 17:38:17
+
   EndStrSet;
 //begin1
 	return;

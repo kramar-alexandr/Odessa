@@ -217,18 +217,21 @@ begin
 	record SHVc SHr;
 	row SHVc SHrw;
 	integer rwcnt,i;
-
-	wn = CurWindow;
-	GetWindowRecord(wn,SHr);
-  rwcnt = MatRowCnt(SHr);
-  for (i=0;i<rwcnt;i=i+1) begin
-    MatRowGet(SHr,i,SHrw);
-    if (NonBlank(SHrw.ArtCode)) then begin
-      SHrw.Ship = SHrw.Ordered;
-      MatRowPut(SHr,i,SHrw);
-    end;
-  end;
-	PutWindowrecord(wn,SHr);
+	
+	
+	if(usercanaction("AllowEditSHByRow",false))then begin
+		wn = CurWindow;
+		GetWindowRecord(wn,SHr);
+		rwcnt = MatRowCnt(SHr);
+		for (i=0;i<rwcnt;i=i+1) begin
+			MatRowGet(SHr,i,SHrw);
+			if (NonBlank(SHrw.ArtCode)) then begin
+				SHrw.Ship = SHrw.Ordered;
+				MatRowPut(SHr,i,SHrw);
+			end;
+		end;
+		PutWindowrecord(wn,SHr);
+	end;
 
 	return;
 end; //Edit***************************Sasha2,12:00 22.01.2015 }
