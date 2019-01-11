@@ -169,7 +169,8 @@ BEGIN
 			MatRowPut(StockMovr,i,SMrw);//Edit_________________ABR//Edit_________________ABR
 		end;//Edit_________________ABR//Edit_________________ABR
 	end;//Edit_________________ABR//Edit_________________ABR
-	
+	StockMovr.BPISign = "";
+	StockMovr.BPISignP = "";
   StockMovVcRecordDuplicate = res; 
   RETURN;
 END;
