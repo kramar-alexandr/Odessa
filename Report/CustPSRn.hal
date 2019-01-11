@@ -1384,15 +1384,12 @@ BEGIN
     end;
     
     if (totQty>0) then begin
-      Gray_Divider(0,1);
       StartFormat(15);
         pos = 0;
         OutString(pos,0,"",false); pos = pos + 70;
         OutString(pos,0,"",false); pos = pos + 230;
-        OutString(pos,0,totQty,false); pos = pos + 40;
         OutString(pos,0,"",false); pos = pos + 50;
         OutString(pos,0,"",false); pos = pos + 50;
-        OutString(pos,0,totSum,false); pos = pos + 50;
       EndFormat;
     end;
     
