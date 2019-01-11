@@ -59,6 +59,8 @@ begin
   row SHVc SHrw;
   boolean chng;
   
+  logtext(0,"WebSaveSHVc");
+  
   if (LoggedInTest()) then begin
     SHr.SerNr = WebGetArg("param");
     readfirstmain(SHr,1,true);
