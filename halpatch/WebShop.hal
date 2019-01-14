@@ -782,8 +782,8 @@ begin
 										AddOrderForStockMove(SMr,ORr,false);
 									end;
 								end;
-								ExtractObjWithSeparator(",",WSb.LocationQuer,true,pos,tstr);
 							end;
+							ExtractObjWithSeparator(",",WSb.LocationQuer,true,pos,tstr);
 						end;
 						
 					end;
