@@ -682,8 +682,8 @@ begin
 			ORr.OrderClass = "WEB";
 	end;
   
-  if (ORr.Reserved!=0) then begin //Edit***************************Sasha2,11:24 18.08.2015 {
-    if (blankdate(ORr.ReservToDate) and ORr.OrderClass=="WEB") then begin
+  if (ORr.Reserved!=0 and nonblank(CurrentUser)) then begin //Edit***************************Sasha2,11:24 18.08.2015 {
+    if (blankdate(ORr.ReservToDate) and ORr.OrderClass=="WEB" ) then begin
       //ORr.ReservToDate = AddDay(ORr.OrdDate,3);
       additionalday = 0;
 			if (GetDateId(AddDay(ORr.OrdDate,1))==7) then begin
@@ -2888,14 +2888,14 @@ begin
   TableSortOR2(ORr);//Edit----------------------Dima  07.07.2015
   SetRowsUID(ORr);	//Edit----------------------Dima  14.08.2015
   
-  if (ORr.OrderClass == "RETAI" and ORr.Reserved!=0 and OR2r.Reserved==0 and blankdate(ORr.ReservToDate)) then begin		//Edit----------------------Dima  18.12.2015
+  if (ORr.OrderClass == "RETAI" and ORr.Reserved!=0 and OR2r.Reserved==0 and blankdate(ORr.ReservToDate) and nonblank(CurrentUser)) then begin		//Edit----------------------Dima  18.12.2015
 	  ORr.ReservToDate = AddDay(CurrentDate,3);
 	  if(GetDateId(CurrentDate)>3)then begin
 	  	ORr.ReservToDate = AddDay(CurrentDate,4);
 	  end;
 	end;  
 	
-	if (ORr.CustomStatusFlag == 2 and ORr.AutoCreation!=0 and blankdate(ORr.ReservToDate) and ORr.Reserved>0) then begin// Edit ************************** Wednesday, 5 July 2017 16:32:58
+	if (ORr.CustomStatusFlag == 2 and ORr.AutoCreation!=0 and blankdate(ORr.ReservToDate) and ORr.Reserved>0 and nonblank(CurrentUser)) then begin// Edit ************************** Wednesday, 5 July 2017 16:32:58
   	additionalday = 0;
 		if (GetDateId(AddDay(currentdate,1))==7) then begin
 			additionalday = 1;
@@ -3193,7 +3193,7 @@ begin
   Recalculate_CustomStatusFlagText(ORr);
   SetNewORCustomStatusFlagOnWeb(ORr);
   
-  if (ORr.OrderClass == "RETAI" and ORr.Reserved!=0) then begin		//Edit----------------------Dima  18.12.2015
+  if (ORr.OrderClass == "RETAI" and ORr.Reserved!=0 and nonblank(CurrentUser)) then begin		//Edit----------------------Dima  18.12.2015
 	  ORr.ReservToDate = AddDay(CurrentDate,3);
 	  if(GetDateId(CurrentDate)>3)then begin
 	  	ORr.ReservToDate = AddDay(CurrentDate,4);

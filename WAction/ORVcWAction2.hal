@@ -433,7 +433,7 @@ BEGIN
           if (r==0) then begin
  							 // ORr.SerNr = ORr.SerNr;
  							  //if(readfirstmain(ORr,1,true))then begin	//Problems with window updating.//Edit----------------------Dima  10.12.2015
-										if (ORr.Reserved!=0 and BlankDate(ORr.ReservToDate)) then begin //Edit***************************Sasha2,15:57 28.08.2015 {
+										if (ORr.Reserved!=0 and BlankDate(ORr.ReservToDate) and nonblank(CurrentUser)) then begin //Edit***************************Sasha2,15:57 28.08.2015 {
 											additionalday = 0;
 											if (GetDateId(AddDay(CurrentDate,1))==7) then begin
 												additionalday = 1;
