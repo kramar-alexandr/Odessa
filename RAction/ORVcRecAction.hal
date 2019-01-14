@@ -659,13 +659,13 @@ begin
   string 80 tmpStr, resStr;
   string 20 char, nextChar;
   integer nameLen,additionalday;
-  boolean ifBegin;
+  boolean ifBegin,TrHs;
   record PLVc PLr;
 	record WebShopSettingsBlock WSSB;
 	record SHVc SHr;
 	record GCSVc GCSr;
 	record RLinkVc RLinkr;
-	record IVVc IVr;
+	record IVVc IVr,IV2r;
 	record RebateVoucherVc RVr;
 	
 	blockload(WSSB);
@@ -1880,6 +1880,22 @@ LORVcRecordRowCheck:;
     end;
   end;
   //Edit_________________ABR/end/Edit_________________ABR
+		if(ORr.CheckReb==0) then begin
+			IV2r.OrderNr = ORr.SerNr;
+			TrHs = true;
+			logtext(0,"c");
+			while (LoopKey("OrderNr",IV2r,1,TrHs)) begin
+				if (IV2r.OrderNr!=ORr.SerNr) then begin TrHs = false; end;
+				if (TrHs and IV2r.InvType==1) then begin
+					logtext(0,IV2r.Sum4 & "=" & ORr.Sum4);
+					if(IV2r.Sum4!=ORr.Sum4) then begin
+						RecordCheckError(31195,"",-1,"CheckReb"); 
+						res = -1; 
+						goto LORVcRecordCheck;		
+					end;
+				end;	
+			end;
+		end;	
 LORVcRecordCheck:;
   if (res!=0) then begin 
     ORr.SerNr = oldnr; 

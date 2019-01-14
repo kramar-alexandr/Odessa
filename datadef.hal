@@ -1787,6 +1787,7 @@ RecordBegin(INVc,-,"artikel5");
   RecordField(PreOrderFlag,M4Int,0,0);// Edit ************************** BPI Ukraine - KramarAlexandr - Thursday, 3 May 2018 15:55:39
 	RecordField(GiftVouchers,M4Str,255,0);//Edit_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-Anton 10:40 11.07.2018
 	RecordField(PromoCode,M4Long,0,0);//Edit_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-Anton 12:33 14.08.2018
+	RecordField(CheckReb,M4Mark,0,0); //Edit_________________ABR 14.01
   ArrayBegin(Math,-,1);
   ArrayField(stp,M4Int,0,0);
   ArrayField(ArtCode,M4Code,20,INVc);

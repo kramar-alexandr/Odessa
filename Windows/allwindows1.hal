@@ -2482,7 +2482,8 @@ begin
   EditField(h1,v+40,70,"Аванс",Normal,Advance,false,0);	
   EditField(h1,v+64,70,"Оплата доставки",Normal,NPPayer,false,NPTypesOfPayersSClass);// Edit ************************** Monday, 17 October 2016 14:56:35
   CheckBox(h1,v+200,0,"Доставка Новой почтой",DeliveryNewPost);
-  CheckBox(h3-100,v+200,0,"Автосоздание документов",AutoCreation);	//Edit----------------------Dima  16.09.2015 
+	CheckBox(h2,v+200,0,"Игнорировать проверку скидки",CheckReb); //Edit_________________ABR 14.01.19
+  CheckBox(h3,v+200,0,"Автосоздание документов",AutoCreation);	//Edit----------------------Dima  16.09.2015 
 
   Tile(9,300,false,"9",FeedBackStatus);	//Edit***************************Sasha2,10:31 17.08.2015 {
   h1 = 50;
