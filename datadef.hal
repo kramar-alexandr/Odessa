@@ -2734,6 +2734,8 @@ RecordBegin(INVc,-,"artikel5");
 	RecordField(ChckAdNPRcpntWarehouse,M4Int,0,0);
 	RecordField(NotThisRecipient,M4Int,0,0);// Edit ************************** BPI Ukraine - KramarAlexandr - Friday, 14 September 2018 09:24:21
 	RecordField(BPISign,M4Str,50,0);// Edit ************************** BPI Ukraine - KramarAlexandr - Friday, 14 September 2018 09:24:21
+	RecordField(TotQtyOrd,M4Qty,0,0); //Edit_________________ABR 14.01.19 10:53 ABR
+	RecordField(QtyDiv,M4Qty,0,0); //Edit_________________ABR 14.01.19 10:53 ABR
 	
   ArrayBegin(Math,-,1);
   ArrayField(OrdRow,M4Long,0,0);

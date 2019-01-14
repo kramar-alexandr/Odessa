@@ -4721,7 +4721,9 @@ begin
     EditField(120,-20,150,"Tax Auth. Approval",Normal,TaxAdminServSeal,false,0);
 //    SoftEditField(120,-20,150,"Tax Auth. Approval",Normal,"TaxAdminServSeal",false,0,M4Str,200);
   end;
-  EditField(-131,-20,80,"Общее кол-во",ViewOnly,TotQty,true,0);
+	EditField(700,-20,30,"Остаток",ViewOnly,QtyDiv,true,0);
+  EditField(600,-20,30,"Свободно",ViewOnly,TotQty,true,0);
+	EditField(480,-20,30,"Заказ",ViewOnly,TotQtyOrd,true,0);
   
   if (CurrentUser=="SAUNOK") then begin
 	  EditField(150,-20,100,"LocOKNr",Normal,LocOKNr,false,0);//Edit----------------------Dima  21.01.2016

@@ -81,7 +81,7 @@ begin
   row SHVc SHrw;
   Integer i,rwcnt,counter;
   Integer orrwcnt;
-  val totqty,taxsum,sum,t,t1;
+  val totqty,taxsum,sum,t,t1,totqtyord,qtydiv;
   val totv,totw;
   record INVc INr;
   val cost,advance;	//Edit----------------------Dima  15.05.2015
@@ -100,9 +100,12 @@ begin
   totqty = blankval;
   taxsum = blankval;
   SHr.TotQty = BlankVal;
+	SHr.QtyDiv = BlankVal;
+	SHr.TotQtyOrd = BlankVal;
   rwcnt = MatRowCnt(SHr);
   for (i=0;i<rwcnt;i=i+1) begin
     MatRowGet(SHr,i,SHrw);
+		totqtyord = totqtyord + SHrw.Ordered;
     totqty = totqty + SHrw.Ship;
     if ((SHrw.OrdRow<orrwcnt) and (SHrw.OrdRow>-1)) then begin
       MatRowGet(ORr,SHrw.OrdRow,ORrw); 
@@ -150,7 +153,11 @@ begin
 			end;
   	end;
   end;
+
+	SHr.TotQtyOrd = Round(totqtyord,SetRoundModeD(2));
   SHr.TotQty = Round(totqty,SetRoundModeD(2));
+	qtydiv = SHr.TotQtyOrd - SHr.TotQty;
+	SHr.QtyDiv = Round(qtydiv,SetRoundModeD(2));
   SHr.TAX1Sum = Round(taxsum,DefaultRoundMode);
   SHr.TotVolume = Round(totv,SetRoundModeD(2));
   SHr.TotWeight = Round(totw,SetRoundModeD(2));  
