@@ -198,7 +198,7 @@ begin
     while (LoopKey("OrdDate",ORr,1,TrHs)) begin
       testf = true;
       //logtext(0,"RemoveReservedMarkMn " & ORr.SerNr);
-      if(ORr.AutoCreation==1 and blankdate(ORr.ReservToDate) and ORr.OrderClass=="WEB" and nonblank(CurrentUser))then begin
+     /* if(ORr.AutoCreation==1 and blankdate(ORr.ReservToDate) and ORr.OrderClass=="WEB" and nonblank(CurrentUser))then begin
       	IVr.OrderNr = ORr.SerNr;
       	if(readfirstkey("OrderNr",IVr,1,true))then begin
       		additionalday = 0;
@@ -216,7 +216,7 @@ begin
 					ORr.ReservToDate = addday(IVr.InvDate,3 + additionalday);
 					recordstore(ORr,true);
       	end;
-      end;
+      end;*/
       
       if(ORr.PreOrderFlag==0)then begin// Edit ************************** BPI Ukraine - KramarAlexandr - Thursday, 3 May 2018 15:59:42
 				if(LBr.UnReserveOpt>0)then begin

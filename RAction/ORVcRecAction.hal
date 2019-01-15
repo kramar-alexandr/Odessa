@@ -686,13 +686,13 @@ begin
     if (blankdate(ORr.ReservToDate) and ORr.OrderClass=="WEB" ) then begin
       //ORr.ReservToDate = AddDay(ORr.OrdDate,3);
       additionalday = 0;
-			if (GetDateId(AddDay(ORr.OrdDate,1))==7) then begin
+			if (GetDateId(AddDay(CurrentDate,1))==7) then begin
 				additionalday = 1;
 			end else begin
-				if (GetDateId(AddDay(ORr.OrdDate,2))==7) then begin
+				if (GetDateId(AddDay(CurrentDate,2))==7) then begin
 					additionalday = 2;
 				end else begin
-					if (GetDateId(AddDay(ORr.OrdDate,3))==7 or GetDateId(AddDay(ORr.OrdDate,3))==6) then begin
+					if (GetDateId(AddDay(CurrentDate,3))==7 or GetDateId(AddDay(ORr.OrdDate,3))==6) then begin
 						additionalday = 2;
 					end;
 				end;
@@ -700,7 +700,7 @@ begin
 			ORr.ReservToDate = addday(ORr.OrdDate,3 + additionalday);
     end else begin
     	if (blankdate(ORr.ReservToDate)) then begin
-    		ORr.ReservToDate = addday(ORr.OrdDate,7);
+    		ORr.ReservToDate = addday(CurrentDate,7);
     	end;
       if (DateDiff(ORr.ReservToDate,ORr.OrdDate)>31) then begin
         RecordCheckError(32702,". " & UsetStr(14642) & "31 " & LowerCase(UsetStr(9640)),-1,"ReservToDate");      
