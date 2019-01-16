@@ -1717,6 +1717,20 @@ begin
   return;
 end;
 
+global
+function Boolean ORDClassCheckRebButtonAction(Integer wn,Integer value)
+begin
+  Boolean res;
+  record ORVc ORr;
+
+  res = true; 
+		if (UserCanAction("UnOKAll",false)==false) then begin
+			res = false;
+		end;	
+  ORDClassCheckRebButtonAction = res;
+  return;
+end;
+
 // iOS functions follows
 
 global 
