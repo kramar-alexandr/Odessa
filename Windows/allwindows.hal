@@ -10189,7 +10189,8 @@ begin
 	AutoSizeWindow(false);
 	SetBlid(RozetkaAuntBlock);
 	EditField(h,v+=vs,60,"Логин",Normal,Login,false,0);
-	EditField(h,50,100,"Пароль",Normal,Password,false,0);
+	EditField(h,v+=vs,100,"Пароль",Normal,Password,false,0);
+	EditField(h,v+=vs,100,"Последний номер клиента",Normal,LastCusrNumber,false,0);
 	
 	EndWindow;
 	

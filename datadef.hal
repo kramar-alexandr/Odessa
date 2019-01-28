@@ -660,6 +660,8 @@ EndBlock;
 BlockBegin(RozetkaAuntBlock,-,"");//Edit---------------Anton  
 	RecordField(Login,M4Str,255,0);
 	RecordField(Password,M4Str,255,0);
+	RecordField(LastCusrNumber,M4Long,0,0);
+
 EndBlock;
 
 
