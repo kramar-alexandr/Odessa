@@ -627,7 +627,7 @@ begin
   val bal;
   val limit,rsrvd;
   string 255 tstr,errstr,instr,curstr;//Edit_________________ABR//Edit_________________ABR
-  Boolean gentrans,transf,unokf,testf,test2f;
+  Boolean gentrans,transf,unokf,testf,test2f,checkReb;
   record OrdSettBlock OSb;
   string 20 location,oldOfficialSerNr;
   val orsrv,orsrved;
@@ -668,7 +668,7 @@ begin
 	record RLinkVc RLinkr;
 	record IVVc IVr,IV2r;
 	record RebateVoucherVc RVr;
-	val sum;
+	val sum,sum1;
 	
 	blockload(WSSB);
 	if(blank(WSSB.AdressDelimeter))then begin
@@ -1885,27 +1885,31 @@ LORVcRecordRowCheck:;
 		if(ORr.CheckReb==0) then begin
 			IV2r.OrderNr = ORr.SerNr;
 			TrHs = true;
+			checkReb = false;
 			logtext(0,"c");
 			sum=0;
 			while (LoopKey("OrderNr",IV2r,1,TrHs)) begin
 				if (IV2r.OrderNr!=ORr.SerNr) then begin TrHs = false; end;
 				if (TrHs and (IV2r.InvType==kInvoiceTypeNormal or IV2r.InvType==kInvoiceTypeCredit)) then begin
+					checkReb = true;
 					if(IV2r.InvType==kInvoiceTypeNormal) then begin
 						sum=sum+IV2r.Sum4;
 					end else begin 	
 						sum=sum-IV2r.Sum4;
 					end;	
 				end;	
-				if(!TrHs) then begin
+			end;
+				if(checkReb) then begin
+					sum1 = ORr.Sum4;
 					Round(sum,SetRoundModeD(2));
-					if(sum!=ORr.Sum4) then begin
+					Round(sum1,SetRoundModeD(2));
+					if(sum!=sum1) then begin
 						RecordCheckError(31195,"",-1,"CheckReb"); 
 						res = -1; 
 						goto LORVcRecordCheck;		
 					end;
 				end;	
-			end;
-		end;	
+		end;		
 LORVcRecordCheck:;
   if (res!=0) then begin 
     ORr.SerNr = oldnr; 
