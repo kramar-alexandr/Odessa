@@ -484,6 +484,10 @@ begin
 	record PLVc PLr;
 	record NPAreaVc NPArear;
 	string 50 oblast,city;
+	record RozetkaAuntBlock RAb;
+	integer counterexit;
+	
+	
 	
 	Cur.Code = XmlGetAttribute(xmlMessage,"orders/order" & i,"clientid");
 	if(storeidtag=="R")then begin
@@ -506,18 +510,38 @@ begin
 			//Cur.Code = "000";
 		end;
 		if(storeidtag=="R")then begin
-			CUr.Code = "R0000";
+			blockload(RAb);
+			counterexit = 0;
+RozetkaCalcCustomer:;
+			CUr.Code = "R" & RAb.LastCusrNumber;
 			if(!readfirstmain(CUr,1,true))then begin
-				CUr.Code = "R0000";
 				Logtext(0,"Create GUEST Customer  CODE!!!!    " & CUr.Code);
 			end else begin
-				CUr.Code = "R9999";
-				readlastmain(CUr,1,false);
-				newcode = "";
-				NextM4Number(CUr.Code,newcode);
-				CUr.Code = newcode;
-				Logtext(0,"Create GUEST Customer  CODE!!!!    " & CUr.Code);
+				RAb.LastCusrNumber = RAb.LastCusrNumber + 1;
+				counterexit = counterexit + 1;
+				if(counterexit<100)then begin
+					goto RozetkaCalcCustomer;
+				end else begin
+					CUr.Code = "R0000";
+					if(!readfirstmain(CUr,1,true))then begin
+						CUr.Code = "R0000";
+						Logtext(0,"Create GUEST Customer  CODE!!!!    " & CUr.Code);
+					end else begin
+						CUr.Code = "R9999";
+						readlastmain(CUr,1,false);
+						newcode = "";
+						NextM4Number(CUr.Code,newcode);
+						CUr.Code = newcode;
+						Logtext(0,"Create GUEST Customer  CODE!!!!    " & CUr.Code);
+					end;
+				end;
 			end;
+			
+			/*
+			*/
+			
+			RAb.LastCusrNumber = RAb.LastCusrNumber + 1;
+			blockstore(RAb);
 			//Cur.Code = "000";
 		end;
 	end;
