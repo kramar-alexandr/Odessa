@@ -102,6 +102,7 @@ external procedure NoDupObjs(string,var string); //Edit*************************
 external function Boolean FindSubString(string,string);// Edit ************************** Wednesday, 24 May 2017 15:21:31
 external procedure ExtractObjWithSeparator(string,string,Boolean,var Integer,var string); 
 external procedure CashS(string,date,vector val,array string);
+external function roundmode SetRoundModeD(Integer);
 
 SetLangMode(LangRussian,"RUS",0);
 
@@ -667,6 +668,7 @@ begin
 	record RLinkVc RLinkr;
 	record IVVc IVr,IV2r;
 	record RebateVoucherVc RVr;
+	val sum;
 	
 	blockload(WSSB);
 	if(blank(WSSB.AdressDelimeter))then begin
@@ -1884,11 +1886,19 @@ LORVcRecordRowCheck:;
 			IV2r.OrderNr = ORr.SerNr;
 			TrHs = true;
 			logtext(0,"c");
+			sum=0;
 			while (LoopKey("OrderNr",IV2r,1,TrHs)) begin
 				if (IV2r.OrderNr!=ORr.SerNr) then begin TrHs = false; end;
-				if (TrHs and IV2r.InvType==1) then begin
-					logtext(0,IV2r.Sum4 & "=" & ORr.Sum4);
-					if(IV2r.Sum4!=ORr.Sum4) then begin
+				if (TrHs and (IV2r.InvType==kInvoiceTypeNormal or IV2r.InvType==kInvoiceTypeCredit)) then begin
+					if(IV2r.InvType==kInvoiceTypeNormal) then begin
+						sum=sum+IV2r.Sum4;
+					end else begin 	
+						sum=sum-IV2r.Sum4;
+					end;	
+				end;	
+				if(!TrHs) then begin
+					Round(sum,SetRoundModeD(2));
+					if(sum!=ORr.Sum4) then begin
 						RecordCheckError(31195,"",-1,"CheckReb"); 
 						res = -1; 
 						goto LORVcRecordCheck;		
