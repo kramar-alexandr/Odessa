@@ -684,8 +684,11 @@ begin
 			ORr.OrderClass = "WEB";
 	end;
   
+  if(blankdate(ORr.ReserveDate) and nonblank(CurrentUser))then begin
+  	ORr.ReserveDate = CurrentDate;
+  end;
+  
   if (ORr.Reserved!=0 and nonblank(CurrentUser)) then begin //Edit***************************Sasha2,11:24 18.08.2015 {
-		ORr.ReserveDate = CurrentDate;
     if (blankdate(ORr.ReservToDate) and ORr.OrderClass=="WEB" ) then begin
       //ORr.ReservToDate = AddDay(ORr.OrdDate,3);
       additionalday = 0;
