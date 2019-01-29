@@ -313,7 +313,8 @@ begin
       OutString(0,0,USetStr(2562),false);
 	  OutString(60,0,"Счета-фактуры",false);//Edit_________________ABR//Edit_________________ABR
       OutString(130,0,USetStr(2563),false);//Edit_________________ABR//Edit_________________ABR
-      OutString(180,0,USetStr(2564),false);//Edit_________________ABR//Edit_________________ABR
+			OutString(170,0,"Дата созд.",false);
+      OutString(210,0,USetStr(2564),false);//Edit_________________ABR//Edit_________________ABR
 	  OutString(300,0,"Cпособ оплаты",false);//Edit_________________ABR//Edit_________________ABR
       if (HasMultiCurrency) then begin
         OutString(437,0,USetStr(2567),true);//Edit_________________ABR//Edit_________________ABR
@@ -574,6 +575,7 @@ L30:;
             OutString(0,"DblORVc",ORr.SerNr,false);
             OutString(40,0,ORr.OrderClass,false);// Edit ************************** Wednesday, 13 July 2016 09:51:26
             OutDate(80,0,ORr.OrdDate,false);//Edit_________________ABR//Edit_________________ABR
+						
             OutString(110,"DblCUVc",ORr.CustCode,false);// Edit ************************** Thursday, 11 May 2017 11:24:17
             OutString(150,0,ORr.Addr0,false);//Edit_________________ABR//Edit_________________ABR
             OutString(200,0,ORr.Objects,false);//Edit_________________ABR//Edit_________________ABR
@@ -616,7 +618,8 @@ L30:;
 				OutString(60,0,tstr1,false);
 			end;
 			OutDate(130,0,ORr.OrdDate,false);
-            OutString(180,0,ORr.Addr0,false);
+			OutDate(170,0,ORr.ReserveDate,false);
+            OutString(210,0,ORr.Addr0,false);
             OutString(250,0,ORr.Comment,false);// Edit ************************** Wednesday, 13 July 2016 09:49:06
 			OutString(300,0,ORr.NewPD,false);//Edit_-_-_-_-_-_-_-Anton 16:57 23.04.2018
             OutString(340,0,ORr.Objects,false);// Edit ************************** Thursday, 11 May 2017 15:41:04
