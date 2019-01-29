@@ -199,7 +199,8 @@ begin
       testf = true;
       //logtext(0,"RemoveReservedMarkMn " & ORr.SerNr);
      /* if(ORr.AutoCreation==1 and blankdate(ORr.ReservToDate) and ORr.OrderClass=="WEB" and nonblank(CurrentUser))then begin
-      	IVr.OrderNr = ORr.SerNr;
+      	ORr.ReserveDate = CurrentDate;
+				IVr.OrderNr = ORr.SerNr;
       	if(readfirstkey("OrderNr",IVr,1,true))then begin
       		additionalday = 0;
 					if (GetDateId(AddDay(IVr.InvDate,1))==7) then begin

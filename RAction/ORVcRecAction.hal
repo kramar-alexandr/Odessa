@@ -685,6 +685,7 @@ begin
 	end;
   
   if (ORr.Reserved!=0 and nonblank(CurrentUser)) then begin //Edit***************************Sasha2,11:24 18.08.2015 {
+		ORr.ReserveDate = CurrentDate;
     if (blankdate(ORr.ReservToDate) and ORr.OrderClass=="WEB" ) then begin
       //ORr.ReservToDate = AddDay(ORr.OrdDate,3);
       additionalday = 0;
@@ -2903,7 +2904,8 @@ begin
   SetRowsUID(ORr);	//Edit----------------------Dima  14.08.2015
   
   if (ORr.OrderClass == "RETAI" and ORr.Reserved!=0 and OR2r.Reserved==0 and blankdate(ORr.ReservToDate) and nonblank(CurrentUser)) then begin		//Edit----------------------Dima  18.12.2015
-	  ORr.ReservToDate = AddDay(CurrentDate,3);
+		ORr.ReserveDate = CurrentDate;
+		ORr.ReservToDate = AddDay(CurrentDate,3);
 	  if(GetDateId(CurrentDate)>3)then begin
 	  	ORr.ReservToDate = AddDay(CurrentDate,4);
 	  end;

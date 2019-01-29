@@ -1976,7 +1976,8 @@ begin
   end;
   CheckBox(h4=-60,vm + 15,0,"Closed",Closed); //Edit***************************Sasha2,15:05 14.07.2014
   CheckBox(h4=-250,vm,0,"Предзаказ",PreOrderFlag);// Edit ************************** BPI Ukraine - KramarAlexandr - Thursday, 3 May 2018 15:57:37
-  CheckBox(h4=-150,vm,0,"Reserved",Reserved); //Edit***************************Sasha2,15:05 14.07.2014
+  CheckBox(h4=-150,vm,0,"Reserved",Reserved); //Edit***************************Sasha2,15:05 14.07.20
+	
 // CheckBox(h+120,vm,0,"Closed",Closed);
 // CheckBox(h+240,vm,0,"Reserved",Reserved);
   TileButton(1,"Условия");
@@ -2013,7 +2014,8 @@ begin
 
   EditField(h3 - 30,v=vm,80,"Продавец",Normal,SalesMan,false,UserSClass); //Edit***************************Sasha2,11:37 14.07.2014
   if (StandardHansa==false) then begin
-    EditField(h3 - 30,v+=vs,80,"Проект",Normal,PRCode,false,PRSClass); //Edit***************************Sasha2,11:37 14.07.2014
+		EditField(h3 -30,v+=vs,80,"Дата Рез.",Normal,ReserveDate,false,0); //Edit_________________ABR 29.01.19
+   // EditField(h3 - 30,v+=vs,80,"Проект",Normal,PRCode,false,PRSClass); //Edit***************************Sasha2,11:37 14.07.2014
   end;
   EditField(h3 - 30,v+=vs,80,"Вид счета",Normal,OrderClass,false,OrderClassSClass); //Edit***************************Sasha2,11:37 14.07.2014
   if (StandardHansa==false) then begin
