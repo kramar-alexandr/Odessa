@@ -2014,7 +2014,7 @@ begin
 
   EditField(h3 - 30,v=vm,80,"Продавец",Normal,SalesMan,false,UserSClass); //Edit***************************Sasha2,11:37 14.07.2014
   if (StandardHansa==false) then begin
-		EditField(h3 -30,v+=vs,80,"Дата Рез.",Normal,ReserveDate,false,0); //Edit_________________ABR 29.01.19
+		EditField(h3 -30,v+=vs,80,"Нач. раб.",Normal,ReserveDate,false,0); //Edit_________________ABR 29.01.19
    // EditField(h3 - 30,v+=vs,80,"Проект",Normal,PRCode,false,PRSClass); //Edit***************************Sasha2,11:37 14.07.2014
   end;
   EditField(h3 - 30,v+=vs,80,"Вид счета",Normal,OrderClass,false,OrderClassSClass); //Edit***************************Sasha2,11:37 14.07.2014
