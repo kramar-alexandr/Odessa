@@ -73,7 +73,8 @@ external procedure IVFinishAndPrint();//Edit_________________ABR//Edit__________
 external procedure DisplayIVItem(record IVVc,Integer);//Edit----------------------Dima  24.11.2015
 external procedure IVVcRecordDuplicateDo(var record IVVc,Boolean,Boolean);
  external procedure IVDClassToolIVReturn();
- 
+remote procedure IVVcRebCodeCound(var record IVVc);// Edit ************************** BPI Ukraine - KramarAlexandr - Thursday, 22 February 2018 11:36:52
+
  SetLangMode(LangRussian,"RUS",0);	
 
 procedure SetPOSWindowDisplay_PaymentRow(string spec,val v)
@@ -2131,6 +2132,7 @@ begin
         MatRowPut(IVr,rownr,IVrw);      
         IVDchrsum(IVr,rownr);
         IVDchsum(IVr,rownr);
+        IVVcRebCodeCound(IVr);// Edit ************************** BPI Ukraine - KramarAlexandr - Wednesday, 30 January 2019 14:35:29
         IVSumup(IVr,true);
 //        IVSumupSoftEditFields(mwn,IVr);
         PutWindowRecord(mwn,IVr);
