@@ -516,6 +516,7 @@ RozetkaCalcCustomer:;
 			CUr.Code = "R" & RAb.LastCusrNumber;
 			if(!readfirstmain(CUr,1,true))then begin
 				CUr.Code = "R" & RAb.LastCusrNumber;
+				RAb.LastCusrNumber = RAb.LastCusrNumber + 1;
 				Logtext(0,"Create GUEST Customer  CODE!!!!    " & CUr.Code);
 			end else begin
 				RAb.LastCusrNumber = RAb.LastCusrNumber + 1;
