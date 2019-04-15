@@ -1317,6 +1317,7 @@ begin
       end;
       if (nonblank(PUrw.ToPosCode)) then begin
         Posr.Code = PUrw.ToPosCode;
+        Posr.Code = PUrw.ToPosCode;
         Posr.Location = location;
         if (ReadFirstKey("Location",Posr,2,true)==false) then begin
           RecordCheckError(1120,PUrw.ToPosCode,i,"ToPosCode");      
