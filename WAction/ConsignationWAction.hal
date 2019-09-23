@@ -18,6 +18,22 @@ BEGIN
   RETURN;
 END;
 
+global
+function Boolean ConsInDClassActiveEditField(Integer wn,string fieldname,Integer fn,Integer wnst,Integer rownr,Integer changed)
+BEGIN
+  Boolean res;
+  record ConsInVc ConsInr;
+  
+  res = true;
+	GetWindowRecord(wn,ConsInr);
+	if(ConsInr.OKFlag>0)then begin
+  	res = false;
+  end;
+
+  ConsInDClassActiveEditField = res;
+  RETURN;
+END;
+
 
 
 global 
@@ -35,6 +51,24 @@ begin
   end;
   
   ConsSaleDClassDeleteRowTest = res;
+  return;
+end;
+
+global 
+function Boolean ConsInDClassDeleteRowTest(Integer wn,Integer rownr)
+begin
+  record ConsInVc ConsInr;
+  Boolean res;
+  Integer updatemode;
+
+  res = true;
+  res = true;
+	GetWindowRecord(wn,ConsInr);
+	if(ConsInr.OKFlag>0)then begin
+  	res = false;
+  end;
+  
+  ConsInDClassDeleteRowTest = res;
   return;
 end;
 

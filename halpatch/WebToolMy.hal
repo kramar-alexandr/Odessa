@@ -717,3 +717,22 @@ begin
   end;
   return;
 end;
+
+
+
+global webpublic updating procedure WebCreate20VAT()
+begin
+	record VATCodeBlock VATb;
+	row VATCodeBlock VATrw;
+	integer i,mtrw;
+	
+	blockload(VATb);
+	matrowget(VATb,matrowcnt(VATb)-1,VATrw);
+		VATrw.VATCode = "20%";
+		VATrw.Comment = "20%";
+		VATrw.IncVatpr = 15;
+	matrowput(VATb,matrowcnt(VATb),VATrw);	
+	blockstore(VATb);
+
+return;
+end;

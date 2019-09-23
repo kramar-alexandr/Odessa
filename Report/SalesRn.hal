@@ -146,9 +146,11 @@ begin
 		OutString(360,0,"Рент.",false);
 		OutString(380,0,"Рент.,%",false);
 		OutString(400,0,"Зарп. цен",false);
-		OutString(420,0,"Зарп. сум.",false);
-		OutString(440,0,"Рент. зп.",false);
-		OutString(460,0,"Рент.,% зп.",false);
+		//OutString(420,0,"Зарп. сум.",false);
+		//OutString(440,0,"Рент. зп.",false);
+		//OutString(460,0,"Рент.,% зп.",false);
+		OutString(461,0,"Бренд",false);
+		
 		if (ReportType==0) then begin
 			OutString(480,0,"Продавец",false);
 			OutString(480,0,"Кассир",false);
@@ -164,6 +166,22 @@ end;
 //отчет строится по вспомогательному регистру SalesDataVc
 //не следует использовать другие регистры! при необходимости расширить описание SalesDataVc в datadef.hal и функцию CreateSalesData
 //для большей скорости отчета лучше избегать фильтрации (testf), вместо этого использовать разнообразные ключи для разных видов запуска отчета: CodeDate,DateCode,LocationDateCode...
+
+function string 255 GetBrandName(array string abrands,vector string vbrandnames, string classifications)
+begin
+	string 100 res;
+	integer i;
+	
+	for(i=0;i<abrands.length;i=i+1)begin
+		if(setinset(abrands[i]),classifications)then begin
+			i = abrands.length;
+			res = vbrandnames[abrands[i]];
+		end;
+	end;
+	
+	GetBrandName = res;
+return;
+end;
 
 global
 procedure  SalesRn(record RcVc RepSpec)
@@ -189,6 +207,17 @@ vector string 255 CashiersVect; //Edit***************************Sasha2,12:15 16
 record UserVc Userr; //Edit***************************Sasha2,12:15 16.12.2016
 boolean multiloc;
 record INVc INr;
+record DIVc DIr;
+array string 100 abrands;
+vector string 100 vbrandnames;
+
+DIr.Code = "";
+while(loopmain(DIr,1,true))begin
+	if(DIr.CType=="BRND_WORLD" or DIr.CType=="BRND_UKR")then begin
+		abrands[abrands.length] = DIr.Code;
+		vbrandnames[DIr.Code] = DIr.Name;
+	end;
+end;
 
 separator = "^";
 
@@ -325,10 +354,11 @@ separator = "^";
 										//OutVal(400,0,prevSalesData.SalaryPrice,M4Val,false);
 										//OutVal(420,0,salarySum,M4Val,false);	
 										OutVal(400,0,prevSalesData.SalaryPrice,M4Val,false);
-										OutVal(420,0,salary,M4Val,false);
+										//OutVal(420,0,salary,M4Val,false);
 										
-										OutVal(440,0,rentsalary,M4Val,false);
-										OutVal(460,0,rentsalary*100/prevSalesData.SalaryPrice/qty,M4Val,false);		//rent, salary %	
+										//OutVal(440,0,rentsalary,M4Val,false);
+										//OutVal(460,0,rentsalary*100/prevSalesData.SalaryPrice/qty,M4Val,false);		//rent, salary %	
+										OutString(461,0,GetBrandName(abrands,vbrandnames,prevSalesData.DispGroups),false);
 									end;
 									//OutString(480,0,prevSalesData.SalesMan,false);	
 									if(currentuser=="SA")then begin
@@ -462,9 +492,10 @@ separator = "^";
 								end;
 								OutVal(380,0,rwGPpercent,M4Val,false);
 								OutVal(400,0,salaryPrice,M4Val,false);
-								OutVal(420,0,salarySum,M4Val,false);	
-								OutVal(440,0,rentSal,M4Val,false);
-								OutVal(460,0,rentSalPercent,M4Val,false);
+								//OutVal(420,0,salarySum,M4Val,false);	
+								//OutVal(440,0,rentSal,M4Val,false);
+								//OutVal(460,0,rentSalPercent,M4Val,false);
+								OutString(461,0,GetBrandName(abrands,vbrandnames,SalesData.DispGroups),false);
 							end;
 							OutString(480,0,SalesData.SalesMan,false);
 							OutString(480,0,CashiersVect[SalesData.Kassir],false);	
@@ -530,9 +561,10 @@ separator = "^";
 								OutVal(360,0,rent,M4Val,false);
 								OutVal(380,0,rent*100/cost,M4Val,false);				//profit %
 								OutVal(400,0,prevSalesData.SalaryPrice,M4Val,false);
-								OutVal(420,0,salarySum,M4Val,false);	
-								OutVal(440,0,rentsalary,M4Val,false);
-								OutVal(460,0,rentsalary*100/prevSalesData.SalaryPrice/qty,M4Val,false);		//rent, salary %	
+								//OutVal(420,0,salarySum,M4Val,false);	
+								//OutVal(440,0,rentsalary,M4Val,false);
+								//OutVal(460,0,rentsalary*100/prevSalesData.SalaryPrice/qty,M4Val,false);		//rent, salary %	
+								OutString(461,0,GetBrandName(abrands,vbrandnames,prevSalesData.DispGroups),false);
 							end;	
 							//OutString(480,0,prevSalesData.SalesMan,false);	
 							if(currentuser=="SA")then begin
@@ -574,9 +606,10 @@ separator = "^";
 		OutString(360,0,totalRent,false);
 		OutString(380,0,totalRent/totalCost*100,false);
 		OutString(400,0,"",false);
-		OutString(420,0,totalSalary,false);
-		OutString(440,0,totalRentSalary,false);
-		OutString(460,0,(totalSum - totalSalary)/totalSalary*100,false);
+		//OutString(420,0,totalSalary,false);
+		//OutString(440,0,totalRentSalary,false);
+		//OutString(460,0,(totalSum - totalSalary)/totalSalary*100,false);
+		OutString(461,0,"",false);
 	end;
 	OutString(480,0,"",false);		
 	EndFormat;	
@@ -732,9 +765,10 @@ boolean multiloc;
 										OutVal(360,0,rent,M4Val,false);
 										OutVal(380,0,rent*100/cost,M4Val,false);				//profit %
 										OutVal(400,0,prevSalesData.SalaryPrice,M4Val,false);
-										OutVal(420,0,salarySum,M4Val,false);	
-										OutVal(440,0,rentsalary,M4Val,false);
-										OutVal(460,0,rentsalary*100/prevSalesData.SalaryPrice/qty,M4Val,false);		//rent, salary %	
+										//OutVal(420,0,salarySum,M4Val,false);	
+										//OutVal(440,0,rentsalary,M4Val,false);
+										//OutVal(460,0,rentsalary*100/prevSalesData.SalaryPrice/qty,M4Val,false);		//rent, salary %	
+										OutString(461,0,GetBrandName(abrands,vbrandnames,prevSalesData.DispGroups),false);
 									end;																									
 									EndFormat;
 									
@@ -830,9 +864,10 @@ boolean multiloc;
 								OutVal(360,0,SalesData.rowGP,M4Val,false);
 								OutVal(380,0,rwGPpercent,M4Val,false);
 								OutVal(400,0,salaryPrice,M4Val,false);
-								OutVal(420,0,salarySum,M4Val,false);	
-								OutVal(440,0,rentSal,M4Val,false);
-								OutVal(460,0,rentSalPercent,M4Val,false);
+								//OutVal(420,0,salarySum,M4Val,false);	
+								//OutVal(440,0,rentSal,M4Val,false);
+								//OutVal(460,0,rentSalPercent,M4Val,false);
+								OutString(461,0,GetBrandName(abrands,vbrandnames,SalesData.DispGroups),false);
 							end;
 							OutString(480,0,SalesData.SalesMan,false);																											
 							EndFormat;					
@@ -873,9 +908,10 @@ boolean multiloc;
 								OutVal(360,0,rent,M4Val,false);
 								OutVal(380,0,rent*100/cost,M4Val,false);				//profit %
 								OutVal(400,0,prevSalesData.SalaryPrice,M4Val,false);
-								OutVal(420,0,salarySum,M4Val,false);	
-								OutVal(440,0,rentsalary,M4Val,false);
-								OutVal(460,0,rentsalary*100/prevSalesData.SalaryPrice/qty,M4Val,false);		//rent, salary %	
+								//OutVal(420,0,salarySum,M4Val,false);	
+								//OutVal(440,0,rentsalary,M4Val,false);
+								//OutVal(460,0,rentsalary*100/prevSalesData.SalaryPrice/qty,M4Val,false);		//rent, salary %	
+								OutString(461,0,GetBrandName(abrands,vbrandnames,prevSalesData.DispGroups),false);
 							end;																									
 							EndFormat;
 	end;	
@@ -906,9 +942,10 @@ boolean multiloc;
 		OutString(360,0,totalRent,false);
 		OutString(380,0,totalRent/totalSalary*100,false);
 		OutString(400,0,"",false);
-		OutString(420,0,totalSalary,false);
-		OutString(440,0,totalRentSalary,false);
-		OutString(460,0,(totalSum - totalSalary)/totalSalary*100,false);
+		//OutString(420,0,totalSalary,false);
+		//OutString(440,0,totalRentSalary,false);
+		//OutString(460,0,(totalSum - totalSalary)/totalSalary*100,false);
+		OutString(461,0,"",false);
 	end;
 	OutString(480,0,"",false);		
 	EndFormat;	
@@ -1197,9 +1234,10 @@ record UserVc User;
 								OutVal(360,0,rwGP,M45Val,false);
 								OutVal(380,0,rwGPpercent,M4Val,false);
 								OutVal(400,0,salaryPrice,M4Val,false);
-								OutVal(420,0,salarySum,M45Val,false);	
-								OutVal(440,0,rentSal,M45Val,false);
-								OutVal(460,0,rentSalPercent,M45Val,false);
+								//OutVal(420,0,salarySum,M45Val,false);	
+								//OutVal(440,0,rentSal,M45Val,false);
+								//OutVal(460,0,rentSalPercent,M45Val,false);
+								OutString(461,0,"Бренд",false);
 							end;
 							OutString(480,0,IVr.SalesMan,false);																											
 							EndFormat;					
@@ -1239,9 +1277,10 @@ record UserVc User;
 				OutString(360,0,rent[itemCodes[k]],false);
 				OutString(380,0,rent[itemCodes[k]]*100/cost[itemCodes[k]],false); 	//profit %
 				OutString(400,0,PLsalary[itemCodes[k]],false);										
-				OutString(420,0,salary[itemCodes[k]],false);
-				OutString(440,0,rentsalary[itemCodes[k]],false);
-				OutString(460,0,rentsalary[itemCodes[k]]*100/PLsalary[itemCodes[k]]/qty[itemCodes[k]],false); //rent, salary %			
+				//OutString(420,0,salary[itemCodes[k]],false);
+				//OutString(440,0,rentsalary[itemCodes[k]],false);
+				//OutString(460,0,rentsalary[itemCodes[k]]*100/PLsalary[itemCodes[k]]/qty[itemCodes[k]],false); //rent, salary %			
+				OutString(461,0,"Бренд",false);
 			end;
 			EndFormat;
 		end;
@@ -1266,9 +1305,10 @@ record UserVc User;
 		OutVal(360,0,total3,M45Val,false);
 		OutString(380,0,total3/total4*100,false);
 		OutString(400,0,"",false);
-		OutVal(420,0,total4,M45Val,false);
-		OutVal(440,0,total5,M45Val,false);
-		OutString(460,0,(total1 - total4)/total4*100,false);
+		//OutVal(420,0,total4,M45Val,false);
+		//OutVal(440,0,total5,M45Val,false);
+		//OutString(460,0,(total1 - total4)/total4*100,false);
+		OutString(461,0,"",false);
 	end;
 		OutString(480,0,"",false);		
 	EndFormat;
