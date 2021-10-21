@@ -736,3 +736,39 @@ begin
 
 return;
 end;
+
+
+global webpublic updating procedure WebGetLastCustWarn()
+begin
+  record CUVc CUr;
+  record CClassVc CCVr;
+  record RetVc Retr;
+  boolean TrHs,testf,TrHs1,testf1,foundf; 
+  area a_req,replyarea;
+  string 255 text;
+  
+  TrHs = true;
+  TrHs1 = true;
+    CUr.Code = webgetarg("custcode");
+    if(readfirstmain(CUr,1,true)) begin
+      testf = false;
+      if(SetInSet("BLACKLIST",CUr.Classification))then begin testf = true; end;
+      if(testf) then begin
+        foundf = false;
+        Retr.CustCode = CUr.Code;
+        while(LoopKey("CustCode",Retr,1,TrHs1)) begin
+					testf1 = true;
+					if(Retr.CustCode!=CUr.Code) then begin testf1 = false; end; 
+					if(Retr.BlackFlag==0) then begin testf1 = false; end; 
+					if(testf1) then begin
+					  text = Retr.Comment;  
+					end;
+				end;
+				ResetLoop(Retr);
+      end;
+    end;
+    
+    weboutstring(text);
+
+return;
+end;
