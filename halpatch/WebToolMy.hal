@@ -769,6 +769,7 @@ begin
     end;
     
     weboutstring(text);
+    logtext(0,CUr.Code & "  " & text);
 
 return;
 end;
